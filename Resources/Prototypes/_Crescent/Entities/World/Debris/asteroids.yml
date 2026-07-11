@@ -24,6 +24,9 @@
       blobDrawProb: 0.5
       radius: 6
       floorPlacements: 16
+    - type: IFF
+      flags: HideLabel
+      color: "#d67e27"
 
 - type: entity
   id: RatBaseAsteroidPoor
@@ -122,7 +125,19 @@
             prob: 0.021
             orGroup: rock
           - id: RandomArtifactSpawner20
-            prob: 0.002
+            prob: 0.005
+            orGroup: rock
+          - id: RockElementalSpawner
+            prob: 0.01
+            orGroup: rock
+          - id: WallRockCoal
+            prob: 0.1
+            orGroup: rock
+          - id: WallRockTin
+            prob: 0.1
+            orGroup: rock
+          - id: WallRockCopper
+            prob: 0.08
             orGroup: rock
           - id: FuelSeepBoriatic
             prob: 0.008
@@ -198,7 +213,7 @@
             orGroup: rock
     - type: IFF
       flags: HideLabel
-      color: "#BACAFF"
+      color: "#d6fffc"
 
 - type: entity
   id: RatBaseIceAsteroidRich
@@ -247,7 +262,7 @@
             orGroup: rock
     - type: IFF
       flags: HideLabel
-      color: "#BACAFF"
+      color: "#d6fffc"
 
 - type: entity
   id: RatBaseBasaltAsteroidPoor
@@ -278,7 +293,7 @@
             orGroup: rock
     - type: IFF
       flags: HideLabel
-      color: "#FF7E75"
+      color: "#b5b5b5"
 
 - type: entity
   id: RatBaseBasaltAsteroidRich
@@ -327,7 +342,7 @@
             orGroup: rock
     - type: IFF
       flags: HideLabel
-      color: "#FF7E75"
+      color: "#b5b5b5"
 
 - type: entity
   id: RatAsteroidPoorLarge
@@ -370,8 +385,8 @@
   components:
     - type: MapGrid
     - type: BlobFloorPlanBuilder
-      floorPlacements: 300
-      radius: 70
+      floorPlacements: 130
+      radius: 35
 
 - type: entity
   id: RatAsteroidRichHuge
@@ -381,8 +396,8 @@
   components:
     - type: MapGrid
     - type: BlobFloorPlanBuilder
-      radius: 8
-      floorPlacements: 300
+      floorPlacements: 130
+      radius: 35
 
 - type: entity
   id: RatIceAsteroidPoorLarge
@@ -414,8 +429,8 @@
   components:
     - type: MapGrid
     - type: BlobFloorPlanBuilder
-      floorPlacements: 300
-      radius: 70
+      floorPlacements: 130
+      radius: 35
 
 - type: entity
   id: RatIceAsteroidRichHuge
@@ -425,8 +440,8 @@
   components:
     - type: MapGrid
     - type: BlobFloorPlanBuilder
-      floorPlacements: 300
-      radius: 70
+      floorPlacements: 130
+      radius: 35
 
 - type: entity
   id: RatBasaltAsteroidPoorLarge
@@ -458,8 +473,8 @@
   components:
     - type: MapGrid
     - type: BlobFloorPlanBuilder
-      floorPlacements: 300
-      radius: 70
+      floorPlacements: 130
+      radius: 35
 
 - type: entity
   id: RatBasaltAsteroidRichHuge

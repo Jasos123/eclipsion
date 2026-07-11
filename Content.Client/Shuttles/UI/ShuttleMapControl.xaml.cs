@@ -226,16 +226,7 @@ public sealed partial class ShuttleMapControl : BaseShuttleControl
         worldOrigin = worldOrigin with { Y = -worldOrigin.Y };
         var screenOrigin = ScalePosition(worldOrigin);
 
-        // Center
-        handle.DrawCircle(screenOrigin, 500f * MinimapScale, new Color(1f, 0f, 0f, 0.03f));
-        handle.DrawCircle(screenOrigin, 500f * MinimapScale, new Color(1f, 0f, 0f, 0.2f), filled: false);
-
-        // Outer ring
-        DrawFilledRing(handle, screenOrigin,
-            4000f * MinimapScale, 4500f * MinimapScale,
-            new Color(0f, 1f, 0f, 0.03f), new Color(0f, 1f, 0f, 0.2f));
-
-        // Severe recurrence exposure zone (legacy biome implementation)
+        // Хадал
         DrawFilledRing(handle, screenOrigin,
             10000f * MinimapScale, 20000f * MinimapScale,
             new Color(1f, 0f, 0f, 0.01f), new Color(1f, 0f, 0f, 0.1f));
@@ -423,7 +414,7 @@ public sealed partial class ShuttleMapControl : BaseShuttleControl
             var gridRelativePos = Vector2.Transform(gridPos, matty);
             gridRelativePos = gridRelativePos with { Y = -gridRelativePos.Y };
             var gridUiPos = ScalePosition(gridRelativePos);
-            
+
             if (_shuttleEntity == grid.Owner)
             {
                 if (EntManager.TryGetComponent<PhysicsComponent>(grid, out var physics))
@@ -642,15 +633,15 @@ public sealed partial class ShuttleMapControl : BaseShuttleControl
             }
             case MapIconType.Shuttle:
             {
-                const int segments = 15;  
+                const int segments = 15;
                 var shuttleRadius = radius * 0.8f;
-                mapObj = new ValueList<Vector2>(segments);  
-                for (var i = 0; i < segments; i++)  
-                {  
-                    var theta = (float)(2.0 * Math.PI * i / segments);  
-                    mapObj.Add(localPos + new Vector2(MathF.Cos(theta), MathF.Sin(theta)) * shuttleRadius);  
-                }  
-                break;  
+                mapObj = new ValueList<Vector2>(segments);
+                for (var i = 0; i < segments; i++)
+                {
+                    var theta = (float)(2.0 * Math.PI * i / segments);
+                    mapObj.Add(localPos + new Vector2(MathF.Cos(theta), MathF.Sin(theta)) * shuttleRadius);
+                }
+                break;
             }
             default:
             {
