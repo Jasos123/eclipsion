@@ -28,6 +28,61 @@
     state: skullbanner
 
 - type: entity
+  parent: BannerBase
+  id: MedievalPoleBannerBlackPurple
+  name: black and purple pole banner
+  description: A dark medieval field banner hanging from a long iron pole.
+  components:
+  - type: Sprite
+    sprite: _Crescent/Structures/medieval_pole_banners.rsi
+    state: black-purple
+    noRot: true
+
+- type: entity
+  parent: BannerBase
+  id: MedievalPoleBannerGreenGold
+  name: green and gold pole banner
+  description: A forest-green medieval field banner edged with antique gold.
+  components:
+  - type: Sprite
+    sprite: _Crescent/Structures/medieval_pole_banners.rsi
+    state: green-gold
+    noRot: true
+
+- type: entity
+  parent: BannerBase
+  id: MedievalPoleBannerBurgundyGold
+  name: burgundy and gold pole banner
+  description: A rich burgundy medieval field banner edged with antique gold.
+  components:
+  - type: Sprite
+    sprite: _Crescent/Structures/medieval_pole_banners.rsi
+    state: burgundy-gold
+    noRot: true
+
+- type: entity
+  parent: BannerBase
+  id: MedievalPoleBannerCharcoalRusset
+  name: charcoal and russet pole banner
+  description: A somber charcoal medieval field banner with weathered russet trim.
+  components:
+  - type: Sprite
+    sprite: _Crescent/Structures/medieval_pole_banners.rsi
+    state: charcoal-russet
+    noRot: true
+
+- type: entity
+  parent: BannerBase
+  id: MedievalPoleBannerBrownNCWL
+  name: NCWL brown pole banner
+  description: A weathered brown field banner carrying restrained Communard-red trim.
+  components:
+  - type: Sprite
+    sprite: _Crescent/Structures/medieval_pole_banners.rsi
+    state: brown-ncwl
+    noRot: true
+
+- type: entity
   parent: BaseSign
   id: BaseFlagNCWL
   abstract: true

@@ -41,7 +41,8 @@
   name: DSM conquest banner
   components:
     - type: Sprite
-      color: "#E5B80B" # imperial gold
+      sprite: _Crescent/Structures/medieval_pole_banners.rsi
+      state: black-purple
     - type: ConquestFlag
       homeFaction: DSM
 
@@ -52,7 +53,8 @@
   name: NCWL conquest banner
   components:
     - type: Sprite
-      color: "#C81919" # communard red
+      sprite: _Crescent/Structures/medieval_pole_banners.rsi
+      state: brown-ncwl
     - type: ConquestFlag
       homeFaction: NCWL
 

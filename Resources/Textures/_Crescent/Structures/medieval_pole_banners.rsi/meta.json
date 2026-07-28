@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "size": {
+    "x": 64,
+    "y": 64
+  },
+  "license": "CC0-1.0",
+  "copyright": "Generated with OpenAI and adapted for New Crescent.",
+  "states": [
+    {
+      "name": "black-purple"
+    },
+    {
+      "name": "green-gold"
+    },
+    {
+      "name": "burgundy-gold"
+    },
+    {
+      "name": "charcoal-russet"
+    },
+    {
+      "name": "brown-ncwl"
+    }
+  ]
+}
