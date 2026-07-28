@@ -141,7 +141,7 @@ public sealed partial class BroadcasterSystem : SharedBroadcasterSystem
 
     public void PlayBroadcast(EntityUid uid, BroadcastingConsoleComponent comp, ref BroadcasterBroadcastMessage args)
     {
-        if (args.indexForBroadcast > broadcastableMessages.Count)
+        if (args.indexForBroadcast < 0 || args.indexForBroadcast >= broadcastableMessages.Count)
             return;
         var message = broadcastableMessages[args.indexForBroadcast];
         if (message.outpost != comp.Outpost)

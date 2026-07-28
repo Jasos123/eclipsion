@@ -183,15 +183,23 @@ public sealed class PointCannonSystem : EntitySystem
         if (_accumulatedFrameTime > targetTime)
             _accumulatedFrameTime = 0;
 
+        List<EntityUid>? inactiveConsoles = null;
         foreach (var uid in _activeConsoles)
         {
             // Use the cached query instead of TryComp
             if (!_consoleQuery.TryGetComponent(uid, out var console))
             {
-                _activeConsoles.Remove(uid);
+                inactiveConsoles ??= new();
+                inactiveConsoles.Add(uid);
                 continue;
             }
             UpdateConsoleState(uid, console);
+        }
+
+        if (inactiveConsoles != null)
+        {
+            foreach (var uid in inactiveConsoles)
+                _activeConsoles.Remove(uid);
         }
 
         var toRemove = new List<EntityUid>();
@@ -491,6 +499,9 @@ public sealed class PointCannonSystem : EntitySystem
 
     private void OnConsoleGroupChanged(Entity<TargetingConsoleComponent> uid, ref TargetingConsoleGroupChangedMessage args)
     {
+        if (!uid.Comp.CannonGroups.TryGetValue(args.GroupName, out var cannons))
+            return;
+
         var sessions = GetUiSessions(uid);
 
         if (uid.Comp.ActiveGroups.Contains(args.GroupName))
@@ -499,7 +510,7 @@ public sealed class PointCannonSystem : EntitySystem
                 uid.Comp.ActiveGroups = new();
             else
                 uid.Comp.ActiveGroups.Remove(args.GroupName);
-            TogglePvsOverride(uid.Comp.CannonGroups[args.GroupName], sessions, false);
+            TogglePvsOverride(cannons, sessions, false);
         }
         else
         {
@@ -507,7 +518,7 @@ public sealed class PointCannonSystem : EntitySystem
                 uid.Comp.ActiveGroups = new() { "all" };
             else
                 uid.Comp.ActiveGroups.Add(args.GroupName);
-            TogglePvsOverride(uid.Comp.CannonGroups[args.GroupName], sessions, true);
+            TogglePvsOverride(cannons, sessions, true);
         }
 
         var totalLength = 0;
