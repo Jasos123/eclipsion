@@ -22,6 +22,13 @@ namespace Content.Shared.Climbing.Components
         public float ClimbDelay = 1.5f;
 
         /// <summary>
+        ///     Whether changing between standing and lying down automatically places an entity on this climbable.
+        ///     Manual climbing is still available when this is disabled.
+        /// </summary>
+        [DataField]
+        public bool AutoClimbOnChangeStanding = true;
+
+        /// <summary>
         ///     Sound to be played when a climb is started.
         /// </summary>
         [DataField("startClimbSound")]

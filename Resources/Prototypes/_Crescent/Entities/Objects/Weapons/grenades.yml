@@ -137,29 +137,26 @@
     delay: 2.5
   - type: Sprite
     sprite: _Crescent/Objects/Weapons/Grenades/incendiary.rsi
-  - type: SmokeOnTrigger
-    duration: 8
-    spreadAmount: 5
-    solution:
-      reagents:
-      - ReagentId: Phlogiston
-        Quantity: 20
+  - type: ExplodeOnTrigger
+  - type: Explosive
+    explosionType: FireBomb
+    maxIntensity: 25
+    intensitySlope: 7
+    totalIntensity: 400
+    canCreateVacuum: false
   - type: CrescentFireOnTrigger
-    radius: 2.5
-    count: 9
+    radius: 5
+    count: 24
   - type: TimerTriggerVisuals
     primingSound:
       path: "/Audio/_Crescent/Weapons/Grenades/trigger1.ogg"
-  - type: SoundOnTrigger
-    sound: /Audio/_Crescent/Weapons/Grenades/smoke10s.ogg
-  - type: DeleteOnTrigger
   - type: EmitSoundOnPickup
     sound: /Audio/_Crescent/Weapons/Grenades/grab1.ogg
   - type: EmitSoundOnDrop
     sound: /Audio/_Crescent/Weapons/Grenades/drop1.ogg
   - type: EmitSoundOnLand
     sound:
-      collection: SmokeGrenadeSFX
+      collection: FragGrenadeSFX
 
 - type: entity
   name: M18 Smoke grenade
@@ -172,8 +169,8 @@
   - type: Sprite
     sprite: _Crescent/Objects/Weapons/Grenades/smoke.rsi
   - type: SmokeOnTrigger
-    duration: 10
-    spreadAmount: 12
+    duration: 12
+    spreadAmount: 16
   - type: TimerTriggerVisuals
     primingSound:
       path: "/Audio/_Crescent/Weapons/Grenades/trigger1.ogg"
@@ -205,9 +202,6 @@
     intensitySlope: 8
     totalIntensity: 450
     canCreateVacuum: false
-  - type: CrescentFireOnTrigger
-    radius: 1.25
-    count: 2
   - type: TimerTriggerVisuals
     primingSound:
       path: "/Audio/_Crescent/Weapons/Grenades/trigger1.ogg"
@@ -236,9 +230,6 @@
     intensitySlope: 9
     totalIntensity: 270
     canCreateVacuum: false
-  - type: CrescentFireOnTrigger
-    radius: 1.25
-    count: 2
   - type: TimerTriggerVisuals
     primingSound:
       path: "/Audio/_Crescent/Weapons/Grenades/trigger1.ogg"
@@ -294,9 +285,6 @@
     intensitySlope: 5
     totalIntensity: 350
     canCreateVacuum: false
-  - type: CrescentFireOnTrigger
-    radius: 1.25
-    count: 2
   - type: TimerTriggerVisuals
     primingSound:
       path: "/Audio/_Crescent/Weapons/Grenades/trigger1.ogg"
@@ -399,9 +387,6 @@
     intensitySlope: 7
     totalIntensity: 400
     canCreateVacuum: false
-  - type: CrescentFireOnTrigger
-    radius: 4.5
-    count: 18
   - type: TimerTriggerVisuals
     primingSound:
       path: "/Audio/_Crescent/Weapons/Grenades/trigger2.ogg"
@@ -430,9 +415,6 @@
     intensitySlope: 4
     totalIntensity: 250
     canCreateVacuum: false
-  - type: CrescentFireOnTrigger
-    radius: 1.25
-    count: 2
   - type: DamageOnHit
     damage:
       types:
@@ -515,9 +497,6 @@
     intensitySlope: 5
     totalIntensity: 150
     canCreateVacuum: false
-  - type: CrescentFireOnTrigger
-    radius: 1
-    count: 2
   - type: EmitSoundOnPickup
     sound: /Audio/_Crescent/Weapons/Grenades/grab1.ogg
   - type: EmitSoundOnDrop
@@ -547,9 +526,6 @@
         Quantity: 40
       - ReagentId: Phlogiston
         Quantity: 40
-  - type: CrescentFireOnTrigger
-    radius: 3.5
-    count: 13
   - type: TimerTriggerVisuals
     primingSound:
       path: "/Audio/_Crescent/Weapons/Grenades/trigger1.ogg"
@@ -583,9 +559,6 @@
     intensitySlope: 4
     totalIntensity: 400
     canCreateVacuum: false
-  - type: CrescentFireOnTrigger
-    radius: 1
-    count: 2
   - type: TimerTriggerVisuals
     primingSound:
       path: "/Audio/_Crescent/Weapons/Grenades/trigger1.ogg"
@@ -625,7 +598,7 @@
     totalIntensity: 450
     canCreateVacuum: false
   - type: EmpOnTrigger
-    range: 2
+    range: 4
     energyConsumption: 5000
   - type: DeleteOnTrigger
   - type: TimerTriggerVisuals
@@ -698,9 +671,6 @@
     intensitySlope: 18
     totalIntensity: 350
     canCreateVacuum: false
-  - type: CrescentFireOnTrigger
-    radius: 1.25
-    count: 2
   - type: TimerTriggerVisuals
     primingSound:
       path: "/Audio/_Crescent/Weapons/Grenades/trigger2.ogg"

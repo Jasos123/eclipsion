@@ -26,9 +26,9 @@
   - type: TimedDespawn
     lifetime: 1
   - type: Sprite
-    sprite: _RMC14/Effects/fire.rsi
+    sprite: _Crescent/Objects/Weapons/Projectiles/flame_red.rsi
     layers:
-    - state: dynamic_1
+    - state: fireball
       shader: unshaded
   - type: Ammo
     muzzleFlash: null

@@ -1,6 +1,6 @@
 using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
-using Content.Server.Explosion;
+using Content.Server.Decals;
 using Content.Server.Explosion.EntitySystems;
 using Content.Shared.Atmos;
 using Content.Shared.Coordinates.Helpers;
@@ -55,12 +55,6 @@ public sealed partial class CrescentTileFireComponent : Component
     public TimeSpan TickInterval = TimeSpan.FromSeconds(1);
 
     [DataField]
-    public TimeSpan SpreadInterval = TimeSpan.FromSeconds(3);
-
-    [DataField]
-    public float SpreadChance = 0.12f;
-
-    [DataField]
     public float IgniteStacks = 0.75f;
 
     [DataField]
@@ -74,7 +68,6 @@ public sealed partial class CrescentTileFireComponent : Component
 
     public TimeSpan DeleteAt;
     public TimeSpan NextTick;
-    public TimeSpan NextSpread;
     public TimeSpan? OxygenStarvedSince;
 }
 
@@ -84,22 +77,17 @@ public sealed partial class CrescentTileFireComponent : Component
 /// </summary>
 public sealed class CrescentTileFireSystem : EntitySystem
 {
+    private static readonly string[] BurntDecals = ["burnt1", "burnt2", "burnt3", "burnt4"];
+
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
+    [Dependency] private readonly DecalSystem _decals = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly FlammableSystem _flammable = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
-
-    private static readonly Vector2[] CardinalDirections =
-    [
-        Vector2.UnitX,
-        -Vector2.UnitX,
-        Vector2.UnitY,
-        -Vector2.UnitY,
-    ];
 
     public override void Initialize()
     {
@@ -108,14 +96,12 @@ public sealed class CrescentTileFireSystem : EntitySystem
         SubscribeLocalEvent<CrescentFireOnTriggerComponent, TriggerEvent>(OnFireTrigger);
         SubscribeLocalEvent<CrescentFlameProjectileComponent, MapInitEvent>(OnFlameProjectileMapInit);
         SubscribeLocalEvent<CrescentFlameProjectileComponent, ProjectileHitEvent>(OnFlameProjectileHit);
-        SubscribeLocalEvent<ExplosionFireEvent>(OnExplosionFire);
     }
 
     private void OnMapInit(Entity<CrescentTileFireComponent> ent, ref MapInitEvent args)
     {
         ent.Comp.DeleteAt = _timing.CurTime + ent.Comp.Lifetime;
         ent.Comp.NextTick = _timing.CurTime;
-        ent.Comp.NextSpread = _timing.CurTime + ent.Comp.SpreadInterval;
 
         if (TryComp<FlammableComponent>(ent, out var flammable))
         {
@@ -160,6 +146,7 @@ public sealed class CrescentTileFireSystem : EntitySystem
         {
             if (_timing.CurTime >= fire.DeleteAt || !flammable.OnFire)
             {
+                LeaveBurntDecal(uid);
                 QueueDel(uid);
                 continue;
             }
@@ -170,6 +157,7 @@ public sealed class CrescentTileFireSystem : EntitySystem
                 if (_timing.CurTime - fire.OxygenStarvedSince >= fire.VacuumExtinguishDelay)
                 {
                     _flammable.Extinguish(uid, flammable);
+                    LeaveBurntDecal(uid);
                     QueueDel(uid);
                 }
                 continue;
@@ -181,13 +169,6 @@ public sealed class CrescentTileFireSystem : EntitySystem
             {
                 fire.NextTick = _timing.CurTime + fire.TickInterval;
                 BurnNearby(uid, fire);
-            }
-
-            if (_timing.CurTime >= fire.NextSpread)
-            {
-                fire.NextSpread = _timing.CurTime + fire.SpreadInterval;
-                if (_random.Prob(fire.SpreadChance))
-                    TrySpread((uid, fire));
             }
         }
     }
@@ -202,12 +183,6 @@ public sealed class CrescentTileFireSystem : EntitySystem
 
         if (_lookup.GetEntitiesInRange<CrescentTileFireComponent>(coordinates, 0.4f).Count == 0)
             Spawn("CrescentTileFire", coordinates);
-    }
-
-    private void OnExplosionFire(ExplosionFireEvent args)
-    {
-        var count = Math.Clamp((int) MathF.Ceiling(args.Radius * args.FireStacks), 2, 16);
-        SpawnFirePatch(args.Epicenter, args.Radius, count);
     }
 
     private void OnFireTrigger(Entity<CrescentFireOnTriggerComponent> ent, ref TriggerEvent args)
@@ -256,16 +231,20 @@ public sealed class CrescentTileFireSystem : EntitySystem
         }
     }
 
-    private void TrySpread(Entity<CrescentTileFireComponent> source)
+    private void LeaveBurntDecal(EntityUid fireUid)
     {
-        var coordinates = Transform(source).Coordinates
-            .Offset(_random.Pick(CardinalDirections))
-            .SnapToGrid(EntityManager, _mapSystem);
-        if (_lookup.GetEntitiesInRange<CrescentTileFireComponent>(coordinates, 0.4f).Count != 0)
+        if (!Transform(fireUid).Coordinates.TryGetTileRef(out var tile, EntityManager, _mapSystem))
             return;
 
-        var spreadFire = Spawn("CrescentTileFire", coordinates);
-        if (TryComp(spreadFire, out CrescentTileFireComponent? spreadFireComponent))
-            spreadFireComponent.DeleteAt = source.Comp.DeleteAt;
+        var tileCenter = new Vector2(tile.Value.GridIndices.X + 0.5f, tile.Value.GridIndices.Y + 0.5f);
+        foreach (var (_, decal) in _decals.GetDecalsInRange(tile.Value.GridUid, tileCenter, 0.5f))
+        {
+            if (Array.IndexOf(BurntDecals, decal.Id) != -1)
+                return;
+        }
+
+        var coordinates = new EntityCoordinates(tile.Value.GridUid, tile.Value.GridIndices);
+        _decals.TryAddDecal(_random.Pick(BurntDecals), coordinates, out _, cleanable: true);
     }
+
 }

@@ -728,7 +728,7 @@
     layers:
       - state: frag
   - type: EmpOnTrigger
-    range: 3
+    range: 4
     energyConsumption: 2700000
   - type: ExplodeOnTrigger
   - type: Explosive
@@ -1168,7 +1168,7 @@
     layers:
       - state: frag
   - type: EmpOnTrigger
-    range: 3
+    range: 4
     energyConsumption: 2700000
   - type: ExplodeOnTrigger
   - type: Explosive

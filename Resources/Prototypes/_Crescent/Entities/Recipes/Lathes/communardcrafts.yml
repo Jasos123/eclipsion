@@ -294,7 +294,7 @@
   materials:
     Steel: 3000
     HardsuitElectronics: 1000
-    NanotrasenElectronics: 1000
+    NanotrasenMechatronics: 1000
     Tungsten: 2500
     Durathread: 1500
 

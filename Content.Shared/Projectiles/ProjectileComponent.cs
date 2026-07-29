@@ -89,6 +89,12 @@ public sealed partial class ProjectileComponent : Component
     [DataField, AutoNetworkedField]
     public bool DamagedEntity;
 
+    /// <summary>
+    ///     Deterministic seed used to predict whether this projectile passes over a lying target.
+    /// </summary>
+    [AutoNetworkedField]
+    public long LyingTargetMissSeed;
+
     // Goobstation start
     [DataField]
     public bool Penetrate;

@@ -5,6 +5,7 @@ using Content.Shared.Actions;
 using Content.Shared.Destructible;
 using Content.Shared.DoAfter;
 using Content.Shared.DragDrop;
+using Content.Shared.Emp;
 using Content.Shared.FixedPoint;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Components;
@@ -523,18 +524,30 @@ public abstract class SharedMechSystem : EntitySystem
 
     private void OnAttackAttempt(EntityUid uid, MechPilotComponent component, AttackAttemptEvent args)
     {
-        if (args.Target == component.Mech)
+        if (args.Target == component.Mech || HasComp<EmpDisabledComponent>(component.Mech))
             args.Cancel();
     }
 
     // Goobstation: Prevent guns being used out of mechs if CCVAR is set.
     private void OnShotAttempted(EntityUid uid, MechEquipmentComponent component, ref ShotAttemptedEvent args)
     {
+        if (HasComp<EmpDisabledComponent>(uid))
+        {
+            args.Cancel();
+            return;
+        }
+
         if (!component.EquipmentOwner.HasValue
             || !HasComp<MechComponent>(component.EquipmentOwner.Value))
         {
             if (!_canUseMechGunOutside)
                 args.Cancel();
+            return;
+        }
+
+        if (HasComp<EmpDisabledComponent>(component.EquipmentOwner.Value))
+        {
+            args.Cancel();
             return;
         }
 

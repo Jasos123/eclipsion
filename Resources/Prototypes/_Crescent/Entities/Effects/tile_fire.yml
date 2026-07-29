@@ -44,8 +44,6 @@
       types: {}
   - type: CrescentTileFire
     lifetime: 18
-    spreadInterval: 2.5
-    spreadChance: 0.18
     igniteStacks: 1
     damage:
       types:

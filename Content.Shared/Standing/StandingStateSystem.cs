@@ -155,7 +155,7 @@ public sealed class StandingStateSystem : EntitySystem
         var entityDistances = new Dictionary<EntityUid, float>();
 
         foreach (var entity in _lookup.GetEntitiesInRange(uid, 0.3f))
-            if (HasComp<ClimbableComponent>(entity))
+            if (TryComp(entity, out ClimbableComponent? climbable) && climbable.AutoClimbOnChangeStanding)
                 entityDistances[entity] = (Transform(uid).Coordinates.Position - Transform(entity).Coordinates.Position).LengthSquared();
 
         if (entityDistances.Count > 0)

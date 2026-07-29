@@ -13,6 +13,18 @@ public sealed partial class LayingDownComponent : Component
     public float LyingSpeedModifier = 0.35f,
                  CrawlingUnderSpeedModifier = 0.5f;
 
+    /// <summary>
+    ///     Chance for a projectile or hitscan fired by a gun to pass over this entity while they are lying down.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float GunshotMissChance = 0.35f;
+
+    /// <summary>
+    ///     Multiplier applied to gun spread while this entity is lying down.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float GunSpreadModifier = 0.65f;
+
     [DataField, AutoNetworkedField]
     public bool AutoGetUp;
 

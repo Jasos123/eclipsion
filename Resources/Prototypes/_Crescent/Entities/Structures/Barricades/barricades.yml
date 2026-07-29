@@ -31,6 +31,7 @@
   - type: DirectionalBarricade
   - type: BarricadeBarbed
   - type: Climbable
+    autoClimbOnChangeStanding: false
   - type: Physics
   - type: Fixtures
     fixtures:
@@ -43,6 +44,7 @@
         - FullTileMask
         layer:
         - TableLayer
+        - LowImpassable
         - BulletImpassable
   - type: Damageable
     damageContainer: StructuralInorganic
@@ -69,7 +71,7 @@
           False: { visible: false }
   - type: Destructible
     thresholds:
-    - trigger: !type:DamageTrigger { damage: 225 }
+    - trigger: !type:DamageTrigger { damage: 325 }
       behaviors:
       - !type:SpawnEntitiesBehavior
         spawn:
@@ -105,7 +107,7 @@
           False: { visible: false }
   - type: Destructible
     thresholds:
-    - trigger: !type:DamageTrigger { damage: 300 }
+    - trigger: !type:DamageTrigger { damage: 400 }
       behaviors:
       - !type:SpawnEntitiesBehavior
         spawn:
@@ -151,7 +153,7 @@
     tileFireChance: 0.15
   - type: Destructible
     thresholds:
-    - trigger: !type:DamageTrigger { damage: 100 }
+    - trigger: !type:DamageTrigger { damage: 200 }
       behaviors:
       - !type:SpawnEntitiesBehavior
         spawn:
@@ -190,7 +192,7 @@
     tileFireChance: 0.04
   - type: Destructible
     thresholds:
-    - trigger: !type:DamageTrigger { damage: 200 }
+    - trigger: !type:DamageTrigger { damage: 500 }
       behaviors:
       - !type:SpawnEntitiesBehavior
         spawn:
@@ -289,7 +291,7 @@
       visible: false
   - type: Destructible
     thresholds:
-    - trigger: !type:DamageTrigger { damage: 300 }
+    - trigger: !type:DamageTrigger { damage: 400 }
       behaviors:
       - !type:SpawnEntitiesBehavior
         spawn:
@@ -348,7 +350,7 @@
       visible: false
   - type: Destructible
     thresholds:
-    - trigger: !type:DamageTrigger { damage: 350 }
+    - trigger: !type:DamageTrigger { damage: 450 }
       behaviors:
       - !type:SpawnEntitiesBehavior
         spawn:

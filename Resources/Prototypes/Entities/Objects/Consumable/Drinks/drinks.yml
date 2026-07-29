@@ -59,8 +59,8 @@
         density: 30
         mask:
         - ItemMask
-        layer:
-        - BulletImpassable # Ever seen a John Woo movie?
+  - type: Damageable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:

@@ -416,7 +416,7 @@
     Durathread: 500
     Tungsten: 1500
     HardlightGenerator: 2000
-    NanotrasenElectronics: 1000
+    NanotrasenMechatronics: 1000
 
 - type: latheRecipe
   id: ClothingOuterHardsuitImperialNullweavePsion

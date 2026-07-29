@@ -199,6 +199,7 @@
     Steel: 2500
     Tungsten: 500
     HardsuitElectronics: 500
+    NanotrasenMechatronics: 500
 
 - type: latheRecipe
   id: ClothingOuterHardsuitHighsecUA
@@ -211,6 +212,7 @@
     Silver: 500
     Tungsten: 500
     HardsuitElectronics: 500
+    NanotrasenMechatronics: 500
 
 - type: latheRecipe
   id: ClothingOuterHardsuitHEV
@@ -244,7 +246,7 @@
     Steel: 5000
     Tungsten: 2000
     HardsuitElectronics: 1000
-    AdvancedMechatronics: 1000 #Exoskeletal support for the additional armour platings
+    NanotrasenMechatronics: 1000 #Exoskeletal support for the additional armour platings
 
 # MARK: Weapons
 

@@ -4,7 +4,6 @@ using Content.Server.Administration.Logs;
 using Content.Server.Atmos.Components;
 using Content.Server.Chat.Managers;
 using Content.Server.Explosion.Components;
-using Content.Server.Explosion;
 using Content.Server.NodeContainer.EntitySystems;
 using Content.Server.NPC.Pathfinding;
 using Content.Shared.Armor;
@@ -31,11 +30,6 @@ using Robust.Shared.Random;
 using Robust.Shared.Utility;
 using Robust.Server.GameObjects;
 using System.Diagnostics;
-// Rat-start
-using Content.Server.Fluids.EntitySystems;
-using Content.Server.Chemistry.Containers.EntitySystems;
-using Content.Shared.Chemistry.Components.SolutionManager;
-using Content.Shared.Chemistry.Components;
 
 namespace Content.Server.Explosion.EntitySystems;
 
@@ -60,8 +54,6 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
     [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly MapSystem _mapSystem = default!;
-    [Dependency] private readonly SmokeSystem _smoke = default!;    // Retgore changes
-    [Dependency] private readonly SolutionContainerSystem _solutionContainer = default!;    // Rargore changes
 
     private EntityQuery<TransformComponent> _transformQuery;
     private EntityQuery<FlammableComponent> _flammableQuery;
@@ -195,19 +187,6 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
             explosive.MaxTileBreak,
             explosive.CanCreateVacuum,
             user);
-
-        if (_prototypeManager.TryIndex<ExplosionPrototype>(explosive.ExplosionType, out var explosionPrototype) &&
-            explosionPrototype.FireStacks is > 0f)
-        {
-            var fireRadius = radius ?? IntensityToRadius(
-                (float) totalIntensity,
-                explosive.IntensitySlope,
-                explosive.MaxIntensity);
-            RaiseLocalEvent(new ExplosionFireEvent(
-                Transform(uid).Coordinates,
-                MathF.Max(1f, fireRadius),
-                explosionPrototype.FireStacks.Value));
-        }
 
         if (explosive.DeleteAfterExplosion ?? delete)
             EntityManager.QueueDeleteEntity(uid);
@@ -382,8 +361,6 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
 
         var visualEnt = CreateExplosionVisualEntity(pos, queued.Proto.ID, spaceMatrix, spaceData, gridData.Values, iterationIntensity);
 
-        SpawnSmoke(queued.Epicenter, 3f, 5); // Ratgore changes
-
         // camera shake
         CameraShake(iterationIntensity.Count * 4f, pos, queued.TotalIntensity);
 
@@ -464,20 +441,4 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
                 _recoilSystem.KickCamera(uid, -delta.Normalized() * effect);
         }
     }
-
-    // Rat-start
-    private void SpawnSmoke(MapCoordinates coords, float duration, int spreadAmount)
-    {
-        var smokeEntity = Spawn("Smoke", coords);
-
-        var solutionComp = EntityManager.AddComponent<SolutionComponent>(smokeEntity);
-        TryComp<SmokeComponent>(smokeEntity, out var smokeComp);
-
-        var solution = new Solution();
-
-        _solutionContainer.TryAddSolution((smokeEntity, solutionComp), solution);
-
-        _smoke.StartSmoke(smokeEntity, solution, duration, spreadAmount, smokeComp);
-    }
-    // Rat-stop
 }

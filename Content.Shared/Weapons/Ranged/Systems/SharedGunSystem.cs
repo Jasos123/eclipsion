@@ -24,6 +24,7 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Mech.Components;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
+using Content.Shared.Standing;
 using Content.Shared.Stunnable;
 using Content.Shared.Tag;
 using Content.Shared.Throwing;
@@ -515,7 +516,7 @@ public abstract partial class SharedGunSystem : EntitySystem
         var toMap = toCoordinates.ToMapPos(EntityManager, TransformSystem);
         var mapDirection = toMap - fromMap.Position;
         var mapAngle = mapDirection.ToAngle();
-        var angle = GetRecoilAngle(Timing.CurTime, gun, mapDirection.ToAngle());
+        var angle = GetRecoilAngle(Timing.CurTime, gun, mapDirection.ToAngle(), user);
 
         // If applicable, this ensures the projectile is parented to grid on spawn, instead of the map.
         var fromEnt = MapManager.TryFindGridAt(fromMap, out var gridUid, out var grid)
@@ -552,13 +553,15 @@ public abstract partial class SharedGunSystem : EntitySystem
             }
         }
 
-        foreach (var (ent, shootable) in ammo)
+        for (var shotIndex = 0; shotIndex < ammo.Count; shotIndex++)
         {
+            var (ent, shootable) = ammo[shotIndex];
+
             // pneumatic cannon doesn't shoot bullets it just throws them, ignore ammo handling
             if (throwItems && ent != null)
             {
                 Recoil(user, mapDirection, gun.CameraRecoilScalarModified);
-                ShootOrThrow(ent.Value, mapDirection, gunVelocity, gun, gunUid, user);
+                ShootOrThrow(ent.Value, mapDirection, gunVelocity, gun, gunUid, user, shotIndex);
                 continue;
             }
 
@@ -571,7 +574,7 @@ public abstract partial class SharedGunSystem : EntitySystem
                         if (_netManager.IsServer || GunPrediction)
                         {
                             var uid = Spawn(cartridge.Prototype, fromEnt);
-                            CreateAndFireProjectiles(uid, cartridge);
+                            CreateAndFireProjectiles(uid, cartridge, shotIndex);
 
                             if (_netManager.IsClient && HasComp<GunIgnorePredictionComponent>(gunUid))
                             {
@@ -619,7 +622,7 @@ public abstract partial class SharedGunSystem : EntitySystem
                 case AmmoComponent newAmmo:
                     if (_netManager.IsServer || GunPrediction)
                     {
-                        CreateAndFireProjectiles(ent!.Value, newAmmo);
+                        CreateAndFireProjectiles(ent!.Value, newAmmo, shotIndex);
                     }
                     else
                     {
@@ -655,23 +658,30 @@ public abstract partial class SharedGunSystem : EntitySystem
                                 break;
 
                             var result = rayCastResults[0];
+                            var foundResult = false;
 
                             // Check if laser is shot from in a container
-                            if (!Containers.IsEntityOrParentInContainer(lastUser))
+                            var checkProjectileTarget = !Containers.IsEntityOrParentInContainer(lastUser);
+                            foreach (var collide in rayCastResults)
                             {
                                 // Checks if the laser should pass over unless targeted by its user
-                                foreach (var collide in rayCastResults)
+                                if (checkProjectileTarget
+                                    && collide.HitEntity != gun.Target
+                                    && CompOrNull<RequireProjectileTargetComponent>(collide.HitEntity)?.Active == true)
                                 {
-                                    if (collide.HitEntity != gun.Target &&
-                                        CompOrNull<RequireProjectileTargetComponent>(collide.HitEntity)?.Active == true)
-                                    {
-                                        continue;
-                                    }
-
-                                    result = collide;
-                                    break;
+                                    continue;
                                 }
+
+                                if (ShouldMissLyingTarget(gunUid, collide.HitEntity, shotIndex))
+                                    continue;
+
+                                result = collide;
+                                foundResult = true;
+                                break;
                             }
+
+                            if (!foundResult)
+                                break;
 
                             var hit = result.HitEntity;
                             lastHit = hit;
@@ -755,7 +765,7 @@ public abstract partial class SharedGunSystem : EntitySystem
             FiredProjectiles = shotProjectiles,
         });
 
-        void CreateAndFireProjectiles(EntityUid ammoEnt, AmmoComponent ammoComp)
+        void CreateAndFireProjectiles(EntityUid ammoEnt, AmmoComponent ammoComp, int shotIndex)
         {
             predictedProjectiles ??= new List<int>();
             MarkPredicted(ammoEnt, 0);
@@ -767,20 +777,20 @@ public abstract partial class SharedGunSystem : EntitySystem
                 var angles = LinearSpread(mapAngle - spreadEvent.Spread / 2,
                     mapAngle + spreadEvent.Spread / 2, ammoSpreadComp.Count);
 
-                ShootOrThrow(ammoEnt, angles[0].ToVec(), gunVelocity, gun, gunUid, user);
+                ShootOrThrow(ammoEnt, angles[0].ToVec(), gunVelocity, gun, gunUid, user, shotIndex, 0);
                 shotProjectiles.Add(ammoEnt);
 
                 for (var i = 1; i < ammoSpreadComp.Count; i++)
                 {
                     var newuid = Spawn(ammoSpreadComp.Proto, fromEnt);
-                    ShootOrThrow(newuid, angles[i].ToVec(), gunVelocity, gun, gunUid, user);
+                    ShootOrThrow(newuid, angles[i].ToVec(), gunVelocity, gun, gunUid, user, shotIndex, i);
                     shotProjectiles.Add(newuid);
                     MarkPredicted(newuid, i);
                 }
             }
             else
             {
-                ShootOrThrow(ammoEnt, mapDirection, gunVelocity, gun, gunUid, user);
+                ShootOrThrow(ammoEnt, mapDirection, gunVelocity, gun, gunUid, user, shotIndex);
                 shotProjectiles.Add(ammoEnt);
             }
 
@@ -792,7 +802,7 @@ public abstract partial class SharedGunSystem : EntitySystem
         return shotProjectiles;
     }
 
-    private Angle GetRecoilAngle(TimeSpan curTime, GunComponent component, Angle direction)
+    private Angle GetRecoilAngle(TimeSpan curTime, GunComponent component, Angle direction, EntityUid? user)
     {
         var timeSinceLastFire = (curTime - component.LastFire).TotalSeconds;
         var newTheta = MathHelper.Clamp(component.CurrentAngle.Theta + component.AngleIncreaseModified.Theta - component.AngleDecayModified.Theta * timeSinceLastFire, component.MinAngleModified.Theta, component.MaxAngleModified.Theta);
@@ -804,13 +814,66 @@ public abstract partial class SharedGunSystem : EntitySystem
         tick = tick << 32;
         tick = tick | (uint) GetNetEntity(component.Owner).Id;
         var random = new Xoroshiro64S(tick).NextFloat(-0.5f, 0.5f);
-        var spread = component.CurrentAngle.Theta * random;
-        var angle = new Angle(direction.Theta + component.CurrentAngle.Theta * random);
+        var spreadModifier = GetLyingGunSpreadModifier(user);
+        var spread = component.CurrentAngle.Theta * spreadModifier * random;
+        var angle = new Angle(direction.Theta + spread);
         DebugTools.Assert(spread <= component.MaxAngleModified.Theta);
         return angle;
     }
 
-    private void ShootOrThrow(EntityUid uid, Vector2 mapDirection, Vector2 gunVelocity, GunComponent gun, EntityUid gunUid, EntityUid? user)
+    public float GetLyingGunSpreadModifier(EntityUid? user)
+    {
+        if (user is not { } uid
+            || !TryComp(uid, out LayingDownComponent? layingDown)
+            || !TryComp(uid, out StandingStateComponent? standing)
+            || standing.CurrentState is not StandingState.Lying)
+        {
+            return 1f;
+        }
+
+        return Math.Clamp(layingDown.GunSpreadModifier, 0f, 1f);
+    }
+
+    private bool ShouldMissLyingTarget(EntityUid gun, EntityUid target, int shotIndex)
+    {
+        if (!TryComp(target, out LayingDownComponent? layingDown)
+            || !TryComp(target, out StandingStateComponent? standing)
+            || standing.CurrentState is not StandingState.Lying)
+        {
+            return false;
+        }
+
+        var chance = Math.Clamp(layingDown.GunshotMissChance, 0f, 1f);
+        if (chance <= 0f)
+            return false;
+
+        var seed = CreateLyingTargetMissSeed(gun, shotIndex, 0);
+        var targetId = GetNetEntity(target).Id;
+        seed ^= ((long) targetId << 32) ^ (uint) targetId;
+        return new Xoroshiro64S(seed).NextFloat() < chance;
+    }
+
+    private long CreateLyingTargetMissSeed(EntityUid gun, int shotIndex, int projectileIndex)
+    {
+        unchecked
+        {
+            long seed = Timing.CurTick.Value;
+            seed = seed * 397 ^ (uint) GetNetEntity(gun).Id;
+            seed = seed * 397 ^ (uint) shotIndex;
+            seed = seed * 397 ^ (uint) projectileIndex;
+            return seed;
+        }
+    }
+
+    private void ShootOrThrow(
+        EntityUid uid,
+        Vector2 mapDirection,
+        Vector2 gunVelocity,
+        GunComponent gun,
+        EntityUid gunUid,
+        EntityUid? user,
+        int shotIndex,
+        int projectileIndex = 0)
     {
         if (gun.Target is { } target && !TerminatingOrDeleted(target))
         {
@@ -833,6 +896,17 @@ public abstract partial class SharedGunSystem : EntitySystem
             //_sawmill.Debug("--@ UPDATE - USER IS IN A MECH");
         }
         ShootProjectile(uid, mapDirection, gunVelocity, gunUid, user, gun.ProjectileSpeedModified);
+
+        var projectile = Comp<ProjectileComponent>(uid);
+        var missSeed = CreateLyingTargetMissSeed(gunUid, shotIndex, projectileIndex);
+        unchecked
+        {
+            missSeed = missSeed * 397 ^ BitConverter.SingleToInt32Bits(mapDirection.X);
+            missSeed = missSeed * 397 ^ BitConverter.SingleToInt32Bits(mapDirection.Y);
+        }
+
+        projectile.LyingTargetMissSeed = missSeed;
+        Dirty(uid, projectile);
     }
 
     #region Hitscan effects

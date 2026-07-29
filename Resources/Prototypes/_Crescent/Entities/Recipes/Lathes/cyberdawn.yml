@@ -88,7 +88,7 @@
     HardsuitElectronics: 1000
     Tungsten: 500
     Durathread: 3000
-    NanotrasenElectronics: 500
+    NanotrasenMechatronics: 500
     Steel: 2500
 
 - type: latheRecipe
@@ -100,7 +100,7 @@
     HardsuitElectronics: 1000
     Tungsten: 2000
     Durathread: 1500
-    NanotrasenElectronics: 500
+    NanotrasenMechatronics: 500
     Steel: 5000
 
 # MARK: Equipment

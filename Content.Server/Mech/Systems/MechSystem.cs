@@ -1,11 +1,13 @@
 using System.Linq;
 using Content.Server.Atmos.EntitySystems;
+using Content.Server.Emp;
 using Content.Server.Mech.Components;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
+using Content.Shared.Emp;
 using Content.Shared.FixedPoint;
 using Content.Shared.Interaction;
 using Content.Shared.Mech;
@@ -58,8 +60,12 @@ public sealed partial class MechSystem : SharedMechSystem
 
         SubscribeLocalEvent<MechComponent, DamageChangedEvent>(OnDamageChanged);
         SubscribeLocalEvent<MechComponent, MechEquipmentRemoveMessage>(OnRemoveEquipmentMessage);
+        SubscribeLocalEvent<MechComponent, EmpPulseEvent>(OnEmpPulse);
+        SubscribeLocalEvent<MechComponent, EmpDisabledRemoved>(OnEmpDisabledRemoved);
 
         SubscribeLocalEvent<MechComponent, UpdateCanMoveEvent>(OnMechCanMoveEvent);
+        SubscribeLocalEvent<BatteryComponent, ChargeChangedEvent>(OnBatteryChargeChanged);
+        SubscribeLocalEvent<EmpDisabledComponent, ComponentAdd>(OnEmpDisabledAdded);
 
 
         SubscribeLocalEvent<MechPilotComponent, ToolUserAttemptUseEvent>(OnToolUseAttempt);
@@ -77,8 +83,48 @@ public sealed partial class MechSystem : SharedMechSystem
 
     private void OnMechCanMoveEvent(EntityUid uid, MechComponent component, UpdateCanMoveEvent args)
     {
-        if (component.Broken || component.Integrity <= 0 || component.Energy <= 0)
+        if (component.Broken ||
+            component.Integrity <= 0 ||
+            component.Energy <= 0 ||
+            HasComp<EmpDisabledComponent>(uid))
             args.Cancel();
+    }
+
+    private void OnEmpPulse(EntityUid uid, MechComponent component, ref EmpPulseEvent args)
+    {
+        args.Affected = true;
+        args.Disabled = true;
+    }
+
+    private void OnEmpDisabledAdded(EntityUid uid, EmpDisabledComponent component, ComponentAdd args)
+    {
+        if (!TryComp<MechComponent>(uid, out var mech))
+            return;
+
+        _actionBlocker.UpdateCanMove(uid);
+        UpdateUserInterface(uid, mech);
+    }
+
+    private void OnEmpDisabledRemoved(EntityUid uid, MechComponent component, EmpDisabledRemoved args)
+    {
+        _actionBlocker.UpdateCanMove(uid);
+        UpdateUserInterface(uid, component);
+    }
+
+    private void OnBatteryChargeChanged(EntityUid uid, BatteryComponent component, ref ChargeChangedEvent args)
+    {
+        var parent = Transform(uid).ParentUid;
+        if (!TryComp<MechComponent>(parent, out var mech) ||
+            mech.BatterySlot == null ||
+            mech.BatterySlot.ContainedEntity != uid)
+            return;
+
+        mech.Energy = args.Charge;
+        mech.MaxEnergy = args.MaxCharge;
+
+        Dirty(parent, mech);
+        _actionBlocker.UpdateCanMove(parent);
+        UpdateUserInterface(parent, mech);
     }
 
     private void OnInteractUsing(EntityUid uid, MechComponent component, InteractUsingEvent args)
