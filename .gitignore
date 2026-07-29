@@ -298,6 +298,9 @@ desktop.ini
 # Images generated using the MapRenderer
 Resources/MapImages
 
+# Temporary image-generation working files
+/tmp/imagegen/
+
 ## Docfx stuff
 /Content.Docfx/api/
 /Content.Docfx/*site

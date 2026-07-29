@@ -192,12 +192,14 @@ public sealed class ActionButton : Control, IEntityControl
         if (!_entities.TryGetComponent(ActionId, out MetaDataComponent? metadata))
             return null;
 
-        var name = FormattedMessage.FromMarkupPermissive(Loc.GetString(metadata.EntityName));
-        var decr = FormattedMessage.FromMarkupPermissive(Loc.GetString(metadata.EntityDescription));
+        // Metadata names and descriptions are already localized by MetaDataSystem.
+        var name = FormattedMessage.FromMarkupPermissive(metadata.EntityName);
+        var decr = FormattedMessage.FromMarkupPermissive(metadata.EntityDescription);
 
         if (_action is { Charges: not null })
         {
-            var charges = FormattedMessage.FromMarkupPermissive(Loc.GetString($"Charges: {_action.Charges.Value.ToString()}/{_action.MaxCharges.ToString()}"));
+            var charges = FormattedMessage.FromMarkupPermissive(
+                Loc.GetString("ui-actionslot-charges", ("charges", _action.Charges.Value)));
             return new ActionAlertTooltip(name, decr, charges: charges);
         }
 

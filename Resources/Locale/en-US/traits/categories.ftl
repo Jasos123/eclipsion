@@ -2,6 +2,7 @@
 
 trait-category-Uncategorized = Uncategorized
 trait-category-Auditory = Auditory
+trait-category-Language = Language
 trait-category-Mental = Mental
 trait-category-Physical = Physical
 trait-category-Psionics = Psionics

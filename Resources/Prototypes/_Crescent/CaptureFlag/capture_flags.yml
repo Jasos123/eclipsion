@@ -9,8 +9,8 @@
       anchored: true
     - type: Clickable
     - type: Sprite
-      sprite: Objects/Misc/Handy_Flags/NT_handy_flag.rsi
-      state: icon
+      sprite: _Crescent/Structures/medieval_pole_banners.rsi
+      state: neutral-white
     - type: CaptureFlag
       radius: 2.0
       captureTime: 45

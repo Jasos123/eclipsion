@@ -4,6 +4,7 @@ using Content.Server.Administration.Logs;
 using Content.Server.Atmos.Components;
 using Content.Server.Chat.Managers;
 using Content.Server.Explosion.Components;
+using Content.Server.Explosion;
 using Content.Server.NodeContainer.EntitySystems;
 using Content.Server.NPC.Pathfinding;
 using Content.Shared.Armor;
@@ -194,6 +195,19 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
             explosive.MaxTileBreak,
             explosive.CanCreateVacuum,
             user);
+
+        if (_prototypeManager.TryIndex<ExplosionPrototype>(explosive.ExplosionType, out var explosionPrototype) &&
+            explosionPrototype.FireStacks is > 0f)
+        {
+            var fireRadius = radius ?? IntensityToRadius(
+                (float) totalIntensity,
+                explosive.IntensitySlope,
+                explosive.MaxIntensity);
+            RaiseLocalEvent(new ExplosionFireEvent(
+                Transform(uid).Coordinates,
+                MathF.Max(1f, fireRadius),
+                explosionPrototype.FireStacks.Value));
+        }
 
         if (explosive.DeleteAfterExplosion ?? delete)
             EntityManager.QueueDeleteEntity(uid);

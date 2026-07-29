@@ -42,9 +42,13 @@ public sealed class CaptureFlagOverlay : Overlay
 
     protected override void Draw(in OverlayDrawArgs args)
     {
-        foreach ((var xform, var flag) in _entMan.EntityQuery<TransformComponent, CaptureFlagComponent>(true))
+        var query = _entMan.AllEntityQueryEnumerator<CaptureFlagComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var flag, out var xform))
         {
-            var worldPos = _xform.GetWorldPosition(xform);
+            if (xform.MapID != args.MapId)
+                continue;
+
+            var worldPos = _xform.GetWorldPosition(uid);
 
             var color = flag.Stage switch
             {

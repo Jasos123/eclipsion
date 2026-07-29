@@ -15,6 +15,8 @@ namespace Content.Client.UserInterface.Systems.DamageOverlays;
 [UsedImplicitly]
 public sealed class DamageOverlayUiController : UIController
 {
+    private const float MinimumDamageOverlayLevel = 0.05f;
+
     [Dependency] private readonly IOverlayManager _overlayManager = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
 
@@ -66,7 +68,7 @@ public sealed class DamageOverlayUiController : UIController
     {
         _overlay.DeadLevel = 0f;
         _overlay.CritLevel = 0f;
-        _overlay.BruteLevel = 0f;
+        _overlay.DamageLevel = 0f;
         _overlay.OxygenLevel = 0f;
     }
 
@@ -94,19 +96,14 @@ public sealed class DamageOverlayUiController : UIController
         {
             case MobState.Alive:
             {
-                if (damageable.DamagePerGroup.TryGetValue("Brute", out var bruteDamage))
-                {
-                    _overlay.BruteLevel = FixedPoint2.Min(1f, bruteDamage / critThreshold).Float();
-                }
+                var damageLevel = FixedPoint2.Min(1f, damageable.TotalDamage / critThreshold).Float();
+                _overlay.DamageLevel = damageable.TotalDamage > FixedPoint2.Zero
+                    ? MathF.Max(MinimumDamageOverlayLevel, damageLevel)
+                    : 0f;
 
                 if (damageable.DamagePerGroup.TryGetValue("Airloss", out var oxyDamage))
                 {
                     _overlay.OxygenLevel = FixedPoint2.Min(1f, oxyDamage / critThreshold).Float();
-                }
-
-                if (_overlay.BruteLevel < 0.05f) // Don't show damage overlay if they're near enough to max.
-                {
-                    _overlay.BruteLevel = 0;
                 }
 
                 _overlay.CritLevel = 0;
@@ -120,13 +117,13 @@ public sealed class DamageOverlayUiController : UIController
                     return;
                 _overlay.CritLevel = critLevel.Value.Float();
 
-                _overlay.BruteLevel = 0;
+                _overlay.DamageLevel = 0;
                 _overlay.DeadLevel = 0;
                 break;
             }
             case MobState.Dead:
             {
-                _overlay.BruteLevel = 0;
+                _overlay.DamageLevel = 0;
                 _overlay.CritLevel = 0;
                 break;
             }

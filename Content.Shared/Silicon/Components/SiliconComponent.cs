@@ -69,6 +69,12 @@ public sealed partial class SiliconComponent : Component
     [DataField]
     public float DrainPerSecond = 50f;
 
+    /// <summary>
+    ///     Additional power drained per second while sprinting.
+    /// </summary>
+    [DataField]
+    public float SprintDrainPerSecond = 2f;
+
 
     /// <summary>
     ///     The percentages at which the silicon will enter each state.

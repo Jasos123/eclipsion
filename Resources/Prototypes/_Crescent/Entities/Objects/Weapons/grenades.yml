@@ -8,7 +8,7 @@
     sprite: Objects/Weapons/Grenades/smoke.rsi
   - type: SmokeOnTrigger
     duration: 2
-    spreadAmount: 13
+    spreadAmount: 9
     smokePrototype: AluminiumMetalFoam
   - type: StaticPrice
     price: 350
@@ -138,12 +138,15 @@
   - type: Sprite
     sprite: _Crescent/Objects/Weapons/Grenades/incendiary.rsi
   - type: SmokeOnTrigger
-    duration: 13
-    spreadAmount: 9
+    duration: 8
+    spreadAmount: 5
     solution:
       reagents:
       - ReagentId: Phlogiston
         Quantity: 20
+  - type: CrescentFireOnTrigger
+    radius: 2.5
+    count: 9
   - type: TimerTriggerVisuals
     primingSound:
       path: "/Audio/_Crescent/Weapons/Grenades/trigger1.ogg"
@@ -169,8 +172,8 @@
   - type: Sprite
     sprite: _Crescent/Objects/Weapons/Grenades/smoke.rsi
   - type: SmokeOnTrigger
-    duration: 13
-    spreadAmount: 18
+    duration: 10
+    spreadAmount: 12
   - type: TimerTriggerVisuals
     primingSound:
       path: "/Audio/_Crescent/Weapons/Grenades/trigger1.ogg"
@@ -202,6 +205,9 @@
     intensitySlope: 8
     totalIntensity: 450
     canCreateVacuum: false
+  - type: CrescentFireOnTrigger
+    radius: 1.25
+    count: 2
   - type: TimerTriggerVisuals
     primingSound:
       path: "/Audio/_Crescent/Weapons/Grenades/trigger1.ogg"
@@ -230,6 +236,9 @@
     intensitySlope: 9
     totalIntensity: 270
     canCreateVacuum: false
+  - type: CrescentFireOnTrigger
+    radius: 1.25
+    count: 2
   - type: TimerTriggerVisuals
     primingSound:
       path: "/Audio/_Crescent/Weapons/Grenades/trigger1.ogg"
@@ -252,8 +261,8 @@
   - type: Sprite
     sprite: _Crescent/Objects/Weapons/Grenades/tfsc_smoke.rsi
   - type: SmokeOnTrigger
-    duration: 20
-    spreadAmount: 9
+    duration: 14
+    spreadAmount: 7
   - type: DeleteOnTrigger
   - type: TimerTriggerVisuals
     primingSound:
@@ -285,6 +294,9 @@
     intensitySlope: 5
     totalIntensity: 350
     canCreateVacuum: false
+  - type: CrescentFireOnTrigger
+    radius: 1.25
+    count: 2
   - type: TimerTriggerVisuals
     primingSound:
       path: "/Audio/_Crescent/Weapons/Grenades/trigger1.ogg"
@@ -338,8 +350,8 @@
   - type: Sprite
     sprite: _Crescent/Objects/Weapons/Grenades/dsm_smoke.rsi
   - type: SmokeOnTrigger
-    duration: 13
-    spreadAmount: 8
+    duration: 9
+    spreadAmount: 6
     solution:
       reagents:
       - ReagentId: NorepinephricAcid
@@ -387,6 +399,9 @@
     intensitySlope: 7
     totalIntensity: 400
     canCreateVacuum: false
+  - type: CrescentFireOnTrigger
+    radius: 4.5
+    count: 18
   - type: TimerTriggerVisuals
     primingSound:
       path: "/Audio/_Crescent/Weapons/Grenades/trigger2.ogg"
@@ -415,6 +430,9 @@
     intensitySlope: 4
     totalIntensity: 250
     canCreateVacuum: false
+  - type: CrescentFireOnTrigger
+    radius: 1.25
+    count: 2
   - type: DamageOnHit
     damage:
       types:
@@ -497,6 +515,9 @@
     intensitySlope: 5
     totalIntensity: 150
     canCreateVacuum: false
+  - type: CrescentFireOnTrigger
+    radius: 1
+    count: 2
   - type: EmitSoundOnPickup
     sound: /Audio/_Crescent/Weapons/Grenades/grab1.ogg
   - type: EmitSoundOnDrop
@@ -516,8 +537,8 @@
   - type: Sprite
     sprite: _Crescent/Objects/Weapons/Grenades/pta_wp.rsi
   - type: SmokeOnTrigger
-    duration: 13
-    spreadAmount: 9
+    duration: 9
+    spreadAmount: 7
     solution:
       reagents:
       - ReagentId: PolytrinicAcid
@@ -526,6 +547,9 @@
         Quantity: 40
       - ReagentId: Phlogiston
         Quantity: 40
+  - type: CrescentFireOnTrigger
+    radius: 3.5
+    count: 13
   - type: TimerTriggerVisuals
     primingSound:
       path: "/Audio/_Crescent/Weapons/Grenades/trigger1.ogg"
@@ -559,6 +583,9 @@
     intensitySlope: 4
     totalIntensity: 400
     canCreateVacuum: false
+  - type: CrescentFireOnTrigger
+    radius: 1
+    count: 2
   - type: TimerTriggerVisuals
     primingSound:
       path: "/Audio/_Crescent/Weapons/Grenades/trigger1.ogg"
@@ -671,6 +698,9 @@
     intensitySlope: 18
     totalIntensity: 350
     canCreateVacuum: false
+  - type: CrescentFireOnTrigger
+    radius: 1.25
+    count: 2
   - type: TimerTriggerVisuals
     primingSound:
       path: "/Audio/_Crescent/Weapons/Grenades/trigger2.ogg"
@@ -701,8 +731,8 @@
   - type: Sprite
     sprite: _Crescent/Objects/Weapons/Grenades/shi_tear.rsi
   - type: SmokeOnTrigger
-    duration: 13
-    spreadAmount: 30
+    duration: 10
+    spreadAmount: 20
     solution:
       reagents:
       - ReagentId: TearGas

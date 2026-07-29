@@ -67,6 +67,79 @@
       - WeaponLightMachineGunTFSCRPD
 
 - type: entity
+  name: barricade light machine gun
+  id: WeaponLightMachineGunBarricade
+  parent: BaseWeaponLightMachineGun
+  description: A long-barreled support weapon fitted with a folding bipod for firing from prepared cover.
+  components:
+  - type: Sprite
+    sprite: _Crescent/Objects/Weapons/Guns/barricade_lmg.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Item
+    sprite: _Crescent/Objects/Weapons/Guns/barricade_lmg.rsi
+    size: Ginormous
+    shape:
+    - 0,0,5,2
+  - type: Clothing
+    sprite: _Crescent/Objects/Weapons/Guns/barricade_lmg.rsi
+    quickEquip: false
+    slots:
+    - Back
+    - suitStorage
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: MagazineLightRifleBox
+        insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
+        ejectSound: /Audio/Weapons/Guns/MagOut/batrifle_magout.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - MagazineLightRifleBox
+      gun_chamber:
+        name: Chamber
+        startingItem: CartridgeLightRifle
+        priority: 1
+        whitelist:
+          tags:
+          - CartridgeLightRifle
+  - type: Gun
+    minAngle: 24
+    maxAngle: 55
+    angleIncrease: 6
+    angleDecay: 14
+    fireRate: 9
+    cameraRecoilScalar: 1.5
+  - type: BarricadeLmg
+    minAngleBonus: -20
+    maxAngleBonus: -41
+    angleIncreaseBonus: -5
+    angleDecayBonus: 16
+    cameraRecoilMultiplier: 0.3
+  - type: GunWieldBonus
+    minAngle: 0
+    maxAngle: 0
+  - type: MagazineVisuals
+    magState: mag
+    steps: 1
+    zeroVisible: true
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.BarricadeLmgVisuals.Deployed:
+        enum.GunVisualLayers.Base:
+          True: { state: deployed }
+          False: { state: base }
+  - type: HeldSpeedModifier
+    walkModifier: 0.55
+    sprintModifier: 0.45
+
+- type: entity
   name: C 54 ROW
   id: WeaponLightMachineGunC54ROW
   parent: BaseItem

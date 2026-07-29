@@ -70,49 +70,6 @@ Scripts/sh/runQuickAll.sh
 
 **Done!** Connect to **localhost** in the client and start playing 🎮
 
-## 🤝 Contributing
-
-We welcome contributions to the project! Before getting started, please familiarize yourself with our commit formatting rules.
-
-### 📝 Commit Format
-
-The changelog is updated **automatically** via GitHub Actions.
-Use the correct prefixes to ensure proper categorization of changes.
-
-#### Bracketed format
-
-```
-[ADD] Added a new mechanic
-[FIX] Fixed a bug
-[REMOVE] Removed an obsolete system
-[TWEAK] Improved weapon balance
-[UPDATE] Updated textures
-```
-
-#### Non-bracketed format (with colon or comma)
-
-```
-Add: added a new mechanic
-Fix, fixed a bug
-Update: updated textures
-Tweak: improved weapon balance
-```
-
-#### Change Types
-
-- **Add** — new features, mechanics, content
-- **Fix** — bug fixes and error corrections
-- **Remove** — removal of obsolete code or content
-- **Tweak** — balance changes, improvements, optimization
-
-#### Ignored Commits
-
-The following prefixes **do not appear** in the changelog:
-
-- `[AUTO]` — automated updates
-- `[MAPS]` / `[maps]` — map and shuttle changes
-- `[IGNORE]` — technical commits, refactoring
-
 ## 🧬 Attribution
 
 This project is a downstream fork and contains code and assets from many other Space Station 14 projects.

@@ -9,6 +9,7 @@ using Content.Server.Popups;
 using Content.Shared.Popups;
 using Content.Shared.Silicon.Systems;
 using Content.Shared.Movement.Systems;
+using Content.Shared.Movement.Components;
 using Content.Server.Body.Components;
 using Robust.Shared.Containers;
 using Content.Shared.Mind.Components;
@@ -105,6 +106,13 @@ public sealed class SiliconChargeSystem : EntitySystem
                 continue;
 
             var drainRate = siliconComp.DrainPerSecond;
+
+            if (TryComp<InputMoverComponent>(silicon, out var mover)
+                && mover.Sprinting
+                && (mover.HeldMoveButtons & MoveButtons.AnyDirection) != MoveButtons.None)
+            {
+                drainRate += siliconComp.SprintDrainPerSecond;
+            }
 
             // All multipliers will be subtracted by 1, and then added together, and then multiplied by the drain rate. This is then added to the base drain rate.
             // This is to stop exponential increases, while still allowing for less-than-one multipliers.

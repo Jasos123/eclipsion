@@ -1,0 +1,118 @@
+- type: construction
+  name: directional metal barricade
+  id: CrescentBarricadeMetal
+  graph: CrescentBarricadeMetal
+  startNode: start
+  targetNode: built
+  category: construction-category-structures
+  description: Directional cover made from steel.
+  icon: { sprite: _RMC14/Structures/Walls/Barricades/barricade.rsi, state: metal }
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  name: directional plasteel barricade
+  id: CrescentBarricadePlasteel
+  graph: CrescentBarricadePlasteel
+  startNode: start
+  targetNode: built
+  category: construction-category-structures
+  description: Heavy directional cover made from plasteel.
+  icon: { sprite: _RMC14/Structures/Walls/Barricades/barricade.rsi, state: plasteel }
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  name: directional wooden barricade
+  id: CrescentBarricadeWood
+  graph: CrescentBarricadeWood
+  startNode: start
+  targetNode: built
+  category: construction-category-structures
+  description: Makeshift directional cover made from wood.
+  icon: { sprite: _RMC14/Structures/Walls/Barricades/barricade.rsi, state: wooden }
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  name: sandbag barricade
+  id: CrescentBarricadeSandbag
+  graph: CrescentBarricadeSandbag
+  startNode: start
+  targetNode: built
+  category: construction-category-structures
+  description: Directional cover assembled from filled sandbags.
+  icon: { sprite: _RMC14/Structures/Walls/Barricades/barricade.rsi, state: sandbag }
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  name: barbed wire coil
+  id: CrescentBarbedWire
+  graph: CrescentBarbedWire
+  startNode: start
+  targetNode: wire
+  category: construction-category-tools
+  description: Sharp wire for fortifying barricades.
+  icon: { sprite: _RMC14/Objects/barbed_wire.rsi, state: barbed_wire }
+  objectType: Item
+
+- type: construction
+  name: deployed barbed wire
+  id: CrescentBarbedWireDeployed
+  graph: CrescentBarbedWireDeployed
+  startNode: start
+  targetNode: built
+  category: construction-category-structures
+  description: Ground-deployed wire that wounds and slows anyone forcing their way through it.
+  icon: { sprite: _RMC14/Objects/barbed_wire.rsi, state: barbed_wire_3 }
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  name: reinforced barricade upgrade
+  id: CrescentBarricadeUpgradeReinforced
+  graph: CrescentBarricadeUpgradeReinforced
+  startNode: start
+  targetNode: kit
+  category: construction-category-tools
+  description: Bracing that improves barricade durability.
+  icon: { sprite: _RMC14/Structures/Walls/Barricades/barricade.rsi, state: brute_upgrade }
+  objectType: Item
+
+- type: construction
+  name: biohazard barricade upgrade
+  id: CrescentBarricadeUpgradeBiohazard
+  graph: CrescentBarricadeUpgradeBiohazard
+  startNode: start
+  targetNode: kit
+  category: construction-category-tools
+  description: Heat-resistant protection for a barricade.
+  icon: { sprite: _RMC14/Structures/Walls/Barricades/barricade.rsi, state: burn_upgrade }
+  objectType: Item
+
+- type: construction
+  name: composite barricade upgrade
+  id: CrescentBarricadeUpgradeComposite
+  graph: CrescentBarricadeUpgradeComposite
+  startNode: start
+  targetNode: kit
+  category: construction-category-tools
+  description: Composite plating that reduces explosion damage.
+  icon: { sprite: _RMC14/Structures/Walls/Barricades/barricade.rsi, state: explosive_upgrade }
+  objectType: Item

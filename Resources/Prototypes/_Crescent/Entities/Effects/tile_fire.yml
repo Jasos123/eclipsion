@@ -1,0 +1,52 @@
+- type: entity
+  id: CrescentTileFire
+  name: spreading fire
+  categories: [ HideSpawnMenu ]
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _RMC14/Effects/fire.rsi
+    noRot: true
+    drawdepth: WallTops
+    state: red_3
+  - type: PointLight
+    radius: 4
+    energy: 2
+    color: "#bf6d02"
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fire:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.35,-0.35,0.35,0.35"
+        density: 100
+        layer:
+        - WallLayer
+        hard: false
+  - type: Appearance
+  - type: Reactive
+    groups:
+      Extinguish: [ Touch ]
+  - type: Flammable
+    onFire: true
+    fireStacks: 5
+    maximumFireStacks: 5
+    minimumFireStacks: 0
+    fireSpread: false
+    canExtinguish: true
+    firestackFade: 0
+    damage:
+      types: {}
+  - type: CrescentTileFire
+    lifetime: 18
+    spreadInterval: 2.5
+    spreadChance: 0.18
+    igniteStacks: 1
+    damage:
+      types:
+        Heat: 4

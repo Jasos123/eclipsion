@@ -109,7 +109,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler
                     var sortedChildren = entry.Children
                         .Select(childId => _entries[childId])
                         .OrderBy(childEntry => childEntry.Priority)
-                        .ThenBy(childEntry => Loc.GetString(childEntry.Name))
+                        .ThenBy(LocalizeName)
                         .Select(childEntry => new ProtoId<GuideEntryPrototype>(childEntry.Id))
                         .ToList();
 
@@ -123,7 +123,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler
         return rootEntries
             .Select(rootEntryId => _entries[rootEntryId])
             .OrderBy(rootEntry => rootEntry.Priority)
-            .ThenBy(rootEntry => Loc.GetString(rootEntry.Name));
+            .ThenBy(LocalizeName);
     }
 
     private void RepopulateTree(List<ProtoId<GuideEntryPrototype>>? roots = null, ProtoId<GuideEntryPrototype>? forcedRoot = null)
@@ -155,8 +155,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler
 
         var item = Tree.AddItem(parent);
         item.Metadata = entry;
-        var name = Loc.GetString(entry.Name);
-        item.Label.Text = name;
+        item.Label.Text = LocalizeName(entry);
 
         foreach (var child in entry.Children)
         {
@@ -164,6 +163,13 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler
         }
 
         return item;
+    }
+
+    private static string LocalizeName(GuideEntry entry)
+    {
+        return Loc.TryGetString(entry.Name, out var localizedName)
+            ? localizedName
+            : entry.Name;
     }
 
     public void HandleClick(string link)

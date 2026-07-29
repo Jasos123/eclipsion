@@ -5,8 +5,8 @@
 
 light_mode unshaded;
 
-// 0.0 = no damage, 1.0 = maximum brute damage
-uniform highp float bruteLevel;
+// 0.0 = no damage, 1.0 = maximum damage
+uniform highp float damageLevel;
 
 void fragment() {
     highp vec2 screenSize = vec2(1.0 / SCREEN_PIXEL_SIZE.x, 1.0 / SCREEN_PIXEL_SIZE.y);
@@ -35,7 +35,7 @@ void fragment() {
     highp float dBR = length(wuv - vec2(1.0, 1.0));
 
     // Patch radius grows with damage
-    highp float radius = 0.35 + bruteLevel * 0.20;
+    highp float radius = 0.35 + damageLevel * 0.20;
 
     highp float pTL = iTL * (1.0 - smoothstep(0.0, radius, dTL));
     highp float pTR = iTR * (1.0 - smoothstep(0.0, radius, dTR));
@@ -71,8 +71,8 @@ void fragment() {
     highp float heartbeat = 0.70 + 0.30 * pulse;
 
     // ── Alpha composition ──
-    highp float fillAlpha  = clamp(cornerPatch * 0.78 * heartbeat, 0.0, 0.88) * bruteLevel;
-    highp float veinAlpha  = clamp(veins       * 1.00 * heartbeat, 0.0, 0.96) * bruteLevel;
+    highp float fillAlpha  = clamp(cornerPatch * 0.78 * heartbeat, 0.0, 0.88) * damageLevel;
+    highp float veinAlpha  = clamp(veins       * 1.00 * heartbeat, 0.0, 0.96) * damageLevel;
     highp float totalAlpha = clamp(fillAlpha + veinAlpha * 0.55, 0.0, 0.93);
 
     // ── Two-tone colour ──

@@ -54,7 +54,10 @@ public sealed partial class CharacterJobRequirement : CharacterRequirement
                 break;
             }
 
-            jobs.Add($"[color={color.ToHex()}]{Loc.GetString(jobProto.Name)}[/color]");
+            var jobName = Loc.TryGetString(jobProto.Name, out var localizedJobName)
+                ? localizedJobName
+                : jobProto.Name;
+            jobs.Add($"[color={color.ToHex()}]{jobName}[/color]");
         }
 
         // Join the job names

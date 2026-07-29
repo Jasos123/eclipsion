@@ -1,13 +1,21 @@
 - type: entity
   id: RMCFireProp
   name: fire
-  description: That isn't going out any time soon.
+  description: A persistent fire that can be put out with an extinguisher.
   suffix: Prop
   components:
   - type: Physics
     bodyType: Static
-    canCollide: false
+    canCollide: true
   - type: Fixtures
+    fixtures:
+      fire:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.35,-0.35,0.35,0.35"
+        hard: false
+        layer:
+        - WallLayer
   - type: PointLight
     radius: 5
     color: "#bf6d02"
@@ -20,3 +28,18 @@
       state: dynamic_2
       color: "#FF7700"
   - type: Clickable
+  - type: Appearance
+  - type: Reactive
+    groups:
+      Extinguish: [ Touch ]
+  - type: Flammable
+    onFire: true
+    fireStacks: 5
+    maximumFireStacks: 5
+    minimumFireStacks: 0
+    fireSpread: false
+    canExtinguish: true
+    firestackFade: 0
+    damage:
+      types: {}
+  - type: RMCFireProp

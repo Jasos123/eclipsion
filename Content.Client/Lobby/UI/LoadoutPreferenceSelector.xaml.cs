@@ -138,17 +138,17 @@ public sealed partial class LoadoutPreferenceSelector : Control
         entityManager.EnsureComponent<AppearanceComponent>(dummyLoadoutItem);
         entityManager.EnsureComponent<PaintedComponent>(dummyLoadoutItem, out var paint);
 
-        var loadoutName =
-            Loc.GetString($"loadout-name-{loadout.ID}") == $"loadout-name-{loadout.ID}"
-                ? entityManager.GetComponent<MetaDataComponent>(dummyLoadoutItem).EntityName
-                : Loc.GetString($"loadout-name-{loadout.ID}");
+        var loadoutNameKey = $"loadout-name-{loadout.ID}";
+        var loadoutName = Loc.TryGetString(loadoutNameKey, out var localizedLoadoutName)
+            ? localizedLoadoutName
+            : entityManager.GetComponent<MetaDataComponent>(dummyLoadoutItem).EntityName;
 
         // Display the item's label if it's present
         if (entityManager.TryGetComponent(dummyLoadoutItem, out LabelComponent? labelComponent))
         {
             var itemLabel = labelComponent.CurrentLabel;
             if (!string.IsNullOrEmpty(itemLabel))
-                loadoutName += $" ({Loc.GetString(itemLabel)})";
+                loadoutName += $" ({(Loc.TryGetString(itemLabel, out var localizedLabel) ? localizedLabel : itemLabel)})";
         }
 
         var loadoutDesc =
@@ -241,7 +241,11 @@ public sealed partial class LoadoutPreferenceSelector : Control
             UpdatePaint(new(dummyLoadoutItem, paint), entityManager);
         };
 
-        var desc = Loc.GetString(loadoutDesc);
+        // EntityDescription is already localized. Some loadouts override it with a
+        // localization key, so only resolve it again when it actually is one.
+        var desc = Loc.TryGetString(loadoutDesc, out var localizedDescription)
+            ? localizedDescription
+            : loadoutDesc;
         NameEdit.PlaceHolder = loadoutName;
         DescriptionEdit.Placeholder = new Rope.Leaf(desc);
 

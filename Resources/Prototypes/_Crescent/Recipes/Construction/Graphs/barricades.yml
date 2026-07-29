@@ -1,0 +1,171 @@
+- type: constructionGraph
+  id: CrescentBarricadeMetal
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      steps:
+      - material: Steel
+        amount: 5
+        doAfter: 5
+  - node: built
+    entity: CrescentBarricadeMetal
+    edges:
+    - to: start
+      steps:
+      - tool: Anchoring
+        doAfter: 5
+      completed:
+      - !type:SpawnPrototype { prototype: SheetSteel1, amount: 4 }
+      - !type:DeleteEntity {}
+
+- type: constructionGraph
+  id: CrescentBarricadePlasteel
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      steps:
+      - material: Plasteel
+        amount: 5
+        doAfter: 7
+  - node: built
+    entity: CrescentBarricadePlasteel
+    edges:
+    - to: start
+      steps:
+      - tool: Anchoring
+        doAfter: 7
+      completed:
+      - !type:SpawnPrototype { prototype: SheetPlasteel1, amount: 4 }
+      - !type:DeleteEntity {}
+
+- type: constructionGraph
+  id: CrescentBarricadeWood
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      steps:
+      - material: WoodPlank
+        amount: 5
+        doAfter: 4
+  - node: built
+    entity: CrescentBarricadeWood
+    edges:
+    - to: start
+      steps:
+      - tool: Prying
+        doAfter: 4
+      completed:
+      - !type:SpawnPrototype { prototype: MaterialWoodPlank1, amount: 4 }
+      - !type:DeleteEntity {}
+
+- type: constructionGraph
+  id: CrescentBarricadeSandbag
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      steps:
+      - material: Cloth
+        amount: 6
+        doAfter: 5
+  - node: built
+    entity: CrescentBarricadeSandbag
+    edges:
+    - to: start
+      steps:
+      - tool: Cutting
+        doAfter: 5
+      completed:
+      - !type:SpawnPrototype { prototype: MaterialCloth1, amount: 5 }
+      - !type:DeleteEntity {}
+
+- type: constructionGraph
+  id: CrescentBarbedWire
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: wire
+      steps:
+      - material: Steel
+        amount: 2
+        doAfter: 3
+  - node: wire
+    entity: CrescentBarbedWire
+
+- type: constructionGraph
+  id: CrescentBarbedWireDeployed
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      steps:
+      - material: CrescentBarbedWire
+        amount: 1
+        doAfter: 3
+  - node: built
+    entity: CrescentBarbedWireDeployed
+    edges:
+    - to: start
+      steps:
+      - tool: Cutting
+        doAfter: 2
+      completed:
+      - !type:SpawnPrototype { prototype: CrescentBarbedWire, amount: 1 }
+      - !type:DeleteEntity {}
+
+- type: constructionGraph
+  id: CrescentBarricadeUpgradeReinforced
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: kit
+      steps:
+      - material: Plasteel
+        amount: 3
+        doAfter: 5
+  - node: kit
+    entity: CrescentBarricadeUpgradeReinforced
+
+- type: constructionGraph
+  id: CrescentBarricadeUpgradeBiohazard
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: kit
+      steps:
+      - material: Steel
+        amount: 3
+        doAfter: 5
+      - material: Glass
+        amount: 2
+        doAfter: 2
+  - node: kit
+    entity: CrescentBarricadeUpgradeBiohazard
+
+- type: constructionGraph
+  id: CrescentBarricadeUpgradeComposite
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: kit
+      steps:
+      - material: Plasteel
+        amount: 4
+        doAfter: 6
+      - material: Plastic
+        amount: 2
+        doAfter: 2
+  - node: kit
+    entity: CrescentBarricadeUpgradeComposite

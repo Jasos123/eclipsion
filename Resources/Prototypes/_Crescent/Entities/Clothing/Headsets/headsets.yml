@@ -216,7 +216,7 @@
 - type: entity
   parent: ClothingHeadsetPlanetfall
   id: ClothingHeadsetNCWL_Planetfall
-  name: union headset
+  name: union groundline headset
   description: To communicate with your comrades.
   components:
     - type: ContainerFill
@@ -231,7 +231,7 @@
 - type: entity
   parent: ClothingHeadsetPlanetfall
   id: ClothingHeadsetEmpireCiv_Planetfall
-  name: imperial headset
+  name: imperial groundline headset
   description: To communicate with your brothers in arms.
   components:
     - type: ContainerFill
@@ -246,7 +246,7 @@
 - type: entity
   parent: ClothingHeadsetPlanetfall
   id: ClothingHeadsetEmpire_Planetfall
-  name: imperial headset
+  name: imperial ground-command headset
   description: To communicate with your brothers in arms.
   components:
     - type: ContainerFill
@@ -347,7 +347,7 @@
 - type: entity
   parent: ClothingHeadsetPlanetfall
   id: ClothingHeadsetNCWLCommand_Planetfall
-  name: union headset
+  name: union ground-command headset
   description: To communicate with your comrades.
   components:
     - type: ContainerFill

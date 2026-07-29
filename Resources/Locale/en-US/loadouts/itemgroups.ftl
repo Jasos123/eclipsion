@@ -815,3 +815,8 @@ character-item-group-LoadoutPrisonerUniforms = Prisoner Uniforms
 # Traits - Languages
 character-item-group-TraitsLanguagesBasic = Basic Languages
 character-item-group-TraitsAccents = Accents
+
+# Generic medical and Crescent loadouts
+character-item-group-LoadoutMedkits = Medical Kits
+character-item-group-LoadoutEVASuit = EVA Suits
+character-item-group-LoadoutLeaderMelee = Leadership Melee Weapons

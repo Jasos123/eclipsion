@@ -24,6 +24,15 @@ public sealed partial class CaptureFlagComponent : Component
     [DataField, AutoNetworkedField]
     public string? OwnerTeam;
 
+    [DataField]
+    public string NeutralState = "neutral-white";
+
+    [DataField]
+    public string DsmState = "black-purple";
+
+    [DataField]
+    public string NcwlState = "brown-ncwl";
+
     [DataField, AutoNetworkedField]
     public string? ActiveTeam;
 

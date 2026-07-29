@@ -8,6 +8,9 @@
   "copyright": "Generated with OpenAI and adapted for New Crescent.",
   "states": [
     {
+      "name": "neutral-white"
+    },
+    {
       "name": "black-purple"
     },
     {

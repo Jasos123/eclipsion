@@ -2473,7 +2473,7 @@ namespace Content.Client.Lobby.UI
             // Fill categories with loadouts
             foreach (var (loadout, usable) in _loadouts
                 .OrderBy(l => l.Key.ID)
-                .ThenBy(l => Loc.GetString($"loadout-name-{l.Key.ID}"))
+                .ThenBy(l => Loc.TryGetString($"loadout-name-{l.Key.ID}", out var name) ? name : l.Key.ID)
                 .ThenBy(l => l.Key.Cost))
             {
                 if (_loadoutPreferences.Select(lps => lps.Loadout.ID).Contains(loadout.ID))

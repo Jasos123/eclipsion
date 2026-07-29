@@ -38,6 +38,7 @@ guide-entry-chef = Chef
 guide-entry-foodrecipes = Food Recipes
 guide-entry-medical = Medical
 guide-entry-medicaldoctor = Medical Doctor
+guide-entry-medpatches = Medical Patches
 guide-entry-chemist = Chemist
 guide-entry-medicine = Medicine
 guide-entry-brute = Advanced Brute Medication

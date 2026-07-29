@@ -24,11 +24,11 @@ public sealed class DamageOverlay : Overlay
     public MobState State = MobState.Alive;
 
     /// <summary>
-    /// Handles the red pulsing overlay
+    /// Handles the red pulsing overlay for all damage.
     /// </summary>
-    public float BruteLevel = 0f;
+    public float DamageLevel = 0f;
 
-    private float _oldBruteLevel = 0f;
+    private float _oldDamageLevel = 0f;
 
     /// <summary>
     /// Handles the darkening overlay.
@@ -94,14 +94,14 @@ public sealed class DamageOverlay : Overlay
             DeadLevel = 0f;
         }
 
-        if (!MathHelper.CloseTo(_oldBruteLevel, BruteLevel, 0.001f))
+        if (!MathHelper.CloseTo(_oldDamageLevel, DamageLevel, 0.001f))
         {
-            var diff = BruteLevel - _oldBruteLevel;
-            _oldBruteLevel += GetDiff(diff, lastFrameTime);
+            var diff = DamageLevel - _oldDamageLevel;
+            _oldDamageLevel += GetDiff(diff, lastFrameTime);
         }
         else
         {
-            _oldBruteLevel = BruteLevel;
+            _oldDamageLevel = DamageLevel;
         }
 
         if (!MathHelper.CloseTo(_oldOxygenLevel, OxygenLevel, 0.001f))
@@ -137,18 +137,18 @@ public sealed class DamageOverlay : Overlay
 
         // Makes debugging easier don't @ me
         float level = 0f;
-        level = _oldBruteLevel;
+        level = _oldDamageLevel;
 
         // TODO: Lerping
         if (level > 0f && _oldCritLevel <= 0f)
         {
-            _bruteShader.SetParameter("bruteLevel", level);
+            _bruteShader.SetParameter("damageLevel", level);
             handle.UseShader(_bruteShader);
             handle.DrawRect(viewport, Color.White);
         }
         else
         {
-            _oldBruteLevel = BruteLevel;
+            _oldDamageLevel = DamageLevel;
         }
 
         level = State != MobState.Critical ? _oldOxygenLevel : 1f;

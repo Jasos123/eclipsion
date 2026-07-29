@@ -9,6 +9,7 @@ using Content.Shared.Weapons.Ranged.Events;
 using Robust.Server.GameObjects;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
+using Robust.Shared.Network;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
@@ -20,6 +21,9 @@ namespace Content.Server._RMC14.Weapons.Ranged.Prediction;
 
 public sealed class GunPredictionSystem : SharedGunPredictionSystem
 {
+    private const int MaxHitCandidates = 8;
+    private const int MaxHitReportsPerTick = 64;
+
     [Dependency] private readonly IConfigurationManager _config = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedProjectileSystem _projectile = default!;
@@ -29,6 +33,7 @@ public sealed class GunPredictionSystem : SharedGunPredictionSystem
 
     private readonly Dictionary<(Guid, int), EntityUid> _predicted = new();
     private readonly List<(PredictedProjectileHitEvent Event, ICommonSession Player)> _predictedHits = new();
+    private readonly Dictionary<NetUserId, int> _hitReportsThisTick = new();
     private bool _preventCollision;
     private bool _logHits;
     private float _coordinateDeviation;
@@ -72,6 +77,8 @@ public sealed class GunPredictionSystem : SharedGunPredictionSystem
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
         _predicted.Clear();
+        _predictedHits.Clear();
+        _hitReportsThisTick.Clear();
     }
 
     private void OnShootRequest(RequestShootEvent ev, EntitySessionEventArgs args)
@@ -96,11 +103,23 @@ public sealed class GunPredictionSystem : SharedGunPredictionSystem
         if (ent.Comp.Shooter == null)
             return;
 
-        _predicted.Remove((ent.Comp.Shooter.UserId, ent.Comp.ClientId));
+        var key = (ent.Comp.Shooter.UserId, ent.Comp.ClientId);
+        if (_predicted.TryGetValue(key, out var predicted) && predicted == ent.Owner)
+            _predicted.Remove(key);
     }
 
     private void OnPredictedProjectileHit(PredictedProjectileHitEvent ev, EntitySessionEventArgs args)
     {
+        var userId = args.SenderSession.UserId;
+        var reports = _hitReportsThisTick.GetValueOrDefault(userId);
+        if (reports >= MaxHitReportsPerTick)
+            return;
+
+        _hitReportsThisTick[userId] = reports + 1;
+
+        if (ev.Hit.Count == 0 || ev.Hit.Count > MaxHitCandidates)
+            return;
+
         _predictedHits.Add((ev, args.SenderSession));
     }
 
@@ -214,7 +233,6 @@ public sealed class GunPredictionSystem : SharedGunPredictionSystem
             return;
         }
 
-        predictedProjectile.Hit = true;
         foreach (var (netEnt, clientPos) in ev.Hit)
         {
             if (GetEntity(netEnt) is not { Valid: true } hit)
@@ -242,7 +260,9 @@ public sealed class GunPredictionSystem : SharedGunPredictionSystem
             if (_logHits)
                 Log.Info("hit");
 
+            predictedProjectile.Hit = true;
             _projectile.ProjectileCollide((projectile, projectileComp, projectilePhysics), hit, true);
+            break;
         }
     }
 
@@ -258,6 +278,7 @@ public sealed class GunPredictionSystem : SharedGunPredictionSystem
         finally
         {
             _predictedHits.Clear();
+            _hitReportsThisTick.Clear();
         }
 
         var predicted = EntityQueryEnumerator<PredictedProjectileHitComponent, TransformComponent>();

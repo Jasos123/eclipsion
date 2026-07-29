@@ -132,10 +132,12 @@ namespace Content.Client.IconSmoothing
                 return;
 
             Vector2i pos;
+            EntityUid gridUid;
 
             if (transform.Anchored && TryComp<MapGridComponent>(transform.GridUid, out var grid))
             {
-                pos = _mapSystemCompat.CoordinatesToTile(transform.GridUid!.Value, grid, transform.Coordinates);
+                gridUid = transform.GridUid!.Value;
+                pos = _mapSystemCompat.CoordinatesToTile(gridUid, grid, transform.Coordinates);
             }
             else
             {
@@ -146,21 +148,22 @@ namespace Content.Client.IconSmoothing
                 if (!TryComp(gridId, out grid))
                     return;
 
+                gridUid = gridId;
                 pos = oldPos;
             }
 
             // Yes, we updates ALL smoothing entities surrounding us even if they would never smooth with us.
-            DirtyEntities(_mapSystemCompat.GetAnchoredEntitiesEnumerator(transform.GridUid!.Value, grid, pos + new Vector2i(1, 0)));
-            DirtyEntities(_mapSystemCompat.GetAnchoredEntitiesEnumerator(transform.GridUid!.Value, grid, pos + new Vector2i(-1, 0)));
-            DirtyEntities(_mapSystemCompat.GetAnchoredEntitiesEnumerator(transform.GridUid!.Value, grid, pos + new Vector2i(0, 1)));
-            DirtyEntities(_mapSystemCompat.GetAnchoredEntitiesEnumerator(transform.GridUid!.Value, grid, pos + new Vector2i(0, -1)));
+            DirtyEntities(_mapSystemCompat.GetAnchoredEntitiesEnumerator(gridUid, grid, pos + new Vector2i(1, 0)));
+            DirtyEntities(_mapSystemCompat.GetAnchoredEntitiesEnumerator(gridUid, grid, pos + new Vector2i(-1, 0)));
+            DirtyEntities(_mapSystemCompat.GetAnchoredEntitiesEnumerator(gridUid, grid, pos + new Vector2i(0, 1)));
+            DirtyEntities(_mapSystemCompat.GetAnchoredEntitiesEnumerator(gridUid, grid, pos + new Vector2i(0, -1)));
 
             if (comp.Mode is IconSmoothingMode.Corners or IconSmoothingMode.NoSprite or IconSmoothingMode.Diagonal)
             {
-                DirtyEntities(_mapSystemCompat.GetAnchoredEntitiesEnumerator(transform.GridUid!.Value, grid, pos + new Vector2i(1, 1)));
-                DirtyEntities(_mapSystemCompat.GetAnchoredEntitiesEnumerator(transform.GridUid!.Value, grid, pos + new Vector2i(-1, -1)));
-                DirtyEntities(_mapSystemCompat.GetAnchoredEntitiesEnumerator(transform.GridUid!.Value, grid, pos + new Vector2i(-1, 1)));
-                DirtyEntities(_mapSystemCompat.GetAnchoredEntitiesEnumerator(transform.GridUid!.Value, grid, pos + new Vector2i(1, -1)));
+                DirtyEntities(_mapSystemCompat.GetAnchoredEntitiesEnumerator(gridUid, grid, pos + new Vector2i(1, 1)));
+                DirtyEntities(_mapSystemCompat.GetAnchoredEntitiesEnumerator(gridUid, grid, pos + new Vector2i(-1, -1)));
+                DirtyEntities(_mapSystemCompat.GetAnchoredEntitiesEnumerator(gridUid, grid, pos + new Vector2i(-1, 1)));
+                DirtyEntities(_mapSystemCompat.GetAnchoredEntitiesEnumerator(gridUid, grid, pos + new Vector2i(1, -1)));
             }
         }
 

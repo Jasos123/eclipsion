@@ -149,7 +149,13 @@ public sealed partial class CharacterSpeciesRequirement : CharacterRequirement
             "character-species-requirement",
             ("inverted", Inverted),
             ("species", $"[color={color}]{string.Join($"[/color], [color={color}]",
-                Species.Select(s => Loc.GetString(prototypeManager.Index(s).Name)))}[/color]"));
+                Species.Select(s =>
+                {
+                    var speciesName = prototypeManager.Index(s).Name;
+                    return Loc.TryGetString(speciesName, out var localizedSpeciesName)
+                        ? localizedSpeciesName
+                        : speciesName;
+                }))}[/color]"));
 
         return Species.Contains(profile.Species);
     }
@@ -371,7 +377,13 @@ public sealed partial class CharacterLoadoutRequirement : CharacterRequirement
             "character-loadout-requirement",
             ("inverted", Inverted),
             ("loadouts", $"[color={color}]{string.Join($"[/color], [color={color}]",
-                Loadouts.Select(l => Loc.GetString($"loadout-name-{l}")))}[/color]"));
+                Loadouts.Select(l =>
+                {
+                    var loadoutName = $"loadout-name-{l}";
+                    return Loc.TryGetString(loadoutName, out var localizedLoadoutName)
+                        ? localizedLoadoutName
+                        : l.ToString();
+                }))}[/color]"));
 
         return Loadouts.Any(l => profile.LoadoutPreferences.Select(l => l.LoadoutName).Contains(l.ToString()));
     }
@@ -422,7 +434,7 @@ public sealed partial class CharacterItemGroupRequirement : CharacterRequirement
         reason = Loc.GetString(
             "character-item-group-requirement",
             ("inverted", Inverted),
-            ("group", Loc.GetString($"character-item-group-{Group}")),
+            ("group", Loc.TryGetString($"character-item-group-{Group}", out var groupName) ? groupName : Group),
             ("max", group.MaxItems));
 
         return !Inverted ? count < group.MaxItems : count >= group.MaxItems - 1;
