@@ -76,6 +76,8 @@
     - WeaponTurretSmallMachinegunFlatpack
     - WeaponTurretMediumMachinegunFlatpack
     - BaseWeaponTurretShortbowFlatpack
+    - M14IncendiaryHandgrenade
+    - M18SmokeHandgrenade
 
 # TAP - Primary Artillery - Tier 2
 - type: technology

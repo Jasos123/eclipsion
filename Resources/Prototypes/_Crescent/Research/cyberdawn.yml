@@ -49,6 +49,8 @@
   - WeaponRifleKrinkovCyberdawn
   - WeaponPistolViperWoodCyberdawn
   - WeaponPistolAnsemCyberdawn
+  - M14IncendiaryHandgrenade
+  - M18SmokeHandgrenade
 
 - type: technology
   id: CyberdawnT1Infiltration

@@ -78,6 +78,8 @@
   - WeaponShotgunDoubleBarreledNCWL
   - WeaponShotgunProletar
   - WeaponRifleNCWLRezerv
+  - M14IncendiaryHandgrenade
+  - M18SmokeHandgrenade
 
 - type: technology
   id: CommunardFighters

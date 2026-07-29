@@ -142,6 +142,8 @@
   - WeaponRevolverInspector
   - WeaponRevolverMateba
   - WeaponRifleGoro
+  - M14IncendiaryHandgrenade
+  - M18SmokeHandgrenade
 
 - type: technology
   id: ShinoharaBasicFactory

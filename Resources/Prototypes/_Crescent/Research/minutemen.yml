@@ -19,6 +19,8 @@
   cost: 3000
   recipeUnlocks:
   - WeaponRifleCMMNimrod
+  - M14IncendiaryHandgrenade
+  - M18SmokeHandgrenade
   #- WeaponSubMachineGunWt550 - uncomment in case of SMG
 
 - type: technology

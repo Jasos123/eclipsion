@@ -115,6 +115,8 @@
   - WeaponRifleHunter
   - WeaponShotgunDSMMatusa
   - GrenadeDSMG4Twistcap
+  - M14IncendiaryHandgrenade
+  - M18SmokeHandgrenade
 
 - type: technology
   id: ImperialCarrion

@@ -362,6 +362,8 @@
       - TradebandTranslator
       - ClothingBeltSalvageWebbing
     dynamicRecipes:
+      - M14IncendiaryHandgrenade
+      - M18SmokeHandgrenade
       #Minutemen
       - MinutemanLPC
       - CorsairLPC

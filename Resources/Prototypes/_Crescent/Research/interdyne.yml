@@ -47,6 +47,8 @@
   - ClothingHeadHelmetSyndicateBasicInterdyne
   - ClothingOuterArmorSyndicateArmorvestInterdyne
   - ClothingOuterHardsuitTraumasec
+  - M14IncendiaryHandgrenade
+  - M18SmokeHandgrenade
 
 - type: technology
   id: InterdyneOptics
