@@ -20,6 +20,12 @@ public sealed partial class BankSystem : EntitySystem
 
     private ISawmill _log = default!;
 
+    /// <summary>
+    ///     Users we have already complained about, so the once-per-state-send handler below doesn't spam the log.
+    /// </summary>
+    private readonly HashSet<NetUserId> _brokenPrefsWarned = new();
+    private readonly HashSet<NetUserId> _crossCharacterWriteWarned = new();
+
     public override void Initialize()
     {
         base.Initialize();
@@ -60,13 +66,38 @@ public sealed partial class BankSystem : EntitySystem
             return;
         }
 
-        var prefs = _prefsManager.GetPreferences((NetUserId) user);
-        var character = prefs.SelectedCharacter;
+        // This runs inside component state serialization, on every state send. Anything that throws here (a
+        // prefs row whose selected slot has no profile behind it makes SelectedCharacter throw) would take out
+        // the player's state send rather than surfacing as a normal error, so resolve it defensively and log.
+        PlayerPreferences prefs;
+        ICharacterProfile character;
+        try
+        {
+            prefs = _prefsManager.GetPreferences((NetUserId) user);
+            character = prefs.SelectedCharacter;
+        }
+        catch (Exception e)
+        {
+            if (_brokenPrefsWarned.Add((NetUserId) user))
+                _log.Error($"Could not resolve the selected character for {user} while saving their bank balance: {e}");
+            return;
+        }
+
         var index = prefs.IndexOfCharacter(character);
 
         if (character is not HumanoidCharacterProfile profile)
         {
             return;
+        }
+
+        // The balance is written to whichever slot is selected *right now*, not to the character this mob
+        // actually is. If the player switched slots in the lobby while still attached to a mob, this quietly
+        // stamps one character's money onto another one's saved profile.
+        if (profile.Name != MetaData(mobUid).EntityName && _crossCharacterWriteWarned.Add((NetUserId) user))
+        {
+            _log.Error(
+                $"Saving bank balance {bank.Balance} for {user} onto selected slot {index} ('{profile.Name}'), " +
+                $"but their attached mob is '{MetaData(mobUid).EntityName}'. These are different characters.");
         }
 
         var balanceDiff = (long)bank.Balance - profile.BankBalance;

@@ -183,20 +183,31 @@ public sealed class LobbyUIController : UIController, IOnStateEntered<LobbyState
         // Safety net: building the character setup off a bad/edge-case profile must never black-screen the
         // whole client (it did — see the "customize crashes" reports). Log the real exception and degrade
         // instead of letting it tear down the lobby UI.
+        //
+        // NOTE: degrading here is what players see as "I lost my character / the buttons are dead" — the
+        // preview never gets a sprite and EnsureGui() below never runs, so the character setup window is
+        // never even built. If you are chasing that report, the exception logged below IS the bug; it names
+        // the stored field that can't be resolved. Do not treat this catch as "handled".
+        var stage = "preview";
         try
         {
             RefreshLobbyPreview();
+            stage = "gui";
             var (characterGui, profileEditor) = EnsureGui();
+            stage = "pickers";
             characterGui.ReloadCharacterPickers();
+            stage = "faction";
             characterGui.FactionSelector.SetProfile((HumanoidCharacterProfile?) _preferencesManager.Preferences?.SelectedCharacter,
                 _preferencesManager.Preferences?.SelectedCharacterIndex);
+            stage = "editor";
             profileEditor.SetProfile(
                 (HumanoidCharacterProfile?) _preferencesManager.Preferences?.SelectedCharacter,
                 _preferencesManager.Preferences?.SelectedCharacterIndex);
         }
         catch (Exception e)
         {
-            Logger.ErrorS("lobby", $"Failed to reload character setup (likely a bad stored character): {e}");
+            Logger.ErrorS("lobby",
+                $"Failed to reload character setup at stage '{stage}' (bad stored character). {DescribeSelectedCharacter()}: {e}");
         }
     }
 
@@ -219,6 +230,34 @@ public sealed class LobbyUIController : UIController, IOnStateEntered<LobbyState
         var dummy = LoadProfileEntity(humanoid, true, true);
         PreviewPanel.SetSprite(dummy);
         PreviewPanel.SetSummaryText(humanoid.Summary);
+    }
+
+    /// <summary>
+    ///     Dumps the identifying fields of the currently selected stored character so a crash report names the
+    ///     culprit instead of just "something in the profile". Every field here is persisted per-account, which
+    ///     is why the breakage follows the account and survives until the prefs row is wiped.
+    /// </summary>
+    private string DescribeSelectedCharacter()
+    {
+        var prefs = _preferencesManager.Preferences;
+        if (prefs == null)
+            return "prefs=<null>";
+
+        var slot = prefs.SelectedCharacterIndex;
+        if (!prefs.Characters.TryGetValue(slot, out var character))
+            return $"slot={slot} MISSING (existing slots: [{string.Join(", ", prefs.Characters.Keys)}])";
+
+        if (character is not HumanoidCharacterProfile p)
+            return $"slot={slot} type={character.GetType().Name}";
+
+        var jobs = string.Join(", ", p.JobPriorities.Select(j => $"{j.Key}={j.Value}"));
+        var loadouts = string.Join(", ", p.LoadoutPreferences.Select(l => l.LoadoutName));
+        var markings = string.Join(", ", p.Appearance.Markings.Select(m => m.MarkingId));
+        return $"slot={slot} name='{p.Name}' species={p.Species} faction='{p.Faction}' subfaction='{p.Subfaction}' " +
+               $"nationality={p.Nationality} employer={p.Employer} lifepath={p.Lifepath} " +
+               $"hair={p.Appearance.HairStyleId} facialHair={p.Appearance.FacialHairStyleId} " +
+               $"markings=[{markings}] jobs=[{jobs}] traits=[{string.Join(", ", p.TraitPreferences)}] " +
+               $"loadouts=[{loadouts}] flags=[{string.Join(", ", p.CharacterFlags)}]";
     }
 
     private void RefreshProfileEditor()

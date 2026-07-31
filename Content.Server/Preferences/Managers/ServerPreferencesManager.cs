@@ -76,7 +76,18 @@ namespace Content.Server.Preferences.Managers
 
             if (ShouldStorePrefs(message.MsgChannel.AuthType))
             {
-                await _db.SaveSelectedCharacterIndexAsync(message.MsgChannel.UserId, message.SelectedCharacterIndex);
+                // async void: an exception past this point escapes into the sync context and is lost, so the
+                // selected slot silently stops matching what the player picked.
+                try
+                {
+                    await _db.SaveSelectedCharacterIndexAsync(message.MsgChannel.UserId, message.SelectedCharacterIndex);
+                }
+                catch (Exception e)
+                {
+                    _sawmill.Error(
+                        $"Failed to persist selected character slot {index} for {userId}. The server is using slot " +
+                        $"{index} in memory but the DB still points elsewhere; it will revert on reconnect: {e}");
+                }
             }
         }
 
@@ -86,9 +97,23 @@ namespace Content.Server.Preferences.Managers
 
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (message.Profile == null)
+            {
                 _sawmill.Error($"User {userId} sent a {nameof(MsgUpdateCharacter)} with a null profile in slot {message.Slot}.");
-            else
+                return;
+            }
+
+            // This handler is async void. Anything SetProfile throws (a bad profile field, an EF constraint
+            // violation on save, ...) would otherwise vanish into the synchronization context while both the
+            // client and the server's in-memory cache still believe the character was saved — which is exactly
+            // how a character "reverts on reconnect" with nothing in the logs.
+            try
+            {
                 await SetProfile(userId, message.Slot, message.Profile);
+            }
+            catch (Exception e)
+            {
+                _sawmill.Error($"Failed to apply character update from {userId} for slot {message.Slot}: {e}");
+            }
         }
 
         public async Task SetProfileNoChecks(NetUserId userId, int slot, ICharacterProfile profile)
@@ -100,13 +125,44 @@ namespace Content.Server.Preferences.Managers
             }
             var curPrefs = prefsData.Prefs!;
             var session = _playerManager.GetSessionById(userId);
+
+            // Callers (BankSystem, CharacterFlagSystem, EconomyPriceSystem) fire this without awaiting it, so
+            // every problem below used to end up in an unobserved Task. Log the suspicious cases instead.
+            if (slot < 0 || slot >= MaxCharacterSlots)
+            {
+                _sawmill.Error(
+                    $"SetProfileNoChecks called for {session.Name} ({userId}) with out-of-range slot {slot} " +
+                    $"(max {MaxCharacterSlots}). This writes a profile row nothing can select later.");
+            }
+
+            if (curPrefs.SelectedCharacterIndex != slot)
+            {
+                // The write also silently moves the server's selected slot, and no MsgUpdatePreferences is sent,
+                // so the client's copy diverges from the server's from here on.
+                _sawmill.Warning(
+                    $"SetProfileNoChecks is moving {session.Name} ({userId}) from selected slot " +
+                    $"{curPrefs.SelectedCharacterIndex} to {slot} without telling the client.");
+            }
+
             var profiles = new Dictionary<int, ICharacterProfile>(curPrefs.Characters)
             {
                 [slot] = profile
             };
             prefsData.Prefs = new PlayerPreferences(profiles, slot, curPrefs.AdminOOCColor);
-            if (ShouldStorePrefs(session.Channel.AuthType))
+
+            if (!ShouldStorePrefs(session.Channel.AuthType))
+                return;
+
+            try
+            {
                 await _db.SaveCharacterSlotAsync(userId, profile, slot);
+            }
+            catch (Exception e)
+            {
+                _sawmill.Error(
+                    $"Failed to persist slot {slot} for {session.Name} ({userId}) via SetProfileNoChecks. " +
+                    $"In-memory prefs were already updated, so the server and the DB now disagree: {e}");
+            }
         }
 
         public async Task SetProfile(NetUserId userId, int slot, ICharacterProfile profile)
@@ -168,8 +224,23 @@ namespace Content.Server.Preferences.Managers
             msg.Preferences = prefsData.Prefs;
             _netManager.ServerSendMessage(msg, session.Channel);
 
-            if (ShouldStorePrefs(session.Channel.AuthType))
+            if (!ShouldStorePrefs(session.Channel.AuthType))
+                return;
+
+            // Note the ordering: in-memory prefs and the client have already been told the save succeeded by the
+            // time we get here. If the DB write fails the player keeps playing an edit that was never stored and
+            // loses it on reconnect, so this must never fail quietly.
+            try
+            {
                 await _db.SaveCharacterSlotAsync(userId, profile, slot);
+            }
+            catch (Exception e)
+            {
+                _sawmill.Error(
+                    $"Failed to persist slot {slot} for {session.Name} ({userId}). The client and the server's " +
+                    $"cache both think this character saved, but the DB does not have it and it will revert on " +
+                    $"reconnect: {e}");
+            }
         }
 
         private async void HandleDeleteCharacterMessage(MsgDeleteCharacter message)
@@ -216,13 +287,24 @@ namespace Content.Server.Preferences.Managers
                 return;
             }
 
-            if (nextSlot != null)
+            // async void again: a failure here leaves the deleted slot in the DB while the server's cache no
+            // longer has it, so the next reconnect resurrects a character the player deleted.
+            try
             {
-                await _db.DeleteSlotAndSetSelectedIndex(userId, slot, nextSlot.Value);
+                if (nextSlot != null)
+                {
+                    await _db.DeleteSlotAndSetSelectedIndex(userId, slot, nextSlot.Value);
+                }
+                else
+                {
+                    await _db.SaveCharacterSlotAsync(userId, null, slot);
+                }
             }
-            else
+            catch (Exception e)
             {
-                await _db.SaveCharacterSlotAsync(userId, null, slot);
+                _sawmill.Error(
+                    $"Failed to delete character slot {slot} for {userId} (new selected slot {nextSlot}). " +
+                    $"The server cache dropped it but the DB did not: {e}");
             }
         }
 
@@ -363,8 +445,26 @@ namespace Content.Server.Preferences.Managers
         {
             // Clean up preferences in case of changes to the game,
             // such as removed jobs still being selected.
-            return new PlayerPreferences(prefs.Characters.Select(p => new KeyValuePair<int, ICharacterProfile>(p.Key,
-                    p.Value.Validated(session, collection))), prefs.SelectedCharacterIndex, prefs.AdminOOCColor);
+            var characters = prefs.Characters
+                .Select(p => new KeyValuePair<int, ICharacterProfile>(p.Key, p.Value.Validated(session, collection)))
+                .ToList();
+
+            // The selected slot is loaded straight out of the DB and was never checked against the profile rows
+            // that actually exist. A dangling index makes PlayerPreferences.SelectedCharacter throw
+            // KeyNotFoundException for every consumer (lobby preview, character setup, BankSystem), which the
+            // client's catch-all turns into a lobby with no character and dead buttons. Since it lives in the
+            // prefs row it reproduces on every reconnect and only a prefs wipe "fixes" it - clamp it instead.
+            var selected = prefs.SelectedCharacterIndex;
+            if (characters.Count > 0 && characters.All(p => p.Key != selected))
+            {
+                var replacement = characters[0].Key;
+                _sawmill.Error(
+                    $"User {session.Name} ({session.UserId}) has selected character slot {selected} but only slots " +
+                    $"[{string.Join(", ", characters.Select(p => p.Key))}] exist. Falling back to slot {replacement}.");
+                selected = replacement;
+            }
+
+            return new PlayerPreferences(characters, selected, prefs.AdminOOCColor);
         }
 
         public IEnumerable<KeyValuePair<NetUserId, ICharacterProfile>> GetSelectedProfilesForPlayers(

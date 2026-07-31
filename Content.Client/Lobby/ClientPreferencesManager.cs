@@ -105,8 +105,17 @@ namespace Content.Client.Lobby
 
         public void DeleteCharacter(int slot)
         {
-            var characters = Preferences.Characters.Where(p => p.Key != slot);
-            Preferences = new PlayerPreferences(characters, Preferences.SelectedCharacterIndex, Preferences.AdminOOCColor);
+            var characters = Preferences.Characters.Where(p => p.Key != slot).ToList();
+
+            // If we just deleted the selected slot, move the selection with it. The server does this on its
+            // side (see HandleDeleteCharacterMessage) but never echoes the result back, so leaving the index
+            // dangling here means every later SelectedCharacter lookup throws KeyNotFoundException and the
+            // lobby silently degrades into "no preview, dead buttons".
+            var selected = Preferences.SelectedCharacterIndex;
+            if (selected == slot && characters.Count > 0)
+                selected = characters[0].Key;
+
+            Preferences = new PlayerPreferences(characters, selected, Preferences.AdminOOCColor);
             var msg = new MsgDeleteCharacter
             {
                 Slot = slot
@@ -159,7 +168,20 @@ namespace Content.Client.Lobby
                 }
             }
 
-            return new PlayerPreferences(characters, prefs.SelectedCharacterIndex, prefs.AdminOOCColor);
+            // Same clamp the server does in SanitizePreferences. Kept here too so a stale server build (or a
+            // slot the server dropped while validating) can't hand us an index with no profile behind it —
+            // SelectedCharacter throws on that and the whole lobby degrades to "no character, dead buttons".
+            var selected = prefs.SelectedCharacterIndex;
+            if (characters.Count > 0 && !characters.ContainsKey(selected))
+            {
+                var replacement = characters.Keys.Min();
+                Logger.ErrorS("prefs",
+                    $"Server sent selected slot {selected} but only slots [{string.Join(", ", characters.Keys)}] " +
+                    $"exist. Falling back to slot {replacement}.");
+                selected = replacement;
+            }
+
+            return new PlayerPreferences(characters, selected, prefs.AdminOOCColor);
         }
     }
 }
