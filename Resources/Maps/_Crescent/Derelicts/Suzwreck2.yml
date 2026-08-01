@@ -4215,13 +4215,6 @@ entities:
     - type: Transform
       pos: 4.5,-7.5
       parent: 1
-- proto: BallisticCycler1
-  entities:
-  - uid: 363
-    components:
-    - type: Transform
-      pos: 0.44198036,-19.789322
-      parent: 1
 - proto: Bed
   entities:
   - uid: 364

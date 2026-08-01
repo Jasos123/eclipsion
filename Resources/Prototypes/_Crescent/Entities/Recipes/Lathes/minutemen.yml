@@ -160,9 +160,9 @@
   result: WeaponShotgunKammerer
   completetime: 1
   materials:
-    Steel: 1500
+    Steel: 3500
     Plasteel: 500
-    BallisticCycler: 1000
+    AdvancedMechatronics: 1000
 
 - type: latheRecipe
   id: WeaponRifleCMMNimrod
@@ -170,9 +170,9 @@
   result: WeaponRifleCMMNimrod
   completetime: 1
   materials:
-    Steel: 1000
+    Steel: 2000
     Plasteel: 250
-    BallisticCycler: 500
+    AdvancedMechatronics: 500
 
 #MISC
 

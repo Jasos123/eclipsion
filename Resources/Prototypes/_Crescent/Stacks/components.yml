@@ -73,13 +73,6 @@
   maxCount: 5
 
 - type: stack
-  id: BallisticCycler
-  name: ballistic gas cycler
-  icon: { sprite: _Crescent/Objects/Materials/materials.rsi, state: gascycler }
-  spawn: BallisticCycler1
-  maxCount: 5
-
-- type: stack
   id: TubeLoader
   name: tube loader robotics
   icon: { sprite: _Crescent/Objects/Materials/materials.rsi, state: tubeloaderrobotics }

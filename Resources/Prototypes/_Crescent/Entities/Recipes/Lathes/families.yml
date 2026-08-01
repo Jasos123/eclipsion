@@ -135,9 +135,9 @@
   category: Weapons
   completetime: 15
   materials: #same as a legi
-    Steel: 2500
+    Steel: 4500
     Silver: 500
-    BallisticCycler: 1000
+    AdvancedMechatronics: 1000
 
 # Autonomous Vehicle flatpacks
 

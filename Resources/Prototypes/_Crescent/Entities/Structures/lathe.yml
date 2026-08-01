@@ -49,7 +49,6 @@
     - FibreAlloyFromCombinedScrap
     - BasicElectronicsFromCombinedScrap
     - BasicMechatronicsFromCombinedScrap
-    - BallisticCyclerFromCombinedScrap
     - HardsuitElectronicsFromCombinedScrap
 
 - type: entity
@@ -103,7 +102,6 @@
     - FibreAlloyFromCombinedScrap
     - BasicElectronicsFromCombinedScrap
     - BasicMechatronicsFromCombinedScrap
-    - BallisticCyclerFromCombinedScrap
     - HardsuitElectronicsFromCombinedScrap
 
 #drugs
@@ -578,7 +576,6 @@
       - EnergySword
       - EnergySwordDouble
       - MarauderFlatpack
-      - BallisticCycler1Craft
       - TubeLoader1Craft
       - LaserLocus1Craft
       - HardlightGenerator1Craft
@@ -949,12 +946,9 @@
       - AdvancedMechatronics1
       - PlastitaniumFibreAlloySHI
       - HardlightGenerator1
-      - BallisticCycler1
       - TubeLoader1
       - LaserLocus1
-      - BallisticCyclerNCWL
       - TubeLoaderNCWL
-      - BallisticCyclerDSM
       - TubeLoaderDSM
       - MagwellFlatpack
       - IdnaFlatpack
@@ -2152,7 +2146,6 @@
       - WeaponSubMachineGunBeetle
       - WeaponRifleHunter
       - WeaponLauncherM320
-      - BallisticCyclerDSM
       - TubeLoaderDSM
       # Shared
       - BaseCartridgeRailgun15mm
@@ -2398,7 +2391,6 @@
       - WeaponLauncherGM94
       - NCWLKukri
       - ClothingBeltSheathNCWLKukri
-      - BallisticCyclerNCWL
       - TubeLoaderNCWL
       # Shared
       - BaseCartridgeRailgun15mm

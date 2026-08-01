@@ -222,7 +222,6 @@
   - type: Factory
     recipes:
       - FabricateMissileTube
-      - FabricateBallisticCycler
       - FabricateWeakLaserLocus
       - FabricateLaserLocus
       - FabricateSpeedLoader
