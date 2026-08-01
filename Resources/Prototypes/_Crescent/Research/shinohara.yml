@@ -247,7 +247,6 @@
   tier: 2
   cost: 10000
   recipeUnlocks:
-  - BallisticCycler1
   - TubeLoader1
   - LaserLocus1
 

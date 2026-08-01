@@ -189,14 +189,6 @@
   price: 0.45
 
 - type: material
-  id: BallisticCycler
-  stackEntity: BallisticCycler1
-  name: materials-gascycler
-  unit: materials-unit-chunk
-  icon: { sprite: _Crescent/Objects/Materials/materials.rsi, state: laserlocus }
-  price: 0.40
-
-- type: material
   id: TubeLoader
   stackEntity: TubeLoader1
   name: materials-tubeloader

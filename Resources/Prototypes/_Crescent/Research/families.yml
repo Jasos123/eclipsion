@@ -43,7 +43,6 @@
   tier: 2
   cost: 10000
   recipeUnlocks:
-  - BallisticCycler1Craft
   - TubeLoader1Craft
   - AdvancedMechatronics1Craft
   - AdvancedElectronics1Craft

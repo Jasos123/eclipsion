@@ -190,15 +190,6 @@
     RefinedScrapTitanium: 250
 
 - type: latheRecipe
-  id: BallisticCyclerFromCombinedScrap
-  category: Ammo
-  result: BallisticCycler1
-  completetime: 0.5
-  materials:
-    RefinedScrapSteel: 5000
-    RefinedScrapTitanium: 3000
-
-- type: latheRecipe
   id: HardsuitElectronicsFromCombinedScrap
   category: Armor
   result: HardsuitElectronics1
