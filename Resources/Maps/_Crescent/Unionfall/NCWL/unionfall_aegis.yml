@@ -2123,9 +2123,6 @@ entities:
       parent: 1
       rot: -1.5707963267948966 rad
       pos: 2.5,6.5
-      anchored: False
-    - type: Physics
-      bodyType: Dynamic
   - uid: 240
     components:
     - type: Transform
@@ -2189,9 +2186,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -1.5,6.5
-      anchored: False
-    - type: Physics
-      bodyType: Dynamic
 - proto: WallReinforced
   entities:
   - uid: 251
