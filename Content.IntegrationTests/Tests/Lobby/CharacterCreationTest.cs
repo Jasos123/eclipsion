@@ -62,10 +62,19 @@ namespace Content.IntegrationTests.Tests.Lobby
 
             await server.WaitAssertion(() =>
             {
-                var serverCharacters = serverPrefManager.GetPreferences(clientNetId).Characters;
+                var serverPreferences = serverPrefManager.GetPreferences(clientNetId);
+                var serverCharacters = serverPreferences.Characters;
 
                 Assert.That(serverCharacters, Has.Count.EqualTo(2));
                 Assert.That(serverCharacters[1].MemberwiseEquals(profile));
+                Assert.That(serverPreferences.SelectedCharacterIndex, Is.EqualTo(0),
+                    "Creating/updating another slot must not silently change the selected character.");
+            });
+
+            await pair.RunTicksSync(1);
+            await client.WaitAssertion(() =>
+            {
+                Assert.That(clientPrefManager.Preferences.SelectedCharacterIndex, Is.EqualTo(0));
             });
 
             await client.WaitAssertion(() =>

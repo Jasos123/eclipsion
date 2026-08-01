@@ -66,6 +66,11 @@ public sealed partial class BankSystem : EntitySystem
             return;
         }
 
+        args.State = new BankAccountComponentState
+        {
+            Balance = bank.Balance,
+        };
+
         // This runs inside component state serialization, on every state send. Anything that throws here (a
         // prefs row whose selected slot has no profile behind it makes SelectedCharacter throw) would take out
         // the player's state send rather than surfacing as a normal error, so resolve it defensively and log.
@@ -90,6 +95,10 @@ public sealed partial class BankSystem : EntitySystem
             return;
         }
 
+        // State gets serialized several times a second, so don't hit the DB unless something actually moved.
+        if (bank.Balance == profile.BankBalance)
+            return;
+
         // The balance is written to whichever slot is selected *right now*, not to the character this mob
         // actually is. If the player switched slots in the lobby while still attached to a mob, this quietly
         // stamps one character's money onto another one's saved profile.
@@ -104,10 +113,6 @@ public sealed partial class BankSystem : EntitySystem
 
         var newProfile = profile.WithBank((long)bank.Balance);
 
-        args.State = new BankAccountComponentState
-        {
-            Balance = bank.Balance,
-        };
         _prefsManager.SetProfileNoChecks((NetUserId) user, index,(ICharacterProfile)newProfile);
         _log.Info($"Character {profile.Name} saved");
         if (balanceDiff > 250000)

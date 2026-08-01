@@ -501,6 +501,25 @@ public string Summary =>
         if (!validFaction)
             Faction = "";
 
+        // Subfaction is prototype-backed like Faction but never got validated, so old profiles still point at
+        // the IPM/SAW/GSC/CD prototypes that went away when TFSC absorbed them. "" is the unset value.
+        if (Subfaction != "" && !prototypeManager.HasIndex<FactionPrototype>(Subfaction))
+            Subfaction = "";
+
+        // No prototypes back CharacterFlags, so there is nothing to validate ids against, only the shape.
+        // Nothing else prunes this list, so blanks and duplicates stay in the DB forever once they get in.
+        if (CharacterFlags.Count > 0)
+        {
+            var flags = CharacterFlags
+                .Where(f => !string.IsNullOrWhiteSpace(f))
+                .Select(f => f.Trim())
+                .Distinct()
+                .ToList();
+
+            if (!flags.SequenceEqual(CharacterFlags))
+                CharacterFlags = flags;
+        }
+
         // EE Contractor fields (Nationality/Employer/Lifepath) are prototype-backed but were never added
         // to validation. A removed/renamed prototype left them permanently invalid in the DB, surviving
         // straight through to the client (EnsureValid is what auto-heals stale prefs). Reset stale values.
