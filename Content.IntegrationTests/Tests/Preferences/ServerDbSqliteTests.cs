@@ -104,7 +104,40 @@ namespace Content.IntegrationTests.Tests.Preferences
             await db.SaveSelectedCharacterIndexAsync(username, 1);
             await db.SaveCharacterSlotAsync(username, null, 1);
             var prefs = await db.GetPlayerPreferencesAsync(username);
-            Assert.That(!prefs.Characters.Any(p => p.Key != 0));
+            Assert.Multiple(() =>
+            {
+                Assert.That(!prefs.Characters.Any(p => p.Key != 0));
+                Assert.That(prefs.SelectedCharacterIndex, Is.EqualTo(0),
+                    "Loading preferences should repair a selected slot whose profile was deleted.");
+            });
+
+            var persisted = await db.GetPlayerPreferencesAsync(username);
+            Assert.That(persisted.SelectedCharacterIndex, Is.EqualTo(0),
+                "The repaired selected slot should be persisted, not only fixed in memory.");
+            await pair.CleanReturnAsync();
+        }
+
+        [Test]
+        public async Task TestReinitializePreferencesWithNoProfiles()
+        {
+            var pair = await PoolManager.GetServerClient();
+            var db = GetDb(pair.Server);
+            var username = NewUserId();
+            var replacement = CharlieCharlieson();
+
+            await db.InitPrefsAsync(username, new HumanoidCharacterProfile());
+            await db.SaveCharacterSlotAsync(username, null, 0);
+
+            var empty = await db.GetPlayerPreferencesAsync(username);
+            Assert.That(empty.Characters, Is.Empty);
+
+            var repaired = await db.InitPrefsAsync(username, replacement);
+            Assert.Multiple(() =>
+            {
+                Assert.That(repaired.SelectedCharacterIndex, Is.EqualTo(0));
+                Assert.That(repaired.Characters, Has.Count.EqualTo(1));
+                Assert.That(repaired.Characters[0].MemberwiseEquals(replacement));
+            });
             await pair.CleanReturnAsync();
         }
 

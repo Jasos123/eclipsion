@@ -432,7 +432,7 @@ namespace Content.Server.Preferences.Managers
         private async Task<PlayerPreferences> GetOrCreatePreferencesAsync(NetUserId userId, CancellationToken cancel)
         {
             var prefs = await _db.GetPlayerPreferencesAsync(userId, cancel);
-            if (prefs is null)
+            if (prefs is null || prefs.Characters.Count == 0)
             {
                 return await _db.InitPrefsAsync(userId, HumanoidCharacterProfile.Random(), cancel);
             }

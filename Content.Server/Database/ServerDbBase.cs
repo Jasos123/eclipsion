@@ -54,14 +54,33 @@ namespace Content.Server.Database
             if (prefs is null)
                 return null;
 
-            var maxSlot = prefs.Profiles.Max(p => p.Slot) + 1;
+            // A preference row can outlive all of its profile rows on SQLite (there is no selected-slot FK
+            // there). Do not throw from Max() before ServerPreferencesManager gets a chance to recreate the
+            // default character.
+            var maxSlot = prefs.Profiles.Count == 0
+                ? 0
+                : prefs.Profiles.Max(p => p.Slot) + 1;
             var profiles = new Dictionary<int, ICharacterProfile>(maxSlot);
             foreach (var profile in prefs.Profiles)
             {
                 profiles[profile.Slot] = ConvertProfiles(profile);
             }
 
-            return new PlayerPreferences(profiles, prefs.SelectedCharacterSlot, Color.FromHex(prefs.AdminOOCColor));
+            var selected = prefs.SelectedCharacterSlot;
+            if (profiles.Count > 0 && !profiles.ContainsKey(selected))
+            {
+                // Heal the source of truth, not just the in-memory copy. Otherwise every reconnect reloads the
+                // same dangling slot and relies on every consumer running after the sanitizer.
+                var replacement = profiles.Keys.Min();
+                _opsLog.Warning(
+                    $"Preferences for {userId} select missing slot {selected}; available slots are " +
+                    $"[{string.Join(", ", profiles.Keys)}]. Persisting fallback slot {replacement}.");
+                prefs.SelectedCharacterSlot = replacement;
+                selected = replacement;
+                await db.DbContext.SaveChangesAsync(cancel);
+            }
+
+            return new PlayerPreferences(profiles, selected, Color.FromHex(prefs.AdminOOCColor));
         }
 
         public async Task SaveSelectedCharacterIndexAsync(NetUserId userId, int index)
@@ -133,16 +152,33 @@ namespace Content.Server.Database
             await using var db = await GetDb();
 
             var profile = ConvertProfiles((HumanoidCharacterProfile) defaultProfile, 0);
-            var prefs = new Preference
+            var prefs = await db.DbContext.Preference
+                .Include(p => p.Profiles)
+                .SingleOrDefaultAsync(p => p.UserId == userId.UserId);
+
+            if (prefs is null)
             {
-                UserId = userId.UserId,
-                SelectedCharacterSlot = 0,
-                AdminOOCColor = Color.Red.ToHex()
-            };
+                prefs = new Preference
+                {
+                    UserId = userId.UserId,
+                    SelectedCharacterSlot = 0,
+                    AdminOOCColor = Color.Red.ToHex()
+                };
+
+                db.DbContext.Preference.Add(prefs);
+            }
+            else
+            {
+                if (prefs.Profiles.Count != 0)
+                    throw new InvalidOperationException($"Preferences for {userId} are already initialized.");
+
+                // Recover an orphaned preference row instead of trying to insert a duplicate user_id and failing
+                // its unique constraint. This state is possible on SQLite if the final profile row was removed.
+                _opsLog.Warning($"Preferences for {userId} contain no character profiles; recreating slot 0.");
+                prefs.SelectedCharacterSlot = 0;
+            }
 
             prefs.Profiles.Add(profile);
-
-            db.DbContext.Preference.Add(prefs);
 
             await db.DbContext.SaveChangesAsync();
 
