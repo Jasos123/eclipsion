@@ -1,0 +1,21 @@
+- type: entity
+  parent: BaseItem
+  id: PlanetfallMilitaryMap
+  name: Planetfall AO military map
+  description: A tactical operations map of the Planetfall area of operations.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/bureaucracy.rsi
+    state: paper
+  - type: Item
+    size: Tiny
+  - type: Tag
+    tags:
+    - Document
+  - type: ActivatableUI
+    requiresComplex: false
+    key: enum.PlanetfallMapUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.PlanetfallMapUiKey.Key:
+        type: PlanetfallMapBoundUserInterface
