@@ -61,15 +61,19 @@ public sealed partial class RCDMenu : RadialMenu
             if (proto.Mode == RcdMode.Invalid)
                 continue;
 
-            var parent = FindControl<RadialContainer>(proto.Category);
-            var tooltip = Loc.GetString(proto.SetName);
-
+            string tooltip;
             if ((proto.Mode == RcdMode.ConstructTile || proto.Mode == RcdMode.ConstructObject) &&
                 proto.Prototype != null && _protoManager.TryIndex(proto.Prototype, out var entProto))
             {
-                tooltip = Loc.GetString(entProto.Name);
+                // EntityPrototype.Name is already localized.
+                tooltip = entProto.Name;
+            }
+            else
+            {
+                tooltip = Loc.GetString(proto.SetName);
             }
 
+            var parent = FindControl<RadialContainer>(proto.Category);
             tooltip = OopsConcat(char.ToUpper(tooltip[0]).ToString(), tooltip.Remove(0, 1));
 
             var button = new RCDMenuButton()

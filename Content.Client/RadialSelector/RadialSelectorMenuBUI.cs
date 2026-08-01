@@ -152,7 +152,7 @@ public sealed class RadialSelectorMenuBUI : BoundUserInterface
     {
         var button = new RadialMenuTextureButton
         {
-            ToolTip = Loc.GetString(name),
+            ToolTip = LocalizeIfAvailable(name),
             StyleClasses = { "RadialMenuButton" },
             SetSize = ItemSize
         };
@@ -174,7 +174,7 @@ public sealed class RadialSelectorMenuBUI : BoundUserInterface
     {
         var button = new RadialMenuTextureButton
         {
-            ToolTip = Loc.GetString(name),
+            ToolTip = LocalizeIfAvailable(name),
             StyleClasses = { "RadialMenuButton" },
             SetSize = ItemSize
         };
@@ -190,6 +190,11 @@ public sealed class RadialSelectorMenuBUI : BoundUserInterface
 
         button.AddChild(texture);
         return button;
+    }
+
+    private static string LocalizeIfAvailable(string text)
+    {
+        return Loc.TryGetString(text, out var localized) ? localized : text;
     }
 
     private void ClearExistingContainers()

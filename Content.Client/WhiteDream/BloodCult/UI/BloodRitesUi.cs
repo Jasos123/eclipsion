@@ -100,7 +100,7 @@ public sealed class BloodRitesUi : BoundUserInterface
     {
         var button = new RadialMenuTextureButton
         {
-            ToolTip = Loc.GetString(name),
+            ToolTip = name,
             StyleClasses = { "RadialMenuButton" },
             SetSize = _itemSize
         };
