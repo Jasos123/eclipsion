@@ -42,6 +42,11 @@ public sealed partial class NewsArticleCard : Control
     public NewsArticleCard()
     {
         RobustXamlLoader.Load(this);
+
+        // Cannot be expressed in the XAML - see the note there.
+        DeleteButton.StyleClasses.Add("ButtonSmall");
+        DeleteButton.StyleClasses.Add("ButtonColorRed");
+
         DeleteButton.OnPressed += _ => OnDeletePressed?.Invoke();
     }
 }
