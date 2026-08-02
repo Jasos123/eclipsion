@@ -14,14 +14,18 @@ public sealed partial class SelfAwareComponent : Component
     // <summary>
     //     Damage types that an entity is able to precisely analyze like a health analyzer when they examine themselves.
     // </summary>
+    // Must be an actual set, not default!. The state handler the source generator emits for a non-nullable
+    // collection does component.AnalyzableTypes.Clear() before refilling it, and a client builds this component
+    // from the network with no YAML behind it - so a null here is a NullReferenceException on the very first
+    // state application, which black-screens every client that can see the entity.
     [DataField(required: true, customTypeSerializer:typeof(PrototypeIdHashSetSerializer<DamageTypePrototype>)), AutoNetworkedField]
-    public HashSet<string> AnalyzableTypes = default!;
+    public HashSet<string> AnalyzableTypes = new();
 
     // <summary>
     //     Damage groups that an entity is able to detect the presence of when they examine themselves.
     // </summary>
     [DataField(required: true, customTypeSerializer:typeof(PrototypeIdHashSetSerializer<DamageGroupPrototype>)), AutoNetworkedField]
-    public HashSet<string> DetectableGroups = default!;
+    public HashSet<string> DetectableGroups = new();
 
     // <summary>
     //     The thresholds for determining the examine text of DetectableGroups for certain amounts of damage.
