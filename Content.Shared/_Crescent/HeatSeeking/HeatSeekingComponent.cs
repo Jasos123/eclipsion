@@ -75,6 +75,24 @@ public sealed partial class HeatSeekingComponent : Component
     public float TopSpeed = 50f;
 
     /// <summary>
+    /// How far off the firing solution does the missile weave? Zero means it flies straight.
+    /// </summary>
+    [DataField]
+    public Angle WeaveAmplitude = Angle.Zero;
+
+    /// <summary>
+    /// How many weaves per second?
+    /// </summary>
+    [DataField]
+    public float WeaveFrequency = 0.5f;
+
+    /// <summary>
+    /// The weave fades out inside this range so the missile still lands on the target.
+    /// </summary>
+    [DataField]
+    public float WeaveFadeDistance;
+
+    /// <summary>
     /// The list of targets visible to this missile sorted by their value as a target
     /// </summary>
     [DataField]

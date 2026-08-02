@@ -11,46 +11,103 @@ public enum DroneConsoleUiKey : byte
     Key
 }
 
+/// <summary>
+///     Per-drone readout shown on the console's status panel.
+/// </summary>
+[Serializable, NetSerializable]
+public struct DroneStatusEntry
+{
+    /// <summary>The drone's control server, used as its identity for selection and orders.</summary>
+    public NetEntity Server;
+
+    /// <summary>The grid the server sits on, used for the radar label.</summary>
+    public NetEntity Grid;
+
+    /// <summary>Display name of the drone grid.</summary>
+    public string Name;
+
+    /// <summary>What the drone is currently doing.</summary>
+    public AutoDroneMode Mode;
+
+    /// <summary>Fraction (0..1) of the drone's original hull tiles still intact.</summary>
+    public float HullIntegrity;
+
+    /// <summary>Whether the drone is powered. Unpowered drones drift and can't be commanded.</summary>
+    public bool Powered;
+
+    /// <summary>Seconds left on a running self destruct, or null if none is armed.</summary>
+    public float? SelfDestructIn;
+}
+
+/// <summary>
+///     Vessel the console can produce, with its current billed price.
+/// </summary>
+[Serializable, NetSerializable]
+public struct DroneSpawnEntry
+{
+    /// <summary>Vessel prototype id, echoed back in <see cref="DroneConsoleSpawnMessage"/>.</summary>
+    public string VesselId;
+
+    /// <summary>Human readable vessel name.</summary>
+    public string Name;
+
+    /// <summary>What producing it costs the treasury, or 0 if production is free.</summary>
+    public int Price;
+}
+
 [Serializable, NetSerializable]
 public sealed class DroneConsoleBoundUserInterfaceState : BoundUserInterfaceState
 {
     public NavInterfaceState NavState;
     public IFFInterfaceState IFFState;
 
-    // Key: NetEntity of the drone, Value: Name
-    public List<(NetEntity Server, NetEntity Grid)> LinkedDrones;
+    /// <summary>Status of every drone this carrier currently commands.</summary>
+    public List<DroneStatusEntry> Drones;
 
     // Carrier controls. IsCarrier false => hide the carrier control panel.
     public bool IsCarrier;
     public DroneStance Stance;
     public DroneTargeting Targeting;
     public DroneFormation Formation;
-    public int DeployedCount;
+
+    /// <summary>Drones produced over the console's lifetime - this is what the production cap counts.</summary>
+    public int ProducedCount;
+
+    /// <summary>How many of the produced drones are still alive and under command.</summary>
+    public int AliveCount;
+
     public int MaxDrones;
-    public List<string> SpawnableDrones;
+    public List<DroneSpawnEntry> SpawnableDrones;
+
+    /// <summary>Funds the console can draw on to produce drones, or null if production is free.</summary>
+    public int? Treasury;
 
     public DroneConsoleBoundUserInterfaceState(
         NavInterfaceState navState,
         IFFInterfaceState iffState,
-        List<(NetEntity, NetEntity)> linkedDrones,
+        List<DroneStatusEntry> drones,
         bool isCarrier,
         DroneStance stance,
         DroneTargeting targeting,
         DroneFormation formation,
-        int deployedCount,
+        int producedCount,
+        int aliveCount,
         int maxDrones,
-        List<string> spawnableDrones)
+        List<DroneSpawnEntry> spawnableDrones,
+        int? treasury)
     {
         NavState = navState;
         IFFState = iffState;
-        LinkedDrones = linkedDrones;
+        Drones = drones;
         IsCarrier = isCarrier;
         Stance = stance;
         Targeting = targeting;
         Formation = formation;
-        DeployedCount = deployedCount;
+        ProducedCount = producedCount;
+        AliveCount = aliveCount;
         MaxDrones = maxDrones;
         SpawnableDrones = spawnableDrones;
+        Treasury = treasury;
     }
 }
 
@@ -116,6 +173,23 @@ public sealed class DroneConsoleSetFormationMessage : BoundUserInterfaceMessage
 [Serializable, NetSerializable]
 public sealed class DroneConsoleDeployMessage : BoundUserInterfaceMessage
 {
+}
+
+/// <summary>
+///     Sent when the player orders the selected drones to scuttle themselves. <see cref="Cancel"/> disarms a
+///     countdown that is already running instead of starting one.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class DroneConsoleSelfDestructMessage : BoundUserInterfaceMessage
+{
+    public HashSet<NetEntity> SelectedDrones;
+    public bool Cancel;
+
+    public DroneConsoleSelfDestructMessage(HashSet<NetEntity> selectedDrones, bool cancel)
+    {
+        SelectedDrones = selectedDrones;
+        Cancel = cancel;
+    }
 }
 
 /// <summary>

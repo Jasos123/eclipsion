@@ -11,6 +11,7 @@ using Content.Shared.Popups;
 using Robust.Server.GameObjects;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
+using Robust.Shared.Timing;
 
 namespace Content.Server._Crescent.Payment;
 
@@ -28,9 +29,15 @@ public sealed class PaymentConsoleSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly StationTradeMarketSystem _market = default!;
     [Dependency] private readonly FactionPayrollSystem _payroll = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     private const int MaxBonus = 1_000_000;
     private const int MaxReasonLength = 128;
+
+    /// <summary>How often an open console re-reads the roster and the treasury balance.</summary>
+    private const float RefreshInterval = 3f;
+
+    private float _sinceRefresh;
 
     public override void Initialize()
     {
@@ -48,6 +55,29 @@ public sealed class PaymentConsoleSystem : EntitySystem
             return;
 
         UpdateUi(ent);
+    }
+
+    /// <summary>
+    /// Keeps an open console current. It only ever redrew in response to its own buttons, so a member
+    /// who joined the faction, disconnected or died after it was opened never appeared or changed, and
+    /// the treasury figure sat frozen while payroll and purchases moved it.
+    /// </summary>
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        _sinceRefresh += frameTime;
+        if (_sinceRefresh < RefreshInterval)
+            return;
+
+        _sinceRefresh = 0f;
+
+        var query = EntityQueryEnumerator<PaymentConsoleComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (_ui.IsUiOpen(uid, PaymentConsoleUiKey.Key))
+                UpdateUi((uid, comp));
+        }
     }
 
     /// <summary>
@@ -102,6 +132,14 @@ public sealed class PaymentConsoleSystem : EntitySystem
         if (reason.Length > MaxReasonLength)
             reason = reason[..MaxReasonLength];
 
+        var now = _timing.CurTime;
+        if (ent.Comp.LastBonus is { } last && now - last < ent.Comp.BonusCooldown)
+        {
+            var secondsLeft = Math.Max(1, (int) Math.Ceiling((ent.Comp.BonusCooldown - (now - last)).TotalSeconds));
+            _popup.PopupEntity(Loc.GetString("payment-console-bonus-cooldown", ("seconds", secondsLeft)), ent, args.Actor);
+            return;
+        }
+
         var station = _market.TryGetFactionTreasuryStation(ent.Comp.Faction);
         if (station == null)
         {
@@ -122,19 +160,33 @@ public sealed class PaymentConsoleSystem : EntitySystem
             return;
         }
 
-        var paid = _market.TryWithdrawTreasury(station.Value, args.Amount);
+        // Identify the operator so the bonus is billed to their own per-round share of the vault.
+        if (!TryComp<ActorComponent>(args.Actor, out var operatorActor))
+            return;
+
+        // Capped, not raw: the operator's bonuses and their own hand withdrawals at the vault draw on
+        // one budget, so signing bonuses is no longer a way around the treasury console's limit.
+        var paid = _market.TryWithdrawTreasuryCapped(
+            station.Value, operatorActor.PlayerSession.UserId, args.Amount, ent.Comp.MaxPayoutFraction);
+
         if (paid <= 0)
         {
-            _popup.PopupEntity(Loc.GetString("payment-console-treasury-empty"), ent, args.Actor);
+            _popup.PopupEntity(
+                Loc.GetString("payment-console-bonus-limit",
+                    ("percent", (int) MathF.Round(ent.Comp.MaxPayoutFraction * 100f))),
+                ent, args.Actor);
             return;
         }
 
         if (!_bank.TryBankDeposit(mob, paid))
         {
-            _market.AddTreasury(station.Value, paid);
+            // Refund rather than plain re-add, so the failed attempt does not eat the operator's budget.
+            _market.RefundTreasuryCapped(station.Value, operatorActor.PlayerSession.UserId, paid);
             _popup.PopupEntity(Loc.GetString("payment-console-member-unpayable"), ent, args.Actor);
             return;
         }
+
+        ent.Comp.LastBonus = now;
 
         _adminLogger.Add(LogType.ATMUsage, LogImpact.High,
             $"{ToPrettyString(args.Actor):player} paid a {paid} bonus from {ent.Comp.Faction} treasury to {ToPrettyString(mob):player}. Reason: {reason}");

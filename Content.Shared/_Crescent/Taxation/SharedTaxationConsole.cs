@@ -103,7 +103,7 @@ public enum TaxationConsoleUiKey : byte
 [Serializable, NetSerializable]
 public sealed class TreasuryConsoleState : BoundUserInterfaceState
 {
-    /// <summary>Current withdrawable treasury balance.</summary>
+    /// <summary>Current treasury balance.</summary>
     public int Balance;
 
     /// <summary>Whether the interacting player is authorized (has faction funds access).</summary>
@@ -112,11 +112,23 @@ public sealed class TreasuryConsoleState : BoundUserInterfaceState
     /// <summary>Whether a security breach is currently active on this console.</summary>
     public bool AlarmActive;
 
-    public TreasuryConsoleState(int balance, bool authorized, bool alarmActive)
+    /// <summary>
+    /// How much of <see cref="Balance"/> this viewer may still draw this round, after their per-person
+    /// share. Shown because "Withdraw All" used to ask for the whole balance, get silently clamped to
+    /// the cap, and report a smaller figure with no explanation of where the rest went.
+    /// </summary>
+    public int Remaining;
+
+    /// <summary>The per-person share of the vault, as a percentage, for the cap explanation.</summary>
+    public int CapPercent;
+
+    public TreasuryConsoleState(int balance, bool authorized, bool alarmActive, int remaining, int capPercent)
     {
         Balance = balance;
         Authorized = authorized;
         AlarmActive = alarmActive;
+        Remaining = remaining;
+        CapPercent = capPercent;
     }
 }
 

@@ -2118,7 +2118,7 @@ entities:
       canCollide: False
       angularDamping: 0
     - type: InsideEntityStorage
-- proto: HeavyReinforcedPlasmaWindow
+- proto: ReinforcedPlasmaWindow
   entities:
   - uid: 199
     components:

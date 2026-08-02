@@ -11,6 +11,10 @@ namespace Content.Client.Flight;
 public sealed class FlyingVisualizerSystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _protoMan = default!;
+    [Dependency] private readonly SpriteSystem _sprite = default!;
+
+    private const string ShaderId = "FlightVisuals";
+
     public override void Initialize()
     {
         base.Initialize();
@@ -36,13 +40,21 @@ public sealed class FlyingVisualizerSystem : EntitySystem
         if (!Resolve(entity, ref entity.Comp, false))
             return;
 
-        entity.Comp.PostShader = shader;
+        if (shader is not null)
+        {
+            _sprite.SetPostShader(entity.Comp, new SpriteComponent.PostShaderArgs(ShaderId, shader)
+            {
+                GetScreenTexture = true,
+                RaiseShaderEvent = true,
+            });
+        }
+        else
+        {
+            _sprite.RemovePostShader(entity.Comp, ShaderId);
+        }
 
         if (animateLayer && layer is not null)
             entity.Comp.LayerSetShader(layer.Value, shader);
-
-        entity.Comp.GetScreenTexture = shader is not null;
-        entity.Comp.RaiseShaderEvent = shader is not null;
     }
 
     /// <summary>

@@ -1,0 +1,29 @@
+<Document>
+
+# Fuel Production
+
+Boriatic fuel is the common ship fuel. AME fuel is substantially more expensive and must be produced in two heated stages. Use suitable chemical equipment and keep both fuels away from ignition sources.
+
+## Boriatic Fuel
+
+Heat the mixture to at least [color=orange]300 K[/color]. The recipe below produces three units of fuel from three units of reagents.
+
+<GuideReagentEmbed Reagent="BoriaticFuel"/>
+
+## AME Fuel
+
+AME fuel requires an AME catalyst before the final fuel can be mixed.
+
+### Step 1: AME Catalyst
+
+Heat the catalyst mixture to at least [color=orange]370 K[/color].
+
+<GuideReagentEmbed Reagent="AmeCatalyst"/>
+
+### Step 2: AME Fuel
+
+Combine the catalyst with boriatic fuel, plasma, and nitrogen, then heat the mixture to at least [color=orange]420 K[/color]. The finished reaction produces two units of AME fuel.
+
+<GuideReagentEmbed Reagent="AmeFuel"/>
+
+</Document>

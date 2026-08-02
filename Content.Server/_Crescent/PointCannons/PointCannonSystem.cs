@@ -1,14 +1,3 @@
-// =============================================================================
-// OPTIMISED PointCannonSystem
-// Path: Content.Server/_Crescent/PointCannons/PointCannonSystem.cs
-//
-// Changes based on Monolith FireControl:
-// 1. Cached EntityQuery instead of TryComp<> (11 calls -> 0 on the hot paths)
-// 2. GridCannonCacheComponent - caches the cannons on a grid (no EntityLookup scan every time)
-// 3. CannonFireCooldownComponent - server-side fire cooldown (early exit before GunSystem)
-// 4. Batch firing with an early exit for cannons that are not ready
-// =============================================================================
-
 using System.Linq;
 using System.Numerics;
 using System.Collections.Generic;
@@ -64,14 +53,16 @@ public sealed class PointCannonSystem : EntitySystem
 
     private readonly HashSet<EntityUid> _activeConsoles = new();
 
-    private readonly Dictionary<EntityUid, float> _gridUpdateCooldown = new();
-    private const float GridUpdateCooldownTime = 0.5f;
+    private readonly Dictionary<EntityUid, PendingRelink> _pendingRelinks = new();
+    private readonly List<(EntityUid Console, bool Full)> _relinkScratch = new();
+    private readonly Dictionary<EntityUid, GridCannonCacheComponent> _dirtyGridScratch = new();
+    private static readonly TimeSpan RelinkDebounce = TimeSpan.FromSeconds(2);
+
     private int CannonCheckRange = 25;
     private HashSet<EntityUid> QueuedGrids = new();
 
-    // ===== OPTIMISATION 1: cached EntityQuery =====
-    // Instead of TryComp<T>() every time, GetEntityQuery<T>() once in Initialize.
-    // EntityQuery.TryGetComponent() is roughly 2-3x faster than TryComp<T>().
+    private readonly record struct PendingRelink(TimeSpan Due, bool Full);
+
     private EntityQuery<PointCannonComponent> _cannonQuery;
     private EntityQuery<TargetingConsoleComponent> _consoleQuery;
     private EntityQuery<GunComponent> _gunQuery;
@@ -105,12 +96,10 @@ public sealed class PointCannonSystem : EntitySystem
 
         SubscribeLocalEvent<PointCannonLinkToolComponent, UseInHandEvent>(OnLinkToolHandUse);
 
-        // ===== OPTIMISATION 2: invalidate the grid cache when cannons change =====
         SubscribeLocalEvent<PointCannonComponent, AnchorStateChangedEvent>(OnCannonAnchorChanged);
         SubscribeLocalEvent<PointCannonComponent, ComponentInit>(OnCannonInit);
         SubscribeLocalEvent<PointCannonComponent, ComponentRemove>(OnCannonRemoved);
 
-        // Cache the EntityQuery once
         _cannonQuery = GetEntityQuery<PointCannonComponent>();
         _consoleQuery = GetEntityQuery<TargetingConsoleComponent>();
         _gunQuery = GetEntityQuery<GunComponent>();
@@ -123,7 +112,6 @@ public sealed class PointCannonSystem : EntitySystem
         _gridCacheQuery = GetEntityQuery<GridCannonCacheComponent>();
     }
 
-    // ===== OPTIMISATION 2: grid cache invalidation =====
     private void OnCannonAnchorChanged(EntityUid uid, PointCannonComponent comp, ref AnchorStateChangedEvent args)
     {
         InvalidateGridCache(uid);
@@ -147,9 +135,69 @@ public sealed class PointCannonSystem : EntitySystem
             return;
         if (_gridCacheQuery.TryGetComponent(gridUid, out var cache))
             cache.Dirty = true;
+
+        QueueGridConsoleRelink(gridUid);
     }
 
-    // ===== OPTIMISATION 3: getting cannons from the grid cache =====
+    private void QueueGridConsoleRelink(EntityUid gridUid)
+    {
+        foreach (var console in _activeConsoles)
+        {
+            if (!_xformQuery.TryGetComponent(console, out var consoleXform))
+                continue;
+            if (consoleXform.GridUid != gridUid)
+                continue;
+
+            QueueConsoleRelink(console);
+        }
+    }
+
+    private void QueueConsoleRelink(EntityUid console, bool full = false, bool immediate = false)
+    {
+        var due = immediate ? TimeSpan.Zero : _timing.CurTime + RelinkDebounce;
+
+        // Never push an already-queued relink further out, only pull it forward.
+        if (_pendingRelinks.TryGetValue(console, out var existing))
+        {
+            _pendingRelinks[console] = new PendingRelink(
+                existing.Due < due ? existing.Due : due,
+                existing.Full || full);
+            return;
+        }
+
+        _pendingRelinks[console] = new PendingRelink(due, full);
+    }
+
+    private void ProcessPendingRelinks()
+    {
+        if (_pendingRelinks.Count == 0)
+            return;
+
+        var now = _timing.CurTime;
+        _relinkScratch.Clear();
+
+        foreach (var (console, pending) in _pendingRelinks)
+        {
+            if (now >= pending.Due)
+                _relinkScratch.Add((console, pending.Full));
+        }
+
+        RefreshDirtyGridCaches();
+
+        foreach (var (console, full) in _relinkScratch)
+        {
+            _pendingRelinks.Remove(console);
+
+            if (!_consoleQuery.TryGetComponent(console, out var comp))
+                continue;
+
+            if (full)
+                ProcessGridShapeChange(console, comp);
+            else
+                SyncConsoleLinks(console, comp);
+        }
+    }
+
     private HashSet<EntityUid> GetGridCannons(EntityUid gridUid)
     {
         var cache = EnsureComp<GridCannonCacheComponent>(gridUid);
@@ -157,23 +205,57 @@ public sealed class PointCannonSystem : EntitySystem
         if (!cache.Dirty)
             return cache.CachedCannons;
 
-        // Only rescan when Dirty=true
         cache.CachedCannons.Clear();
-        var cannonList = new HashSet<Entity<PointCannonComponent>>();
-        _lookup.GetGridEntities(gridUid, cannonList);
 
-        foreach (var cannon in cannonList)
+        var query = AllEntityQuery<PointCannonComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out _, out var xform))
         {
-            cache.CachedCannons.Add(cannon.Owner);
+            if (xform.GridUid == gridUid)
+                cache.CachedCannons.Add(uid);
         }
 
         cache.Dirty = false;
         return cache.CachedCannons;
     }
 
+    private void RefreshDirtyGridCaches()
+    {
+        _dirtyGridScratch.Clear();
+
+        foreach (var (console, _) in _relinkScratch)
+        {
+            if (!_xformQuery.TryGetComponent(console, out var xform) || xform.GridUid is not { } gridUid)
+                continue;
+            if (_dirtyGridScratch.ContainsKey(gridUid))
+                continue;
+
+            var cache = EnsureComp<GridCannonCacheComponent>(gridUid);
+            if (!cache.Dirty)
+                continue;
+
+            cache.CachedCannons.Clear();
+            _dirtyGridScratch[gridUid] = cache;
+        }
+
+        if (_dirtyGridScratch.Count == 0)
+            return;
+
+        var query = AllEntityQuery<PointCannonComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out _, out var xform))
+        {
+            if (xform.GridUid is { } gridUid && _dirtyGridScratch.TryGetValue(gridUid, out var cache))
+                cache.CachedCannons.Add(uid);
+        }
+
+        foreach (var cache in _dirtyGridScratch.Values)
+            cache.Dirty = false;
+    }
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
+
+        ProcessPendingRelinks();
 
         _accumulatedFrameTime += frameTime;
         float targetTime = _uiTps > 0 ? 1.0f / _uiTps : 1.0f;
@@ -186,7 +268,6 @@ public sealed class PointCannonSystem : EntitySystem
         List<EntityUid>? inactiveConsoles = null;
         foreach (var uid in _activeConsoles)
         {
-            // Use the cached query instead of TryComp
             if (!_consoleQuery.TryGetComponent(uid, out var console))
             {
                 inactiveConsoles ??= new();
@@ -201,45 +282,111 @@ public sealed class PointCannonSystem : EntitySystem
             foreach (var uid in inactiveConsoles)
                 _activeConsoles.Remove(uid);
         }
-
-        var toRemove = new List<EntityUid>();
-        foreach (var (uid, timer) in _gridUpdateCooldown)
-        {
-            if (timer <= 0)
-            {
-                if (!_consoleQuery.TryGetComponent(uid, out var consoleComp))
-                    continue;
-                ProcessGridShapeChange(uid, consoleComp);
-                toRemove.Add(uid);
-            }
-            else
-            {
-                _gridUpdateCooldown[uid] = timer - frameTime;
-            }
-        }
-        foreach (var id in toRemove)
-        {
-            _gridUpdateCooldown.Remove(id);
-        }
     }
 
     private void ProcessGridShapeChange(EntityUid console, TargetingConsoleComponent component)
     {
+        var sessions = GetUiSessions(console);
+        TogglePvsOverride(component.CurrentGroup, sessions, false);
+
         UnlinkAllCannonsFromConsole(console, component);
         LinkAllCannonsToConsole(console, component);
+
+        RebuildCurrentGroup(console, component, sessions);
+    }
+
+    private void SyncConsoleLinks(EntityUid console, TargetingConsoleComponent comp)
+    {
+        var gridUid = Transform(console).GridUid;
+        if (gridUid is null)
+        {
+            UnlinkAllCannonsFromConsole(console, comp);
+            RebuildCurrentGroup(console, comp);
+            return;
+        }
+
+        var mounted = new HashSet<EntityUid>();
+        foreach (var cannonUid in GetGridCannons(gridUid.Value))
+        {
+            if (IsCannonMounted(cannonUid))
+                mounted.Add(cannonUid);
+        }
+
+        // Collect first, UnlinkConsole mutates CannonGroups as it goes.
+        var stale = new List<EntityUid>();
+        foreach (var (_, cannons) in comp.CannonGroups)
+        {
+            foreach (var cannon in cannons)
+            {
+                if (!mounted.Contains(cannon))
+                    stale.Add(cannon);
+            }
+        }
+
+        foreach (var cannon in stale)
+            UnlinkConsole(cannon, console, comp);
+
+        foreach (var cannon in mounted)
+            LinkCannon(cannon, console, comp, MetaData(cannon).EntityName);
+
+        RebuildCurrentGroup(console, comp);
+    }
+
+    private void RebuildCurrentGroup(EntityUid console, TargetingConsoleComponent comp, List<ICommonSession>? sessions = null)
+    {
+        sessions ??= GetUiSessions(console);
+
+        comp.ActiveGroups.RemoveWhere(group => !comp.CannonGroups.ContainsKey(group));
+
+        // A cannon can sit in more than one selected group, so dedupe.
+        var seen = new HashSet<EntityUid>();
+        var selected = new List<EntityUid>();
+
+        foreach (var group in comp.ActiveGroups.OrderBy(g => g, StringComparer.Ordinal))
+        {
+            if (!comp.CannonGroups.TryGetValue(group, out var cannons))
+                continue;
+
+            foreach (var cannon in cannons)
+            {
+                if (seen.Add(cannon))
+                    selected.Add(cannon);
+            }
+        }
+
+        List<EntityUid>? dropped = null;
+        foreach (var cannon in comp.CurrentGroup)
+        {
+            if (seen.Contains(cannon))
+                continue;
+
+            dropped ??= new List<EntityUid>();
+            dropped.Add(cannon);
+        }
+
+        if (dropped != null)
+            TogglePvsOverride(dropped, sessions, false);
+
+        comp.CurrentGroup = selected;
+        TogglePvsOverride(comp.CurrentGroup, sessions, true);
+        comp.RegenerateCannons = true;
+    }
+
+    private bool IsCannonMounted(EntityUid cannonUid)
+    {
+        if (!_xformQuery.TryGetComponent(cannonUid, out var xform) || !xform.Anchored)
+            return false;
+
+        return _anchorQuery.TryGetComponent(cannonUid, out var anchorComp) && anchorComp.anchoredTo is not null;
     }
 
     private void OnRefreshServer(EntityUid console, TargetingConsoleComponent component, FireControlConsoleRefreshServerMessage args)
     {
-        // Invalidate the grid cache on a manual refresh
         var gridUid = Transform(console).GridUid;
         if (gridUid is not null && _gridCacheQuery.TryGetComponent(gridUid.Value, out var cache))
             cache.Dirty = true;
 
-        if (_gridUpdateCooldown.ContainsKey(console))
-            _gridUpdateCooldown[console] = GridUpdateCooldownTime;
-        else
-            _gridUpdateCooldown[console] = GridUpdateCooldownTime;
+        QueueConsoleRelink(console, full: true, immediate: true);
     }
 
     private void UnlinkAllCannonsFromConsole(EntityUid console, TargetingConsoleComponent comp)
@@ -263,7 +410,10 @@ public sealed class PointCannonSystem : EntitySystem
     private void OnConsoleDelete<T>(EntityUid console, TargetingConsoleComponent comp, ref T args)
     {
         UnlinkAllCannonsFromConsole(console, comp);
+        comp.CurrentGroup.Clear();
+        comp.ActiveGroups.Clear();
         _activeConsoles.Remove(console);
+        _pendingRelinks.Remove(console);
     }
 
     private void OnConsoleAnchor(EntityUid console, TargetingConsoleComponent comp, ref AnchorStateChangedEvent args)
@@ -275,21 +425,17 @@ public sealed class PointCannonSystem : EntitySystem
         }
     }
 
-    // ===== OPTIMISATION 3: LinkAllCannonsToConsole uses the grid cache =====
     public void LinkAllCannonsToConsole(EntityUid console, TargetingConsoleComponent comp)
     {
         var gridUid = Transform(console).GridUid;
         if (gridUid is null)
             return;
 
-        // Use the cache instead of calling _lookup.GetGridEntities every time
         var cachedCannons = GetGridCannons(gridUid.Value);
 
         foreach (var cannonUid in cachedCannons)
         {
-            if (!_xformQuery.TryGetComponent(cannonUid, out var xform) || !xform.Anchored)
-                continue;
-            if (!_anchorQuery.TryGetComponent(cannonUid, out var anchorComp) || anchorComp.anchoredTo is null)
+            if (!IsCannonMounted(cannonUid))
                 continue;
             LinkCannon(cannonUid, console, comp, MetaData(cannonUid).EntityName);
         }
@@ -333,11 +479,21 @@ public sealed class PointCannonSystem : EntitySystem
     {
         uid.Comp.RegenerateCannons = true;
         _activeConsoles.Add(uid.Owner);
+
+        QueueConsoleRelink(uid.Owner, immediate: true);
     }
 
     private void OnConsoleClosed(Entity<TargetingConsoleComponent> uid, ref BoundUIClosedEvent args)
     {
+        if (_playerMan.TryGetSessionByEntity(args.Actor, out var session))
+            TogglePvsOverride(uid.Comp.CurrentGroup, new[] { session }, false);
+
+        // Someone else may still have the console open, don't tear it down under them.
+        if (_uiSys.IsUiOpen(uid.Owner, TargetingConsoleUiKey.Key))
+            return;
+
         _activeConsoles.Remove(uid.Owner);
+        _pendingRelinks.Remove(uid.Owner);
     }
 
     private void OnCannonDetach<T>(Entity<PointCannonComponent> uid, ref T args)
@@ -352,15 +508,14 @@ public sealed class PointCannonSystem : EntitySystem
 
         _dialogSys.OpenDialog(session, "Group name", "Name (case insensitive)", (string name) =>
         {
-            // Invariant: the group is matched against keys that come from data, so lowering a typed "IFF"
-            // with a Turkish locale ("ıff") would stop it ever matching.
+            // ToLowerInvariant, not ToLower: under a Turkish locale a typed "IFF" lowercases to a dotless i
+            // and stops matching the group keys, which come from data.
             uid.Comp.GroupName = string.IsNullOrEmpty(name) ? "all" : name.ToLowerInvariant();
         });
     }
 
     public void LinkCannon(EntityUid cannonUid, EntityUid consoleUid, TargetingConsoleComponent console, string group)
     {
-        // Use the cached query
         if (!_cannonQuery.TryGetComponent(cannonUid, out var cannonComponent))
             return;
         if (!console.CannonGroups.ContainsKey(group))
@@ -409,6 +564,7 @@ public sealed class PointCannonSystem : EntitySystem
                 }
             }
 
+            console.CurrentGroup.Remove(cannonUid);
             console.RegenerateCannons = true;
             TogglePvsOverride(new[] { cannonUid }, GetUiSessions(consoleUid), false);
         }
@@ -418,10 +574,9 @@ public sealed class PointCannonSystem : EntitySystem
 
     public void UnlinkConsole(EntityUid cannonUid, EntityUid consoleUid, TargetingConsoleComponent comp)
     {
-        if (!_cannonQuery.TryGetComponent(cannonUid, out var cannonComp))
-            return;
-
-        cannonComp.LinkedConsoleIds.Remove(consoleUid);
+        // Cannon may already be gone; the console still needs cleaning up either way.
+        if (_cannonQuery.TryGetComponent(cannonUid, out var cannonComp))
+            cannonComp.LinkedConsoleIds.Remove(consoleUid);
 
         if (!_consoleQuery.TryGetComponent(consoleUid, out var console))
             return;
@@ -439,6 +594,7 @@ public sealed class PointCannonSystem : EntitySystem
             }
         }
 
+        console.CurrentGroup.Remove(cannonUid);
         console.RegenerateCannons = true;
         TogglePvsOverride(new[] { cannonUid }, GetUiSessions(consoleUid), false);
     }
@@ -461,7 +617,6 @@ public sealed class PointCannonSystem : EntitySystem
         _uiSys.SetUiState(uid, TargetingConsoleUiKey.Key, consoleState);
     }
 
-    // ===== OPTIMISATION 4: OnConsoleFire with a server-side cooldown =====
     private void OnConsoleFire(EntityUid uid, TargetingConsoleComponent console, TargetingConsoleFireMessage ev)
     {
         var now = _timing.CurTime;
@@ -476,7 +631,6 @@ public sealed class PointCannonSystem : EntitySystem
                 continue;
             }
 
-            // ===== Server-side cooldown check - early exit before TryFireCannon =====
             if (_cooldownQuery.TryGetComponent(cannonUid, out var cooldown))
             {
                 if (now < cooldown.NextFire)
@@ -488,7 +642,6 @@ public sealed class PointCannonSystem : EntitySystem
 
             if (TryFireCannon(cannonUid, ev.Coordinates))
             {
-                // Refresh the cooldown after a successful shot
                 if (cooldown != null)
                     cooldown.NextFire = now + TimeSpan.FromSeconds(cooldown.FireCooldown);
             }
@@ -499,42 +652,34 @@ public sealed class PointCannonSystem : EntitySystem
 
     private void OnConsoleGroupChanged(Entity<TargetingConsoleComponent> uid, ref TargetingConsoleGroupChangedMessage args)
     {
-        if (!uid.Comp.CannonGroups.TryGetValue(args.GroupName, out var cannons))
+        if (!uid.Comp.CannonGroups.ContainsKey(args.GroupName))
             return;
 
         var sessions = GetUiSessions(uid);
 
+        // Drop the lot and rebuild, since groups can share cannons.
+        TogglePvsOverride(uid.Comp.CurrentGroup, sessions, false);
+
         if (uid.Comp.ActiveGroups.Contains(args.GroupName))
         {
             if (args.GroupName == "all")
-                uid.Comp.ActiveGroups = new();
+                uid.Comp.ActiveGroups.Clear();
             else
                 uid.Comp.ActiveGroups.Remove(args.GroupName);
-            TogglePvsOverride(cannons, sessions, false);
+        }
+        else if (args.GroupName == "all")
+        {
+            uid.Comp.ActiveGroups.Clear();
+            uid.Comp.ActiveGroups.Add("all");
         }
         else
         {
-            if (args.GroupName == "all")
-                uid.Comp.ActiveGroups = new() { "all" };
-            else
-                uid.Comp.ActiveGroups.Add(args.GroupName);
-            TogglePvsOverride(cannons, sessions, true);
+            uid.Comp.ActiveGroups.Add(args.GroupName);
         }
 
-        var totalLength = 0;
-
-        foreach (var group in uid.Comp.ActiveGroups)
-            totalLength += uid.Comp.CannonGroups[group].Count;
-
-        var selected = new List<EntityUid>(totalLength);
-
-        foreach (var group in uid.Comp.ActiveGroups)
-            selected.AddRange(uid.Comp.CannonGroups[group]);
-
-        uid.Comp.CurrentGroup = selected;
+        RebuildCurrentGroup(uid, uid.Comp, sessions);
     }
 
-    // ===== OPTIMISATION 1: TryFireCannon with cached EntityQuery =====
     public bool TryFireCannon(
         EntityUid uid,
         Vector2 pos,
@@ -542,7 +687,6 @@ public sealed class PointCannonSystem : EntitySystem
         GunComponent? gun = null,
         PointCannonComponent? cannon = null)
     {
-        // Use the cached queries instead of Resolve -> TryComp
         if (form == null && !_xformQuery.TryGetComponent(uid, out form))
             return false;
         if (gun == null && !_gunQuery.TryGetComponent(uid, out gun))
@@ -553,7 +697,6 @@ public sealed class PointCannonSystem : EntitySystem
         if (form.MapUid == null || !_gunSys.CanShoot(gun))
             return false;
 
-        // Cached queries for the hardpoint checks
         if (!_anchorQuery.TryGetComponent(uid, out var anchorComp) || anchorComp.anchoredTo is null)
             return false;
         if (!_powerQuery.TryGetComponent(anchorComp.anchoredTo.Value, out var powerComp) || !powerComp.Powered)
@@ -611,7 +754,6 @@ public sealed class PointCannonSystem : EntitySystem
 
         foreach (var childUid in entities)
         {
-            // Cached query instead of Transform()
             if (!_xformQuery.TryGetComponent(childUid, out var otherForm))
                 continue;
             if (otherForm.GridUid != gridUid)
@@ -621,7 +763,6 @@ public sealed class PointCannonSystem : EntitySystem
             if (!otherForm.Anchored)
                 continue;
 
-            // Cached query instead of TryComp<PhysicsComponent>
             if (!_physicsQuery.TryGetComponent(childUid, out var body) || !body.Hard)
                 continue;
 

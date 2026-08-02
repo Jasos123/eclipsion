@@ -124,7 +124,7 @@
     sprite: Objects/Specific/Medical/implanter.rsi
     state: implanter0
   product: CrateVitalsTrackingBasic
-  cost: 500
+  cost: 750
   category: cargoproduct-category-name-medical
   group: hayes
 
@@ -134,6 +134,6 @@
     sprite: Objects/Specific/Medical/implanter.rsi
     state: implanter0
   product: CrateVitalsTrackingIPM
-  cost: 500
+  cost: 750
   category: cargoproduct-category-name-medical
   group: hayes

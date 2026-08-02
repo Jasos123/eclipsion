@@ -1132,7 +1132,7 @@ entities:
     - type: NamedModules
       buttonNames:
       - Fire All
-      - Fire 150cc "Starburst"
+      - Fire 200cc "Starburst"
       - Fire 60mm "Azimuth"
       - Close Shutters
       - Empty Module

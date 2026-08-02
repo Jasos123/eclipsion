@@ -12,6 +12,22 @@ public sealed class OverwatchRefreshMessage : BoundUserInterfaceMessage
 }
 
 /// <summary>
+/// Shared Overwatch limits, enforced server-side and mirrored on the console so the operator sees the
+/// limit rather than having their input silently trimmed.
+/// </summary>
+public static class OverwatchLimits
+{
+    /// <summary>Longest announcement body accepted from a console.</summary>
+    public const int MaxAnnouncementLength = 512;
+
+    /// <summary>Longest squad name accepted.</summary>
+    public const int MaxSquadNameLength = 32;
+
+    /// <summary>Most squads one faction may have at once.</summary>
+    public const int MaxSquadsPerFaction = 16;
+}
+
+/// <summary>
 /// UI state carrying the faction member data.
 /// </summary>
 [Serializable, NetSerializable]
@@ -28,21 +44,6 @@ public sealed class OverwatchUpdateState : BoundUserInterfaceState
     public readonly Dictionary<int, string> AvailableSquads;
 
     /// <summary>
-    /// Current status filter.
-    /// </summary>
-    public readonly OverwatchMemberStatus? StatusFilter;
-
-    /// <summary>
-    /// Current squad filter.
-    /// </summary>
-    public readonly int? SquadFilter;
-
-    /// <summary>
-    /// Current search query.
-    /// </summary>
-    public readonly string SearchQuery;
-
-    /// <summary>
     /// Faction colour for the UI.
     /// </summary>
     public readonly Color FactionColor;
@@ -50,16 +51,10 @@ public sealed class OverwatchUpdateState : BoundUserInterfaceState
     public OverwatchUpdateState(
         List<OverwatchMemberData> members,
         Dictionary<int, string>? availableSquads = null,
-        OverwatchMemberStatus? statusFilter = null,
-        int? squadFilter = null,
-        string searchQuery = "",
         Color factionColor = default)
     {
         Members = members;
         AvailableSquads = availableSquads ?? new Dictionary<int, string>();
-        StatusFilter = statusFilter;
-        SquadFilter = squadFilter;
-        SearchQuery = searchQuery;
         FactionColor = factionColor;
     }
 }
@@ -87,57 +82,6 @@ public sealed class OverwatchViewCameraMessage : BoundUserInterfaceMessage
 [Serializable, NetSerializable]
 public sealed class OverwatchStopWatchingMessage : BoundUserInterfaceMessage
 {
-}
-
-/// <summary>
-/// Request to set the status filter.
-/// </summary>
-[Serializable, NetSerializable]
-public sealed class OverwatchSetStatusFilterMessage : BoundUserInterfaceMessage
-{
-    /// <summary>
-    /// The status to filter by.
-    /// </summary>
-    public readonly OverwatchMemberStatus? Status;
-
-    public OverwatchSetStatusFilterMessage(OverwatchMemberStatus? status)
-    {
-        Status = status;
-    }
-}
-
-/// <summary>
-/// Request to set the squad filter.
-/// </summary>
-[Serializable, NetSerializable]
-public sealed class OverwatchSetSquadFilterMessage : BoundUserInterfaceMessage
-{
-    /// <summary>
-    /// The squad ID to filter by.
-    /// </summary>
-    public readonly int? SquadId;
-
-    public OverwatchSetSquadFilterMessage(int? squadId)
-    {
-        SquadId = squadId;
-    }
-}
-
-/// <summary>
-/// Request to set the search query.
-/// </summary>
-[Serializable, NetSerializable]
-public sealed class OverwatchSetSearchMessage : BoundUserInterfaceMessage
-{
-    /// <summary>
-    /// The search query string.
-    /// </summary>
-    public readonly string SearchQuery;
-
-    public OverwatchSetSearchMessage(string searchQuery)
-    {
-        SearchQuery = searchQuery;
-    }
 }
 
 /// <summary>

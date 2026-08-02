@@ -1,6 +1,8 @@
 using Content.Shared.Examine;
+using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Verbs;
+using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Shared.Containers;
 
@@ -21,6 +23,27 @@ public abstract partial class SharedGunSystem
         SubscribeLocalEvent<MagazineAmmoProviderComponent, EntRemovedFromContainerMessage>(OnMagazineSlotChange);
         SubscribeLocalEvent<MagazineAmmoProviderComponent, UseInHandEvent>(OnMagazineUse);
         SubscribeLocalEvent<MagazineAmmoProviderComponent, ExaminedEvent>(OnMagazineExamine);
+        SubscribeLocalEvent<MagazineAmmoProviderComponent, ItemSlotInsertEvent>(OnMagazineInserted);
+    }
+
+    private void OnMagazineInserted(Entity<MagazineAmmoProviderComponent> ent, ref ItemSlotInsertEvent args)
+    {
+        if (ent.Comp.ReloadDuration <= 0f ||
+            args.User == null ||
+            args.Slot.ID != MagazineSlot ||
+            !TryComp<GunComponent>(ent, out var gun))
+        {
+            return;
+        }
+
+        var reloadComplete = Timing.CurTime + TimeSpan.FromSeconds(ent.Comp.ReloadDuration);
+        if (gun.NextFire >= reloadComplete)
+            return;
+
+        gun.NextFire = reloadComplete;
+        DirtyField(ent, gun, nameof(GunComponent.NextFire));
+
+        Popup(Loc.GetString("gun-magazine-reloading"), ent.Owner, args.User);
     }
 
     private void OnMagazineMapInit(Entity<MagazineAmmoProviderComponent> ent, ref MapInitEvent args)
@@ -35,6 +58,16 @@ public abstract partial class SharedGunSystem
 
         var (count, _) = GetMagazineCountCapacity(uid, component);
         args.PushMarkup(Loc.GetString("gun-magazine-examine", ("color", AmmoExamineColor), ("count", count)));
+
+        if (component.ReloadDuration <= 0f || !TryComp<GunComponent>(uid, out var gun))
+            return;
+
+        var remaining = gun.NextFire - Timing.CurTime;
+        if (remaining > TimeSpan.Zero)
+        {
+            args.PushMarkup(Loc.GetString("gun-magazine-reloading-examine",
+                ("seconds", Math.Ceiling(remaining.TotalSeconds))));
+        }
     }
 
     private void OnMagazineUse(EntityUid uid, MagazineAmmoProviderComponent component, UseInHandEvent args)

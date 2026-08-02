@@ -6,7 +6,7 @@
   name: SAW Rokh
   description: |
     A converted cargo hauler.
-    LOADOUT: 4x 50mm 'Striker' Heavy Autocannon, 2x 35mm 'Scout' Autocannon, 4x 200cc 'Retribution' Pulse Laser, 2x 120mm 'Anvil' Artillery, 2x 48mm 'Shortbow' SRM rocket systems
+    LOADOUT: 4x 50mm 'Striker' Heavy Autocannon, 2x 35mm 'Scout' Autocannon, 4x 150cc 'Retribution' Pulse Laser, 2x 120mm 'Anvil' Artillery, 2x 48mm 'Shortbow' SRM rocket systems
     MINIMUM CREW: 1x Pilot, 1x Gunner
   price: 125000
   category: Medium

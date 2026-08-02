@@ -1,0 +1,24 @@
+# AME jars use the existing engineering cargo product.
+
+- type: entity
+  id: CrateFuelBoriatic
+  parent: N14CrateAluminium
+  name: boriatic fuel crate
+  description: A shipping crate holding a single 200 unit canister of boriatic fuel.
+  components:
+  - type: StorageFill
+    contents:
+      - id: FuelCanisterBoriaticT1Full
+        amount: 1
+  - type: StaticPrice
+    price: 1200
+
+- type: cargoProduct
+  id: FuelBoriaticGeneric
+  icon:
+    sprite: _Crescent/Objects/Misc/fuelcan.rsi
+    state: jug
+  product: CrateFuelBoriatic
+  cost: 6000
+  category: cargoproduct-category-name-materials
+  group: generic

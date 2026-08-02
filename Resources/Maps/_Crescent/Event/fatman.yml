@@ -229,7 +229,7 @@ entities:
     - type: Transform
       pos: 0.5,-3.5
       parent: 1
-- proto: BoriaticFuelTankHuge
+- proto: BoriaticFuelTankFull
   entities:
   - uid: 3
     components:

@@ -43,6 +43,20 @@
   components:
   - type: FactionMachine
     faction: DSM
+  - type: Lathe
+    excludedRecipes:
+    - ClothingOuterCoatClarizianOfficer
+    - ClothingUniformJumpsuitClarizeCombat
+    - ClothingUniformJumpsuitClarizeDoctor
+    - ClothingUniformJumpsuitClarizeOfficer
+    - ClothingHeadHatClarizeBeret
+    - ClothingOuterArmorClarizianTrooperArmor
+    - ClothingHeadHelmetClarizianTrooperHelmet
+    - ClothingOuterHardsuitClarizianWorker
+    - ClothingOuterHardsuitClarize
+    - TubeLoader1Craft
+    - TubeLoader1
+    - TubeLoaderNCWL
 
 - type: entity
   parent: [PristineMicroforge, BaseFactionMicroforge]

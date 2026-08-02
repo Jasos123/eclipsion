@@ -235,9 +235,8 @@
   completetime: 1.5
   materials:
     Gold: 750
-    BallisticCycler: 250
-    AdvancedMechatronics: 500
-    Steel: 1000
+    AdvancedMechatronics: 750
+    Steel: 1500
 
 - type: latheRecipe
   id: MagazinePistolSpecialMindbreakerCyberdawn
@@ -275,9 +274,9 @@
   result: WeaponRifleKrinkov
   completetime: 1.5
   materials:
-    Steel: 1500
+    Steel: 2000
     Plastic: 500
-    BallisticCycler: 250
+    AdvancedMechatronics: 250
 
 - type: latheRecipe
   id: WeaponPistolViperWoodCyberdawn
@@ -305,10 +304,10 @@
   result: WeaponLightMachineGunTFSCRPD
   completetime: 1.5
   materials:
-    Steel: 3500
+    Steel: 6500
     Plastic: 1500
     Silver: 1000
-    BallisticCycler: 1500
+    AdvancedMechatronics: 1500
 
 - type: latheRecipe
   id: WeaponLightMachineGunCompaktCyberdawn
@@ -316,10 +315,10 @@
   result: WeaponLightMachineGunCompakt
   completetime: 1.5
   materials:
-    Steel: 2000
+    Steel: 4000
     Plastic: 1000
     Tungsten: 500
-    BallisticCycler: 1000
+    AdvancedMechatronics: 1000
 
 - type: latheRecipe
   id: WeaponRifleMayflower
@@ -327,10 +326,10 @@
   result: WeaponRifleMayflower
   completetime: 1.5
   materials:
-    Steel: 2500 
+    Steel: 3500
     Plastic: 1500
     Silver: 1000
-    BallisticCycler: 500
+    AdvancedMechatronics: 500
 
 - type: latheRecipe
   id: WeaponRifleUnderdogCyberdawn
@@ -338,10 +337,10 @@
   result: WeaponRifleUnderdog
   completetime: 1.5
   materials:
-    Steel: 2500
+    Steel: 3500
     Plastic: 1000
     Silver: 500
-    BallisticCycler: 500
+    AdvancedMechatronics: 500
 
 - type: latheRecipe
   id:  WeaponRifleSVDMarksmanTFSC
@@ -349,10 +348,10 @@
   result: WeaponRifleSVDMarksman
   completetime: 1.5
   materials:
-    Steel: 2500
+    Steel: 4500
     Plastic: 1000
     Silver: 1000
-    BallisticCycler: 1000
+    AdvancedMechatronics: 1000
 
 - type: latheRecipe
   id:  WeaponSniperAK60Cyberdawn
@@ -360,10 +359,10 @@
   result: WeaponSniperAK60
   completetime: 1.5
   materials:
-    Steel: 2500
+    Steel: 5500
     Plastic: 1000
     Silver: 1500
-    BallisticCycler: 1500
+    AdvancedMechatronics: 1500
 
 - type: latheRecipe
   id: WeaponRifleAkCyberdawn
@@ -371,9 +370,9 @@
   result: WeaponRifleAk
   completetime: 1.5
   materials:
-    Steel: 1500
+    Steel: 2500
     Silver: 1000
-    BallisticCycler: 500
+    AdvancedMechatronics: 500
 
 - type: latheRecipe
   id:  WeaponShotgunTuberCyberdawn
@@ -381,9 +380,9 @@
   result: WeaponShotgunTuber
   completetime: 1.5
   materials:
-    Steel: 2000
+    Steel: 3000
     Plastic: 1000
-    BallisticCycler: 500
+    AdvancedMechatronics: 500
 
 - type: latheRecipe
   id:  WeaponShotgunSaiga12TFSC
@@ -391,9 +390,9 @@
   result: WeaponShotgunTFSCSaiga12
   completetime: 1.5
   materials:
-    Steel: 2500
+    Steel: 3500
     Plastic: 1000
-    BallisticCycler: 500
+    AdvancedMechatronics: 500
 
 - type: latheRecipe
   id:  WeaponLauncherRocketCyberdawn
@@ -452,11 +451,11 @@
   result: WeaponSpecialKingpin
   completetime: 2
   materials:
-    Steel: 4000
+    Steel: 8000
     Plasteel: 4000
     BasicMechatronics: 3000
+    AdvancedMechatronics: 2000
     Tungsten: 3000
-    BallisticCycler: 2000
 
 # MARK: Ship LPCS
 
@@ -547,22 +546,13 @@
 # MARK: Components
 
 - type: latheRecipe
-  id:  BallisticCycler1Craft
-  category: Ammo
-  result: BallisticCycler1
-  completetime: 1.5
-  materials:
-    AdvancedMechatronics: 500
-    Steel: 1000
-
-- type: latheRecipe
   id:  TubeLoader1Craft
   category: Ammo
   result: TubeLoader1
   completetime: 1.5
   materials:
-    BallisticCycler: 1000
-    Steel: 2000
+    AdvancedMechatronics: 1000
+    Steel: 4000
 
 - type: latheRecipe
   id: LaserLocus1Craft
@@ -755,11 +745,10 @@
   completetime: 1.5
   materials:
     AdvancedElectronics: 1000
-    AdvancedMechatronics: 1000
+    AdvancedMechatronics: 2000
     Silver: 2000
-    Steel: 1500
+    Steel: 3500
     Gold: 1500
-    BallisticCycler: 1000
     Plasma: 1500
     HardlightGenerator: 1000
     LaserLocus: 500
@@ -771,11 +760,10 @@
   completetime: 1.5
   materials:
     AdvancedElectronics: 1500
-    AdvancedMechatronics: 1500
+    AdvancedMechatronics: 3000
     Silver: 1500
-    Steel: 3000
+    Steel: 6000
     Gold: 3000
     Plasma: 3000
-    BallisticCycler: 1500
     HardlightGenerator: 500
     LaserLocus: 500

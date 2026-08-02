@@ -38,3 +38,6 @@ treasury-console-robbery-cut = The vault console loses power and the siphon dies
 treasury-console-alarm-sender = Treasury Vault Security
 treasury-console-alarm-unknown-station = an unknown holding
 treasury-console-alarm-announcement = Security alert: unauthorized hands are at the {$station} treasury vault. A robbery is in progress — all command and security personnel, respond at once.
+
+# Your own share of the vault, so "withdraw all" stops looking like it short-changed you.
+treasury-console-remaining = Your allowance: { $remaining } cr ({ $percent }% share)

@@ -22,6 +22,12 @@ namespace Content.Shared.Lathe
         public List<ProtoId<LatheRecipePrototype>> DynamicRecipes = new();
 
         /// <summary>
+        /// Recipes to drop from whatever this lathe inherited, for prototypes that only want part of a parent's list
+        /// </summary>
+        [DataField]
+        public List<ProtoId<LatheRecipePrototype>> ExcludedRecipes = new();
+
+        /// <summary>
         /// The lathe's construction queue
         /// </summary>
         [DataField]

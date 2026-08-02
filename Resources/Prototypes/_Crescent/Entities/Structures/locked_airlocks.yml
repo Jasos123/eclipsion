@@ -56,6 +56,15 @@
 
 - type: entity
   parent: WindoorSecure
+  id: WindoorSecureNCWL
+  suffix: NCWL, Windoor
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsNCWL ]
+
+- type: entity
+  parent: WindoorSecure
   id: WindoorSecureNCWLJail
   suffix: NCWL Jail, Windoor
   components:
@@ -268,6 +277,15 @@
       board: [ DoorElectronicsTFSCRamzi ]
 
 #empire
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaDSM
+  suffix: DSM, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsDSMEmpire ]
 
 - type: entity
   parent: WindoorSecure

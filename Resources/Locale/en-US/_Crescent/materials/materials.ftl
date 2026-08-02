@@ -28,7 +28,6 @@ materials-basicmechanics = basic mechatronic parts
 materials-advancedmechanics = advanced mechatronic parts
 materials-precursormechanics = precursor mechatronic parts
 materials-laserlocus = focused laser locus
-materials-gascycler = ballistic gas cycler
 materials-tubeloader = tube loader robotics
 materials-weaklaserlocus = weak laser locus
 materials-hardlightgenerator = hardlight generator conduit

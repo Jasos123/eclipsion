@@ -19,6 +19,8 @@
     HornetDrone:
       stationProto: StandardCrescentVessel
       components:
+        - type: VesselDesignation
+          designation: vessel-designation-fighter
         - type: StationNameSetup
           mapNameTemplate: 'NCWL Hornet {1}'
           nameGenerator:

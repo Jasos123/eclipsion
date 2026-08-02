@@ -224,3 +224,64 @@ Entries:
   id: 6015
   time: '2026-07-26T00:00:00.0000000+00:00'
   url: null
+- author: Taleryn
+  changes:
+    - message: Boriatic and AME fuel can be mixed in chemistry now.
+      type: Add
+    - message: Added refillable boriatic and AME fuel tanks, and the old boriatic drums take a refill too. Antimatter jars can be topped back up and show what's actually left in them.
+      type: Add
+    - message: Boriatic canisters and AME jars come in three sizes. The two bigger ones need fuel storage research.
+      type: Add
+    - message: Standard AME jars hold 1000 units, the researched ones hold 5000 and 10000.
+      type: Tweak
+    - message: Added the Titan, a 200 kW boriatic generator, with a flatpack and a lathe recipe. Chelubey runs twin Titans and Sabre got an Einstein.
+      type: Add
+    - message: Cargo sells a boriatic crate with a full 200 unit canister in it. The old crate shipped ten empty cans and now carries eight full ones.
+      type: Tweak
+    - message: The three-jar AME crate costs 24000 spesos, up from 10000.
+      type: Tweak
+    - message: Part-full AME jars no longer swallow extra fuel when you refill them.
+      type: Fix
+  id: 6016
+  time: '2026-08-01T00:00:00.0000000+00:00'
+  url: null
+- author: Taleryn
+  changes:
+    - message: Ship weapons run off their own capacitor now. Energy weapons cost the most per shot, then ballistics, then missiles.
+      type: Tweak
+    - message: Turret-launched missiles punch through shields.
+      type: Tweak
+    - message: Rocket launchers take a moment to cycle a fresh magazine before they'll fire again.
+      type: Tweak
+    - message: Heat-seekers stopped chasing friendly hulls, say what they are on examine, and set off a lock warning on whatever they're tracking.
+      type: Fix
+    - message: Flak can shoot down incoming heat-seekers.
+      type: Tweak
+    - message: Ships no longer handle strangely when a thrust direction has nothing pointing that way.
+      type: Fix
+    - message: Shipyard hulls always take the console's faction and livery colour, including the ones with no station prototype behind them.
+      type: Fix
+    - message: The heavy reinforced plasma windows on Aurora, Aurora Hyperwar and Chanchu are plain reinforced plasma now.
+      type: Tweak
+    - message: Dropped the ballistic gas cycler. Anything that used one takes steel and mechatronic parts directly instead.
+      type: Remove
+    - message: Editing or creating a character no longer drags you onto that slot.
+      type: Fix
+    - message: Took Respawn, Ghost, Grant Full Access and AI Overlay out of the sandbox panel.
+      type: Remove
+    - message: The general and hands emote categories have their own icons instead of borrowing clothing sprites.
+      type: Tweak
+  id: 6017
+  time: '2026-08-01T00:00:00.0000000+00:00'
+  url: null
+- author: Taleryn
+  changes:
+    - message: The Hristov sniper case is a row taller, so it actually fits the rifle and both of its spare magazines.
+      type: Fix
+    - message: Cargo crates that sold for more than they cost had their order prices corrected, mostly medical implanter, shuttle ammo and breaching charge crates.
+      type: Tweak
+    - message: The bluespace asteroid bunker and Shinohara DED events announce themselves properly instead of printing a raw string id.
+      type: Fix
+  id: 6018
+  time: '2026-08-02T00:00:00.0000000+00:00'
+  url: null

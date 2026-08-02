@@ -299,6 +299,18 @@ public sealed partial class ShipyardSystem : SharedShipyardSystem
         _mapping.SetPaused(ShipyardMap.Value, false);
     }
 
+    private void ApplyShipyardIFF(EntityUid console, EntityUid shuttle)
+    {
+        var iffColor = new Color { R = 10, G = 50, B = 100, A = 100 };
+        if (TryComp<ShipyardListingComponent>(console, out var listing) && listing.IffColor.HasValue)
+            iffColor = listing.IffColor.Value;
+
+        _shuttle.SetIFFColor(shuttle, iffColor);
+        _shuttle.AddIFFFlag(shuttle, IFFFlags.IsPlayerShuttle);
+
+        if (TryComp<IFFComponent>(Transform(console).GridUid, out var stationIFF))
+            _shuttle.SetIFFFaction(shuttle, stationIFF.Faction);
+    }
 
     private int ComputeSellValue(EntityUid shuttleUid, ShipyardConsoleUiKey? uiKey = null)
     {
@@ -412,20 +424,16 @@ public sealed partial class ShipyardSystem : SharedShipyardSystem
             return;
         }
 
-        // Faction shipyards draw from the faction treasury instead of the buyer's personal bank.
-        // Civilian consoles (UsesFactionTreasury == false) always bill the buyer's own account.
+        // Faction yards bill the treasury, civilian ones bill the buyer.
         var faction = _market.GetStationFaction(station);
         var isFactionYard = component.UsesFactionTreasury && faction != null;
 
-        // Still needed for the UI balance readout and the personal-bank payment path.
         TryComp<BankAccountComponent>(player, out var bank);
 
-        // Identify the player for the per-round, per-player faction purchase cap.
         NetUserId? buyer = TryComp<ActorComponent>(player, out var buyerActor) ? buyerActor.PlayerSession.UserId : null;
         var factionLimit = _config.GetCVar(CCVars.ShipyardFactionShipLimit);
 
-        // Validate funds up front, but only deduct after the ship actually spawns so a failed spawn
-        // never charges the treasury or the player.
+        // Check funds now but don't take them yet, a failed spawn shouldn't cost anyone anything.
         if (isFactionYard)
         {
             if (factionLimit > 0 && buyer is { } capId && _factionShipPurchases.GetValueOrDefault(capId) >= factionLimit)
@@ -465,7 +473,6 @@ public sealed partial class ShipyardSystem : SharedShipyardSystem
             return;
         }
 
-        // Ship exists now — take payment. Treasury for faction yards, personal bank otherwise.
         if (isFactionYard)
         {
             _market.TryWithdrawTreasury(station, vesselPrice);
@@ -516,21 +523,11 @@ public sealed partial class ShipyardSystem : SharedShipyardSystem
                 var metaData = MetaData((EntityUid) shuttleStation);
                 name = metaData.EntityName;
             }
-
-            var iffColor = new Color { R = 10, G = 50, B = 100, A = 100 };
-            if (TryComp<ShipyardListingComponent>(uid, out var listing) && listing.IffColor.HasValue)
-                iffColor = listing.IffColor.Value;
-
-            _shuttle.SetIFFColor(shuttle.Owner, iffColor);
-            _shuttle.AddIFFFlag(shuttle.Owner, IFFFlags.IsPlayerShuttle);
-
-            // match our IFF faction with our spawner's
-            if (TryComp<IFFComponent>(Transform(uid).GridUid, out var stationIFF))
-            {
-                _shuttle.SetIFFFaction(shuttle.Owner, stationIFF.Faction);
-            }
-
         }
+
+        // Outside the stationProto block - a hull with no GameMapPrototype still needs its IFF.
+        ApplyShipyardIFF(uid, shuttle.Owner);
+
         // dynamic grid acces initializing automatically if none is mapped in
         if (!HasComp<DynamicCodeHolderComponent>(shuttle.Owner))
         {
@@ -646,8 +643,6 @@ public sealed partial class ShipyardSystem : SharedShipyardSystem
         Del(targetId);
 
 
-        // Faction shipyards return sale proceeds to the faction treasury (so a treasury-bought ship
-        // can't be flipped for personal profit); civilian yards pay the seller's personal bank.
         if (component.UsesFactionTreasury && _market.GetStationFaction(stationUid) is not null)
             _market.AddTreasury(stationUid, bill);
         else
@@ -933,14 +928,8 @@ public sealed partial class ShipyardSystem : SharedShipyardSystem
         return availableShuttles;
     }
 
-    /// <summary>
-    /// The balance to show in a shipyard console UI: the faction treasury for faction shipyards,
-    /// otherwise the viewing player's personal bank balance.
-    /// </summary>
     private long GetDisplayBalance(EntityUid console, EntityUid player)
     {
-        // Only faction/treasury consoles show the treasury balance; civilian consoles show the
-        // viewing player's own bank balance (matching where their purchase would be billed).
         if (TryComp<ShipyardConsoleComponent>(console, out var comp) && comp.UsesFactionTreasury
             && _station.GetOwningStation(console) is { Valid: true } station
             && _market.GetStationFaction(station) is not null)
@@ -1082,22 +1071,13 @@ public sealed partial class ShipyardSystem : SharedShipyardSystem
             shuttleStation = _station.InitializeNewStation(stationProto.Stations[vessel.ID], gridUids);
             var metaData = MetaData((EntityUid) shuttleStation);
             name = metaData.EntityName;
-
-            var iffColor = new Color { R = 10, G = 50, B = 100, A = 100 };
-            if (TryComp<ShipyardListingComponent>(uid, out var listing) && listing.IffColor.HasValue)
-                iffColor = listing.IffColor.Value;
-
-            _shuttle.SetIFFColor(shuttle.Owner, iffColor);
-            _shuttle.AddIFFFlag(shuttle.Owner, IFFFlags.IsPlayerShuttle);
-            var comp = EnsureComp<ShipPriceMultiplierComponent>(shuttle.Owner);
-            comp.priceMultiplier = 0.50f;
-
-            // match our IFF faction with our spawner's
-            if (TryComp<IFFComponent>(Transform(uid).GridUid, out var stationIFF))
-            {
-                _shuttle.SetIFFFaction(shuttle.Owner, stationIFF.Faction);
-            }
         }
+
+        var comp = EnsureComp<ShipPriceMultiplierComponent>(shuttle.Owner);
+        comp.priceMultiplier = 0.50f;
+
+        ApplyShipyardIFF(uid, shuttle.Owner);
+
         // dynamic grid acces initializing automatically if none is mapped in
         if (!HasComp<DynamicCodeHolderComponent>(shuttle.Owner))
         {

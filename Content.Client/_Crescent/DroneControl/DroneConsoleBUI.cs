@@ -29,6 +29,19 @@ public sealed class DroneConsoleBoundUserInterface : BoundUserInterface
         _window.OnSetTargeting += targeting => SendMessage(new DroneConsoleSetTargetingMessage(targeting));
         _window.OnSetFormation += formation => SendMessage(new DroneConsoleSetFormationMessage(formation));
         _window.OnSpawn += vesselId => SendMessage(new DroneConsoleSpawnMessage(vesselId));
+        _window.OnSelfDestruct += OnSelfDestruct;
+    }
+
+    private void OnSelfDestruct(bool arm)
+    {
+        if (_window == null)
+            return;
+
+        var selected = _window.SelectedDrones;
+        if (selected.Count == 0)
+            return;
+
+        SendMessage(new DroneConsoleSelfDestructMessage(selected, !arm));
     }
 
     private void OnMoveOrder(EntityCoordinates coord)

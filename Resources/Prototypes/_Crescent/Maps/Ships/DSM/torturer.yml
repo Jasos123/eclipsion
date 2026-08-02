@@ -3,10 +3,10 @@
   name: DSM Torturer
   description: |
     A stealth bomber, made for imperial use. Comes with little crew accommodations, and a fragile hull, but in exchange - it sports an IFF cloak for stealth engagements, capable of ending battles before they start.
-    LOADOUT: 4x 350cc 'Glare' Burst Lasers, 2x 200cc 'Retribution' Pulse Lasers
+    LOADOUT: 4x 350cc 'Glare' Burst Lasers, 2x 150cc 'Retribution' Pulse Lasers
     MINIMUM CREW: 1x Pilot, 1x Loader
   price: 58000
-  category: Small
+  category: Medium
   group: None
   path: /Maps/_Crescent/Shuttles/DSM/torturer.yml
 
@@ -29,6 +29,6 @@
             !type:NanotrasenNameGenerator
             prefixCreator: '14'
         - type: VesselDesignation
-          designation: vessel-designation-fighter
+          designation: vessel-designation-destroyer
         - type: VesselDescription
           description: Any smart ritter can turn this little ship into a terror weapon. 

@@ -1,4 +1,5 @@
 using Robust.Shared.Map;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared._Crescent.DroneControl;
 
@@ -32,10 +33,102 @@ public sealed partial class AutoDroneComponent : Component
     public EntityCoordinates SlotCoordinates;
 
     /// <summary>
-    ///     Current behavior mode, for debugging/visibility.
+    ///     Current behavior mode, for debugging/visibility. Mirrored to the console UI.
     /// </summary>
     [ViewVariables]
     public AutoDroneMode Mode = AutoDroneMode.Idle;
+
+    /// <summary>
+    ///     True once the drone has cleared its carrier's hull after deployment. Until then it flies straight
+    ///     out instead of trying to take up its formation slot. Latched, so a drone that has formed up never
+    ///     drops back into the launch behaviour just because the carrier drifted onto it.
+    /// </summary>
+    [ViewVariables]
+    public bool Launched;
+
+    /// <summary>
+    ///     True once we have cast the drone off its carrier. Undocking is a grid-wide lookup, so it is done
+    ///     once at deployment (and retried while the drone is still attached) rather than every tick.
+    /// </summary>
+    [ViewVariables]
+    public bool Undocked;
+
+    /// <summary>
+    ///     True if this drone was produced by its carrier console rather than claimed from a dock. Only
+    ///     produced drones may have their ownership deed stripped and count against pending production.
+    /// </summary>
+    [ViewVariables]
+    public bool Produced;
+
+    // ---- condition readout ----
+
+    /// <summary>
+    ///     Fraction (0..1) of the drone grid's original tiles that are still intact. Recomputed on a slow
+    ///     timer by <c>AutoDroneSystem</c> and shown on the console status panel.
+    /// </summary>
+    [ViewVariables]
+    public float HullIntegrity = 1f;
+
+    /// <summary>
+    ///     Tile count of the drone grid when it was deployed, used as the denominator for
+    ///     <see cref="HullIntegrity"/>. Zero until the drone is deployed.
+    /// </summary>
+    [ViewVariables]
+    public int InitialTileCount;
+
+    // ---- self destruct ----
+
+    /// <summary>
+    ///     When set, the drone scuttles itself at this time. Set by a console order, or automatically when
+    ///     the drone is orphaned (its carrier console is destroyed) so dead squadrons don't litter the map.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan? SelfDestructAt;
+
+    /// <summary>
+    ///     Countdown applied when a self destruct is ordered from the console.
+    /// </summary>
+    [DataField]
+    public TimeSpan SelfDestructDelay = TimeSpan.FromSeconds(10);
+
+    /// <summary>
+    ///     Countdown applied automatically when the drone loses its carrier console. Longer than the ordered
+    ///     one so a carrier that is merely rebuilt/replaced has a chance to reclaim the squadron.
+    /// </summary>
+    [DataField]
+    public TimeSpan OrphanSelfDestructDelay = TimeSpan.FromMinutes(3);
+
+    /// <summary>
+    ///     Explosion prototype used when the drone scuttles itself.
+    /// </summary>
+    [DataField]
+    public string SelfDestructExplosion = "Default";
+
+    /// <summary>
+    ///     Total intensity of the scuttling explosion. Sized to gut the drone without threatening a ship
+    ///     holding station next to it.
+    /// </summary>
+    [DataField]
+    public float SelfDestructIntensity = 60f;
+
+    /// <summary>
+    ///     Intensity falloff per tile of the scuttling explosion.
+    /// </summary>
+    [DataField]
+    public float SelfDestructSlope = 8f;
+
+    /// <summary>
+    ///     Per-tile intensity cap of the scuttling explosion.
+    /// </summary>
+    [DataField]
+    public float SelfDestructMaxTileIntensity = 12f;
+
+    /// <summary>
+    ///     How long after the scuttling charge goes off the wreck is removed. Long enough for the blast to
+    ///     visibly tear the hull apart first, rather than the grid blinking out from under the explosion.
+    /// </summary>
+    [DataField]
+    public TimeSpan ScuttleCleanupDelay = TimeSpan.FromSeconds(4);
 
     // ---- manual override ----
 
@@ -64,6 +157,7 @@ public sealed partial class AutoDroneComponent : Component
     public TimeSpan ManualOverrideTimeout = TimeSpan.FromSeconds(12);
 }
 
+[Serializable, NetSerializable]
 public enum AutoDroneMode : byte
 {
     Idle,
@@ -71,4 +165,5 @@ public enum AutoDroneMode : byte
     Follow,
     Attack,
     Manual,
+    SelfDestructing,
 }

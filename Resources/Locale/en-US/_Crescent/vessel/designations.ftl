@@ -32,3 +32,14 @@ vessel-designation-strikefrigate = strike frigate
 vessel-designation-outpost = Mobile Outpost
 vessel-designation-heavybattlecruiser = heavy battlecruiser
 vessel-designation-wreck = derelict
+
+# Hull classes from the ship mapping standard, in ascending tonnage. Several hulls already pointed at
+# these keys, or at a bare string like "corvette", before they existed.
+vessel-designation-ultralight = ultralight
+vessel-designation-corvette = corvette
+vessel-designation-frigate = frigate
+vessel-designation-cruiser = cruiser
+vessel-designation-battlecruiser = battlecruiser
+vessel-designation-battleship = battleship
+
+vessel-designation-planet = planetary body

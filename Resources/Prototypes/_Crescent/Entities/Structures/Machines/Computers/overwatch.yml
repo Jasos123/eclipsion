@@ -16,6 +16,14 @@
   - type: ActivatableUI
     singleUser: true
     key: enum.OverwatchUiKey.Key
+
+  # Declared empty here; every variant must supply its faction's access levels. An AccessReader with no
+  # access list allows everyone, so a variant that forgets it ships open. OverwatchSystem also checks
+  # faction membership on the body, so a stolen ID alone is not enough.
+  - type: AccessReader
+  - type: ActivatableUIRequiresAccess
+    popupMessage: overwatch-console-access-denied
+
   - type: Sprite
     sprite: Structures/Machines/computers.rsi
     layers:
@@ -138,6 +146,8 @@
   components:
   - type: OverwatchConsole
     faction: DSM
+  - type: AccessReader
+    access: [["Empire"]]
   # - type: Sprite
   #   layers:
   #   - map: ["computerLayerScreen"]
@@ -150,6 +160,8 @@
   components:
   - type: OverwatchConsole
     faction: NCWL
+  - type: AccessReader
+    access: [["NCWLGeneral"]]
   # - type: Sprite
   #   layers:
   #   - map: ["computerLayerScreen"]
@@ -162,6 +174,8 @@
   components:
   - type: OverwatchConsole
     faction: SHI
+  - type: AccessReader
+    access: [["Shinohara"]]
   # - type: Sprite
   #   layers:
   #   - map: ["computerLayerScreen"]
@@ -174,6 +188,8 @@
   components:
   - type: OverwatchConsole
     faction: TAP
+  - type: AccessReader
+    access: [["Families"]]
   # - type: Sprite
   #   layers:
   #   - map: ["computerLayerScreen"]
@@ -190,6 +206,8 @@
   components:
   - type: OverwatchConsole
     faction: TFSC
+  - type: AccessReader
+    access: [["SyndicateBasic"]]
   # - type: Sprite
   #   layers:
   #   - map: ["computerLayerScreen"]
@@ -202,6 +220,8 @@
   components:
   - type: OverwatchConsole
     faction: SRM
+  - type: AccessReader
+    access: [["Hunter"]]
   # - type: Sprite
   #   layers:
   #   - map: ["computerLayerScreen"]
@@ -269,6 +289,12 @@
   - type: ActivatableUI
     verbText: overwatch-clipboard-computer-verb-text
     key: enum.OverwatchUiKey.Key
+
+  # A portable console is worse than a fixed one if it ships open: stealing it hands the thief the
+  # owning faction's roster, live positions and announcement channel, anywhere in the sector.
+  - type: AccessReader
+  - type: ActivatableUIRequiresAccess
+    popupMessage: overwatch-console-access-denied
   - type: UserInterface
     interfaces:
       enum.OverwatchUiKey.Key:
@@ -288,6 +314,8 @@
   components:
   - type: OverwatchConsole
     faction: DSM
+  - type: AccessReader
+    access: [["Empire"]]
 
 - type: entity
   parent: BaseOverwatchClipboard
@@ -296,6 +324,8 @@
   components:
   - type: OverwatchConsole
     faction: NCWL
+  - type: AccessReader
+    access: [["NCWLGeneral"]]
 
 - type: entity
   parent: BaseOverwatchClipboard
@@ -304,6 +334,8 @@
   components:
   - type: OverwatchConsole
     faction: SHI
+  - type: AccessReader
+    access: [["Shinohara"]]
 
 - type: entity
   parent: BaseOverwatchClipboard
@@ -312,6 +344,8 @@
   components:
   - type: OverwatchConsole
     faction: TAP
+  - type: AccessReader
+    access: [["Families"]]
 
 # As above: one Coalition tablet in place of the four per-company ones.
 - type: entity
@@ -321,6 +355,8 @@
   components:
   - type: OverwatchConsole
     faction: TFSC
+  - type: AccessReader
+    access: [["SyndicateBasic"]]
 
 - type: entity
   parent: BaseOverwatchClipboard
@@ -329,3 +365,5 @@
   components:
   - type: OverwatchConsole
     faction: SRM
+  - type: AccessReader
+    access: [["Hunter"]]

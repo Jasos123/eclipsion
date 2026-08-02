@@ -32,6 +32,6 @@
             !type:NanotrasenNameGenerator
             prefixCreator: '14'
         - type: VesselDesignation
-          designation: Frigate
+          designation: vessel-designation-frigate
         - type: VesselDescription
           description: Well-fitted for short, high-intensity deployments, the Corsair struggles during prolonged combat.

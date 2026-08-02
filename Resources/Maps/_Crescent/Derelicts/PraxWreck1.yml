@@ -3063,7 +3063,7 @@ entities:
     - type: Transform
       pos: 7.4069967,10.521954
       parent: 1
-- proto: HeavyReinforcedPlasmaWindow
+- proto: ReinforcedPlasmaWindow
   entities:
   - uid: 401
     components:

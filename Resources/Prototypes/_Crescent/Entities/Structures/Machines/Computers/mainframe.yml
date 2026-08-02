@@ -50,6 +50,11 @@
     # between-announcements cooldown (delay) still applies after each broadcast.
     initialDelay: 0
 
+  # PaymentConsole is deliberately absent. MainframeConsoleSystem and the client can host a payroll
+  # tab, but this entity's AccessReader is the faction's base tag (so ordinary members can use the
+  # overwatch tab), and payroll behind that gate lets any member pay themselves out of the vault.
+  # Payroll lives on ComputerPayment*, which is gated on the command tier.
+
   # Every hosted key must be declared here. A missing one makes both SetUiState and OpenUi silently
   # no-op, which surfaces as a tab that never appears rather than as an error.
   # WiresUiKey included because this block replaces BaseComputer's rather than merging with it —

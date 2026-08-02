@@ -19,6 +19,7 @@ verb-categories-rotate = Rotate
 verb-categories-smite = Smite
 verb-categories-tricks = Tricks
 verb-categories-transfer = Set Transfer Amount
+verb-categories-transfer-direction = Set Transfer Direction
 verb-categories-split = Split
 verb-categories-instrument-style = Instrument Style
 verb-categories-channel-select = Channels

@@ -6,7 +6,7 @@
   name: NCWL Sasha
   description: An antiquated communard warship.
   price: 125000
-  category: Small
+  category: Large
   group: None
   path: /Maps/_Crescent/Shuttles/NCWL/sasha.yml
 
@@ -25,7 +25,7 @@
           !type:NanotrasenNameGenerator
           prefixCreator: '14'
       - type: VesselDesignation
-        designation: vessel-designation-warship
+        designation: vessel-designation-battleship
       - type: VesselDescription
         description: A relic of another time.
       - type: VesselIcon

@@ -49,11 +49,16 @@ public sealed class FactionPayrollSystem : EntitySystem
     private static readonly TimeSpan SaveInterval = TimeSpan.FromSeconds(10);
 
     /// <summary>
-    /// Seconds between payout runs. Set to one real hour so wages arrive as a single lump of the full
-    /// hourly salary, rather than trickling in every minute. (The accrual below is SalaryPerHour * this/3600,
-    /// which at a 3600s interval is exactly the full hourly amount per run.)
+    /// Seconds between payout runs.
     /// </summary>
-    private const float PayoutInterval = 3600f;
+    /// <remarks>
+    /// One minute, not one hour. On an hourly tick the entire wage went to whoever happened to be
+    /// online at that single instant: log in five seconds before it and collect a full hour, play
+    /// fifty-nine minutes and log off with nothing. Accruing a sixtieth of the wage each minute pays
+    /// people for the time they actually served, and makes payday continuous rather than a lottery
+    /// keyed to server uptime.
+    /// </remarks>
+    private const float PayoutInterval = 60f;
 
     /// <summary>
     /// Back-pay ceiling, in hours of salary. Unpaid wages accrue while the treasury is short, but
@@ -154,6 +159,9 @@ public sealed class FactionPayrollSystem : EntitySystem
         RunPayout();
     }
 
+    /// <summary>One member due wages this run.</summary>
+    private readonly record struct PayoutCandidate(EntityUid Mob, string Faction, PayrollEntry Entry, int Owed);
+
     private void RunPayout()
     {
         if (_rosters.Count == 0)
@@ -161,6 +169,7 @@ public sealed class FactionPayrollSystem : EntitySystem
 
         // Resolved once per run rather than per member; a faction's treasury doesn't move mid-tick.
         var stations = new Dictionary<string, EntityUid?>();
+        var candidates = new List<PayoutCandidate>();
 
         // Own query rather than Overwatch's member cache: that one is keyed by entity and its
         // invalidation is tied to a UI being open, neither of which suits payroll.
@@ -200,15 +209,32 @@ public sealed class FactionPayrollSystem : EntitySystem
             if (owed <= 0)
                 continue;
 
+            candidates.Add(new PayoutCandidate(mob, faction, entry, owed));
+        }
+
+        if (candidates.Count == 0)
+            return;
+
+        // Smallest debt first. When the treasury cannot cover everyone the order decides who eats the
+        // shortfall, and raw entity-query order made that arbitrary and unrepeatable — the same roster
+        // could pay different people on different runs. Paying the cheapest claims first also settles
+        // the most members from a thin vault, and the rest keep their accrual for the next tick.
+        candidates.Sort((a, b) => a.Owed.CompareTo(b.Owed));
+
+        foreach (var (mob, faction, entry, owed) in candidates)
+        {
+            if (stations[faction] is not { } station)
+                continue;
+
             // Clamped to the balance, and returns what it actually took — pay partial, never negative.
-            var paid = _market.TryWithdrawTreasury(station.Value, owed);
+            var paid = _market.TryWithdrawTreasury(station, owed);
             if (paid <= 0)
                 continue;
 
             if (!_bank.TryBankDeposit(mob, paid))
             {
                 // Crediting failed after the treasury was debited. Put it back rather than burn it.
-                _market.AddTreasury(station.Value, paid);
+                _market.AddTreasury(station, paid);
                 continue;
             }
 

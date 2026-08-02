@@ -31,14 +31,14 @@
     - type: Gun
       fireOnDropChance: 0
       fireRate: 10
-      projectileSpeed: 80
+      projectileSpeed: 110
       selectedMode: FullAuto
       availableModes:
         - FullAuto
-      angleDecay: 1
-      minAngle: 2
-      maxAngle: 4.5
-      angleIncrease: 0.25
+      angleDecay: 2
+      minAngle: 1.5
+      maxAngle: 5
+      angleIncrease: .35
       soundGunshot: /Audio/Weapons/Guns/Gunshots/vulcan.ogg
     - type: ItemSlots
       slots:
@@ -60,10 +60,18 @@
               - Cartridge20mm
     - type: ApcPowerReceiver
       powerLoad: 2000
+    - type: WeaponPowerDraw
+      energyPerShot: 600
+    - type: Battery
+      maxCharge: 3000
+      startingCharge: 3000
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 24000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Small
     - type: MagazineAmmoProvider
+      reloadDuration: 3
 
 - type: entity
   parent: BaseTurretShipgun
@@ -95,12 +103,12 @@
           ents: []
     - type: Gun
       fireOnDropChance: 0
-      fireRate: 6
-      projectileSpeed: 80
-      angleDecay: 1
-      minAngle: 1.5
-      maxAngle: 3
-      angleIncrease: 0.25
+      fireRate: 8
+      projectileSpeed: 110
+      angleDecay: 2.5
+      minAngle: 1
+      maxAngle: 3.5
+      angleIncrease: .25
       selectedMode: FullAuto
       availableModes:
         - FullAuto
@@ -125,10 +133,18 @@
               - Cartridge20mm
     - type: ApcPowerReceiver
       powerLoad: 2000
+    - type: WeaponPowerDraw
+      energyPerShot: 750
+    - type: Battery
+      maxCharge: 3750
+      startingCharge: 3750
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 24000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Small
     - type: MagazineAmmoProvider
+      reloadDuration: 3
 
 - type: entity
   parent: BaseTurretShipgun
@@ -189,10 +205,18 @@
               - Cartridge20mm
     - type: ApcPowerReceiver
       powerLoad: 6000
+    - type: WeaponPowerDraw
+      energyPerShot: 556
+    - type: Battery
+      maxCharge: 2780
+      startingCharge: 2780
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 40000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Medium
     - type: MagazineAmmoProvider
+      reloadDuration: 4.5
 
 # 35mm scout
 
@@ -222,17 +246,18 @@
               sound:
                 collection: MetalGlassBreak
     - type: MagazineAmmoProvider
+      reloadDuration: 3.5
     - type: Gun
       fireOnDropChance: 0
-      projectileSpeed: 65
+      projectileSpeed: 95
       fireRate: 4
       selectedMode: FullAuto
       availableModes:
         - FullAuto
-      angleDecay: 1
-      minAngle: 2.5
-      maxAngle: 5.5
-      angleIncrease: 0.5
+      angleDecay: 2
+      minAngle: 2
+      maxAngle: 6
+      angleIncrease: .45
       soundGunshot: /Audio/Weapons/Guns/Gunshots/vulcan.ogg
     - type: ContainerContainer
       containers:
@@ -251,13 +276,20 @@
               - Magazine35mm
         gun_chamber:
           name: Chamber
-          startingItem: CartridgeVulcanStandard
+          startingItem: Cartridge35mm
           priority: 1
           whitelist:
             tags:
               - Cartridge35mm
     - type: ApcPowerReceiver
       powerLoad: 2500
+    - type: WeaponPowerDraw
+      energyPerShot: 1500
+    - type: Battery
+      maxCharge: 7500
+      startingCharge: 7500
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 24000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Small
@@ -288,17 +320,18 @@
               sound:
                 collection: MetalGlassBreak
     - type: MagazineAmmoProvider
+      reloadDuration: 3.5
     - type: Gun
       fireOnDropChance: 0
-      projectileSpeed: 65
+      projectileSpeed: 95
       fireRate: 4
       selectedMode: FullAuto
       availableModes:
         - FullAuto
-      angleDecay: 1
-      minAngle: 2
+      angleDecay: 2.5
+      minAngle: 1.5
       maxAngle: 4.5
-      angleIncrease: 0.5
+      angleIncrease: .35
       soundGunshot: /Audio/Weapons/Guns/Gunshots/vulcan.ogg
     - type: ContainerContainer
       containers:
@@ -317,13 +350,20 @@
               - Magazine35mm
         gun_chamber:
           name: Chamber
-          startingItem: CartridgeVulcanStandard
+          startingItem: Cartridge35mm
           priority: 1
           whitelist:
             tags:
               - Cartridge35mm
     - type: ApcPowerReceiver
       powerLoad: 2500
+    - type: WeaponPowerDraw
+      energyPerShot: 1500
+    - type: Battery
+      maxCharge: 7500
+      startingCharge: 7500
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 24000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Small
@@ -338,6 +378,7 @@
   description: A heavy autocannon capable of fighting a wide variety of targets. It's performance characteristics are balanced all around and doesnt require frequent reloading. This makes it quite popular in Taypan.
   components:
     - type: MagazineAmmoProvider
+      reloadDuration: 4
     - type: Sprite
       sprite: _Crescent/Objects/Turrets/Projectile/autocannon.rsi
       drawdepth: Mobs
@@ -358,15 +399,15 @@
                 collection: MetalGlassBreak
     - type: Gun
       fireOnDropChance: 0
-      projectileSpeed: 70
-      fireRate: 4
+      projectileSpeed: 105
+      fireRate: 3
       selectedMode: FullAuto
       availableModes:
         - FullAuto
-      angleDecay: 0.5
-      minAngle: 1.5
-      maxAngle: 3
-      angleIncrease: 0.25
+      angleDecay: 1.5
+      minAngle: 1.25
+      maxAngle: 3.5
+      angleIncrease: .25
       soundGunshot: /Audio/Weapons/Guns/Gunshots/gun_sentry.ogg
     - type: ContainerContainer
       containers:
@@ -392,6 +433,13 @@
               - Cartridge50mm
     - type: ApcPowerReceiver
       powerLoad: 3000
+    - type: WeaponPowerDraw
+      energyPerShot: 3333
+    - type: Battery
+      maxCharge: 16665
+      startingCharge: 16665
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 40000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Medium
@@ -405,6 +453,7 @@
   description: A heavy autocannon capable of fighting a wide variety of targets. It's performance characteristics are balanced all around and doesnt require frequent reloading. This makes it quite popular in Taypan. Modified by NCWL with a heavier barrel and weapon mount.
   components:
     - type: MagazineAmmoProvider
+      reloadDuration: 4
     - type: Sprite
       sprite: _Crescent/Objects/Turrets/Projectile/autocannon.rsi
       drawdepth: Mobs
@@ -425,15 +474,15 @@
                 collection: MetalGlassBreak
     - type: Gun
       fireOnDropChance: 0
-      projectileSpeed: 70
-      fireRate: 4
+      projectileSpeed: 105
+      fireRate: 3.2
       selectedMode: FullAuto
       availableModes:
         - FullAuto
-      angleDecay: 0.5
-      minAngle: 1
-      maxAngle: 2
-      angleIncrease: 0.25
+      angleDecay: 1.8
+      minAngle: .8
+      maxAngle: 2.5
+      angleIncrease: .2
       soundGunshot: /Audio/Weapons/Guns/Gunshots/gun_sentry.ogg
     - type: ContainerContainer
       containers:
@@ -443,7 +492,7 @@
       slots:
         gun_magazine:
           name: Magazine
-          #startingItem: Magazine50mm
+          #startingItem: Magazine50mm - on being rebuilt from destruction this gives it free ammo
           insertSound: /Audio/Weapons/Guns/MagIn/ltrifle_magin.ogg
           ejectSound: /Audio/Weapons/Guns/MagOut/ltrifle_magout.ogg
           priority: 2
@@ -459,6 +508,13 @@
               - Cartridge50mm
     - type: ApcPowerReceiver
       powerLoad: 3000
+    - type: WeaponPowerDraw
+      energyPerShot: 3125
+    - type: Battery
+      maxCharge: 15625
+      startingCharge: 15625
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 40000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Medium
@@ -495,20 +551,21 @@
         ballistic-ammo: !type:Container
     - type: Gun
       fireOnDropChance: 0
-      projectileSpeed: 170
-      fireRate: 0.3
+      projectileSpeed: 180
+      fireRate: .25
       selectedMode: FullAuto
       availableModes:
         - FullAuto
-      angleDecay: 0.1
-      minAngle: 0.5
-      maxAngle: 2
-      angleIncrease: 0.4
+      angleDecay: .5
+      minAngle: .3
+      maxAngle: 1.5
+      angleIncrease: .3
       soundGunshot: /Audio/Weapons/Guns/Gunshots/ship_duster.ogg
     - type: BallisticAmmoProvider
       soundInsert:
         path: /Audio/Weapons/Guns/UnionfallWeapons/amr_close_1.ogg
-      fillWithDoAfter: false
+      fillWithDoAfter: true
+      fillDelay: 2
       cycleable: true
       capacity: 4
       proto: Cartridge120mm
@@ -517,6 +574,13 @@
         - Cartridge120mm
     - type: ApcPowerReceiver
       powerLoad: 2000
+    - type: WeaponPowerDraw
+      energyPerShot: 40000
+    - type: Battery
+      maxCharge: 200000
+      startingCharge: 200000
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 40000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Medium
@@ -550,18 +614,20 @@
                 collection: MetalGlassBreak
     - type: Gun
       fireOnDropChance: 0
-      projectileSpeed: 100
-      burstFireRate: 8
-      burstCooldown: 2
+      projectileSpeed: 125
+      burstFireRate: 6
+      burstCooldown: 2.5
+      shotsPerBurst: 3
       selectedMode: Burst
       availableModes:
         - Burst
-      angleDecay: 0.3
-      minAngle: 1
-      maxAngle: 3.5
-      angleIncrease: 0.5
+      angleDecay: 1
+      minAngle: .75
+      maxAngle: 3
+      angleIncrease: .4
       soundGunshot: /Audio/Weapons/Guns/Gunshots/ship_duster.ogg
     - type: MagazineAmmoProvider
+      reloadDuration: 5
     - type: ContainerContainer
       containers:
         ballistic-ammo: !type:Container
@@ -586,6 +652,13 @@
               - Cartridge90mm
     - type: ApcPowerReceiver
       powerLoad: 5500
+    - type: WeaponPowerDraw
+      energyPerShot: 16000
+    - type: Battery
+      maxCharge: 80000
+      startingCharge: 80000
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 64000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Large
@@ -610,14 +683,21 @@
                 collection: MetalGlassBreak
     - type: ApcPowerReceiver
       powerLoad: 800
+    - type: WeaponPowerDraw
+      energyPerShot: 13333
+    - type: Battery
+      maxCharge: 66665
+      startingCharge: 66665
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 64000
     - type: Gun
       fireOnDropChance: 0
-      projectileSpeed: 100
-      fireRate: 1.5
-      angleDecay: 0.3
-      minAngle: 0.75
-      maxAngle: 3
-      angleIncrease: 0.5
+      projectileSpeed: 125
+      fireRate: 1.2
+      angleDecay: 1.2
+      minAngle: .5
+      maxAngle: 2.5
+      angleIncrease: .35
       selectedMode: FullAuto
       availableModes:
         - FullAuto
@@ -660,21 +740,21 @@
         ballistic-ammo: !type:Container
     - type: Gun
       fireOnDropChance: 0
-      projectileSpeed: 200
-      fireRate: 0.2
+      projectileSpeed: 190
+      fireRate: .15
       selectedMode: SemiAuto
       availableModes:
         - SemiAuto
-      angleDecay: 0.05
-      minAngle: 0.4
-      maxAngle: 1.5
-      angleIncrease: 1
+      angleDecay: .4
+      minAngle: .25
+      maxAngle: 1
+      angleIncrease: .7
       soundGunshot: /Audio/Weapons/Guns/Gunshots/ship_duster.ogg
     - type: BallisticAmmoProvider
       soundInsert:
         path: /Audio/Weapons/Guns/UnionfallWeapons/amr_close_1.ogg
       fillWithDoAfter: true
-      fillDelay: 1
+      fillDelay: 3
       cycleable: true
       capacity: 2
       proto: Cartridge300mm
@@ -683,6 +763,13 @@
         - Cartridge300mm
     - type: ApcPowerReceiver
       powerLoad: 10000
+    - type: WeaponPowerDraw
+      energyPerShot: 106667
+    - type: Battery
+      maxCharge: 533335
+      startingCharge: 533335
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 64000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Large
@@ -701,22 +788,34 @@
         - state: ncwl-howitzer
     - type: Gun
       fireOnDropChance: 0
-      projectileSpeed: 150
-      fireRate: 0.25
-      angleDecay: 0.05
-      minAngle: 0.4
-      maxAngle: 1.5
-      angleIncrease: 1
-      selectedMode: FullAuto
+      projectileSpeed: 200
+      fireRate: .18
+      angleDecay: .45
+      minAngle: .2
+      maxAngle: .9
+      angleIncrease: .6
+      selectedMode: SemiAuto
       availableModes:
-        - FullAuto
+        - SemiAuto
       soundGunshot: /Audio/Weapons/Guns/Gunshots/ship_duster.ogg
     - type: ApcPowerReceiver
       powerLoad: 8500
+    - type: WeaponPowerDraw
+      energyPerShot: 88889
+    - type: Battery
+      maxCharge: 444445
+      startingCharge: 444445
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 64000
     - type: BallisticAmmoProvider
-      fillDelay: 1
+      fillWithDoAfter: true
+      fillDelay: 2.75
       cycleable: true
       capacity: 2
+      proto: Cartridge300mm
+      whitelist:
+        tags:
+        - Cartridge300mm
     - type: Destructible
       thresholds:
         - trigger:
@@ -763,18 +862,19 @@
           ents: []
     - type: Gun
       fireOnDropChance: 0
-      projectileSpeed: 70
-      fireRate: 1.5
+      projectileSpeed: 105
+      fireRate: 1.2
       selectedMode: FullAuto
       availableModes:
         - FullAuto
       soundGunshot: /Audio/Weapons/Guns/Gunshots/needler.ogg
     - type: MagazineAmmoProvider
+      reloadDuration: 5
     - type: ItemSlots
       slots:
         gun_magazine:
           name: Magazine
-          #startingItem: MagazineFlak - on being rebuilt from destruction this gives it free ammo
+          #startingItem: MagazineCorpus - on being rebuilt from destruction this gives it free ammo
           insertSound: /Audio/Weapons/Guns/MagIn/ltrifle_magin.ogg
           ejectSound: /Audio/Weapons/Guns/MagOut/ltrifle_magout.ogg
           priority: 2
@@ -783,13 +883,20 @@
               - CorpusBox
         gun_chamber:
           name: Chamber
-          startingItem: FlakCartridge
+          startingItem: CorpusCartridge
           priority: 1
           whitelist:
             tags:
-              - FlakShell
+              - CorpusShell
     - type: ApcPowerReceiver
       powerLoad: 6500
+    - type: WeaponPowerDraw
+      energyPerShot: 13333
+    - type: Battery
+      maxCharge: 66665
+      startingCharge: 66665
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 64000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Large

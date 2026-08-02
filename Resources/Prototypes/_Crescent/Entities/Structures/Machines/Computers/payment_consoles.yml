@@ -1,5 +1,9 @@
 # Payroll consoles: set standing salaries for a faction's members, paid from that faction's treasury.
-# The same PaymentConsole component is also carried by the command mainframe, where it renders as a tab.
+#
+# Deliberately NOT carried by the command mainframe, even though the client and MainframeConsoleSystem
+# can host it as a tab. The mainframe is gated on each faction's base access tag so any member can use
+# its overwatch; hanging payroll off that same gate would hand every conscript the treasury again by the
+# back door. If a payroll tab is ever wanted there, the mainframe needs its own command-tier gate first.
 
 - type: entity
   abstract: true
@@ -53,8 +57,13 @@
     color: "#b8a025"
     enabled: false
 
-# One variant per faction, gated on that faction's base access tag — the one every job in the
-# faction carries.
+# One variant per faction, gated on that faction's command tier. Not the base access tag: that one is
+# carried by every job in the faction, so it let a conscript open the payroll, set their own salary to
+# the cap and sign themselves a bonus straight out of the vault — bypassing the per-person withdrawal
+# cap the treasury console enforces.
+#
+# TAP and SRM deliberately have no payroll console (nor treasury or taxation). They run on overwatch
+# alone.
 
 - type: entity
   parent: ComputerPaymentBase
@@ -64,7 +73,10 @@
   - type: PaymentConsole
     faction: DSM
   - type: AccessReader
-    access: [["Empire"]]
+    # Command tier only, matching the treasury vault next to it. The old `Empire` tag is carried by
+    # every DSM job down to the cadet, which let any conscript set their own salary and sign their
+    # own bonus out of the faction vault.
+    access: [["EmpireGovernor"], ["EmpireAdjutant"], ["LogisticsWealth"]]
 
 - type: entity
   parent: ComputerPaymentBase
@@ -74,7 +86,9 @@
   - type: PaymentConsole
     faction: NCWL
   - type: AccessReader
-    access: [["NCWLGeneral"]]
+    # Command tier (MVD, kommissar, officers, commandant), not the `NCWLGeneral` tag every worker
+    # and partisan carries.
+    access: [["NCWLCommand"]]
 
 - type: entity
   parent: ComputerPaymentBase
@@ -84,17 +98,8 @@
   - type: PaymentConsole
     faction: SHI
   - type: AccessReader
-    access: [["Shinohara"]]
-
-- type: entity
-  parent: ComputerPaymentBase
-  id: ComputerPaymentTAP
-  name: payroll console TAP
-  components:
-  - type: PaymentConsole
-    faction: TAP
-  - type: AccessReader
-    access: [["Families"]]
+    # Executives and officers, not the `Shinohara` tag every employee carries.
+    access: [["ShinoharaExecutive"], ["ShinoharaOfficer"]]
 
 - type: entity
   parent: ComputerPaymentBase
@@ -114,12 +119,3 @@
 # no treasury is bound to, so they could never have paid anyone. The Coalition shares one payroll:
 # ComputerPaymentTFSC above.
 
-- type: entity
-  parent: ComputerPaymentBase
-  id: ComputerPaymentSRM
-  name: payroll console SRM
-  components:
-  - type: PaymentConsole
-    faction: SRM
-  - type: AccessReader
-    access: [["Hunter"]]

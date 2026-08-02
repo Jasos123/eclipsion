@@ -22,6 +22,6 @@
             !type:NanotrasenNameGenerator
             prefixCreator: '14'
         - type: VesselDesignation
-          designation: corvette
+          designation: vessel-designation-frigate
         - type: VesselDescription
           description: Fielded by imperials to establish dominance in the battlefield.

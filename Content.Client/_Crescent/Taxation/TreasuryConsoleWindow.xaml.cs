@@ -12,7 +12,7 @@ public sealed partial class TreasuryConsoleWindow : FancyWindow
     /// <summary>Raised with the amount of credits to withdraw.</summary>
     public event Action<int>? OnWithdraw;
 
-    private int _balance;
+    private int _remaining;
 
     public TreasuryConsoleWindow()
     {
@@ -25,18 +25,25 @@ public sealed partial class TreasuryConsoleWindow : FancyWindow
                 OnWithdraw?.Invoke(amount);
         };
 
+        // Asks for the player's own remaining allowance, not the whole balance. Asking for the balance
+        // got silently clamped to the cap, so the button reported a smaller figure than the one above
+        // it with nothing to explain the gap.
         WithdrawAllButton.OnPressed += _ =>
         {
-            if (_balance > 0)
-                OnWithdraw?.Invoke(_balance);
+            if (_remaining > 0)
+                OnWithdraw?.Invoke(_remaining);
         };
     }
 
     public void UpdateState(TreasuryConsoleState state)
     {
-        _balance = state.Balance;
+        _remaining = state.Remaining;
 
         BalanceLabel.Text = Loc.GetString("treasury-console-balance", ("balance", state.Balance));
+
+        RemainingLabel.Text = Loc.GetString("treasury-console-remaining",
+            ("remaining", state.Remaining), ("percent", state.CapPercent));
+        RemainingLabel.Modulate = state.Remaining > 0 ? Color.LightGray : Color.DarkOrange;
 
         if (state.AlarmActive)
         {

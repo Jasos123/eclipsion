@@ -51,8 +51,9 @@ public sealed partial class DroneCarrierComponent : Component
     public float FormationDepth = 45f;
 
     /// <summary>
-    ///     Extra clearance (meters) added to the carrier's radius. While a drone is closer than this to the
-    ///     carrier it first flies straight out to open space before forming up, so it never grinds the hull.
+    ///     Extra clearance (meters) added to the carrier's hull radius. A freshly deployed drone first flies
+    ///     straight out past this before forming up, so it never grinds the hull on the way out.
+    ///     The hull radius itself is measured from the carrier's AABB, so this is pure margin.
     /// </summary>
     [DataField]
     public float LaunchClearance = 25f;
@@ -84,12 +85,47 @@ public sealed partial class DroneCarrierComponent : Component
     public float OrbitRange = 250f;
 
     /// <summary>
-    ///     Radius (meters) in which an unclaimed drone of the carrier's own faction is picked up even if it is
-    ///     not docked. A shipyard-bought drone only docks if a matching port happened to be free, so it often
-    ///     just arrives floating next to the hull; without this it would never join a formation.
+    ///     Extra standoff (meters) added per formation slot while attacking, so the squadron spreads into a
+    ///     staggered ring instead of every drone flying the exact same circle.
     /// </summary>
     [DataField]
-    public float ClaimRange = 1500f;
+    public float OrbitSpread = 25f;
+
+    /// <summary>
+    ///     How far (meters) a drone may drift off its orbit radius before it corrects. Wide enough that the
+    ///     drone keeps its momentum through the turn instead of constantly braking.
+    /// </summary>
+    [DataField]
+    public float OrbitTolerance = 40f;
+
+    /// <summary>
+    ///     How far around the circle a drone aims while orbiting. This is what drives the orbit at all - the
+    ///     steering aims at a point this many degrees ahead of the drone's own projection onto the orbit
+    ///     radius, so at zero the drone would just hold its radius and never come around. Larger values make
+    ///     it cut the circle more aggressively.
+    /// </summary>
+    [DataField]
+    public Angle OrbitLeadAngle = Angle.FromDegrees(30f);
+
+    /// <summary>
+    ///     Whether drones scuttle themselves when this console is destroyed. Without it a dead carrier leaves
+    ///     a squadron of unrecoverable derelicts drifting on the map forever.
+    /// </summary>
+    [DataField]
+    public bool SelfDestructOnOrphan = true;
+
+    /// <summary>
+    ///     Whether producing a drone bills the owning faction's treasury for the vessel's price. Turn off for
+    ///     a console that should hand out drones for free.
+    /// </summary>
+    [DataField]
+    public bool ChargeTreasury = true;
+
+    /// <summary>
+    ///     Multiplier applied to the vessel's shipyard price when billing the treasury for a produced drone.
+    /// </summary>
+    [DataField]
+    public float PriceMultiplier = 1f;
 
     /// <summary>
     ///     Currently deployed drones (their control-server uids) keyed by formation slot index.
@@ -120,11 +156,13 @@ public sealed partial class DroneCarrierComponent : Component
     public Color IffColor = Color.Gold;
 
     /// <summary>
-    ///     Spawn times of drones produced but not yet claimed into a slot, used to gate production against the
-    ///     limit while a fresh drone is still FTL-docking. Entries expire on their own. Runtime state.
+    ///     Drones produced but not yet claimed into a slot, used to gate production against the limit while a
+    ///     fresh drone is still FTL-docking. The grid is recorded so the eventual claim can be matched back to
+    ///     the hull we actually built, rather than crediting whichever drone happens to dock next. Entries
+    ///     expire on their own. Runtime state.
     /// </summary>
     [ViewVariables]
-    public List<TimeSpan> PendingSpawns = new();
+    public List<(TimeSpan Time, EntityUid Grid)> PendingSpawns = new();
 
     /// <summary>
     ///     Shared focus target all this carrier's drones concentrate fire on. Re-selected when the current

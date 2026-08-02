@@ -6,7 +6,7 @@
   name: CD Velator
   description: |
     A light Syndicate electronic warfare corvette with an onboard saboteur's armory.
-    LOADOUT: 1x 240mm 'Gargoyle' Torpedo Launcher, 1x 150cc 'Starburst' Plasma Gatling
+    LOADOUT: 1x 240mm 'Gargoyle' Torpedo Launcher, 1x 200cc 'Starburst' Plasma Gatling
   price: 60000
   category: Medium
   group: None

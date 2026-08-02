@@ -252,7 +252,7 @@
     sprite: _Crescent/Objects/Turrets/Ammunition/Magazine/screamer.rsi
     state: base
   product: Crate20mmAmmo
-  cost: 2000
+  cost: 3000
   category: cargoproduct-category-name-shuttleammo
   group: genericAmmo
 

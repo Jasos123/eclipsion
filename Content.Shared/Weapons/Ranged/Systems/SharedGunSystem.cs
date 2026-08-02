@@ -361,7 +361,7 @@ public abstract partial class SharedGunSystem : EntitySystem
         var fromCoordinates = TryComp<MechPilotComponent>(user, out var mechPilot)
             ? Transform(mechPilot.Mech).Coordinates
             : Transform(user).Coordinates;
-        var attemptEv = new AttemptShootEvent(user, null, fromCoordinates, toCoordinates);
+        var attemptEv = new AttemptShootEvent(user, null, fromCoordinates, toCoordinates, Shots: shots);
         RaiseLocalEvent(gunUid, ref attemptEv);
 
         if (attemptEv.Cancelled)
@@ -375,6 +375,9 @@ public abstract partial class SharedGunSystem : EntitySystem
             gun.NextFire = attemptEv.ResetCooldown ? curTime : TimeSpan.FromSeconds(Math.Max(lastFire.TotalSeconds + SafetyNextFire, gun.NextFire.TotalSeconds));
             return null;
         }
+
+        // A handler may have trimmed this down, e.g. a ship gun that can only afford part of the burst.
+        shots = Math.Min(shots, Math.Max(0, attemptEv.Shots));
 
         // Remove ammo
         var ev = new TakeAmmoEvent(shots, new List<(EntityUid? Entity, IShootable Shootable)>(), fromCoordinates, user);
@@ -1292,8 +1295,9 @@ public abstract partial class SharedGunSystem : EntitySystem
 /// <param name="User">The user that attempted to fire this gun.</param>
 /// <param name="Cancelled">Set this to true if the shot should be cancelled.</param>
 /// <param name="ThrowItems">Set this to true if the ammo shouldn't actually be fired, just thrown.</param>
+/// <param name="Shots">The maximum number of shots that may be fired by this attempt.</param>
 [ByRefEvent]
-public record struct AttemptShootEvent(EntityUid User, string? Message, EntityCoordinates FromCoordinates, EntityCoordinates? ToCoordinates, bool Cancelled = false, bool ThrowItems = false, bool ResetCooldown = false); // RMC14
+public record struct AttemptShootEvent(EntityUid User, string? Message, EntityCoordinates FromCoordinates, EntityCoordinates? ToCoordinates, bool Cancelled = false, bool ThrowItems = false, bool ResetCooldown = false, int Shots = int.MaxValue); // RMC14
 
 /// <summary>
 ///     Raised directed on the gun after firing.

@@ -36,6 +36,16 @@ public sealed class OverwatchConsoleSystem : EntitySystem
     // Scratch list built each frame before spawning relayed audio entities.
     private readonly List<(EntityUid Uid, AudioComponent Audio, RatOverwatchRelayedSoundComponent? Relay, EntityCoordinates Position)> _toRelay = new();
 
+    // Reusable buffers, so the per-frame spectating path allocates nothing.
+    private readonly HashSet<EntityUid> _activeSounds = new();
+    private readonly List<EntityUid> _staleScratch = new();
+
+    /// <summary>
+    /// Whether any source has ever been tagged with <see cref="RatOverwatchRelayedSoundComponent"/>
+    /// since the last full cleanup. Lets the idle path skip the entity sweep entirely.
+    /// </summary>
+    private bool _anyRelayTagged;
+
     private OverwatchAnnouncementOverlay _announcementOverlay = default!;
 
     /// <summary>
@@ -139,8 +149,16 @@ public sealed class OverwatchConsoleSystem : EntitySystem
         }
     }
 
+    /// <summary>
+    /// Tears down every relayed sound. Cheap to call when nothing is relayed — <see cref="Update"/>
+    /// runs this on the not-spectating path, i.e. every frame for every client in the game, so the
+    /// entity sweep has to stay behind the early-out rather than running unconditionally.
+    /// </summary>
     private void CleanupAllRelayedSounds()
     {
+        if (_relayedSounds.Count == 0 && !_anyRelayTagged)
+            return;
+
         foreach (var relayedUid in _relayedSounds.Values)
         {
             if (relayedUid.Valid && IsClientSide(relayedUid))
@@ -154,18 +172,20 @@ public sealed class OverwatchConsoleSystem : EntitySystem
             TryDeleteRelayed(relay.Relay);
             RemCompDeferred<RatOverwatchRelayedSoundComponent>(uid);
         }
+
+        _anyRelayTagged = false;
     }
 
     private void CleanupStaleRelayedSounds(HashSet<EntityUid> activeSounds)
     {
-        var toRemove = new List<EntityUid>();
+        _staleScratch.Clear();
         foreach (var soundUid in _relayedSounds.Keys)
         {
             if (!activeSounds.Contains(soundUid))
-                toRemove.Add(soundUid);
+                _staleScratch.Add(soundUid);
         }
 
-        foreach (var soundUid in toRemove)
+        foreach (var soundUid in _staleScratch)
         {
             RemoveRelayedSound(soundUid);
         }
@@ -212,7 +232,7 @@ public sealed class OverwatchConsoleSystem : EntitySystem
         var listenerCoords = _transform.ToCoordinates(eyePosition);
         var maxDistanceSquared = MaxSoundRelayDistance * MaxSoundRelayDistance;
 
-        var activeSounds = new HashSet<EntityUid>();
+        _activeSounds.Clear();
 
         var query = AllEntityQuery<AudioComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var audio, out var xform))
@@ -238,7 +258,7 @@ public sealed class OverwatchConsoleSystem : EntitySystem
             if (distanceSquared > maxDistanceSquared)
                 continue;
 
-            activeSounds.Add(uid);
+            _activeSounds.Add(uid);
             UpdateOrCreateRelayedSound(uid, audio, eyePosition, delta, player);
         }
 
@@ -261,9 +281,10 @@ public sealed class OverwatchConsoleSystem : EntitySystem
             if (TryComp<RatOverwatchRelayedSoundComponent>(uid, out var relayedComp))
             {
                 relayedComp.Relay = relayedAudioEnt;
+                _anyRelayTagged = true;
             }
         }
 
-        CleanupStaleRelayedSounds(activeSounds);
+        CleanupStaleRelayedSounds(_activeSounds);
     }
 }

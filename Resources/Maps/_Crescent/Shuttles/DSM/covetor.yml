@@ -5903,7 +5903,7 @@ entities:
     - type: Transform
       pos: -2.5,18.5
       parent: 1
-- proto: HeavyReinforcedPlasmaWindow
+- proto: ReinforcedPlasmaWindow
   entities:
   - uid: 545
     components:

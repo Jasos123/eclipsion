@@ -3,9 +3,9 @@
   name: DSM Laelaps
   description: |
     A heavy assault cruiser excelling at brawling.
-    LOADOUT: 2x 350cc 'Glare' burst laser, 1x 300cc 'Bolter' plasma caster, 2x 300w 'Curse' EMP projector, 4x 200cc 'Retribution' pulse laser, 2x 150cc 'Starburst' plasma gatling
+    LOADOUT: 2x 350cc 'Glare' burst laser, 1x 300cc 'Bolter' plasma caster, 2x 300w 'Curse' EMP projector, 4x 150cc 'Retribution' pulse laser, 2x 200cc 'Starburst' plasma gatling
   price: 100000
-  category: Medium
+  category: Large
   group: None
   path: /Maps/_Crescent/Shuttles/DSM/laelaps.yml
 
@@ -28,4 +28,4 @@
             !type:NanotrasenNameGenerator
             prefixCreator: '14'
         - type: VesselDesignation
-          designation: vessel-designation-assault-frigate
+          designation: vessel-designation-cruiser

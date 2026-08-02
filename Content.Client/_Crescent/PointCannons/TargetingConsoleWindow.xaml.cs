@@ -53,12 +53,23 @@ public sealed partial class TargetingConsoleWindow : FancyWindow, IComputerWindo
 
     public void UpdateAmmoStatus(List<(int, int)> values)
     {
-        AmmoStatusBox.DisposeAllChildren();
-        foreach ((int value, int max) in values)
+        // This runs on the UI tick, so reuse the bars instead of rebuilding them every time.
+        while (AmmoStatusBox.ChildCount > values.Count)
+            AmmoStatusBox.GetChild(AmmoStatusBox.ChildCount - 1).Dispose();
+
+        while (AmmoStatusBox.ChildCount < values.Count)
+            AmmoStatusBox.AddChild(new AmmoBar());
+
+        for (var i = 0; i < values.Count; i++)
         {
+            var (value, max) = values[i];
+            if (AmmoStatusBox.GetChild(i) is not AmmoBar bar)
+                continue;
+
             //funny, but it's important that max value is set before value
             //or it will get clamped to the default max of 100
-            AmmoStatusBox.AddChild(new AmmoBar() { MaxValue = max, Value = value });
+            bar.MaxValue = max;
+            bar.Value = value;
         }
     }
 }

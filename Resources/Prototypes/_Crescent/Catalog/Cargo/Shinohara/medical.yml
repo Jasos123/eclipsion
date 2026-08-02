@@ -74,7 +74,7 @@
     sprite: Objects/Specific/Medical/implanter.rsi
     state: implanter0
   product: CrateVitalsTrackingShinohara
-  cost: 500
+  cost: 750
   category: cargoproduct-category-name-medical
   group: shinohara
 

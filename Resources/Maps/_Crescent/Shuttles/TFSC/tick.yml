@@ -339,8 +339,8 @@ entities:
           - SpaceArtilleryFire
     - type: NamedModules
       buttonNames:
-      - Toggle "Retribution" 200cc Laser Gatling
-      - Fire "Retribution" 200cc Laser Gatling
+      - Toggle "Retribution" 150cc Laser Gatling
+      - Fire "Retribution" 150cc Laser Gatling
       - Module C
       - Module D
       - Module E

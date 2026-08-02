@@ -3,7 +3,7 @@
   name: DSM Sunesis
   description: |
     Originally deployed as a mobile base of operations for Imperial Scribes, the Sunesis has undergone extensive wartime refits. Its stealth systems and civilian modules have been largely stripped to support a heavy energy weapons battery, transforming it into a fast but fragile battlecruiser. It retains its mobility, but now serves as a high-risk strike platform, capable of crippling larger vessels if it can close the distance.
-    LOADOUT: 4x 300w 'Curse' EMP projector, 1x 150cc 'Starburst' plasma gatling
+    LOADOUT: 4x 300w 'Curse' EMP projector, 1x 200cc 'Starburst' plasma gatling
   price: 170000
   category: Large
   group: None

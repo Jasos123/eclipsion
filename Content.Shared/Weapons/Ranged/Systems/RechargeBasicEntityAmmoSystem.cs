@@ -1,5 +1,6 @@
 using Content.Shared.Examine;
 using Content.Shared.Weapons.Ranged.Components;
+using Content.Shared.Weapons.Ranged.Events;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
@@ -37,6 +38,23 @@ public sealed class RechargeBasicEntityAmmoSystem : EntitySystem
 
             if (recharge.NextCharge > _timing.CurTime)
                 continue;
+
+            if (recharge.EnergyPerCharge > 0f)
+            {
+                // Battery charge only exists on the server, so let it drive and net the result back down.
+                if (!_netManager.IsServer)
+                    continue;
+
+                var powerAttempt = new RechargeBasicEntityAmmoAttemptEvent(recharge.EnergyPerCharge);
+                RaiseLocalEvent(uid, ref powerAttempt);
+                if (!powerAttempt.Allowed)
+                {
+                    var retryDelay = Math.Min(recharge.RechargeCooldown, 1f);
+                    recharge.NextCharge = _timing.CurTime + TimeSpan.FromSeconds(retryDelay);
+                    Dirty(uid, recharge);
+                    continue;
+                }
+            }
 
             if (_gun.UpdateBasicEntityAmmoCount(uid, ammo.Count.Value + 1, ammo))
             {

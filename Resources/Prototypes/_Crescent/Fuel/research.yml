@@ -1,0 +1,27 @@
+- type: technology
+  id: AstronauticsFuelStorage
+  name: research-technology-astronautics-fuel-storage
+  icon:
+    sprite: _Crescent/Objects/Misc/fuelcan.rsi
+    state: jug
+  discipline: Astronautics
+  tier: 1
+  cost: 3000
+  recipeUnlocks:
+  - FuelCanisterBoriaticT2Craft
+  - AmeJarT2Craft
+
+- type: technology
+  id: AstronauticsBulkFuelStorage
+  name: research-technology-astronautics-bulk-fuel-storage
+  icon:
+    sprite: _Crescent/Objects/Misc/fuelcan.rsi
+    state: jug
+  discipline: Astronautics
+  tier: 2
+  cost: 7500
+  technologyPrerequisites:
+  - AstronauticsFuelStorage
+  recipeUnlocks:
+  - FuelCanisterBoriaticT3Craft
+  - AmeJarT3Craft

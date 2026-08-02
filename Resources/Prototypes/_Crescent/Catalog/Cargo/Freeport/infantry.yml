@@ -34,6 +34,6 @@
     sprite: Objects/Weapons/Bombs/breaching.rsi
     state: icon
   product: BoxBreachingCharges
-  cost: 1500
+  cost: 12500
   category: cargoproduct-category-name-military
   group: freeport

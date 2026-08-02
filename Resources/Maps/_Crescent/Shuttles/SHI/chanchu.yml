@@ -7259,7 +7259,7 @@ entities:
     - type: Transform
       pos: 3.6162884,-5.8606334
       parent: 1
-- proto: HeavyReinforcedPlasmaWindow
+- proto: ReinforcedPlasmaWindow
   entities:
   - uid: 675
     components:
@@ -7729,8 +7729,6 @@ entities:
         [head=2][bold]Components:[/bold][/head]
 
         [bold]Advanced Mechatronic/Electrical - ¥2,500* per unit[/bold]
-
-        [bold]Gas Cyclers - ¥5,000* per unit[/bold]
 
         [bold]Tube Loaders - ¥6,000* per unit[/bold]
 

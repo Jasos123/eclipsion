@@ -11,14 +11,15 @@
     - Impassable
     - BulletImpassable
   - type: ShipWeaponProjectile
+  - type: IgnoresHullrotShields
   - type: Projectile
     ignoreWeaponGrid: true
     damage:
       types:
-        Structural: 350
-        Blunt: 50
+        Structural: 280
+        Blunt: 40
   - type: TimedDespawn
-    lifetime: 8.24 #1000m
+    lifetime: 12 # 900 m at 75 m/s
   - type: Sprite
     sprite: _Crescent/Objects/Turrets/Ammunition/Projectiles/shortbow.rsi
     layers:
@@ -37,13 +38,17 @@
   - type: ProjectileIFF
     visualType: SquareReticle
     color: Red
+  - type: ProximityFuseTarget
   - type: HeatSeeking
     rotationSpeed: 18 # fighter killer for security ships
     acceleration: 120
-    topSpeed: 110
+    topSpeed: 75
     fieldOfView: 30
     defaultSeekingRange: 800
     guidanceAlgorithm: PredictiveGuidance
+    weaveAmplitude: 10
+    weaveFrequency: 0.55
+    weaveFadeDistance: 180
   - type: Fixtures
     fixtures:
       projectile:
@@ -83,6 +88,7 @@
     - Impassable
     - BulletImpassable
   - type: ShipWeaponProjectile
+  - type: IgnoresHullrotShields
   - type: Projectile
     ignoreWeaponGrid: true
     damage:
@@ -109,6 +115,7 @@
   - type: ProjectileIFF
     visualType: SquareReticle
     color: Red
+  - type: ProximityFuseTarget
   - type: HeatSeeking
     rotationSpeed: 10 # slow rotation so it isnt aimbot, still fairly accurate though
     acceleration: 90
@@ -116,6 +123,9 @@
     fieldOfView: 15
     defaultSeekingRange: 400
     guidanceAlgorithm: PurePursuit
+    weaveAmplitude: 7
+    weaveFrequency: 0.45
+    weaveFadeDistance: 200
   - type: Fixtures
     fixtures:
       projectile:
@@ -156,14 +166,15 @@
     - Impassable
     - BulletImpassable
   - type: ShipWeaponProjectile
+  - type: IgnoresHullrotShields
   - type: Projectile
     ignoreWeaponGrid: true
     damage:
       types:
-        Structural: 600
-        Blunt: 100
+        Structural: 420
+        Blunt: 80
   - type: TimedDespawn
-    lifetime: 11.49 #1500m
+    lifetime: 14 # 1190 m at 85 m/s
   - type: Sprite
     sprite: _Crescent/Objects/Turrets/Ammunition/Projectiles/azimuth.rsi
     layers:
@@ -173,7 +184,7 @@
     explosionType: Default
     maxIntensity: 400
     intensitySlope: 100
-    totalIntensity: 2500
+    totalIntensity: 2000
     maxTileBreak: 4
   - type: PointLight
     radius: 3.5
@@ -207,13 +218,17 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
       - !type:ExplodeBehavior
+  - type: ProximityFuseTarget
   - type: HeatSeeking
     rotationSpeed: 7
     acceleration: 90
-    topSpeed: 90
+    topSpeed: 85
     fieldOfView: 30
     defaultSeekingRange: 1200
     guidanceAlgorithm: PurePursuit
+    weaveAmplitude: 12
+    weaveFrequency: 0.4
+    weaveFadeDistance: 300
 
 - type: entity
   id: AzimuthRocketProjectileGorlex
@@ -230,10 +245,10 @@
     ignoreWeaponGrid: true
     damage:
       types:
-        Structural: 650
-        Blunt: 40
+        Structural: 450
+        Blunt: 50
   - type: TimedDespawn
-    lifetime: 11.49 #1500m
+    lifetime: 14 # 1260 m at 90 m/s
   - type: Sprite
     sprite: _Crescent/Objects/Turrets/Ammunition/Projectiles/azimuth.rsi
     layers:
@@ -244,6 +259,7 @@
     intensitySlope: 200
     totalIntensity: 3000
     maxTileBreak: 5
+  - type: ProximityFuseTarget
   - type: HeatSeeking
     rotationSpeed: 3
     acceleration: 90
@@ -251,6 +267,9 @@
     fieldOfView: 30
     defaultSeekingRange: 1200
     guidanceAlgorithm: PurePursuit
+    weaveAmplitude: 10
+    weaveFrequency: 0.35
+    weaveFadeDistance: 350
 
 - type: entity
   id: AzimuthRocketProjectileNCWL
@@ -279,15 +298,19 @@
     explosionType: Default
     maxIntensity: 450
     intensitySlope: 20
-    totalIntensity: 3200
+    totalIntensity: 2400
     maxTileBreak: 6
+  - type: ProximityFuseTarget
   - type: HeatSeeking
     rotationSpeed: 5
     acceleration: 90
-    topSpeed: 90
+    topSpeed: 95
     fieldOfView: 30
     defaultSeekingRange: 1200
     guidanceAlgorithm: PurePursuit
+    weaveAmplitude: 10
+    weaveFrequency: 0.4
+    weaveFadeDistance: 350
 
 - type: entity
   id: AzimuthRocketProjectileAdvanced # ratgore - removed from the game
@@ -318,6 +341,7 @@
     intensitySlope: 50
     totalIntensity: 1500
     maxTileBreak: 4
+  - type: ProximityFuseTarget
   - type: HeatSeeking
     rotationSpeed: 30
     acceleration: 60
@@ -340,14 +364,15 @@
     - Impassable
     - BulletImpassable
   - type: ShipWeaponProjectile
+  - type: IgnoresHullrotShields
   - type: Projectile
     ignoreWeaponGrid: true
     damage:
       types:
-        Structural: 900
-        Blunt: 200
+        Structural: 700
+        Blunt: 150
   - type: TimedDespawn
-    lifetime: 14.28 # 2000m
+    lifetime: 22 # 2420 m at 110 m/s
   - type: Sprite
     sprite: _Crescent/Objects/Turrets/Ammunition/Projectiles/arbalest.rsi
     layers:
@@ -357,7 +382,7 @@
     explosionType: Default
     maxIntensity: 400
     intensitySlope: 100
-    totalIntensity: 6000
+    totalIntensity: 5500
     maxTileBreak: 8
   - type: PointLight
     radius: 3.5
@@ -366,6 +391,7 @@
   - type: ProjectileIFF
     visualType: SquareReticle
     color: Red
+  - type: ProximityFuseTarget
   - type: HeatSeeking
     rotationSpeed: 10
     acceleration: 45
@@ -373,6 +399,9 @@
     fieldOfView: 30
     defaultSeekingRange: 2000
     guidanceAlgorithm: PredictiveGuidance
+    weaveAmplitude: 12
+    weaveFrequency: 0.3
+    weaveFadeDistance: 450
   - type: Fixtures
     fixtures:
       projectile:
@@ -411,14 +440,15 @@
     - Impassable
     - BulletImpassable
   - type: ShipWeaponProjectile
+  - type: IgnoresHullrotShields
   - type: Projectile
     ignoreWeaponGrid: true
     damage:
       types:
-        Structural: 900
-        Blunt: 200
+        Structural: 700
+        Blunt: 150
   - type: TimedDespawn
-    lifetime: 15 #2000
+    lifetime: 24 # 2400 m at 100 m/s
   - type: Sprite
     sprite: _Crescent/Objects/Turrets/Ammunition/Projectiles/arbalest.rsi
     layers:
@@ -428,7 +458,7 @@
     explosionType: Default
     maxIntensity: 400
     intensitySlope: 100
-    totalIntensity: 8000
+    totalIntensity: 6500
     maxTileBreak: 8
   - type: PointLight
     radius: 3.5
@@ -437,6 +467,7 @@
   - type: ProjectileIFF
     visualType: SquareReticle
     color: Red
+  - type: ProximityFuseTarget
   - type: HeatSeeking
     rotationSpeed: 4
     acceleration: 45
@@ -444,6 +475,9 @@
     fieldOfView: 30
     defaultSeekingRange: 2000
     guidanceAlgorithm: PredictiveGuidance
+    weaveAmplitude: 10
+    weaveFrequency: 0.28
+    weaveFadeDistance: 450
   - type: Fixtures
     fixtures:
       projectile:
@@ -482,6 +516,7 @@
     - Impassable
     - BulletImpassable
   - type: ShipWeaponProjectile
+  - type: IgnoresHullrotShields
   - type: Projectile
     ignoreWeaponGrid: true
     damage:
@@ -508,6 +543,7 @@
   - type: ProjectileIFF
     visualType: SquareReticle
     color: Red
+  - type: ProximityFuseTarget
   - type: HeatSeeking
     rotationSpeed: 2
     acceleration: 75
@@ -515,6 +551,9 @@
     fieldOfView: 30
     defaultSeekingRange: 1000
     guidanceAlgorithm: PredictiveGuidance
+    weaveAmplitude: 8
+    weaveFrequency: 0.25
+    weaveFadeDistance: 500
   - type: Fixtures
     fixtures:
       projectile:
@@ -559,10 +598,10 @@
     ignoreWeaponGrid: true
     damage:
       types:
-        Structural: 1000
+        Structural: 1400
         Blunt: 200
   - type: TimedDespawn
-    lifetime: 27.4 #3000m
+    lifetime: 50 # 2500 m at 50 m/s
   - type: Sprite
     sprite: _Crescent/Objects/Turrets/Ammunition/Projectiles/gargoyle.rsi
     layers:
@@ -581,13 +620,17 @@
   - type: ProjectileIFF
     visualType: SquareReticle
     color: Red
+  - type: ProximityFuseTarget
   - type: HeatSeeking
     rotationSpeed: 5 #very slow we'll see how it works..
     acceleration: 25
-    topSpeed: 120
+    topSpeed: 50
     fieldOfView: 25
     defaultSeekingRange: 2000
     guidanceAlgorithm: PurePursuit
+    weaveAmplitude: 10
+    weaveFrequency: 0.2
+    weaveFadeDistance: 600
   - type: Fixtures
     fixtures:
       projectile:
@@ -653,6 +696,7 @@
   - type: ProjectileIFF
     visualType: SquareReticle
     color: Red
+  - type: ProximityFuseTarget
   - type: HeatSeeking
     rotationSpeed: 10
     acceleration: 35
@@ -660,6 +704,9 @@
     fieldOfView: 25
     defaultSeekingRange: 2300
     guidanceAlgorithm: PurePursuit
+    weaveAmplitude: 10
+    weaveFrequency: 0.22
+    weaveFadeDistance: 650
   - type: Fixtures
     fixtures:
       projectile:
@@ -708,7 +755,7 @@
         Structural: 2000
         Blunt: 500
   - type: TimedDespawn
-    lifetime: 30 #6000m
+    lifetime: 75 # 6000 m at 80 m/s
   - type: Sprite
     sprite: _Crescent/Objects/Turrets/Ammunition/Projectiles/catapult.rsi
     layers:
@@ -719,7 +766,7 @@
     explosionType: Default
     maxIntensity: 23000
     intensitySlope: 500
-    totalIntensity: 35000
+    totalIntensity: 28000
     maxTileBreak: 32
   - type: PointLight
     radius: 3.5
@@ -728,13 +775,17 @@
   - type: ProjectileIFF
     visualType: SquareReticle
     color: Red
+  - type: ProximityFuseTarget
   - type: HeatSeeking
     rotationSpeed: 8
     acceleration: 10
-    topSpeed: 130
+    topSpeed: 80
     fieldOfView: 10
     defaultSeekingRange: 5000
     guidanceAlgorithm: PredictiveGuidance
+    weaveAmplitude: 6
+    weaveFrequency: 0.12
+    weaveFadeDistance: 900
   - type: Fixtures
     fixtures:
       projectile:
@@ -776,6 +827,7 @@
     - Impassable
     - BulletImpassable
   - type: ShipWeaponProjectile
+  - type: IgnoresHullrotShields
   - type: Projectile
     damage:
       types:
@@ -801,6 +853,7 @@
   - type: ProjectileIFF
     visualType: SquareReticle
     color: Red
+  - type: ProximityFuseTarget
   - type: HeatSeeking
     rotationSpeed: 25 # slow rotation so it isnt aimbot, still fairly accurate though
     acceleration: 30
@@ -808,6 +861,9 @@
     fieldOfView: 30
     defaultSeekingRange: 400
     guidanceAlgorithm: PredictiveGuidance
+    weaveAmplitude: 16
+    weaveFrequency: 0.75
+    weaveFadeDistance: 150
   - type: Fixtures
     fixtures:
       projectile:

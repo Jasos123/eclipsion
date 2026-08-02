@@ -39,7 +39,6 @@ overwatch-member-status-alive = Alive
 overwatch-member-status-ssd = SSD
 overwatch-member-status-dead = Dead
 overwatch-member-status-unknown = Unknown
-overwatch-member-coordinates = ({ $x }; { $y })
 overwatch-member-coordinates-none = —
 
 overwatch-stop-watching-button = Stop Watching
@@ -109,3 +108,12 @@ ent-SRMOverwatchClipboard = Squad Overwatch Tablet «HUNTER EYES»
     .desc = { ent-BaseOverwatchClipboard.desc }
 
 overwatch-clipboard-computer-verb-text = Toggle Overwatch Menu
+
+# Access control and limits
+overwatch-console-access-denied = ACCESS DENIED - this terminal is keyed to another organisation.
+overwatch-announcement-cooldown = Transmitter recharging. { $seconds }s until the next broadcast.
+overwatch-squad-limit-reached = Squad register full ({ $max } maximum). Disband one first.
+overwatch-squad-not-empty = Squad still has personnel assigned. Reassign them first.
+
+# Grid-local position. Coordinates alone are meaningless across maps, so the grid travels with them.
+overwatch-member-location = { $location } ({ $x }, { $y })

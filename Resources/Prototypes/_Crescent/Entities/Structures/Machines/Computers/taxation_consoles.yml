@@ -50,7 +50,11 @@
     - map: ["computerLayerKeys"]
       state: tech_key
   - type: TaxationConsole
+  # singleUser is load-bearing: TaxationConsoleState carries a per-player CanEdit flag, but SetUiState
+  # is shared by every viewer of a key and has no per-actor overload. With two viewers, a command
+  # member opening the console unlocked the rate fields on the other viewer's screen too.
   - type: ActivatableUI
+    singleUser: true
     key: enum.TaxationConsoleUiKey.Key
   - type: UserInterface
     interfaces:

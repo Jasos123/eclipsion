@@ -94,6 +94,7 @@ namespace Content.Server.Power.EntitySystems
             SubscribeLocalEvent<ApcPowerReceiverComponent, ComponentRemove>(ApcPowerReceiverRemove);
             SubscribeLocalEvent<ApcPowerReceiverComponent, EntityPausedEvent>(ApcPowerReceiverPaused);
             SubscribeLocalEvent<ApcPowerReceiverComponent, EntityUnpausedEvent>(ApcPowerReceiverUnpaused);
+            SubscribeLocalEvent<ApcPowerReceiverBatteryComponent, ChargeChangedEvent>(ApcPowerReceiverBatteryChargeChanged);
 
             SubscribeLocalEvent<PowerNetworkBatteryComponent, ComponentInit>(BatteryInit);
             SubscribeLocalEvent<PowerNetworkBatteryComponent, ComponentShutdown>(BatteryShutdown);
@@ -381,6 +382,14 @@ namespace Content.Server.Power.EntitySystems
         public void QueueApcPowerReceiverUpdate(EntityUid uid)
         {
             _dirtyApcReceivers.Add(uid);
+        }
+
+        private void ApcPowerReceiverBatteryChargeChanged(
+            EntityUid uid,
+            ApcPowerReceiverBatteryComponent component,
+            ref ChargeChangedEvent args)
+        {
+            QueueApcPowerReceiverUpdate(uid);
         }
 
         private bool IsPoweredCalculate(ApcPowerReceiverComponent comp)

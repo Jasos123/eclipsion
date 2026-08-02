@@ -22,6 +22,14 @@ public sealed partial class RechargeBasicEntityAmmoComponent : Component
         Params = AudioParams.Default.WithVolume(-5f)
     };
 
+    /// <summary>
+    /// Joules taken off the battery for each round regenerated. Leave at zero for free recharge.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite)]
+    [DataField("energyPerCharge")]
+    [AutoNetworkedField]
+    public float EnergyPerCharge;
+
     [ViewVariables(VVAccess.ReadWrite),
      DataField("nextCharge", customTypeSerializer:typeof(TimeOffsetSerializer)),
     AutoNetworkedField]

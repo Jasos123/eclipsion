@@ -1,7 +1,10 @@
 using System.Numerics;
 using Content.Server._Crescent.Diplomacy;
+using Content.Server._Crescent.Economy;
 using Content.Server._Mono.NPC.HTN;
 using Content.Server.DeviceNetwork.Systems;
+using Content.Server.Explosion.EntitySystems;
+using Content.Server.NPC.HTN;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Server.Shipyard;
@@ -12,33 +15,40 @@ using Content.Server.Station.Systems;
 using Content.Shared._Crescent.Diplomacy;
 using Content.Shared._Crescent.DroneControl;
 using Content.Shared.DeviceNetwork.Components;
+using Content.Shared.GameTicking;
+using Content.Shared.Mind.Components;
 using Content.Shared.Popups;
 using Content.Shared.Shipyard.Components;
 using Content.Shared.Shipyard.Prototypes;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
 using Content.Shared.Verbs;
+using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using StationTradeMarketSystem = Content.Server.Crescent.Dispenser.StationTradeMarketSystem;
 
 namespace Content.Server._Crescent.DroneControl;
 
 /// <summary>
 ///     Drives <see cref="AutoDroneComponent"/> drones for a <see cref="DroneCarrierComponent"/> console:
 ///     claims drones docked to (or linked to) the carrier, undocks them, holds them in a selectable
-///     formation, and directs them to focus-fire diplomatic enemies. Manual console orders temporarily
-///     override the autopilot (routed here from <see cref="DroneControlSystem"/>).
+///     formation, and directs them to orbit and focus-fire diplomatic enemies. Manual console orders
+///     temporarily override the autopilot (routed here from <see cref="DroneControlSystem"/>).
 /// </summary>
 public sealed class AutoDroneSystem : EntitySystem
 {
     [Dependency] private readonly DeviceListSystem _deviceList = default!;
     [Dependency] private readonly DiplomacySystem _diplomacy = default!;
     [Dependency] private readonly DockingSystem _docking = default!;
+    [Dependency] private readonly EconomyPriceSystem _economyPrice = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedMapSystem _mapManager = default!;
+    [Dependency] private readonly ExplosionSystem _explosion = default!;
+    [Dependency] private readonly HTNSystem _htn = default!;
+    [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
@@ -51,6 +61,7 @@ public sealed class AutoDroneSystem : EntitySystem
     [Dependency] private readonly ShipSteeringSystem _steering = default!;
     [Dependency] private readonly ShipTargetingSystem _targeting = default!;
     [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private readonly StationTradeMarketSystem _market = default!;
 
     private EntityQuery<ApcPowerReceiverComponent> _powerQuery;
     private EntityQuery<AutoDroneComponent> _autoQuery;
@@ -61,11 +72,18 @@ public sealed class AutoDroneSystem : EntitySystem
     private EntityQuery<ShipSteererComponent> _steererQuery;
 
     private const float UpdateInterval = 0.25f;
-    private const int DeployEveryNTicks = 4; // ~1s between deployment scans
+    private const int SlowEveryNTicks = 4; // ~1s between deployment scans, enemy scans and hull readouts
     private const float FriendlyHoldFireRange = 300f; // hold fire if a friendly is this close in front
     private const float PendingSpawnTtl = 20f; // seconds a produced-but-unclaimed drone counts against the cap
+
+    /// <summary>
+    ///     Accuracy of the drones' target leading. Matches the value the hand-written HTN drone task uses, so
+    ///     an autopiloted drone is no deadlier than any other AI ship - the component default is a perfect 1.0.
+    /// </summary>
+    private const float DroneLeadingAccuracy = 0.4f;
+
     private float _accumulator;
-    private int _deployTick;
+    private int _slowTick;
 
     // scratch collections, reused between ticks
     private readonly HashSet<Entity<DockingComponent>> _docks = new();
@@ -73,7 +91,14 @@ public sealed class AutoDroneSystem : EntitySystem
     private readonly HashSet<EntityUid> _enemies = new();
     private readonly HashSet<EntityUid> _enemyDrones = new(); // enemy grids that carry a drone server
     private readonly List<KeyValuePair<int, EntityUid>> _slotScratch = new();
+    private readonly List<Entity<AutoDroneComponent>> _scuttleScratch = new();
     private List<Entity<MapGridComponent>> _gridScratch = new();
+
+    /// <summary>
+    ///     Wrecks left by a scuttling charge, due for removal once the blast has had time to tear them apart.
+    ///     Held here rather than on the drone because the explosion usually destroys the control server.
+    /// </summary>
+    private readonly List<(TimeSpan At, EntityUid Grid)> _scuttleCleanup = new();
 
     public override void Initialize()
     {
@@ -87,6 +112,9 @@ public sealed class AutoDroneSystem : EntitySystem
         _targetingQuery = GetEntityQuery<ShipTargetingComponent>();
         _steererQuery = GetEntityQuery<ShipSteererComponent>();
 
+        // System fields outlive a round but entity uids don't, so drop any pending wreck cleanup on restart.
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(_ => _scuttleCleanup.Clear());
+
         SubscribeLocalEvent<AutoDroneComponent, ComponentShutdown>(OnDroneShutdown);
         SubscribeLocalEvent<DroneCarrierComponent, ComponentShutdown>(OnCarrierShutdown);
         SubscribeLocalEvent<DroneCarrierComponent, GetVerbsEvent<AlternativeVerb>>(OnCarrierGetVerbs);
@@ -96,6 +124,7 @@ public sealed class AutoDroneSystem : EntitySystem
         SubscribeLocalEvent<DroneCarrierComponent, DroneConsoleSetTargetingMessage>(OnUiSetTargeting);
         SubscribeLocalEvent<DroneCarrierComponent, DroneConsoleSetFormationMessage>(OnUiSetFormation);
         SubscribeLocalEvent<DroneCarrierComponent, DroneConsoleSpawnMessage>(OnUiSpawn);
+        SubscribeLocalEvent<DroneCarrierComponent, DroneConsoleSelfDestructMessage>(OnUiSelfDestruct);
     }
 
     public override void Update(float frameTime)
@@ -108,8 +137,13 @@ public sealed class AutoDroneSystem : EntitySystem
         _accumulator = 0f;
 
         var now = _timing.CurTime;
-        // Claiming walks docks/station grids, so run it less often than the steering update.
-        var doDeploy = _deployTick++ % DeployEveryNTicks == 0;
+        // Claiming walks docks/station grids and the enemy scan sweeps a multi-kilometre radius, so run both
+        // less often than the steering update.
+        var slowTick = _slowTick++ % SlowEveryNTicks == 0;
+
+        // Runs over every drone, not just commanded ones: an orphaned drone still has to be able to scuttle
+        // itself after its carrier console is gone.
+        UpdateSelfDestruct(now);
 
         var query = EntityQueryEnumerator<DroneCarrierComponent>();
         while (query.MoveNext(out var consoleUid, out var carrier))
@@ -118,10 +152,19 @@ public sealed class AutoDroneSystem : EntitySystem
             if (carrierGrid == null)
                 continue;
 
-            var powered = !_powerQuery.TryComp(consoleUid, out var receiver) || _power.IsPowered(consoleUid, receiver);
+            // An unpowered console commands nothing. Deployment, targeting and steering all stop together, so
+            // knocking the console out is a real counter instead of only stopping new launches.
+            if (!IsConsolePowered(consoleUid))
+            {
+                IdleDrones((consoleUid, carrier));
+                continue;
+            }
 
-            if (doDeploy && powered)
+            if (slowTick)
+            {
                 TryDeploy((consoleUid, carrier), carrierGrid.Value);
+                UpdateHullIntegrity(carrier);
+            }
 
             // Find diplomatic enemies near the carrier (leash), pick a focus, then drive each drone.
             // The stance decides whether and how far the drones look for targets.
@@ -130,9 +173,9 @@ public sealed class AutoDroneSystem : EntitySystem
                 _enemies.Clear();
                 carrier.FocusTarget = null;
             }
-            else
+            else if (slowTick)
             {
-                var faction = _iffQuery.TryComp(carrierGrid, out var iff) ? iff.Faction : "Neutral";
+                var faction = GetGridFaction(carrierGrid.Value);
                 var range = carrier.Stance == DroneStance.Defend ? carrier.DefendRange : carrier.EngagementRange;
                 ScanEnemies(carrierGrid.Value, faction, range, carrier.Targeting);
                 SelectFocus(carrier, carrierGrid.Value);
@@ -140,6 +183,28 @@ public sealed class AutoDroneSystem : EntitySystem
 
             DriveDrones((consoleUid, carrier), now);
         }
+    }
+
+    /// <summary>
+    ///     A console with no power receiver counts as powered (unpowered otherwise), matching how the rest of
+    ///     the computer prototypes behave.
+    /// </summary>
+    private bool IsConsolePowered(EntityUid console)
+    {
+        return !_powerQuery.TryComp(console, out var receiver) || _power.IsPowered(console, receiver);
+    }
+
+    /// <summary>
+    ///     A grid's diplomatic faction, or null if it has none we recognise. Bare grids default their IFF
+    ///     faction to the literal string "Neutral", which is not a diplomacy prototype - debris, asteroids and
+    ///     unaligned hulls all land here, and must never be mistaken for a real faction in either direction.
+    /// </summary>
+    private string? GetGridFaction(EntityUid grid)
+    {
+        if (!_iffQuery.TryComp(grid, out var iff) || string.IsNullOrEmpty(iff.Faction))
+            return null;
+
+        return _proto.HasIndex<DiplomacyPrototype>(iff.Faction) ? iff.Faction : null;
     }
 
     #region deployment
@@ -211,7 +276,7 @@ public sealed class AutoDroneSystem : EntitySystem
                 continue;
 
             var before = carrier.Comp.ProducedCount;
-            DeployDrone(carrier, carrierGrid, carrierGridComp, drone);
+            DeployDrone(carrier, carrierGrid, carrierGridComp, drone, produced: true);
             return carrier.Comp.ProducedCount > before;
         }
 
@@ -251,7 +316,10 @@ public sealed class AutoDroneSystem : EntitySystem
                 if (drone.Comp.CarrierConsole != null)
                     continue; // already deployed elsewhere
 
-                DeployDrone(carrier, carrierGrid, carrierGridComp, drone);
+                // A drone we produced ourselves may have failed to bind on the spawn tick and be waiting here.
+                var produced = ConsumePendingSpawn(carrier.Comp, partnerGrid.Value);
+
+                DeployDrone(carrier, carrierGrid, carrierGridComp, drone, produced);
 
                 if (carrier.Comp.ProducedCount >= EffectiveMaxDrones(carrier.Comp))
                     return;
@@ -259,15 +327,36 @@ public sealed class AutoDroneSystem : EntitySystem
         }
     }
 
-    private void DeployDrone(Entity<DroneCarrierComponent> carrier, EntityUid carrierGrid, MapGridComponent grid, Entity<AutoDroneComponent> drone)
+    /// <summary>
+    ///     Consumes the in-flight production record for <paramref name="droneGrid"/> if we are the console
+    ///     that produced it. Matching on the grid (rather than popping the oldest entry) keeps a drone that
+    ///     merely docked here by hand from eating a production slot it never used.
+    /// </summary>
+    private bool ConsumePendingSpawn(DroneCarrierComponent carrier, EntityUid droneGrid)
+    {
+        for (var i = 0; i < carrier.PendingSpawns.Count; i++)
+        {
+            if (carrier.PendingSpawns[i].Grid != droneGrid)
+                continue;
+
+            carrier.PendingSpawns.RemoveAt(i);
+            return true;
+        }
+
+        return false;
+    }
+
+    private void DeployDrone(Entity<DroneCarrierComponent> carrier, EntityUid carrierGrid, MapGridComponent grid, Entity<AutoDroneComponent> drone, bool produced = false)
     {
         var droneGrid = Transform(drone.Owner).GridUid;
 
-        var carrierFaction = _iffQuery.TryComp(carrierGrid, out var carrierIff) ? carrierIff.Faction : "Neutral";
+        var carrierFaction = GetGridFaction(carrierGrid);
+        var droneFaction = droneGrid != null ? GetGridFaction(droneGrid.Value) : null;
 
-        // Never claim an enemy's drone (e.g. one docked to the same shared station).
-        if (droneGrid != null && _iffQuery.TryComp(droneGrid.Value, out var droneIff)
-            && _diplomacy.GetRelations(carrierFaction, droneIff.Faction) == Relations.War)
+        // Only ever claim our own faction's drones, or unaligned ones (which is what a freshly produced hull
+        // looks like before we stamp our IFF on it). Claiming anyone else's - even a neutral or allied
+        // faction's - would let a carrier walk off with another player's ship just because it docked here.
+        if (droneFaction != null && droneFaction != carrierFaction)
             return;
 
         var slot = GetFreeSlot(carrier.Comp);
@@ -276,24 +365,44 @@ public sealed class AutoDroneSystem : EntitySystem
 
         carrier.Comp.Slots[slot] = drone.Owner;
         carrier.Comp.ProducedCount++; // lifetime count, never decremented (hard production cap)
-        if (carrier.Comp.PendingSpawns.Count > 0)
-            carrier.Comp.PendingSpawns.RemoveAt(0); // this claim accounts for one in-flight production
 
         drone.Comp.CarrierConsole = carrier.Owner;
         drone.Comp.Slot = slot;
         drone.Comp.SlotCoordinates = ComputeSlot(carrierGrid, grid, carrier.Comp, slot);
         drone.Comp.Mode = AutoDroneMode.Follow;
+        drone.Comp.Produced = produced;
+        drone.Comp.Launched = false;
+        drone.Comp.Undocked = false;
+        drone.Comp.SelfDestructAt = null;
+
+        // Baseline for the console's hull readout. Taken at deploy so battle damage shows up as a shortfall.
+        drone.Comp.InitialTileCount = droneGrid != null ? CountTiles(droneGrid.Value) : 0;
+        drone.Comp.HullIntegrity = 1f;
 
         // Adopt the carrier's faction + colour so diplomacy/radar treat the drone consistently (instead of the
         // default gold a bare grid shows).
         if (droneGrid != null)
         {
-            _shuttle.SetIFFFaction(droneGrid.Value, carrierFaction);
+            if (carrierFaction != null)
+                _shuttle.SetIFFFaction(droneGrid.Value, carrierFaction);
             _shuttle.SetIFFColor(droneGrid.Value, carrier.Comp.IffColor);
 
-            // No ownership deed -> the producing player can't rename/recolour it; its identity stays locked
-            // to what the carrier set.
-            RemComp<ShuttleDeedComponent>(droneGrid.Value);
+            // Only a drone we built ourselves loses its deed. Stripping it from a hull somebody else owns
+            // would destroy their claim on a ship we are merely borrowing.
+            if (produced)
+                RemComp<ShuttleDeedComponent>(droneGrid.Value);
+        }
+
+        // A leftover HTN plan drives the very same steering/targeting components this system does, so the two
+        // would fight over the drone every tick. Tear it down before we take the controls.
+        if (TryComp<HTNComponent>(drone.Owner, out var htn))
+        {
+            _htn.ShutdownPlan(htn);
+            if (TryComp<DroneControlComponent>(drone.Owner, out var droneControl))
+            {
+                htn.Blackboard.Remove<string>(droneControl.OrderKey);
+                htn.Blackboard.Remove<EntityCoordinates>(droneControl.TargetKey);
+            }
         }
 
         // Link the drone to the carrier console so it shows on the console UI and can receive manual override
@@ -304,8 +413,24 @@ public sealed class AutoDroneSystem : EntitySystem
             _deviceList.UpdateDeviceList(carrier.Owner, new List<EntityUid> { drone.Owner }, true);
 
         // Cast off from the carrier (no-op if it wasn't docked).
-        if (droneGrid != null)
-            _docking.UndockDocks(droneGrid.Value);
+        TryUndock(drone);
+    }
+
+    /// <summary>
+    ///     Casts a drone off whatever it is docked to, once. Undocking sweeps the whole drone grid for docking
+    ///     ports, so it is latched rather than re-run every tick - and re-running it would also make it
+    ///     impossible to ever dock to a deployed drone to repair or recover it.
+    /// </summary>
+    private void TryUndock(Entity<AutoDroneComponent> drone)
+    {
+        if (drone.Comp.Undocked)
+            return;
+
+        if (Transform(drone.Owner).GridUid is not { } droneGrid)
+            return;
+
+        _docking.UndockDocks(droneGrid);
+        drone.Comp.Undocked = true;
     }
 
     private int GetFreeSlot(DroneCarrierComponent carrier)
@@ -322,9 +447,54 @@ public sealed class AutoDroneSystem : EntitySystem
 
     private static int EffectiveMaxDrones(DroneCarrierComponent carrier) => Math.Max(0, carrier.MaxDrones);
 
+    private int CountTiles(EntityUid gridUid)
+    {
+        if (!_gridQuery.TryComp(gridUid, out var grid))
+            return 0;
+
+        var count = 0;
+        var enumerator = _map.GetAllTilesEnumerator(gridUid, grid);
+        while (enumerator.MoveNext(out _))
+            count++;
+
+        return count;
+    }
+
+    /// <summary>
+    ///     Refreshes each commanded drone's hull readout. Walks every tile of the drone grids, so it runs on
+    ///     the slow tick only.
+    /// </summary>
+    private void UpdateHullIntegrity(DroneCarrierComponent carrier)
+    {
+        foreach (var droneUid in carrier.Slots.Values)
+        {
+            if (!_autoQuery.TryComp(droneUid, out var drone) || drone.InitialTileCount <= 0)
+                continue;
+
+            if (Transform(droneUid).GridUid is not { } gridUid)
+                continue;
+
+            drone.HullIntegrity = Math.Clamp(CountTiles(gridUid) / (float) drone.InitialTileCount, 0f, 1f);
+        }
+    }
+
     #endregion
 
     #region formation
+
+    /// <summary>
+    ///     Distance from the carrier grid's origin out to the furthest corner of its hull. Drones measure
+    ///     their separation from that same origin, so the launch clearance and the formation slots have to be
+    ///     expressed against it too - measuring one from the origin and the other from the hull's rear edge
+    ///     lets the two disagree, and the drone then oscillates between flying out and forming up.
+    /// </summary>
+    private static float GetHullRadius(MapGridComponent grid)
+    {
+        var aabb = grid.LocalAABB;
+        var x = MathF.Max(MathF.Abs(aabb.Left), MathF.Abs(aabb.Right));
+        var y = MathF.Max(MathF.Abs(aabb.Bottom), MathF.Abs(aabb.Top));
+        return new Vector2(x, y).Length();
+    }
 
     /// <summary>
     ///     Formation slot as a carrier-grid-relative coordinate, anchored behind the carrier's hull so drones
@@ -335,7 +505,17 @@ public sealed class AutoDroneSystem : EntitySystem
         var aabb = grid.LocalAABB;
         var offset = GetFormationOffset(carrier, slot);
         // X centered on the hull, Y measured backward from the rear edge (shuttles face grid-north / +Y).
-        return new EntityCoordinates(carrierGrid, new Vector2(aabb.Center.X + offset.X, aabb.Bottom - offset.Y));
+        var local = new Vector2(aabb.Center.X + offset.X, aabb.Bottom - offset.Y);
+
+        // Push any slot that would land inside the launch clearance ring back out past it. On a wide, shallow
+        // carrier the rear-edge offset alone can leave the front row inside that ring, and a drone can then
+        // never satisfy both behaviours at once.
+        var minDistance = GetHullRadius(grid) + carrier.LaunchClearance;
+        var distance = local.Length();
+        if (distance > 0.01f && distance < minDistance)
+            local *= minDistance / distance;
+
+        return new EntityCoordinates(carrierGrid, local);
     }
 
     /// <summary>
@@ -430,16 +610,25 @@ public sealed class AutoDroneSystem : EntitySystem
 
     private void OnUiDeploy(Entity<DroneCarrierComponent> ent, ref DroneConsoleDeployMessage args)
     {
+        if (!IsConsolePowered(ent.Owner))
+            return;
+
         ForceDeploy(ent);
     }
 
     private void OnUiSetStance(Entity<DroneCarrierComponent> ent, ref DroneConsoleSetStanceMessage args)
     {
+        if (!IsConsolePowered(ent.Owner))
+            return;
+
         SetStance(ent, args.Stance);
     }
 
     private void OnUiSetTargeting(Entity<DroneCarrierComponent> ent, ref DroneConsoleSetTargetingMessage args)
     {
+        if (!IsConsolePowered(ent.Owner))
+            return;
+
         ent.Comp.Targeting = args.Targeting;
         _popup.PopupEntity(Loc.GetString("drone-targeting-set",
             ("targeting", Loc.GetString($"drone-targeting-{args.Targeting.ToString().ToLowerInvariant()}"))),
@@ -448,18 +637,65 @@ public sealed class AutoDroneSystem : EntitySystem
 
     private void OnUiSetFormation(Entity<DroneCarrierComponent> ent, ref DroneConsoleSetFormationMessage args)
     {
+        if (!IsConsolePowered(ent.Owner))
+            return;
+
         ent.Comp.Formation = args.Formation;
         RecomputeFormation(ent.Owner, ent.Comp);
     }
 
+    private void OnUiSelfDestruct(Entity<DroneCarrierComponent> ent, ref DroneConsoleSelfDestructMessage args)
+    {
+        if (!IsConsolePowered(ent.Owner))
+            return;
+
+        var now = _timing.CurTime;
+        var affected = 0;
+
+        foreach (var droneUid in ent.Comp.Slots.Values)
+        {
+            if (!args.SelectedDrones.Contains(GetNetEntity(droneUid)) || !_autoQuery.TryComp(droneUid, out var drone))
+                continue;
+
+            if (args.Cancel)
+            {
+                if (drone.SelfDestructAt == null)
+                    continue;
+
+                drone.SelfDestructAt = null;
+                drone.Mode = AutoDroneMode.Follow;
+            }
+            else
+            {
+                if (drone.SelfDestructAt != null)
+                    continue; // already counting down, don't restart the clock
+
+                drone.SelfDestructAt = now + drone.SelfDestructDelay;
+            }
+
+            affected++;
+        }
+
+        if (affected == 0)
+            return;
+
+        _popup.PopupEntity(
+            Loc.GetString(args.Cancel ? "drone-self-destruct-cancelled" : "drone-self-destruct-armed", ("count", affected)),
+            ent.Owner,
+            args.Cancel ? PopupType.Medium : PopupType.LargeCaution);
+    }
+
     private void OnUiSpawn(Entity<DroneCarrierComponent> ent, ref DroneConsoleSpawnMessage args)
     {
+        if (!IsConsolePowered(ent.Owner))
+            return;
+
         if (!ent.Comp.SpawnableDrones.Contains(args.VesselId))
             return;
 
         // Drop stale in-flight spawns so a drone that never docked doesn't block production forever.
         var now = _timing.CurTime;
-        ent.Comp.PendingSpawns.RemoveAll(t => (now - t).TotalSeconds > PendingSpawnTtl);
+        ent.Comp.PendingSpawns.RemoveAll(p => (now - p.Time).TotalSeconds > PendingSpawnTtl);
 
         // Hard lifetime cap: produced + still-arriving must stay under the limit.
         if (ent.Comp.ProducedCount + ent.Comp.PendingSpawns.Count >= EffectiveMaxDrones(ent.Comp))
@@ -475,15 +711,30 @@ public sealed class AutoDroneSystem : EntitySystem
         }
 
         if (!_proto.TryIndex<VesselPrototype>(args.VesselId, out var vessel))
+        {
+            _popup.PopupEntity(Loc.GetString("drone-carrier-unknown-vessel", ("vessel", args.VesselId)), ent.Owner, PopupType.MediumCaution);
             return;
+        }
 
-        // Free production: the shipyard spawns the drone and docks it to the station; the deploy scan then
-        // claims it into a formation slot (which is where ProducedCount is incremented).
+        // Bill the faction that owns the carrier, exactly as a faction shipyard would. Checked before the
+        // spawn so a failed spawn never costs anyone anything.
+        var price = GetDronePrice(ent.Owner, ent.Comp, vessel);
+        if (price > 0 && _market.GetTreasury(station) < price)
+        {
+            _popup.PopupEntity(Loc.GetString("drone-carrier-treasury-insufficient", ("cost", price)), ent.Owner, PopupType.MediumCaution);
+            return;
+        }
+
+        // The shipyard spawns the drone and docks it to the station; the deploy scan then claims it into a
+        // formation slot (which is where ProducedCount is incremented).
         if (!_shipyard.TryPurchaseShuttle(station, vessel.Path.ToString(), out var shuttle, out _))
         {
             _popup.PopupEntity(Loc.GetString("drone-carrier-spawn-failed"), ent.Owner, PopupType.MediumCaution);
             return;
         }
+
+        if (price > 0)
+            _market.TryWithdrawTreasury(station, price);
 
         // TryPurchaseShuttle leaves the grid as an anonymous "grid"; give it a proper name so it shows on radar.
         _metaData.SetEntityName(shuttle.Owner, $"{vessel.Name} {_random.Next(100, 1000)}");
@@ -495,10 +746,33 @@ public sealed class AutoDroneSystem : EntitySystem
             && _gridQuery.TryComp(carrierGrid.Value, out var carrierGridComp)
             && TryBindDroneGrid(ent, carrierGrid.Value, carrierGridComp, shuttle.Owner);
 
+        // Fallback: a dock scan will claim it. Recording the grid keeps that claim attributable to us, so it
+        // is treated as our own production rather than as a borrowed hull.
         if (!bound)
-            ent.Comp.PendingSpawns.Add(now); // fallback: a dock scan will claim it (and increment ProducedCount)
+            ent.Comp.PendingSpawns.Add((now, shuttle.Owner));
 
-        _popup.PopupEntity(Loc.GetString("drone-carrier-spawned"), ent.Owner, PopupType.Medium);
+        _popup.PopupEntity(
+            price > 0
+                ? Loc.GetString("drone-carrier-spawned-cost", ("cost", price))
+                : Loc.GetString("drone-carrier-spawned"),
+            ent.Owner,
+            PopupType.Medium);
+    }
+
+    /// <summary>
+    ///     What producing <paramref name="vessel"/> bills the treasury, or 0 when production is free: either
+    ///     billing is switched off on the console, or the carrier belongs to no faction whose vault we could
+    ///     charge. An unaligned carrier builds for free rather than being unable to build at all.
+    /// </summary>
+    public int GetDronePrice(EntityUid console, DroneCarrierComponent carrier, VesselPrototype vessel)
+    {
+        if (!carrier.ChargeTreasury)
+            return 0;
+
+        if (_station.GetOwningStation(console) is not { } station || _market.GetStationFaction(station) == null)
+            return 0;
+
+        return Math.Max(0, (int) (_economyPrice.GetVesselPrice(vessel) * carrier.PriceMultiplier));
     }
 
     private void ForceDeploy(Entity<DroneCarrierComponent> ent)
@@ -563,6 +837,14 @@ public sealed class AutoDroneSystem : EntitySystem
                 continue;
             }
 
+            // A drone counting down to scuttle stops taking orders; it just coasts until it goes off.
+            if (drone.SelfDestructAt != null)
+            {
+                StopDrone(droneUid);
+                drone.Mode = AutoDroneMode.SelfDestructing;
+                continue;
+            }
+
             // Unpowered drones drift.
             if (_powerQuery.TryComp(droneUid, out var receiver) && !_power.IsPowered(droneUid, receiver))
             {
@@ -571,9 +853,8 @@ public sealed class AutoDroneSystem : EntitySystem
                 continue;
             }
 
-            // A produced drone finishes FTL still docked to the station; keep it free to fly (no-op otherwise).
-            if (Transform(droneUid).GridUid is { } droneGrid)
-                _docking.UndockDocks(droneGrid);
+            // A produced drone can finish its FTL hop still docked to the station; cast it off once.
+            TryUndock((droneUid, drone));
 
             // A recent manual console order takes priority.
             if (now < drone.ManualOverrideUntil && drone.ManualCommand != null)
@@ -589,13 +870,36 @@ public sealed class AutoDroneSystem : EntitySystem
         }
     }
 
+    /// <summary>
+    ///     Cuts every drone loose from a carrier that can no longer command them (an unpowered console).
+    /// </summary>
+    private void IdleDrones(Entity<DroneCarrierComponent> carrier)
+    {
+        carrier.Comp.FocusTarget = null;
+
+        foreach (var droneUid in carrier.Comp.Slots.Values)
+        {
+            if (TerminatingOrDeleted(droneUid) || !_autoQuery.TryComp(droneUid, out var drone))
+                continue;
+
+            // Still let an armed scuttle run - that is handled centrally and must not depend on the console.
+            if (drone.SelfDestructAt != null)
+                continue;
+
+            StopDrone(droneUid);
+            drone.Mode = AutoDroneMode.Idle;
+        }
+    }
+
     private void DriveFollow(EntityUid drone, AutoDroneComponent comp, DroneCarrierComponent carrier)
     {
         var carrierGrid = comp.SlotCoordinates.EntityId;
 
-        // If we're still hugging the carrier (e.g. just undocked), first fly straight out to open space so we
-        // don't grind against or shove the hull. The target is empty space, so the carrier IS avoided.
-        if (!TerminatingOrDeleted(carrierGrid) && _gridQuery.TryComp(carrierGrid, out var carrierGridComp))
+        // Straight after deployment we're still hugging the carrier, so fly out to open space first instead of
+        // grinding along the hull. The target is empty space, so the carrier IS avoided.
+        // This is latched: once clear, a drone never drops back into launching, so it can't ping-pong between
+        // flying out and forming up when its slot happens to sit near the clearance boundary.
+        if (!comp.Launched && !TerminatingOrDeleted(carrierGrid) && _gridQuery.TryComp(carrierGrid, out var carrierGridComp))
         {
             var carrierMap = _transform.GetMapCoordinates(carrierGrid);
             var droneMap = _transform.GetMapCoordinates(drone);
@@ -604,7 +908,7 @@ public sealed class AutoDroneSystem : EntitySystem
             {
                 var toDrone = droneMap.Position - carrierMap.Position;
                 var dist = toDrone.Length();
-                var clearRadius = carrierGridComp.LocalAABB.Size.Length() * 0.5f + carrier.LaunchClearance;
+                var clearRadius = GetHullRadius(carrierGridComp) + carrier.LaunchClearance;
 
                 if (dist < clearRadius && Transform(carrierGrid).MapUid is { } mapUid)
                 {
@@ -629,6 +933,8 @@ public sealed class AutoDroneSystem : EntitySystem
                     comp.Mode = AutoDroneMode.Launching;
                     return;
                 }
+
+                comp.Launched = true;
             }
         }
 
@@ -660,13 +966,15 @@ public sealed class AutoDroneSystem : EntitySystem
         var steer = _steering.Steer(drone, enemyCoords);
         if (steer != null)
         {
-            // Keep the nose on the target at a standoff range, but stay actively maneuvering (NoFinish) and
-            // jink away from incoming shipgun fire (AvoidProjectiles) instead of sitting still. Each drone holds
-            // a slightly different range so they spread into a firing line rather than stacking.
-            steer.Mode = ShipSteeringMode.GoToRange;
-            steer.Range = carrier.OrbitRange + comp.Slot * 25f;
-            steer.RangeTolerance = 40f;
-            steer.InRangeMaxSpeed = null;
+            // Circle the target rather than parking in front of it: a drone holding a fixed standoff is a
+            // stationary gun platform and trivial to hit back. Separation comes from the per-slot standoff
+            // radius and from alternating which way each drone circles - not from varying the lead angle,
+            // which is what actually drives the orbit and would stall a drone if it were ever zero.
+            steer.Mode = comp.Slot % 2 == 0 ? ShipSteeringMode.Orbit : ShipSteeringMode.OrbitCW;
+            steer.OrbitOffset = carrier.OrbitLeadAngle;
+            steer.Range = carrier.OrbitRange + comp.Slot * carrier.OrbitSpread;
+            steer.RangeTolerance = carrier.OrbitTolerance;
+            steer.InRangeMaxSpeed = null; // orbit as fast as we can
             steer.MaxRotateRate = null;
             steer.NoFinish = true;          // never park - keep steering so projectile evasion runs
             steer.LeadingEnabled = true;
@@ -679,18 +987,31 @@ public sealed class AutoDroneSystem : EntitySystem
         comp.Mode = AutoDroneMode.Attack;
 
         // Hold fire if a friendly ship is in the line of fire toward the target, so we never clip an ally.
-        var faction = _iffQuery.TryComp(Transform(drone).GridUid ?? drone, out var iff) ? iff.Faction : "Neutral";
+        var faction = GetGridFaction(Transform(drone).GridUid ?? drone);
         if (FriendlyInLineOfFire(drone, enemyGrid, faction))
             StopFiring(drone);
         else
-            _targeting.Target(drone, enemyCoords);
+            Fire(drone, enemyCoords);
     }
 
     /// <summary>
-    ///     True if a friendly (non-War) grid sits within <see cref="FriendlyHoldFireRange"/> of the drone and
-    ///     roughly between it and the target - i.e. in the line of fire.
+    ///     Points the drone's guns at a target, matching the leading accuracy the hand-written HTN drone task
+    ///     uses so autopiloted drones aren't strictly better shots than every other AI ship.
     /// </summary>
-    private bool FriendlyInLineOfFire(EntityUid drone, EntityUid enemyGrid, string faction)
+    private void Fire(EntityUid drone, EntityCoordinates target)
+    {
+        var targeting = _targeting.Target(drone, target);
+        if (targeting != null)
+            targeting.LeadingAccuracy = DroneLeadingAccuracy;
+    }
+
+    /// <summary>
+    ///     True if a grid belonging to a faction we are not at war with sits within
+    ///     <see cref="FriendlyHoldFireRange"/> of the drone and roughly between it and the target - i.e. in
+    ///     the line of fire. Only grids with a real faction count: debris, asteroids and other unaligned hulls
+    ///     have no IFF faction, and treating those as friendlies would mute the squadron in any wreck field.
+    /// </summary>
+    private bool FriendlyInLineOfFire(EntityUid drone, EntityUid enemyGrid, string? faction)
     {
         var droneGrid = Transform(drone).GridUid;
         if (droneGrid == null)
@@ -707,11 +1028,15 @@ public sealed class AutoDroneSystem : EntitySystem
 
         var bounds = Box2.CenteredAround(dronePos.Position, new Vector2(FriendlyHoldFireRange * 2f, FriendlyHoldFireRange * 2f));
         _gridScratch.Clear();
-        _mapManager.FindGridsIntersecting(dronePos.MapId, bounds, ref _gridScratch, approx: true, includeMap: false);
+        _map.FindGridsIntersecting(dronePos.MapId, bounds, ref _gridScratch, approx: true, includeMap: false);
 
         foreach (var grid in _gridScratch)
         {
             if (grid.Owner == droneGrid.Value || grid.Owner == enemyGrid)
+                continue;
+
+            // Unaligned hulls (debris, asteroids, wrecks) are not anyone's friendly - shoot through them.
+            if (GetGridFaction(grid.Owner) is not { } gridFaction)
                 continue;
 
             var toGrid = _transform.GetMapCoordinates(grid.Owner).Position - dronePos.Position;
@@ -723,8 +1048,7 @@ public sealed class AutoDroneSystem : EntitySystem
             if (Vector2.Dot(toGrid.Normalized(), toEnemy) < 0.86f)
                 continue;
 
-            var gridFaction = _iffQuery.TryComp(grid.Owner, out var iff) ? iff.Faction : "Neutral";
-            if (_diplomacy.GetRelations(faction, gridFaction) != Relations.War)
+            if (faction == null || _diplomacy.GetRelations(faction, gridFaction) != Relations.War)
                 return true; // a friendly/neutral grid is in the line of fire
         }
 
@@ -743,16 +1067,17 @@ public sealed class AutoDroneSystem : EntitySystem
                 // Hold at standoff facing the target, don't orbit/spin.
                 steer.Mode = ShipSteeringMode.GoToRange;
                 steer.Range = carrier.OrbitRange;
-                steer.RangeTolerance = 40f;
+                steer.RangeTolerance = carrier.OrbitTolerance;
                 steer.InRangeMaxSpeed = 0.1f;
                 steer.MaxRotateRate = 0.02f;
+                steer.NoFinish = false;
                 steer.LeadingEnabled = true;
                 steer.AlwaysFaceTarget = true;
                 steer.AvoidCollisions = true;
                 steer.AvoidTargetGrid = false;
             }
 
-            _targeting.Target(drone, target);
+            Fire(drone, target);
         }
         else // move
         {
@@ -764,6 +1089,7 @@ public sealed class AutoDroneSystem : EntitySystem
                 steer.RangeTolerance = null;
                 steer.InRangeMaxSpeed = 0.1f;
                 steer.MaxRotateRate = 0.02f;
+                steer.NoFinish = false;
                 steer.LeadingEnabled = false;
                 steer.AlwaysFaceTarget = true;
                 steer.AvoidCollisions = true;
@@ -780,7 +1106,7 @@ public sealed class AutoDroneSystem : EntitySystem
 
     #region targeting
 
-    private void ScanEnemies(EntityUid carrierGrid, string faction, float range, DroneTargeting targeting)
+    private void ScanEnemies(EntityUid carrierGrid, string? faction, float range, DroneTargeting targeting)
     {
         _enemies.Clear();
         _enemyDrones.Clear();
@@ -800,9 +1126,14 @@ public sealed class AutoDroneSystem : EntitySystem
             if (targetComp.NeedPower && _powerQuery.TryComp(target, out var receiver) && !_power.IsPowered(target, receiver))
                 continue;
 
-            var targetFaction = _iffQuery.TryComp(targetGrid, out var iff) ? iff.Faction : "Neutral";
-            var relation = _diplomacy.GetRelations(faction, targetFaction);
-            // Enemies mode: only War. All mode: everything except friendly (allied/same-faction).
+            // Never open fire on a hull with no diplomatic faction. That covers derelicts, unaligned civilian
+            // ships, stations we happen to be parked at, and - critically - our own freshly produced drones,
+            // which are unaligned for the moment between spawning and being stamped with our IFF.
+            if (GetGridFaction(targetGrid.Value) is not { } targetFaction)
+                continue;
+
+            var relation = faction == null ? Relations.Neutral : _diplomacy.GetRelations(faction, targetFaction);
+            // Enemies mode: only War. All mode: every faction except our own and our allies.
             var hostile = targeting == DroneTargeting.All ? relation != Relations.Ally : relation == Relations.War;
             if (!hostile)
                 continue;
@@ -870,6 +1201,104 @@ public sealed class AutoDroneSystem : EntitySystem
 
     #endregion
 
+    #region self destruct
+
+    /// <summary>
+    ///     Runs every armed scuttle countdown, and clears up the wrecks afterwards. Deliberately independent
+    ///     of the carrier loop so an orphaned drone - whose console is gone, which is exactly when the
+    ///     automatic countdown gets armed - still goes off.
+    /// </summary>
+    private void UpdateSelfDestruct(TimeSpan now)
+    {
+        _scuttleScratch.Clear();
+
+        var query = EntityQueryEnumerator<AutoDroneComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (comp.SelfDestructAt is { } at && now >= at)
+                _scuttleScratch.Add((uid, comp));
+        }
+
+        // Deferred: scuttling touches grids, which mutates the entity set we just walked.
+        foreach (var drone in _scuttleScratch)
+        {
+            Scuttle(drone, now);
+        }
+
+        for (var i = _scuttleCleanup.Count - 1; i >= 0; i--)
+        {
+            var (at, grid) = _scuttleCleanup[i];
+            if (now < at)
+                continue;
+
+            _scuttleCleanup.RemoveAt(i);
+
+            // Never delete a hull somebody boarded in the meantime - leave them the wreck.
+            if (Exists(grid) && !TerminatingOrDeleted(grid) && !HasOccupants(grid))
+                QueueDel(grid);
+        }
+    }
+
+    /// <summary>
+    ///     Blows the drone up, then clears the wreck a moment later so a squadron whose carrier died doesn't
+    ///     leave a field of unrecoverable derelicts behind. The removal is tracked here rather than on the
+    ///     drone because the blast usually destroys the control server itself.
+    /// </summary>
+    private void Scuttle(Entity<AutoDroneComponent> drone, TimeSpan now)
+    {
+        drone.Comp.SelfDestructAt = null;
+
+        if (TerminatingOrDeleted(drone.Owner))
+            return;
+
+        // Release the slot first: the carrier shouldn't keep steering a hull that's about to stop existing.
+        if (drone.Comp.CarrierConsole is { } console
+            && TryComp<DroneCarrierComponent>(console, out var carrier)
+            && drone.Comp.Slot >= 0
+            && carrier.Slots.TryGetValue(drone.Comp.Slot, out var occupant)
+            && occupant == drone.Owner)
+        {
+            carrier.Slots.Remove(drone.Comp.Slot);
+        }
+
+        StopDrone(drone.Owner);
+        drone.Comp.CarrierConsole = null;
+        drone.Comp.Slot = -1;
+        drone.Comp.Mode = AutoDroneMode.Idle;
+
+        var gridUid = Transform(drone.Owner).GridUid;
+
+        // Resolves the epicentre immediately and queues a map-anchored blast, so it still goes off even
+        // though the hull under it is on its way out.
+        _explosion.QueueExplosion(
+            drone.Owner,
+            drone.Comp.SelfDestructExplosion,
+            drone.Comp.SelfDestructIntensity,
+            drone.Comp.SelfDestructSlope,
+            drone.Comp.SelfDestructMaxTileIntensity);
+
+        if (gridUid != null)
+            _scuttleCleanup.Add((now + drone.Comp.ScuttleCleanupDelay, gridUid.Value));
+    }
+
+    /// <summary>
+    ///     True if anything with a mind is aboard the grid. Used to make sure scuttling never deletes a hull
+    ///     out from under a player who boarded it.
+    /// </summary>
+    private bool HasOccupants(EntityUid gridUid)
+    {
+        var query = EntityQueryEnumerator<MindContainerComponent, TransformComponent>();
+        while (query.MoveNext(out _, out var mind, out var xform))
+        {
+            if (xform.GridUid == gridUid && mind.HasMind)
+                return true;
+        }
+
+        return false;
+    }
+
+    #endregion
+
     #region cleanup
 
     private void OnDroneShutdown(Entity<AutoDroneComponent> ent, ref ComponentShutdown args)
@@ -883,6 +1312,8 @@ public sealed class AutoDroneSystem : EntitySystem
 
     private void OnCarrierShutdown(Entity<DroneCarrierComponent> ent, ref ComponentShutdown args)
     {
+        var now = _timing.CurTime;
+
         foreach (var drone in ent.Comp.Slots.Values)
         {
             if (!_autoQuery.TryComp(drone, out var comp))
@@ -891,6 +1322,11 @@ public sealed class AutoDroneSystem : EntitySystem
             comp.CarrierConsole = null;
             comp.Slot = -1;
             comp.Mode = AutoDroneMode.Idle;
+
+            // Nothing can command these any more, and they can't dock or be recovered, so arm a scuttle rather
+            // than leaving a squadron of derelicts drifting on the map for the rest of the round.
+            if (ent.Comp.SelfDestructOnOrphan && comp.SelfDestructAt == null && !TerminatingOrDeleted(drone))
+                comp.SelfDestructAt = now + comp.OrphanSelfDestructDelay;
 
             if (!TerminatingOrDeleted(drone))
                 StopDrone(drone);

@@ -15,3 +15,7 @@ comp-solution-transfer-verb-toggle = Toggle to {$amount}u
 
 ## Displayed after you successfully change a solution's amount using the BUI
 comp-solution-transfer-set-amount = Transfer amount set to {$amount}u.
+comp-solution-transfer-verb-mode-receive = Switch to draw mode
+comp-solution-transfer-verb-mode-send = Switch to pour mode
+comp-solution-transfer-mode-receive = Transfer mode set to draw.
+comp-solution-transfer-mode-send = Transfer mode set to pour.

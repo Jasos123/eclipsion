@@ -88,6 +88,9 @@ namespace Content.Shared.Verbs
         public static readonly VerbCategory SetTransferAmount =
             new("verb-categories-transfer", "/Textures/Interface/VerbIcons/spill.svg.192dpi.png");
 
+        public static readonly VerbCategory SetTransferDirection =
+            new("verb-categories-transfer-direction", "/Textures/Interface/VerbIcons/spill.svg.192dpi.png");
+
         public static readonly VerbCategory Split = new("verb-categories-split");
 
         public static readonly VerbCategory InstrumentStyle = new("verb-categories-instrument-style");

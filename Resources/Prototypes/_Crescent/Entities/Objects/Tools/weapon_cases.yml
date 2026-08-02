@@ -269,8 +269,10 @@
           False: { state: icon }
   - type: Storage
     maxItemSize: Huge
+    # The Hristov's item shape is 6x3 and fills all but one row of a 6x4 grid, leaving
+    # nowhere for the spare magazines it ships with. 6x5 fits the rifle plus both mags.
     grid:
-    - 0,0,5,3
+    - 0,0,5,4
     whitelist:
       components:
       - Gun

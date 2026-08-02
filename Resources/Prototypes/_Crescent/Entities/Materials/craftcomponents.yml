@@ -320,51 +320,6 @@
 
 - type: entity
   parent: OreBase
-  id: BallisticCycler
-  name: ballistic gas cycler
-  description: Part of a greater machine; this cycler is almost always exclusively used for shuttle armaments that use ballistic feeder mechanisms.
-  suffix: Full
-  components:
-  - type: Stack
-    stackType: BallisticCycler
-  - type: Tag
-    tags:
-    - CraftMaterials
-  - type: Sprite
-    sprite: _Crescent/Objects/Materials/materials.rsi
-    layers:
-    - state: gascycler
-  - type: Material
-  - type: PhysicalComposition
-    materialComposition:
-      BallisticCycler: 500
-
-- type: entity
-  id: BallisticCycler1
-  parent: BallisticCycler
-  suffix: Single
-  components:
-    - type: Stack
-      count: 1
-
-- type: entity
-  id: BallisticCycler3
-  parent: BallisticCycler
-  suffix: "3"
-  components:
-    - type: Stack
-      count: 3
-
-- type: entity
-  id: BallisticCycler5
-  parent: BallisticCycler
-  suffix: "5"
-  components:
-    - type: Stack
-      count: 5
-
-- type: entity
-  parent: OreBase
   id: TubeLoader
   name: tube loader robotics
   description: A basic mechanism and manipulator arm designed for internal loading mechanisms of missile platforms, grenade turrets, and other implements of war.

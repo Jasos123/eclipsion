@@ -127,11 +127,11 @@
 #Energy
 - type: entity
   parent: CrateEngineering
-  id: CrateShuttlegun200ccAbsolution
-  name: 200cc 'Absolution' hardlight cannon Flatpack
-  description: Parts used to build a 200cc 'Absolution' hardlight cannon Flatpack. HARDPOINT TYPE - SMALL/ENERGY
+  id: CrateShuttlegun150ccRetribution
+  name: 150cc 'Retribution' pulse laser flatpack
+  description: Parts used to build a 150cc 'Retribution' pulse laser. HARDPOINT TYPE - SMALL/ENERGY
   components:
   - type: StorageFill
     contents:
-      - id: WeaponTurretRetribution
+      - id: BaseWeaponTurretRetributionFlatpack
         amount: 1

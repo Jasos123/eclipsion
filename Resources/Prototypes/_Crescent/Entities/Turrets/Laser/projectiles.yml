@@ -43,20 +43,20 @@
     ignoreWeaponGrid: true
     damage:
       types:
-        Heat: 75
+        Heat: 100
   - type: ProjectileIFF
     visualType: Circle
     color: Blue
   - type: EmpOnTrigger
-    range: 4
-    energyConsumption: 3500
-    disableDuration: 10
+    range: 3.5
+    energyConsumption: 3000
+    disableDuration: 6
   - type: PointLight
     radius: 3.5
     color: blue
     energy: 0.5
   - type: TimedDespawn
-    lifetime: 9 #1080
+    lifetime: 10 # 950 m at 95 m/s
   - type: Sprite
     sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
     layers:
@@ -77,7 +77,7 @@
     ignoreWeaponGrid: true
     damage:
       types:
-        Heat: 110
+        Heat: 100
   - type: ProjectileIFF
     visualType: Circle
     color: Red
@@ -86,7 +86,7 @@
     color: blue
     energy: 0.5
   - type: TimedDespawn
-    lifetime: 17.5 #ratgore, 1400m
+    lifetime: 16 # 1600 m base / 1680 m Navy
   - type: Sprite
     sprite: _Crescent/Objects/Turrets/Ammunition/Projectiles/lasers.rsi
     layers:
@@ -107,7 +107,7 @@
     ignoreWeaponGrid: true
     damage:
       types:
-        Heat: 250
+        Heat: 220
   - type: ProjectileIFF
     visualType: Circle
     color: Red
@@ -116,7 +116,7 @@
     color: blue
     energy: 0.5
   - type: TimedDespawn
-    lifetime: 37.65 #3200m
+    lifetime: 32 # 3040 m base / 3200 m Navy
   - type: Sprite
     sprite: _Crescent/Objects/Turrets/Ammunition/Projectiles/lasers.rsi
     layers:

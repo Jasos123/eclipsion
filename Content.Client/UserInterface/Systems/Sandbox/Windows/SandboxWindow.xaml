@@ -4,13 +4,9 @@
     Title="{Loc sandbox-window-title}"
     Resizable="False">
     <BoxContainer Orientation="Vertical" SeparationOverride="4">
-        <Button Name="AiOverlayButton" Access="Public" Text="{Loc sandbox-window-ai-overlay-button}" ToggleMode="True"/>
-        <Button Name="RespawnButton" Access="Public" Text="{Loc sandbox-window-respawn-button}"/>
         <Button Name="SpawnEntitiesButton" Access="Public" Text="{Loc sandbox-window-spawn-entities-button}"/>
         <Button Name="SpawnTilesButton" Access="Public" Text="{Loc sandbox-window-spawn-tiles-button}"/>
         <Button Name="SpawnDecalsButton" Access="Public" Text="{Loc sandbox-window-spawn-decals-button}"/>
-        <Button Name="GiveFullAccessButton" Access="Public" Text="{Loc sandbox-window-grant-full-access-button}"/>
-        <Button Name="GiveAghostButton" Access="Public" Text="{Loc sandbox-window-ghost-button}"/>
         <Button Name="ToggleLightButton" Access="Public" Text="{Loc sandbox-window-toggle-lights-button}" ToggleMode="True"/>
         <Button Name="ToggleFovButton" Access="Public" Text="{Loc sandbox-window-toggle-fov-button}" ToggleMode="True"/>
         <Button Name="ToggleShadowsButton" Access="Public" Text="{Loc sandbox-window-toggle-shadows-button}" ToggleMode="True"/>

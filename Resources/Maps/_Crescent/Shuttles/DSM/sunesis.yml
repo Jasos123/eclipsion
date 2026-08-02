@@ -4591,7 +4591,7 @@ entities:
         - 1176
         - 1177
         - 1178
-        150cc 'Starburst' hybrid plasma gatling:
+        200cc 'Starburst' hybrid plasma gatling:
         - 1179
 - proto: CrateEngineeringAMEJar
   entities:

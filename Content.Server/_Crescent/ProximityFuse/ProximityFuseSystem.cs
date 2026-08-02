@@ -1,7 +1,9 @@
 using System.Numerics;
 using Content.Server.Explosion.Components;
 using Content.Server.Explosion.EntitySystems;
+using Content.Shared._Crescent.Diplomacy;
 using Content.Shared.Projectiles;
+using Content.Shared.Shuttles.Systems;
 
 namespace Content.Server._Crescent.ProximityFuse;
 
@@ -12,9 +14,11 @@ public sealed class ProximityFuseSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly ExplosionSystem _explosion = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly SharedShuttleSystem _shuttle = default!;
 
     private EntityQuery<TransformComponent> _xformQuery;
     private EntityQuery<ProximityFuseTargetComponent> _targetQuery;
+    private EntityQuery<ProjectileComponent> _projectileQuery;
 
     private readonly List<EntityUid> _keysScratch = new();
 
@@ -23,6 +27,31 @@ public sealed class ProximityFuseSystem : EntitySystem
         base.Initialize();
         _xformQuery = GetEntityQuery<TransformComponent>();
         _targetQuery = GetEntityQuery<ProximityFuseTargetComponent>();
+        _projectileQuery = GetEntityQuery<ProjectileComponent>();
+    }
+
+    private bool IsFriendlyTarget(TransformComponent shooterTransform, EntityUid target, TransformComponent targetTransform)
+    {
+        if (shooterTransform.GridUid is not { } owner)
+            return false;
+
+        var targetOwner = targetTransform.GridUid;
+
+        // A missile in flight has no grid of its own, so fall back to whoever launched it.
+        if (targetOwner == null &&
+            _projectileQuery.TryGetComponent(target, out var targetProjectile) &&
+            _xformQuery.TryGetComponent(targetProjectile.Shooter, out var targetShooterXform))
+        {
+            targetOwner = targetShooterXform.GridUid;
+        }
+
+        if (targetOwner is not { } resolvedTargetOwner)
+            return false;
+
+        if (resolvedTargetOwner == owner)
+            return true;
+
+        return _shuttle.GetIFFRelation(owner, _shuttle.GetIFFFaction(resolvedTargetOwner)) == Relations.Ally;
     }
 
     public override void Update(float frameTime)
@@ -54,7 +83,8 @@ public sealed class ProximityFuseSystem : EntitySystem
 
             comp.NextDiscoveryScan = DiscoveryInterval;
 
-            var nearby = _lookup.GetEntitiesInRange(uid, comp.MaxRange, LookupFlags.Dynamic | LookupFlags.Sundries);
+            var nearby = _lookup.GetEntitiesInRange(uid, comp.MaxRange,
+                LookupFlags.Dynamic | LookupFlags.Static | LookupFlags.Sundries);
 
             foreach (var near in nearby)
             {
@@ -64,7 +94,7 @@ public sealed class ProximityFuseSystem : EntitySystem
                 if (!_xformQuery.TryGetComponent(near, out var txform))
                     continue;
 
-                if (shooterTransform.GridUid == txform.GridUid)
+                if (IsFriendlyTarget(shooterTransform, near, txform))
                     continue;
 
                 if (comp.Targets.ContainsKey(near))
@@ -96,7 +126,7 @@ public sealed class ProximityFuseSystem : EntitySystem
                 continue;
             }
 
-            if (shooterTransform.GridUid == txform.GridUid)
+            if (IsFriendlyTarget(shooterTransform, near, txform))
             {
                 comp.Targets.Remove(near);
                 continue;

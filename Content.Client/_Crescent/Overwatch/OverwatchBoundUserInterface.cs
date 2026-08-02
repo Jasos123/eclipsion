@@ -109,21 +109,6 @@ public sealed class OverwatchBoundUserInterface : BoundUserInterface
         SendMessage(new OverwatchStopWatchingMessage());
     }
 
-    public void SetStatusFilter(OverwatchMemberStatus? status)
-    {
-        SendMessage(new OverwatchSetStatusFilterMessage(status));
-    }
-
-    public void SetSquadFilter(int? squadId)
-    {
-        SendMessage(new OverwatchSetSquadFilterMessage(squadId));
-    }
-
-    public void SetSearchQuery(string query)
-    {
-        SendMessage(new OverwatchSetSearchMessage(query));
-    }
-
     public void CreateSquad(string squadName)
     {
         SendMessage(new OverwatchCreateSquadMessage(squadName));

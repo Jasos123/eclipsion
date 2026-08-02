@@ -317,7 +317,6 @@
   tier: 2
   cost: 10000
   recipeUnlocks:
-  - BallisticCycler1Craft
   - TubeLoader1Craft
   - LaserLocus1Craft
   - HardlightGenerator1Craft

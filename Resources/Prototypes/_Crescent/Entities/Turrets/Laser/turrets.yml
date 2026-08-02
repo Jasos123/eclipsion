@@ -8,6 +8,13 @@
   components:
   - type: ApcPowerReceiver
     powerLoad: 500
+  - type: WeaponPowerDraw
+    energyPerShot: 1500
+  - type: Battery
+    maxCharge: 7500
+    startingCharge: 7500
+  - type: ApcPowerReceiverBattery
+    batteryRechargeRate: 24000
   - type: StaticPrice
     price: 1500
   - type: Sprite
@@ -96,20 +103,22 @@
           ents: []
     - type: Gun
       fireOnDropChance: 0
-      projectileSpeed: 80
-      fireRate: .5
+      projectileSpeed: 95
+      fireRate: .4
       selectedMode: FullAuto
       availableModes:
         - FullAuto
-      angleDecay: 0
-      minAngle: 5
-      maxAngle: 5
+      angleDecay: 3
+      minAngle: 1
+      maxAngle: 4
+      angleIncrease: .5
       soundGunshot:
         path: /Audio/Weapons/Guns/Gunshots/laserturret.ogg
         params:
           variation: 0.12
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: 5
+      rechargeCooldown: 3
+      energyPerCharge: 200
       rechargeSound:
         path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
         params:
@@ -117,10 +126,17 @@
           variation: 0.08
     - type: BasicEntityAmmoProvider
       proto: BulletCurse
-      capacity: 8
-      count: 8
+      capacity: 6
+      count: 6
     - type: ApcPowerReceiver
       powerLoad: 2500
+    - type: WeaponPowerDraw
+      energyPerShot: 87500
+    - type: Battery
+      maxCharge: 437500
+      startingCharge: 437500
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 140000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Medium
@@ -180,6 +196,13 @@
       count: 10
     - type: ApcPowerReceiver
       powerLoad: 2500
+    - type: WeaponPowerDraw
+      energyPerShot: 70000
+    - type: Battery
+      maxCharge: 350000
+      startingCharge: 350000
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 140000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Medium
@@ -190,7 +213,7 @@
   parent: BaseTurretShipgun
   id: WeaponTurretRetribution
   suffix: Small Laser
-  name: 200cc 'Retribution' Pulse Laser
+  name: 150cc 'Retribution' Pulse Laser
   description: A light energy weapons platform that converts energy into hardlight and flings it at high speeds.
   components:
     - type: Sprite
@@ -216,20 +239,22 @@
           ents: []
     - type: Gun
       fireOnDropChance: 0
-      projectileSpeed: 90
-      fireRate: 7
+      projectileSpeed: 100
+      fireRate: 6
       selectedMode: FullAuto
       availableModes:
         - FullAuto
-      angleDecay: 0
-      minAngle: 0.1
-      maxAngle: 0.1
+      angleDecay: 4
+      minAngle: .75
+      maxAngle: 3
+      angleIncrease: .25
       soundGunshot:
         path: /Audio/Weapons/Guns/Gunshots/laserturret.ogg
         params:
           variation: 0.12
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: 0.25
+      rechargeCooldown: .35
+      energyPerCharge: 75
       rechargeSound:
         path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
         params:
@@ -237,10 +262,17 @@
           variation: 0.08
     - type: BasicEntityAmmoProvider
       proto: BulletRetribution
-      capacity: 60
-      count: 60
+      capacity: 36
+      count: 36
     - type: ApcPowerReceiver
       powerLoad: 2500
+    - type: WeaponPowerDraw
+      energyPerShot: 3333
+    - type: Battery
+      maxCharge: 16665
+      startingCharge: 16665
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 80000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Small
@@ -249,7 +281,7 @@
   parent: WeaponTurretRetribution
   id: WeaponTurretRetributionNavy
   suffix: Small Laser, Navy
-  name: Navy 200cc 'Solaris' Pulse Laser
+  name: Navy 150cc 'Solaris' Pulse Laser
   description: A light energy weapons platform that converts energy into hardlight and flings it at high speeds. It's upgraded hardlight generator lets it fire faster while its power reserves last.
   components:
     - type: Sprite
@@ -275,20 +307,22 @@
           ents: []
     - type: Gun
       fireOnDropChance: 0
-      projectileSpeed: 90
-      fireRate: 10
+      projectileSpeed: 105
+      fireRate: 8
       selectedMode: FullAuto
       availableModes:
         - FullAuto
-      angleDecay: 0
-      minAngle: 0.1
-      maxAngle: 0.1
+      angleDecay: 5
+      minAngle: .5
+      maxAngle: 2.5
+      angleIncrease: .2
       soundGunshot:
         path: /Audio/Weapons/Guns/Gunshots/laserturret.ogg
         params:
           variation: 0.12
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: 0.25
+      rechargeCooldown: .3
+      energyPerCharge: 90
       rechargeSound:
         path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
         params:
@@ -296,10 +330,17 @@
           variation: 0.08
     - type: BasicEntityAmmoProvider
       proto: BulletRetribution
-      capacity: 30
-      count: 30
+      capacity: 40
+      count: 40
     - type: ApcPowerReceiver
       powerLoad: 5000
+    - type: WeaponPowerDraw
+      energyPerShot: 2500
+    - type: Battery
+      maxCharge: 12500
+      startingCharge: 12500
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 80000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Small
@@ -336,22 +377,24 @@
           ents: []
     - type: Gun
       fireOnDropChance: 0
-      projectileSpeed: 85
-      burstFireRate: 20 #6.67 effective RPS
-      burstCooldown: 1
-      shotsPerBurst: 10
+      projectileSpeed: 95
+      burstFireRate: 16
+      burstCooldown: 1.25
+      shotsPerBurst: 8
       selectedMode: Burst
       availableModes:
         - Burst
-      angleDecay: 0
-      minAngle: 0.1
-      maxAngle: 0.1
+      angleDecay: 6
+      minAngle: .4
+      maxAngle: 2
+      angleIncrease: .15
       soundGunshot:
         path: /Audio/Weapons/Guns/Gunshots/lasergatling.ogg
         params:
           variation: 0.12
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: 0.25
+      rechargeCooldown: .22
+      energyPerCharge: 175
       rechargeSound:
         path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
         params:
@@ -359,10 +402,17 @@
           variation: 0.08
     - type: BasicEntityAmmoProvider
       proto: BulletAbsolution
-      capacity: 60
-      count: 60
+      capacity: 48
+      count: 48
     - type: ApcPowerReceiver
       powerLoad: 4000
+    - type: WeaponPowerDraw
+      energyPerShot: 7656
+    - type: Battery
+      maxCharge: 38280
+      startingCharge: 38280
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 140000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Medium
@@ -397,22 +447,24 @@
           ents: []
     - type: Gun
       fireOnDropChance: 0
-      projectileSpeed: 90
-      burstFireRate: 40 #8 effective RPS
-      burstCooldown: 1
-      shotsPerBurst: 10
+      projectileSpeed: 100
+      burstFireRate: 24
+      burstCooldown: 1.1
+      shotsPerBurst: 8
       selectedMode: Burst
       availableModes:
         - Burst
-      angleDecay: 0
-      minAngle: 0.1
-      maxAngle: 0.1
+      angleDecay: 7
+      minAngle: .3
+      maxAngle: 1.7
+      angleIncrease: .12
       soundGunshot:
         path: /Audio/Weapons/Guns/Gunshots/lasergatling.ogg
         params:
           variation: 0.12
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: 0.25
+      rechargeCooldown: .18
+      energyPerCharge: 200
       rechargeSound:
         path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
         params:
@@ -420,10 +472,17 @@
           variation: 0.08
     - type: BasicEntityAmmoProvider
       proto: BulletAbsolution
-      capacity: 80
-      count: 80
+      capacity: 56
+      count: 56
     - type: ApcPowerReceiver
       powerLoad: 6000
+    - type: WeaponPowerDraw
+      energyPerShot: 6271
+    - type: Battery
+      maxCharge: 31355
+      startingCharge: 31355
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 140000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Medium
@@ -484,6 +543,13 @@
       count: 25
     - type: ApcPowerReceiver
       powerLoad: 8000
+    - type: WeaponPowerDraw
+      energyPerShot: 22000
+    - type: Battery
+      maxCharge: 110000
+      startingCharge: 110000
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 220000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Large
@@ -542,6 +608,13 @@
       count: 30
     - type: ApcPowerReceiver
       powerLoad: 10000
+    - type: WeaponPowerDraw
+      energyPerShot: 18333
+    - type: Battery
+      maxCharge: 91665
+      startingCharge: 91665
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 220000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Large

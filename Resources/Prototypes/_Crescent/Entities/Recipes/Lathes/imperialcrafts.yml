@@ -489,9 +489,9 @@
   result: WeaponRifleMiller
   completetime: 2
   materials:
-    Steel: 1500
+    Steel: 4000
     Silver: 500
-    BallisticCycler: 500
+    BasicMechatronics: 1000
 
 - type: latheRecipe
   id: WeaponRifleHunter
@@ -510,9 +510,9 @@
   result: WeaponSubMachineGunC20rHullrot
   completetime: 2
   materials:
-    Steel: 1500
+    Steel: 4000
     Plastic: 500
-    BallisticCycler: 500
+    BasicMechatronics: 1000
 
 - type: latheRecipe
   id: WeaponShotgunDSMMatusa
@@ -530,9 +530,9 @@
   result: WeaponRifleDSMLegionnaire
   completetime: 2
   materials:
-    Steel: 2500
+    Steel: 7500
     Silver: 500
-    BallisticCycler: 1000
+    BasicMechatronics: 2000
 
 - type: latheRecipe
   id: WeaponPlasmaRifleSeethe
@@ -563,10 +563,10 @@
   result: WeaponSniperImperator
   completetime: 2
   materials:
-    Steel: 3000
+    Steel: 10500
     Plastic: 500
     Tungsten: 1000
-    BallisticCycler: 1500
+    BasicMechatronics: 3000
 
 - type: latheRecipe
   id: WeaponShotgunReno
@@ -574,9 +574,9 @@
   result: WeaponShotgunReno
   completetime: 1.5
   materials:
-    Steel: 1500
+    Steel: 6500
     Silver: 500
-    BallisticCycler: 1000
+    BasicMechatronics: 2000
 
 - type: latheRecipe
   id: WeaponLauncherM320
@@ -616,10 +616,10 @@
   result: WeaponLightMachineGunDSMDominion
   completetime: 1.5
   materials:
-    Steel: 2500
+    Steel: 12500
     Plastic: 1000
     Tungsten: 500
-    BallisticCycler: 2000
+    BasicMechatronics: 4000
 
 # MARK: Mech Weapons
 
@@ -984,15 +984,6 @@
     Tungsten: 3500 #made the material costs roughly the same as the bogatyr.
 
 # MARK: Components
-
-- type: latheRecipe
-  id:  BallisticCyclerDSM
-  category: Ammo
-  result: BallisticCycler1
-  completetime: 1.5
-  materials:
-    BasicMechatronics: 1000
-    Steel: 2500
 
 - type: latheRecipe
   id:  TubeLoaderDSM

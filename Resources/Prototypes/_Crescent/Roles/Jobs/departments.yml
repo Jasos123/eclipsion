@@ -4,9 +4,8 @@
   color: "#374b4e"
   weight: 10
   roles:
-  - GliessianDockmaster
-  - GliessianSheriff
-  - GliessianDeputy
-  - GliessianDockhand
+  - MarshalCMM
+  - DeputyMarshalCMM
+  - MinutemanCMM
   - Spacer
   editorHidden: false

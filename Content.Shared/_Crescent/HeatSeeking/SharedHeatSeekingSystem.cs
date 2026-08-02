@@ -1,9 +1,14 @@
+using Content.Shared._Crescent.Diplomacy;
 using Content.Shared._Crescent.HeatSeeking;
+using Content.Shared.Examine;
 using Content.Shared.Interaction;
 using Content.Shared.Projectiles;
+using Content.Shared.Shuttles.Components;
+using Content.Shared.Shuttles.Systems;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
+using Robust.Shared.Timing;
 using System.Linq;
 using System.Numerics;
 
@@ -17,6 +22,25 @@ public sealed class HeatSeekingSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly RotateToFaceSystem _rotate = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedShuttleSystem _shuttle = default!;
+
+    private EntityQuery<IFFComponent> _iffQuery;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        _iffQuery = GetEntityQuery<IFFComponent>();
+
+        SubscribeLocalEvent<HeatSeekingComponent, ExaminedEvent>(OnHeatSeekerExamined);
+    }
+
+    private void OnHeatSeekerExamined(Entity<HeatSeekingComponent> ent, ref ExaminedEvent args)
+    {
+        args.PushMarkup(Loc.GetString("heat-seeking-examine"));
+        args.PushMarkup(Loc.GetString("heat-seeking-examine-intercept"));
+    }
 
     public override void Update(float frameTime)
     {
@@ -54,10 +78,21 @@ public sealed class HeatSeekingSystem : EntitySystem
     public void RefreshTargetList(EntityUid uid, HeatSeekingComponent comp, TransformComponent xform) // refreshes the list of potential targets
     {
         comp.TargetList.Clear();
+
+        EntityUid? shooterGrid = null;
+        if (TryComp<ProjectileComponent>(uid, out var projectile) &&
+            TryComp<TransformComponent>(projectile.Shooter, out var shooterTransform))
+        {
+            shooterGrid = shooterTransform.GridUid;
+        }
+
         var shipQuery = EntityQueryEnumerator<CanBeHeatTrackedComponent, TransformComponent>(); // get all entities that can be tracked
         while (shipQuery.MoveNext(out var tUid, out var tComp, out var tXform))
         {
             if (tXform.GridUid.HasValue && HasComp<IgnoreHeatSeekingTargetComponent>(tXform.GridUid.Value))
+                continue;
+
+            if (IsFriendly(shooterGrid, tXform.GridUid))
                 continue;
 
             var angle = (
@@ -83,13 +118,6 @@ public sealed class HeatSeekingSystem : EntitySystem
                 continue;
             }
 
-            if (TryComp<ProjectileComponent>(uid, out var projectile) && TryComp<TransformComponent>(projectile.Shooter, out var shooterTransform) && shooterTransform.GridUid.HasValue)
-            {
-                if (Transform(tUid).GridUid == shooterTransform.GridUid)
-                {
-                    continue;
-                }
-            }
             Angle angleOffset = angle - _transform.GetWorldRotation(xform);
             float weight = distance / comp.DefaultSeekingRange - dif / 3;
             if (comp.TargetEntity == tUid)
@@ -137,6 +165,7 @@ public sealed class HeatSeekingSystem : EntitySystem
         Vector2 predictedPosition = _transform.ToMapCoordinates(entXform.Coordinates).Position + targetPhysics.LinearVelocity * timeToImpact;
 
         Angle targetAngle = (predictedPosition - _transform.ToMapCoordinates(xform.Coordinates).Position).ToWorldAngle();
+        targetAngle = ApplyWeave(uid, comp, targetAngle, distance);
         _rotate.TryRotateTo(uid, targetAngle, frameTime, comp.WeaponArc, comp.RotationSpeed?.Theta ?? double.MaxValue, xform);
     }
 
@@ -146,10 +175,10 @@ public sealed class HeatSeekingSystem : EntitySystem
         {
             var entXform = Transform(comp.TargetEntity.Value);
 
-            var angle = (
+            var targetDelta =
                 _transform.ToMapCoordinates(entXform.Coordinates).Position -
-                _transform.ToMapCoordinates(xform.Coordinates).Position
-            ).ToWorldAngle();
+                _transform.ToMapCoordinates(xform.Coordinates).Position;
+            var angle = targetDelta.ToWorldAngle();
 
             float dif = (float) Math.Abs(MathHelper.RadiansToDegrees((float) angle) - MathHelper.RadiansToDegrees((float) _transform.GetWorldRotation(xform)) % 360);
             if (dif > 180)
@@ -162,7 +191,45 @@ public sealed class HeatSeekingSystem : EntitySystem
                 return;
             }
 
+            angle = ApplyWeave(uid, comp, angle, targetDelta.Length());
             _rotate.TryRotateTo(uid, angle, frameTime, comp.WeaponArc, comp.RotationSpeed?.Theta ?? double.MaxValue, xform);
         }
+    }
+
+    private bool IsFriendly(EntityUid? shooterGrid, EntityUid? targetGrid)
+    {
+        if (shooterGrid is not { } shooter || targetGrid is not { } target)
+            return false;
+
+        if (shooter == target)
+            return true;
+
+        if (!_iffQuery.TryGetComponent(shooter, out var shooterIff) ||
+            !_iffQuery.TryGetComponent(target, out var targetIff))
+        {
+            return false;
+        }
+
+        return _shuttle.GetIFFRelation(shooter, targetIff.Faction, shooterIff) == Relations.Ally;
+    }
+
+    private Angle ApplyWeave(EntityUid uid, HeatSeekingComponent comp, Angle targetAngle, float distance)
+    {
+        if (comp.WeaveAmplitude == Angle.Zero)
+            return targetAngle;
+
+        var fade = comp.WeaveFadeDistance > 0f
+            ? Math.Clamp(distance / comp.WeaveFadeDistance, 0f, 1f)
+            : 1f;
+
+        // Seed off the NetEntity and CurTime rather than anything local, otherwise the client draws the
+        // missile weaving out of phase with where the server actually has it.
+        var seed = GetNetEntity(uid).Id & int.MaxValue;
+        var direction = (seed & 1) == 0 ? 1d : -1d;
+
+        var phase = _timing.CurTime.TotalSeconds * comp.WeaveFrequency * Math.Tau
+                    + seed % 64 * (Math.Tau / 64d);
+        var offset = comp.WeaveAmplitude.Theta * Math.Sin(phase) * fade * direction;
+        return targetAngle + new Angle(offset);
     }
 }

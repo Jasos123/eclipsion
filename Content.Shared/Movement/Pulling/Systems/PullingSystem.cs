@@ -19,6 +19,7 @@ using Content.Shared.Database;
 using Content.Shared.Effects; // Goobstation
 using Content.Shared.Gravity;
 using Content.Shared.Hands;
+using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Input;
 using Content.Shared.Interaction;
@@ -53,6 +54,7 @@ using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Random; // Goobstation
 using Robust.Shared.Timing;
+using Robust.Shared.Utility;
 
 namespace Content.Shared.Movement.Pulling.Systems;
 
@@ -113,6 +115,9 @@ public sealed class PullingSystem : EntitySystem
         SubscribeLocalEvent<PullerComponent, VirtualItemThrownEvent>(OnVirtualItemThrown); // Goobstation - Grab Intent
         SubscribeLocalEvent<PullerComponent, AddCuffDoAfterEvent>(OnAddCuffDoAfterEvent); // Goobstation - Grab Intent
 
+        SubscribeLocalEvent<HandsComponent, PullStartedMessage>(OnPullStarted);
+        SubscribeLocalEvent<HandsComponent, PullStoppedMessage>(OnPullStopped);
+
         SubscribeLocalEvent<PullableComponent, StrappedEvent>(OnBuckled);
         SubscribeLocalEvent<PullableComponent, BuckledEvent>(OnGotBuckled);
 
@@ -121,6 +126,38 @@ public sealed class PullingSystem : EntitySystem
             .Bind(ContentKeyFunctions.ReleasePulledObject, InputCmdHandler.FromDelegate(OnReleasePulledObject, handle: false))
             .Register<PullingSystem>();
     }
+
+    private void OnPullStarted(EntityUid uid, HandsComponent component, PullStartedMessage args)
+    {
+        if (args.PullerUid != uid)
+            return;
+
+        if (TryComp<PullerComponent>(args.PullerUid, out var pullerComp) && !pullerComp.NeedsHands)
+            return;
+
+        if (!_virtualSystem.TrySpawnVirtualItemInHand(args.PulledUid, uid))
+            DebugTools.Assert("Unable to find available hand when starting pulling??");
+    }
+
+    private void OnPullStopped(EntityUid uid, HandsComponent component, PullStoppedMessage args)
+    {
+        if (args.PullerUid != uid)
+            return;
+
+        foreach (var hand in component.Hands.Values)
+        {
+            if (hand.HeldEntity == null
+                || !TryComp(hand.HeldEntity, out VirtualItemComponent? virtualItem)
+                || virtualItem.BlockingEntity != args.PulledUid)
+            {
+                continue;
+            }
+
+            _handsSystem.TryDrop(args.PullerUid, hand, handsComp: component);
+            break;
+        }
+    }
+
     // Goobstation - Grab Intent
     private void OnAddCuffDoAfterEvent(Entity<PullerComponent> ent, ref AddCuffDoAfterEvent args)
     {

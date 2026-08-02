@@ -31,7 +31,7 @@
       - Book
   - type: PaperVisuals
     backgroundImagePath: "/Textures/Interface/Paper/paper_background_book.svg.96dpi.png"
-    backgroundPatchMargin: 23.0, 16.0, 14.0, 15.0
+    backgroundPatchMargin: 23.0, 15.0, 14.0, 16.0
     contentMargin: 20.0, 20.0, 20.0, 20.0
   - type: EmitSoundOnPickup
     sound: /Audio/SimpleStation14/Items/Handling/book_pickup.ogg

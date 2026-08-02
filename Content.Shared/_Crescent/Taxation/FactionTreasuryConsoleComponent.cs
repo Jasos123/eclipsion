@@ -47,6 +47,17 @@ public sealed partial class FactionTreasuryConsoleComponent : Component
     [DataField]
     public float MaxWithdrawFraction = 0.50f;
 
+    /// <summary>
+    /// Most credits taken from a cash stack per click when paying in.
+    /// </summary>
+    /// <remarks>
+    /// A deposit used to bank the clicked stack's entire count and delete the item, so paying a small
+    /// sum out of a large stack silently cost the whole stack. Capping the bite keeps deposits
+    /// deliberate: click repeatedly to pay in more, and split the stack first to pay in less.
+    /// </remarks>
+    [DataField]
+    public int DepositPerClick = 10_000;
+
     // --- Robbery ----------------------------------------------------------
 
     /// <summary>

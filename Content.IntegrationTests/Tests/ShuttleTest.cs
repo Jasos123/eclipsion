@@ -1,7 +1,9 @@
 using System.Numerics;
+using Content.Server.Physics.Controllers;
 using Content.Server.Shuttles.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
+using Robust.Shared.Maths;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
@@ -51,6 +53,29 @@ namespace Content.IntegrationTests.Tests
                 Assert.That(entManager.GetComponent<TransformComponent>(map.Grid).LocalPosition, Is.Not.EqualTo(Vector2.Zero));
             });
             await pair.CleanReturnAsync();
+        }
+
+        [Test]
+        public void CardinalThrustDoesNotDependOnPerpendicularThrusters()
+        {
+            var mover = new MoverController();
+            var shuttle = new ShuttleComponent();
+            var body = new PhysicsComponent();
+
+            shuttle.LinearThrust[(int) Direction.North / 2] = 400f;
+            var northThrust = mover.GetDirectionThrust(Vector2.UnitY, shuttle, body);
+
+            shuttle.LinearThrust[(int) Direction.North / 2] = 0f;
+            shuttle.LinearThrust[(int) Direction.East / 2] = 250f;
+            var eastThrust = mover.GetDirectionThrust(Vector2.UnitX, shuttle, body);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(northThrust, Is.EqualTo(Vector2.UnitY * 400f));
+                Assert.That(eastThrust, Is.EqualTo(Vector2.UnitX * 250f));
+                Assert.That(float.IsFinite(northThrust.X) && float.IsFinite(northThrust.Y), Is.True);
+                Assert.That(float.IsFinite(eastThrust.X) && float.IsFinite(eastThrust.Y), Is.True);
+            });
         }
     }
 }

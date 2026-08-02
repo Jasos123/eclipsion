@@ -24,6 +24,7 @@ guide-entry-salvage = Salvage
 guide-entry-survival = Survival
 guide-entry-chemicals = Chemicals
 guide-entry-elements = Elements
+guide-entry-fuel-production = Fuel Production
 guide-entry-narcotics = Narcotics
 guide-entry-pyrotechnics = Pyrotechnic
 guide-entry-toxins = Toxins

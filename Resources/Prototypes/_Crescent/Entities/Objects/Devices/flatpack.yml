@@ -1231,8 +1231,8 @@
 - type: entity
   parent: BaseFlatpack
   id: BaseWeaponTurretRetributionFlatpack
-  name: 200cc 'Retribution' hardlight cannon Flatpack
-  description: Parts used to build a 200cc 'Retribution' hardlight cannon. Activate with a multitool to deploy.
+  name: 150cc 'Retribution' pulse laser flatpack
+  description: Parts used to build a 150cc 'Retribution' pulse laser. Activate with a multitool to deploy.
   components:
   - type: Flatpack
     entity: WeaponTurretRetribution
@@ -1275,8 +1275,8 @@
 - type: entity
   parent: BaseFlatpack
   id: BaseWeaponTurretStarburstFlatpack
-  name: 150cc 'Starburst' hybrid plasma gatling Flatpack
-  description: Parts used to build a 150cc 'Starburst' hybrid plasma gatling. Activate with a multitool to deploy.
+  name: 200cc 'Starburst' hybrid plasma gatling Flatpack
+  description: Parts used to build a 200cc 'Starburst' hybrid plasma gatling. Activate with a multitool to deploy.
   components:
   - type: Flatpack
     entity: WeaponTurretStarburst

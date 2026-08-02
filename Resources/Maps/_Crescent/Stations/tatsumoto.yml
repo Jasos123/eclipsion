@@ -62763,7 +62763,7 @@ entities:
     - type: Transform
       pos: -11.412851,27.194595
       parent: 1
-- proto: HeavyReinforcedPlasmaWindow
+- proto: ReinforcedPlasmaWindow
   entities:
   - uid: 6096
     components:

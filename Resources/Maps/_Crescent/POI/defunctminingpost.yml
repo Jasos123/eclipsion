@@ -14219,7 +14219,7 @@ entities:
     - type: Transform
       pos: -15.5,28.5
       parent: 1
-- proto: BoriaticFuelTankHuge
+- proto: BoriaticFuelTankFull
   entities:
   - uid: 1035
     components:

@@ -7,19 +7,27 @@
     <GridContainer Columns="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 
         <BoxContainer Orientation="Vertical"
-                      MinWidth="250"
+                      MinWidth="280"
                       HorizontalExpand="False"
                       Margin="5">
             <controls:StripeBack>
-                <Label Text="Linked Drones" FontColorOverride="LightGray" Align="Center"/>
+                <Label Name="SquadronLabel" Text="Squadron" FontColorOverride="LightGray" Align="Center"/>
             </controls:StripeBack>
+
             <ScrollContainer VerticalExpand="True">
                 <BoxContainer Name="DroneListContainer" Orientation="Vertical"/>
             </ScrollContainer>
 
+            <Label Name="NoDronesLabel" Text="No drones deployed." FontColorOverride="DarkGray" Align="Center" Margin="0 4"/>
+
             <BoxContainer Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Name="SelectAllBtn" Text="Select All" Margin="2"/>
                 <Button Name="DeselectAllBtn" Text="Clear" Margin="2"/>
+            </BoxContainer>
+
+            <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
+                <Button Name="ScuttleBtn" Text="Scuttle" Margin="2" HorizontalExpand="True"/>
+                <Button Name="AbortScuttleBtn" Text="Abort" Margin="2" HorizontalExpand="True"/>
             </BoxContainer>
 
             <BoxContainer Name="CarrierPanel" Orientation="Vertical" Margin="0 8 0 0">
@@ -28,6 +36,7 @@
                 </controls:StripeBack>
 
                 <Label Name="DeployedLabel" Text="Drones: 0/0" HorizontalAlignment="Center"/>
+                <Label Name="TreasuryLabel" Text="" HorizontalAlignment="Center" FontColorOverride="DarkGray"/>
 
                 <BoxContainer Name="SpawnRow" Orientation="Horizontal" HorizontalExpand="True">
                     <OptionButton Name="SpawnOption" HorizontalExpand="True" Margin="2"/>

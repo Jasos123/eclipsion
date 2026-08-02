@@ -71,6 +71,8 @@
   - ClothingHeadHelmetImperialKnightCommanderHelmet
   - ClothingOuterArmorImperialArmorPrestige
   - ClothingOuterHardsuitImperialKnight
+  - ClothingShoesBootsMagDSM
+  - ClothingOuterHardsuitHunterElite
 
 - type: technology
   id: ImperialPsionicAttunement
@@ -413,38 +415,11 @@
   tier: 2
   cost: 15000
   recipeUnlocks:
-  - BallisticCyclerDSM
   - TubeLoaderDSM
   - AdvancedMechatronics1Craft
   - AdvancedElectronics1Craft
   - LaserLocus1Craft
   - HardlightGenerator1Craft
-
-
-# _Crescent: patterns that used to sit in the microforge's staticRecipes, so they printed without any
-# research behind them. Moved here so the station forges actually depend on an R&D server.
-
-- type: technology
-  id: ImperialClarizianPatterns
-  name: research-technology-imperial-clarizianpatterns
-  icon:
-    sprite: _Crescent/Clothing/Empire/Head/mandatehelmet.rsi
-    state: icon
-  discipline: Imperial
-  tier: 1
-  cost: 2500
-  recipeUnlocks:
-  - ClothingHeadHatClarizeBeret
-  - ClothingHeadHelmetClarizianTrooperHelmet
-  - ClothingOuterArmorClarizianTrooperArmor
-  - ClothingOuterCoatClarizianOfficer
-  - ClothingOuterHardsuitClarize
-  - ClothingOuterHardsuitClarizianWorker
-  - ClothingUniformJumpsuitClarizeCombat
-  - ClothingUniformJumpsuitClarizeDoctor
-  - ClothingUniformJumpsuitClarizeOfficer
-  - ClothingOuterHardsuitHunterElite
-  - ClothingShoesBootsMagDSM
 
 - type: technology
   id: ImperialAuxiliaryHulls

@@ -9,6 +9,13 @@
   components:
   - type: ApcPowerReceiver
     powerLoad: 2000
+  - type: WeaponPowerDraw
+    energyPerShot: 16667
+  - type: Battery
+    maxCharge: 83335
+    startingCharge: 83335
+  - type: ApcPowerReceiverBattery
+    batteryRechargeRate: 80000
   - type: StaticPrice
     price: 3500
   - type: Sprite
@@ -76,6 +83,13 @@
   components:
   - type: ApcPowerReceiver
     powerLoad: 2000
+  - type: WeaponPowerDraw
+    energyPerShot: 14583
+  - type: Battery
+    maxCharge: 72915
+    startingCharge: 72915
+  - type: ApcPowerReceiverBattery
+    batteryRechargeRate: 140000
   - type: StaticPrice
     price: 6500
   - type: Sprite
@@ -143,6 +157,13 @@
   components:
   - type: ApcPowerReceiver
     powerLoad: 1000
+  - type: WeaponPowerDraw
+    energyPerShot: 7500
+  - type: Battery
+    maxCharge: 37500
+    startingCharge: 37500
+  - type: ApcPowerReceiverBattery
+    batteryRechargeRate: 12000
   - type: StaticPrice
     price: 3000
   - type: Sprite
@@ -228,6 +249,13 @@
   components:
   - type: ApcPowerReceiver
     powerLoad: 1000
+  - type: WeaponPowerDraw
+    energyPerShot: 3000
+  - type: Battery
+    maxCharge: 15000
+    startingCharge: 15000
+  - type: ApcPowerReceiverBattery
+    batteryRechargeRate: 12000
   - type: StaticPrice
     price: 3000
   - type: Sprite
@@ -311,6 +339,13 @@
   components:
   - type: ApcPowerReceiver
     powerLoad: 2000
+  - type: WeaponPowerDraw
+    energyPerShot: 16667
+  - type: Battery
+    maxCharge: 83335
+    startingCharge: 83335
+  - type: ApcPowerReceiverBattery
+    batteryRechargeRate: 20000
   - type: StaticPrice
     price: 4500
   - type: Sprite
@@ -404,6 +439,13 @@
   components:
   - type: ApcPowerReceiver
     powerLoad: 3000
+  - type: WeaponPowerDraw
+    energyPerShot: 5000
+  - type: Battery
+    maxCharge: 25000
+    startingCharge: 25000
+  - type: ApcPowerReceiverBattery
+    batteryRechargeRate: 40000
   - type: StaticPrice
     price: 8000
   - type: Sprite
@@ -497,6 +539,13 @@
   components:
   - type: ApcPowerReceiver
     powerLoad: 1000
+  - type: WeaponPowerDraw
+    energyPerShot: 78571
+  - type: Battery
+    maxCharge: 392855
+    startingCharge: 392855
+  - type: ApcPowerReceiverBattery
+    batteryRechargeRate: 220000
   - type: StaticPrice
     price: 10000
   - type: Sprite
@@ -590,6 +639,13 @@
   components:
   - type: ApcPowerReceiver
     powerLoad: 3000
+  - type: WeaponPowerDraw
+    energyPerShot: 4000
+  - type: Battery
+    maxCharge: 20000
+    startingCharge: 20000
+  - type: ApcPowerReceiverBattery
+    batteryRechargeRate: 64000
   - type: StaticPrice
     price: 7500
   - type: Sprite
@@ -670,6 +726,10 @@
   components:
   - type: ApcPowerReceiver
     powerLoad: 6000
+  - type: WeaponPowerDraw
+    energyPerShot: 50000
+  - type: ApcPowerReceiverBattery
+    batteryRechargeRate: 64000
   - type: StaticPrice
     price: 20000
   - type: Sprite
@@ -759,6 +819,13 @@
   components:
   - type: ApcPowerReceiver
     powerLoad: 3000
+  - type: WeaponPowerDraw
+    energyPerShot: 500
+  - type: Battery
+    maxCharge: 2500
+    startingCharge: 2500
+  - type: ApcPowerReceiverBattery
+    batteryRechargeRate: 24000
   - type: StaticPrice
     price: 2500
   - type: Sprite
@@ -858,6 +925,13 @@
   components:
   - type: ApcPowerReceiver
     powerLoad: 3000
+  - type: WeaponPowerDraw
+    energyPerShot: 278
+  - type: Battery
+    maxCharge: 1390
+    startingCharge: 1390
+  - type: ApcPowerReceiverBattery
+    batteryRechargeRate: 40000
   - type: StaticPrice
     price: 8000
   - type: Sprite
@@ -959,6 +1033,13 @@
   components:
   - type: ApcPowerReceiver
     powerLoad: 2000
+  - type: WeaponPowerDraw
+    energyPerShot: 882
+  - type: Battery
+    maxCharge: 4410
+    startingCharge: 4410
+  - type: ApcPowerReceiverBattery
+    batteryRechargeRate: 12000
   - type: StaticPrice
     price: 8000
   - type: Sprite

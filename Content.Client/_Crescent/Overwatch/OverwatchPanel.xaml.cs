@@ -31,12 +31,24 @@ public sealed partial class OverwatchPanel : BoxContainer
     private const int SquadFilterUnassignedId = -1;
     private const int AnnouncementTargetAllId = 0;
 
+    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private readonly IEntityManager _entManager = default!;
+
     private OverwatchBoundUserInterface? _ui;
     private readonly Dictionary<NetEntity, OverwatchMemberRow> _memberRows = new();
     private List<OverwatchMemberData> _allMembers = new();
 
+    /// <summary>
+    /// Squad heading labels, reused across refreshes alongside the member rows so a rebuild doesn't
+    /// churn the whole grid. Index 0..n follows the order squads are rendered in.
+    /// </summary>
+    private readonly List<Label> _squadHeaders = new();
+
     // Preserves per-member watch state so UI refreshes don't reset the camera view.
     private readonly Dictionary<NetEntity, bool> _watchingStateCache = new();
+
+    /// <summary>Scratch buffer for <see cref="FrameUpdate"/>, so the watch sweep allocates nothing.</summary>
+    private readonly List<NetEntity> _watchScratch = new();
 
     private bool _anyDropdownOpen;
     private bool _justOpenedSquadSelect;
@@ -52,6 +64,7 @@ public sealed partial class OverwatchPanel : BoxContainer
     public OverwatchPanel()
     {
         RobustXamlLoader.Load(this);
+        IoCManager.InjectDependencies(this);
 
         StopWatchingButton.OnPressed += _ =>
         {
@@ -162,12 +175,6 @@ public sealed partial class OverwatchPanel : BoxContainer
 
         _allMembers = state.Members;
         _factionColor = state.FactionColor;
-
-        if (!string.IsNullOrEmpty(state.SearchQuery) && string.IsNullOrEmpty(_searchQuery))
-        {
-            _searchQuery = state.SearchQuery;
-            SearchInput.Text = state.SearchQuery;
-        }
 
         var squadsChanged = _availableSquads.Count != state.AvailableSquads.Count ||
                             state.AvailableSquads.Any(kvp =>
@@ -382,10 +389,21 @@ public sealed partial class OverwatchPanel : BoxContainer
         UpdateMembersGrid(filteredMembers);
     }
 
+    /// <summary>
+    /// Rebuilds the member grid, reusing the controls that are already there.
+    /// </summary>
+    /// <remarks>
+    /// This used to <c>DisposeAllChildren</c> and construct a fresh row per member on every refresh —
+    /// once a second, forever, for every member. At forty members that is several hundred controls
+    /// destroyed and recreated per second, and a full layout invalidation of the shared mainframe
+    /// window each time, which is what made other tabs flicker and drop clicks. Rows and headings are
+    /// now detached, updated in place and re-added in order; only members who actually left get
+    /// disposed.
+    /// </remarks>
     private void UpdateMembersGrid(List<OverwatchMemberData> members)
     {
-        MembersGrid.DisposeAllChildren();
-        _memberRows.Clear();
+        if (_ui == null)
+            return;
 
         var currentWatched = GetCurrentWatchedEntity();
 
@@ -400,11 +418,12 @@ public sealed partial class OverwatchPanel : BoxContainer
         foreach (var member in members)
         {
             var squadId = member.SquadId ?? SquadFilterUnassignedId;
-            if (!membersBySquad.ContainsKey(squadId))
+            if (!membersBySquad.TryGetValue(squadId, out var bucket))
             {
-                membersBySquad[squadId] = new List<OverwatchMemberData>();
+                bucket = new List<OverwatchMemberData>();
+                membersBySquad[squadId] = bucket;
             }
-            membersBySquad[squadId].Add(member);
+            bucket.Add(member);
         }
 
         var sortedSquads = membersBySquad.OrderBy(kvp =>
@@ -413,6 +432,27 @@ public sealed partial class OverwatchPanel : BoxContainer
                 return "";
             return _availableSquads.TryGetValue(kvp.Key, out var name) ? name : kvp.Key.ToString();
         }).ToList();
+
+        // Drop rows for members who are no longer shown. Everything else is kept and reused.
+        var present = new HashSet<NetEntity>(members.Count);
+        foreach (var member in members)
+            present.Add(member.Member);
+
+        foreach (var (member, row) in _memberRows.ToList())
+        {
+            if (present.Contains(member))
+                continue;
+
+            _memberRows.Remove(member);
+            row.Orphan();
+            row.Dispose();
+        }
+
+        // Detaches without disposing, so the surviving rows and headings can be re-added below in the
+        // new order. DisposeAllChildren here would destroy the very controls we are reusing.
+        MembersGrid.RemoveAllChildren();
+
+        var headerIndex = 0;
 
         foreach (var squad in sortedSquads)
         {
@@ -430,27 +470,40 @@ public sealed partial class OverwatchPanel : BoxContainer
                 squadName = $"{Loc.GetString("overwatch-squad-label")} {squad.Key} {Loc.GetString("overwatch-squad-member-count", ("count", squad.Value.Count))}";
             }
 
-            var headerLabel = new Label
+            if (headerIndex == _squadHeaders.Count)
             {
-                Text = squadName,
-                FontColorOverride = _factionColor,
-                Margin = new Thickness(0, HeaderMarginTop, 0, HeaderMarginBottom)
-            };
+                _squadHeaders.Add(new Label
+                {
+                    Margin = new Thickness(0, HeaderMarginTop, 0, HeaderMarginBottom),
+                });
+            }
+
+            var headerLabel = _squadHeaders[headerIndex++];
+            headerLabel.Text = squadName;
+            headerLabel.FontColorOverride = _factionColor;
             MembersGrid.AddChild(headerLabel);
 
             foreach (var memberData in squad.Value)
             {
-                if (_ui == null)
-                    continue;
-
-                var row = new OverwatchMemberRow(memberData, _ui, OnMemberStartWatching, () => _availableSquads, _availableSquads, (isOpen) => _anyDropdownOpen = isOpen, this);
+                if (!_memberRows.TryGetValue(memberData.Member, out var row))
+                {
+                    row = new OverwatchMemberRow(memberData, _ui, OnMemberStartWatching, () => _availableSquads, _availableSquads, isOpen => _anyDropdownOpen = isOpen, this);
+                    _memberRows[memberData.Member] = row;
+                }
+                else
+                {
+                    row.Update(memberData);
+                }
 
                 row.SetWatching(currentWatched == memberData.Member);
-
                 MembersGrid.AddChild(row);
-                _memberRows[memberData.Member] = row;
             }
         }
+
+        // Headings left over from a refresh with more squads than this one. Kept in the pool for the
+        // next refresh, just not parented.
+        for (var i = headerIndex; i < _squadHeaders.Count; i++)
+            _squadHeaders[i].Orphan();
     }
 
     public void SetWatching(NetEntity member, bool isWatching)
@@ -467,13 +520,13 @@ public sealed partial class OverwatchPanel : BoxContainer
 
     private NetEntity? GetCurrentWatchedEntity()
     {
-        var playerManager = IoCManager.Resolve<IPlayerManager>();
-        var entManager = IoCManager.Resolve<IEntityManager>();
-        if (playerManager.LocalEntity is { } localPlayer &&
-            entManager.TryGetComponent<RatOverwatchWatchingComponent>(localPlayer, out var watchingComp) &&
+        // Injected once in the constructor rather than resolved here: this runs every frame from
+        // FrameUpdate, and twice more per grid rebuild.
+        if (_playerManager.LocalEntity is { } localPlayer &&
+            _entManager.TryGetComponent<RatOverwatchWatchingComponent>(localPlayer, out var watchingComp) &&
             watchingComp.Watching.HasValue)
         {
-            return entManager.GetNetEntity(watchingComp.Watching.Value);
+            return _entManager.GetNetEntity(watchingComp.Watching.Value);
         }
         return null;
     }
@@ -498,20 +551,26 @@ public sealed partial class OverwatchPanel : BoxContainer
         var currentWatched = GetCurrentWatchedEntity();
         var changed = false;
 
+        // Collect first, mutate after: the cache cannot be written while it is being enumerated. Uses a
+        // reusable buffer because this runs every frame.
+        _watchScratch.Clear();
+        foreach (var (member, isWatch) in _watchingStateCache)
+        {
+            if (isWatch && member != currentWatched)
+                _watchScratch.Add(member);
+        }
+
+        foreach (var member in _watchScratch)
+        {
+            _watchingStateCache[member] = false;
+            changed = true;
+        }
+
         if (currentWatched.HasValue)
         {
             if (!_watchingStateCache.TryGetValue(currentWatched.Value, out var isWatching) || !isWatching)
             {
                 changed = true;
-            }
-
-            foreach (var (member, isWatch) in _watchingStateCache.ToList())
-            {
-                if (member != currentWatched.Value && isWatch)
-                {
-                    _watchingStateCache[member] = false;
-                    changed = true;
-                }
             }
 
             if (changed)
@@ -524,25 +583,13 @@ public sealed partial class OverwatchPanel : BoxContainer
                 StopWatchingButton.Visible = true;
             }
         }
-        else
+        else if (changed)
         {
-            foreach (var (member, isWatch) in _watchingStateCache.ToList())
+            foreach (var row in _memberRows.Values)
             {
-                if (isWatch)
-                {
-                    _watchingStateCache[member] = false;
-                    changed = true;
-                }
+                row.SetWatching(false);
             }
-
-            if (changed)
-            {
-                foreach (var row in _memberRows.Values)
-                {
-                    row.SetWatching(false);
-                }
-                StopWatchingButton.Visible = false;
-            }
+            StopWatchingButton.Visible = false;
         }
     }
 
@@ -554,6 +601,14 @@ public sealed partial class OverwatchPanel : BoxContainer
             row.Dispose();
         }
         _memberRows.Clear();
+
+        // Pooled headings can be sitting unparented, so base.Dispose would not reach them.
+        foreach (var header in _squadHeaders)
+        {
+            header.Dispose();
+        }
+        _squadHeaders.Clear();
+
         base.Dispose(disposing);
     }
 }
@@ -669,7 +724,10 @@ public sealed class OverwatchMemberRow : BoxContainer
 
     public void RefreshSquadSelect()
     {
-        var squads = _availableSquadsCache ?? _getSquadsFunc();
+        // Always the live lookup. The cached dictionary was captured when the row was built and the
+        // panel replaces its dictionary wholesale on every refresh, so the cache pinned whatever squads
+        // existed at construction — rows now outlive many refreshes, which made that visible.
+        var squads = _getSquadsFunc();
 
         _squadSelect.Clear();
         _squadSelect.AddItem(Loc.GetString("overwatch-member-squad-no-squad"), -1);
@@ -717,8 +775,13 @@ public sealed class OverwatchMemberRow : BoxContainer
         };
 
         _coordinates = data.Coordinates;
+        // Coordinates are grid-local now, so the grid name has to travel with them or the numbers mean
+        // nothing. No grid at all (space, cryo, nullspace) reports as unknown rather than as a position.
         _coordinatesLabel.Text = data.Coordinates.HasValue
-            ? Loc.GetString("overwatch-member-coordinates", ("x", Math.Round(data.Coordinates.Value.X, 1)), ("y", Math.Round(data.Coordinates.Value.Y, 1)))
+            ? Loc.GetString("overwatch-member-location",
+                ("location", data.LocationName),
+                ("x", Math.Round(data.Coordinates.Value.X, 1)),
+                ("y", Math.Round(data.Coordinates.Value.Y, 1)))
             : Loc.GetString("overwatch-member-coordinates-none");
 
         _viewButton.Disabled = !data.HasCamera;

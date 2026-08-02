@@ -6,6 +6,7 @@ using Content.Shared.Crescent.Dispenser;
 using Content.Shared.Popups;
 using Robust.Server.GameObjects;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.Server._Crescent.Taxation;
 
@@ -21,6 +22,26 @@ public sealed class TaxationConsoleSystem : EntitySystem
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+
+    /// <summary>How often an open console re-reads the treasury and goods list.</summary>
+    private const float RefreshInterval = 3f;
+
+    /// <summary>How long a station's built goods list stays reusable before it is rebuilt.</summary>
+    private static readonly TimeSpan GoodsCacheTtl = TimeSpan.FromSeconds(15);
+
+    private float _sinceRefresh;
+
+    /// <summary>
+    /// Per-station goods lists, memoised.
+    /// </summary>
+    /// <remarks>
+    /// Building one walks every dispenser in the world and resolves each one's owning station (a
+    /// transform-parent walk), which was happening on every open, every button press, and now every
+    /// refresh tick. What a station sells barely changes within a round, so the list is rebuilt on a
+    /// timer and whenever a rate edit makes the cached effective rates wrong.
+    /// </remarks>
+    private readonly Dictionary<EntityUid, (TimeSpan Built, List<TaxableGoodEntry> Goods)> _goodsCache = new();
 
     public override void Initialize()
     {
@@ -34,7 +55,30 @@ public sealed class TaxationConsoleSystem : EntitySystem
 
     private void OnOpened(EntityUid uid, TaxationConsoleComponent comp, BoundUIOpenedEvent args)
     {
-        UpdateUi(uid, args.Actor);
+        UpdateUi(uid);
+    }
+
+    /// <summary>
+    /// Keeps an open console current. The treasury figure it shows moves constantly — trade tax, drone
+    /// and shipyard purchases, payroll — but the console only ever redrew in response to its own
+    /// buttons, so the balance froze at whatever it was when the operator last pressed something.
+    /// </summary>
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        _sinceRefresh += frameTime;
+        if (_sinceRefresh < RefreshInterval)
+            return;
+
+        _sinceRefresh = 0f;
+
+        var query = EntityQueryEnumerator<TaxationConsoleComponent>();
+        while (query.MoveNext(out var uid, out _))
+        {
+            if (_ui.IsUiOpen(uid, TaxationConsoleUiKey.Key))
+                UpdateUi(uid);
+        }
     }
 
     private void OnSetDefault(EntityUid uid, TaxationConsoleComponent comp, TaxationSetDefaultRateMessage args)
@@ -43,7 +87,8 @@ public sealed class TaxationConsoleSystem : EntitySystem
             return;
 
         _market.SetDefaultTaxRate(station, args.Rate);
-        UpdateUi(uid, args.Actor);
+        _goodsCache.Remove(station);
+        UpdateUi(uid);
     }
 
     private void OnSetOverride(EntityUid uid, TaxationConsoleComponent comp, TaxationSetOverrideMessage args)
@@ -52,7 +97,8 @@ public sealed class TaxationConsoleSystem : EntitySystem
             return;
 
         _market.SetTaxOverride(station, args.ProtoId, args.Rate);
-        UpdateUi(uid, args.Actor);
+        _goodsCache.Remove(station);
+        UpdateUi(uid);
     }
 
     private void OnClearOverride(EntityUid uid, TaxationConsoleComponent comp, TaxationClearOverrideMessage args)
@@ -61,7 +107,8 @@ public sealed class TaxationConsoleSystem : EntitySystem
             return;
 
         _market.ClearTaxOverride(station, args.ProtoId);
-        UpdateUi(uid, args.Actor);
+        _goodsCache.Remove(station);
+        UpdateUi(uid);
     }
 
     /// <summary>Validates edit access and resolves the owning station.</summary>
@@ -83,23 +130,45 @@ public sealed class TaxationConsoleSystem : EntitySystem
         return true;
     }
 
-    private void UpdateUi(EntityUid uid, EntityUid actor)
+    /// <summary>
+    /// Pushes fresh state to the console's viewer.
+    /// </summary>
+    /// <remarks>
+    /// <c>CanEdit</c> is a per-player answer but <c>SetUiState</c> is shared by every viewer of a key,
+    /// with no per-actor overload. The console is therefore <c>singleUser</c> — the same reason the
+    /// mainframe is — and the flag is computed from whoever currently holds it rather than from
+    /// whoever triggered this update. Without that, a command member opening a console someone else
+    /// was already reading handed them an unlocked rate field; the writes were still refused
+    /// server-side, but the UI said otherwise, so the buttons argued with the access-denied popup.
+    /// </remarks>
+    private void UpdateUi(EntityUid uid)
     {
         var station = _market.TryGetOwningStation(uid);
         if (station is null || !TryComp<StationTradeMarketComponent>(station, out var market))
             return;
 
-        var canEdit = _access.IsAllowed(actor, uid);
-        var goods = BuildGoodsList(station.Value, market);
+        var viewer = _ui.GetActors(uid, TaxationConsoleUiKey.Key).FirstOrDefault();
+        var canEdit = viewer != default && _access.IsAllowed(viewer, uid);
 
-        var state = new TaxationConsoleState(
+        _ui.SetUiState(uid, TaxationConsoleUiKey.Key, new TaxationConsoleState(
             market.DefaultTaxRate,
             market.MaxTaxRate,
-            market.TreasuryBalance,
+            _market.GetTreasury(station.Value),
             canEdit,
-            goods);
+            GetGoodsList(station.Value, market)));
+    }
 
-        _ui.SetUiState(uid, TaxationConsoleUiKey.Key, state);
+    /// <summary>Cached view of <see cref="BuildGoodsList"/>. See <see cref="_goodsCache"/>.</summary>
+    private List<TaxableGoodEntry> GetGoodsList(EntityUid station, StationTradeMarketComponent market)
+    {
+        var now = _timing.CurTime;
+
+        if (_goodsCache.TryGetValue(station, out var cached) && now - cached.Built < GoodsCacheTtl)
+            return cached.Goods;
+
+        var goods = BuildGoodsList(station, market);
+        _goodsCache[station] = (now, goods);
+        return goods;
     }
 
     /// <summary>

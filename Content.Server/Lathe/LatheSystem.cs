@@ -205,9 +205,9 @@ namespace Content.Server.Lathe
         }
 
         /// <summary>
-        /// The recipes this lathe can make. The returned list is the caller's own copy — the cached original
-        /// backs every later call, so handing it out directly would let one caller's edit silently change what
-        /// every other caller sees. Internal hot paths use <see cref="EnsureCachedRecipes"/> and skip the copy.
+        /// The recipes this lathe can make. The returned list is the caller's own copy; the cached original
+        /// backs every later call, so handing it out would let one caller's edit change what everyone else sees.
+        /// Internal hot paths use <see cref="EnsureCachedRecipes"/> and skip the copy.
         /// </summary>
         public List<ProtoId<LatheRecipePrototype>> GetAvailableRecipes(EntityUid uid, LatheComponent component, bool getUnavailable = false)
         {
@@ -220,6 +220,8 @@ namespace Content.Server.Lathe
                 Recipes = new List<ProtoId<LatheRecipePrototype>>(component.StaticRecipes)
             };
             RaiseLocalEvent(uid, ev);
+
+            ev.Recipes.RemoveAll(component.ExcludedRecipes.Contains);
 
             return ev.Recipes;
         }
@@ -239,6 +241,8 @@ namespace Content.Server.Lathe
             };
             RaiseLocalEvent(uid, ev);
 
+            ev.Recipes.RemoveAll(component.ExcludedRecipes.Contains);
+
             component.CachedRecipes = ev.Recipes;
             component.CachedRecipeLookup = new HashSet<ProtoId<LatheRecipePrototype>>(ev.Recipes);
 
@@ -247,7 +251,10 @@ namespace Content.Server.Lathe
 
         public static List<ProtoId<LatheRecipePrototype>> GetAllBaseRecipes(LatheComponent component)
         {
-            return component.StaticRecipes.Union(component.DynamicRecipes).ToList();
+            return component.StaticRecipes
+                .Union(component.DynamicRecipes)
+                .Except(component.ExcludedRecipes)
+                .ToList();
         }
 
         public bool TryAddToQueue(EntityUid uid, LatheRecipePrototype recipe, LatheComponent? component = null)

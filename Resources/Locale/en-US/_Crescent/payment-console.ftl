@@ -36,3 +36,6 @@ payment-console-no-treasury = This faction has no treasury bound this round.
 payment-console-treasury-empty = The treasury is empty.
 payment-console-member-gone = That member is no longer available.
 payment-console-member-unpayable = That member can't be paid right now — they must be connected and in-body.
+
+payment-console-bonus-cooldown = Disbursement authoriser busy. { $seconds }s until the next payment.
+payment-console-bonus-limit = Refused: this would exceed your { $percent }% share of the treasury for this round.

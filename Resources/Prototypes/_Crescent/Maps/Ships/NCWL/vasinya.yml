@@ -6,7 +6,7 @@
   name: NCWL Vasinya
   description: A light communard patrol corvette.
   price: 50000
-  category: Small
+  category: Medium
   group: None
   path: /Maps/_Crescent/Shuttles/NCWL/vasinya.yml
 
@@ -25,3 +25,4 @@
             !type:NanotrasenNameGenerator
             prefixCreator: '14'
         - type: VesselDesignation
+          designation: vessel-designation-frigate

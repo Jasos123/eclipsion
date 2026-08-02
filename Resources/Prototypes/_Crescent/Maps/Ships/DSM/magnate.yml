@@ -3,12 +3,12 @@
   name: DSM Magnate FSV
   description: |
     An imperial fire support vessel, designed for fleet support with its gargoyle launcher for bypassing enemy shields.
-    LOADOUT: 1x 240mm 'Gargoyle' torpedo launcher, 4x 200cc 'Retribution' pulse laser
+    LOADOUT: 1x 240mm 'Gargoyle' torpedo launcher, 4x 150cc 'Retribution' pulse laser
     MINIMUM CREW: 1x Pilot, 1x Gunner, 1x Loader (optional)
     SHIELD: Errant-class
     SPEED: 25m/s
   price: 40000
-  category: Small
+  category: Medium
   group: None
   path: /Maps/_Crescent/Shuttles/DSM/magnate.yml
 
@@ -31,6 +31,6 @@
             !type:NanotrasenNameGenerator
             prefixCreator: '14'
         - type: VesselDesignation
-          designation: vessel-designation-corvette
+          designation: vessel-designation-frigate
         - type: VesselDescription
           description: DSM Fire support vessel.

@@ -9597,7 +9597,7 @@ entities:
     - type: Transform
       pos: 0.5,26.5
       parent: 1
-- proto: BoriaticFuelTankHuge
+- proto: BoriaticFuelTankFull
   entities:
   - uid: 85
     components:

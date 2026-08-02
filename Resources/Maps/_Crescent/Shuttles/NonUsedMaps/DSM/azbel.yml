@@ -3456,7 +3456,7 @@ entities:
     - type: Transform
       pos: 7.5,33.5
       parent: 1
-- proto: HeavyReinforcedPlasmaWindow
+- proto: ReinforcedPlasmaWindow
   entities:
   - uid: 64
     components:

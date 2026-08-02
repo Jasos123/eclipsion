@@ -34,6 +34,42 @@ public sealed class SolutionTransferSystem : EntitySystem
         SubscribeLocalEvent<SolutionTransferComponent, GetVerbsEvent<AlternativeVerb>>(AddSetTransferVerbs);
         SubscribeLocalEvent<SolutionTransferComponent, AfterInteractEvent>(OnAfterInteract);
         SubscribeLocalEvent<SolutionTransferComponent, TransferAmountSetValueMessage>(OnTransferAmountSetValueMessage);
+        SubscribeLocalEvent<SolutionTransferDirectionComponent, GetVerbsEvent<AlternativeVerb>>(AddDirectionVerb);
+    }
+
+    private void AddDirectionVerb(Entity<SolutionTransferDirectionComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
+    {
+        if (!args.CanAccess || !args.CanInteract || args.Hands == null)
+            return;
+
+        var direction = ent.Comp.Direction == SolutionTransferDirection.Receive
+            ? SolutionTransferDirection.Send
+            : SolutionTransferDirection.Receive;
+        var verbText = direction == SolutionTransferDirection.Receive
+            ? "comp-solution-transfer-verb-mode-receive"
+            : "comp-solution-transfer-verb-mode-send";
+        var user = args.User;
+
+        args.Verbs.Add(new AlternativeVerb
+        {
+            Text = Loc.GetString(verbText),
+            Category = VerbCategory.SetTransferDirection,
+            Act = () =>
+            {
+                SetDirection(ent, direction);
+                var message = direction == SolutionTransferDirection.Receive
+                    ? "comp-solution-transfer-mode-receive"
+                    : "comp-solution-transfer-mode-send";
+                _popup.PopupClient(Loc.GetString(message), ent, user);
+            },
+            Priority = 1,
+        });
+    }
+
+    public void SetDirection(Entity<SolutionTransferDirectionComponent> ent, SolutionTransferDirection direction)
+    {
+        ent.Comp.Direction = direction;
+        Dirty(ent);
     }
 
     private void OnTransferAmountSetValueMessage(Entity<SolutionTransferComponent> ent, ref TransferAmountSetValueMessage message)
@@ -95,10 +131,14 @@ public sealed class SolutionTransferSystem : EntitySystem
             return;
 
         var (uid, comp) = ent;
+        var direction = CompOrNull<SolutionTransferDirectionComponent>(uid)?.Direction;
+        var canReceive = comp.CanReceive && direction != SolutionTransferDirection.Send;
+        var canSend = comp.CanSend && direction != SolutionTransferDirection.Receive;
 
         //Special case for reagent tanks, because normally clicking another container will give solution, not take it.
-        if (comp.CanReceive
-            && !HasComp<RefillableSolutionComponent>(target) // target must not be refillable (e.g. Reagent Tanks)
+        if (canReceive
+            // Tanks are both refillable and drainable, so an explicit mode is the only way to say which you meant.
+            && (direction == SolutionTransferDirection.Receive || !HasComp<RefillableSolutionComponent>(target))
             && _solution.TryGetDrainableSolution(target, out var targetSoln, out _) // target must be drainable
             && TryComp<RefillableSolutionComponent>(uid, out var refill)
             && _solution.TryGetRefillableSolution((uid, refill, null), out var ownerSoln, out var ownerRefill))
@@ -125,7 +165,7 @@ public sealed class SolutionTransferSystem : EntitySystem
         }
 
         // if target is refillable, and owner is drainable
-        if (comp.CanSend
+        if (canSend
             && TryComp<RefillableSolutionComponent>(target, out var targetRefill)
             && _solution.TryGetRefillableSolution((target, targetRefill, null), out targetSoln, out _)
             && _solution.TryGetDrainableSolution(uid, out ownerSoln, out _))

@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using Content.Server.Administration.Logs;
 using Content.Server.Chat.Managers;
 using Content.Server.SurveillanceCamera;
 using Content.Server._Crescent.Squad;
@@ -11,18 +12,22 @@ using Content.Shared.Access.Systems;
 using Content.Shared.Chat;
 using Content.Shared.Database;
 using Content.Shared.GameTicking;
+using Content.Shared.Ghost;
 using Content.Shared.Implants.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Events;
+using Content.Shared.Popups;
 using Content.Shared.Power;
 using Content.Shared.UserInterface;
 using Robust.Server.GameObjects;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Maths;
+using Robust.Shared.Timing;
 
 namespace Content.Server._Crescent.Overwatch;
 
@@ -42,12 +47,6 @@ public sealed class OverwatchSystem : EntitySystem
     /// </summary>
     private const float UpdateInterval = 1.0f;
 
-    /// <summary>
-    /// Equipment slot ID for the surveillance camera.
-    /// </summary>
-    private const string CameraSlotId = "neck";
-
-    [Dependency] private readonly InventorySystem _inventorySystem = default!;
     [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
     [Dependency] private readonly AccessReaderSystem _accessReaderSystem = default!;
@@ -58,6 +57,9 @@ public sealed class OverwatchSystem : EntitySystem
     [Dependency] private readonly SquadSystem _squadSystem = default!;
     [Dependency] private readonly IChatManager _chatManager = default!;
     [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     /// <summary>
     /// Watch pairs: watcher -> target.
@@ -82,6 +84,7 @@ public sealed class OverwatchSystem : EntitySystem
     {
         base.Initialize();
 
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
         SubscribeLocalEvent<OverwatchConsoleComponent, ActivatableUIOpenAttemptEvent>(OnUIOpenAttempt);
         SubscribeLocalEvent<OverwatchConsoleComponent, BeforeActivatableUIOpenEvent>(OnBeforeUIOpen);
         SubscribeLocalEvent<OverwatchConsoleComponent, OverwatchRefreshMessage>(OnRefresh);
@@ -102,15 +105,59 @@ public sealed class OverwatchSystem : EntitySystem
         {
             subs.Event<OverwatchViewCameraMessage>(OnViewCamera);
             subs.Event<OverwatchStopWatchingMessage>(OnStopWatching);
-            subs.Event<OverwatchSetStatusFilterMessage>(OnSetStatusFilter);
-            subs.Event<OverwatchSetSquadFilterMessage>(OnSetSquadFilter);
-            subs.Event<OverwatchSetSearchMessage>(OnSetSearch);
             subs.Event<OverwatchCreateSquadMessage>(OnCreateSquad);
             subs.Event<OverwatchDeleteSquadMessage>(OnDeleteSquad);
             subs.Event<OverwatchAssignSquadMessage>(OnAssignSquad);
             subs.Event<OverwatchRemoveSquadMemberMessage>(OnRemoveSquadMember);
             subs.Event<OverwatchSendMessageAnnouncement>(OnSendAnnouncement);
         });
+    }
+
+    /// <summary>
+    /// Drops every cross-round scrap of state. The caches and watch pairs are plain system fields, so
+    /// they outlive the entities they name; they happen to be emptied by component shutdowns at round
+    /// end today, but relying on that leaves stale EntityUids one refactor away.
+    /// </summary>
+    private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
+    {
+        _watchingPairs.Clear();
+        _factionMembersCache.Clear();
+        _memberDataCache.Clear();
+    }
+
+    /// <summary>
+    /// Whether <paramref name="user"/> may operate this console: they must belong to the faction it
+    /// watches. Checked on open <b>and</b> on every message, because a crafted message can arrive
+    /// without the UI ever having been opened, and because a player can be stripped of their faction
+    /// while the UI is still up.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Membership is read from the body, not the ID card, so a stolen card cannot turn a boarder into
+    /// staff — the same stance the treasury vault takes. Admin ghosts are let through so they can look
+    /// inside without being treated as intruders.
+    /// </para>
+    /// <para>
+    /// This is the second gate, not the only one: the prototypes carry an <c>AccessReader</c> and
+    /// <c>ActivatableUIRequiresAccess</c>, so a player must hold the faction's access level to get this
+    /// far. It follows that a user carrying no faction component at all is let through on the ID alone
+    /// — mobs that never had one (and any spawn path that forgets to set it) would otherwise be locked
+    /// out of a console they hold a valid key for. What this stops is the case that actually matters:
+    /// someone who demonstrably belongs to a <i>different</i> faction working a stolen card.
+    /// </para>
+    /// </remarks>
+    private bool IsAuthorized(Entity<OverwatchConsoleComponent> ent, EntityUid user)
+    {
+        if (HasComp<GhostComponent>(user))
+            return true;
+
+        var faction = ent.Comp.Faction;
+        if (string.IsNullOrEmpty(faction))
+            return false;
+
+        var userFaction = CompOrNull<HullrotFactionComponent>(user)?.Faction;
+
+        return string.IsNullOrEmpty(userFaction) || userFaction == faction;
     }
 
     /// <summary>
@@ -163,10 +210,21 @@ public sealed class OverwatchSystem : EntitySystem
     /// <summary>
     /// UI open attempt — checks the player belongs to the faction.
     /// </summary>
+    /// <remarks>
+    /// This used to be an empty body while still claiming to check membership, which left every
+    /// standalone overwatch console (and the portable clipboard variants) open to anyone who reached
+    /// one: full enemy roster, live positions, camera spectate and faction-wide announcements.
+    /// </remarks>
     private void OnUIOpenAttempt(Entity<OverwatchConsoleComponent> ent, ref ActivatableUIOpenAttemptEvent args)
     {
-        if (args.User is not { Valid: true } user)
+        if (args.Cancelled || args.User is not { Valid: true } user)
             return;
+
+        if (IsAuthorized(ent, user))
+            return;
+
+        args.Cancel();
+        _popup.PopupEntity(Loc.GetString("overwatch-console-access-denied"), ent.Owner, user, PopupType.MediumCaution);
     }
 
     /// <summary>
@@ -210,9 +268,6 @@ public sealed class OverwatchSystem : EntitySystem
             new OverwatchUpdateState(
                 memberData,
                 availableSquads.ToDictionary(k => k.Key, v => v.Value.Name),
-                ent.Comp.StatusFilter,
-                ent.Comp.SquadFilter,
-                ent.Comp.SearchQuery,
                 GetOverwatchColor(ent.Comp.Faction)
             ));
     }
@@ -220,13 +275,19 @@ public sealed class OverwatchSystem : EntitySystem
     /// <summary>
     /// Checks whether a member's data needs refreshing.
     /// </summary>
+    /// <remarks>
+    /// Status is compared first and for every member, not just for the disconnected. It used to be
+    /// skipped for anyone still holding an <c>ActorComponent</c>, so a member who died without moving
+    /// kept displaying as Alive — the one thing the console exists to report. That was masked only by
+    /// <see cref="CacheInvalidationInterval"/> nuking the whole cache every couple of seconds.
+    /// </remarks>
     private bool ShouldRefreshData(EntityUid member, OverwatchMemberData cachedData)
     {
-        if (!TryComp<ActorComponent>(member, out var actor))
-            return cachedData.Status != OverwatchMemberStatus.Dead;
+        if (cachedData.Status != GetMemberStatus(member))
+            return true;
 
-        if (actor.PlayerSession == null)
-            return cachedData.Status != OverwatchMemberStatus.SSD;
+        if (cachedData.Name != Name(member) || cachedData.JobTitle != GetJobTitle(member))
+            return true;
 
         if (TryComp<SquadComponent>(member, out var squadComp))
         {
@@ -240,9 +301,10 @@ public sealed class OverwatchSystem : EntitySystem
                 return true;
         }
 
-        var currentCoords = GetMemberCoordinates(member);
-        if (cachedData.Coordinates.HasValue != currentCoords.HasValue)
+        var (currentCoords, currentLocation) = GetMemberLocation(member);
+        if (cachedData.Coordinates.HasValue != currentCoords.HasValue || cachedData.LocationName != currentLocation)
             return true;
+
         if (cachedData.Coordinates.HasValue && currentCoords.HasValue)
         {
             // Check whether the coordinates moved significantly (0.5f threshold)
@@ -260,15 +322,21 @@ public sealed class OverwatchSystem : EntitySystem
     /// </summary>
     private OverwatchMemberData CreateMemberData(EntityUid member)
     {
+        var status = GetMemberStatus(member);
+        var (coords, location) = GetMemberLocation(member);
+
         return new OverwatchMemberData(
             GetNetEntity(member),
             Name(member),
             GetJobTitle(member),
-            GetMemberStatus(member),
-            true,
+            status,
+            // A corpse's camera shows a patch of floor. Reported here and enforced in OnViewCamera, so
+            // the greyed-out button is backed by an actual rule rather than being decorative.
+            status != OverwatchMemberStatus.Dead,
             GetSquadId(member),
             GetSquadName(member) ?? "",
-            GetMemberCoordinates(member)
+            coords,
+            location
         );
     }
 
@@ -277,46 +345,51 @@ public sealed class OverwatchSystem : EntitySystem
         RefreshData(ent);
     }
 
-    private void OnSetStatusFilter(Entity<OverwatchConsoleComponent> ent, ref OverwatchSetStatusFilterMessage args)
-    {
-        ent.Comp.StatusFilter = args.Status;
-        RefreshData(ent);
-    }
-
-    private void OnSetSquadFilter(Entity<OverwatchConsoleComponent> ent, ref OverwatchSetSquadFilterMessage args)
-    {
-        ent.Comp.SquadFilter = args.SquadId;
-        RefreshData(ent);
-    }
-
-    private void OnSetSearch(Entity<OverwatchConsoleComponent> ent, ref OverwatchSetSearchMessage args)
-    {
-        ent.Comp.SearchQuery = args.SearchQuery;
-        RefreshData(ent);
-    }
-
     /// <summary>
-    /// Handles a new squad being created.
+    /// Handles a new squad being created. Both the name length and the squad count are capped: the
+    /// roster is re-serialized to every open console once a second, so an unbounded list of unbounded
+    /// names is a cheap way to bury the server in state updates.
     /// </summary>
     private void OnCreateSquad(Entity<OverwatchConsoleComponent> ent, ref OverwatchCreateSquadMessage args)
     {
-        if (args.Actor is not { Valid: true } actor)
+        if (args.Actor is not { Valid: true } actor || !IsAuthorized(ent, actor))
             return;
 
-        var created = _squadSystem.CreateSquad(ent.Comp.Faction, args.SquadName);
-        if (created)
+        var name = args.SquadName.Trim();
+        if (string.IsNullOrEmpty(name))
+            return;
+
+        if (name.Length > OverwatchLimits.MaxSquadNameLength)
+            name = name[..OverwatchLimits.MaxSquadNameLength];
+
+        if (_squadSystem.GetFactionSquads(ent.Comp.Faction).Count >= OverwatchLimits.MaxSquadsPerFaction)
+        {
+            _popup.PopupEntity(
+                Loc.GetString("overwatch-squad-limit-reached", ("max", OverwatchLimits.MaxSquadsPerFaction)),
+                ent.Owner, actor, PopupType.MediumCaution);
+            return;
+        }
+
+        if (_squadSystem.CreateSquad(ent.Comp.Faction, name))
         {
             RefreshData(ent);
         }
     }
 
     /// <summary>
-    /// Handles a squad being deleted.
+    /// Handles a squad being deleted. Refuses to delete one that still has members — the client greys
+    /// the button out, but the button is not the check.
     /// </summary>
     private void OnDeleteSquad(Entity<OverwatchConsoleComponent> ent, ref OverwatchDeleteSquadMessage args)
     {
-        if (args.Actor is not { Valid: true } actor)
+        if (args.Actor is not { Valid: true } actor || !IsAuthorized(ent, actor))
             return;
+
+        if (_squadSystem.GetSquadMemberCount(args.SquadId) > 0)
+        {
+            _popup.PopupEntity(Loc.GetString("overwatch-squad-not-empty"), ent.Owner, actor, PopupType.MediumCaution);
+            return;
+        }
 
         if (_squadSystem.RemoveSquad(ent.Comp.Faction, args.SquadId))
         {
@@ -329,7 +402,7 @@ public sealed class OverwatchSystem : EntitySystem
     /// </summary>
     private void OnAssignSquad(Entity<OverwatchConsoleComponent> ent, ref OverwatchAssignSquadMessage args)
     {
-        if (args.Actor is not { Valid: true } actor)
+        if (args.Actor is not { Valid: true } actor || !IsAuthorized(ent, actor))
             return;
 
         var player = GetEntity(args.Player);
@@ -351,7 +424,7 @@ public sealed class OverwatchSystem : EntitySystem
     /// </summary>
     private void OnRemoveSquadMember(Entity<OverwatchConsoleComponent> ent, ref OverwatchRemoveSquadMemberMessage args)
     {
-        if (args.Actor is not { Valid: true } actor)
+        if (args.Actor is not { Valid: true } actor || !IsAuthorized(ent, actor))
             return;
 
         var player = GetEntity(args.Player);
@@ -371,14 +444,36 @@ public sealed class OverwatchSystem : EntitySystem
     /// </summary>
     private void OnSendAnnouncement(Entity<OverwatchConsoleComponent> ent, ref OverwatchSendMessageAnnouncement args)
     {
-        if (args.Actor is not { Valid: true } actor)
+        if (args.Actor is not { Valid: true } actor || !IsAuthorized(ent, actor))
             return;
 
-        if (string.IsNullOrEmpty(args.Message))
+        var message = args.Message.Trim();
+        if (string.IsNullOrEmpty(message))
             return;
+
+        // Clamped rather than rejected: an operator who pastes something long still gets their
+        // announcement out, just trimmed. Unbounded text is broadcast to the whole faction as a
+        // full-screen overlay plus a chat line, so it cannot be left to the client to limit.
+        if (message.Length > OverwatchLimits.MaxAnnouncementLength)
+            message = message[..OverwatchLimits.MaxAnnouncementLength];
+
+        var now = _timing.CurTime;
+        if (ent.Comp.LastAnnounce is { } last && now - last < ent.Comp.AnnounceCooldown)
+        {
+            var secondsLeft = Math.Max(1, (int) Math.Ceiling((ent.Comp.AnnounceCooldown - (now - last)).TotalSeconds));
+            _popup.PopupEntity(
+                Loc.GetString("overwatch-announcement-cooldown", ("seconds", secondsLeft)),
+                ent.Owner, actor, PopupType.Medium);
+            return;
+        }
+
+        ent.Comp.LastAnnounce = now;
 
         var faction = ent.Comp.Faction;
         var factionMembers = GetFactionMembers(faction);
+
+        _adminLogger.Add(LogType.Chat, LogImpact.Medium,
+            $"{ToPrettyString(actor):player} sent a {faction} overwatch announcement: {message}");
 
         var targetName = !args.TargetSquadId.HasValue
             ? Loc.GetString("overwatch-announcement-target-all")
@@ -401,14 +496,14 @@ public sealed class OverwatchSystem : EntitySystem
             if (TryComp<ActorComponent>(member, out var memberActor) && memberActor.PlayerSession != null)
             {
                 recipients.Add(memberActor.PlayerSession);
-                RaiseNetworkEvent(new OverwatchAnnouncementEvent(args.Message, targetName, overwatchTitle, color), memberActor.PlayerSession);
+                RaiseNetworkEvent(new OverwatchAnnouncementEvent(message, targetName, overwatchTitle, color), memberActor.PlayerSession);
             }
         }
 
         if (recipients.Count == 0)
             return;
 
-        var wrappedMessage = $"{overwatchTitle}: {args.Message}";
+        var wrappedMessage = $"{overwatchTitle}: {message}";
 
         var filter = Robust.Shared.Player.Filter.Empty();
         foreach (var recipient in recipients)
@@ -419,7 +514,7 @@ public sealed class OverwatchSystem : EntitySystem
         _chatManager.ChatMessageToManyFiltered(
             filter,
             ChatChannel.Local,
-            args.Message,
+            message,
             wrappedMessage,
             EntityUid.Invalid,
             false,
@@ -491,12 +586,17 @@ public sealed class OverwatchSystem : EntitySystem
     /// </summary>
     private void OnViewCamera(Entity<OverwatchConsoleComponent> ent, ref OverwatchViewCameraMessage args)
     {
-        if (args.Actor is not { Valid: true } actor)
+        if (args.Actor is not { Valid: true } actor || !IsAuthorized(ent, actor))
             return;
 
         var target = GetEntity(args.Target);
         if (!TryComp<HullrotFactionComponent>(target, out var factionComp) ||
             factionComp.Faction != ent.Comp.Faction)
+            return;
+
+        // Mirrors OverwatchMemberData.HasCamera. The client greys the button for the dead; this is the
+        // check that actually holds, since the button is not a security boundary.
+        if (GetMemberStatus(target) == OverwatchMemberStatus.Dead)
             return;
 
         if (!TryComp<ActorComponent>(actor, out var actorComp) || actorComp.PlayerSession == null)
@@ -838,11 +938,20 @@ public sealed class OverwatchSystem : EntitySystem
     }
 
     /// <summary>
-    /// Gets an entity's world coordinates.
+    /// A member's position local to the grid they are standing on, plus that grid's name.
     /// </summary>
-    private Vector2? GetMemberCoordinates(EntityUid entity)
+    /// <remarks>
+    /// Deliberately not world position, which is what this used to return. World coordinates are
+    /// meaningless side by side once members are on different maps — two people light-years apart could
+    /// read as neighbours — and the old version never returned null, so someone in nullspace, in cryo or
+    /// inside a container still reported a confident-looking pair of numbers.
+    /// </remarks>
+    private (Vector2? Coordinates, string LocationName) GetMemberLocation(EntityUid entity)
     {
-        var worldPos = _transformSystem.GetWorldPosition(entity);
-        return new Vector2(worldPos.X, worldPos.Y);
+        if (!TryComp<TransformComponent>(entity, out var xform) || xform.GridUid is not { } grid)
+            return (null, string.Empty);
+
+        var local = Vector2.Transform(_transformSystem.GetWorldPosition(xform), _transformSystem.GetInvWorldMatrix(grid));
+        return (local, Name(grid));
     }
 }

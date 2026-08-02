@@ -67,10 +67,6 @@
             MarshalCMM: [ 1, 1 ]
             DeputyMarshalCMM: [ 1, 1 ]
             MinutemanCMM: [ 8, 8 ]
-            GliessianDockmaster: [ 1, 1 ]
-            GliessianSheriff: [ 1, 1 ]
-            GliessianDeputy: [ 2, 2 ]
-            GliessianDockhand: [ 3, 3 ]
             Spacer: [ -1, -1 ]
 
 

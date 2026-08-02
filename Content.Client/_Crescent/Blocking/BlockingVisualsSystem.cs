@@ -9,6 +9,9 @@ namespace Content.Client._Crescent.Blocking;
 public sealed class BlockingVisualsSystem : SharedBlockingSystem
 {
     [Dependency] private readonly IPrototypeManager _protoMan = default!;
+    [Dependency] private readonly SpriteSystem _sprite = default!;
+
+    private const string ShaderId = "ShieldingOutline";
 
     private ShaderInstance _shader = default!;
 
@@ -27,9 +30,18 @@ public sealed class BlockingVisualsSystem : SharedBlockingSystem
         if (!Resolve(uid, ref component, ref sprite, false))
             return;
 
-        sprite.PostShader = enabled ? _shader : null;
-        sprite.GetScreenTexture = enabled;
-        sprite.RaiseShaderEvent = enabled;
+        if (enabled)
+        {
+            _sprite.SetPostShader(sprite, new SpriteComponent.PostShaderArgs(ShaderId, _shader)
+            {
+                GetScreenTexture = true,
+                RaiseShaderEvent = true,
+            });
+        }
+        else
+        {
+            _sprite.RemovePostShader(sprite, ShaderId);
+        }
     }
     private void OnStartup(EntityUid uid, BlockingVisualsComponent component, ComponentStartup args)
     {

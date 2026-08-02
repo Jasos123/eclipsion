@@ -6,7 +6,7 @@
   name: NCWL Lodka
   description: A light communard frigate.
   price: 30000
-  category: Small
+  category: Medium
   group: None
   path: /Maps/_Crescent/Shuttles/NCWL/lodka.yml
 
@@ -25,4 +25,5 @@
             !type:NanotrasenNameGenerator
             prefixCreator: '14'
         - type: VesselDesignation
+          designation: vessel-designation-frigate
 

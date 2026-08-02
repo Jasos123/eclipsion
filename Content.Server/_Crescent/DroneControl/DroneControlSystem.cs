@@ -1,37 +1,46 @@
 using Content.Server.DeviceNetwork;
-using Content.Server.DeviceNetwork.Components;
 using Content.Server.DeviceNetwork.Systems;
 using Content.Server.NPC.HTN;
-using Content.Server.Shuttles.Components;
+using Content.Server.Power.Components;
+using Content.Server.Power.EntitySystems;
 using Content.Server.Shuttles.Systems;
+using Content.Server.Station.Systems;
 using Content.Shared._Crescent.DroneControl;
 using Content.Shared.DeviceNetwork;
-using Content.Shared.DeviceNetwork.Components;
 using Content.Shared.DeviceNetwork.Systems;
 using Content.Shared.Popups;
-using Content.Shared.Verbs;
+using Content.Shared.Shipyard.Prototypes;
+using Content.Shared.Shuttles.Systems;
 using Robust.Shared.Map;
-using Robust.Shared.Map.Components;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+using StationTradeMarketSystem = Content.Server.Crescent.Dispenser.StationTradeMarketSystem;
 
 namespace Content.Server._Crescent.DroneControl;
 
 public sealed class DroneControlSystem : EntitySystem
 {
-    [Dependency] private readonly DeviceListSystem _deviceList = default!;
-    [Dependency] private readonly DeviceNetworkSystem _deviceNetwork = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly AutoDroneSystem _autoDrone = default!;
     [Dependency] private readonly HTNSystem _htn = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly PowerReceiverSystem _power = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly SharedShuttleSystem _shuttles = default!;
     [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
     [Dependency] private readonly ShuttleConsoleSystem _shuttleConsole = default!;
+    [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private readonly StationTradeMarketSystem _market = default!;
 
-    private EntityQuery<DroneControlComponent> _controlQuery;
+    private EntityQuery<ApcPowerReceiverComponent> _powerQuery;
 
-    private HashSet<Entity<DockingComponent>> _docks = new();
-    private HashSet<Entity<DroneControlComponent>> _controllers = new();
+    /// <summary>
+    ///     How often an open console's UI is refreshed. Building the state sweeps every docking port in the
+    ///     world, so it must not run per tick.
+    /// </summary>
+    private static readonly TimeSpan RefreshInterval = TimeSpan.FromSeconds(0.5);
+
+    private TimeSpan _nextRefresh;
 
     public override void Initialize()
     {
@@ -39,51 +48,40 @@ public sealed class DroneControlSystem : EntitySystem
 
         // Manual autolink is intentionally disabled: a carrier only fields the drones it produces, so players
         // can't wire extra drones in with a multitool. Deployment/linking is handled by AutoDroneSystem.
-        // SubscribeLocalEvent<DroneControlConsoleComponent, GetVerbsEvent<AlternativeVerb>>(OnGetAltVerbs);
 
         SubscribeLocalEvent<DroneControlConsoleComponent, DroneConsoleMoveMessage>(OnMoveMsg);
         SubscribeLocalEvent<DroneControlConsoleComponent, DroneConsoleTargetMessage>(OnTargetMsg);
 
         SubscribeLocalEvent<DroneControlComponent, DeviceNetworkPacketEvent>(OnPacketReceived);
 
-        _controlQuery = GetEntityQuery<DroneControlComponent>();
-    }
-
-    private void OnGetAltVerbs(Entity<DroneControlConsoleComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
-    {
-        if (!args.CanInteract || !args.CanAccess)
-            return;
-
-        args.Verbs.Add(new AlternativeVerb
-        {
-            Text = Loc.GetString("drone-control-autolink"),
-            Priority = 10,
-            Act = () => TryAutolink(ent)
-        });
+        _powerQuery = GetEntityQuery<ApcPowerReceiverComponent>();
     }
 
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
 
-        var query = EntityQueryEnumerator<DroneControlConsoleComponent, DeviceListComponent>();
-        while (query.MoveNext(out var uid, out var comp, out var devList))
+        var now = _timing.CurTime;
+        if (now < _nextRefresh)
+            return;
+        _nextRefresh = now + RefreshInterval;
+
+        var query = EntityQueryEnumerator<DroneControlConsoleComponent>();
+        while (query.MoveNext(out var uid, out _))
         {
-             if (_ui.IsUiOpen(uid, DroneConsoleUiKey.Key))
-             {
-                 UpdateState(uid);
-             }
+            if (_ui.IsUiOpen(uid, DroneConsoleUiKey.Key))
+                UpdateState(uid);
         }
     }
 
     private void OnMoveMsg(Entity<DroneControlConsoleComponent> ent, ref DroneConsoleMoveMessage args)
     {
-        DoTargetedDroneOrder(ent, args.SelectedDrones, DroneOrderType.Move, GetCoordinates(args.TargetCoordinates), args.Actor);
+        DoTargetedDroneOrder(ent, args.SelectedDrones, DroneOrderType.Move, GetCoordinates(args.TargetCoordinates));
     }
 
     private void OnTargetMsg(Entity<DroneControlConsoleComponent> ent, ref DroneConsoleTargetMessage args)
     {
-        DoTargetedDroneOrder(ent, args.SelectedDrones, DroneOrderType.Target, GetCoordinates(args.TargetCoordinates), args.Actor);
+        DoTargetedDroneOrder(ent, args.SelectedDrones, DroneOrderType.Target, GetCoordinates(args.TargetCoordinates));
     }
 
     private void OnPacketReceived(Entity<DroneControlComponent> ent, ref DeviceNetworkPacketEvent args)
@@ -93,16 +91,11 @@ public sealed class DroneControlSystem : EntitySystem
         )
             return;
 
-        // A drone that has been claimed by a carrier is driven by AutoDroneSystem, so route the manual order
-        // there as a temporary override. An unclaimed auto-drone falls through to the HTN path below so it
-        // still responds to console orders.
+        // A drone claimed by a carrier is driven by AutoDroneSystem and takes its orders straight from that
+        // console (see DoTargetedDroneOrder), so a stray broadcast on this frequency must not be able to
+        // redirect somebody else's squadron. Only unclaimed drones answer the network.
         if (TryComp<AutoDroneComponent>(ent, out var autoDrone) && autoDrone.CarrierConsole != null)
-        {
-            autoDrone.ManualCommand = cmd;
-            autoDrone.ManualTarget = coords;
-            autoDrone.ManualOverrideUntil = _timing.CurTime + autoDrone.ManualOverrideTimeout;
             return;
-        }
 
         if (!TryComp<HTNComponent>(ent, out var htn))
             return;
@@ -116,8 +109,12 @@ public sealed class DroneControlSystem : EntitySystem
         blackboard.SetValue(ent.Comp.TargetKey, coords);
     }
 
-    private void DoTargetedDroneOrder(Entity<DroneControlConsoleComponent> console, HashSet<NetEntity> selected, DroneOrderType order, EntityCoordinates coordinates, EntityUid actor)
+    private void DoTargetedDroneOrder(Entity<DroneControlConsoleComponent> console, HashSet<NetEntity> selected, DroneOrderType order, EntityCoordinates coordinates)
     {
+        // An unpowered console issues no orders, matching how its drones stop being driven at all.
+        if (_powerQuery.TryComp(console, out var receiver) && !_power.IsPowered(console, receiver))
+            return;
+
         if (!coordinates.TryDistance(EntityManager, Transform(console).Coordinates, out var distance))
             return;
 
@@ -139,23 +136,13 @@ public sealed class DroneControlSystem : EntitySystem
             if (!selected.Contains(GetNetEntity(drone)) || !TryComp<AutoDroneComponent>(drone, out var ad))
                 continue;
 
+            // A drone counting down to scuttle isn't taking orders any more.
+            if (ad.SelfDestructAt != null)
+                continue;
+
             ad.ManualCommand = command;
             ad.ManualTarget = coordinates;
             ad.ManualOverrideUntil = _timing.CurTime + ad.ManualOverrideTimeout;
-        }
-    }
-
-    private void SendToSelected(EntityUid source, HashSet<NetEntity> selected, NetworkPayload payload)
-    {
-        if (!TryComp<DeviceListComponent>(source, out var devList))
-            return;
-
-        var linked = _deviceList.GetDeviceList(source, devList);
-
-        foreach (var (name, droneUid) in linked)
-        {
-            if (selected.Contains(GetNetEntity(droneUid)) && TryComp<DeviceNetworkComponent>(droneUid, out var droneNet))
-                _deviceNetwork.QueuePacket(source, droneNet.Address, payload);
         }
     }
 
@@ -165,21 +152,35 @@ public sealed class DroneControlSystem : EntitySystem
         var iffState = _shuttleConsole.GetIFFState(console, null);
 
         // The carrier's own slot roster is authoritative - it always matches the drones it commands.
-        var drones = new List<(NetEntity, NetEntity)>();
+        var drones = new List<DroneStatusEntry>();
         var isCarrier = TryComp<DroneCarrierComponent>(console, out var carrier);
+        var now = _timing.CurTime;
 
         if (carrier != null)
         {
             foreach (var drone in carrier.Slots.Values)
             {
-                if (TerminatingOrDeleted(drone))
+                if (TerminatingOrDeleted(drone) || !TryComp<AutoDroneComponent>(drone, out var auto))
                     continue;
 
                 var xform = Transform(drone);
                 if (xform.GridUid == null)
                     continue;
 
-                drones.Add((GetNetEntity(drone), GetNetEntity(xform.GridUid.Value)));
+                float? selfDestructIn = auto.SelfDestructAt is { } at
+                    ? MathF.Max(0f, (float) (at - now).TotalSeconds)
+                    : null;
+
+                drones.Add(new DroneStatusEntry
+                {
+                    Server = GetNetEntity(drone),
+                    Grid = GetNetEntity(xform.GridUid.Value),
+                    Name = _shuttles.GetIFFLabel(xform.GridUid.Value, self: false) ?? Name(xform.GridUid.Value),
+                    Mode = auto.Mode,
+                    HullIntegrity = auto.HullIntegrity,
+                    Powered = !_powerQuery.TryComp(drone, out var droneReceiver) || _power.IsPowered(drone, droneReceiver),
+                    SelfDestructIn = selfDestructIn,
+                });
             }
         }
 
@@ -190,47 +191,49 @@ public sealed class DroneControlSystem : EntitySystem
             carrier?.Targeting ?? DroneTargeting.Enemies,
             carrier?.Formation ?? DroneFormation.Arrow,
             carrier?.ProducedCount ?? 0,
+            drones.Count,
             carrier?.MaxDrones ?? 0,
-            carrier?.SpawnableDrones ?? new List<string>()));
+            BuildSpawnList(console, carrier),
+            GetTreasury(console, carrier)));
     }
 
-    public void TryAutolink(EntityUid fromEnt)
+    /// <summary>
+    ///     The vessels this console can produce, each with the price it would bill.
+    /// </summary>
+    private List<DroneSpawnEntry> BuildSpawnList(EntityUid console, DroneCarrierComponent? carrier)
     {
-        var newDrones = new List<EntityUid>();
+        var list = new List<DroneSpawnEntry>();
+        if (carrier == null)
+            return list;
 
-        var xform = Transform(fromEnt);
-        var shipUid = xform.GridUid;
-        if (!TryComp<MapGridComponent>(shipUid, out var grid))
-            return;
-
-        _docks.Clear();
-        _lookup.GetLocalEntitiesIntersecting(shipUid.Value, grid.LocalAABB, _docks);
-
-        foreach (var dock in _docks)
+        foreach (var vesselId in carrier.SpawnableDrones)
         {
-            if (dock.Comp.DockedWith == null)
+            if (!_proto.TryIndex<VesselPrototype>(vesselId, out var vessel))
                 continue;
 
-            var withXform = Transform(dock.Comp.DockedWith.Value);
-
-            if (!TryComp<MapGridComponent>(withXform.GridUid, out var withGrid))
-                continue;
-
-            _controllers.Clear();
-            _lookup.GetLocalEntitiesIntersecting(withXform.GridUid.Value, withGrid.LocalAABB, _controllers);
-            foreach (var controller in _controllers)
+            list.Add(new DroneSpawnEntry
             {
-                if (!_controlQuery.TryComp(controller, out var controlComp) || controlComp.Autolinked)
-                    continue;
-
-                controlComp.Autolinked = true;
-                newDrones.Add(controller);
-            }
+                VesselId = vesselId,
+                Name = vessel.Name,
+                Price = _autoDrone.GetDronePrice(console, carrier, vessel),
+            });
         }
 
-        if (newDrones.Count != 0)
-            _deviceList.UpdateDeviceList(fromEnt, newDrones, true);
+        return list;
+    }
 
-        _popup.PopupEntity(Loc.GetString("drone-control-autolinked", ("count", newDrones.Count)), fromEnt, PopupType.Large);
+    /// <summary>
+    ///     Funds available to this console, or null when production is free and no balance should be shown.
+    /// </summary>
+    private int? GetTreasury(EntityUid console, DroneCarrierComponent? carrier)
+    {
+        if (carrier is not { ChargeTreasury: true })
+            return null;
+
+        // No faction vault to draw on means production is free, so show nothing rather than a bogus 0.
+        if (_station.GetOwningStation(console) is not { } station || _market.GetStationFaction(station) == null)
+            return null;
+
+        return _market.GetTreasury(station);
     }
 }

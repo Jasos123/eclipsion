@@ -1,17 +1,29 @@
 using System.Text.Json;
 using Content.Shared.GameTicking;
 using Robust.Shared.ContentPack;
+using Robust.Shared.Network;
 using Robust.Shared.Utility;
 
 namespace Content.Server._Crescent.Taxation;
 
 /// <summary>
-/// Cross-round persistence for faction treasury balances. Station entities (and their
-/// <c>StationTradeMarketComponent</c>) are recreated every round, so the accumulated treasury would
-/// otherwise reset to zero. This system keeps an authoritative per-faction balance in memory (it
-/// survives round restarts because entity systems live for the whole server process) and mirrors it
-/// to a JSON file under the server's user-data directory so it also survives full server restarts.
+/// The single authority for faction treasury balances.
 /// </summary>
+/// <remarks>
+/// <para>
+/// A faction owns exactly one balance, held here. Station entities are recreated every round and a
+/// faction can own several of them at once (its home station plus every shipyard-bought hull that
+/// becomes its own station), so a balance mirrored onto station components would be duplicated: each
+/// copy would load the full faction balance and then race the others writing back, which both
+/// duplicated and destroyed money. Everything therefore reads and writes through this system, and
+/// <c>StationTradeMarketComponent.TreasuryBalance</c> is only used by unaligned stations, which have
+/// no faction to bank into.
+/// </para>
+/// <para>
+/// The dictionary lives for the whole server process, so balances survive round restarts, and is
+/// mirrored to a JSON file under the server's user-data directory so they also survive full restarts.
+/// </para>
+/// </remarks>
 public sealed class FactionTreasurySystem : EntitySystem
 {
     [Dependency] private readonly IResourceManager _res = default!;
@@ -22,6 +34,14 @@ public sealed class FactionTreasurySystem : EntitySystem
     private static readonly TimeSpan SaveInterval = TimeSpan.FromSeconds(10);
 
     private readonly Dictionary<string, int> _balances = new();
+
+    /// <summary>
+    /// Per-faction, per-player cumulative hand withdrawals this round. Backs the treasury console's
+    /// per-person cap. Kept here rather than on a station component so the cap follows the faction:
+    /// on the component a player could withdraw their full share once per station the faction owns.
+    /// </summary>
+    private readonly Dictionary<string, Dictionary<NetUserId, int>> _withdrawnThisRound = new();
+
     private bool _dirty;
     private float _sinceSave;
 
@@ -29,29 +49,129 @@ public sealed class FactionTreasurySystem : EntitySystem
     {
         base.Initialize();
 
-        // Flush on round cleanup so a round's earnings survive even if the process is killed shortly after.
-        SubscribeLocalEvent<RoundRestartCleanupEvent>(_ => Save());
+        // Flush on round cleanup so a round's earnings survive even if the process is killed shortly
+        // after, and drop the per-round withdrawal ledger so caps reset with the round.
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(_ =>
+        {
+            Save();
+            _withdrawnThisRound.Clear();
+        });
 
         Load();
     }
 
-    /// <summary>Current persisted balance for a faction (0 if the faction has never banked anything).</summary>
+    /// <summary>Current balance for a faction (0 if the faction has never banked anything).</summary>
     public int Get(string faction)
     {
         return string.IsNullOrEmpty(faction) ? 0 : _balances.GetValueOrDefault(faction);
     }
 
-    /// <summary>Records the latest balance for a faction. Debounced to disk via <see cref="Update"/>.</summary>
-    public void Set(string faction, int value)
+    /// <summary>Overwrites a faction's balance. Clamped at zero. Returns the new balance.</summary>
+    public int Set(string faction, int value)
     {
         if (string.IsNullOrEmpty(faction))
-            return;
+            return 0;
+
+        value = Math.Max(0, value);
 
         if (_balances.TryGetValue(faction, out var current) && current == value)
-            return;
+            return value;
 
         _balances[faction] = value;
         _dirty = true;
+        return value;
+    }
+
+    /// <summary>Adds to a faction's balance. Returns the new balance.</summary>
+    public int Add(string faction, int amount)
+    {
+        if (string.IsNullOrEmpty(faction) || amount <= 0)
+            return Get(faction);
+
+        return Set(faction, Get(faction) + amount);
+    }
+
+    /// <summary>
+    /// Removes up to <paramref name="amount"/>, clamped to the available balance. Returns what was
+    /// actually taken. Uncapped — for robbery, payroll and machine purchases.
+    /// </summary>
+    public int TryWithdraw(string faction, int amount)
+    {
+        if (string.IsNullOrEmpty(faction) || amount <= 0)
+            return 0;
+
+        var balance = Get(faction);
+        var taken = Math.Min(amount, balance);
+        if (taken <= 0)
+            return 0;
+
+        Set(faction, balance - taken);
+        return taken;
+    }
+
+    /// <summary>
+    /// How much more this player may withdraw by hand this round, given a per-person share of
+    /// <paramref name="maxFraction"/>. Measured against the vault as it stood before they started
+    /// (current balance + their prior withdrawals), so coming back repeatedly cannot beat the cap.
+    /// </summary>
+    public int GetRemainingWithdrawal(string faction, NetUserId user, float maxFraction)
+    {
+        if (string.IsNullOrEmpty(faction))
+            return 0;
+
+        var balance = Get(faction);
+        if (balance <= 0)
+            return 0;
+
+        var already = GetWithdrawnThisRound(faction, user);
+        var cap = (int) ((balance + already) * Math.Clamp(maxFraction, 0f, 1f));
+
+        return Math.Clamp(cap - already, 0, balance);
+    }
+
+    /// <summary>Credits this player has already drawn by hand from this faction's vault this round.</summary>
+    public int GetWithdrawnThisRound(string faction, NetUserId user)
+    {
+        return _withdrawnThisRound.TryGetValue(faction, out var ledger) && ledger.TryGetValue(user, out var already)
+            ? already
+            : 0;
+    }
+
+    /// <summary>
+    /// Withdraws for a specific player, enforcing their per-round share of the vault.
+    /// Returns the amount actually withdrawn.
+    /// </summary>
+    public int TryWithdrawCapped(string faction, NetUserId user, int amount, float maxFraction)
+    {
+        if (amount <= 0)
+            return 0;
+
+        var allowed = Math.Min(amount, GetRemainingWithdrawal(faction, user, maxFraction));
+        if (allowed <= 0)
+            return 0;
+
+        var taken = TryWithdraw(faction, allowed);
+        if (taken <= 0)
+            return 0;
+
+        _withdrawnThisRound.GetOrNew(faction)[user] = GetWithdrawnThisRound(faction, user) + taken;
+        return taken;
+    }
+
+    /// <summary>
+    /// Puts back money taken by <see cref="TryWithdrawCapped"/> that could not be delivered, and gives
+    /// the player their budget back with it. Without the second half, a payment that failed after the
+    /// debit would silently cost the operator part of their round's allowance.
+    /// </summary>
+    public void RefundCapped(string faction, NetUserId user, int amount)
+    {
+        if (string.IsNullOrEmpty(faction) || amount <= 0)
+            return;
+
+        Add(faction, amount);
+
+        if (_withdrawnThisRound.TryGetValue(faction, out var ledger) && ledger.TryGetValue(user, out var already))
+            ledger[user] = Math.Max(0, already - amount);
     }
 
     public override void Update(float frameTime)
@@ -79,7 +199,7 @@ public sealed class FactionTreasurySystem : EntitySystem
 
             _balances.Clear();
             foreach (var (faction, balance) in loaded)
-                _balances[faction] = balance;
+                _balances[faction] = Math.Max(0, balance);
         }
         catch (Exception e)
         {

@@ -3,7 +3,7 @@
   name: DSM Praetorian
   description: |
     An Imperial patrol corvette.
-    LOADOUT: 2x 48mm 'Shortbow' SRM, 1x 350cc 'Glare' burst laser, 4x 200cc 'Retribution' pulse laser
+    LOADOUT: 2x 48mm 'Shortbow' SRM, 1x 350cc 'Glare' burst laser, 4x 150cc 'Retribution' pulse laser
   price: 65000
   category: Medium
   group: None
@@ -28,6 +28,6 @@
             !type:NanotrasenNameGenerator
             prefixCreator: '14'
         - type: VesselDesignation
-          designation: corvette
+          designation: vessel-designation-destroyer
         - type: VesselDescription
           description: Fielded by imperials to establish dominance in the battlefield.

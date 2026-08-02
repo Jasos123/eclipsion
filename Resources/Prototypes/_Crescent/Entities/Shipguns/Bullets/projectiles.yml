@@ -283,6 +283,7 @@
     maxIntensity: 1000
     intensitySlope: 400
     totalIntensity: 15000
+  - type: ProximityFuseTarget
   - type: HeatSeeking
     rotationSpeed: 25
     acceleration: 25
@@ -354,6 +355,7 @@
     totalIntensity: 40000
     intensitySlope: 250
     maxIntensity: 2500
+  - type: ProximityFuseTarget
   - type: HeatSeeking
     rotationSpeed: 7 # slow turn rate
     acceleration: 5
@@ -431,6 +433,7 @@
     intensitySlope: 250
     maxIntensity: 2500
     maxTileBreak: 5
+  - type: ProximityFuseTarget
   - type: HeatSeeking
     rotationSpeed: 5 # slow turn rate
     acceleration: 5
@@ -511,6 +514,7 @@
   - type: ProjectileIFF
     visualType: SquareReticle
     color: Red
+  - type: ProximityFuseTarget
   - type: HeatSeeking
     rotationSpeed: 15 # slow rotation so it isnt aimbot, still fairly accurate though
     acceleration: 120
@@ -1000,6 +1004,7 @@
   - type: ProjectileIFF
     visualType: SolidCircle
     color: White
+  - type: ProximityFuseTarget
   - type: HeatSeeking
     rotationSpeed: 20 # slow rotation so it isnt aimbot, still fairly accurate though
     acceleration: 85
@@ -1068,6 +1073,7 @@
     radius: 3.5
     color: orange
     energy: 0.5
+  - type: ProximityFuseTarget
   - type: HeatSeeking
     rotationSpeed: 15
     acceleration: 25
@@ -1200,6 +1206,7 @@
     intensitySlope: 700
     totalIntensity: 800
     maxTileBreak: 7
+  - type: ProximityFuseTarget
   - type: HeatSeeking
     rotationSpeed: 25
     acceleration: 5
@@ -1211,6 +1218,18 @@
     color: orange
     energy: 0.5
   - type: ProjectileIFF
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: StructuralMetallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 120
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:ExplodeBehavior
 
 #derecho projectile
 

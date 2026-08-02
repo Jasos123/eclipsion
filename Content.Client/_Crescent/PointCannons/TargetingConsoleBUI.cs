@@ -37,17 +37,23 @@ public sealed class TargetingConsoleBoundUserInterface : BoundUserInterface
         if (_controlled == null || _window == null)
             return;
 
-        var query = _entMan.EntityQueryEnumerator<PointCannonComponent>();
-        List<(int, int)> ammoValues = new();
-        while (query.MoveNext(out var uid, out var _))
+        // Walk _controlled, not the entity query, or the bars end up in a different order than the server's list.
+        var ammoValues = new List<(int, int)>(_controlled.Count);
+        foreach (var netEntity in _controlled)
         {
-            if (_controlled.Contains(_entMan.GetNetEntity(uid)))
+            // Still push a placeholder so the remaining bars don't shift.
+            if (!_entMan.TryGetEntity(netEntity, out var uid) ||
+                !_entMan.HasComponent<PointCannonComponent>(uid.Value))
             {
-                GetAmmoCountEvent ammoEv = new();
-                _entMan.EventBus.RaiseLocalEvent(uid, ref ammoEv);
-                ammoValues.Add((ammoEv.Count, ammoEv.Capacity));
+                ammoValues.Add((0, 1));
+                continue;
             }
+
+            GetAmmoCountEvent ammoEv = new();
+            _entMan.EventBus.RaiseLocalEvent(uid.Value, ref ammoEv);
+            ammoValues.Add((ammoEv.Count, ammoEv.Capacity));
         }
+
         _window.UpdateAmmoStatus(ammoValues);
     }
 

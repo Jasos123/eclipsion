@@ -2419,7 +2419,7 @@ entities:
     - type: Transform
       pos: -0.43802544,-6.483928
       parent: 1
-- proto: HeavyReinforcedPlasmaWindow
+- proto: ReinforcedPlasmaWindow
   entities:
   - uid: 211
     components:

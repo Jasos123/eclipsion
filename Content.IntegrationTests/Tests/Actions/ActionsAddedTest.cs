@@ -15,10 +15,12 @@ public sealed class ActionsAddedTest
     // TODO add magboot test (inventory action)
     // TODO add ghost toggle-fov test (client-side action)
 
+    private const string PlayerPrototype = "MobHuman";
+
     [Test]
     public async Task TestCombatActionsAdded()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, DummyTicker = false });
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Dirty = true });
         var server = pair.Server;
         var client = pair.Client;
         var sEntMan = server.ResolveDependency<IEntityManager>();
@@ -28,9 +30,19 @@ public sealed class ActionsAddedTest
         var sActionSystem = server.System<SharedActionsSystem>();
         var cActionSystem = client.System<SharedActionsSystem>();
 
-        // Dummy ticker is disabled - client should be in control of a normal mob.
-        Assert.That(serverSession.AttachedEntity, Is.Not.Null);
-        var serverEnt = serverSession.AttachedEntity!.Value;
+        // The Empty test station is deliberately jobless in this fork, so round-start spawning would only
+        // ever hand the player an observer. Spawn a normal mob and attach to it instead.
+        var map = await pair.CreateTestMap();
+        EntityUid serverEnt = default;
+        await server.WaitPost(() =>
+        {
+            serverEnt = sEntMan.SpawnEntity(PlayerPrototype, map.GridCoords);
+            server.PlayerMan.SetAttachedEntity(serverSession, serverEnt);
+        });
+
+        await pair.RunTicksSync(10);
+
+        Assert.That(serverSession.AttachedEntity, Is.EqualTo(serverEnt));
         var clientEnt = clientSession!.AttachedEntity!.Value;
         Assert.That(sEntMan.EntityExists(serverEnt));
         Assert.That(cEntMan.EntityExists(clientEnt));
@@ -65,6 +77,7 @@ public sealed class ActionsAddedTest
         Assert.That(ReferenceEquals(sAct, cAct), Is.False);
         Assert.That(ReferenceEquals(sAct.BaseEvent, cAct.BaseEvent), Is.False);
 
+        // The pair's clean-return deletes the test map for us.
         await pair.CleanReturnAsync();
     }
 }

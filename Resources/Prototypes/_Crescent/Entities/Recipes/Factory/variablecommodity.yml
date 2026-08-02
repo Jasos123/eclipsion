@@ -54,15 +54,6 @@
     TubeLoader1: 1
 
 - type: factoryRecipe
-  id: FabricateBallisticCycler
-  name: fabricate ballistic cycler
-  inputs:
-    BasicMechatronics: 2
-    Steel: 5
-  outputs:
-    BallisticCycler1: 1
-
-- type: factoryRecipe
   id: FabricateLaserLocus
   name: fabricate focused laser locus
   inputs:

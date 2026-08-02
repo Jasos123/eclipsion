@@ -4,7 +4,7 @@
     sprite: Objects/Specific/Medical/firstaidkits.rsi
     state: firstaid
   product: CrateMedicalSupplies
-  cost: 2000
+  cost: 2600
   category: cargoproduct-category-name-medical
   group: pangtai
 
@@ -74,6 +74,6 @@
     sprite: Objects/Specific/Medical/implanter.rsi
     state: implanter0
   product: CrateVitalsTrackingIPM
-  cost: 500
+  cost: 750
   category: cargoproduct-category-name-medical
   group: pangtai

@@ -8,4 +8,9 @@ namespace Content.Shared.Weapons.Ranged;
 [RegisterComponent, Virtual]
 public partial class MagazineAmmoProviderComponent : AmmoProviderComponent
 {
+    /// <summary>
+    /// Seconds the gun is locked out for after a magazine goes in. Zero means it can fire immediately.
+    /// </summary>
+    [DataField]
+    public float ReloadDuration;
 }

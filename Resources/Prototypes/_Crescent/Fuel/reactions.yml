@@ -1,0 +1,47 @@
+- type: reaction
+  id: BoriaticFuel
+  minTemp: 300
+  reactants:
+    Plasma:
+      amount: 1
+    Hydrogen:
+      amount: 1
+    Oil:
+      amount: 1
+  products:
+    BoriaticFuel: 3
+
+- type: reaction
+  id: AmeCatalyst
+  minTemp: 370
+  impact: Medium
+  reactants:
+    Uranium:
+      amount: 2
+    Silver:
+      amount: 1
+    SulfuricAcid:
+      amount: 2
+  products:
+    AmeCatalyst: 2
+
+- type: reaction
+  id: AmeFuel
+  minTemp: 420
+  impact: High
+  effects:
+  - !type:PopupMessage
+    visualType: LargeCaution
+    messages: [ "ame-fuel-reaction-unstable" ]
+    type: Pvs
+  reactants:
+    AmeCatalyst:
+      amount: 1
+    BoriaticFuel:
+      amount: 2
+    Plasma:
+      amount: 2
+    Nitrogen:
+      amount: 1
+  products:
+    AmeFuel: 2

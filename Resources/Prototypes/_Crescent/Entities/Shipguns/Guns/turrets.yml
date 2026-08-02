@@ -50,6 +50,13 @@
           variation: 0.08
     - type: ApcPowerReceiver
       powerLoad: 1000
+    - type: WeaponPowerDraw
+      energyPerShot: 1200
+    - type: Battery
+      maxCharge: 6000
+      startingCharge: 6000
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 24000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Small
@@ -132,6 +139,13 @@
               - VulcanCartridgeBox
     - type: ApcPowerReceiver
       powerLoad: 2500
+    - type: WeaponPowerDraw
+      energyPerShot: 500
+    - type: Battery
+      maxCharge: 2500
+      startingCharge: 2500
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 24000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Small
@@ -219,6 +233,13 @@
       count: 6
     - type: ApcPowerReceiver
       powerLoad: 3500
+    - type: WeaponPowerDraw
+      energyPerShot: 500
+    - type: Battery
+      maxCharge: 2500
+      startingCharge: 2500
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 12000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Small
@@ -302,6 +323,13 @@
       count: 10
     - type: ApcPowerReceiver
       powerLoad: 3000
+    - type: WeaponPowerDraw
+      energyPerShot: 5000
+    - type: Battery
+      maxCharge: 25000
+      startingCharge: 25000
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 40000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Medium
@@ -371,6 +399,13 @@
               - MortarShell
     - type: ApcPowerReceiver
       powerLoad: 2000
+    - type: WeaponPowerDraw
+      energyPerShot: 16667
+    - type: Battery
+      maxCharge: 83335
+      startingCharge: 83335
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 40000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Medium
@@ -457,6 +492,13 @@
       count: 15
     - type: ApcPowerReceiver
       powerLoad: 3000
+    - type: WeaponPowerDraw
+      energyPerShot: 2500
+    - type: Battery
+      maxCharge: 12500
+      startingCharge: 12500
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 80000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Small
@@ -593,6 +635,13 @@
               - NeedlerShell
     - type: ApcPowerReceiver
       powerLoad: 3500
+    - type: WeaponPowerDraw
+      energyPerShot: 16667
+    - type: Battery
+      maxCharge: 83335
+      startingCharge: 83335
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 40000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Medium
@@ -730,6 +779,13 @@
         - TorpedoGarg
     - type: ApcPowerReceiver
       powerLoad: 6500
+    - type: WeaponPowerDraw
+      energyPerShot: 20000
+    - type: Battery
+      maxCharge: 100000
+      startingCharge: 100000
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 32000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Large
@@ -802,6 +858,13 @@
         - LanceRocket
     - type: ApcPowerReceiver
       powerLoad: 4000
+    - type: WeaponPowerDraw
+      energyPerShot: 5556
+    - type: Battery
+      maxCharge: 27780
+      startingCharge: 27780
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 20000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Medium
@@ -874,6 +937,13 @@
         - HeavyMortarShell
     - type: ApcPowerReceiver
       powerLoad: 4000
+    - type: WeaponPowerDraw
+      energyPerShot: 80000
+    - type: Battery
+      maxCharge: 400000
+      startingCharge: 400000
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 64000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Large
@@ -958,6 +1028,13 @@
               - FlakShell
     - type: ApcPowerReceiver
       powerLoad: 6500
+    - type: WeaponPowerDraw
+      energyPerShot: 20000
+    - type: Battery
+      maxCharge: 100000
+      startingCharge: 100000
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 64000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Large
@@ -1040,6 +1117,13 @@
         - TorpedoCatapult
     - type: ApcPowerReceiver
       powerLoad: 6500
+    - type: WeaponPowerDraw
+      energyPerShot: 40000
+    - type: Battery
+      maxCharge: 200000
+      startingCharge: 200000
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 32000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Large
@@ -1115,6 +1199,13 @@
       count: 20
     - type: ApcPowerReceiver
       powerLoad: 3000
+    - type: WeaponPowerDraw
+      energyPerShot: 20588
+    - type: Battery
+      maxCharge: 102940
+      startingCharge: 102940
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 140000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Medium
@@ -1178,6 +1269,13 @@
               - CompaktLens
     - type: ApcPowerReceiver
       powerLoad: 3000
+    - type: WeaponPowerDraw
+      energyPerShot: 2917
+    - type: Battery
+      maxCharge: 14585
+      startingCharge: 14585
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 140000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Medium
@@ -1258,6 +1356,13 @@
               - AntimatterCanister
     - type: ApcPowerReceiver
       powerLoad: 4000
+    - type: WeaponPowerDraw
+      energyPerShot: 10000
+    - type: Battery
+      maxCharge: 50000
+      startingCharge: 50000
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 140000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Medium
@@ -1341,6 +1446,13 @@
               - SwarmerRocketsClip
     - type: ApcPowerReceiver
       powerLoad: 4000
+    - type: WeaponPowerDraw
+      energyPerShot: 1471
+    - type: Battery
+      maxCharge: 7355
+      startingCharge: 7355
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 20000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Medium
@@ -1420,6 +1532,13 @@
         path: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
     - type: ApcPowerReceiver
       powerLoad: 4000
+    - type: WeaponPowerDraw
+      energyPerShot: 6000
+    - type: Battery
+      maxCharge: 30000
+      startingCharge: 30000
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 12000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Small
@@ -1506,6 +1625,13 @@
               - SlugthrowerCartridgeBox
     - type: ApcPowerReceiver
       powerLoad: 4000
+    - type: WeaponPowerDraw
+      energyPerShot: 5000
+    - type: Battery
+      maxCharge: 25000
+      startingCharge: 25000
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 40000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Medium
@@ -1583,6 +1709,13 @@
       count: 10
     - type: ApcPowerReceiver
       powerLoad: 6500
+    - type: WeaponPowerDraw
+      energyPerShot: 26667
+    - type: Battery
+      maxCharge: 133335
+      startingCharge: 133335
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 64000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Large
@@ -1643,6 +1776,13 @@
       count: 10
     - type: ApcPowerReceiver
       powerLoad: 6500
+    - type: WeaponPowerDraw
+      energyPerShot: 600
+    - type: Battery
+      maxCharge: 3000
+      startingCharge: 3000
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 12000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Small
@@ -1705,6 +1845,13 @@
       count: 10
     - type: ApcPowerReceiver
       powerLoad: 3000
+    - type: WeaponPowerDraw
+      energyPerShot: 6667
+    - type: Battery
+      maxCharge: 33335
+      startingCharge: 33335
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 80000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Small

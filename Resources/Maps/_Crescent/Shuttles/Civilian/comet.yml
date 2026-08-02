@@ -3758,8 +3758,8 @@ entities:
           - SpaceArtilleryFire
     - type: NamedModules
       buttonNames:
-      - Toggle 200cc 'Retribution'
-      - Fire 200cc 'Retribution'
+      - Toggle 150cc 'Retribution'
+      - Fire 150cc 'Retribution'
       - Module C
       - Module D
       - Module E

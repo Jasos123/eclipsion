@@ -6,7 +6,7 @@
     sprite: _Crescent/Objects/Turrets/Ammunition/Magazine/screamer.rsi
     state: base
   product: Crate20mmAmmo
-  cost: 1000
+  cost: 2500
   category: cargoproduct-category-name-shuttleammo
   group: shinoharastation
 
@@ -50,7 +50,7 @@
     sprite: _Crescent/Objects/Turrets/Ammunition/Cartridge/shortbow.rsi
     state: shortbow
   product: Crate48mmAmmo
-  cost: 4000
+  cost: 10000
   category: cargoproduct-category-name-shuttleammo
   group: shinoharastation
 

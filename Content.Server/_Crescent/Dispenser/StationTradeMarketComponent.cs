@@ -1,5 +1,3 @@
-using Robust.Shared.Network;
-
 namespace Content.Server.Crescent.Dispenser;
 
 [RegisterComponent]
@@ -43,31 +41,30 @@ public sealed partial class StationTradeMarketComponent : Component
     public float MaxTaxRate = 0.95f;
 
     /// <summary>
-    /// Accumulated tax revenue held by the faction, withdrawable at the treasury console.
+    /// Tax revenue for an <b>unaligned</b> station only, and per-round only.
     /// </summary>
+    /// <remarks>
+    /// A station belonging to a faction does not keep a balance here: its money lives in
+    /// <c>FactionTreasurySystem</c> under <see cref="Faction"/>, because a faction routinely owns
+    /// several stations at once (its home station plus every shipyard-bought hull that becomes its own
+    /// station) and a per-station copy of the balance both duplicated and destroyed money as the copies
+    /// wrote over each other. Read and write through <c>StationTradeMarketSystem</c>, never this field.
+    /// </remarks>
     [DataField]
     public int TreasuryBalance = 0;
 
     /// <summary>
-    /// Faction key this station's treasury belongs to (e.g. "SHI", "NCWL", "DSM"), set from the
-    /// faction treasury console(s) present on the station. While non-empty the balance is persisted
-    /// across rounds under this key; empty means the treasury is per-round only.
+    /// Faction key whose treasury this station banks into (e.g. "SHI", "NCWL", "DSM"), resolved from
+    /// the station grid's IFF faction. Empty means unaligned: the station keeps its own per-round
+    /// balance in <see cref="TreasuryBalance"/> instead.
     /// </summary>
     [ViewVariables]
     public string Faction = string.Empty;
 
     /// <summary>
-    /// Whether this round's balance has already been loaded from the cross-round store. Guards against
-    /// re-loading (and clobbering accrued tax) when multiple consoles bind the same station.
+    /// Whether <see cref="Faction"/> has been resolved this round. Guards the lookup so it runs once
+    /// per station rather than every tick, and makes the first writer win.
     /// </summary>
     [ViewVariables]
-    public bool TreasuryLoaded = false;
-
-    /// <summary>
-    /// Per-player cumulative treasury withdrawals this round, keyed by player user id. Backs the
-    /// per-person withdrawal cap so no single member can drain the vault. Reset each round because
-    /// this component is recreated when the station initializes.
-    /// </summary>
-    [ViewVariables]
-    public Dictionary<NetUserId, int> WithdrawnThisRound = new();
+    public bool FactionResolved = false;
 }

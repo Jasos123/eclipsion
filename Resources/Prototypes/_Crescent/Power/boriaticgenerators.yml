@@ -251,3 +251,101 @@
       range: 0.30
     - type: StaticPrice
       price: 2500
+
+- type: entity
+  name: Boriatic Generator 'Titan'
+  description: |-
+    An industrial bank of boriatic burners plumbed into one output.
+    Runs off corrosive Boriatic fuel and is rated for up to 200 kW.
+  parent: BoriaticGeneratorSwitchableBase
+  id: BoriaticGeneratorTitan
+  suffix: BoriaticFuel, 200 kW
+  components:
+    - type: Sprite
+      sprite: _Crescent/Structures/boriatic_reactor.rsi
+      layers:
+        - state: portgen0
+          map: [ "enum.GeneratorVisualLayers.Body" ]
+        - state: portgen_on_unlit
+          map: [ "enum.GeneratorVisualLayers.Unlit" ]
+          shader: unshaded
+          visible: false
+    - type: GenericVisualizer
+      visuals:
+        enum.GeneratorVisuals.Running:
+          enum.GeneratorVisualLayers.Body:
+            True: { state: portgen0on }
+            False: { state: portgen0 }
+          enum.GeneratorVisualLayers.Unlit:
+            True: { visible: true }
+            False: { visible: false }
+    - type: FuelGenerator
+      minTargetPower: 40000
+      maxTargetPower: 200000
+      targetPower: 190000
+      optimalPower: 190000
+      optimalBurnRate: 0.075
+      fuelEfficiencyConstant: 1.8
+    - type: Explosive
+      explosionType: Default
+      totalIntensity: 6000
+      intensitySlope: 5
+      maxIntensity: 450
+    - type: ChemicalFuelGeneratorAdapter
+      solution: tank
+      reagents:
+        BoriaticFuel: 1
+    - type: SolutionContainerManager
+      solutions:
+        tank:
+          maxVol: 4000
+    - type: RefillableSolution
+      solution: tank
+      maxRefill: 100
+    - type: PowerMonitoringDevice
+      group: Generator
+      loadNodes:
+        - output_hv
+        - output_mv
+      sprite: Structures/Power/Generation/portable_generator.rsi
+      state: portgen0
+    - type: MaterialStorageMagnetPickup # Frontier
+      range: 0.30
+    - type: StaticPrice
+      price: 5000
+
+- type: entity
+  parent: BaseFlatpack
+  id: TitanGeneratorFlatpack
+  name: Boriatic Generator Titan Flatpack
+  description: Parts used to build a heavy boriatic generator. Activate with a multitool to deploy.
+  components:
+  - type: Flatpack
+    entity: BoriaticGeneratorTitanShuttle
+  - type: Sprite
+    layers:
+    - state: ame-part
+  - type: StaticPrice
+    price: 2500
+  - type: ReverseEngineering
+    recipes:
+      - TitanGeneratorFlatpack
+
+- type: entity
+  parent: BoriaticGeneratorTitan
+  id: BoriaticGeneratorTitanShuttle
+  suffix: BoriaticFuel, 200 kW, Ship
+  components:
+    - type: FuelGenerator
+      on: true
+    - type: Transform
+      anchored: true
+    - type: SolutionContainerManager
+      solutions:
+        tank:
+          maxVol: 4000
+          reagents:
+          - ReagentId: BoriaticFuel
+            Quantity: 800
+    - type: PortableGenerator
+      startOnMapInit: true

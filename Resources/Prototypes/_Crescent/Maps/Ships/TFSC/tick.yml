@@ -6,7 +6,7 @@
   name: GSC Tick
   description: |
     An ultralight Syndicate fighter, armed with two pulse lasers. Capable of dealing devastating damage for its small size.
-    LOADOUT: 2x 200cc 'Retribution' Pulse Laser
+    LOADOUT: 2x 150cc 'Retribution' Pulse Laser
     CREW: 1x Pilot
   price: 12500 #12000 appraisegrid
   category: Small

@@ -11,9 +11,108 @@
     sprite: Objects/Power/AME/ame_jar.rsi
     state: jar
   - type: AmeFuelContainer
-    fuelAmount: 10000
-    fuelCapacity: 10000
+    fuelAmount: 1000
+    fuelCapacity: 1000
+  # maxVol must match fuelCapacity.
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        maxVol: 1000
+  - type: RefillableSolution
+    solution: tank
+  - type: DrainableSolution
+    solution: tank
+  - type: ExaminableSolution
+    solution: tank
+  - type: SolutionItemStatus
+    solution: tank
+  - type: SolutionTransfer
+    transferAmount: 250
+    minTransferAmount: 50
+    maxTransferAmount: 1000
+    canChangeTransferAmount: true
+  - type: SolutionTransferDirection
+  - type: UserInterface
+    interfaces:
+      enum.TransferAmountUiKey.Key:
+        type: TransferAmountBoundUserInterface
+  - type: Spillable
+    solution: tank
   - type: StaticPrice
     price: 500
   - type: GuideHelp
     guides: [ AME, Power ]
+
+- type: entity
+  parent: AmeJar
+  id: AmeJarEmpty
+  suffix: Empty
+  components:
+  - type: AmeFuelContainer
+    fuelAmount: 0
+    fuelCapacity: 1000
+  - type: StaticPrice
+    price: 80
+
+# Fabrication recipes output empty upgraded jars.
+- type: entity
+  parent: AmeJar
+  id: AmeJarT2
+  name: reinforced AME fuel jar
+  suffix: Tier 2
+  description: A reinforced antimatter containment jar with a 5000 unit capacity.
+  components:
+  - type: AmeFuelContainer
+    fuelAmount: 5000
+    fuelCapacity: 5000
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        maxVol: 5000
+  - type: SolutionTransfer
+    transferAmount: 1250
+    maxTransferAmount: 5000
+  - type: StaticPrice
+    price: 2500
+
+- type: entity
+  parent: AmeJarT2
+  id: AmeJarT2Empty
+  suffix: Tier 2, Empty
+  components:
+  - type: AmeFuelContainer
+    fuelAmount: 0
+    fuelCapacity: 5000
+  - type: StaticPrice
+    price: 200
+
+- type: entity
+  parent: AmeJar
+  id: AmeJarT3
+  name: bulk AME fuel jar
+  suffix: Tier 3
+  description: A compound-shielded antimatter containment jar with a 10000 unit capacity.
+  components:
+  - type: AmeFuelContainer
+    fuelAmount: 10000
+    fuelCapacity: 10000
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        maxVol: 10000
+  - type: SolutionTransfer
+    transferAmount: 2500
+    maxTransferAmount: 10000
+  - type: StaticPrice
+    price: 5000
+
+- type: entity
+  parent: AmeJarT3
+  id: AmeJarT3Empty
+  suffix: Tier 3, Empty
+  components:
+  - type: AmeFuelContainer
+    fuelAmount: 0
+    fuelCapacity: 10000
+  - type: StaticPrice
+    price: 400

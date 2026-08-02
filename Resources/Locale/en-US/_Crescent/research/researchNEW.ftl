@@ -21,6 +21,8 @@ research-technology-astronautics-basiceva = Basic EVA
 research-technology-astronautics-advancedeva = Specialized EVA
 research-technology-astronautics-shipyardconstruction = Rapid Vessel Construction Device
 research-technology-astronautics-modsuit = MODSuit
+research-technology-astronautics-fuel-storage = Reinforced Fuel Storage
+research-technology-astronautics-bulk-fuel-storage = Bulk Fuel Storage
 
 # MECHATRONICS
 research-technology-mechatronics-parts = Construction Parts
@@ -121,7 +123,6 @@ research-technology-imperial-craftcomps = Imperial Weapon Components
 research-technology-imperial-raider = Imperial Troop Transport
 research-technology-imperial-baserosterships = Standard Imperial Ships
 research-technology-imperial-baserosterinfantry = Standard Imperial Infantry Gear
-research-technology-imperial-clarizianpatterns = Clarizian Patterns
 research-technology-imperial-auxiliaryhulls = Imperial Auxiliary Hulls
 
 # NCWL

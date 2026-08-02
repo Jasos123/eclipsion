@@ -4,8 +4,8 @@
   parent: BaseTurretShipgun
   id: WeaponTurretStarburst
   suffix: Small Hybrid
-  name: 150cc 'Starburst' Plasma Gatling
-  description: A light hybrid weapons platform that superheats unstable units of plasma and flings them at high speeds at targets. The plasma projectiles are inaccurate, but pack a punch.
+  name: 200cc 'Starburst' Plasma Gatling
+  description: A high-output hybrid weapons platform that superheats unstable units of plasma and flings them at high speeds at targets. The plasma projectiles are inaccurate, but pack a punch.
   components:
     - type: Sprite
       sprite: _Crescent/Objects/Turrets/Hybrid/starburst.rsi
@@ -30,21 +30,22 @@
           ents: []
     - type: Gun
       fireOnDropChance: 0
-      projectileSpeed: 60
-      fireRate: 8
+      projectileSpeed: 75
+      fireRate: 10
       selectedMode: FullAuto
       availableModes:
         - FullAuto
-      angleDecay: 20
-      minAngle: 3.5
-      maxAngle: 35
-      angleIncrease: 2.75
+      angleDecay: 12
+      minAngle: 2
+      maxAngle: 18
+      angleIncrease: 1.6
       soundGunshot:
         path: /Audio/Weapons/Guns/Gunshots/laserturret.ogg
         params:
           variation: 0.12
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: .5
+      rechargeCooldown: .4
+      energyPerCharge: 125
       rechargeSound:
         path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
         params:
@@ -52,10 +53,17 @@
           variation: 0.08
     - type: BasicEntityAmmoProvider
       proto: BulletPlasmaGatling
-      capacity: 120
-      count: 120
+      capacity: 80
+      count: 80
     - type: ApcPowerReceiver
       powerLoad: 2500
+    - type: WeaponPowerDraw
+      energyPerShot: 2000
+    - type: Battery
+      maxCharge: 10000
+      startingCharge: 10000
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 80000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Small
@@ -92,21 +100,22 @@
           ents: []
     - type: Gun
       fireOnDropChance: 0
-      projectileSpeed: 70
-      fireRate: 4
+      projectileSpeed: 85
+      fireRate: 2.5
       selectedMode: FullAuto
       availableModes:
         - FullAuto
-      angleDecay: 20
-      minAngle: 3.5
-      maxAngle: 25
-      angleIncrease: 2.25
+      angleDecay: 10
+      minAngle: 1.5
+      maxAngle: 10
+      angleIncrease: 1.25
       soundGunshot:
         path: /Audio/Weapons/Guns/Gunshots/lasergatling.ogg
         params:
           variation: 0.12
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: 1
+      rechargeCooldown: .75
+      energyPerCharge: 150
       rechargeSound:
         path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
         params:
@@ -114,10 +123,17 @@
           variation: 0.08
     - type: BasicEntityAmmoProvider
       proto: BulletPlasmaBall
-      capacity: 60
-      count: 60
+      capacity: 36
+      count: 36
     - type: ApcPowerReceiver
       powerLoad: 3500
+    - type: WeaponPowerDraw
+      energyPerShot: 14000
+    - type: Battery
+      maxCharge: 70000
+      startingCharge: 70000
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 140000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Medium
@@ -180,6 +196,13 @@
       count: 15
     - type: ApcPowerReceiver
       powerLoad: 5000
+    - type: WeaponPowerDraw
+      energyPerShot: 55000
+    - type: Battery
+      maxCharge: 275000
+      startingCharge: 275000
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 220000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Large

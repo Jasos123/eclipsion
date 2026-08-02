@@ -42,6 +42,11 @@ public sealed class FactionTreasuryConsoleSystem : EntitySystem
     [Dependency] private readonly PowerReceiverSystem _power = default!;
     [Dependency] private readonly FactionMachineSystem _factionMachine = default!;
 
+    /// <summary>How often an open vault console re-reads the balance and the viewer's remaining share.</summary>
+    private const float RefreshInterval = 3f;
+
+    private float _sinceRefresh;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -257,9 +262,14 @@ public sealed class FactionTreasuryConsoleSystem : EntitySystem
         if (station is null || stack.Count <= 0)
             return;
 
-        var amount = stack.Count;
+        // Deposit at most DepositPerClick, taken out of the stack rather than swallowing it whole.
+        // Clicking the vault with a large stack used to bank every last credit and delete the item with
+        // no prompt, so paying in a thousand from a five-million stack cost you the five million.
+        var amount = Math.Min(stack.Count, comp.DepositPerClick);
+        if (!_stack.Use(args.Used, amount, stack))
+            return;
+
         _market.AddTreasury(station.Value, amount);
-        QueueDel(args.Used);
 
         // Paying in is open to everyone, but re-securing stays a privilege: otherwise a single credit
         // from any passer-by — including one of the thieves — would call off a robbery in progress.
@@ -329,10 +339,21 @@ public sealed class FactionTreasuryConsoleSystem : EntitySystem
     {
         base.Update(frameTime);
 
+        // The balance moves from trade tax, payroll, drone and shipyard purchases and other consoles,
+        // none of which the vault hears about, so an open UI has to re-read it on a timer or it shows
+        // whatever was true when the operator last pressed a button.
+        _sinceRefresh += frameTime;
+        var refresh = _sinceRefresh >= RefreshInterval;
+        if (refresh)
+            _sinceRefresh = 0f;
+
         var now = _timing.CurTime;
         var query = EntityQueryEnumerator<FactionTreasuryConsoleComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
+            if (refresh && _ui.IsUiOpen(uid, TreasuryConsoleUiKey.Key))
+                UpdateUi(uid);
+
             if (comp.RobberyStart is not { } start || comp.RobberyEnd is not { } end)
                 continue;
 
@@ -404,9 +425,25 @@ public sealed class FactionTreasuryConsoleSystem : EntitySystem
         var station = _market.TryGetOwningStation(uid);
         var balance = station is null ? 0 : _market.GetTreasury(station.Value);
         var robbed = TryComp<FactionTreasuryConsoleComponent>(uid, out var comp) && comp.RobberyStart != null;
+        var capFraction = comp?.MaxWithdrawFraction ?? 0f;
+
+        // The remaining allowance is per player, so it is read for whoever currently holds the console.
+        // The vault is singleUser by way of its access gate — only one member is ever looking.
+        var remaining = balance;
+        if (station is { } s
+            && _ui.GetActors(uid, TreasuryConsoleUiKey.Key).FirstOrDefault() is { Valid: true } viewer
+            && TryComp<ActorComponent>(viewer, out var viewerActor))
+        {
+            remaining = _market.GetRemainingWithdrawal(s, viewerActor.PlayerSession.UserId, capFraction);
+        }
 
         // Only authorized members can have the UI open, so authorized is always true here.
-        _ui.SetUiState(uid, TreasuryConsoleUiKey.Key, new TreasuryConsoleState(balance, true, robbed));
+        _ui.SetUiState(uid, TreasuryConsoleUiKey.Key, new TreasuryConsoleState(
+            balance,
+            true,
+            robbed,
+            remaining,
+            (int) MathF.Round(capFraction * 100f)));
     }
 
     /// <summary>

@@ -76,6 +76,7 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
     // Represents where the mouse would physically be in the game world. Only updates when the mouse is over the UI.
     private Vector2 MousePosition = Vector2.Zero;
     private Vector2 MouseUIPosition = Vector2.Zero;
+    private bool MouseOverRadar;
     private Angle LastRotation = Angle.Zero;
     private Vector2 LastWorldCoordinates = Vector2.Zero;
 	public List<NetEntity>? ActiveCannons { get; set; } // Rat
@@ -321,8 +322,16 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
 
         OnRadarMouseMove?.Invoke(returned);
         OnRadarMouseMoveRelative?.Invoke(RelativeAngleFromFace(returned));
-        MouseUIPosition = args.RelativePosition;
+        // Pixels, not virtual units - the cannon lines are drawn against ScalePosition output.
+        MouseUIPosition = args.RelativePixelPosition;
+        MouseOverRadar = true;
 		MousePosition = _transform.ToMapCoordinates(returned).Position; // Rat
+    }
+
+    protected override void MouseExited()
+    {
+        base.MouseExited();
+        MouseOverRadar = false;
     }
 
     private EntityCoordinates RelativePositionToEntityCoords(Vector2 pos)
@@ -652,9 +661,14 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
     }
 
     // Rat-start
+    private static readonly Color LineOfFireColor = Color.Red.WithAlpha(0.25f);
+
     private void DrawCannonLines(DrawingHandleScreen handle, Matrix3x2 worldMatrixInvert)
     {
         if (ActiveCannons == null || ActiveCannons.Count == 0)
+            return;
+
+        if (!MouseOverRadar)
             return;
 
         var cannonQuery = EntManager.GetEntityQuery<PointCannonComponent>();
@@ -701,7 +715,7 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
             cannonLocal.Y = -cannonLocal.Y;
             var cannonUIPos = ScalePosition(cannonLocal);
 
-            handle.DrawLine(cannonUIPos, MouseUIPosition, Color.Red.WithAlpha(0.1f));
+            handle.DrawLine(cannonUIPos, MouseUIPosition, LineOfFireColor);
         }
     }
 	// Rat-end

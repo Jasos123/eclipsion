@@ -148,40 +148,6 @@
         - CMMWarship
 
 - type: entity
-  id: HeavyReinforcedPlasmaWindow
-  name: Heavy reinforced plasma window
-  parent: ReinforcedPlasmaWindow
-  components:
-    - type: Destructible
-      thresholds:
-      - trigger:
-          !type:DamageTrigger
-          damage: 10000
-        behaviors: #excess damage, don't spawn entities.
-        - !type:DoActsBehavior
-          acts: [ "Destruction" ]
-        - !type:PlaySoundBehavior
-          sound:
-            collection: WindowShatter
-      - trigger:
-          !type:DamageTrigger
-          damage: 7500
-        behaviors:
-        - !type:PlaySoundBehavior
-          sound:
-            collection: WindowShatter
-        - !type:SpawnEntitiesBehavior
-          spawn:
-            ShardGlassPlasma:
-              min: 3
-              max: 7
-            PartRodMetal:
-              min: 5
-              max: 15
-        - !type:DoActsBehavior
-          acts: [ "Destruction" ]
-
-- type: entity
   parent: WallShuttle
   id: WallShuttleCMM
   suffix: CMM Warship

@@ -14,7 +14,7 @@
     sprite: Structures/Shuttles/gyroscope.rsi
     state: base
   product: CrateEngineeringGyroscope
-  cost: 2000
+  cost: 2600
   category: cargoproduct-category-name-shuttle
   group: generic
 
@@ -144,11 +144,11 @@
 
 #energy
 - type: cargoProduct
-  id: ShuttleGunGeneric200ccRetribution
+  id: ShuttleGunGeneric150ccRetribution
   icon:
-    sprite: _Crescent/Objects/Turrets/Laser/absolution.rsi
-    state: absolution
-  product: CrateShuttlegun200ccAbsolution
+    sprite: _Crescent/Objects/Turrets/Laser/retribution.rsi
+    state: retribution
+  product: CrateShuttlegun150ccRetribution
   cost: 10000
   category: cargoproduct-category-name-shuttle
   group: generic

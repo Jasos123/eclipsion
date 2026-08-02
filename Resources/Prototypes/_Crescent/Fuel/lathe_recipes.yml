@@ -1,0 +1,78 @@
+# Fuel containers are fabricated empty.
+
+- type: latheRecipe
+  id: FuelCanisterBoriaticT1Craft
+  result: FuelCanisterBoriaticT1
+  completetime: 2
+  materials:
+    Steel: 300
+    Plastic: 150
+
+- type: latheRecipe
+  id: FuelCanisterBoriaticT2Craft
+  result: FuelCanisterBoriaticT2
+  completetime: 4
+  materials:
+    Steel: 700
+    Plastic: 300
+    Silver: 100
+
+- type: latheRecipe
+  id: FuelCanisterBoriaticT3Craft
+  result: FuelCanisterBoriaticT3
+  completetime: 7
+  materials:
+    Steel: 1400
+    Plastic: 600
+    Silver: 300
+    Gold: 100
+
+- type: latheRecipe
+  id: AmeJarT2Craft
+  result: AmeJarT2Empty
+  completetime: 6
+  materials:
+    Steel: 1200
+    Plastic: 400
+    Silver: 300
+    Gold: 100
+
+- type: latheRecipe
+  id: AmeJarT3Craft
+  result: AmeJarT3Empty
+  completetime: 10
+  materials:
+    Steel: 2500
+    Plastic: 800
+    Silver: 700
+    Gold: 300
+
+- type: latheRecipe
+  id: BoriaticFuelTankCraft
+  result: BoriaticFuelTank
+  completetime: 6
+  materials:
+    Steel: 2000
+    Plastic: 500
+
+- type: latheRecipe
+  id: AmeFuelTankCraft
+  result: AmeFuelTank
+  completetime: 9
+  materials:
+    Steel: 2500
+    Plastic: 500
+    Silver: 800
+    Gold: 200
+
+- type: latheRecipe
+  id: TitanGeneratorFlatpack
+  category: Circuitry
+  result: TitanGeneratorFlatpack
+  completetime: 2
+  materials:
+    AdvancedElectronics: 750
+    Steel: 4000
+    Tungsten: 1000
+    Gold: 750
+    Silver: 750

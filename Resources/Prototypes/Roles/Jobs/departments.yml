@@ -16,15 +16,12 @@
   description: department-Civilian-description
   color: "#9FED58"
   weight: 5
-  # Spacer and GliessianDockhand live in the Independents department, see _Crescent/Roles/Jobs/departments.yml
-  roles:
+  # CMM and Spacer roles live in the Independents department, see _Crescent/Roles/Jobs/departments.yml
+  #roles:
   #- OrdnancemanCMM
   #- MachinistCMM
   #- PhysicianCMM
-  - MinutemanCMM
   #- WatchmasterCMM
-  - DeputyMarshalCMM
-  - MarshalCMM
   editorHidden: true
 
 - type: department

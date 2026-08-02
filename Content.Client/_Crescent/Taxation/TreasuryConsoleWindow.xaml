@@ -5,6 +5,7 @@
     <BoxContainer Orientation="Vertical" Margin="12 8 12 12">
         <Label Name="AlarmLabel" HorizontalAlignment="Center" Margin="0 0 0 6" />
         <Label Name="BalanceLabel" StyleClasses="LabelBig" HorizontalAlignment="Center" Margin="0 0 0 4" />
+        <Label Name="RemainingLabel" HorizontalAlignment="Center" Margin="0 0 0 4" />
         <Label Name="StatusLabel" HorizontalAlignment="Center" Margin="0 0 0 10" />
         <BoxContainer Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 6">
             <Label Text="{Loc 'treasury-console-amount-label'}" VerticalAlignment="Center" />

@@ -8,13 +8,14 @@
   category: cargoproduct-category-name-engineering
   group: generic
 
+# Three jars per crate.
 - type: cargoProduct
   id: EngineAmeJarGeneric
   icon:
     sprite: Objects/Power/AME/ame_jar.rsi
     state: jar
   product: CrateEngineeringAMEJar
-  cost: 10000
+  cost: 24000
   category: cargoproduct-category-name-engineering
   group: generic
 
@@ -24,7 +25,7 @@
     sprite: Objects/Weapons/Grenades/smoke.rsi
     state: icon
   product: CrateEngineeringMetalFoamFast
-  cost: 1000
+  cost: 1500
   category: cargoproduct-category-name-engineering
   group: generic
 

@@ -986,7 +986,7 @@ entities:
           - Toggle
     - type: NamedModules
       buttonNames:
-      - Toggle "Retribution" 200cc Laser Gatling
+      - Toggle "Retribution" 150cc Laser Gatling
       - Toggle Blast Doors
       - Empty Module
       - Empty Module

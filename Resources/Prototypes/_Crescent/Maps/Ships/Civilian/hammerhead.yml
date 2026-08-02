@@ -32,4 +32,4 @@
             !type:NanotrasenNameGenerator
             prefixCreator: '14'
         - type: VesselDesignation
-          designation: Cruiser
+          designation: vessel-designation-cruiser

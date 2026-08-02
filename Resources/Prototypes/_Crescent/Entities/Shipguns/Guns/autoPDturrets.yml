@@ -93,6 +93,13 @@
         - Off
     - type: ApcPowerReceiver
       powerLoad: 1000
+    - type: WeaponPowerDraw
+      energyPerShot: 600
+    - type: Battery
+      maxCharge: 3000
+      startingCharge: 3000
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 24000
     - type: ExtensionCableReceiver
     - type: LightningTarget
       priority: 1

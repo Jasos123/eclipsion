@@ -31,8 +31,8 @@
           ents: []
     - type: Gun
       fireOnDropChance: 0
-      projectileSpeed: 40
-      burstCooldown: 2.5
+      projectileSpeed: 75
+      burstCooldown: 2.2
       shotsPerBurst: 2
       burstFireRate: 8
       selectedMode: Burst
@@ -41,14 +41,22 @@
       soundGunshot: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
     - type: BallisticAmmoProvider
       cycleable: false
-      capacity: 12
-      fillWithDoAfter: false
+      capacity: 10
+      fillWithDoAfter: true
+      fillDelay: .6
       proto: Cartridge48mmRocket
       whitelist:
         tags:
         - CartridgeShortbow
     - type: ApcPowerReceiver
       powerLoad: 2000
+    - type: WeaponPowerDraw
+      energyPerShot: 3675
+    - type: Battery
+      maxCharge: 18375
+      startingCharge: 18375
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 12000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Small
@@ -89,8 +97,9 @@
     - type: BallisticAmmoProvider
       cycleable: false
       capacity: 18
-      fillWithDoAfter: false
-      proto: Cartridge48mmRocket
+      fillWithDoAfter: true
+      fillDelay: .6
+      proto: Cartridge48mmRocketGorlex
       whitelist:
         tags:
         - CartridgeShortbow
@@ -128,22 +137,30 @@
           ents: []
     - type: Gun
       fireOnDropChance: 0
-      projectileSpeed: 60
-      fireRate: 4
+      projectileSpeed: 85
+      fireRate: 2.2
       selectedMode: FullAuto
       availableModes:
         - FullAuto
       soundGunshot: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
     - type: BallisticAmmoProvider
       cycleable: false
-      capacity: 6
-      fillWithDoAfter: false
+      capacity: 8
+      fillWithDoAfter: true
+      fillDelay: .8
       proto: Cartridge60mmRocket
       whitelist:
         tags:
         - CartridgeAzimuth
     - type: ApcPowerReceiver
       powerLoad: 1500
+    - type: WeaponPowerDraw
+      energyPerShot: 1364
+    - type: Battery
+      maxCharge: 6820
+      startingCharge: 6820
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 12000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Small
@@ -188,13 +205,21 @@
     - type: BallisticAmmoProvider
       cycleable: false
       capacity: 6
-      fillWithDoAfter: false
+      fillWithDoAfter: true
+      fillDelay: .8
       proto: Cartridge60mmRocket
       whitelist:
         tags:
         - CartridgeAzimuth
     - type: ApcPowerReceiver
       powerLoad: 1500
+    - type: WeaponPowerDraw
+      energyPerShot: 750
+    - type: Battery
+      maxCharge: 3750
+      startingCharge: 3750
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 12000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Small
@@ -225,22 +250,30 @@
                 collection: MetalGlassBreak
     - type: Gun
       fireOnDropChance: 0
-      projectileSpeed: 70
-      fireRate: 3
+      projectileSpeed: 95
+      fireRate: 2
       selectedMode: FullAuto
       availableModes:
         - FullAuto
       soundGunshot: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
     - type: BallisticAmmoProvider
       cycleable: false
-      capacity: 6
-      fillWithDoAfter: false
-      proto: Cartridge60mmRocket
+      capacity: 8
+      fillWithDoAfter: true
+      fillDelay: .8
+      proto: Cartridge60mmRocketNCWL
       whitelist:
         tags:
         - CartridgeAzimuth
     - type: ApcPowerReceiver
       powerLoad: 1500
+    - type: WeaponPowerDraw
+      energyPerShot: 1500
+    - type: Battery
+      maxCharge: 7500
+      startingCharge: 7500
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 12000
 
 - type: entity
   parent: BaseWeaponTurretAzimuth
@@ -277,13 +310,21 @@
     - type: BallisticAmmoProvider
       cycleable: false
       capacity: 6
-      fillWithDoAfter: false
-      proto: Cartridge60mmRocket
+      fillWithDoAfter: true
+      fillDelay: .8
+      proto: Cartridge60mmRocketGorlex
       whitelist:
         tags:
         - CartridgeAzimuth
     - type: ApcPowerReceiver
       powerLoad: 1500
+    - type: WeaponPowerDraw
+      energyPerShot: 600
+    - type: Battery
+      maxCharge: 3000
+      startingCharge: 3000
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 12000
 
 #arbalest
 
@@ -318,22 +359,30 @@
           ents: []
     - type: Gun
       fireOnDropChance: 0
-      projectileSpeed: 60
-      fireRate: 1.2
+      projectileSpeed: 110
+      fireRate: .65
       selectedMode: FullAuto
       availableModes:
         - FullAuto
       soundGunshot: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
     - type: BallisticAmmoProvider
       cycleable: false
-      capacity: 5
-      fillWithDoAfter: false
+      capacity: 6
+      fillWithDoAfter: true
+      fillDelay: 1.25
       proto: Cartridge95mmRocket
       whitelist:
         tags:
         - CartridgeArbalest
     - type: ApcPowerReceiver
       powerLoad: 3000
+    - type: WeaponPowerDraw
+      energyPerShot: 7692
+    - type: Battery
+      maxCharge: 38460
+      startingCharge: 38460
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 20000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Medium
@@ -378,13 +427,21 @@
     - type: BallisticAmmoProvider
       cycleable: false
       capacity: 8
-      fillWithDoAfter: false
-      proto: Cartridge95mmRocket
+      fillWithDoAfter: true
+      fillDelay: 1.25
+      proto: Cartridge95mmRocketGSC
       whitelist:
         tags:
         - CartridgeArbalest
     - type: ApcPowerReceiver
       powerLoad: 4000
+    - type: WeaponPowerDraw
+      energyPerShot: 3333
+    - type: Battery
+      maxCharge: 16665
+      startingCharge: 16665
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 20000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Medium
@@ -420,22 +477,30 @@
           ents: []
     - type: Gun
       fireOnDropChance: 0
-      projectileSpeed: 50
-      fireRate: 1
+      projectileSpeed: 100
+      fireRate: .6
       selectedMode: FullAuto
       availableModes:
         - FullAuto
       soundGunshot: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
     - type: BallisticAmmoProvider
       cycleable: false
-      capacity: 4
-      fillWithDoAfter: false
-      proto: Cartridge95mmRocket
+      capacity: 5
+      fillWithDoAfter: true
+      fillDelay: 1.25
+      proto: Cartridge95mmRocketNCWL
       whitelist:
         tags:
         - CartridgeArbalest
     - type: ApcPowerReceiver
       powerLoad: 3000
+    - type: WeaponPowerDraw
+      energyPerShot: 8333
+    - type: Battery
+      maxCharge: 41665
+      startingCharge: 41665
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 20000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Medium
@@ -479,22 +544,30 @@
       zeroVisible: true
     - type: Gun
       fireOnDropChance: 0
-      projectileSpeed: 30
-      fireRate: 0.25
+      projectileSpeed: 50
+      fireRate: .2
       selectedMode: FullAuto
       availableModes:
         - FullAuto
       soundGunshot: /Audio/Weapons/Guns/Gunshots/rocket_launcher.ogg
     - type: BallisticAmmoProvider
-      fillWithDoAfter: false
+      fillWithDoAfter: true
+      fillDelay: 2.5
       cycleable: false
-      capacity: 4
+      capacity: 3
       proto: Cartridge240mmRocket
       whitelist:
         tags:
         - CartridgeGargoyle
     - type: ApcPowerReceiver
       powerLoad: 3500
+    - type: WeaponPowerDraw
+      energyPerShot: 25000
+    - type: Battery
+      maxCharge: 125000
+      startingCharge: 125000
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 20000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Medium
@@ -543,7 +616,8 @@
         - FullAuto
       soundGunshot: /Audio/Weapons/Guns/Gunshots/rocket_launcher.ogg
     - type: BallisticAmmoProvider
-      fillWithDoAfter: false
+      fillWithDoAfter: true
+      fillDelay: 2.5
       cycleable: false
       capacity: 4
       proto: Cartridge240mmRocketNCWL
@@ -552,6 +626,13 @@
         - CartridgeGargoyle
     - type: ApcPowerReceiver
       powerLoad: 3500
+    - type: WeaponPowerDraw
+      energyPerShot: 25000
+    - type: Battery
+      maxCharge: 125000
+      startingCharge: 125000
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 20000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Medium
@@ -593,23 +674,30 @@
           ents: []
     - type: Gun
       fireOnDropChance: 0
-      projectileSpeed: 40
-      fireRate: 0.35
-      selectedMode: FullAuto
+      projectileSpeed: 80
+      fireRate: .12
+      selectedMode: SemiAuto
       availableModes:
-        - FullAuto
+        - SemiAuto
       soundGunshot: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
     - type: BallisticAmmoProvider
       cycleable: false
-      capacity: 3
+      capacity: 2
       fillWithDoAfter: true
-      fillDelay: 2
-      proto: Cartridge95mmRocketNCWL
+      fillDelay: 4
+      proto: Cartridge330mmRocket
       whitelist:
         tags:
         - CartridgeCatapult
     - type: ApcPowerReceiver
       powerLoad: 6000
+    - type: WeaponPowerDraw
+      energyPerShot: 66667
+    - type: Battery
+      maxCharge: 333335
+      startingCharge: 333335
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 32000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Large
@@ -655,6 +743,7 @@
       soundGunshot: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
     - type: RechargeBasicEntityAmmo
       rechargeCooldown: 2
+      energyPerCharge: 125
       rechargeSound:
         path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
         params:
@@ -666,6 +755,13 @@
       count: 12
     - type: ApcPowerReceiver
       powerLoad: 1000
+    - type: WeaponPowerDraw
+      energyPerShot: 750
+    - type: Battery
+      maxCharge: 3750
+      startingCharge: 3750
+    - type: ApcPowerReceiverBattery
+      batteryRechargeRate: 12000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Small

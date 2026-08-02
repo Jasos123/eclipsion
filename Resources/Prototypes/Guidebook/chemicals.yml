@@ -5,6 +5,7 @@
   priority: 100
   children:
   - Elements
+  - FuelProduction
   - Medicine
   - Narcotics
   - Pyrotechnic
@@ -13,6 +14,12 @@
   - Botanical
   - Biological
   - Others
+  filterEnabled: True
+
+- type: guideEntry
+  id: FuelProduction
+  name: guide-entry-fuel-production
+  text: "/ServerInfo/Guidebook/ChemicalTabs/FuelProduction.xml"
   filterEnabled: True
 
 - type: guideEntry
