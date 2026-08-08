@@ -25,14 +25,15 @@ public sealed partial class GunSystem
             if (gun.NextFire > Timing.CurTime)
                 continue;
 
-            if (TryComp(uid, out AutoShootGunComponent? autoShoot))
+            if (TryComp(uid, out AutoShootGunComponent? autoShoot) && autoShoot.Enabled)
             {
-                if (!autoShoot.Enabled)
-                    continue;
-
                 AttemptShoot(uid, gun);
+                continue;
             }
-            else if (gun.BurstActivated)
+
+            // A disabled AutoShootGun must not prevent a burst that has already started from finishing.
+            // Fixed hardpoints can retain this component after their automatic-fire toggle is switched off.
+            if (gun.BurstActivated)
             {
                 var parent = _transform.GetParentUid(uid);
                 if (HasComp<DamageableComponent>(parent))

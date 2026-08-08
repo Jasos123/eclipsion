@@ -44,9 +44,12 @@ public sealed class HardpointSystem : SharedHardpointSystem
 
         if (args.Port == component.Trigger)
             _gun.AttemptShoot(hard.anchoring.Value, gun);
-        var autoShoot = EnsureComp<AutoShootGunComponent>(hard.anchoring.Value);
+
         if (args.Port == component.Toggle)
+        {
+            var autoShoot = EnsureComp<AutoShootGunComponent>(hard.anchoring.Value);
             _gun.SetEnabled(hard.anchoring.Value, autoShoot, !autoShoot.Enabled);
+        }
     }
 
     public void OnCannonDeanchor(EntityUid uid, HardpointComponent comp, ref HardpointCannonDeanchoredEvent args)
