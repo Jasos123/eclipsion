@@ -158,7 +158,7 @@
   - HunterSRM
   - MontagneSRM
   - OverseerSRM
-  editorHidden: false # i just like to see them for the numbers , SPCR 2025
+  editorHidden: true # unused faction, hidden from job selection
 
 - type: department
   id: SHI
@@ -206,7 +206,7 @@
   - BeltrunnerTAP
   - DraugrTAP
   - ServileTAP
-  editorHidden: false
+  editorHidden: true # unused faction, hidden from job selection
 
 - type: department
   id: ATH

@@ -3,6 +3,17 @@
 - type: Tag
   id: CartridgeShortbow
 
+- type: Tag
+  id: MagazineShortbow
+
+#pila tags
+
+- type: Tag
+  id: CartridgePila
+
+- type: Tag
+  id: MagazinePila
+
 #gargoyle tags
 
 - type: Tag
@@ -18,10 +29,16 @@
 - type: Tag
   id: CartridgeAzimuth
 
+- type: Tag
+  id: MagazineAzimuth
+
 #arbalest
 
 - type: Tag
   id: CartridgeArbalest
+
+- type: Tag
+  id: MagazineArbalest
 
 #35mm tag
 

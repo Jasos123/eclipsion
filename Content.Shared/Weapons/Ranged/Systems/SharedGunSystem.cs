@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
 using Content.Shared._RMC14.CCVar;
+using Content.Shared._RMC14.Marines.Orders;
 using Content.Shared._RMC14.Random;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared.ActionBlocker;
@@ -818,6 +819,7 @@ public abstract partial class SharedGunSystem : EntitySystem
         tick = tick | (uint) GetNetEntity(component.Owner).Id;
         var random = new Xoroshiro64S(tick).NextFloat(-0.5f, 0.5f);
         var spreadModifier = GetLyingGunSpreadModifier(user);
+        spreadModifier *= GetOrderGunSpreadModifier(user); // RMC14 Focus order
         var spread = component.CurrentAngle.Theta * spreadModifier * random;
         var angle = new Angle(direction.Theta + spread);
         DebugTools.Assert(spread <= component.MaxAngleModified.Theta);
@@ -835,6 +837,15 @@ public abstract partial class SharedGunSystem : EntitySystem
         }
 
         return Math.Clamp(layingDown.GunSpreadModifier, 0f, 1f);
+    }
+
+    // RMC14 - Focus order spread modifier.
+    public float GetOrderGunSpreadModifier(EntityUid? user)
+    {
+        if (user is not { } uid || !TryComp(uid, out FocusOrderComponent? focus))
+            return 1f;
+
+        return Math.Clamp(1f - focus.SpreadReduction * focus.Power, focus.MinSpreadMultiplier, 1f);
     }
 
     private bool ShouldMissLyingTarget(EntityUid gun, EntityUid target, int shotIndex)

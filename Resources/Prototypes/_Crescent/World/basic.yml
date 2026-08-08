@@ -786,6 +786,10 @@
   - type: SimpleDebrisSelector
     debrisTable:
     - id: RatAsteroidPoorLarge
+      prob: 1
+    # Rare outer-belt chromite.
+    - id: RatChromiteAsteroidLarge
+      prob: 0.06
 
 - type: spaceBiome
   id: RatCraster
@@ -798,6 +802,10 @@
   - type: SimpleDebrisSelector
     debrisTable:
     - id: RatAsteroidRichLarge
+      prob: 1
+    # Common core-belt chromite.
+    - id: RatChromiteAsteroidLarge
+      prob: 0.3
   - type: NoiseRangeCarver
     ranges:
     - 0.3, 0.51

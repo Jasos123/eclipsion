@@ -13,6 +13,12 @@ namespace Content.Shared.Power.Components;
 public sealed partial class ApcPowerReceiverBatteryComponent : Component
 {
     /// <summary>
+    /// Whether this receiver may draw idle and recharge power from its APC network.
+    /// </summary>
+    [ViewVariables]
+    public bool PowerDrawEnabled = true;
+
+    /// <summary>
     /// Indicates whether power is currently being drawn from the battery.
     /// </summary>
     [DataField, AutoNetworkedField]

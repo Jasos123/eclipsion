@@ -91,7 +91,7 @@
   - type: LitOnPowered
   - type: PowerSwitch
   - type: ApcPowerReceiver
-    powerLoad: 60000
+    powerLoad: 500000 # T3 deflector. Losing the grid drops the bubble - see ShipShieldsSystem.
   - type: Appearance
   - type: ShipShieldEmitter
     damageLimit: 30000
@@ -144,7 +144,7 @@
           True: { visible: true }
           False: { visible: false }
   - type: ApcPowerReceiver
-    powerLoad: 20000
+    powerLoad: 150000 # T2 deflector
 
 - type: entity
   id: ShieldEmitterSmall
@@ -185,4 +185,4 @@
           True: { visible: true }
           False: { visible: false }
   - type: ApcPowerReceiver
-    powerLoad: 5000
+    powerLoad: 40000 # T1 deflector

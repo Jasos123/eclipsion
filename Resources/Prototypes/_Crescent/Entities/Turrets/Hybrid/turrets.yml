@@ -29,12 +29,15 @@
         ballistic-ammo: !type:Container
           ents: []
     - type: Gun
+      burstCooldown: 5.0
+      burstFireRate: 10.0
+      shotsPerBurst: 50
       fireOnDropChance: 0
       projectileSpeed: 75
       fireRate: 10
-      selectedMode: FullAuto
+      selectedMode: Burst
       availableModes:
-        - FullAuto
+      - Burst
       angleDecay: 12
       minAngle: 2
       maxAngle: 18
@@ -44,7 +47,7 @@
         params:
           variation: 0.12
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: .4
+      rechargeCooldown: 0.1
       energyPerCharge: 125
       rechargeSound:
         path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
@@ -53,17 +56,18 @@
           variation: 0.08
     - type: BasicEntityAmmoProvider
       proto: BulletPlasmaGatling
-      capacity: 80
-      count: 80
+      capacity: 50
+      count: 50
     - type: ApcPowerReceiver
-      powerLoad: 2500
+      powerLoad: 10000
     - type: WeaponPowerDraw
-      energyPerShot: 2000
+      energyPerShot: 9000
     - type: Battery
-      maxCharge: 10000
-      startingCharge: 10000
+      maxCharge: 450000
+      startingCharge: 450000
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 80000
+      idleLoad: 10000
+      batteryRechargeRate: 90000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Small
@@ -99,12 +103,15 @@
         ballistic-ammo: !type:Container
           ents: []
     - type: Gun
+      burstCooldown: 8.0
+      burstFireRate: 2.5
+      shotsPerBurst: 10
       fireOnDropChance: 0
       projectileSpeed: 85
       fireRate: 2.5
-      selectedMode: FullAuto
+      selectedMode: Burst
       availableModes:
-        - FullAuto
+      - Burst
       angleDecay: 10
       minAngle: 1.5
       maxAngle: 10
@@ -114,7 +121,7 @@
         params:
           variation: 0.12
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: .75
+      rechargeCooldown: 0.8
       energyPerCharge: 150
       rechargeSound:
         path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
@@ -123,17 +130,18 @@
           variation: 0.08
     - type: BasicEntityAmmoProvider
       proto: BulletPlasmaBall
-      capacity: 36
-      count: 36
+      capacity: 10
+      count: 10
     - type: ApcPowerReceiver
-      powerLoad: 3500
+      powerLoad: 30000
     - type: WeaponPowerDraw
-      energyPerShot: 14000
+      energyPerShot: 256000
     - type: Battery
-      maxCharge: 70000
-      startingCharge: 70000
+      maxCharge: 2560000
+      startingCharge: 2560000
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 140000
+      idleLoad: 30000
+      batteryRechargeRate: 320000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Medium
@@ -169,12 +177,15 @@
         ballistic-ammo: !type:Container
           ents: []
     - type: Gun
+      burstCooldown: 12.0
+      burstFireRate: 1.0
+      shotsPerBurst: 3
       fireOnDropChance: 0
       projectileSpeed: 100
       fireRate: 1
-      selectedMode: FullAuto
+      selectedMode: Burst
       availableModes:
-        - FullAuto
+      - Burst
       angleDecay: 2
       minAngle: 1
       maxAngle: 9
@@ -184,7 +195,7 @@
         params:
           variation: 0.12
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: 4
+      rechargeCooldown: 4.0
       rechargeSound:
         path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
         params:
@@ -192,17 +203,18 @@
           variation: 0.08
     - type: BasicEntityAmmoProvider
       proto: BulletPlasmaArc
-      capacity: 15
-      count: 15
+      capacity: 3
+      count: 3
     - type: ApcPowerReceiver
-      powerLoad: 5000
+      powerLoad: 80000
     - type: WeaponPowerDraw
-      energyPerShot: 55000
+      energyPerShot: 3280000
     - type: Battery
-      maxCharge: 275000
-      startingCharge: 275000
+      maxCharge: 9840000
+      startingCharge: 9840000
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 220000
+      idleLoad: 80000
+      batteryRechargeRate: 820000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Large

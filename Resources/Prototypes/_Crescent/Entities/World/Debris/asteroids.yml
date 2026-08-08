@@ -6,6 +6,10 @@
   components:
     - type: MapGrid
     - type: IgnoreHeatSeekingTarget
+    # Keep the core belt stationary while the outer belt orbits.
+    - type: OrbitingDebris
+      period: 4h
+      minRadius: 3000
     - type: BlobFloorPlanBuilder
       floorTileset:
       - FloorAsteroidSand
@@ -22,41 +26,45 @@
     - type: IFF
       flags: HideLabel
       color: "#FFF0AA"
+    # Sparse ore distribution for the outer belt.
     - type: SimpleFloorPlanPopulator
       entries:
         FloorAsteroidSand:
           - id: WallRock
-            prob: 0.2
+            prob: 0.77
             orGroup: rock
           - id: WallRockCoal
-            prob: 0.05
+            prob: 0.038
             orGroup: rock
           - id: WallRockTin
-            prob: 0.05
+            prob: 0.038
             orGroup: rock
           - id: WallRockQuartz
-            prob: 0.05
+            prob: 0.038
             orGroup: rock
           - id: WallRockCopper
-            prob: 0.05
+            prob: 0.038
             orGroup: rock
           - id: WallRockGold
-            prob: 0.02
+            prob: 0.015
             orGroup: rock
           - id: WallRockSilver
-            prob: 0.02
+            prob: 0.015
             orGroup: rock
           - id: WallRockArtifactFragment
-            prob: 0.002
+            prob: 0.0015
             orGroup: rock
           - id: WallRockPlasma
-            prob: 0.015
+            prob: 0.012
             orGroup: rock
           - id: WallRockUranium
-            prob: 0.015
+            prob: 0.012
             orGroup: rock
           - id: WallRockTungsten
-            prob: 0.015
+            prob: 0.012
+            orGroup: rock
+          - id: FuelSeepBoriatic
+            prob: 0.01
             orGroup: rock
 
 - type: entity
@@ -68,45 +76,87 @@
     - type: IFF
       flags: HideLabel
       color: "#FFD000"
+    # Rich asteroids keep a higher ore density than outer-belt rocks.
     - type: SimpleFloorPlanPopulator
       entries:
         FloorAsteroidSand:
           - id: WallRock
-            prob: 0.1
+            prob: 0.64
             orGroup: rock
           - id: WallRockCoal
-            prob: 0.075
+            prob: 0.0525
             orGroup: rock
           - id: WallRockTin
-            prob: 0.075
+            prob: 0.0525
             orGroup: rock
           - id: WallRockQuartz
-            prob: 0.075
+            prob: 0.0525
             orGroup: rock
           - id: WallRockCopper
-            prob: 0.075
+            prob: 0.0525
             orGroup: rock
           - id: WallRockGold
-            prob: 0.05
+            prob: 0.035
             orGroup: rock
           - id: WallRockSilver
-            prob: 0.05
+            prob: 0.035
             orGroup: rock
           - id: WallRockArtifactFragment
-            prob: 0.01
+            prob: 0.007
             orGroup: rock
           - id: WallRockPlasma
-            prob: 0.03
+            prob: 0.021
             orGroup: rock
           - id: WallRockUranium
-            prob: 0.03
+            prob: 0.021
             orGroup: rock
           - id: WallRockTungsten
-            prob: 0.03
+            prob: 0.021
             orGroup: rock
           - id: RandomArtifactSpawner20
             prob: 0.002
             orGroup: rock
+          - id: FuelSeepBoriatic
+            prob: 0.008
+            orGroup: rock
+
+# Chromite asteroids carry AME seeps.
+- type: entity
+  id: RatBaseChromiteAsteroid
+  parent: RatBaseAsteroidDebrisNF
+  name: Chromite Asteroid Debris
+  abstract: true
+  components:
+    - type: BlobFloorPlanBuilder
+      floorTileset:
+      - FloorChromite
+    - type: SimpleFloorPlanPopulator
+      entries:
+        FloorChromite:
+          - id: WallRockChromite
+            prob: 0.45
+            orGroup: rock
+          - id: WallRockChromiteCoal
+            prob: 0.05
+            orGroup: rock
+          - id: WallRockChromiteTin
+            prob: 0.05
+            orGroup: rock
+          - id: WallRockChromiteTungsten
+            prob: 0.04
+            orGroup: rock
+          - id: WallRockChromitePlasma
+            prob: 0.03
+            orGroup: rock
+          - id: WallRockChromiteArtifactFragment
+            prob: 0.005
+            orGroup: rock
+          - id: FuelSeepAme
+            prob: 0.004
+            orGroup: rock
+    - type: IFF
+      flags: HideLabel
+      color: "#8178cc"
 
 - type: entity
   id: RatBaseIceAsteroidPoor
@@ -283,6 +333,17 @@
   id: RatAsteroidRichLarge
   parent: RatBaseAsteroidRich
   name: Rich Asteroid Large
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: MapGrid
+    - type: BlobFloorPlanBuilder
+      radius: 8
+      floorPlacements: 300
+
+- type: entity
+  id: RatChromiteAsteroidLarge
+  parent: RatBaseChromiteAsteroid
+  name: Chromite Asteroid Large
   categories: [ HideSpawnMenu ]
   components:
     - type: MapGrid

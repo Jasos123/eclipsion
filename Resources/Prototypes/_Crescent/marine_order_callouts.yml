@@ -1,0 +1,116 @@
+# Order callouts keyed by the issuer's HullrotFaction id.
+# Factions without an entry here fall back to the generic lines on MarineOrdersComponent.
+
+- type: marineOrderCallouts
+  id: NCWL
+  move:
+  - move-order-callout-ncwl-1
+  - move-order-callout-ncwl-2
+  - move-order-callout-ncwl-3
+  - move-order-callout-ncwl-4
+  - move-order-callout-ncwl-5
+  - move-order-callout-ncwl-6
+  - move-order-callout-ncwl-7
+  - move-order-callout-ncwl-8
+  - move-order-callout-ncwl-9
+  - move-order-callout-ncwl-10
+  - move-order-callout-ncwl-11
+  - move-order-callout-ncwl-12
+  - move-order-callout-ncwl-13
+  - move-order-callout-ncwl-14
+  - move-order-callout-ncwl-15
+  hold:
+  - hold-order-callout-ncwl-1
+  - hold-order-callout-ncwl-2
+  - hold-order-callout-ncwl-3
+  - hold-order-callout-ncwl-4
+  - hold-order-callout-ncwl-5
+  - hold-order-callout-ncwl-6
+  - hold-order-callout-ncwl-7
+  - hold-order-callout-ncwl-8
+  - hold-order-callout-ncwl-9
+  - hold-order-callout-ncwl-10
+  - hold-order-callout-ncwl-11
+  - hold-order-callout-ncwl-12
+  - hold-order-callout-ncwl-13
+  - hold-order-callout-ncwl-14
+  - hold-order-callout-ncwl-15
+  - hold-order-callout-ncwl-16
+  - hold-order-callout-ncwl-17
+  focus:
+  - focus-order-callout-ncwl-1
+  - focus-order-callout-ncwl-2
+  - focus-order-callout-ncwl-3
+  - focus-order-callout-ncwl-4
+  - focus-order-callout-ncwl-5
+  - focus-order-callout-ncwl-6
+  - focus-order-callout-ncwl-7
+  - focus-order-callout-ncwl-8
+  - focus-order-callout-ncwl-9
+  - focus-order-callout-ncwl-10
+  - focus-order-callout-ncwl-11
+  - focus-order-callout-ncwl-12
+  - focus-order-callout-ncwl-13
+  - focus-order-callout-ncwl-14
+  - focus-order-callout-ncwl-15
+  - focus-order-callout-ncwl-16
+  - focus-order-callout-ncwl-17
+  - focus-order-callout-ncwl-18
+  - focus-order-callout-ncwl-19
+
+- type: marineOrderCallouts
+  id: DSM
+  move:
+  - move-order-callout-dsm-1
+  - move-order-callout-dsm-2
+  - move-order-callout-dsm-3
+  - move-order-callout-dsm-4
+  - move-order-callout-dsm-5
+  - move-order-callout-dsm-6
+  - move-order-callout-dsm-7
+  - move-order-callout-dsm-8
+  - move-order-callout-dsm-9
+  - move-order-callout-dsm-10
+  - move-order-callout-dsm-11
+  - move-order-callout-dsm-12
+  - move-order-callout-dsm-13
+  - move-order-callout-dsm-14
+  - move-order-callout-dsm-15
+  hold:
+  - hold-order-callout-dsm-1
+  - hold-order-callout-dsm-2
+  - hold-order-callout-dsm-3
+  - hold-order-callout-dsm-4
+  - hold-order-callout-dsm-5
+  - hold-order-callout-dsm-6
+  - hold-order-callout-dsm-7
+  - hold-order-callout-dsm-8
+  - hold-order-callout-dsm-9
+  - hold-order-callout-dsm-10
+  - hold-order-callout-dsm-11
+  - hold-order-callout-dsm-12
+  - hold-order-callout-dsm-13
+  - hold-order-callout-dsm-14
+  - hold-order-callout-dsm-15
+  - hold-order-callout-dsm-16
+  - hold-order-callout-dsm-17
+  focus:
+  - focus-order-callout-dsm-1
+  - focus-order-callout-dsm-2
+  - focus-order-callout-dsm-3
+  - focus-order-callout-dsm-4
+  - focus-order-callout-dsm-5
+  - focus-order-callout-dsm-6
+  - focus-order-callout-dsm-7
+  - focus-order-callout-dsm-8
+  - focus-order-callout-dsm-9
+  - focus-order-callout-dsm-10
+  - focus-order-callout-dsm-11
+  - focus-order-callout-dsm-12
+  - focus-order-callout-dsm-13
+  - focus-order-callout-dsm-14
+  - focus-order-callout-dsm-15
+  - focus-order-callout-dsm-16
+  - focus-order-callout-dsm-17
+  - focus-order-callout-dsm-18
+  - focus-order-callout-dsm-19

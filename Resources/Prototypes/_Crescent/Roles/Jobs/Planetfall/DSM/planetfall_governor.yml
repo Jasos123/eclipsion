@@ -37,6 +37,8 @@
     components:
       - type: HullrotFaction
         faction: DSM
+      - type: MarineOrders
+        power: 3
       - type: LanguageAdder
         addSpoken:
           - HighImperial

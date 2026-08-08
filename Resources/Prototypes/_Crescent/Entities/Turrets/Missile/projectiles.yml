@@ -16,8 +16,8 @@
     ignoreWeaponGrid: true
     damage:
       types:
-        Structural: 280
-        Blunt: 40
+        Structural: 220
+        Blunt: 30
   - type: TimedDespawn
     lifetime: 12 # 900 m at 75 m/s
   - type: Sprite
@@ -27,10 +27,10 @@
   - type: ExplodeOnTrigger
   - type: Explosive
     explosionType: Default
-    maxIntensity: 50
-    intensitySlope: 25
-    totalIntensity: 700
-    maxTileBreak: 2
+    maxIntensity: 100
+    intensitySlope: 50
+    totalIntensity: 450
+    maxTileBreak: 1
   - type: PointLight
     radius: 3.5
     color: orange
@@ -40,15 +40,15 @@
     color: Red
   - type: ProximityFuseTarget
   - type: HeatSeeking
-    rotationSpeed: 18 # fighter killer for security ships
-    acceleration: 120
-    topSpeed: 75
+    rotationSpeed: 16
+    acceleration: 45
+    topSpeed: 85
     fieldOfView: 30
     defaultSeekingRange: 800
     guidanceAlgorithm: PredictiveGuidance
-    weaveAmplitude: 10
-    weaveFrequency: 0.55
-    weaveFadeDistance: 180
+    weaveAmplitude: 16
+    weaveFrequency: 0.5
+    weaveFadeDistance: 220
   - type: Fixtures
     fixtures:
       projectile:
@@ -831,7 +831,7 @@
   - type: Projectile
     damage:
       types:
-        Structural: 125
+        Structural: 260
         Blunt: 40
   - type: TimedDespawn
     lifetime: 25 #1250m + Lock on = 1650m
@@ -842,9 +842,9 @@
   - type: ExplodeOnTrigger
   - type: Explosive
     explosionType: Default
-    maxIntensity: 100
-    intensitySlope: 50
-    totalIntensity: 250
+    maxIntensity: 120
+    intensitySlope: 60
+    totalIntensity: 550
     maxTileBreak: 1
   - type: PointLight
     radius: 3.5

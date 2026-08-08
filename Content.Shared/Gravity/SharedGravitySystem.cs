@@ -71,6 +71,18 @@ namespace Content.Shared.Gravity
                    _gravityQuery.TryComp(entity.Comp.MapUid, out var mapGravity) && mapGravity.Enabled;
         }
 
+        /// <summary>
+        /// Returns whether the entity can use movement that requires gravity, such as sprinting.
+        /// </summary>
+        public bool HasTraction(Entity<TransformComponent?> entity)
+        {
+            // Preserve movement for entities that ignore gravity.
+            if (HasComp<MovementIgnoreGravityComponent>(entity))
+                return true;
+
+            return EntityGridOrMapHaveGravity(entity);
+        }
+
         public override void Initialize()
         {
             base.Initialize();

@@ -31,6 +31,13 @@ public sealed partial class RadarConsoleComponent : Component
 
     // hullrot edit
     public NavBoundUserInterfaceState? LastUpdatedState = null;
+
+    /// <summary>
+    /// The next scheduled IFF refresh. This server-only value is staggered so consoles update on different ticks.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan NextIffUpdate = TimeSpan.Zero;
+
     [DataField]
     public bool KeepWorldAligned = false;
     // end

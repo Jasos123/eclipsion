@@ -400,6 +400,18 @@
   category: cargoproduct-category-name-shuttleammo
   group: genericAmmo
 
+#30mm Pila
+
+- type: cargoProduct
+  id: ShuttlePilaAmmoGeneric
+  icon:
+    sprite: _Crescent/Objects/Turrets/Ammunition/Cartridge/shortbow.rsi
+    state: shortbow
+  product: CratePilaAmmo
+  cost: 18000
+  category: cargoproduct-category-name-shuttleammo
+  group: genericAmmo
+
 #120mm Anvil
 
 - type: cargoProduct

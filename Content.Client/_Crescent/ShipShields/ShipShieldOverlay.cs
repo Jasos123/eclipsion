@@ -6,6 +6,7 @@ using Robust.Shared.Physics.Systems;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Collision.Shapes;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using Content.Client.Resources;
 using Robust.Client.Physics;
 using Robust.Shared.Prototypes;
@@ -14,22 +15,22 @@ namespace Content.Client._Crescent.ShipShields;
 
 public sealed class ShipShieldOverlay : Overlay
 {
-    private readonly IResourceCache _resourceCache;
     private readonly IEntityManager _entManager;
     private readonly FixtureSystem _fixture;
     private readonly SharedPhysicsSystem _physics;
     private readonly ShaderInstance _unshadedShader;
+    private readonly Texture _shieldTexture;
     private readonly List<DrawVertexUV2D> _verts = new(128);
     public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowWorld;
 
     public ShipShieldOverlay(IEntityManager entityManager, IPrototypeManager prototypeManager, IResourceCache resourceCache)
     {
-        _resourceCache = resourceCache;
         _entManager = entityManager;
         _fixture = _entManager.EntitySysManager.GetEntitySystem<FixtureSystem>();
         _physics = _entManager.EntitySysManager.GetEntitySystem<PhysicsSystem>();
 
         _unshadedShader = prototypeManager.Index<ShaderPrototype>("unshaded").Instance();
+        _shieldTexture = resourceCache.GetTexture("/Textures/_Crescent/ShipShields/shieldtex.png");
 
         ZIndex = 8;
     }
@@ -47,28 +48,45 @@ public sealed class ShipShieldOverlay : Overlay
             if (xform.MapID != args.MapId)
                 continue;
 
-            // TODO: We can probably at least test its parent grid is in PVS range...?
-
             var fixture = _fixture.GetFixtureOrNull(uid, "shield", fixtures);
 
             if (fixture is not { Shape: ChainShape chain })
                 continue;
 
-            var texture = _resourceCache.GetTexture("/Textures/_Crescent/ShipShields/shieldtex.png");
+            var transform = _physics.GetPhysicsTransform(uid);
 
-            DrawShield(handle, uid, chain, xform, texture, _verts);
-            _verts.Clear();
+            // Skip geometry for shields outside the viewport.
+            if (!IsOnScreen(chain, transform.Position, args.WorldAABB))
+                continue;
+
+            DrawShield(handle, chain, transform, xform.LocalPosition, _shieldTexture, _verts);
         }
     }
 
-    private void DrawShield(DrawingHandleWorld handle, EntityUid uid, ChainShape chain, TransformComponent xform, Texture tex, List<DrawVertexUV2D> verts)
+    private static bool IsOnScreen(ChainShape chain, Vector2 worldCenter, in Box2 viewport)
+    {
+        var maxDistanceSq = 0f;
+
+        foreach (var vertex in chain.Vertices)
+        {
+            var distanceSq = vertex.LengthSquared();
+
+            if (distanceSq > maxDistanceSq)
+                maxDistanceSq = distanceSq;
+        }
+
+        // Keep a small margin around the chain's outer edge.
+        var radius = MathF.Sqrt(maxDistanceSq) + 2f;
+        var extents = new Vector2(radius, radius);
+
+        return new Box2(worldCenter - extents, worldCenter + extents).Intersects(viewport);
+    }
+
+    private void DrawShield(DrawingHandleWorld handle, ChainShape chain, Transform transform, Vector2 localPos, Texture tex, List<DrawVertexUV2D> verts)
     {
         // The vertices of this fixture are defined relative to local position,
         // so we'll have to add them to this and then use the matrix to put them back in world position.
-        var localPos = xform.LocalPosition;
-
-        // If "Transforms" ever get deprecated go ahead and check how DebugPHysicsSystem is drawing chains in this hellworld future
-        var transform = _physics.GetPhysicsTransform(uid);
+        verts.Clear();
 
         for (int i = 1; i <= chain.Count; i++)
         {
@@ -97,7 +115,8 @@ public sealed class ShipShieldOverlay : Overlay
             verts.Add(new DrawVertexUV2D(rightCorner, new Vector2(1, 0)));
         }
 
-        handle.DrawPrimitives(DrawPrimitiveTopology.TriangleList, texture: tex, verts.ToArray().AsSpan(), Color.White);
+        // Draw directly from the reusable vertex buffer.
+        handle.DrawPrimitives(DrawPrimitiveTopology.TriangleList, texture: tex, CollectionsMarshal.AsSpan(verts), Color.White);
     }
 
     private Vector2 VertexToWorldPos(Vector2 vertexPos, Transform transform)

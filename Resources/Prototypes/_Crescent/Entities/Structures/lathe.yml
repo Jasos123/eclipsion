@@ -1699,14 +1699,15 @@
     staticRecipes:
     - JugBoriaticFuelCraft
     # Capacity upgrades remain research-gated.
-    - FuelCanisterBoriaticT1Craft
-    - BoriaticFuelTankCraft
-    - AmeFuelTankCraft
+    - JugBoriaticFuelEmptyCraft
     dynamicRecipes:
     - FuelCanisterBoriaticT2Craft
     - FuelCanisterBoriaticT3Craft
     - AmeJarT2Craft
     - AmeJarT3Craft
+    - BoriaticFuelTankCraft
+    - AmeFuelTankCraft
+    - FuelExtractorFlatpackCraft
 
 #organs
 

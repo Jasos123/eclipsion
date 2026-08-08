@@ -141,6 +141,13 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
                 continue;
             }
 
+            // Closed consoles rebuild their state when opened, so refreshing their turret cache only wastes a
+            // world-wide turret scan.
+            if (!_ui.IsUiOpen(uid, ShuttleConsoleUiKey.Key))
+            {
+                continue;
+            }
+
             console.LastUpdatedState.IFFState.Turrets = GetAllTurrets(uid);
         }
     }
@@ -644,16 +651,23 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
     public List<ProjectileState> GetProjectilesInRange(EntityUid consoleUid)
     {
         var projectiles = new List<ProjectileState>();
+        var consoleXform = Transform(consoleUid);
+        var consoleMap = consoleXform.MapID;
         var consolePosition = _transform.GetWorldPosition(consoleUid);
         var range = SharedRadarConsoleSystem.DefaultMaxRange;
+        var rangeSq = range * range;
 
         var query = EntityQueryEnumerator<ProjectileIFFComponent, MetaDataComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var projectileIFF, out var metadata, out var transform))
         {
+            // World positions are only comparable on the same map.
+            if (transform.MapID != consoleMap)
+                continue;
+
             if (HasComp<RadarPingerComponent>(uid) && !_ui.IsUiOpen(uid, RadarConsoleUiKey.Key))
                 continue;
-			
-            if ((consolePosition - _transform.GetWorldPosition(uid)).Length() > range)
+
+            if ((consolePosition - _transform.GetWorldPosition(uid)).LengthSquared() > rangeSq)
             {
                 continue;
             }

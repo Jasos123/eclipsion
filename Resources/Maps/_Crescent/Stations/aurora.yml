@@ -89724,7 +89724,7 @@ entities:
           showEnts: False
           occludes: True
           ent: 446
-- proto: AmeJar
+- proto: AmeJarT3
   entities:
   - uid: 446
     components:
@@ -89732,6 +89732,8 @@ entities:
       parent: 445
     - type: Physics
       canCollide: False
+- proto: AmeJar
+  entities:
   - uid: 448
     components:
     - type: Transform

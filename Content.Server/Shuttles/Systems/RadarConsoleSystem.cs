@@ -22,6 +22,7 @@ public sealed partial class RadarConsoleSystem : SharedRadarConsoleSystem
         base.Initialize();
         SubscribeLocalEvent<RadarConsoleComponent, ComponentStartup>(OnRadarStartup);
         SubscribeLocalEvent<RadarConsoleComponent, BoundUIOpenedEvent>(OnUIOpened);
+        InitializeCrescent(); // Crescent radar update rate.
     }
 
     private void OnRadarStartup(EntityUid uid, RadarConsoleComponent component, ComponentStartup args)

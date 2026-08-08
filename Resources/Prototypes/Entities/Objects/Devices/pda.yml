@@ -813,7 +813,7 @@
   components:
   - type: Pda
     id: RoboticsIDCard
-    state: pda-robotics
+    # No dedicated robotics PDA state exists yet.
   - type: PdaBorderColor
     borderColor: "#d7d7d0"
     accentVColor: "#952004"
@@ -1363,7 +1363,7 @@
   components:
   - type: Pda
     id: PirateIDCard
-    state: pda-pirate
+    # No dedicated pirate PDA state exists yet.
 
 - type: entity
   parent: BaseMedicalPDA

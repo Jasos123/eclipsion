@@ -33,6 +33,9 @@
           - id: WallRockCopper
             prob: 0.02
             orGroup: rock
+          - id: FuelSeepBoriatic
+            prob: 0.005
+            orGroup: rock
     - type: IFF
       flags: HideLabel
       color: "#d67e27"
@@ -190,6 +193,9 @@
             orGroup: rock
           - id: WallRockChromiteTin
             prob: 0.05
+            orGroup: rock
+          - id: FuelSeepAme
+            prob: 0.004
             orGroup: rock
     - type: IFF
       flags: HideLabel

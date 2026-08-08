@@ -32,31 +32,38 @@
     - type: Gun
       fireOnDropChance: 0
       projectileSpeed: 75
-      burstCooldown: 2.2
-      shotsPerBurst: 2
-      burstFireRate: 8
+      burstCooldown: 6
+      shotsPerBurst: 20
+      burstFireRate: 20
       selectedMode: Burst
       availableModes:
         - Burst
       soundGunshot: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
-    - type: BallisticAmmoProvider
-      cycleable: false
-      capacity: 10
-      fillWithDoAfter: true
-      fillDelay: .6
-      proto: Cartridge48mmRocket
-      whitelist:
-        tags:
-        - CartridgeShortbow
+    - type: ItemSlots
+      slots:
+        gun_magazine:
+          name: Magazine
+          startingItem: Magazine48mmRocket
+          insertSound: /Audio/Weapons/Guns/MagIn/ltrifle_magin.ogg
+          ejectSound: /Audio/Weapons/Guns/MagOut/ltrifle_magout.ogg
+          priority: 2
+          whitelist:
+            tags:
+              - MagazineShortbow
+    - type: MagazineAmmoProvider
+      reloadDuration: 13
+    - type: FullSalvo
+      requiredShots: 20
     - type: ApcPowerReceiver
-      powerLoad: 2000
+      powerLoad: 1000
     - type: WeaponPowerDraw
       energyPerShot: 3675
     - type: Battery
-      maxCharge: 18375
-      startingCharge: 18375
+      maxCharge: 73500
+      startingCharge: 73500
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 12000
+      idleLoad: 1000
+      batteryRechargeRate: 6000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Small
@@ -94,15 +101,21 @@
       selectedMode: Burst
       availableModes:
         - Burst
-    - type: BallisticAmmoProvider
-      cycleable: false
-      capacity: 18
-      fillWithDoAfter: true
-      fillDelay: .6
-      proto: Cartridge48mmRocketGorlex
-      whitelist:
-        tags:
-        - CartridgeShortbow
+    - type: ItemSlots
+      slots:
+        gun_magazine:
+          name: Magazine
+          startingItem: Magazine48mmRocketGorlex
+          insertSound: /Audio/Weapons/Guns/MagIn/ltrifle_magin.ogg
+          ejectSound: /Audio/Weapons/Guns/MagOut/ltrifle_magout.ogg
+          priority: 2
+          whitelist:
+            tags:
+              - MagazineShortbow
+    - type: MagazineAmmoProvider
+      reloadDuration: 6
+    - type: FullSalvo
+      requiredShots: 3
 
 #azimuth
 
@@ -143,24 +156,29 @@
       availableModes:
         - FullAuto
       soundGunshot: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
-    - type: BallisticAmmoProvider
-      cycleable: false
-      capacity: 8
-      fillWithDoAfter: true
-      fillDelay: .8
-      proto: Cartridge60mmRocket
-      whitelist:
-        tags:
-        - CartridgeAzimuth
+    - type: ItemSlots
+      slots:
+        gun_magazine:
+          name: Magazine
+          startingItem: Magazine60mm
+          insertSound: /Audio/Weapons/Guns/MagIn/ltrifle_magin.ogg
+          ejectSound: /Audio/Weapons/Guns/MagOut/ltrifle_magout.ogg
+          priority: 2
+          whitelist:
+            tags:
+              - MagazineAzimuth
+    - type: MagazineAmmoProvider
+      reloadDuration: 4
     - type: ApcPowerReceiver
-      powerLoad: 1500
+      powerLoad: 1000
     - type: WeaponPowerDraw
       energyPerShot: 1364
     - type: Battery
       maxCharge: 6820
       startingCharge: 6820
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 12000
+      idleLoad: 1000
+      batteryRechargeRate: 6000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Small
@@ -202,24 +220,29 @@
       availableModes:
         - FullAuto
       soundGunshot: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
-    - type: BallisticAmmoProvider
-      cycleable: false
-      capacity: 6
-      fillWithDoAfter: true
-      fillDelay: .8
-      proto: Cartridge60mmRocket
-      whitelist:
-        tags:
-        - CartridgeAzimuth
+    - type: ItemSlots
+      slots:
+        gun_magazine:
+          name: Magazine
+          startingItem: Magazine60mmCDT
+          insertSound: /Audio/Weapons/Guns/MagIn/ltrifle_magin.ogg
+          ejectSound: /Audio/Weapons/Guns/MagOut/ltrifle_magout.ogg
+          priority: 2
+          whitelist:
+            tags:
+              - MagazineAzimuth
+    - type: MagazineAmmoProvider
+      reloadDuration: 4
     - type: ApcPowerReceiver
-      powerLoad: 1500
+      powerLoad: 1000
     - type: WeaponPowerDraw
       energyPerShot: 750
     - type: Battery
       maxCharge: 3750
       startingCharge: 3750
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 12000
+      idleLoad: 1000
+      batteryRechargeRate: 6000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Small
@@ -256,24 +279,29 @@
       availableModes:
         - FullAuto
       soundGunshot: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
-    - type: BallisticAmmoProvider
-      cycleable: false
-      capacity: 8
-      fillWithDoAfter: true
-      fillDelay: .8
-      proto: Cartridge60mmRocketNCWL
-      whitelist:
-        tags:
-        - CartridgeAzimuth
+    - type: ItemSlots
+      slots:
+        gun_magazine:
+          name: Magazine
+          startingItem: Magazine60mmNCWL
+          insertSound: /Audio/Weapons/Guns/MagIn/ltrifle_magin.ogg
+          ejectSound: /Audio/Weapons/Guns/MagOut/ltrifle_magout.ogg
+          priority: 2
+          whitelist:
+            tags:
+              - MagazineAzimuth
+    - type: MagazineAmmoProvider
+      reloadDuration: 4
     - type: ApcPowerReceiver
-      powerLoad: 1500
+      powerLoad: 1000
     - type: WeaponPowerDraw
       energyPerShot: 1500
     - type: Battery
       maxCharge: 7500
       startingCharge: 7500
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 12000
+      idleLoad: 1000
+      batteryRechargeRate: 6000
 
 - type: entity
   parent: BaseWeaponTurretAzimuth
@@ -307,24 +335,29 @@
       availableModes:
         - FullAuto
       soundGunshot: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
-    - type: BallisticAmmoProvider
-      cycleable: false
-      capacity: 6
-      fillWithDoAfter: true
-      fillDelay: .8
-      proto: Cartridge60mmRocketGorlex
-      whitelist:
-        tags:
-        - CartridgeAzimuth
+    - type: ItemSlots
+      slots:
+        gun_magazine:
+          name: Magazine
+          startingItem: Magazine60mmGorlex
+          insertSound: /Audio/Weapons/Guns/MagIn/ltrifle_magin.ogg
+          ejectSound: /Audio/Weapons/Guns/MagOut/ltrifle_magout.ogg
+          priority: 2
+          whitelist:
+            tags:
+              - MagazineAzimuth
+    - type: MagazineAmmoProvider
+      reloadDuration: 4
     - type: ApcPowerReceiver
-      powerLoad: 1500
+      powerLoad: 1000
     - type: WeaponPowerDraw
       energyPerShot: 600
     - type: Battery
       maxCharge: 3000
       startingCharge: 3000
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 12000
+      idleLoad: 1000
+      batteryRechargeRate: 6000
 
 #arbalest
 
@@ -365,24 +398,29 @@
       availableModes:
         - FullAuto
       soundGunshot: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
-    - type: BallisticAmmoProvider
-      cycleable: false
-      capacity: 6
-      fillWithDoAfter: true
-      fillDelay: 1.25
-      proto: Cartridge95mmRocket
-      whitelist:
-        tags:
-        - CartridgeArbalest
+    - type: ItemSlots
+      slots:
+        gun_magazine:
+          name: Magazine
+          startingItem: Magazine95mmRocket
+          insertSound: /Audio/Weapons/Guns/MagIn/ltrifle_magin.ogg
+          ejectSound: /Audio/Weapons/Guns/MagOut/ltrifle_magout.ogg
+          priority: 2
+          whitelist:
+            tags:
+              - MagazineArbalest
+    - type: MagazineAmmoProvider
+      reloadDuration: 5
     - type: ApcPowerReceiver
-      powerLoad: 3000
+      powerLoad: 1500
     - type: WeaponPowerDraw
       energyPerShot: 7692
     - type: Battery
       maxCharge: 38460
       startingCharge: 38460
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 20000
+      idleLoad: 1500
+      batteryRechargeRate: 10000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Medium
@@ -424,24 +462,29 @@
       availableModes:
         - FullAuto
       soundGunshot: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
-    - type: BallisticAmmoProvider
-      cycleable: false
-      capacity: 8
-      fillWithDoAfter: true
-      fillDelay: 1.25
-      proto: Cartridge95mmRocketGSC
-      whitelist:
-        tags:
-        - CartridgeArbalest
+    - type: ItemSlots
+      slots:
+        gun_magazine:
+          name: Magazine
+          startingItem: Magazine95mmRocketGorlex
+          insertSound: /Audio/Weapons/Guns/MagIn/ltrifle_magin.ogg
+          ejectSound: /Audio/Weapons/Guns/MagOut/ltrifle_magout.ogg
+          priority: 2
+          whitelist:
+            tags:
+              - MagazineArbalest
+    - type: MagazineAmmoProvider
+      reloadDuration: 5
     - type: ApcPowerReceiver
-      powerLoad: 4000
+      powerLoad: 1500
     - type: WeaponPowerDraw
       energyPerShot: 3333
     - type: Battery
       maxCharge: 16665
       startingCharge: 16665
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 20000
+      idleLoad: 1500
+      batteryRechargeRate: 10000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Medium
@@ -483,24 +526,29 @@
       availableModes:
         - FullAuto
       soundGunshot: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
-    - type: BallisticAmmoProvider
-      cycleable: false
-      capacity: 5
-      fillWithDoAfter: true
-      fillDelay: 1.25
-      proto: Cartridge95mmRocketNCWL
-      whitelist:
-        tags:
-        - CartridgeArbalest
+    - type: ItemSlots
+      slots:
+        gun_magazine:
+          name: Magazine
+          startingItem: Magazine95mmRocketNCWL
+          insertSound: /Audio/Weapons/Guns/MagIn/ltrifle_magin.ogg
+          ejectSound: /Audio/Weapons/Guns/MagOut/ltrifle_magout.ogg
+          priority: 2
+          whitelist:
+            tags:
+              - MagazineArbalest
+    - type: MagazineAmmoProvider
+      reloadDuration: 5
     - type: ApcPowerReceiver
-      powerLoad: 3000
+      powerLoad: 1500
     - type: WeaponPowerDraw
       energyPerShot: 8333
     - type: Battery
       maxCharge: 41665
       startingCharge: 41665
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 20000
+      idleLoad: 1500
+      batteryRechargeRate: 10000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Medium
@@ -560,14 +608,15 @@
         tags:
         - CartridgeGargoyle
     - type: ApcPowerReceiver
-      powerLoad: 3500
+      powerLoad: 1500
     - type: WeaponPowerDraw
       energyPerShot: 25000
     - type: Battery
       maxCharge: 125000
       startingCharge: 125000
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 20000
+      idleLoad: 1500
+      batteryRechargeRate: 10000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Medium
@@ -625,14 +674,15 @@
         tags:
         - CartridgeGargoyle
     - type: ApcPowerReceiver
-      powerLoad: 3500
+      powerLoad: 1500
     - type: WeaponPowerDraw
       energyPerShot: 25000
     - type: Battery
       maxCharge: 125000
       startingCharge: 125000
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 20000
+      idleLoad: 1500
+      batteryRechargeRate: 10000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Medium
@@ -690,14 +740,15 @@
         tags:
         - CartridgeCatapult
     - type: ApcPowerReceiver
-      powerLoad: 6000
+      powerLoad: 2500
     - type: WeaponPowerDraw
       energyPerShot: 66667
     - type: Battery
       maxCharge: 333335
       startingCharge: 333335
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 32000
+      idleLoad: 2500
+      batteryRechargeRate: 16000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Large
@@ -736,32 +787,39 @@
     - type: Gun
       fireOnDropChance: 0
       projectileSpeed: 30
-      fireRate: 4
-      selectedMode: FullAuto
+      fireRate: 20
+      burstCooldown: 6
+      shotsPerBurst: 10
+      burstFireRate: 20
+      selectedMode: Burst
       availableModes:
-        - FullAuto
+        - Burst
       soundGunshot: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
-    - type: RechargeBasicEntityAmmo
-      rechargeCooldown: 2
-      energyPerCharge: 125
-      rechargeSound:
-        path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
-        params:
-          pitch: 1.2
-          variation: 0.08
-    - type: BasicEntityAmmoProvider
-      proto: PilaRocketProjectile
-      capacity: 12
-      count: 12
+    - type: ItemSlots
+      slots:
+        gun_magazine:
+          name: Magazine
+          startingItem: Magazine30mmPila
+          insertSound: /Audio/Weapons/Guns/MagIn/ltrifle_magin.ogg
+          ejectSound: /Audio/Weapons/Guns/MagOut/ltrifle_magout.ogg
+          priority: 2
+          whitelist:
+            tags:
+              - MagazinePila
+    - type: MagazineAmmoProvider
+      reloadDuration: 5
+    - type: FullSalvo
+      requiredShots: 10
     - type: ApcPowerReceiver
       powerLoad: 1000
     - type: WeaponPowerDraw
       energyPerShot: 750
     - type: Battery
-      maxCharge: 3750
-      startingCharge: 3750
+      maxCharge: 7500
+      startingCharge: 7500
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 12000
+      idleLoad: 1000
+      batteryRechargeRate: 6000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Small

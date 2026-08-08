@@ -59,14 +59,15 @@
             tags:
               - Cartridge20mm
     - type: ApcPowerReceiver
-      powerLoad: 2000
+      powerLoad: 1500
     - type: WeaponPowerDraw
       energyPerShot: 600
     - type: Battery
       maxCharge: 3000
       startingCharge: 3000
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 24000
+      idleLoad: 1500
+      batteryRechargeRate: 12000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Small
@@ -132,14 +133,15 @@
             tags:
               - Cartridge20mm
     - type: ApcPowerReceiver
-      powerLoad: 2000
+      powerLoad: 1500
     - type: WeaponPowerDraw
       energyPerShot: 750
     - type: Battery
       maxCharge: 3750
       startingCharge: 3750
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 24000
+      idleLoad: 1500
+      batteryRechargeRate: 12000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Small
@@ -204,14 +206,15 @@
             tags:
               - Cartridge20mm
     - type: ApcPowerReceiver
-      powerLoad: 6000
+      powerLoad: 2000
     - type: WeaponPowerDraw
       energyPerShot: 556
     - type: Battery
       maxCharge: 2780
       startingCharge: 2780
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 40000
+      idleLoad: 2000
+      batteryRechargeRate: 20000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Medium
@@ -282,14 +285,15 @@
             tags:
               - Cartridge35mm
     - type: ApcPowerReceiver
-      powerLoad: 2500
+      powerLoad: 1500
     - type: WeaponPowerDraw
       energyPerShot: 1500
     - type: Battery
       maxCharge: 7500
       startingCharge: 7500
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 24000
+      idleLoad: 1500
+      batteryRechargeRate: 12000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Small
@@ -356,14 +360,15 @@
             tags:
               - Cartridge35mm
     - type: ApcPowerReceiver
-      powerLoad: 2500
+      powerLoad: 1500
     - type: WeaponPowerDraw
       energyPerShot: 1500
     - type: Battery
       maxCharge: 7500
       startingCharge: 7500
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 24000
+      idleLoad: 1500
+      batteryRechargeRate: 12000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Small
@@ -432,14 +437,15 @@
             tags:
               - Cartridge50mm
     - type: ApcPowerReceiver
-      powerLoad: 3000
+      powerLoad: 2000
     - type: WeaponPowerDraw
       energyPerShot: 3333
     - type: Battery
       maxCharge: 16665
       startingCharge: 16665
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 40000
+      idleLoad: 2000
+      batteryRechargeRate: 20000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Medium
@@ -507,14 +513,15 @@
             tags:
               - Cartridge50mm
     - type: ApcPowerReceiver
-      powerLoad: 3000
+      powerLoad: 2000
     - type: WeaponPowerDraw
       energyPerShot: 3125
     - type: Battery
       maxCharge: 15625
       startingCharge: 15625
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 40000
+      idleLoad: 2000
+      batteryRechargeRate: 20000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Medium
@@ -580,7 +587,8 @@
       maxCharge: 200000
       startingCharge: 200000
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 40000
+      idleLoad: 2000
+      batteryRechargeRate: 20000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Medium
@@ -651,14 +659,15 @@
             tags:
               - Cartridge90mm
     - type: ApcPowerReceiver
-      powerLoad: 5500
+      powerLoad: 3000
     - type: WeaponPowerDraw
       energyPerShot: 16000
     - type: Battery
       maxCharge: 80000
       startingCharge: 80000
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 64000
+      idleLoad: 3000
+      batteryRechargeRate: 32000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Large
@@ -682,14 +691,15 @@
               sound:
                 collection: MetalGlassBreak
     - type: ApcPowerReceiver
-      powerLoad: 800
+      powerLoad: 3000
     - type: WeaponPowerDraw
       energyPerShot: 13333
     - type: Battery
       maxCharge: 66665
       startingCharge: 66665
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 64000
+      idleLoad: 3000
+      batteryRechargeRate: 32000
     - type: Gun
       fireOnDropChance: 0
       projectileSpeed: 125
@@ -762,14 +772,15 @@
         tags:
         - Cartridge300mm
     - type: ApcPowerReceiver
-      powerLoad: 10000
+      powerLoad: 3000
     - type: WeaponPowerDraw
       energyPerShot: 106667
     - type: Battery
       maxCharge: 533335
       startingCharge: 533335
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 64000
+      idleLoad: 3000
+      batteryRechargeRate: 32000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Large
@@ -799,14 +810,15 @@
         - SemiAuto
       soundGunshot: /Audio/Weapons/Guns/Gunshots/ship_duster.ogg
     - type: ApcPowerReceiver
-      powerLoad: 8500
+      powerLoad: 3000
     - type: WeaponPowerDraw
       energyPerShot: 88889
     - type: Battery
       maxCharge: 444445
       startingCharge: 444445
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 64000
+      idleLoad: 3000
+      batteryRechargeRate: 32000
     - type: BallisticAmmoProvider
       fillWithDoAfter: true
       fillDelay: 2.75
@@ -889,14 +901,15 @@
             tags:
               - CorpusShell
     - type: ApcPowerReceiver
-      powerLoad: 6500
+      powerLoad: 3000
     - type: WeaponPowerDraw
       energyPerShot: 13333
     - type: Battery
       maxCharge: 66665
       startingCharge: 66665
     - type: ApcPowerReceiverBattery
-      batteryRechargeRate: 64000
+      idleLoad: 3000
+      batteryRechargeRate: 32000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Large

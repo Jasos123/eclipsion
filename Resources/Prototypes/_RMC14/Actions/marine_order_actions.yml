@@ -1,0 +1,38 @@
+- type: entity
+  id: ActionMarineFocus
+  name: Issue Focus Order
+  description: Order nearby allies to steady their aim.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: InstantAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/marine_actions.rsi
+      state: focus
+    event: !type:FocusActionEvent
+
+- type: entity
+  id: ActionMarineHold
+  name: Issue Hold Order
+  description: Order nearby allies to brace for incoming damage.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: InstantAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/marine_actions.rsi
+      state: hold
+    event: !type:HoldActionEvent
+
+- type: entity
+  id: ActionMarineMove
+  name: Issue Move Order
+  description: Order nearby allies to move faster.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: InstantAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/marine_actions.rsi
+      state: move
+    event: !type:MoveActionEvent

@@ -93,6 +93,11 @@
         posY: 0
         IFFColor: IndianRed
         IFFFaction: TFSC
+      GliessSanto:
+        gameMapID: GliessSanto
+        posX: -3500
+        posY: -2000
+        IFFColor: Blue
       RatFakel:
         gameMapID: RatFakel
         posX: 0
@@ -172,11 +177,11 @@
         posY: 5000
         IFFColor: "#C677A5"
         IFFFaction: DSM
-#      GliessSanto:
-#        gameMapID: GliessSanto
-#        posX: -3500
-#        posY: 0
-#        IFFColor: Gold
+      GliessSanto:
+        gameMapID: GliessSanto
+        posX: -3500
+        posY: 0
+        IFFColor: Blue
       RatFakel:
         gameMapID: RatFakel
         posX: 3000
@@ -256,11 +261,11 @@
         posY: 0
         IFFColor: IndianRed
         IFFFaction: TFSC
-#      GliessSanto:
-#        gameMapID: GliessSanto
-#        posX: 500
-#        posY: 3500
-#        IFFColor: Gold
+      GliessSanto:
+        gameMapID: GliessSanto
+        posX: 500
+        posY: 3500
+        IFFColor: Blue
       RatFakel:
         gameMapID: RatFakel
         posX: 3000

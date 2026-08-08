@@ -37,6 +37,8 @@
     components:
       - type: HullrotFaction
         faction: NCWL
+      - type: MarineOrders
+        power: 2
       - type: LanguageAdder
         addSpoken:
           - Dockta

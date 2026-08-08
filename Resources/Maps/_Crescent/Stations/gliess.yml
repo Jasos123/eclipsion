@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 06/06/2026 13:38:31
-  entityCount: 9232
+  entityCount: 9234
 maps: []
 grids:
 - 1
@@ -75,7 +75,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: Shuttle BET-454
+      name: Gliess Santo
     - type: Transform
       pos: -0.671875,0.8359375
       parent: invalid
@@ -65342,10 +65342,6 @@ entities:
     - type: IFF
       relations: {}
       color: '#F6CE9C9C'
-      flags: IsPlayerShuttle
-    - type: ShuttleDeed
-      shuttleName: Shuttle BET-454
-      shuttleUid: 1
     - type: SelfDeleteGrid
 - proto: AAAHardpointMediumBallistic
   entities:
@@ -113858,12 +113854,49 @@ entities:
     - type: Transform
       pos: 0.5,-27.5
       parent: 1
+- proto: SpawnPointDockhand
+  entities:
+  - uid: 9233
+    components:
+    - type: Transform
+      pos: 31.5,-13.5
+      parent: 1
+  - uid: 9234
+    components:
+    - type: Transform
+      pos: 31.5,-10.5
+      parent: 1
+  - uid: 9235
+    components:
+    - type: Transform
+      pos: 32.5,-10.5
+      parent: 1
+  - uid: 9239
+    components:
+    - type: Transform
+      pos: 31.5,-12.5
+      parent: 1
 - proto: SpawnPointGliessDeputy
   entities:
   - uid: 7922
     components:
     - type: Transform
       pos: 14.5,4.5
+      parent: 1
+  - uid: 9236
+    components:
+    - type: Transform
+      pos: 15.5,4.5
+      parent: 1
+  - uid: 9237
+    components:
+    - type: Transform
+      pos: 14.5,3.5
+      parent: 1
+  - uid: 9238
+    components:
+    - type: Transform
+      pos: 15.5,3.5
       parent: 1
 - proto: SpawnPointGliessDockmaster
   entities:

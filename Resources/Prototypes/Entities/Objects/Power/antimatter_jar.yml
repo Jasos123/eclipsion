@@ -42,6 +42,31 @@
     price: 500
   - type: GuideHelp
     guides: [ AME, Power ]
+  # Detonate the remaining antimatter when the jar is heated or destroyed.
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Explosive
+    explosionType: Default
+    totalIntensity: 300
+    intensitySlope: 5
+    maxIntensity: 35
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Heat
+        damage: 5
+      behaviors:
+      - !type:SolutionExplosionBehavior
+        solution: tank
+    - trigger:
+        !type:DamageTrigger
+        damage: 15
+      behaviors:
+      - !type:SolutionExplosionBehavior
+        solution: tank
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
 
 - type: entity
   parent: AmeJar
@@ -74,6 +99,11 @@
     maxTransferAmount: 5000
   - type: StaticPrice
     price: 2500
+  - type: Explosive
+    explosionType: Default
+    totalIntensity: 800
+    intensitySlope: 7
+    maxIntensity: 70
 
 - type: entity
   parent: AmeJarT2
@@ -105,6 +135,11 @@
     maxTransferAmount: 10000
   - type: StaticPrice
     price: 5000
+  - type: Explosive
+    explosionType: Default
+    totalIntensity: 1300
+    intensitySlope: 8
+    maxIntensity: 95
 
 - type: entity
   parent: AmeJarT3

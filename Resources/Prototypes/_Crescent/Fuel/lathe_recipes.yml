@@ -1,8 +1,8 @@
 # Fuel containers are fabricated empty.
 
 - type: latheRecipe
-  id: FuelCanisterBoriaticT1Craft
-  result: FuelCanisterBoriaticT1
+  id: JugBoriaticFuelEmptyCraft
+  result: JugBoriaticFuelEmpty
   completetime: 2
   materials:
     Steel: 300
@@ -64,6 +64,16 @@
     Plastic: 500
     Silver: 800
     Gold: 200
+
+- type: latheRecipe
+  id: FuelExtractorFlatpackCraft
+  result: FuelExtractorFlatpack
+  completetime: 8
+  materials:
+    Steel: 1500
+    Plastic: 400
+    Tungsten: 300
+    Silver: 150
 
 - type: latheRecipe
   id: TitanGeneratorFlatpack

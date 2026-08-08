@@ -15,3 +15,4 @@ ship-weapon-no-charge = Capacitors flat!
 ship-weapon-power-examine = It spends [color=orange]{$shot} J[/color] per shot from a [color=cyan]{$charge}/{$max} J[/color] capacitor.
 ship-weapon-power-examine-draw = Recharging it pulls [color=cyan]{$draw} W[/color] off the ship's grid.
 ship-weapon-power-examine-flat = Its capacitors are [color=red]too flat to fire[/color].
+gun-full-salvo-not-ready = Salvo incomplete: {$count}/{$required} rounds loaded.

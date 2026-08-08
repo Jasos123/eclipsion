@@ -114,6 +114,6 @@
     sprite: _Crescent/Objects/ShuttleWeapons/swarmermissile.rsi
     state: base
   product: CrateSwarmerAmmo
-  cost: 40000
+  cost: 22000
   category: cargoproduct-category-name-shuttle
   group: market

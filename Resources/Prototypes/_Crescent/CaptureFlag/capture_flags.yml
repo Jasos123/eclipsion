@@ -13,8 +13,8 @@
       state: neutral-white
     - type: CaptureFlag
       radius: 2.0
-      captureTime: 45
-      neutralizeTime: 45
+      captureTime: 10
+      neutralizeTime: 10
       decayWhenInactive: true
       decayRate: 1
       dominationEnabled: true

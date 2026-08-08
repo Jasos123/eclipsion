@@ -26,4 +26,12 @@ Combine the catalyst with boriatic fuel, plasma, and nitrogen, then heat the mix
 
 <GuideReagentEmbed Reagent="AmeFuel"/>
 
+## Asteroid Seeps
+
+Fuel seeps sometimes form inside asteroids. Sand asteroids can hold boriatic fuel, while chromite asteroids can hold raw AME fuel.
+
+Research [color=orange]Seep Extraction[/color], then print an [color=orange]NT-FX-1 seep drill flatpack[/color] at a boriatic composter. Deploy it with a multitool, roll it over a seep, wrench it down and connect it to medium-voltage power.
+
+The drill fills its own tank first, then any refillable container in its cradle. Once both are full, the drill spills excess fuel onto the floor. Seeps never refill.
+
 </Document>

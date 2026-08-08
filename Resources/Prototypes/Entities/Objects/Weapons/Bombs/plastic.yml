@@ -79,6 +79,8 @@
   parent: BasePlasticExplosive
   id: SeismicCharge
   components:
+  # Required by the short seismic charge case whitelist.
+  - type: WeaponCaseInsertable
   - type: Sprite
     sprite: Objects/Weapons/Bombs/seismic.rsi
     state: icon

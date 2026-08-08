@@ -257,8 +257,6 @@
       amount: 1
     - id: Tourniquet
       amount: 1
-    - id: Zipties
-      amount: 1
 
 - type: entity
   id: ClothingBeltAuthorityPouchesFilled

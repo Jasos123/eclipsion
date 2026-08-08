@@ -163,7 +163,7 @@
     attackRate: 1
     damage:
       types:
-        Slash: 34
+        Slash: 42
     heavyStaminaCost: 10
     heavyRateModifier: 1.15
     clickPartDamageMultiplier: 1.25

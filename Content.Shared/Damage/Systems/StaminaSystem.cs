@@ -119,7 +119,10 @@ public sealed partial class StaminaSystem : EntitySystem
         }
 
         component.StaminaDamage = 0;
-        RemComp<ActiveStaminaComponent>(uid);
+
+        if (!IsDraining(component))
+            RemComp<ActiveStaminaComponent>(uid);
+
         SetStaminaAlert(uid, component);
         Dirty(uid, component);
     }
@@ -389,11 +392,21 @@ public sealed partial class StaminaSystem : EntitySystem
         Dirty(target, stamina);
     }
 
+    /// <summary>
+    /// Whether this entity has an active stamina drain.
+    /// </summary>
+    private static bool IsDraining(StaminaComponent stamina)
+    {
+        return stamina.ActiveDrains.Count > 0 || stamina.SprintDraining;
+    }
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
         if (!_timing.IsFirstTimePredicted)
             return;
+
+        UpdateSprint();
 
         var stamQuery = GetEntityQuery<StaminaComponent>();
         var query = EntityQueryEnumerator<ActiveStaminaComponent>();
@@ -402,7 +415,7 @@ public sealed partial class StaminaSystem : EntitySystem
         {
             // Just in case we have active but not stamina we'll check and account for it.
             if (!stamQuery.TryGetComponent(uid, out var comp) ||
-                comp.StaminaDamage <= 0f && !comp.Critical && comp.ActiveDrains.Count == 0)
+                comp.StaminaDamage <= 0f && !comp.Critical && !IsDraining(comp))
             {
                 RemComp<ActiveStaminaComponent>(uid);
                 continue;
@@ -415,6 +428,15 @@ public sealed partial class StaminaSystem : EntitySystem
                     source: source,
                     visual: false,
                     allowsSlowdown: modifiesSpeed);
+
+            // _Crescent: sprint is drained here rather than through ActiveDrains, see StaminaComponent.SprintDraining.
+            if (comp.SprintDraining)
+                TakeStaminaDamage(uid,
+                    SprintStaminaCost * frameTime,
+                    comp,
+                    source: uid,
+                    visual: false,
+                    allowsSlowdown: false);
             // Shouldn't need to consider paused time as we're only iterating non-paused stamina components.
             var nextUpdate = comp.NextUpdate;
 
@@ -430,7 +452,7 @@ public sealed partial class StaminaSystem : EntitySystem
 
             comp.NextUpdate += TimeSpan.FromSeconds(1f);
             // If theres no active drains, recover stamina.
-            if (comp.ActiveDrains.Count == 0)
+            if (!IsDraining(comp))
                 TakeStaminaDamage(uid, -comp.Decay, comp);
 
             Dirty(uid, comp);
@@ -481,7 +503,11 @@ public sealed partial class StaminaSystem : EntitySystem
         component.StaminaDamage = 0f;
         component.NextUpdate = _timing.CurTime;
         SetStaminaAlert(uid, component);
-        RemComp<ActiveStaminaComponent>(uid);
+
+        // An active drain (sprint, or anything using ActiveDrains) still needs ticking.
+        if (!IsDraining(component))
+            RemComp<ActiveStaminaComponent>(uid);
+
         Dirty(uid, component);
         _adminLogger.Add(LogType.Stamina, LogImpact.Low, $"{ToPrettyString(uid):user} recovered from stamina crit");
     }

@@ -530,6 +530,16 @@
 
 
 #Missiles
+#30mm Pila Ammo
+- type: latheRecipe
+  id: Pila30mmRegularRecipe
+  category: Ammo
+  result: Cartridge30mmPila
+  completetime: 1
+  materials:
+    Steel: 250
+    Plasma: 100
+
 #48mm Shortbow Ammo
 - type: latheRecipe
   id: Shortbow48mmRegularRecipe

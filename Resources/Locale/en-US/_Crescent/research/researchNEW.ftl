@@ -23,6 +23,7 @@ research-technology-astronautics-shipyardconstruction = Rapid Vessel Constructio
 research-technology-astronautics-modsuit = MODSuit
 research-technology-astronautics-fuel-storage = Reinforced Fuel Storage
 research-technology-astronautics-bulk-fuel-storage = Bulk Fuel Storage
+research-technology-astronautics-seep-extraction = Seep Extraction
 
 # MECHATRONICS
 research-technology-mechatronics-parts = Construction Parts

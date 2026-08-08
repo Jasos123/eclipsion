@@ -285,3 +285,139 @@ Entries:
   id: 6018
   time: '2026-08-02T00:00:00.0000000+00:00'
   url: null
+- author: Taleryn
+  changes:
+    - message: Planetfall commanders can now give nearby allies Move, Hold and Focus orders.
+      type: Add
+    - message: Orders reach seven tiles, only affect the commander's faction and share an 80-second cooldown.
+      type: Add
+  id: 6019
+  time: '2026-08-04T00:00:00.0000000+00:00'
+  url: null
+- author: Taleryn
+  changes:
+    - message: Without gravity, sprinting now falls back to walking speed, even in magboots.
+      type: Tweak
+    - message: Trying to sprint without gravity no longer wastes stamina or extra silicon charge.
+      type: Fix
+  id: 6020
+  time: '2026-08-05T00:00:00.0000000+00:00'
+  url: null
+- author: Taleryn
+  changes:
+    - message: Added boriatic and AME fuel seeps to sand and chromite asteroids.
+      type: Add
+    - message: Added the NT-FX-1 seep drill and Seep Extraction research.
+      type: Add
+    - message: Seep drills fill their own tank and any refillable container placed in the cradle.
+      type: Add
+    - message: Seep drills keep running when full, spilling any excess fuel.
+      type: Add
+  id: 6021
+  time: '2026-08-06T00:00:00.0000000+00:00'
+  url: null
+- author: Taleryn
+  changes:
+    - message: Gliess Santo has returned to the freeplay game modes.
+      type: Add
+    - message: Gliess Santo jobs are available in the lobby and late-join menu again.
+      type: Fix
+  id: 6022
+  time: '2026-08-06T00:00:00.0000000+00:00'
+  url: null
+- author: Taleryn
+  changes:
+    - message: Neutral Planetfall flags now take 10 seconds to capture and enemy flags take 20 seconds.
+      type: Tweak
+  id: 6023
+  time: '2026-08-07T00:00:00.0000000+00:00'
+  url: null
+- author: Taleryn
+  changes:
+    - message: Reduced the ore density of overworld asteroids without changing which ores they contain.
+      type: Tweak
+    - message: Chromite asteroids now have a small chance to appear in the outer belt.
+      type: Tweak
+  id: 6024
+  time: '2026-08-07T00:00:00.0000000+00:00'
+  url: null
+- author: Taleryn
+  changes:
+    - message: The outer asteroid belt now orbits the map once every four hours. The core belt remains stationary.
+      type: Add
+    - message: Fixed moving debris leaving stale chunk-index entries behind and spawning replacements.
+      type: Fix
+  id: 6025
+  time: '2026-08-07T00:00:00.0000000+00:00'
+  url: null
+- author: Taleryn
+  changes:
+    - message: Boriatic and AME fuel spills now catch fire from nearby ignition sources and spread flames when oxygen is present.
+      type: Add
+    - message: Fuel containers, seep drills and generators can now cook off, with the blast scaling to the fuel left inside.
+      type: Add
+    - message: Boriatic generators now explode correctly when damaged or heated.
+      type: Tweak
+  id: 6026
+  time: '2026-08-07T00:00:00.0000000+00:00'
+  url: null
+- author: Taleryn
+  changes:
+    - message: Energy ship weapons now use fixed burst cycles of 5 seconds for light mounts, 8 for medium and 12 for heavy. Ballistic and missile mounts are unchanged.
+      type: Tweak
+    - message: Ship weapon damage, spread and projectile speed are unchanged.
+      type: Tweak
+  id: 6027
+  time: '2026-08-07T00:00:00.0000000+00:00'
+  url: null
+- author: Taleryn
+  changes:
+    - message: Power draw from ship weapons and shield emitters is temporarily disabled while existing ship grids are remapped.
+      type: Tweak
+  id: 6028
+  time: '2026-08-07T00:00:00.0000000+00:00'
+  url: null
+- author: Taleryn
+  changes:
+    - message: Adjusted mech movement speeds by chassis weight.
+      type: Tweak
+    - message: Reduced mech movement speeds in zero gravity.
+      type: Tweak
+    - message: The machete now deals 42 slash damage instead of 34.
+      type: Tweak
+  id: 6029
+  time: '2026-08-07T00:00:00.0000000+00:00'
+  url: null
+- author: Taleryn
+  changes:
+    - message: Fixed a duplicate burst cooldown that prevented fixed-point weapon prototypes from loading.
+      type: Fix
+    - message: Ghost roles with no configured mind roles now spawn correctly.
+      type: Fix
+    - message: Fixed missing sprite states on robotics and pirate PDAs.
+      type: Fix
+    - message: Fixed short seismic charge cases spawning empty.
+      type: Fix
+    - message: Fixed the rifle belt spawning with more items than its storage grid could hold.
+      type: Fix
+  id: 6030
+  time: '2026-08-07T00:00:00.0000000+00:00'
+  url: null
+- author: Taleryn
+  changes:
+    - message: Removed unused factions from job selection.
+      type: Tweak
+    - message: TFSC Technician, Operative and Traumasec were removed from the faction recruitment console.
+      type: Tweak
+  id: 6031
+  time: '2026-08-07T00:00:00.0000000+00:00'
+  url: null
+- author: Taleryn
+  changes:
+    - message: Marine order actions now share a 45-second cooldown, down from 80 seconds.
+      type: Tweak
+    - message: Orders now use faction-specific callouts, including dedicated NCWL and DSM lines.
+      type: Tweak
+  id: 6032
+  time: '2026-08-08T00:00:00.0000000+00:00'
+  url: null

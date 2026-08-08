@@ -21,6 +21,7 @@ using Robust.Shared.Utility;
 using Content.Shared.CCVar;
 using Content.Shared.PowerCell.Components;
 using Content.Shared.Alert;
+using Content.Shared.Gravity;
 
 namespace Content.Server.Silicon.Charge;
 
@@ -35,6 +36,7 @@ public sealed class SiliconChargeSystem : EntitySystem
     [Dependency] private readonly IConfigurationManager _config = default!;
     [Dependency] private readonly PowerCellSystem _powerCell = default!;
     [Dependency] private readonly AlertsSystem _alerts = default!;
+    [Dependency] private readonly SharedGravitySystem _gravity = default!; // _Crescent
     public override void Initialize()
     {
         base.Initialize();
@@ -109,7 +111,8 @@ public sealed class SiliconChargeSystem : EntitySystem
 
             if (TryComp<InputMoverComponent>(silicon, out var mover)
                 && mover.Sprinting
-                && (mover.HeldMoveButtons & MoveButtons.AnyDirection) != MoveButtons.None)
+                && (mover.HeldMoveButtons & MoveButtons.AnyDirection) != MoveButtons.None
+                && _gravity.HasTraction(silicon)) // _Crescent: movers without traction never actually sprint.
             {
                 drainRate += siliconComp.SprintDrainPerSecond;
             }

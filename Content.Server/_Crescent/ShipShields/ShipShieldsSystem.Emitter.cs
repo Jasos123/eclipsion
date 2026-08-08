@@ -1,5 +1,7 @@
 using Content.Shared._Crescent.ShipShields;
+using Content.Shared._Crescent.CCvars;
 using Content.Server.Power.Components;
+using Robust.Shared.Configuration;
 using Content.Shared.Projectiles;
 using Robust.Shared.Physics.Components;
 using Content.Server.Emp;
@@ -19,9 +21,14 @@ public partial class ShipShieldsSystem
     [Dependency] private readonly TriggerSystem _trigger = default!;
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+	[Dependency] private readonly IConfigurationManager _config = default!;
 	[Dependency] private readonly EntityLookupSystem _lookup = default!; // Rat
+	private bool _powerDrawEnabled;
+
     public void InitializeEmitters()
     {
+		_powerDrawEnabled = _config.GetCVar(CrescentCVars.ShipSystemsPowerDrawEnabled);
+
         SubscribeLocalEvent<ShipShieldEmitterComponent, ShieldDeflectedEvent>(OnShieldDeflected);
         SubscribeLocalEvent<ShipShieldEmitterComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<ShipShieldEmitterComponent, ComponentRemove>(OnRemoved);
@@ -32,6 +39,12 @@ public partial class ShipShieldsSystem
     private void OnEmitterStartup(EntityUid uid, ShipShieldEmitterComponent component, ComponentStartup args)
     {
         _pvsSys.AddGlobalOverride(uid);
+
+		if (_powerDrawEnabled || !TryComp<ApcPowerReceiverComponent>(uid, out var receiver))
+			return;
+
+		receiver.Load = 0f;
+		receiver.NeedsPower = false;
     }
     // Rat-end
 

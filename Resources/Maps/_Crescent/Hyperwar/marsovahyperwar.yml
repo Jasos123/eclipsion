@@ -251683,7 +251683,7 @@ entities:
           showEnts: False
           occludes: True
           ent: 320
-- proto: AmeJar
+- proto: AmeJarT3
   entities:
   - uid: 320
     components:
@@ -251693,6 +251693,8 @@ entities:
       angularDamping: 0
       linearDamping: 0
       canCollide: False
+- proto: AmeJar
+  entities:
   - uid: 321
     components:
     - type: Transform

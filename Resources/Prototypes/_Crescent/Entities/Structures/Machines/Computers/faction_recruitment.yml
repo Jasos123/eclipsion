@@ -118,10 +118,7 @@
     # Command (Ringleader, Lieutenant, Coordinator, Foreman, Intelligence Officer) is intentionally
     # omitted: leadership roles must never be assignable from a console.
     roles:
-    - TechnicianTFSC
     - InfanteerTFSC
-    - OperativeTFSC
     - ShipbreakerTFSC
     - CyberdawnTechTFSC
     - RipperdocTFSC
-    - TraumasecTFSC

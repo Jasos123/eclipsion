@@ -64,7 +64,7 @@ public sealed class ShipFuelEconomyTest
     {
         var expected = new Dictionary<string, int>
         {
-            ["FuelCanisterBoriaticT1"] = 200,
+            ["JugBoriaticFuelEmpty"] = 200,
             ["FuelCanisterBoriaticT2"] = 500,
             ["FuelCanisterBoriaticT3"] = 1000,
         };
@@ -155,7 +155,7 @@ public sealed class ShipFuelEconomyTest
             }
 
             var tankUid = entMan.SpawnEntity("BoriaticFuelTankFull", map.GridCoords);
-            var canisterUid = entMan.SpawnEntity("FuelCanisterBoriaticT1", map.GridCoords);
+            var canisterUid = entMan.SpawnEntity("JugBoriaticFuelEmpty", map.GridCoords);
             var transferSys = entMan.System<SolutionTransferSystem>();
             var direction = entMan.GetComponent<SolutionTransferDirectionComponent>(canisterUid);
 
@@ -208,7 +208,7 @@ public sealed class ShipFuelEconomyTest
         Assert.Multiple(() =>
         {
             Assert.That(boriaticFill!.Contents, Has.Count.EqualTo(1));
-            Assert.That(boriaticFill.Contents[0].PrototypeId, Is.EqualTo("FuelCanisterBoriaticT1Full"));
+            Assert.That(boriaticFill.Contents[0].PrototypeId, Is.EqualTo("JugBoriaticFuel"));
         });
 
         var ameCrate = protoMan.Index<EntityPrototype>("CrateEngineeringAMEJar");
@@ -254,7 +254,7 @@ public sealed class ShipFuelEconomyTest
         Assert.Multiple(() =>
         {
             var statics = lathe!.StaticRecipes.Select(r => r.Id).ToList();
-            Assert.That(statics, Contains.Item("FuelCanisterBoriaticT1Craft"));
+            Assert.That(statics, Contains.Item("JugBoriaticFuelEmptyCraft"));
 
             var dynamics = lathe.DynamicRecipes.Select(r => r.Id).ToList();
             Assert.That(dynamics, Contains.Item("FuelCanisterBoriaticT2Craft"));

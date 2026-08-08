@@ -826,7 +826,7 @@
   name: Dockhand
   components:
   - type: SpawnPoint
-    job_id: Dockhand
+    job_id: GliessianDockhand
   - type: Sprite
     layers:
       - state: green

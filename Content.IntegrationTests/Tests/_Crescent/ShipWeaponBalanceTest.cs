@@ -5,14 +5,19 @@ using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Shared._Crescent.HeatSeeking;
 using Content.Shared._Crescent.SpaceArtillery;
+using Content.Shared._Crescent.Weapons.Ranged;
+using Content.Shared.Cargo.Prototypes;
 using Content.Shared.Containers.ItemSlots;
+using Content.Shared.Power.Components;
 using Content.Shared.Projectiles;
 using Content.Shared.Shuttles.Systems;
+using Content.Shared.Storage.Components;
 using Content.Shared.Weapons.Ranged;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.IntegrationTests.Tests._Crescent;
@@ -21,7 +26,7 @@ namespace Content.IntegrationTests.Tests._Crescent;
 public sealed class ShipWeaponBalanceTest
 {
     [Test]
-    public async Task EnergyRechargeConsumesBatteryAndLegacyOptOutRemainsFree()
+    public async Task ShipPowerDrawIsBypassedUntilMapsAreReady()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -33,16 +38,16 @@ public sealed class ShipWeaponBalanceTest
         {
             var retributionUid = entMan.SpawnEntity("WeaponTurretRetribution", map.GridCoords);
             var recharge = entMan.GetComponent<RechargeBasicEntityAmmoComponent>(retributionUid);
-            var ammo = entMan.GetComponent<BasicEntityAmmoProviderComponent>(retributionUid);
-            var gun = entMan.GetComponent<GunComponent>(retributionUid);
             var battery = entMan.GetComponent<BatteryComponent>(retributionUid);
+            var power = entMan.GetComponent<ApcPowerReceiverComponent>(retributionUid);
+            var receiverBattery = entMan.GetComponent<ApcPowerReceiverBatteryComponent>(retributionUid);
 
             Assert.Multiple(() =>
             {
-                Assert.That(recharge.EnergyPerCharge, Is.EqualTo(75f));
-                Assert.That(ammo.Capacity, Is.EqualTo(36));
-                Assert.That(gun.FireRate, Is.EqualTo(6f));
-                Assert.That(gun.ProjectileSpeed, Is.EqualTo(100f));
+                Assert.That(recharge.EnergyPerCharge, Is.GreaterThan(0f));
+                Assert.That(power.Load, Is.Zero);
+                Assert.That(power.NeedsPower, Is.False);
+                Assert.That(receiverBattery.PowerDrawEnabled, Is.False);
             });
 
             batterySystem.SetCharge(retributionUid, 0f, battery);
@@ -51,7 +56,7 @@ public sealed class ShipWeaponBalanceTest
 
             Assert.Multiple(() =>
             {
-                Assert.That(unpoweredAttempt.Allowed, Is.False);
+                Assert.That(unpoweredAttempt.Allowed, Is.True);
                 Assert.That(battery.CurrentCharge, Is.Zero);
             });
 
@@ -62,7 +67,7 @@ public sealed class ShipWeaponBalanceTest
             Assert.Multiple(() =>
             {
                 Assert.That(poweredAttempt.Allowed, Is.True);
-                Assert.That(battery.CurrentCharge, Is.EqualTo(425f));
+                Assert.That(battery.CurrentCharge, Is.EqualTo(500f));
             });
 
             var exhumerUid = entMan.SpawnEntity("ShuttleGunExhumer", map.GridCoords);
@@ -70,33 +75,45 @@ public sealed class ShipWeaponBalanceTest
             Assert.That(legacyRecharge.EnergyPerCharge, Is.Zero,
                 "Opt-in power costs must not alter free-recharge legacy or utility weapons.");
 
-            var pilaUid = entMan.SpawnEntity("BaseWeaponTurretPila", map.GridCoords);
-            var pilaRecharge = entMan.GetComponent<RechargeBasicEntityAmmoComponent>(pilaUid);
-            Assert.That(pilaRecharge.EnergyPerCharge, Is.EqualTo(125f),
-                "The active Pila's unlimited synthesized ammunition must have an energy cost.");
+            var shieldUid = entMan.SpawnEntity("ShieldEmitterSmall", map.GridCoords);
+            var shieldPower = entMan.GetComponent<ApcPowerReceiverComponent>(shieldUid);
+            Assert.Multiple(() =>
+            {
+                Assert.That(shieldPower.Load, Is.Zero);
+                Assert.That(shieldPower.NeedsPower, Is.False);
+            });
 
             entMan.DeleteEntity(retributionUid);
             entMan.DeleteEntity(exhumerUid);
-            entMan.DeleteEntity(pilaUid);
+            entMan.DeleteEntity(shieldUid);
         });
 
         await pair.CleanReturnAsync();
     }
 
     [Test]
-    public async Task ActiveReloadableWeaponsUseDelayedLoadingAndIntendedAmmunition()
+    public async Task MissileLaunchersUseBoxesAboveFourRoundsAndLooseLoadingBelowFive()
     {
-        var reloadableLaunchers = new Dictionary<string, (float Delay, string Ammo)>
+        var boxedLaunchers = new Dictionary<string, (float Delay, string Magazine, int Ammo)>
         {
-            ["BaseWeaponTurretShortbow"] = (0.6f, "Cartridge48mmRocket"),
-            ["BaseWeaponTurretShortbowGorlex"] = (0.6f, "Cartridge48mmRocketGorlex"),
-            ["BaseWeaponTurretAzimuth"] = (0.8f, "Cartridge60mmRocket"),
-            ["BaseWeaponTurretAzimuthCDT"] = (0.8f, "Cartridge60mmRocket"),
-            ["BaseWeaponTurretAzimuthNCWL"] = (0.8f, "Cartridge60mmRocketNCWL"),
-            ["BaseWeaponTurretAzimuthGSC"] = (0.8f, "Cartridge60mmRocketGorlex"),
-            ["BaseWeaponTurretArbalest"] = (1.25f, "Cartridge95mmRocket"),
-            ["BaseWeaponTurretArbalestTFSC"] = (1.25f, "Cartridge95mmRocketGSC"),
-            ["BaseWeaponTurretArbalestNCWL"] = (1.25f, "Cartridge95mmRocketNCWL"),
+            ["BaseWeaponTurretShortbow"] = (13f, "Magazine48mmRocket", 20),
+            ["BaseWeaponTurretShortbowGorlex"] = (6f, "Magazine48mmRocketGorlex", 20),
+            ["BaseWeaponTurretAzimuth"] = (4f, "Magazine60mm", 8),
+            ["BaseWeaponTurretAzimuthCDT"] = (4f, "Magazine60mmCDT", 6),
+            ["BaseWeaponTurretAzimuthNCWL"] = (4f, "Magazine60mmNCWL", 8),
+            ["BaseWeaponTurretAzimuthGSC"] = (4f, "Magazine60mmGorlex", 6),
+            ["BaseWeaponTurretArbalest"] = (5f, "Magazine95mmRocket", 6),
+            ["BaseWeaponTurretArbalestTFSC"] = (5f, "Magazine95mmRocketGorlex", 8),
+            ["BaseWeaponTurretArbalestNCWL"] = (5f, "Magazine95mmRocketNCWL", 5),
+            ["BaseWeaponTurretPila"] = (5f, "Magazine30mmPila", 10),
+            ["BaseWeaponTurretSwarmerFilled"] = (5f, "MagazineSwarmer", 10),
+            ["BaseWeaponTurretLancerFilled"] = (6f, "MagazineLancer", 15),
+            ["BaseWeaponTurretMagwellFilled"] = (6f, "MagazineIdna", 6),
+            ["MissilePodSnapdragon"] = (5f, "MagazineSnapdragon", 20),
+        };
+
+        var looseLaunchers = new Dictionary<string, (float Delay, string Ammo)>
+        {
             ["BaseWeaponTurretGargoyleTorpedo"] = (2.5f, "Cartridge240mmRocket"),
             ["BaseWeaponTurretGargoyleTorpedoNCWL"] = (2.5f, "Cartridge240mmRocketNCWL"),
             ["BaseWeaponTurretCatapult"] = (4f, "Cartridge330mmRocket"),
@@ -109,7 +126,27 @@ public sealed class ShipWeaponBalanceTest
 
         await server.WaitAssertion(() =>
         {
-            foreach (var (prototype, expected) in reloadableLaunchers)
+            foreach (var (prototype, expected) in boxedLaunchers)
+            {
+                var uid = entMan.SpawnEntity(prototype, map.GridCoords);
+                var provider = entMan.GetComponent<MagazineAmmoProviderComponent>(uid);
+                var slots = entMan.GetComponent<ItemSlotsComponent>(uid);
+                var ammo = new GetAmmoCountEvent();
+                entMan.EventBus.RaiseLocalEvent(uid, ref ammo);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(provider.ReloadDuration, Is.EqualTo(expected.Delay));
+                    Assert.That(slots.Slots["gun_magazine"].StartingItem, Is.EqualTo(expected.Magazine));
+                    Assert.That(ammo.Count, Is.EqualTo(expected.Ammo));
+                    Assert.That(entMan.HasComponent<BallisticAmmoProviderComponent>(uid), Is.False,
+                        $"{prototype} must load a replaceable box rather than loose rounds.");
+                });
+
+                entMan.DeleteEntity(uid);
+            }
+
+            foreach (var (prototype, expected) in looseLaunchers)
             {
                 var uid = entMan.SpawnEntity(prototype, map.GridCoords);
                 var ammo = entMan.GetComponent<BallisticAmmoProviderComponent>(uid);
@@ -118,12 +155,100 @@ public sealed class ShipWeaponBalanceTest
                 {
                     Assert.That(ammo.Proto, Is.Not.Null);
                     Assert.That(ammo.Proto!.Value.Id, Is.EqualTo(expected.Ammo));
-                    Assert.That(ammo.FillWithDoAfter, Is.True,
-                        $"{prototype} must pay a logistics reload-time cost.");
+                    Assert.That(ammo.FillWithDoAfter, Is.True);
                     Assert.That(ammo.FillDelay, Is.EqualTo(TimeSpan.FromSeconds(expected.Delay)));
+                    Assert.That(entMan.HasComponent<MagazineAmmoProviderComponent>(uid), Is.False);
                 });
 
                 entMan.DeleteEntity(uid);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task SaturationLaunchersRequireCompleteConfiguredSalvos()
+    {
+        var launchers = new Dictionary<string, int>
+        {
+            ["BaseWeaponTurretShortbow"] = 20,
+            ["BaseWeaponTurretPila"] = 10,
+            ["BaseWeaponTurretSwarmerFilled"] = 10,
+        };
+
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entMan = server.ResolveDependency<IEntityManager>();
+
+        await server.WaitAssertion(() =>
+        {
+            foreach (var (prototype, salvoSize) in launchers)
+            {
+                var uid = entMan.SpawnEntity(prototype, map.GridCoords);
+                var gun = entMan.GetComponent<GunComponent>(uid);
+                var salvo = entMan.GetComponent<FullSalvoComponent>(uid);
+                var ammo = new GetAmmoCountEvent();
+                entMan.EventBus.RaiseLocalEvent(uid, ref ammo);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(gun.SelectedMode, Is.EqualTo(SelectiveFire.Burst));
+                    Assert.That(gun.ShotsPerBurst, Is.EqualTo(salvoSize));
+                    Assert.That(gun.BurstFireRate, Is.EqualTo(20f));
+                    Assert.That(salvo.RequiredShots, Is.EqualTo(salvoSize));
+                    Assert.That(ammo.Count, Is.EqualTo(salvoSize));
+                });
+
+                entMan.DeleteEntity(uid);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task SaturationMissileCargoCratesContainPreloadedBoxes()
+    {
+        var cargoAmmo = new Dictionary<string, (string Crate, string Box, int Boxes, int Rounds)>
+        {
+            ["Shuttle48mmAmmoGeneric"] = ("Crate48mmAmmo", "Magazine48mmRocket", 3, 20),
+            ["ShuttlePilaAmmoGeneric"] = ("CratePilaAmmo", "Magazine30mmPila", 5, 10),
+            ["ShuttleSwarmerAmmoCargoShuttle"] = ("CrateSwarmerAmmo", "MagazineSwarmer", 5, 10),
+        };
+
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entMan = server.ResolveDependency<IEntityManager>();
+        var protoMan = server.ResolveDependency<IPrototypeManager>();
+        var compFactory = server.ResolveDependency<IComponentFactory>();
+
+        await server.WaitAssertion(() =>
+        {
+            foreach (var (cargoId, expected) in cargoAmmo)
+            {
+                var product = protoMan.Index<CargoProductPrototype>(cargoId);
+                var crate = protoMan.Index<EntityPrototype>(expected.Crate);
+                Assert.That(crate.TryGetComponent<StorageFillComponent>(out var fill, compFactory), Is.True);
+
+                var boxEntry = fill!.Contents.Single(entry => entry.PrototypeId == expected.Box);
+                var box = entMan.SpawnEntity(expected.Box, map.GridCoords);
+                var ammo = new GetAmmoCountEvent();
+                entMan.EventBus.RaiseLocalEvent(box, ref ammo);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(product.Product.Id, Is.EqualTo(expected.Crate));
+                    Assert.That(fill.Contents, Has.Count.EqualTo(1),
+                        $"{expected.Crate} must contain preloaded boxes, not loose rockets.");
+                    Assert.That(boxEntry.Amount, Is.EqualTo(expected.Boxes));
+                    Assert.That(ammo.Count, Is.EqualTo(expected.Rounds),
+                        $"{expected.Box} must arrive fully loaded.");
+                });
+
+                entMan.DeleteEntity(box);
             }
         });
 
@@ -147,6 +272,7 @@ public sealed class ShipWeaponBalanceTest
             "ProjectileGargoyleNCWL",
             "ProjectileCatapultMissile",
             "PilaRocketProjectile",
+            "SwarmerMissile",
         };
 
         await using var pair = await PoolManager.GetServerClient();

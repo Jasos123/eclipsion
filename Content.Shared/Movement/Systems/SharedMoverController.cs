@@ -180,6 +180,13 @@ namespace Content.Shared.Movement.Systems
             var (walkDir, sprintDir) = GetVelocityInput(mover);
             var touching = false;
 
+            // Fall back to walk speed when there is no traction.
+            if (sprintDir != Vector2.Zero && !_gravity.HasTraction((uid, xform)))
+            {
+                walkDir += sprintDir;
+                sprintDir = Vector2.Zero;
+            }
+
 
             // Handle wall-pushes.
             if (weightless)

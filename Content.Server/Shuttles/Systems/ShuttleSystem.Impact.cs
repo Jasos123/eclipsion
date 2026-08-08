@@ -161,8 +161,6 @@ public sealed partial class ShuttleSystem
             if (ourTiles == 0 || otherTiles == 0)
                 continue;
 
-            Log.Info($"Shuttle impact of {ToPrettyString(args.OurEntity)} with {ToPrettyString(args.OtherEntity)}; our mass: {ourMass}, other: {otherMass}, velocity {jungleDiff}, impact point {worldPoint}");
-
             // E = MV^2/2
             var energyMult = MathF.Pow(jungleDiff, 2) / 2;
             // mass-based damage reduction to grid with more mass so that plastitanium block rammer doesn't die to lattice
@@ -178,8 +176,12 @@ public sealed partial class ShuttleSystem
             if (toUsEnergy + toOtherEnergy > 2f * _tileBreakEnergyMultiplier * _platingMass)
                 impact = LogImpact.Extreme;
             // TODO: would be nice for it to also log who is piloting the grid(s)
+            // Rate-limit both logs because a scrape raises many collision events.
             if (CheckShouldLog(args.OurEntity) && CheckShouldLog(args.OtherEntity))
+            {
                 _logger.Add(LogType.ShuttleImpact, impact, $"Shuttle impact of {ToPrettyString(args.OurEntity)} with {ToPrettyString(args.OtherEntity)} at {worldPoint}");
+                Log.Debug($"Shuttle impact of {ToPrettyString(args.OurEntity)} with {ToPrettyString(args.OtherEntity)}; our mass: {ourMass}, other: {otherMass}, velocity {jungleDiff}, impact point {worldPoint}");
+            }
 
             _impactedAt[args.OurEntity] = _gameTiming.CurTime;
             _impactedAt[args.OtherEntity] = _gameTiming.CurTime;
