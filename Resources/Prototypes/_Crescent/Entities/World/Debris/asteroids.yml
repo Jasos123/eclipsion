@@ -131,6 +131,9 @@
       floorTileset:
       - FloorChromite
     - type: SimpleFloorPlanPopulator
+      guaranteedSpawns:
+        FloorChromite:
+        - FuelSeepAme
       entries:
         FloorChromite:
           - id: WallRockChromite

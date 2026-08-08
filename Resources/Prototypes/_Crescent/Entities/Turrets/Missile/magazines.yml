@@ -72,7 +72,7 @@
       proto: Cartridge60mmRocket
       capacity: 8
     - type: MagazineVisuals
-      steps: 8
+      steps: 6
 
 - type: entity
   id: Magazine60mmGorlex
@@ -115,7 +115,7 @@
       proto: Cartridge60mmRocketNCWL
       capacity: 8
     - type: MagazineVisuals
-      steps: 8
+      steps: 6
     - type: Sprite
       layers:
       - state: base
@@ -198,7 +198,7 @@
       proto: Cartridge95mmRocketGSC
       capacity: 8
     - type: MagazineVisuals
-      steps: 8
+      steps: 6
     - type: Sprite
       layers:
       - state: base
@@ -244,4 +244,4 @@
       proto: Cartridge30mmPila
       capacity: 10
     - type: MagazineVisuals
-      steps: 10
+      steps: 6

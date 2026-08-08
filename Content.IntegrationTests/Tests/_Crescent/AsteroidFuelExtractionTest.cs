@@ -1,4 +1,5 @@
 #nullable enable
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Content.Server.Power.Components;
@@ -103,6 +104,7 @@ public sealed class AsteroidFuelExtractionTest
         const int samples = 25;
         var boriaticSeeps = 0;
         var ameSeeps = 0;
+        var chromiteAsteroids = new List<EntityUid>(samples);
 
         await server.WaitPost(() =>
         {
@@ -111,7 +113,8 @@ public sealed class AsteroidFuelExtractionTest
             for (var i = 0; i < samples; i++)
             {
                 entMan.SpawnEntity("RatAsteroidPoorLarge", new MapCoordinates(new Vector2(i * 200, 0), mapId));
-                entMan.SpawnEntity("RatChromiteAsteroidLarge", new MapCoordinates(new Vector2(i * 200, 400), mapId));
+                chromiteAsteroids.Add(entMan.SpawnEntity("RatChromiteAsteroidLarge",
+                    new MapCoordinates(new Vector2(i * 200, 400), mapId)));
             }
         });
 
@@ -127,6 +130,31 @@ public sealed class AsteroidFuelExtractionTest
                     boriaticSeeps++;
                 else if (seep.Reagent == "AmeFuel")
                     ameSeeps++;
+            }
+
+            foreach (var asteroid in chromiteAsteroids)
+            {
+                var chromiteWalls = 0;
+                var asteroidAmeSeeps = 0;
+                var children = entMan.GetComponent<TransformComponent>(asteroid).ChildEnumerator;
+
+                while (children.MoveNext(out var child))
+                {
+                    var prototype = entMan.GetComponent<MetaDataComponent>(child).EntityPrototype?.ID;
+                    if (prototype?.StartsWith("WallRockChromite") == true)
+                        chromiteWalls++;
+
+                    if (entMan.TryGetComponent<FuelSeepComponent>(child, out var seep) && seep.Reagent == "AmeFuel")
+                        asteroidAmeSeeps++;
+                }
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(chromiteWalls, Is.GreaterThan(100),
+                        $"{asteroid} generated as a hollow chromite grid with only {chromiteWalls} rock walls.");
+                    Assert.That(asteroidAmeSeeps, Is.GreaterThanOrEqualTo(1),
+                        $"{asteroid} must contain at least one accessible AME seep.");
+                });
             }
         });
 
