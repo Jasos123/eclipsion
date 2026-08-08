@@ -50,6 +50,7 @@ public sealed class PointCannonSystem : EntitySystem
 
     private float _accumulatedFrameTime;
     private float _uiTps;
+    private bool _shipPowerDrawEnabled;
 
     private readonly HashSet<EntityUid> _activeConsoles = new();
 
@@ -78,6 +79,7 @@ public sealed class PointCannonSystem : EntitySystem
     {
         base.Initialize();
 
+        _shipPowerDrawEnabled = _cfg.GetCVar(CrescentCVars.ShipSystemsPowerDrawEnabled);
         Subs.CVar(_cfg, CrescentCVars.PointCannonUiTps, (float val) => { _uiTps = val; }, true);
 
         SubscribeLocalEvent<TargetingConsoleComponent, ActivatableUIOpenAttemptEvent>(OnConsoleOpenAttempt);
@@ -699,7 +701,10 @@ public sealed class PointCannonSystem : EntitySystem
 
         if (!_anchorQuery.TryGetComponent(uid, out var anchorComp) || anchorComp.anchoredTo is null)
             return false;
-        if (!_powerQuery.TryGetComponent(anchorComp.anchoredTo.Value, out var powerComp) || !powerComp.Powered)
+
+        // The hardpoint must not reintroduce a power requirement while ship-weapon power is opted out.
+        if (_shipPowerDrawEnabled &&
+            (!_powerQuery.TryGetComponent(anchorComp.anchoredTo.Value, out var powerComp) || !powerComp.Powered))
             return false;
 
         var entPos = new EntityCoordinates(uid, new Vector2(0, -1));

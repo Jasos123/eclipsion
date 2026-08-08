@@ -27,13 +27,14 @@ public sealed class FullSalvoSystem : EntitySystem
         var ammo = new GetAmmoCountEvent();
         RaiseLocalEvent(ent.Owner, ref ammo);
 
-        if (ammo.Count >= ent.Comp.RequiredShots)
+        var requiredShots = Math.Min(ent.Comp.RequiredShots, ammo.Capacity);
+        if (ammo.Count >= requiredShots)
             return;
 
         args.Cancelled = true;
         args.ResetCooldown = true;
         args.Message = Loc.GetString("gun-full-salvo-not-ready",
             ("count", ammo.Count),
-            ("required", ent.Comp.RequiredShots));
+            ("required", requiredShots));
     }
 }

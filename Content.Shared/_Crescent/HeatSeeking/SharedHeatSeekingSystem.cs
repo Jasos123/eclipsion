@@ -227,9 +227,15 @@ public sealed class HeatSeekingSystem : EntitySystem
         var seed = GetNetEntity(uid).Id & int.MaxValue;
         var direction = (seed & 1) == 0 ? 1d : -1d;
 
-        var phase = _timing.CurTime.TotalSeconds * comp.WeaveFrequency * Math.Tau
-                    + seed % 64 * (Math.Tau / 64d);
-        var offset = comp.WeaveAmplitude.Theta * Math.Sin(phase) * fade * direction;
+        var offsetFactor = direction;
+        if (!comp.Pincer)
+        {
+            var phase = _timing.CurTime.TotalSeconds * comp.WeaveFrequency * Math.Tau
+                        + seed % 64 * (Math.Tau / 64d);
+            offsetFactor *= Math.Sin(phase);
+        }
+
+        var offset = comp.WeaveAmplitude.Theta * fade * offsetFactor;
         return targetAngle + new Angle(offset);
     }
 }

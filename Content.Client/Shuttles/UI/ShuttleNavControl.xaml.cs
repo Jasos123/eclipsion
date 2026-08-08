@@ -332,6 +332,7 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
     {
         base.MouseExited();
         MouseOverRadar = false;
+        OnRadarRelease?.Invoke();
     }
 
     private EntityCoordinates RelativePositionToEntityCoords(Vector2 pos)

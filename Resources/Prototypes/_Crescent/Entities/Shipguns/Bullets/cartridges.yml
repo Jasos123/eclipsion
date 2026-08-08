@@ -767,6 +767,7 @@
   - type: Tag
     tags:
       - Rocket48mm
+      - CartridgeShortbow
 
 - type: entity
   id: CartridgeRocketHighYield
@@ -787,6 +788,7 @@
   - type: Tag
     tags:
       - Rocket48mm
+      - CartridgeShortbow
 
 - type: entity
   id: CartridgeRocketEMP

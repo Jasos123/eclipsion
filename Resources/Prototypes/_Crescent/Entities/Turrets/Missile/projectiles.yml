@@ -49,6 +49,7 @@
     weaveAmplitude: 16
     weaveFrequency: 0.5
     weaveFadeDistance: 220
+    pincer: true
   - type: Fixtures
     fixtures:
       projectile:
@@ -126,6 +127,7 @@
     weaveAmplitude: 7
     weaveFrequency: 0.45
     weaveFadeDistance: 200
+    pincer: true
   - type: Fixtures
     fixtures:
       projectile:
@@ -229,6 +231,7 @@
     weaveAmplitude: 12
     weaveFrequency: 0.4
     weaveFadeDistance: 300
+    pincer: true
 
 - type: entity
   id: AzimuthRocketProjectileGorlex
@@ -270,6 +273,7 @@
     weaveAmplitude: 10
     weaveFrequency: 0.35
     weaveFadeDistance: 350
+    pincer: true
 
 - type: entity
   id: AzimuthRocketProjectileNCWL
@@ -311,6 +315,7 @@
     weaveAmplitude: 10
     weaveFrequency: 0.4
     weaveFadeDistance: 350
+    pincer: true
 
 - type: entity
   id: AzimuthRocketProjectileAdvanced # ratgore - removed from the game
@@ -402,6 +407,7 @@
     weaveAmplitude: 12
     weaveFrequency: 0.3
     weaveFadeDistance: 450
+    pincer: true
   - type: Fixtures
     fixtures:
       projectile:
@@ -478,6 +484,7 @@
     weaveAmplitude: 10
     weaveFrequency: 0.28
     weaveFadeDistance: 450
+    pincer: true
   - type: Fixtures
     fixtures:
       projectile:
@@ -554,6 +561,7 @@
     weaveAmplitude: 8
     weaveFrequency: 0.25
     weaveFadeDistance: 500
+    pincer: true
   - type: Fixtures
     fixtures:
       projectile:
@@ -631,6 +639,7 @@
     weaveAmplitude: 10
     weaveFrequency: 0.2
     weaveFadeDistance: 600
+    pincer: true
   - type: Fixtures
     fixtures:
       projectile:
@@ -707,6 +716,7 @@
     weaveAmplitude: 10
     weaveFrequency: 0.22
     weaveFadeDistance: 650
+    pincer: true
   - type: Fixtures
     fixtures:
       projectile:
@@ -786,6 +796,7 @@
     weaveAmplitude: 6
     weaveFrequency: 0.12
     weaveFadeDistance: 900
+    pincer: true
   - type: Fixtures
     fixtures:
       projectile:
@@ -864,6 +875,7 @@
     weaveAmplitude: 16
     weaveFrequency: 0.75
     weaveFadeDistance: 150
+    pincer: true
   - type: Fixtures
     fixtures:
       projectile:

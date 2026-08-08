@@ -7,6 +7,8 @@ using Content.Client._Crescent.PointCannons;
 using Robust.Client.GameObjects;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Client.Weapons.Ranged.Systems;
+using Robust.Client.Input;
+using Robust.Shared.Input;
 
 namespace Content.Client._Crescent.PointCannons;
 
@@ -15,6 +17,7 @@ public sealed class TargetingConsoleBoundUserInterface : BoundUserInterface
 {
     private IEntityManager _entMan;
     private TransformSystem _formSys;
+    private IInputManager _inputManager;
 
     private TargetingConsoleWindow? _window;
     private bool _isFiring;
@@ -26,11 +29,20 @@ public sealed class TargetingConsoleBoundUserInterface : BoundUserInterface
     {
         _entMan = IoCManager.Resolve<IEntityManager>();
         _formSys = _entMan.System<TransformSystem>();
+        _inputManager = IoCManager.Resolve<IInputManager>();
         Timer.SpawnRepeating(100, Update, _updTimerTok.Token);
     }
 
     private void Update()
     {
+        // A key-up can be missed when the mouse leaves the radar, the window closes, or focus changes.
+        // Never let the repeating timer preserve a stale fire command.
+        if (_isFiring &&
+            (!IsOpened || _inputManager.CmdStates.GetState(EngineKeyFunctions.UIClick) != BoundKeyState.Down))
+        {
+            StopFiring();
+        }
+
         if (_isFiring)
             SendMessage(new TargetingConsoleFireMessage(_coords));
 
@@ -60,10 +72,11 @@ public sealed class TargetingConsoleBoundUserInterface : BoundUserInterface
     protected override void Open()
     {
         base.Open();
+        StopFiring();
 
         _window = new TargetingConsoleWindow();
         _window.OpenCentered();
-        _window.OnClose += Close;
+        _window.OnClose += OnWindowClosed;
 
         _window.OnServerRefresh += OnRefreshServer;
 
@@ -76,7 +89,7 @@ public sealed class TargetingConsoleBoundUserInterface : BoundUserInterface
 
         _window.Radar.OnRadarRelease += () =>
         {
-            _isFiring = false;
+            StopFiring();
         };
 
         _window.Radar.OnRadarMouseMove += (coords) =>
@@ -92,6 +105,7 @@ public sealed class TargetingConsoleBoundUserInterface : BoundUserInterface
 
     protected override void Dispose(bool disposing)
     {
+        StopFiring();
         base.Dispose(disposing);
 
         if (disposing)
@@ -99,6 +113,17 @@ public sealed class TargetingConsoleBoundUserInterface : BoundUserInterface
             _updTimerTok.Cancel();
             _window?.Dispose();
         }
+    }
+
+    private void StopFiring()
+    {
+        _isFiring = false;
+    }
+
+    private void OnWindowClosed()
+    {
+        StopFiring();
+        Close();
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)

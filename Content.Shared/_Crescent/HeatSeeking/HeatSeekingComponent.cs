@@ -93,6 +93,13 @@ public sealed partial class HeatSeekingComponent : Component
     public float WeaveFadeDistance;
 
     /// <summary>
+    /// Keeps alternating missiles on opposite sides of the firing solution instead of oscillating.
+    /// The offset fades near the target, producing a converging pincer salvo.
+    /// </summary>
+    [DataField]
+    public bool Pincer;
+
+    /// <summary>
     /// The list of targets visible to this missile sorted by their value as a target
     /// </summary>
     [DataField]

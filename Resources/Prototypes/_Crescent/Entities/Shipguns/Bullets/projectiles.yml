@@ -1317,6 +1317,7 @@
     weaveAmplitude: 14
     weaveFrequency: 0.55
     weaveFadeDistance: 220
+    pincer: true
   - type: Fixtures
     fixtures:
       projectile:

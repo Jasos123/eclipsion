@@ -1,4 +1,6 @@
 using System.Numerics;
+using Content.Shared._Crescent.CCvars;
+using Content.Shared._Crescent.ShipPower;
 using Content.Shared._Crescent.SpaceArtillery;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.CombatMode;
@@ -21,6 +23,7 @@ using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Weapons.Ranged.Components; 
 using Robust.Shared.Map;
 using Robust.Shared.Containers;
+using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Player;
@@ -41,6 +44,7 @@ public sealed partial class SpaceArtillerySystem : EntitySystem
     [Dependency] private readonly BatterySystem _battery = default!;
     [Dependency] private readonly SharedTransformSystem _xform = default!;
     [Dependency] private readonly SharedCameraRecoilSystem _recoilSystem = default!;
+    [Dependency] private readonly IConfigurationManager _config = default!;
 
     private const float DISTANCE = 100;
     private const float BIG_DAMAGE = 2500;
@@ -54,10 +58,31 @@ public sealed partial class SpaceArtillerySystem : EntitySystem
     private EntityQuery<DeviceLinkSourceComponent> _deviceLinkSourceQuery;
     private EntityQuery<StackComponent> _stackQuery;
     private EntityQuery<GunComponent> _gunCompQuery;
+    private bool _shipPowerDrawEnabled;
+
+    /// <summary>
+    /// All ship-weapon power is bypassed while the feature flag is disabled. Once enabled,
+    /// weapons opted into WeaponPowerDraw are billed by that system and must not be charged twice.
+    /// </summary>
+    private bool BypassesLegacyPower(EntityUid uid)
+    {
+        return !_shipPowerDrawEnabled || HasComp<WeaponPowerDrawComponent>(uid);
+    }
+
+    private bool HasPowerToFire(EntityUid uid, SpaceArtilleryComponent component)
+    {
+        if (BypassesLegacyPower(uid) || !component.IsPowerRequiredToFire)
+            return true;
+
+        return component.IsPowered &&
+               _batteryQuery.TryGetComponent(uid, out var battery) &&
+               battery.CurrentCharge >= component.PowerUseActive;
+    }
 
     public override void Initialize()
     {
         base.Initialize();
+        _shipPowerDrawEnabled = _config.GetCVar(CrescentCVars.ShipSystemsPowerDrawEnabled);
         _sawmill = Logger.GetSawmill("SpaceArtillery");
         SubscribeLocalEvent<SpaceArtilleryComponent, SignalReceivedEvent>(OnSignalReceived);
         SubscribeLocalEvent<SpaceArtilleryComponent, BuckledEvent>(OnBuckle);
@@ -87,20 +112,16 @@ public sealed partial class SpaceArtillerySystem : EntitySystem
 
     private void OnShotAttempt(Entity<SpaceArtilleryComponent> entity, ref AttemptShootEvent ev)
     {
-        if (_battery.TryGetBatteryComponent(entity.Owner, out var battery, out var _) &&
+        if (BypassesLegacyPower(entity.Owner) || !entity.Comp.IsPowerRequiredToFire)
+            return;
+
+        // Only validate here. AmmoShotEvent bills a successful shot once it actually fires.
+        if (!_battery.TryGetBatteryComponent(entity.Owner, out var battery, out var _) ||
             battery.CurrentCharge < entity.Comp.PowerUseActive)
         {
             OnMalfunction(entity.Owner, entity.Comp);
             ev.Cancelled = true;
-            return;
         }
-
-        if (!_battery.TryUseCharge(entity.Owner, entity.Comp.PowerUseActive))
-        {
-            OnMalfunction(entity.Owner, entity.Comp);
-            ev.Cancelled = true;
-        }
-
     }
     private void OnComponentInit(EntityUid uid, SpaceArtilleryComponent component, ComponentInit args)
     {
@@ -139,22 +160,19 @@ public sealed partial class SpaceArtillerySystem : EntitySystem
 
     private void OnSignalReceived(EntityUid uid, SpaceArtilleryComponent component, ref SignalReceivedEvent args)
     {
-        if (component.IsPowered == true || component.IsPowerRequiredForSignal == false)
+        if (BypassesLegacyPower(uid) || component.IsPowered || !component.IsPowerRequiredForSignal)
         {
-            if (args.Port == component.SpaceArtilleryFirePort && component.IsArmed == true)
+            if (args.Port == component.SpaceArtilleryFirePort && component.IsArmed)
             {
-                if (_batteryQuery.TryGetComponent(uid, out var battery))
+                if (HasPowerToFire(uid, component))
                 {
-                    if (component.IsPowered == true && battery.CurrentCharge >= component.PowerUseActive || component.IsPowerRequiredToFire == false)
-                    {
-                        if (component.IsCoolantRequiredToFire == true && component.CoolantStored >= component.CoolantConsumed || component.IsCoolantRequiredToFire == false)
-                            TryFireArtillery(uid, component);
-                        else
-                            OnMalfunction(uid, component);
-                    }
+                    if (component.IsCoolantRequiredToFire && component.CoolantStored >= component.CoolantConsumed || !component.IsCoolantRequiredToFire)
+                        TryFireArtillery(uid, component);
                     else
                         OnMalfunction(uid, component);
                 }
+                else
+                    OnMalfunction(uid, component);
             }
             if (args.Port == component.SpaceArtilleryToggleSafetyPort)
             {
@@ -233,27 +251,24 @@ public sealed partial class SpaceArtillerySystem : EntitySystem
     /// </summary>
     private void OnFireAction(EntityUid uid, SpaceArtilleryComponent component, FireActionEvent args)
     {
-        if ((component.IsPowered || !component.IsPowerRequiredForMount) && component.IsArmed)
+        if ((BypassesLegacyPower(uid) || component.IsPowered || !component.IsPowerRequiredForMount) && component.IsArmed)
         {
-            if (_batteryQuery.TryGetComponent(uid, out var battery))
+            if (HasPowerToFire(uid, component))
             {
-                if ((component.IsPowered && battery.CurrentCharge >= component.PowerUseActive) || !component.IsPowerRequiredToFire)
+                if (component.IsCoolantRequiredToFire && component.CoolantStored >= component.CoolantConsumed || !component.IsCoolantRequiredToFire)
                 {
-                    if (component.IsCoolantRequiredToFire && component.CoolantStored >= component.CoolantConsumed || !component.IsCoolantRequiredToFire)
-                    {
-                        if (args.Handled)
-                            return;
+                    if (args.Handled)
+                        return;
 
-                        TryFireArtillery(uid, component);
+                    TryFireArtillery(uid, component);
 
-                        args.Handled = true;
-                    }
-                    else
-                        OnMalfunction(uid, component);
+                    args.Handled = true;
                 }
                 else
                     OnMalfunction(uid, component);
             }
+            else
+                OnMalfunction(uid, component);
         }
         else
             OnMalfunction(uid, component);
@@ -402,7 +417,7 @@ public sealed partial class SpaceArtillerySystem : EntitySystem
             if (component.IsCapableOfSendingSignal == true && _deviceLinkSourceQuery.HasComponent(uid))
                 _deviceLink.SendSignal(uid, component.SpaceArtilleryDetectedFiringPort, true);
 
-            if (component.IsPowerRequiredToFire == true)
+            if (component.IsPowerRequiredToFire && !BypassesLegacyPower(uid))
             {
                 _battery.UseCharge(uid, component.PowerUseActive, battery);
             }
