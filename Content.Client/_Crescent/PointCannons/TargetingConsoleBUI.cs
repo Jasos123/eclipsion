@@ -17,7 +17,7 @@ public sealed class TargetingConsoleBoundUserInterface : BoundUserInterface
 {
     private IEntityManager _entMan;
     private TransformSystem _formSys;
-    private IInputManager _inputManager;
+    private InputSystem _inputSystem;
 
     private TargetingConsoleWindow? _window;
     private bool _isFiring;
@@ -29,7 +29,7 @@ public sealed class TargetingConsoleBoundUserInterface : BoundUserInterface
     {
         _entMan = IoCManager.Resolve<IEntityManager>();
         _formSys = _entMan.System<TransformSystem>();
-        _inputManager = IoCManager.Resolve<IInputManager>();
+        _inputSystem = _entMan.System<InputSystem>();
         Timer.SpawnRepeating(100, Update, _updTimerTok.Token);
     }
 
@@ -38,7 +38,7 @@ public sealed class TargetingConsoleBoundUserInterface : BoundUserInterface
         // A key-up can be missed when the mouse leaves the radar, the window closes, or focus changes.
         // Never let the repeating timer preserve a stale fire command.
         if (_isFiring &&
-            (!IsOpened || _inputManager.CmdStates.GetState(EngineKeyFunctions.UIClick) != BoundKeyState.Down))
+            (!IsOpened || _inputSystem.CmdStates.GetState(EngineKeyFunctions.UIClick) != BoundKeyState.Down))
         {
             StopFiring();
         }
