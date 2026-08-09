@@ -45,10 +45,12 @@ public sealed class CrescentCVars : CVars
         CVarDef.Create("shuttle.console_tps", 10.0f, CVar.SERVERONLY);
 
     /// <summary>
-    /// Radar console updates per second.
+    /// Radar console updates per second. 0 (the default) means every tick, which is what radar has always done.
+    /// Projectile blips are drawn straight from these snapshots with no smoothing in between, so lowering this
+    /// makes them visibly step. Only worth turning down on a host that is measurably struggling.
     /// </summary>
     public static readonly CVarDef<float> RadarConsoleUiTps =
-        CVarDef.Create("radar.console_tps", 10.0f, CVar.SERVERONLY);
+        CVarDef.Create("radar.console_tps", 0f, CVar.SERVERONLY);
 
     /// <summary>
     /// Whether ship weapons and shield emitters consume power.

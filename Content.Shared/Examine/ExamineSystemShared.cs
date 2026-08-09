@@ -201,15 +201,16 @@ namespace Content.Shared.Examine
 
             foreach (var result in rayResults)
             {
-                if (!entMan.TryGetComponent(result.HitEntity, out OccluderComponent? o))
+                if (!entMan.TryGetComponent(result.HitEntity, out OccluderComponent? o)
+                    || !entMan.TryGetComponent(result.HitEntity, out TransformComponent? occluderXform))
                 {
                     continue;
                 }
 
-                var bBox = o.BoundingBox;
-                bBox = bBox.Translated(_transform.GetWorldPosition(result.HitEntity));
-
-                if (bBox.Contains(origin.Position) || bBox.Contains(other.Position))
+                // Occluders are convex polygons and can be rotated, so a world-translated AABB would
+                // both over- and under-report. ContainsPoint does the rotated narrowphase properly.
+                if (occluderSystem.ContainsPoint(o, occluderXform, origin.Position)
+                    || occluderSystem.ContainsPoint(o, occluderXform, other.Position))
                 {
                     continue;
                 }

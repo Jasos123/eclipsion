@@ -53,10 +53,10 @@
   - type: SignalTransmitterDevice
   - type: Anchorable
   - type: ActivatableUI
-    key: enum.Content.Shared._Crescent.SignalTransmitter.SignalTransmitterUiKey.Key
+    key: enum.SignalTransmitterUiKey.Key
   - type: UserInterface
     interfaces:
-      enum.Content.Shared._Crescent.SignalTransmitter.SignalTransmitterUiKey.Key:
+      enum.SignalTransmitterUiKey.Key:
         type: Content.Client._Crescent.SignalTransmitter.TransmitterBui
   - type: Construction
     graph: SignalTransmitterDevice

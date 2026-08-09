@@ -57,6 +57,14 @@
     - type: IFF
       flags: HideLabel
       color: "#d67e27"
+    # Ratgore Start - clean up rocks the miners have hollowed out and left behind.
+    - type: MinedAsteroidDecay
+      claimWhitelist:
+        components:
+        - PowerSupplier
+        - FuelGenerator
+        - FuelExtractor
+    # Ratgore End
 
 - type: entity
   id: AsteroidDebrisNFMedium
@@ -205,6 +213,14 @@
     - type: IFF
       flags: HideLabel
       color: "#d6fffc"
+    # Ratgore Start - clean up rocks the miners have hollowed out and left behind.
+    - type: MinedAsteroidDecay
+      claimWhitelist:
+        components:
+        - PowerSupplier
+        - FuelGenerator
+        - FuelExtractor
+    # Ratgore End
 
 - type: entity
   id: AsteroidDebrisNFIceMedium
@@ -362,6 +378,14 @@
     - type: IFF
       flags: HideLabel
       color: "#95c280"
+    # Ratgore Start - clean up rocks the miners have hollowed out and left behind.
+    - type: MinedAsteroidDecay
+      claimWhitelist:
+        components:
+        - PowerSupplier
+        - FuelGenerator
+        - FuelExtractor
+    # Ratgore End
 
 - type: entity
   id: AsteroidDebrisNFAndesiteMedium
@@ -516,6 +540,14 @@
     - type: IFF
       flags: HideLabel
       color: "#b5b5b5"
+    # Ratgore Start - clean up rocks the miners have hollowed out and left behind.
+    - type: MinedAsteroidDecay
+      claimWhitelist:
+        components:
+        - PowerSupplier
+        - FuelGenerator
+        - FuelExtractor
+    # Ratgore End
 
 - type: entity
   id: AsteroidDebrisNFBasaltMedium
@@ -673,6 +705,14 @@
     - type: IFF
       flags: HideLabel
       color: "#cad17b"
+    # Ratgore Start - clean up rocks the miners have hollowed out and left behind.
+    - type: MinedAsteroidDecay
+      claimWhitelist:
+        components:
+        - PowerSupplier
+        - FuelGenerator
+        - FuelExtractor
+    # Ratgore End
 
 - type: entity
   id: AsteroidDebrisNFSandMedium
@@ -824,6 +864,14 @@
     - type: IFF
       flags: HideLabel
       color: "#8178cc"
+    # Ratgore Start - clean up rocks the miners have hollowed out and left behind.
+    - type: MinedAsteroidDecay
+      claimWhitelist:
+        components:
+        - PowerSupplier
+        - FuelGenerator
+        - FuelExtractor
+    # Ratgore End
 
 - type: entity
   id: AsteroidDebrisNFChromiteMedium

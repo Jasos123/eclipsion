@@ -10,6 +10,14 @@
     - type: OrbitingDebris
       period: 4h
       minRadius: 3000
+    # Ratgore Start - clean up rocks the miners have hollowed out and left behind.
+    - type: MinedAsteroidDecay
+      claimWhitelist:
+        components:
+        - PowerSupplier
+        - FuelGenerator
+        - FuelExtractor
+    # Ratgore End
     - type: BlobFloorPlanBuilder
       floorTileset:
       - FloorAsteroidSand

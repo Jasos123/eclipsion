@@ -39,6 +39,14 @@
     - type: IFF
       flags: HideLabel
       color: "#d67e27"
+    # Ratgore Start - clean up rocks the miners have hollowed out and left behind.
+    - type: MinedAsteroidDecay
+      claimWhitelist:
+        components:
+        - PowerSupplier
+        - FuelGenerator
+        - FuelExtractor
+    # Ratgore End
 
 - type: entity
   id: HullrotLowYieldSmall
@@ -126,6 +134,14 @@
     - type: IFF
       flags: HideLabel
       color: "#b5b5b5"
+    # Ratgore Start - clean up rocks the miners have hollowed out and left behind.
+    - type: MinedAsteroidDecay
+      claimWhitelist:
+        components:
+        - PowerSupplier
+        - FuelGenerator
+        - FuelExtractor
+    # Ratgore End
 
 - type: entity
   id: HullrotMediumYieldSmall
@@ -200,6 +216,14 @@
     - type: IFF
       flags: HideLabel
       color: "#8178cc"
+    # Ratgore Start - clean up rocks the miners have hollowed out and left behind.
+    - type: MinedAsteroidDecay
+      claimWhitelist:
+        components:
+        - PowerSupplier
+        - FuelGenerator
+        - FuelExtractor
+    # Ratgore End
 
 - type: entity
   id: HullrotHighYieldSmall

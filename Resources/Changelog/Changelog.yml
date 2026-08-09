@@ -456,3 +456,12 @@ Entries:
   id: 6035
   time: '2026-08-09T00:00:00.0000000+00:00'
   url: null
+- author: Taleryn
+  changes:
+    - message: Asteroids that miners have hollowed out now clean themselves up. Once half of a rock's ore is gone it is deleted half an hour later, so a picked-over belt stops sitting there as dead grids.
+      type: Tweak
+    - message: A hollowed-out asteroid is never deleted while a generator or a seep drill is parked on it, and never while a player is within 128 tiles of it. Rocks nobody has ever visited are left alone entirely.
+      type: Tweak
+  id: 6036
+  time: '2026-08-09T00:00:00.0000000+00:00'
+  url: null

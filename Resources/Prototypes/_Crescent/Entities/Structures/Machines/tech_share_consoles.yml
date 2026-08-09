@@ -20,10 +20,10 @@
     consoleName: "TECH-REQ"
   - type: ResearchClient
   - type: ActivatableUI
-    key: enum.Content.Shared._Crescent.Research.TechShare.TechShareRequestUiKey.Key
+    key: enum.TechShareRequestUiKey.Key
   - type: UserInterface
     interfaces:
-      enum.Content.Shared._Crescent.Research.TechShare.TechShareRequestUiKey.Key:
+      enum.TechShareRequestUiKey.Key:
         type: Content.Client._Crescent.Research.TechShare.TechShareRequestBui
 
 - type: entity
@@ -48,8 +48,8 @@
     consoleName: "TECH-RCV"
   - type: ResearchClient
   - type: ActivatableUI
-    key: enum.Content.Shared._Crescent.Research.TechShare.TechShareReceiverUiKey.Key
+    key: enum.TechShareReceiverUiKey.Key
   - type: UserInterface
     interfaces:
-      enum.Content.Shared._Crescent.Research.TechShare.TechShareReceiverUiKey.Key:
+      enum.TechShareReceiverUiKey.Key:
         type: Content.Client._Crescent.Research.TechShare.TechShareReceiverBui
