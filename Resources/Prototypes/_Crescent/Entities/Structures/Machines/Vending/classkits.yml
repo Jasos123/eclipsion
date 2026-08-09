@@ -1,3 +1,8 @@
+# Who may use one of these racks is decided by its AccessReader alone. The
+# `jobs` list on CMAutomatedVendor is inert here - the port dropped RMC's job
+# check, and nothing in the codebase reads the field - so it is documentation of
+# the intended users, not a gate. Keep the two in agreement.
+
 - type: entity
   parent: ColMarTechBase
   id: ColMarTechEquipmentNCWL
@@ -128,7 +133,7 @@
   components:
   - type: AccessReader
     access:
-    - [ "SyndicateInterdyne" ]
+    - [ "SyndicateInterdyneArmory" ]
   - type: Sprite
     sprite: _Crescent/Structures/syndicatearmory.rsi
   - type: CMAutomatedVendor
@@ -190,7 +195,7 @@
   components:
   - type: AccessReader
     access:
-    - [ "GliessSheriff" ]
+    - [ "Minuteman" ]
   - type: Sprite
     sprite: _Crescent/Structures/syndicatearmory.rsi
   - type: CMAutomatedVendor
@@ -346,7 +351,7 @@
   components:
   - type: AccessReader
     access:
-    - [ "SyndicateGorlex" ]
+    - [ "SyndicateGorlexArmory" ]
   - type: Sprite
     sprite: _Crescent/Structures/syndicatearmory.rsi
   - type: CMAutomatedVendor

@@ -54,7 +54,7 @@ public sealed class BluespaceErrorRule : StationEventSystem<BluespaceErrorRuleCo
             return;
         component.startingValue = _pricing.AppraiseGrid(gridUid);
         _shuttle.SetIFFColor(gridUid, component.Color);
-        var offset = _random.NextVector2Box(component.minX, component.minY, component.maxX, component.maxY); // Hullrot - fix random event spawns being only around kal
+        var offset = GetSpawnOffset(component);
         var mapId = GameTicker.DefaultMap;
         var mapUid = _mapManager.GetMap(mapId);
         if (TryComp<ShuttleComponent>(component.GridUid, out var shuttle))
@@ -62,23 +62,46 @@ public sealed class BluespaceErrorRule : StationEventSystem<BluespaceErrorRuleCo
             _shuttle.FTLToCoordinates(gridUid, shuttle, new EntityCoordinates(mapUid, offset), 0f, 0f, 30f);
         }
 
-        var stringEnd = component.GridPath.Length-1;
-        var path = component.GridPath;
-        var startingIndex = 0;
-        while (path[stringEnd] != '/')
+        // Grids that need to be stations of their own - traders and the like, anything holding a cargo console -
+        // name the game map carrying their station config. Everything else stays a plain loot grid.
+        var gameProto = component.StationMap?.Id ?? new ResPath(component.GridPath).FilenameWithoutExtension;
+        if (_prototypeManager.TryIndex<GameMapPrototype>(gameProto, out var stationProto))
         {
-            startingIndex = stringEnd;
-            stringEnd--;
+            if (stationProto.Stations.TryGetValue(gameProto, out var stationConfig))
+                component.StationUid = _station.InitializeNewStation(stationConfig, new List<EntityUid>(){gridUid});
+            else
+                Log.Error($"Game map {gameProto} has no station config keyed to its own id, {component.GridPath} will not become a station.");
         }
-        var GameProto= component.GridPath.Substring(startingIndex);
-        // remove yaml shit
-        GameProto = GameProto.Remove(GameProto.Length - 4);
-        if (_prototypeManager.TryIndex<GameMapPrototype>(GameProto, out var stationProto))
+        else if (component.StationMap != null)
         {
-            _station.InitializeNewStation(stationProto.Stations[GameProto], new List<EntityUid>(){component.GridUid.Value});
+            Log.Error($"Bluespace error rule points at missing game map {gameProto}, {component.GridPath} will not become a station.");
         }
 
 
+    }
+
+    /// <summary>
+    /// Where on the default map the grid drops in. A min/max distance picks a random point on a ring around the
+    /// belt centre, which is the only way to guarantee the grid lands clear of the belt and the station cluster -
+    /// the min/max box contains the origin, so it can put a grid right on top of them. Otherwise it falls back to
+    /// the box.
+    /// </summary>
+    private Vector2 GetSpawnOffset(BluespaceErrorRuleComponent component)
+    {
+        if (component.MinDistance is not { } minDistance || component.MaxDistance is not { } maxDistance)
+            return _random.NextVector2Box(component.minX, component.minY, component.maxX, component.maxY); // Hullrot - fix random event spawns being only around kal
+
+        if (minDistance > maxDistance)
+        {
+            Log.Error($"Bluespace error rule for {component.GridPath} has minDistance above maxDistance, spawning at the inner edge.");
+            maxDistance = minDistance;
+        }
+
+        // Sample the radius by area, otherwise a plain lerp crowds the spawns against the inner edge of the ring.
+        var radius = MathF.Sqrt(_random.NextFloat(minDistance * minDistance, maxDistance * maxDistance));
+        var angle = _random.NextAngle();
+
+        return angle.RotateVec(new Vector2(radius, 0f));
     }
 
     protected override void Ended(EntityUid uid, BluespaceErrorRuleComponent component, GameRuleComponent gameRule, GameRuleEndedEvent args)
@@ -120,6 +143,9 @@ public sealed class BluespaceErrorRule : StationEventSystem<BluespaceErrorRuleCo
             _transform.SetCoordinates(mob.Entity.Owner, new EntityCoordinates(mob.MapUid, mob.LocalPosition));
         }
 
+        // A station outlives its grid, so without this every trader event leaves a gridless station behind.
+        if (component.StationUid is { } stationUid && Exists(stationUid))
+            _station.DeleteStation(stationUid);
 
         var query = EntityQueryEnumerator<StationBankAccountComponent>();
         while(query.MoveNext(out var id, out var bank))

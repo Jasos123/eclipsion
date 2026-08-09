@@ -31,6 +31,7 @@ public sealed class StorageWindow : BaseWindow
     private readonly GridContainer _pieceGrid;
     private readonly GridContainer _backgroundGrid;
     private readonly GridContainer _sidebar;
+    private readonly ItemIconLayer _iconLayer;
 
     private Control _titleContainer;
     private Label _titleLabel;
@@ -103,6 +104,11 @@ public sealed class StorageWindow : BaseWindow
             VSeparationOverride = 0
         };
 
+        _iconLayer = new ItemIconLayer(this)
+        {
+            Name = "IconLayer"
+        };
+
         _titleLabel = new Label()
         {
             HorizontalExpand = true,
@@ -144,7 +150,9 @@ public sealed class StorageWindow : BaseWindow
                             Children =
                             {
                                 _backgroundGrid,
-                                _pieceGrid
+                                _pieceGrid,
+                                // Drawn last so item icons sit above every piece's backing tiles.
+                                _iconLayer
                             }
                         }
                     }
@@ -373,6 +381,8 @@ public sealed class StorageWindow : BaseWindow
         draggingGhost.OnPieceUnpressed += OnPieceUnpressed;
         _pieces[draggingGhost.Entity] = (location, draggingGhost);
         draggingGhost.Location = location;
+        // Back in the grid, so the icon goes back to being drawn by the icon layer.
+        draggingGhost.DeferIconDraw = true;
         var controlIndex = GetGridIndex(draggingGhost);
         _controlGrid[controlIndex].AddChild(draggingGhost);
     }
@@ -481,6 +491,7 @@ public sealed class StorageWindow : BaseWindow
                 {
                     MinSize = size,
                     Marked = IsMarked(ent),
+                    DeferIconDraw = true,
                 };
                 gridPiece.OnPiecePressed += OnPiecePressed;
                 gridPiece.OnPieceUnpressed += OnPieceUnpressed;
@@ -721,6 +732,40 @@ public sealed class StorageWindow : BaseWindow
                     _storageController.DraggingRotation = Angle.Zero;
                     args.Handle();
                 }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Paints every grid piece's item icon after all of the pieces have painted their backing
+    /// tiles. Those tiles are opaque and icons are drawn bigger than the shape they occupy, so
+    /// without a separate pass an item's icon gets cut off by the tiles of whichever item happens
+    /// to sit in a later grid cell.
+    /// </summary>
+    private sealed class ItemIconLayer : Control
+    {
+        private readonly StorageWindow _window;
+
+        public ItemIconLayer(StorageWindow window)
+        {
+            _window = window;
+        }
+
+        protected override void Draw(DrawingHandleScreen handle)
+        {
+            base.Draw(handle);
+
+            // Walk the cells rather than the piece dictionary so icons keep overlapping each other
+            // in the same order they always have.
+            foreach (var cell in _window._pieceGrid.Children)
+            {
+                if (cell.ChildCount == 0 || cell.GetChild(0) is not ItemGridPiece piece)
+                    continue;
+
+                if (!piece.DeferIconDraw || !piece.Visible)
+                    continue;
+
+                piece.DrawIcon(handle, piece.GlobalPixelPosition - GlobalPixelPosition);
             }
         }
     }

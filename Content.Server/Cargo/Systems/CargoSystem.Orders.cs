@@ -192,6 +192,8 @@ namespace Content.Server.Cargo.Systems
 
                 if (ev.FulfillmentEntity == null)
                 {
+                    // Nothing got delivered, so hand the money back instead of eating it.
+                    _bankSystem.TryBankDeposit(player, cost);
                     ConsolePopup(args.Actor, Loc.GetString("cargo-console-unfulfilled"));
                     PlayDenySound(uid, component);
                     return;

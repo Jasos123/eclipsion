@@ -31,6 +31,9 @@ public sealed partial class CargoSystem
 
     private void OnTelepadFulfillCargoOrder(ref FulfillCargoOrderEvent args)
     {
+        if (!TryComp<DeviceLinkSourceComponent>(args.OrderConsole.Owner, out var consoleLinks))
+            return;
+
         var query = EntityQueryEnumerator<CargoTelepadComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var tele, out var xform))
         {
@@ -43,10 +46,9 @@ public sealed partial class CargoSystem
             if (_station.GetOwningStation(uid, xform) != args.Station)
                 continue;
 
-            // todo cannot be fucking asked to figure out device linking rn but this shouldn't just default to the first port.
-            if (!TryComp<DeviceLinkSinkComponent>(uid, out var sinkComponent) ||
-                sinkComponent.LinkedSources.FirstOrNull() is not { } console ||
-                console != args.OrderConsole.Owner)
+            // A pad can be wired to several consoles - the Crescent trade grids share one bank of pads between two -
+            // so take any pad this console is linked to, not just whichever console linked to the pad first.
+            if (_linker.GetLinks(args.OrderConsole.Owner, uid, consoleLinks).Count == 0)
                 continue;
 
             for (var i = 0; i < args.Order.OrderQuantity; i++)

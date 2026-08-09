@@ -403,6 +403,9 @@ public sealed class StorageUIController : UIController, IOnSystemChanged<Storage
 
         DraggingGhost!.Orphan();
         DraggingRotation = dragged.Location.Rotation;
+        // Off the grid and onto the popup root, so there is no storage window icon layer to draw
+        // the icon for it any more.
+        DraggingGhost.DeferIconDraw = false;
 
         UIManager.PopupRoot.AddChild(DraggingGhost);
         SetDraggingRotation();
@@ -428,8 +431,10 @@ public sealed class StorageUIController : UIController, IOnSystemChanged<Storage
             new ItemStorageLocation(DraggingRotation, Vector2i.Zero),
             EntityManager);
 
-        // I don't know why it divides the position by 2. Hope this helps! -emo
-        LayoutContainer.SetPosition(DraggingGhost, UIManager.MousePositionScaled.Position / 2 - offset );
+        // It used to halve this because ItemGridPiece drew itself at its own position on top of the
+        // transform it was already given, doubling the offset. That is gone, so the ghost's rect
+        // now lines up with where it actually gets drawn.
+        LayoutContainer.SetPosition(DraggingGhost, UIManager.MousePositionScaled.Position - offset * 2);
     }
 
     private void OnMenuEndDrag()

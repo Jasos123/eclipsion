@@ -20,6 +20,22 @@ public sealed class ItemGridPiece : Control, IEntityControl
     public ItemStorageLocation Location;
     public ItemGridPieceMarks? Marked;
 
+    /// <summary>
+    /// When set, <see cref="Draw"/> only paints the backing tiles and the owning
+    /// <see cref="StorageWindow"/> paints the icon afterwards via <see cref="DrawIcon"/>.
+    /// The backing tiles are fully opaque and item icons are drawn larger than the shape they
+    /// occupy, so without that second pass an icon gets painted over by the tiles of whichever
+    /// item sits in a later grid cell. Cleared while the piece is dragged around, because it is
+    /// then drawn standalone on the popup root.
+    /// </summary>
+    public bool DeferIconDraw;
+
+    /// <summary>
+    /// Top-left corner of the marker badge, in this control's own pixels. Set by the tile pass and
+    /// consumed by the icon pass so the badge stays on top of the icon.
+    /// </summary>
+    private Vector2? _markedPosition;
+
     public event Action<GUIBoundKeyEventArgs, ItemGridPiece>? OnPiecePressed;
     public event Action<GUIBoundKeyEventArgs, ItemGridPiece>? OnPieceUnpressed;
 
@@ -105,12 +121,30 @@ public sealed class ItemGridPiece : Control, IEntityControl
             return;
         }
 
-        if (_storageController.IsDragging && _storageController.DraggingGhost?.Entity == Entity &&
-            _storageController.DraggingGhost != this)
-        {
+        if (IsDraggedElsewhere())
             return;
-        }
 
+        DrawTiles(handle, itemComponent);
+
+        if (!DeferIconDraw)
+            DrawIcon(handle, Vector2.Zero);
+    }
+
+    /// <summary>
+    /// True when another control is currently standing in for this entity as the drag ghost.
+    /// </summary>
+    private bool IsDraggedElsewhere()
+    {
+        return _storageController.IsDragging &&
+               _storageController.DraggingGhost?.Entity == Entity &&
+               _storageController.DraggingGhost != this;
+    }
+
+    /// <summary>
+    /// Paints the opaque tiles that back the shape this item occupies in the grid.
+    /// </summary>
+    private void DrawTiles(DrawingHandleScreen handle, ItemComponent itemComponent)
+    {
         var adjustedShape = _entityManager.System<ItemSystem>().GetAdjustedItemShape((Entity, itemComponent), Location.Rotation, Vector2i.Zero);
         var boundingGrid = adjustedShape.GetBoundingBox();
         var size = _centerTexture!.Size * 2 * UIScale;
@@ -120,7 +154,7 @@ public sealed class ItemGridPiece : Control, IEntityControl
         Color? colorModulate = hovering  ? null : Color.FromHex("#a8a8a8");
 
         var marked = Marked != null;
-        Vector2i? maybeMarkedPos = null;
+        _markedPosition = null;
 
         _texturesPositions.Clear();
         for (var y = boundingGrid.Bottom; y <= boundingGrid.Top; y++)
@@ -131,7 +165,10 @@ public sealed class ItemGridPiece : Control, IEntityControl
                     continue;
 
                 var offset = size * 2 * new Vector2(x - boundingGrid.Left, y - boundingGrid.Bottom);
-                var topLeft = PixelPosition + offset.Floored();
+                // Draw calls are already transformed by this control's global position, so these
+                // stay control-local. Adding Position on top would count the offset from the parent
+                // twice over.
+                var topLeft = offset.Floored();
 
                 if (GetTexture(adjustedShape, new Vector2i(x, y), Direction.NorthEast) is {} neTexture)
                 {
@@ -140,12 +177,12 @@ public sealed class ItemGridPiece : Control, IEntityControl
                 }
                 if (GetTexture(adjustedShape, new Vector2i(x, y), Direction.NorthWest) is {} nwTexture)
                 {
-                    _texturesPositions.Add((nwTexture, Position + offset / UIScale));
+                    _texturesPositions.Add((nwTexture, offset / UIScale));
                     handle.DrawTextureRect(nwTexture, new UIBox2(topLeft, topLeft + size), colorModulate);
 
                     if (marked && nwTexture == _topLeftTexture)
                     {
-                        maybeMarkedPos = topLeft;
+                        _markedPosition = topLeft;
                         marked = false;
                     }
                 }
@@ -161,6 +198,24 @@ public sealed class ItemGridPiece : Control, IEntityControl
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// Paints this item's icon and marker badge.
+    /// </summary>
+    /// <param name="origin">
+    /// This piece's top-left corner expressed in the pixels of whichever control is drawing right
+    /// now. Zero when the piece draws itself, non-zero when the storage window draws it in its
+    /// icon pass.
+    /// </param>
+    public void DrawIcon(DrawingHandleScreen handle, Vector2 origin)
+    {
+        if (!_entityManager.TryGetComponent<ItemComponent>(Entity, out var itemComponent) || IsDraggedElsewhere())
+            return;
+
+        var adjustedShape = _entityManager.System<ItemSystem>().GetAdjustedItemShape((Entity, itemComponent), Location.Rotation, Vector2i.Zero);
+        var boundingGrid = adjustedShape.GetBoundingBox();
+        var size = _centerTexture!.Size * 2 * UIScale;
 
         // typically you'd divide by two, but since the textures are half a tile, this is done implicitly
         var iconPosition = new Vector2((boundingGrid.Width + 1) * size.X + itemComponent.StoredOffset.X * 2,
@@ -170,32 +225,29 @@ public sealed class ItemGridPiece : Control, IEntityControl
         if (itemComponent.StoredSprite is { } storageSprite)
         {
             var scale = 2 * UIScale;
-            var offset = (((Box2) boundingGrid).Size - Vector2.One) * size;
             var sprite = _entityManager.System<SpriteSystem>().Frame0(storageSprite);
+            var spriteSize = new Vector2(sprite.Width, sprite.Height) * scale;
 
-            var spriteBox = new Box2Rotated(new Box2(0f, sprite.Height * scale, sprite.Width * scale, 0f), -iconRotation, Vector2.Zero);
-            var root = spriteBox.CalcBoundingBox().BottomLeft;
-            var pos = PixelPosition * 2
-                      + (Parent?.GlobalPixelPosition ?? Vector2.Zero)
-                      + offset;
-
-            handle.SetTransform(pos, iconRotation);
-            var box = new UIBox2(root, root + sprite.Size * scale);
-            handle.DrawTextureRect(sprite, box);
-            handle.SetTransform(GlobalPixelPosition, Angle.Zero);
+            // Centre the sprite on the icon position and spin it about that centre, the same as the
+            // DrawEntity path below. Deriving the anchor from the sprite's own size is what keeps
+            // the two paths agreeing for stored sprites that aren't a single 32x32 tile.
+            var centre = GlobalPixelPosition + iconPosition;
+            handle.SetTransform(centre, iconRotation);
+            handle.DrawTextureRect(sprite, new UIBox2(-spriteSize / 2, spriteSize / 2));
+            handle.SetTransform(GlobalPixelPosition - origin, Angle.Zero);
         }
         else
         {
             _entityManager.System<SpriteSystem>().ForceUpdate(Entity);
             handle.DrawEntity(Entity,
-                PixelPosition + iconPosition,
+                origin + iconPosition,
                 Vector2.One * 2 * UIScale,
                 Angle.Zero,
                 eyeRotation: iconRotation,
                 overrideDirection: Direction.South);
         }
 
-        if (maybeMarkedPos is {} markedPos)
+        if (_markedPosition is {} markedPos)
         {
             var markedTexture = Marked switch
             {
@@ -206,7 +258,7 @@ public sealed class ItemGridPiece : Control, IEntityControl
 
             if (markedTexture != null)
             {
-                handle.DrawTextureRect(markedTexture, new UIBox2(markedPos, markedPos + size));
+                handle.DrawTextureRect(markedTexture, new UIBox2(origin + markedPos, origin + markedPos + size));
             }
         }
     }

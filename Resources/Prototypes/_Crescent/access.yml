@@ -54,9 +54,19 @@
   id: SyndicateGorlex
   name: id-card-access-level-syndicategorlex
 
+# The company tags above and below are on every Coalition keyring, so they cannot
+# gate company-only gear. These two go to that company's own jobs alone.
+- type: accessLevel
+  id: SyndicateGorlexArmory
+  name: id-card-access-level-syndicategorlexarmory
+
 - type: accessLevel
   id: SyndicateInterdyne
   name: id-card-access-level-syndicateinterdyne
+
+- type: accessLevel
+  id: SyndicateInterdyneArmory
+  name: id-card-access-level-syndicateinterdynearmory
 
 - type: accessLevel
   id: SyndicateSaws
@@ -80,7 +90,9 @@
   - SyndicateBasic
   - SyndicateCommand
   - SyndicateGorlex
+  - SyndicateGorlexArmory
   - SyndicateInterdyne
+  - SyndicateInterdyneArmory
   - SyndicateSaws
   - SyndicateRamzi
   - SyndicateRingleader

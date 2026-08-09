@@ -1,3 +1,4 @@
+using Content.Server.Atmos.EntitySystems;
 using Content.Server.Silicon.WeldingHealing;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Silicon.WeldingHealing;
@@ -23,7 +24,10 @@ public sealed class WeldingHealableSystem : SharedWeldingHealableSystem
     [Dependency] private readonly SharedBodySystem _bodySystem = default!;
     public override void Initialize()
     {
-        SubscribeLocalEvent<WeldingHealableComponent, InteractUsingEvent>(Repair);
+        // Must run before FlammableSystem: an IPC is Flammable, and a lit welder counts as "hot",
+        // so FlammableSystem's InteractUsing handler would otherwise swallow the click (it marks the
+        // event handled even when the target has no fire stacks to ignite) and repairing would never start.
+        SubscribeLocalEvent<WeldingHealableComponent, InteractUsingEvent>(Repair, before: new[] { typeof(FlammableSystem) });
         SubscribeLocalEvent<WeldingHealableComponent, SiliconRepairFinishedEvent>(OnRepairFinished);
     }
 
@@ -100,7 +104,7 @@ public sealed class WeldingHealableSystem : SharedWeldingHealableSystem
             return false;
 
         foreach (var type in healable.Damage.DamageDict)
-            if (damageable.Comp.Damage.DamageDict[type.Key].Value > 0)
+            if (damageable.Comp.Damage.DamageDict.TryGetValue(type.Key, out var value) && value.Value > 0)
                 return true;
 
         // In case the healer is a humanoid entity with targeting, we run the check on the targeted parts.
@@ -111,7 +115,7 @@ public sealed class WeldingHealableSystem : SharedWeldingHealableSystem
         foreach (var part in _bodySystem.GetBodyChildrenOfType(damageable, targetType, symmetry: targetSymmetry))
             if (TryComp<DamageableComponent>(part.Id, out var damageablePart))
                 foreach (var type in healable.Damage.DamageDict)
-                    if (damageablePart.Damage.DamageDict[type.Key].Value > 0)
+                    if (damageablePart.Damage.DamageDict.TryGetValue(type.Key, out var partValue) && partValue.Value > 0)
                         return true;
 
         return false;

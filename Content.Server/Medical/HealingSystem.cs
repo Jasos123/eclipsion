@@ -132,7 +132,10 @@ public sealed class HealingSystem : EntitySystem
         var healingDict = healing.Damage.DamageDict;
         foreach (var type in healingDict)
         {
-            if (damageableDict[type.Key].Value > 0)
+            // The item may heal a damage type the target's damage container doesn't support
+            // (e.g. cable coils heal Cold, which the Silicon container has no entry for), so
+            // never index the dict directly here.
+            if (damageableDict.TryGetValue(type.Key, out var value) && value.Value > 0)
             {
                 return true;
             }

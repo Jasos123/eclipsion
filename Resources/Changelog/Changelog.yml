@@ -421,3 +421,38 @@ Entries:
   id: 6032
   time: '2026-08-08T00:00:00.0000000+00:00'
   url: null
+- author: Taleryn
+  changes:
+    - message: IPCs can be repaired with a welder again. A lit welder counted as an ignition source, so the click was swallowed by the set-on-fire handler before the repair could start.
+      type: Fix
+    - message: Cable coils heal IPCs again. Using one threw an error because coils heal cold damage, which silicons have no damage entry for.
+      type: Fix
+  id: 6033
+  time: '2026-08-09T00:00:00.0000000+00:00'
+  url: null
+- author: Taleryn
+  changes:
+    - message: The SHI Kitamura Jeon and PTA Gu Tian corporate trader events are back in rotation.
+      type: Add
+    - message: Both traders now drop in on a random bearing 7 to 9 km out from the belt centre, clear of the asteroids and every station. They used to roll a position from a box that included the middle of the map, so they could turn up right on top of you.
+      type: Tweak
+    - message: Requisitions consoles on the trader grids work now. The grids never became stations, so the consoles showed no balance and rejected every order as having no station.
+      type: Fix
+    - message: A cargo pad wired to more than one order console now accepts orders from all of them, not just the first one it was linked to.
+      type: Fix
+    - message: An order that cannot be delivered no longer takes your money. The cost is refunded when no pad is free.
+      type: Fix
+  id: 6034
+  time: '2026-08-09T00:00:00.0000000+00:00'
+  url: null
+- author: Taleryn
+  changes:
+    - message: The automated mercenary equipment rack is Gorlex-only again. It asked for the Gorlex keyring tag, but every Coalition job carries that tag, so any TFSC member could vend from it. Ringleaders, Lieutenants, Infanteers and Technicians now get a dedicated Gorlex Armory access on their ID and the rack checks that instead.
+      type: Fix
+    - message: Same fix for the Interdyne rack, which the whole Coalition could also use. Traumasecs, Ripperdocs and Coordinators now carry Interdyne Armory access.
+      type: Fix
+    - message: The minutemen rack on Gliess checked for the Gliessian sheriff tag, so the town sheriff, deputy and dockmaster could draw CMM combat kit. It checks the Minutemen tag now, which is exactly the seven CMM jobs.
+      type: Fix
+  id: 6035
+  time: '2026-08-09T00:00:00.0000000+00:00'
+  url: null

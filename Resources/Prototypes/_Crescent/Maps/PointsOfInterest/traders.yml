@@ -1,0 +1,28 @@
+# Station configs for the bluespace corporate trader events. The grids carry requisitions consoles, and a console
+# only resolves an order database and a bank account through the station that owns its grid - without one of these
+# the console opens on an empty balance and every order dies on "station not found".
+# BluespaceErrorRule picks these up through its stationMap field, so the station key must match the prototype id.
+
+- type: gameMap
+  id: KitamuraTrader
+  mapName: 'SHI Kitamura Jeon VD-201'
+  mapPath: /Maps/_Crescent/Bluespace/shitrader.yml
+  minPlayers: 0
+  stations:
+    KitamuraTrader:
+      stationProto: StandardCrescentPOI
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'SHI Kitamura Jeon VD-201'
+
+- type: gameMap
+  id: GuTianTrader
+  mapName: 'PTA Gu Tian X-312'
+  mapPath: /Maps/_Crescent/Bluespace/trader.yml
+  minPlayers: 0
+  stations:
+    GuTianTrader:
+      stationProto: StandardCrescentPOI
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'PTA Gu Tian X-312'
