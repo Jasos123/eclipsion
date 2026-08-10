@@ -206,7 +206,7 @@
 - type: entity
   parent: IDCardStandard
   id: TFSCIDCardRingleader
-  name: TFSC ID card
+  name: TFCF ID card
   components:
   - type: Sprite
     layers:
@@ -218,7 +218,7 @@
 - type: entity
   parent: IDCardStandard
   id: TFSCIDCardCyberdawnTech
-  name: TFSC ID card
+  name: TFCF ID card
   components:
   - type: Sprite
     layers:
@@ -230,7 +230,7 @@
 - type: entity
   parent: IDCardStandard
   id: TFSCIDCardLieutenant
-  name: TFSC ID card
+  name: TFCF ID card
   components:
   - type: Sprite
     layers:
@@ -242,7 +242,7 @@
 - type: entity
   parent: IDCardStandard
   id: TFSCIDCardInfanteer
-  name: TFSC ID card
+  name: TFCF ID card
   components:
   - type: Sprite
     layers:
@@ -254,7 +254,7 @@
 - type: entity
   parent: IDCardStandard
   id: TFSCIDCardCoordinator
-  name: TFSC ID card
+  name: TFCF ID card
   components:
   - type: Sprite
     layers:
@@ -266,7 +266,7 @@
 - type: entity
   parent: IDCardStandard
   id: TFSCIDCardRipperdoc
-  name: TFSC ID card
+  name: TFCF ID card
   components:
   - type: Sprite
     layers:
@@ -278,7 +278,7 @@
 - type: entity
   parent: IDCardStandard
   id: TFSCIDCardTraumasec
-  name: TFSC ID card
+  name: TFCF ID card
   components:
   - type: Sprite
     layers:
@@ -290,7 +290,7 @@
 - type: entity
   parent: IDCardStandard
   id: TFSCIDCardOperative
-  name: TFSC ID card
+  name: TFCF ID card
   components:
   - type: Sprite
     layers:
@@ -302,7 +302,7 @@
 - type: entity
   parent: IDCardStandard
   id: TFSCIDCardIntelligenceOfficer
-  name: TFSC ID card
+  name: TFCF ID card
   components:
   - type: Sprite
     layers:
@@ -314,7 +314,7 @@
 - type: entity
   parent: IDCardStandard
   id: TFSCIDCardForeman
-  name: TFSC ID card
+  name: TFCF ID card
   components:
   - type: Sprite
     layers:
@@ -326,7 +326,7 @@
 - type: entity
   parent: IDCardStandard
   id: TFSCIDCardShipbreaker
-  name: TFSC ID card
+  name: TFCF ID card
   components:
   - type: Sprite
     layers:
@@ -990,7 +990,7 @@
 - type: entity
   parent: IDCardStandard
   id: ATHIDCardKommandant
-  name: 43rd battlegroup ID card
+  name: Crown expeditionary ID card
   components:
   - type: Sprite
     layers:
@@ -1002,7 +1002,7 @@
 - type: entity
   parent: IDCardStandard
   id: ATHIDCardLeutnant
-  name: 43rd battlegroup ID card
+  name: Crown expeditionary ID card
   components:
   - type: Sprite
     layers:
@@ -1014,7 +1014,7 @@
 - type: entity
   parent: IDCardStandard
   id: ATHIDCardSoldat
-  name: 43rd battlegroup ID card
+  name: Crown expeditionary ID card
   components:
   - type: Sprite
     layers:
@@ -1026,7 +1026,7 @@
 - type: entity
   parent: IDCardStandard
   id: ATHIDCardKanoneer
-  name: 43rd battlegroup ID card
+  name: Crown expeditionary ID card
   components:
   - type: Sprite
     layers:
@@ -1038,7 +1038,7 @@
 - type: entity
   parent: IDCardStandard
   id: ATHIDCardSanitat
-  name: 43rd battlegroup ID card
+  name: Crown expeditionary ID card
   components:
   - type: Sprite
     layers:
@@ -1050,7 +1050,7 @@
 - type: entity
   parent: IDCardStandard
   id: ATHIDCardSteward
-  name: 43rd battlegroup ID card
+  name: Crown expeditionary ID card
   components:
   - type: Sprite
     layers:
@@ -1062,7 +1062,7 @@
 - type: entity
   parent: IDCardStandard
   id: ATHIDCardOberartz
-  name: 43rd battlegroup ID card
+  name: Crown expeditionary ID card
   components:
   - type: Sprite
     layers:
@@ -1074,7 +1074,7 @@
 - type: entity
   parent: IDCardStandard
   id: ATHIDCardLogistat
-  name: 43rd battlegroup ID card
+  name: Crown expeditionary ID card
   components:
   - type: Sprite
     layers:
@@ -1086,7 +1086,7 @@
 - type: entity
   parent: IDCardStandard
   id: ATHIDCardHandels
-  name: 43rd battlegroup ID card
+  name: Crown expeditionary ID card
   components:
   - type: Sprite
     layers:
@@ -1098,7 +1098,7 @@
 - type: entity
   parent: IDCardStandard
   id: ATHIDCardForscher
-  name: 43rd battlegroup ID card
+  name: Crown expeditionary ID card
   components:
   - type: Sprite
     layers:
@@ -1110,7 +1110,7 @@
 - type: entity
   parent: IDCardStandard
   id: ATHIDCardChirurgeon
-  name: 43rd battlegroup ID card
+  name: Crown expeditionary ID card
   components:
   - type: Sprite
     layers:
@@ -1122,7 +1122,7 @@
 - type: entity
   parent: IDCardStandard
   id: ATHIDCardVorarbeiter
-  name: 43rd battlegroup ID card
+  name: Crown expeditionary ID card
   components:
   - type: Sprite
     layers:
@@ -1134,7 +1134,7 @@
 - type: entity
   parent: IDCardStandard
   id: ATHIDCardArbeiter
-  name: 43rd battlegroup ID card
+  name: Crown expeditionary ID card
   components:
   - type: Sprite
     layers:
@@ -1148,7 +1148,7 @@
 - type: entity
   parent: IDCardStandard
   id: APRTIDCardKanoneer
-  name: 43rd battlegroup ID card
+  name: Crown expeditionary ID card
   components:
   - type: Sprite
     layers:
@@ -1160,7 +1160,7 @@
 - type: entity
   parent: IDCardStandard
   id: APRTIDCardSanitat
-  name: 43rd battlegroup ID card
+  name: Crown expeditionary ID card
   components:
   - type: Sprite
     layers:
@@ -1172,7 +1172,7 @@
 - type: entity
   parent: IDCardStandard
   id: APRTIDCardSoldat
-  name: 43rd battlegroup ID card
+  name: Crown expeditionary ID card
   components:
   - type: Sprite
     layers:

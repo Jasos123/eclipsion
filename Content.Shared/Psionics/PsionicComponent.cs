@@ -231,6 +231,35 @@ namespace Content.Shared.Abilities.Psionics
 
         [DataField]
         public Dictionary<string, float> AvailablePowers = new();
+
+        /// <summary>
+        /// The tree exposed through the psionic progression action.
+        /// </summary>
+        [DataField]
+        public ProtoId<PsionicSkillTreePrototype> SkillTree = "PsionicGeneralTree";
+
+        /// <summary>
+        /// Psionic levels award points rather than immediately rolling random powers.
+        /// Level one starts with one point so a new psion can choose their first class.
+        /// </summary>
+        [DataField]
+        public int PsionicLevel = 1;
+
+        [DataField]
+        public int SkillPoints = 1;
+
+        /// <summary>
+        /// Node IDs are recorded separately from ActivePowers because innate powers can exist
+        /// outside a tree and multiple trees may expose different routes to powers.
+        /// </summary>
+        [DataField]
+        public HashSet<string> UnlockedSkills = new();
+
+        /// <summary>
+        /// Runtime action entity used to open the tree.
+        /// </summary>
+        [DataField]
+        public EntityUid? SkillTreeAction;
     }
 }
 

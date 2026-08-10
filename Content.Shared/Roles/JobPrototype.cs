@@ -154,6 +154,18 @@ namespace Content.Shared.Roles
         [DataField]
         public bool Whitelisted;
 
+        /// <summary>
+        /// Optional shared whitelist key. Every job declaring the same group is covered by a single whitelist
+        /// entry, so admins whitelist the group once instead of granting each job separately.
+        /// </summary>
+        [DataField]
+        public string? WhitelistGroup;
+
+        /// <summary>
+        /// The key this job's whitelist entry is stored under: its group if it has one, otherwise its own ID.
+        /// </summary>
+        public string WhitelistKey => WhitelistGroup ?? ID;
+
         [DataField]
         public bool SpawnLoadout = true;
 

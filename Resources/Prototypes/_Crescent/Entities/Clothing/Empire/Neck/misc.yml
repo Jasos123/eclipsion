@@ -23,8 +23,8 @@
 - type: entity
   parent: ClothingNeckBase
   id: ClothingNeckCloakImperialGovernor
-  name: governor's shoulder cape
-  description: Adorned with Imperial livery and meant to be worn by the Imperial Governor.
+  name: lord admiral's shoulder cape
+  description: Adorned with Imperial livery and meant to be worn by the charter's Lord Admiral.
   components:
    - type: Sprite
      sprite: _Crescent/Clothing/Empire/Neck/mandategovernorcape.rsi

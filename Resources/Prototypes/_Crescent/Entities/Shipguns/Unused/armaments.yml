@@ -107,7 +107,11 @@
     - Wall
   - type: Airtight
   - type: Occluder
-    boundingBox: "-0.1,-0.5,0.5,0.5"
+    polygon:
+      - "-0.1,-0.5"
+      - "-0.1,0.5"
+      - "0.5,0.5"
+      - "0.5,-0.5"
   - type: Fixtures
     fixtures:
       fix1:
@@ -352,7 +356,11 @@
     - Wall
   - type: Airtight
   - type: Occluder
-    boundingBox: "-0.1,-0.5,0.5,0.5"
+    polygon:
+      - "-0.1,-0.5"
+      - "-0.1,0.5"
+      - "0.5,0.5"
+      - "0.5,-0.5"
   - type: RadiationBlocker
     resistance: 8
   - type: ApcPowerReceiver
@@ -376,7 +384,11 @@
     - Wall
   - type: Airtight
   - type: Occluder
-    boundingBox: "-0.1,-0.5,0.5,0.5"
+    polygon:
+      - "-0.1,-0.5"
+      - "-0.1,0.5"
+      - "0.5,0.5"
+      - "0.5,-0.5"
   - type: Fixtures
     fixtures:
       fix1:

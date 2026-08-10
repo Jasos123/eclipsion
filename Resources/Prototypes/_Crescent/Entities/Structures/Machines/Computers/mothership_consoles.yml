@@ -325,7 +325,7 @@
 - type: entity
   id: RatRamziMothershipComputer
   parent: BaseMothershipComputer
-  name: ramzi internal shipyard
+  name: cyberdawn internal shipyard
   components:
   - type: ShipyardListing
     iffColor: IndianRed
@@ -418,7 +418,7 @@
 - type: entity
   id: RatAuthorityMothershipComputer
   parent: BaseMothershipComputer
-  name: authority shipyard
+  name: Crown expeditionary shipyard
   components:
   - type: ShipyardListing
     shuttles:

@@ -51,7 +51,7 @@
 - type: entity
   parent: WallPlastitanium
   id: WallPlastitaniumTFSC
-  suffix: TFSC Warship
+  suffix: TFCF Warship
   components:
     - type: NpcFactionMember
       factions:
@@ -62,7 +62,7 @@
 - type: entity
   parent: WallReinforced
   id: WallReinforcedTFSC
-  suffix: TFSC Warship
+  suffix: TFCF Warship
   components:
     - type: NpcFactionMember
       factions:
@@ -197,7 +197,7 @@
 - type: entity
   parent: WallShuttle
   id: WallShuttleTFSC
-  suffix: TFSC Warship
+  suffix: TFCF Warship
   components:
     - type: NpcFactionMember
       factions:

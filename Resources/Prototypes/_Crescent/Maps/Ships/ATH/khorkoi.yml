@@ -4,7 +4,7 @@
 - type: vessel
   id: Khorkoi
   name: ATH Khorkoi
-  description: A light Authoritat fighter deployed in swarms.
+  description: A light Crown expeditionary fighter deployed in swarms.
   price: 17500
   category: Small
   group: None

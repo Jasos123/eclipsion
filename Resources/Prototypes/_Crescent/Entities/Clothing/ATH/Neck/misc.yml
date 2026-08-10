@@ -24,7 +24,7 @@
   parent: ClothingNeckBase
   id: ClothingNeckAuthoritySicherheitzMantle
   name: sicherheitz mantle
-  description: A glorious mantle meant for the sicherheitz division of the 43rd battlegroup.
+  description: A formal mantle worn by the security division of a Crown expedition.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/ATH/Neck/sicherheitz.rsi

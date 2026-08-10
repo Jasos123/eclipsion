@@ -539,7 +539,7 @@
   name: 320mm subnuclear accelerator cartridge
   parent: BaseItem
   suffix: Live Ammo
-  description: A 320mm railgun cartridge produced out of a volatile plasma-cored tungsten shell. 'House Olywir Armaments' has been laser-stamped at the bottom.
+  description: A 320mm railgun cartridge produced out of a volatile plasma-cored tungsten shell. 'Olywier Charter Armaments' has been laser-stamped at the bottom.
   components:
   - type: Tag
     tags:

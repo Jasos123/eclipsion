@@ -128,7 +128,7 @@ public sealed class FactionTreasuryConsoleSystem : EntitySystem
 
         // Compared raw, not folded through FactionMachineSystem's parent-faction table: that table maps
         // TAP onto TFSC for machine ownership, which here would quietly make every Pact nomad count as
-        // Coalition staff and lock them out of robbing the Freeport. Every job writes the same faction id
+        // TFCF staff and lock them out of robbing the Freeport. Every job writes the same faction id
         // its vault is configured with, so an exact match is what we want.
         var owner = string.IsNullOrEmpty(comp.Faction)
             ? _factionMachine.GetFaction(uid)

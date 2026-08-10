@@ -1,6 +1,10 @@
 using Content.Shared.Audio.Jukebox;
+using Content.Shared.CCVar;
 using Robust.Client.Animations;
 using Robust.Client.GameObjects;
+using Robust.Shared.Audio.Components;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client.Audio.Jukebox;
@@ -12,6 +16,19 @@ public sealed class JukeboxSystem : SharedJukeboxSystem
     [Dependency] private readonly AnimationPlayerSystem _animationPlayer = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearanceSystem = default!;
     [Dependency] private readonly SharedUserInterfaceSystem _uiSystem = default!;
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
+
+    /// <summary>
+    /// The listener's boombox volume slider, converted from gain to dB so it can be added on top
+    /// of the jukebox's own base volume.
+    /// </summary>
+    private float _volumeSlider;
+
+    // Audio streams are network entities owned by the server. Track only the streams belonging to
+    // jukeboxes so a local slider can be re-applied when either side receives a relevant state update,
+    // without scanning every jukebox every frame.
+    private readonly Dictionary<EntityUid, (EntityUid Jukebox, float BaseVolume)> _jukeboxStreams = new();
+    private readonly Dictionary<EntityUid, EntityUid> _ownerStreams = new();
 
     public override void Initialize()
     {
@@ -19,8 +36,26 @@ public sealed class JukeboxSystem : SharedJukeboxSystem
         SubscribeLocalEvent<JukeboxComponent, AppearanceChangeEvent>(OnAppearanceChange);
         SubscribeLocalEvent<JukeboxComponent, AnimationCompletedEvent>(OnAnimationCompleted);
         SubscribeLocalEvent<JukeboxComponent, AfterAutoHandleStateEvent>(OnJukeboxAfterState);
+        SubscribeLocalEvent<JukeboxComponent, ComponentShutdown>(OnJukeboxShutdown);
+        SubscribeLocalEvent<AudioComponent, AfterAutoHandleStateEvent>(OnAudioAfterState);
+        SubscribeLocalEvent<AudioComponent, ComponentShutdown>(OnAudioShutdown);
+
+        Subs.CVar(_cfg, CCVars.BoomboxVolume, OnVolumeCVarChanged, true);
 
         _protoManager.PrototypesReloaded += OnProtoReload;
+    }
+
+    private void OnVolumeCVarChanged(float gain)
+    {
+        _volumeSlider = SharedAudioSystem.GainToVolume(gain);
+
+        foreach (var (stream, data) in _jukeboxStreams)
+        {
+            if (!TryComp(stream, out AudioComponent? audio))
+                continue;
+
+            ApplyListenerVolume(stream, data.BaseVolume, audio);
+        }
     }
 
     public override void Shutdown()
@@ -47,10 +82,58 @@ public sealed class JukeboxSystem : SharedJukeboxSystem
 
     private void OnJukeboxAfterState(Entity<JukeboxComponent> ent, ref AfterAutoHandleStateEvent args)
     {
+        TrackStream(ent);
+
         if (!_uiSystem.TryGetOpenUi<JukeboxBoundUserInterface>(ent.Owner, JukeboxUiKey.Key, out var bui))
             return;
 
         bui.Reload();
+    }
+
+    private void TrackStream(Entity<JukeboxComponent> ent)
+    {
+        if (_ownerStreams.Remove(ent.Owner, out var previous))
+            _jukeboxStreams.Remove(previous);
+
+        if (ent.Comp.AudioStream is not { } stream)
+            return;
+
+        _ownerStreams[ent.Owner] = stream;
+        _jukeboxStreams[stream] = (ent.Owner, ent.Comp.Volume);
+
+        if (TryComp(stream, out AudioComponent? audio))
+            ApplyListenerVolume(stream, ent.Comp.Volume, audio);
+    }
+
+    private void OnAudioAfterState(Entity<AudioComponent> ent, ref AfterAutoHandleStateEvent args)
+    {
+        if (_jukeboxStreams.TryGetValue(ent.Owner, out var data))
+            ApplyListenerVolume(ent.Owner, data.BaseVolume, ent.Comp);
+    }
+
+    private void OnJukeboxShutdown(Entity<JukeboxComponent> ent, ref ComponentShutdown args)
+    {
+        if (_ownerStreams.Remove(ent.Owner, out var stream))
+            _jukeboxStreams.Remove(stream);
+    }
+
+    private void OnAudioShutdown(Entity<AudioComponent> ent, ref ComponentShutdown args)
+    {
+        if (!_jukeboxStreams.Remove(ent.Owner, out var data))
+            return;
+
+        if (_ownerStreams.TryGetValue(data.Jukebox, out var stream) && stream == ent.Owner)
+            _ownerStreams.Remove(data.Jukebox);
+    }
+
+    private void ApplyListenerVolume(EntityUid stream, float baseVolume, AudioComponent audio)
+    {
+        var target = baseVolume + _volumeSlider;
+
+        if (audio.Params.Volume == target)
+            return;
+
+        Audio.SetVolume(stream, target, audio);
     }
 
     private void OnAnimationCompleted(EntityUid uid, JukeboxComponent component, AnimationCompletedEvent args)

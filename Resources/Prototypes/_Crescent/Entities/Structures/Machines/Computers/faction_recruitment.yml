@@ -107,14 +107,14 @@
 - type: entity
   parent: BaseFactionRecruitmentConsole
   id: FactionRecruitmentConsoleTFSC
-  name: Coalition recruitment terminal
-  suffix: TFSC
+  name: TFCF recruitment terminal
+  suffix: TFCF
   components:
   - type: AccessReader
     access: [["SyndicateCommand"], ["SyndicateRingleader"]]
   - type: FactionRecruitmentConsole
     faction: TFSC
-    # Roles sourced from the Freeport (Stations/freeport.yml) spawn points, the Coalition's only station.
+    # Roles sourced from shared Federation infrastructure at the Freeport (Stations/freeport.yml).
     # Command (Ringleader, Lieutenant, Coordinator, Foreman, Intelligence Officer) is intentionally
     # omitted: leadership roles must never be assignable from a console.
     roles:

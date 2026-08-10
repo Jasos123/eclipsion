@@ -502,7 +502,7 @@ public string Summary =>
             Faction = "";
 
         // Subfaction is prototype-backed like Faction but never got validated, so old profiles still point at
-        // the IPM/SAW/GSC/CD prototypes that went away when TFSC absorbed them. "" is the unset value.
+        // the legacy IPM/SAW/GSC/CD gameplay ids now represented by the shared TFCF diplomatic id. "" is the unset value.
         if (Subfaction != "" && !prototypeManager.HasIndex<FactionPrototype>(Subfaction))
             Subfaction = "";
 

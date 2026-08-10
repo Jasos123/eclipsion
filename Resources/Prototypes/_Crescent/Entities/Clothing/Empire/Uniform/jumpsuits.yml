@@ -16,7 +16,7 @@
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitClarizeCombat
-  name: clarizian fatigues
+  name: Aurevienne fatigues
   description: A sleek onepiece bodysuit with Royal livery.
   components:
   - type: Sprite
@@ -31,7 +31,7 @@
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitClarizeOfficer
-  name: clarizian officer's suit
+  name: Aurevienne officer's suit
   description: An officer's silken suit.
   components:
   - type: Sprite
@@ -102,8 +102,8 @@
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitImperialGovernor
-  name: imperial governor's formal dress
-  description: An ornate jumpsuit, intended for an Imperial Governor.
+  name: lord admiral's formal dress
+  description: An ornate jumpsuit intended for Count Olywier's senior frontier military officer.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Empire/Uniform/mandategovernor.rsi
@@ -169,7 +169,7 @@
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitImperialSurgeon
   name: imperial scribe's surgeon scrubs
-  description: Sterile scrubs in Olywir purple.
+  description: Sterile scrubs in Olywier purple.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Empire/Uniform/mandatesurgeon.rsi

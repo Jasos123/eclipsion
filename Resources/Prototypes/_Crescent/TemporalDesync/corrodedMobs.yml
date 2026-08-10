@@ -1,8 +1,8 @@
 - type: entity
   parent: BaseMobFleshExpeditions
   id: MobFleshGolemCorroded
-  name: corroded human
-  description: What an unfortunate fate to befall.
+  name: desynchronized human
+  description: A catastrophic biological mismatch left by uncontrolled exposure to a severe Turning front.
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
@@ -23,7 +23,7 @@
       200: Dead
 
 - type: polymorph
-  id: HadalCorrosion
+  id: TemporalDesync
   configuration:
     entity: MobFleshGolemCorroded
     forced: true
@@ -33,6 +33,6 @@
     revertOnDeath: true
     revertOnCrit: true
     copiedComponents:
-    - HadalCorrosion
+    - TemporalDesync
     - StaticOverlay
 

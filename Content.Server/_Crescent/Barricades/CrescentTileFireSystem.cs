@@ -7,7 +7,10 @@ using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Damage;
 using Content.Shared.Maps;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Physics;
 using Content.Shared.Projectiles;
+using Robust.Shared.Map.Components;
+using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Random;
@@ -79,6 +82,17 @@ public sealed class CrescentTileFireSystem : EntitySystem
 {
     private static readonly string[] BurntDecals = ["burnt1", "burnt2", "burnt3", "burnt4"];
 
+    /// <summary>Anything solid enough to stop fire spreading onto the tile behind it.</summary>
+    private const CollisionGroup FireBlockingMask = CollisionGroup.Impassable | CollisionGroup.InteractImpassable;
+
+    private static readonly Vector2i[] Neighbours =
+    {
+        new(1, 0),
+        new(-1, 0),
+        new(0, 1),
+        new(0, -1),
+    };
+
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
     [Dependency] private readonly DecalSystem _decals = default!;
@@ -88,6 +102,7 @@ public sealed class CrescentTileFireSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly TurfSystem _turf = default!;
 
     public override void Initialize()
     {
@@ -124,7 +139,20 @@ public sealed class CrescentTileFireSystem : EntitySystem
         SpawnFirePatch(
             Transform(ent).Coordinates,
             ent.Comp.ImpactRadius,
-            ent.Comp.ImpactFireCount);
+            ent.Comp.ImpactFireCount,
+            GetApproachDirection(ent));
+    }
+
+    /// <summary>
+    /// World-space direction the projectile arrived from, used to back the impact patch off a wall.
+    /// </summary>
+    private Vector2? GetApproachDirection(EntityUid uid)
+    {
+        if (TryComp<PhysicsComponent>(uid, out var physics) && physics.LinearVelocity.LengthSquared() > 0f)
+            return -physics.LinearVelocity;
+
+        var forward = _transform.GetWorldRotation(uid).ToWorldVec();
+        return forward.LengthSquared() > 0f ? -forward : null;
     }
 
     public override void Update(float frameTime)
@@ -178,8 +206,15 @@ public sealed class CrescentTileFireSystem : EntitySystem
         if (Deleted(projectile) || Transform(projectile).MapID == MapId.Nullspace)
             return;
 
-        var coordinates = Transform(projectile).Coordinates
-            .SnapToGrid(EntityManager, _mapSystem);
+        var mapPos = _transform.GetMapCoordinates(projectile.Owner);
+        if (!_mapSystem.TryFindGridAt(mapPos, out var gridUid, out var grid))
+            return;
+
+        var coordinates = _mapSystem.MapToGrid(gridUid, mapPos).SnapToGrid(EntityManager, _mapSystem);
+
+        // Never drop a trail tile inside a wall the round hasn't actually passed.
+        if (IsFireBlocked(gridUid, grid, _mapSystem.TileIndicesFor(gridUid, grid, coordinates)))
+            return;
 
         if (_lookup.GetEntitiesInRange<CrescentTileFireComponent>(coordinates, 0.4f).Count == 0)
             Spawn("CrescentTileFire", coordinates);
@@ -190,24 +225,126 @@ public sealed class CrescentTileFireSystem : EntitySystem
         SpawnFirePatch(Transform(ent).Coordinates, ent.Comp.Radius, ent.Comp.Count);
     }
 
-    private void SpawnFirePatch(EntityCoordinates epicenter, float radius, int count)
+    /// <summary>
+    /// Scatters floor fire around <paramref name="epicenter"/>. Fire only lands on tiles it could
+    /// actually reach across open floor, so a flamer emptied into a wall burns in front of it
+    /// instead of spraying flame into the room on the other side.
+    /// </summary>
+    /// <param name="approach">
+    /// Optional world-space direction the fire arrived from. Used to step the epicentre back out of
+    /// a wall when a projectile detonated against one.
+    /// </param>
+    private void SpawnFirePatch(EntityCoordinates epicenter, float radius, int count, Vector2? approach = null)
     {
         var mapEpicenter = _transform.ToMapCoordinates(epicenter);
-        if (!_mapSystem.TryFindGridAt(mapEpicenter, out var gridUid, out _))
+        if (!_mapSystem.TryFindGridAt(mapEpicenter, out var gridUid, out var grid))
             return;
 
         var gridEpicenter = _mapSystem.MapToGrid(gridUid, mapEpicenter);
+        var origin = _mapSystem.TileIndicesFor(gridUid, grid, gridEpicenter);
+
+        if (!TryGetPatchSeed(gridUid, grid, origin, approach, out var seed))
+            return;
+
+        // If the shot ended inside a wall, recentre the splash on the tile in front of it.
+        if (seed != origin)
+            gridEpicenter = _mapSystem.GridTileToLocal(gridUid, grid, seed);
+
+        var reachable = GetReachableTiles(gridUid, grid, seed, radius);
+
         for (var i = 0; i < count; i++)
         {
             var offset = i == 0 ? Vector2.Zero : _random.NextVector2(radius);
             var coordinates = gridEpicenter
                 .Offset(offset)
                 .SnapToGrid(EntityManager, _mapSystem);
+
+            if (!reachable.Contains(_mapSystem.TileIndicesFor(gridUid, grid, coordinates)))
+                continue;
+
             if (_lookup.GetEntitiesInRange<CrescentTileFireComponent>(coordinates, 0.4f).Count != 0)
                 continue;
 
             Spawn("CrescentTileFire", coordinates);
         }
+    }
+
+    /// <summary>
+    /// Picks the tile the patch actually grows out of. Normally the epicentre itself, but a round
+    /// that stopped against a wall has to fall back to the tile it flew in from.
+    /// </summary>
+    private bool TryGetPatchSeed(
+        EntityUid gridUid,
+        MapGridComponent grid,
+        Vector2i origin,
+        Vector2? approach,
+        out Vector2i seed)
+    {
+        seed = origin;
+
+        if (!IsFireBlocked(gridUid, grid, origin))
+            return true;
+
+        if (approach is not { } worldDir || worldDir.LengthSquared() <= 0f)
+            return false;
+
+        // The direction is in world space; the grid it lands on may be rotated (ships are).
+        var localDir = (-_transform.GetWorldRotation(gridUid)).RotateVec(worldDir);
+        var step = MathF.Abs(localDir.X) >= MathF.Abs(localDir.Y)
+            ? new Vector2i(MathF.Sign(localDir.X), 0)
+            : new Vector2i(0, MathF.Sign(localDir.Y));
+
+        seed = origin + step;
+        return !IsFireBlocked(gridUid, grid, seed);
+    }
+
+    /// <summary>
+    /// Flood fills open floor out from <paramref name="seed"/>, so walls bound the patch.
+    /// </summary>
+    private HashSet<Vector2i> GetReachableTiles(EntityUid gridUid, MapGridComponent grid, Vector2i seed, float radius)
+    {
+        // Bound by the same Euclidean radius the scatter samples, not by a step count: a step count is a
+        // Manhattan bound, so it cuts the corners off the disc. (2,2) sits inside a radius of 3 but is
+        // four steps away, and those tiles were being silently dropped from every patch.
+        var radiusSquared = Math.Max(1f, radius * radius);
+        var reachable = new HashSet<Vector2i>();
+        var visited = new HashSet<Vector2i> { seed };
+        var frontier = new Queue<Vector2i>();
+        frontier.Enqueue(seed);
+
+        while (frontier.TryDequeue(out var indices))
+        {
+            if (IsFireBlocked(gridUid, grid, indices))
+                continue;
+
+            reachable.Add(indices);
+
+            foreach (var offset in Neighbours)
+            {
+                var next = indices + offset;
+                var delta = next - seed;
+
+                if (delta.X * delta.X + delta.Y * delta.Y > radiusSquared)
+                    continue;
+
+                if (visited.Add(next))
+                    frontier.Enqueue(next);
+            }
+        }
+
+        return reachable;
+    }
+
+    /// <summary>
+    /// True if fire can neither sit on nor travel through this tile - open space, or something solid
+    /// enough to block line of sight such as a wall, window or shut airlock.
+    /// </summary>
+    public bool IsFireBlocked(EntityUid gridUid, MapGridComponent grid, Vector2i indices)
+    {
+        if (!_mapSystem.TryGetTile(grid, indices, out var tile) || tile.IsEmpty)
+            return true;
+
+        return _turf.IsTileBlocked(gridUid, indices, FireBlockingMask, grid);
     }
 
     private bool HasEnoughOxygen(EntityUid uid, CrescentTileFireComponent fire)

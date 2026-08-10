@@ -85,7 +85,7 @@
 
 - type: gameMap
   id: FogwreckedDerelict
-  mapName: 'Lost in the Fog'
+  mapName: 'Lost Between Turnings'
   mapPath: /Maps/_Crescent/Explorables/fogexplorer.yml
   minPlayers: 0
   stations:
@@ -98,7 +98,7 @@
             state: pointofinterest
       components:
         - type: StationNameSetup
-          mapNameTemplate: 'Lost in the Fog'
+          mapNameTemplate: 'Lost Between Turnings'
 
 - type: gameMap
   id: SolarSailorDerelict

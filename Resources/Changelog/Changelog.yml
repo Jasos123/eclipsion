@@ -47,7 +47,7 @@ Entries:
 
 - author: Taleryn
   changes:
-    - message: Reorganized faction rank structures for ATH, CMM, DSM, NCWL, SHI, SRM and TFSC.
+    - message: Reorganized faction rank structures for Crown expeditionary, CMM, DSM, NCWL, SHI, Saint's Militia and TFCF roles.
       type: Tweak
     - message: Adjusted the NCWL and DSM role menus.
       type: Tweak
@@ -59,7 +59,7 @@ Entries:
 
 - author: Taleryn
   changes:
-    - message: Updated TFSC ship maps, jobs and loadouts.
+    - message: Updated TFCF ship maps, jobs and loadouts.
       type: Tweak
     - message: Updated empire role and job supervisor text.
       type: Tweak
@@ -144,21 +144,21 @@ Entries:
   url: null
 - author: Taleryn
   changes:
-    - message: The Taypani Freestations Coalition is no longer four squabbling companies. Gorlex, Interdyne, Cyberdawn and the Shipfitters are now one faction with one keyring, under a single Ringleader - the old company names survive only as the names of its departments.
+    - message: The Taypani Free Companies Federation now uses one outward-facing gameplay faction and shared keyring. GSC, Interdyne, Cyberdawn and Shipbreaker retain distinct organizations and internal leaders; their Ringleader decides joint Federation matters.
       type: Tweak
-    - message: The Coalition now fields a single station, the rebuilt Freeport, in place of Jackal, Hayes, Dochenskaya and the Anvil. It counts for the conquest win condition like every other faction capital.
+    - message: The TFCF now fields the rebuilt Freeport as shared Federation infrastructure in place of Jackal, Hayes, Dochenskaya and the Anvil. It counts for the conquest win condition like every other faction capital.
       type: Tweak
     - message: The Freeport has a command mainframe, a payroll console, a taxation console and a treasury vault - the vault sits in the Ringleader's office and only the Ringleader can open it. Everyone else trips the alarm.
       type: Add
     - message: "Tatsumoto finally has the economy it was written for: a Shinohara command mainframe on the bridge, and payroll, taxation and treasury consoles in the executive's office."
       type: Add
-    - message: Coalition command staff now carry a single Coalition access elevator covering every department instead of one per company.
+    - message: TFCF command staff now carry a shared Federation access elevator covering every member organization.
       type: Tweak
     - message: Treasury vaults now run on station power. An unpowered vault cannot be robbed, and cutting the power mid-heist kills the siphon - the thieves keep only what has already come out. It locks the owners out too, so it is a real decision.
       type: Tweak
     - message: A faction's own crew can no longer rob its treasury vault. Members without command access are simply turned away instead of tripping the alarm and starting a heist - only outsiders can crack a vault. Membership is read off the person, so a stolen ID card will not pass you off as staff.
       type: Fix
-    - message: The Coalition's treasury, taxation and payroll consoles now open for the whole command tier - ringleader, lieutenant, coordinator, foreman and intelligence officer - rather than the ringleader alone.
+    - message: The TFCF treasury, taxation and payroll consoles now open for the whole command tier - ringleader, lieutenant, coordinator, foreman and intelligence officer - rather than the ringleader alone.
       type: Fix
     - message: Added recruitment terminals to the Freeport and to Tatsumoto, so both factions can hire on shift like the League and the Mandate already could.
       type: Add
@@ -184,9 +184,9 @@ Entries:
       type: Tweak
     - message: Depositing cash into a vault you don't have access to no longer sounds the intrusion alarm or denies you outright.
       type: Fix
-    - message: The Coalition now has its own overwatch console and squad tablet. Byblik was running a Cyberdawn-branded one whose roster was permanently empty, since its crew are all TFSC.
+    - message: The TFCF now has a shared overwatch console and squad tablet. Byblik was running a Cyberdawn-only one whose roster was empty because its crew expose the shared Federation gameplay faction.
       type: Fix
-    - message: Folded the leftover Interdyne, Shipfitters, Gorlex and Cyberdawn command mainframes, overwatch consoles, squad tablets and payroll consoles into their single TFSC equivalents. The charters merged long ago; nothing granted those subfaction ids any more, so all sixteen were unusable and unplaced.
+    - message: Folded obsolete Interdyne, Shipbreaker, GSC and Cyberdawn command devices into shared TFCF equivalents. The member organizations remain distinct in lore, but their jobs use one outward-facing gameplay faction, so the old subfaction devices were unusable.
       type: Remove
   id: 6012
   time: '2026-07-26T00:00:00.0000000+00:00'
@@ -407,7 +407,7 @@ Entries:
   changes:
     - message: Removed unused factions from job selection.
       type: Tweak
-    - message: TFSC Technician, Operative and Traumasec were removed from the faction recruitment console.
+    - message: TFCF Technician, Operative and Traumasec were removed from the faction recruitment console.
       type: Tweak
   id: 6031
   time: '2026-08-07T00:00:00.0000000+00:00'
@@ -447,9 +447,9 @@ Entries:
   url: null
 - author: Taleryn
   changes:
-    - message: The automated mercenary equipment rack is Gorlex-only again. It asked for the Gorlex keyring tag, but every Coalition job carries that tag, so any TFSC member could vend from it. Ringleaders, Lieutenants, Infanteers and Technicians now get a dedicated Gorlex Armory access on their ID and the rack checks that instead.
+    - message: The automated mercenary equipment rack is GSC-only again. It asked for the GSC keyring tag, but every TFCF job carried that tag, so any Federation member could vend from it. Ringleaders, Lieutenants, Infanteers and Technicians now get dedicated GSC Armory access and the rack checks that instead.
       type: Fix
-    - message: Same fix for the Interdyne rack, which the whole Coalition could also use. Traumasecs, Ripperdocs and Coordinators now carry Interdyne Armory access.
+    - message: Same fix for the Interdyne rack, which every TFCF member could also use through shared access. TraumaSec, Ripperdocs and Coordinators now carry dedicated Interdyne Armory access.
       type: Fix
     - message: The minutemen rack on Gliess checked for the Gliessian sheriff tag, so the town sheriff, deputy and dockmaster could draw CMM combat kit. It checks the Minutemen tag now, which is exactly the seven CMM jobs.
       type: Fix
@@ -464,4 +464,69 @@ Entries:
       type: Tweak
   id: 6036
   time: '2026-08-09T00:00:00.0000000+00:00'
+  url: null
+- author: Taleryn
+  changes:
+    - message: Player-facing text across the guidebook, jobs, languages and item names now follows the revised Sector Crescent canon. The Coalition is the Taypani Free Companies Federation, the Kaiser is elective, the Adjutant observes rather than commands, and the Turning replaces the old Hadal and Fog material.
+      type: Tweak
+    - message: Swept the last legacy lore out of visible strings - the Matron, fog rats, the hadal crystal and the Ramzi hardsuit and shipyard are gone. Prototype IDs are untouched so existing characters, saves and maps still load.
+      type: Tweak
+    - message: The NCWL field leader is the Flagman everywhere. Supervisor and rank text still pointed crews at a General Major that no role was called any more.
+      type: Fix
+    - message: Hadal Corrosion is now Temporal Desynchronization, matching what it always did - drift out of phase with the world until your body no longer matches it.
+      type: Tweak
+    - message: Removed the last House Vogsburg and Osteen name-drops from ship paintings, graffiti and station labels.
+      type: Tweak
+  id: 6037
+  time: '2026-08-09T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Boriatic and AME fuel no longer set people alight on contact. Splashing it, or slipping in a puddle of it, now soaks the target in fire stacks instead, so you need an actual flame to touch them off - and then they burn much harder than before.
+      type: Fix
+    - message: Welding fuel tanks cook off properly again. They were still running on the default blast settings, which the shipgun explosion rebalance had quietly reduced to about four damage.
+      type: Fix
+    - message: Rupturing a fuel tank or fuel canister now leaves burning fuel across the deck instead of only a bang.
+      type: Tweak
+    - message: Spilled fuel and oil now catch as spreading floor fire. A lit puddle burns off its fuel, creeps along the rest of the spill and torches anyone standing in it.
+      type: Tweak
+  id: 6038
+  time: '2026-08-09T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: People set each other on fire again. Contact fire spread had been dead - walking a burning crewman into someone did nothing - so a body on fire is now a hazard to everyone who touches it.
+      type: Fix
+    - message: Flamethrowers no longer throw fire through walls. Impact flames used to scatter blind around the hit point, which put burning tiles in the room behind whatever you were shooting at. The splash now only lands on floor the fire could actually reach, and a shot that ends against a wall burns on your side of it.
+      type: Fix
+    - message: Incendiary grenades and fuel tank cook-offs follow the same rule - their fire no longer crosses walls, windows or shut airlocks.
+      type: Fix
+  id: 6039
+  time: '2026-08-10T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Boomboxes and jukeboxes are much quieter by default. They used to play at full gain, over ten times louder than the station's own music, so one of them flattened everything else in earshot.
+      type: Tweak
+    - message: The Boombox Volume slider in Options works. It was writing a setting nothing read, so moving it did nothing at all.
+      type: Fix
+    - message: Music ducking near a playing boombox is now reliable and has its own Boombox Music Ducking slider in Options, so you can set how far the game's music drops or turn it off.
+      type: Fix
+  id: 6040
+  time: '2026-08-10T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Factions now have population-scaled join caps. A faction that is already ahead stops accepting late-joiners until the others catch up, so rounds no longer settle into one side outnumbering the other from the first hour.
+      type: Add
+    - message: The late-join window locks jobs whose faction is full and tells you its current headcount and cap, instead of letting you press the button and quietly get nothing.
+      type: Add
+    - message: Counts are live. Ghosting, dying out of your body or disconnecting gives your slot back, so the side taking losses is always the side that can be reinforced.
+      type: Add
+  id: 6041
+  time: '2026-08-10T00:00:00.0000000+00:00'
   url: null

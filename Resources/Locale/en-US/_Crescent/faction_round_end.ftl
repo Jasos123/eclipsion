@@ -111,7 +111,7 @@ faction-mission-cmm-desc =
     Board her, sweep the wreck, and bring the key back. Assume you are not the only party reading that hull signature — anything with a scanner and an opinion will be moving on her too. Do not let it leave the sector in someone else's pocket.
     {""}
     Bring it to the terminal and we will handle the rest.
-faction-mission-cmm-announce = The Colonial Minutemen have recovered the Analiesse authentication key from the derelict and filed it under seal. Whatever that key opens, it now opens for the Minutemen — and every other party in this sector just lost a race they may not have known they were running.
+faction-mission-cmm-announce = The Colonial Minutemen have recovered the Analliesse authentication key from the derelict and filed it under seal. Whatever that key opens, it now opens for the Minutemen — and every other party in this sector just lost a race they may not have known they were running.
 faction-mission-cmm-sender = Minutemen Command
 
 
@@ -124,11 +124,11 @@ faction-finale-dsm = It seems the Imperials really did it. They convinced Olywie
 
 faction-finale-ncwl = It seems the League really did it. They convinced High Command to send reinforcements to Taypan, and now your shuttle console is detecting a massive signal. It's fucking DEAR CLEMENTINE! The legendary Communard cruiser used during the construction of Balreska. This ship carries a glorious past... The workers of the sector may finally be free.
 
-faction-finale-tfsc = It seems the Coalition succeeded in convincing both major powers of Taypan. They actually got permission, and now your shuttle console is detecting a massive signal. It's fucking JACKAL! This will only fuel the chaos. The battle for Taypan has entered a new phase.
+faction-finale-tfsc = The TFCF secured enough contracts, access, and common support to bring the JACKAL into Taypan. The Federation now has a platform capable of defending its independent market on its own terms. The commercial war has entered a new phase.
 
 faction-finale-shi = It seems the corporate executives succeeded in convincing both major powers of Taypan. They actually got permission, and now your shuttle console is detecting a massive signal. It's fucking DAWNBREAKER! This will only serve their profits. Taypan is... profit.
 
-faction-finale-cmm = It seems the CMM has finally redeemed itself. They found their long-lost flagship, ANALIESSE. During the Taypan Conquest War between the Imperials and the Communards, the CMM betrayed its Imperial allies, and the Imperials destroyed the Analiesse. It was last reported lost within the Hadal Abyss... until now. Your shuttle console is detecting a massive signal. It's ANALIESSE! Taypan is saved. The civilians can finally feel safe once again.
+faction-finale-cmm = The Colonial Minutemen recovered enough of Analliesse's archive and command authentication to restore the dream it represented. Imperial forces destroyed the old mobile headquarters after the CMM refused to turn local law into Imperial obedience. Your shuttle console now detects ANALIESSE again. Taypan is not saved, but it may once more have a public patrol force beyond Gliess Santo.
 
 
 # ============================================================================
@@ -151,17 +151,17 @@ faction-conquest-summary-nobody = [color=orange]The war for Taypan was never set
 faction-conquest-summary-station-standing = [color=green]{ $station }[/color] ({ $faction }) was still standing.
 faction-conquest-summary-station-fallen = [color=red]{ $station }[/color] ({ $faction }) fell.
 
-faction-victory-cmm = CMM VICTORY — THE GOOD ENDING. Taypan is finally freed from outside powers.
+faction-victory-cmm = CMM VICTORY — LOCAL ARTICLES PREVAIL. Public patrols and station law hold against every outside claimant.
 
-faction-victory-dsm = DSM VICTORY — THE IMPERIAL ENDING. The gates are opened, and the Kaiser personally kisses Count Olywier on the lips.
+faction-victory-dsm = DSM VICTORY — THE CHARTER HOLDS. Count Olywier's seal governs the frontier, and notice of the victory travels to Crown institutions in Domain.
 
-faction-victory-ncwl = NCWL VICTORY — THE SOVIET ENDING. The workers liberate everyone. Everyone lives happily ever after… unless they're a noble.
+faction-victory-ncwl = NCWL VICTORY — THE FRONT ADVANCES. The winning party's program goes to Chengridz and Kane for ratification while the Workers' Union secures the gains.
 
-faction-victory-shi = SHI VICTORY. Profit.
+faction-victory-shi = SHI VICTORY — INFRASTRUCTURE BECOMES LEVERAGE. Credit, logistics, and Prometheus standards bind the frontier to Shinohara.
 
-faction-victory-tfsc = TFSC VICTORY. Chaos.
+faction-victory-tfsc = TFCF VICTORY — THE INDEPENDENT MARKET HOLDS. Four distinct member organizations act together where the Ringleader's Federation mandate applies.
 
-faction-victory-timeout = No one won. The wars ground on, the banners kept falling, and not one flag was left flying over Taypan. In the end the Hadal Abyss simply opened and swallowed the sector whole — every station, every fleet, every quarrel — and the dark closed over Taypan as if it had never been.
+faction-victory-timeout = No one won. The wars ground on, the banners kept falling, and no flag secured Taypan. Another Turning renewed exposed fields, erased temporary gains, and made the frontier profitable enough to fight over again.
 
 
 # ============================================================================
@@ -199,9 +199,9 @@ faction-station-fall-balreska = NCWL Nova Balreska is silent. The foundries are 
 
 faction-station-fall-tatsumoto = SHI Tatsumoto is silent. The shipyard is dark and every account with it. Its IFF slowly fades from your shuttle console screen. Shinohara is defeated.
 
-faction-station-fall-jackal = GSC Jackal is silent. Whatever the Coalition was arguing about, it has stopped. Its IFF slowly fades from your shuttle console screen. The Coalition is defeated.
+faction-station-fall-jackal = GSC Jackal is silent. Whatever the Federation was arguing about, it has stopped. Its IFF slowly fades from your shuttle console screen. The TFCF is defeated.
 
-faction-station-fall-freeport = The Freeport is silent. The docks are dark, the vault is open and the ledgers answer to nobody. Its IFF slowly fades from your shuttle console screen. The Coalition is defeated.
+faction-station-fall-freeport = The Freeport is silent. The docks are dark, the vault is open and the ledgers answer to nobody. Its IFF slowly fades from your shuttle console screen. The TFCF is defeated.
 
 # Both great powers have fallen. Deliberately names nobody — the remaining forces are still scrapping over it.
 faction-victory-minors = The great powers are gone. Their thrones are cold, their fleets are scrap, and there is nobody left to give orders to Taypan. Only the remaining forces are still out there, still fighting over what is left of the sector — and now there is nothing above them to answer to. The age of empires in Taypan is over. Whatever comes next belongs to whoever is still standing when the shooting stops.

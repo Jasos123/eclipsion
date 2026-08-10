@@ -120,7 +120,7 @@
   completetime: 2
   materials:
     Steel: 1000
-    Durathread: 300
+    Cloth: 150
 
 - type: latheRecipe
   id: ClothingHeadHelmetNCWLBasic
@@ -139,7 +139,7 @@
   materials:
     Steel: 800
     Tungsten: 400
-    Durathread: 200
+    Cloth: 100
 
 - type: latheRecipe
   id: ClothingHeadHelmetNCWLHeavy
@@ -166,8 +166,7 @@
   completetime: 2
   materials:
     Steel: 600
-    Cloth: 300
-    Durathread: 300
+    Cloth: 450
 
 - type: latheRecipe
   id: ClothingOuterArmorNCWLLogi
@@ -176,8 +175,7 @@
   completetime: 2
   materials:
     Steel: 600
-    Cloth: 300
-    Durathread: 300
+    Cloth: 450
 
 - type: latheRecipe
   id: ClothingOuterArmorNCWLCarapaceVrachev
@@ -186,8 +184,7 @@
   completetime: 2
   materials:
     Plastic: 600
-    Cloth: 300
-    Durathread: 300
+    Cloth: 450
 
 - type: latheRecipe
   id: ClothingOuterArmorNCWLMedi
@@ -196,8 +193,7 @@
   completetime: 2
   materials:
     Plastic: 600
-    Cloth: 300
-    Durathread: 300
+    Cloth: 450
 
 - type: latheRecipe
   id: ClothingOuterArmorNCWLCarapaceDoktor
@@ -207,8 +203,7 @@
   materials:
     Steel: 600
     Plastic: 200
-    Cloth: 300
-    Durathread: 300
+    Cloth: 450
 
 - type: latheRecipe
   id: ClothingOuterArmorNCWLCarapaceKapitan
@@ -218,7 +213,7 @@
   materials:
     Steel: 800
     Tungsten: 200
-    Durathread: 300
+    Cloth: 150
 
 - type: latheRecipe
   id: ClothingOuterArmorNCWLCarapace
@@ -228,7 +223,7 @@
   materials:
     Steel: 800
     Tungsten: 200
-    Durathread: 300
+    Cloth: 150
 
 - type: latheRecipe
   id: ClothingOuterArmorNCWLOpremeCarapace

@@ -9,16 +9,16 @@ id-card-access-level-ncwljail = Homeguard Cells
 
 # syndicate
 
-id-card-access-level-syndicatebasic = Syndicate
-id-card-access-level-syndicatecommand = Syndicate Command
+id-card-access-level-syndicatebasic = TFCF
+id-card-access-level-syndicatecommand = TFCF Command
 id-card-access-level-syndicategorlex = Gorlex
 id-card-access-level-syndicategorlexarmory = Gorlex Armory
 id-card-access-level-syndicateinterdyne = Interdyne
 id-card-access-level-syndicateinterdynearmory = Interdyne Armory
-id-card-access-level-syndicatesaws = Shipfitters Union
-id-card-access-level-syndicateramzi = Cybersun
+id-card-access-level-syndicatesaws = Shipbreaker Union
+id-card-access-level-syndicateramzi = Cyberdawn
 id-card-access-level-syndicateringleader = Ringleader
-id-card-access-level-syndicatearmory = Syndicate Armory
+id-card-access-level-syndicatearmory = Federation Armory
 
 # empire
 
@@ -26,17 +26,17 @@ id-card-access-level-empire = General Imperial Access
 id-card-access-level-empiremilitary = Imperial Navy
 id-card-access-level-empirenoble = Imperial Charter of Nobility
 id-card-access-level-empireadjutant = Imperial Adjutant
-id-card-access-level-empiregovernor = Imperial Governor
-id-card-access-level-empirewealth = Minister of Wealth
+id-card-access-level-empiregovernor = Lord Admiral
+id-card-access-level-empirewealth = Knight Logisticar
 id-card-access-level-empirescribes = The Guild of Scribes
 id-card-access-level-empirearchmaester = Archmaester
 id-card-access-level-advocatus = Advocati
 
 # srm
 
-id-card-access-level-srm = Sixth Subjugation Fireteam
-id-card-access-level-srmsenior = Sixth Subjugation Fireteam Officer
-id-card-access-level-srmoverseer = Sixth Subjugation Fireteam Commodore
+id-card-access-level-srm = Saint's Militia
+id-card-access-level-srmsenior = Senior Hunter
+id-card-access-level-srmoverseer = Overseer of the Hunt
 
 # shi
 
@@ -54,11 +54,11 @@ id-card-access-level-cmmmarshal = Colonial Marshal
 
 # ath
 
-id-card-access-level-authoritat-kommandant = Konteradmiral
-id-card-access-level-authoritat = 43rd Battlegroup
-id-card-access-level-authoritat-ranking = 43rd Battlegroup Officer
-id-card-access-level-authoritat-medical = 43rd Battlegroup Medical
-id-card-access-level-authoritat-cargo = 43rd Battlegroup Supply
+id-card-access-level-authoritat-kommandant = Crown Expedition Commander
+id-card-access-level-authoritat = Crown Expeditionary Force
+id-card-access-level-authoritat-ranking = Crown Expeditionary Officer
+id-card-access-level-authoritat-medical = Crown Expeditionary Medical
+id-card-access-level-authoritat-cargo = Crown Expeditionary Supply
 
 # misc
 

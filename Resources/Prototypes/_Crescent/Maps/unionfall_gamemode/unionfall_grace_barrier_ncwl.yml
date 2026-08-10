@@ -1,6 +1,6 @@
 - type: gameMap
   id: UnionfallGraceBarrierNCWL
-  mapName: 'Hadal Protection Barrier (NCWL)'
+  mapName: 'Turning Exclusion Barrier (NCWL)'
   mapPath: /Maps/_Crescent/Unionfall/grace_barrier_NCWL.yml
   minPlayers: 0
   stations:
@@ -16,7 +16,7 @@
             state: outpost
       components:
         - type: StationNameSetup
-          mapNameTemplate: 'Hadal Protection Barrier (NCWL)'
+          mapNameTemplate: 'Turning Exclusion Barrier (NCWL)'
         - type: VesselDesignation
           designation: vessel-designation-outpost
         - type: VesselDescription

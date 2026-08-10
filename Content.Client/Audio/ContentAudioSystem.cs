@@ -35,6 +35,9 @@ public sealed partial class ContentAudioSystem : SharedContentAudioSystem
     // Multiplier for boombox / jukebox individual volume cvar.
     public const float BoomboxMultiplier = 3f;
 
+    // Duck amount, in dB, that a fully cranked boombox ducking slider corresponds to.
+    public const float BoomboxDuckMaxDb = 20f;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -42,6 +45,7 @@ public sealed partial class ContentAudioSystem : SharedContentAudioSystem
         UpdatesOutsidePrediction = true;
         InitializeAmbientMusic();
         InitializeLobbyMusic();
+        InitializeDucking();
         SubscribeNetworkEvent<RoundRestartCleanupEvent>(OnRoundCleanup);
     }
 
@@ -94,6 +98,24 @@ public sealed partial class ContentAudioSystem : SharedContentAudioSystem
 
     #region Fades
 
+    /// <summary>
+    /// Gets the volume a fade should start from. AudioComponent.Volume is a straight passthrough for the
+    /// source's current gain, so it reads back as -infinity whenever the stream happens to be silent: either
+    /// a volume slider sits at 0, or the engine muted the stream for being on another map. Dividing that by
+    /// the duration gives an infinite per-tick change, and the first frame the volume is finite again the
+    /// fade lands on +infinity, which sticks in the component's AudioParams and makes OpenAL reject every
+    /// gain set from then on. So fall back to the intended volume, which stays finite in those cases.
+    /// </summary>
+    private static bool TryGetFadeVolume(AudioComponent component, out float volume)
+    {
+        volume = component.Volume;
+
+        if (!float.IsFinite(volume))
+            volume = component.Params.Volume;
+
+        return float.IsFinite(volume);
+    }
+
     public void FadeOut(EntityUid? stream, AudioComponent? component = null, float duration = DefaultDuration)
     {
         if (stream == null || duration <= 0f || !Resolve(stream.Value, ref component))
@@ -102,19 +124,29 @@ public sealed partial class ContentAudioSystem : SharedContentAudioSystem
         // Just in case
         // TODO: Maybe handle the removals by making it seamless?
         _fadingIn.Remove(stream.Value);
-        var diff = component.Volume - MinVolume;
-        _fadingOut.Add(stream.Value, diff / duration);
+
+        if (!TryGetFadeVolume(component, out var curVolume) || curVolume <= MinVolume)
+        {
+            // Nothing audible left to fade, so go straight to what the fade would have ended on.
+            _audio.Stop(stream);
+            _fadingOut.Remove(stream.Value);
+            return;
+        }
+
+        _fadingOut[stream.Value] = (curVolume - MinVolume) / duration;
     }
 
     public void FadeIn(EntityUid? stream, AudioComponent? component = null, float duration = DefaultDuration)
     {
-        if (stream == null || duration <= 0f || !Resolve(stream.Value, ref component) || component.Volume < MinVolume)
+        if (stream == null || duration <= 0f || !Resolve(stream.Value, ref component))
+            return;
+
+        if (!TryGetFadeVolume(component, out var curVolume) || curVolume < MinVolume)
             return;
 
         _fadingOut.Remove(stream.Value);
-        var curVolume = component.Volume;
         var change = (MinVolume - curVolume) / duration;
-        _fadingIn.Add(stream.Value, (change, component.Volume));
+        _fadingIn[stream.Value] = (change, curVolume);
         component.Volume = MinVolume;
     }
 
@@ -131,10 +163,17 @@ public sealed partial class ContentAudioSystem : SharedContentAudioSystem
             }
 
             var volume = component.Volume - change * frameTime;
+
+            // The stream was silenced from under us mid-fade (map change, slider at 0), so the step above
+            // is infinite. MathF.Max won't clamp +infinity, and letting it through would burn a permanent
+            // infinite volume into the params. It's inaudible either way, so just end the fade here.
+            if (!float.IsFinite(volume))
+                volume = MinVolume;
+
             volume = MathF.Max(MinVolume, volume);
             _audio.SetVolume(stream, volume, component);
 
-            if (component.Volume.Equals(MinVolume))
+            if (volume.Equals(MinVolume))
             {
                 _audio.Stop(stream);
                 _fadeToRemove.Add(stream);
@@ -158,10 +197,16 @@ public sealed partial class ContentAudioSystem : SharedContentAudioSystem
             }
 
             var volume = component.Volume - change * frameTime;
+
+            // Same as above: silenced mid-fade. Restart the ramp from the floor rather than letting an
+            // infinite value through, so the fade picks back up once the stream is audible again.
+            if (!float.IsFinite(volume))
+                volume = MinVolume;
+
             volume = MathF.Min(target, volume);
             _audio.SetVolume(stream, volume, component);
 
-            if (component.Volume.Equals(target))
+            if (volume.Equals(target))
             {
                 _fadeToRemove.Add(stream);
             }

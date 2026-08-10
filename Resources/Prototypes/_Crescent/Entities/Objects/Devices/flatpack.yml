@@ -1,8 +1,8 @@
 - type: entity
   parent: BaseFlatpack
   id: TFSCWarshipThrusterFlatpack
-  name: syndicate warship thruster flatpack
-  description: A flatpack used for constructing warship thrusters with Syndicate IFF clearance.
+  name: TFCF warship thruster flatpack
+  description: A flatpack used for constructing warship thrusters with TFCF IFF clearance.
   components:
   - type: Flatpack
     entity: ThrusterTFSCWarship
@@ -15,8 +15,8 @@
 - type: entity
   parent: BaseFlatpack
   id: TFSCFighterThrusterFlatpack
-  name: syndicate fighter thruster flatpack
-  description: A flatpack used for constructing smallshuttle thrusters with Syndicate IFF clearance.
+  name: TFCF fighter thruster flatpack
+  description: A flatpack used for constructing small-shuttle thrusters with TFCF IFF clearance.
   components:
   - type: Flatpack
     entity: ThrusterTFSCFighter

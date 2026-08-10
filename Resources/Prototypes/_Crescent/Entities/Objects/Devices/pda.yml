@@ -147,7 +147,7 @@
   parent: BasePDA
   id: RingleaderPDA
   name: ringleader's PDA
-  description: Red for Syndicate.
+  description: Red for the TFCF.
   components:
   - type: Pda
     id: TFSCIDCardRingleader
@@ -162,7 +162,7 @@
   parent: BasePDA
   id: LieutenantPDA
   name: lieutenant's PDA
-  description: Red for Syndicate.
+  description: Red for the TFCF.
   components:
   - type: Pda
     id: TFSCIDCardLieutenant
@@ -177,7 +177,7 @@
   parent: BasePDA
   id: InfanteerPDA
   name: infanteer's PDA
-  description: Red for Syndicate. Has the Gorlex logo stamped at the back.
+  description: TFCF red with the Gorlex logo stamped on the back.
   components:
   - type: Pda
     id: TFSCIDCardInfanteer
@@ -191,7 +191,7 @@
   parent: BasePDA
   id: TechnicianPDA
   name: artillery technician's PDA
-  description: Red for Syndicate. Has the Gorlex logo stamped at the back.
+  description: TFCF red with the Gorlex logo stamped on the back.
   components:
   - type: Pda
     id: TFSCIDCardInfanteer
@@ -205,7 +205,7 @@
   parent: BasePDA
   id: CoordinatorPDA
   name: coordinator's PDA
-  description: Red for Syndicate. Has the Interdyne Pharmaceutics logo stamped at the back. Has a thumbdrive version of a health analyzer wired crudely at one end.
+  description: TFCF red with the Interdyne Pharmaceuticals logo on the back and a thumbdrive health analyzer wired to one end.
   components:
   - type: Pda
     id: TFSCIDCardCoordinator
@@ -225,7 +225,7 @@
   parent: BasePDA
   id: RipperdocPDA
   name: ripperdoc's PDA
-  description: Red for Syndicate. Has the Interdyne Pharmaceutics logo stamped at the back. Has a thumbdrive version of a health analyzer wired crudely at one end.
+  description: TFCF red with the Interdyne Pharmaceuticals logo on the back and a thumbdrive health analyzer wired to one end.
   components:
   - type: Pda
     id: TFSCIDCardRipperdoc
@@ -245,7 +245,7 @@
   parent: BasePDA
   id: TraumasecPDA
   name: traumasec's PDA
-  description: Red for Syndicate. Has the Interdyne Pharmaceutics logo stamped at the back.
+  description: TFCF red with the Interdyne Pharmaceuticals logo stamped on the back.
   components:
   - type: Pda
     id: TFSCIDCardTraumasec
@@ -265,7 +265,7 @@
   parent: BasePDA
   id: OperativePDA
   name: asset security's PDA
-  description: Red for Syndicate. Has the name 'Cyberdawn' stamped at the back.
+  description: TFCF red with the name 'Cyberdawn' stamped on the back.
   components:
   - type: Pda
     id: TFSCIDCardOperative
@@ -279,7 +279,7 @@
   parent: BasePDA
   id: CyberdawnTechPDA
   name: researcher's PDA
-  description: Red for Syndicate. Has the name 'Cyberdawn' stamped at the back.
+  description: TFCF red with the name 'Cyberdawn' stamped on the back.
   components:
   - type: Pda
     id: TFSCIDCardCyberdawnTech
@@ -293,7 +293,7 @@
   parent: BasePDA
   id: IntelligenceOfficerPDA
   name: patriarch's PDA
-  description: Red for Syndicate. Has the name 'Cyberdawn' stamped at the back.
+  description: TFCF red with the name 'Cyberdawn' stamped on the back.
   components:
   - type: Pda
     id: TFSCIDCardIntelligenceOfficer
@@ -308,7 +308,7 @@
   parent: BasePDA
   id: ForemanPDA
   name: foreman's PDA
-  description: Red for Syndicate. Has the name 'SAWS' stamped at the back.
+  description: TFCF red with the name 'SAW' stamped on the back.
   components:
   - type: Pda
     id: TFSCIDCardForeman
@@ -323,7 +323,7 @@
   parent: BasePDA
   id: ShipbreakerPDA
   name: shipbreaker's PDA
-  description: Red for Syndicate. Has the name 'SAWS' stamped at the back.
+  description: TFCF red with the name 'SAW' stamped on the back.
   components:
   - type: Pda
     id: TFSCIDCardShipbreaker
@@ -525,7 +525,7 @@
 - type: entity
   parent: [BasePDA, StreeCredRedeemable]
   id: GovernorPDA
-  name: governor's PDA
+  name: lord admiral's PDA
   description: Purple for Imperial.
   components:
   - type: Pda

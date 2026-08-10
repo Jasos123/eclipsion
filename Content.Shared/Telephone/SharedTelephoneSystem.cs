@@ -1,4 +1,5 @@
 using System.Linq;
+using Robust.Shared.Utility;
 
 namespace Content.Shared.Telephone;
 
@@ -21,15 +22,15 @@ public abstract class SharedTelephoneSystem : EntitySystem
 
         if (presumedJob != null)
             callerId = Loc.GetString("chat-telephone-caller-id-with-job",
-                ("callerName", presumedName),
-                ("callerJob", presumedJob),
+                ("callerName", FormattedMessage.EscapeText(presumedName)),
+                ("callerJob", FormattedMessage.EscapeText(presumedJob)),
                 ("color", fontColor),
                 ("fontType", fontType),
                 ("fontSize", fontSize));
 
         else
             callerId = Loc.GetString("chat-telephone-caller-id-without-job",
-                ("callerName", presumedName),
+                ("callerName", FormattedMessage.EscapeText(presumedName)),
                 ("color", fontColor),
                 ("fontType", fontType),
                 ("fontSize", fontSize));
@@ -48,7 +49,7 @@ public abstract class SharedTelephoneSystem : EntitySystem
         }
 
         return Loc.GetString("chat-telephone-device-id",
-            ("deviceName", deviceName),
+            ("deviceName", FormattedMessage.EscapeText(deviceName)),
             ("color", fontColor),
             ("fontType", fontType),
             ("fontSize", fontSize));

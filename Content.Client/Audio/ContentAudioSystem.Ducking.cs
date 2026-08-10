@@ -1,6 +1,7 @@
 using Content.Client.Gameplay;
 using Content.Shared._Crescent.Audio.CustomBoombox;
 using Content.Shared.Audio.Jukebox;
+using Content.Shared.CCVar;
 using Robust.Shared.Audio.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -21,17 +22,29 @@ public sealed partial class ContentAudioSystem
     // ramping up to the full amount right next to the boombox.
     private const float DuckRange = 12f;
 
-    // How much (in dB) to lower the game music by when standing on top of a boombox.
-    private const float MaxDuckDb = -14f;
-
     // How fast (dB per second) the duck eases in and out. Lower = smoother/slower.
     private const float DuckChangeSpeed = 9f;
+
+    // How much (in dB) to lower the game music by when standing on top of a boombox.
+    // Negative; 0 means the player turned ducking off.
+    private float _maxDuckDb;
 
     // Current applied duck offset in dB (<= 0). Eased toward the target each frame.
     private float _currentDuckDb;
 
     // Whether we touched the music volume last frame, so we know to restore it once.
     private bool _wasDucking;
+
+    private void InitializeDucking()
+    {
+        Subs.CVar(_configManager, CCVars.BoomboxMusicDuck, OnDuckCVarChanged, true);
+    }
+
+    private void OnDuckCVarChanged(float db)
+    {
+        // Stored as a positive number in the CVar because "duck by 14 dB" reads better than -14.
+        _maxDuckDb = -MathF.Abs(db);
+    }
 
     private void UpdateDucking(float frameTime)
     {
@@ -62,6 +75,9 @@ public sealed partial class ContentAudioSystem
     /// </summary>
     private float GetDuckTarget()
     {
+        if (_maxDuckDb == 0f)
+            return 0f;
+
         if (_state.CurrentState is not GameplayState)
             return 0f;
 
@@ -92,11 +108,16 @@ public sealed partial class ContentAudioSystem
     /// </summary>
     private float DuckFor(EntityUid source, EntityUid? audioStream, MapCoordinates playerCoords)
     {
-        if (!_audio.IsPlaying(audioStream))
+        // Deliberately not SharedAudioSystem.IsPlaying: that also requires the stream's networked
+        // AudioState to be Playing, and a stream that is audible right now is reason enough to duck.
+        if (audioStream is not { } stream ||
+            !TryComp(stream, out AudioComponent? audio) ||
+            !audio.Playing ||
+            float.IsNegativeInfinity(audio.Params.Volume))
             return 0f;
 
         var coords = _xform.GetMapCoordinates(source);
-        if (coords.MapId != playerCoords.MapId)
+        if (coords.MapId == MapId.Nullspace || coords.MapId != playerCoords.MapId)
             return 0f;
 
         var dist = (coords.Position - playerCoords.Position).Length();
@@ -105,7 +126,7 @@ public sealed partial class ContentAudioSystem
 
         // 1 right on top of the boombox, 0 at the edge of the range.
         var factor = 1f - dist / DuckRange;
-        return MaxDuckDb * factor;
+        return _maxDuckDb * factor;
     }
 
     /// <summary>
@@ -113,33 +134,32 @@ public sealed partial class ContentAudioSystem
     /// </summary>
     private void ApplyDuck()
     {
-        if (_ambientMusicStream is not { } stream || _musicProto == null)
+        if (_ambientMusicStream is not { } stream)
             return;
 
         // The track is on its way out and will be stopped by the fade; leave it alone.
-        // _musicProto may already describe the *next* track at this point, so the volume
-        // we'd compute here wouldn't even belong to this stream.
         if (_fadingOut.ContainsKey(stream))
             return;
 
         if (!TryComp(stream, out AudioComponent? comp))
             return;
 
-        var slider = _isCombatMusicPlaying ? _volumeSliderCombat : _volumeSliderAmbient;
-        var target = GetDuckedVolume(_musicProto.Sound.Params.Volume + slider);
+        var target = GetDuckedVolume(_ambientMusicVolume);
 
         // Mid fade-in (10s for ambient tracks) we don't set the volume directly, we retarget
         // the fade instead. Otherwise the duck would be ignored for the whole fade and then
-        // slam the volume down by MaxDuckDb in a single frame the moment the fade finished.
+        // slam the volume down by the full duck in a single frame the moment the fade finished.
         if (_fadingIn.TryGetValue(stream, out var fade))
         {
             _fadingIn[stream] = (fade.VolumeChange, target);
             return;
         }
 
-        // Volume round-trips through gain, so compare with an (inaudible) tolerance rather
-        // than exactly, otherwise we'd re-set the volume every single frame.
-        if (MathHelper.CloseTo(comp.Volume, target, 0.01f))
+        // Compare against the volume we last asked for, not AudioComponent.Volume: that one reads
+        // straight back off the audio source, where it comes back as -infinity while the stream is
+        // muted and, without EFX, has occlusion folded into it. Either would make this bail out and
+        // never duck at all.
+        if (comp.Params.Volume == target)
             return;
 
         _audio.SetVolume(stream, target, comp);

@@ -123,6 +123,8 @@
   special:
   - !type:AddComponentSpecial
     components:
+      - type: HullrotFaction
+        faction: SHI
       - type: LanguageAdder
         addSpoken:
           - Kaishago

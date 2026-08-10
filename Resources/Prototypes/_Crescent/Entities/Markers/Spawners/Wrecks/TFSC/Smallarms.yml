@@ -1,6 +1,6 @@
 #allows mappers to automate spawning terrible DSM conscript weapons with an ocassional gem
 - type: entity
-  name: TFSC Smallarms Wreck Randomizer
+  name: TFCF Smallarms Wreck Randomizer
   id: TFSCGunsWreckRandomizer
   parent: MarkerBase
   components:

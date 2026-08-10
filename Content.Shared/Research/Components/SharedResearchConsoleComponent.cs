@@ -1,3 +1,4 @@
+using Content.Shared._Goobstation.Research;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.Research.Components
@@ -26,14 +27,31 @@ namespace Content.Shared.Research.Components
     }
 
     [Serializable, NetSerializable]
+    public sealed class ResearchConsolePointsChangedMessage : BoundUserInterfaceMessage
+    {
+        public int Points;
+
+        public ResearchConsolePointsChangedMessage(int points)
+        {
+            Points = points;
+        }
+    }
+
+    [Serializable, NetSerializable]
     public sealed class ResearchConsoleBoundInterfaceState : BoundUserInterfaceState
     {
         public int Points;
         public float SoftCapMultiplier;
-        public ResearchConsoleBoundInterfaceState(int points, float softCapMultiplier)
+        public Dictionary<string, ResearchAvailability> Researches;
+
+        public ResearchConsoleBoundInterfaceState(
+            int points,
+            float softCapMultiplier,
+            Dictionary<string, ResearchAvailability>? researches = null)
         {
             Points = points;
             SoftCapMultiplier = softCapMultiplier;
+            Researches = researches ?? new();
         }
     }
 }

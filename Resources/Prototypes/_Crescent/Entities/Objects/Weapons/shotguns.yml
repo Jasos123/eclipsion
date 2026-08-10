@@ -302,7 +302,7 @@
   name: IRM DA-13 Reno 12g
   parent: [BaseWeaponShotgun, BaseGunWieldable, StreeCredRedeemable]
   id: WeaponShotgunReno
-  description: An Imperial semi-automatic shotgun designed by Olywir Armaments. Unlike other Olywirian designs, this weapon is not prohibitively expensive to produce.
+  description: An Imperial semi-automatic shotgun designed by Olywier Charter Armaments. Unlike many charter designs, this weapon is not prohibitively expensive to produce.
   components:
   - type: Sprite
     sprite: _Crescent/Objects/Weapons/Guns/reno.rsi
@@ -428,7 +428,7 @@
   # Don't parent to BaseWeaponShotgun because it differs significantly
   parent: [BaseItem, BaseGunWieldable]
   id: WeaponShotgunTFSCSaiga12
-  name: TFSC Saiga-12k Hammer 12g
+  name: TFCF Saiga-12k Hammer 12g
   description: A magazine-fed shotgun in use by terrorist forces. Uses 12 gauge shotgun shells.
   components:
   - type: Sprite

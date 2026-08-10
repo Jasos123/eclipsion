@@ -26,11 +26,22 @@ public partial class SharedRenamableSystem : EntitySystem
         _metaData = _entManager.System<MetaDataSystem>();
     }
 
+    /// <summary>
+    /// The name comes straight off a client message and ends up on a networked entity, so it needs a bound.
+    /// </summary>
+    private const int MaxNameLength = 64;
+
     private void OnRename(Entity<RenamableComponent> entity, ref RenamableBuiMessage renameMessage)
     {
-        _popup!.PopupPredicted(Loc.GetString("comp-renamable-rename", ("newname", renameMessage.Name)), entity, null);
-
         var name = renameMessage.Name.Trim();
+
+        if (string.IsNullOrEmpty(name))
+            return;
+
+        if (name.Length > MaxNameLength)
+            name = name[..MaxNameLength];
+
+        _popup!.PopupPredicted(Loc.GetString("comp-renamable-rename", ("newname", name)), entity, null);
 
         var metaData = MetaData(entity);
 

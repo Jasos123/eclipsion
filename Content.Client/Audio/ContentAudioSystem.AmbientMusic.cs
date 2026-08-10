@@ -59,6 +59,16 @@ public sealed partial class ContentAudioSystem
     // This stores the music stream. It's used to start/stop the music on the fly.
     private EntityUid? _ambientMusicStream;
 
+    // Volume the current track is meant to play at (prototype volume plus the matching slider),
+    // before boombox ducking. Tracked here rather than recomputed from _musicProto, which can
+    // already describe the *next* track while the current one is still fading out.
+    private float _ambientMusicVolume;
+
+    // The prototype volume of the track that is actually playing, without any slider applied. Kept
+    // so moving a slider can re-derive _ambientMusicVolume for *this* stream; reading _musicProto
+    // there would price the current track using the next one's volume.
+    private float _ambientMusicBaseVolume;
+
     // This stores the ambient music prototype to be played next.
     private AmbientMusicPrototype? _musicProto;
 
@@ -140,6 +150,11 @@ public sealed partial class ContentAudioSystem
     /// </summary>
     private void ReplayAmbientMusic()
     {
+        // A replay timer can outlive its track while the client leaves gameplay. Never let a stale
+        // callback start ambient music over the lobby or round-end screen.
+        if (_state.CurrentState is not GameplayState)
+            return;
+
         if (_musicProto == null) //if we don't find any, we play the default track.
         {
             _musicProto = _protMan.Index<AmbientMusicPrototype>("default");
@@ -152,10 +167,7 @@ public sealed partial class ContentAudioSystem
 
         PlayMusicTrack(path, _musicProto.Sound.Params.Volume, _ambientMusicFadeInTime, false);
 
-        _ambientMusicCancelToken.Cancel();
-        _ambientMusicCancelToken = new CancellationTokenSource();
-
-        Timer.Spawn(_audio.GetAudioLength(path) + _timeUntilNextAmbientTrack, () => ReplayAmbientMusic(), _ambientMusicCancelToken.Token);
+        ScheduleAmbientReplay(path);
 
     }
 
@@ -201,10 +213,7 @@ public sealed partial class ContentAudioSystem
 
         PlayMusicTrack(path, _musicProto.Sound.Params.Volume, _ambientMusicFadeInTime, false);
 
-        _ambientMusicCancelToken.Cancel();
-        _ambientMusicCancelToken = new CancellationTokenSource();
-
-        Timer.Spawn(_audio.GetAudioLength(path) + _timeUntilNextAmbientTrack, () => ReplayAmbientMusic(), _ambientMusicCancelToken.Token);
+        ScheduleAmbientReplay(path);
     }
 
 
@@ -261,10 +270,7 @@ public sealed partial class ContentAudioSystem
 
         PlayMusicTrack(path, _musicProto.Sound.Params.Volume, _ambientMusicFadeInTime, false);
 
-        _ambientMusicCancelToken.Cancel();
-        _ambientMusicCancelToken = new CancellationTokenSource();
-
-        Timer.Spawn(_audio.GetAudioLength(path) + _timeUntilNextAmbientTrack, () => ReplayAmbientMusic(), _ambientMusicCancelToken.Token);
+        ScheduleAmbientReplay(path);
     }
 
 
@@ -276,8 +282,7 @@ public sealed partial class ContentAudioSystem
             return;
 
         // Without this, there's inconsistent behaviour to when combat mode toggles on/off.
-        _combatMusicCancelToken.Cancel();
-        _combatMusicCancelToken = new CancellationTokenSource();
+        ResetCombatMusicToken();
 
         bool currentCombatState = _combatModeSystem.IsInCombatMode();
 
@@ -296,8 +301,10 @@ public sealed partial class ContentAudioSystem
     private void SwitchCombatMusic(string factionComponentString)
     {
 
-        _ambientMusicCancelToken.Cancel();
-        _ambientMusicCancelToken = new CancellationTokenSource();
+        ResetAmbientReplayToken();
+
+        if (_state.CurrentState is not GameplayState)
+            return;
 
 
         bool currentCombatState = _combatModeSystem.IsInCombatMode();
@@ -380,7 +387,7 @@ public sealed partial class ContentAudioSystem
 
             PlayMusicTrack(path, _musicProto.Sound.Params.Volume, _ambientMusicFadeInTime, false);
 
-            Timer.Spawn(_audio.GetAudioLength(path) + _timeUntilNextAmbientTrack, () => ReplayAmbientMusic(), _ambientMusicCancelToken.Token);
+            ScheduleAmbientReplay(path);
 
         }
     }
@@ -396,16 +403,22 @@ public sealed partial class ContentAudioSystem
         _isCombatMusicPlaying = combatMode;
         _sawmill.Debug($"NOW PLAYING: {path}" + " | COMBAT MODE: " + _isCombatMusicPlaying);
 
+        _ambientMusicBaseVolume = volume;
+
         if (combatMode)
             volume += _volumeSliderCombat;
         else
             volume += _volumeSliderAmbient;
 
+        _ambientMusicVolume = volume;
+
+        // Start already ducked if a boombox is playing next to us, otherwise the track would open
+        // at full volume and only get pulled down once the ducking update caught up.
         var strim = _audio.PlayGlobal(
             path,
             Filter.Local(),
             false,
-            AudioParams.Default.WithVolume(volume))!;
+            AudioParams.Default.WithVolume(GetDuckedVolume(volume)))!;
 
         _ambientMusicStream = strim.Value.Entity; //this plays it immediately, but fadein function later makes it actually fade in.
 
@@ -458,10 +471,11 @@ public sealed partial class ContentAudioSystem
 
         // GetDuckedVolume keeps any active boombox duck applied, otherwise moving the slider
         // would jump the music back to full volume until the ducking update ran again.
-        if (_ambientMusicStream != null && _musicProto != null && !_isCombatMusicPlaying)
-        {
-            _audio.SetVolume(_ambientMusicStream, GetDuckedVolume(_musicProto.Sound.Params.Volume + _volumeSliderAmbient));
-        }
+        if (_ambientMusicStream == null || _isCombatMusicPlaying)
+            return;
+
+        _ambientMusicVolume = _ambientMusicBaseVolume + _volumeSliderAmbient;
+        _audio.SetVolume(_ambientMusicStream, GetDuckedVolume(_ambientMusicVolume));
     }
 
     private void CombatCVarChanged(float obj)
@@ -470,10 +484,11 @@ public sealed partial class ContentAudioSystem
 
         //this changes the music volume live, while the music is playing. otherwise, the line above that changes the slider is the one that matters.
 
-        if (_ambientMusicStream != null && _musicProto != null && _isCombatMusicPlaying)
-        {
-            _audio.SetVolume(_ambientMusicStream, GetDuckedVolume(_musicProto.Sound.Params.Volume + _volumeSliderCombat));
-        }
+        if (_ambientMusicStream == null || !_isCombatMusicPlaying)
+            return;
+
+        _ambientMusicVolume = _ambientMusicBaseVolume + _volumeSliderCombat;
+        _audio.SetVolume(_ambientMusicStream, GetDuckedVolume(_ambientMusicVolume));
     }
 
     private void CombatToggleChanged(bool obj)
@@ -484,11 +499,12 @@ public sealed partial class ContentAudioSystem
             return;
 
         // if we are turning combat music OFF, then do all this bullshit to turn music off and get ambient music back on
-        _combatMusicCancelToken.Cancel();
-        _combatMusicCancelToken = new CancellationTokenSource();
+        ResetCombatMusicToken();
 
-        _ambientMusicCancelToken.Cancel();
-        _ambientMusicCancelToken = new CancellationTokenSource();
+        ResetAmbientReplayToken();
+
+        if (_state.CurrentState is not GameplayState)
+            return;
 
 
         bool currentCombatState = _combatModeSystem.IsInCombatMode();
@@ -532,14 +548,36 @@ public sealed partial class ContentAudioSystem
 
         PlayMusicTrack(path, _musicProto.Sound.Params.Volume, _ambientMusicFadeInTime, false);
 
-        Timer.Spawn(_audio.GetAudioLength(path) + _timeUntilNextAmbientTrack, () => ReplayAmbientMusic(), _ambientMusicCancelToken.Token);
+        ScheduleAmbientReplay(path);
 
     }
 
     private void ShutdownAmbientMusic()
     {
         _state.OnStateChanged -= OnStateChange;
+        _ambientMusicCancelToken.Cancel();
+        _combatMusicCancelToken.Cancel();
         _ambientMusicStream = _audio.Stop(_ambientMusicStream);
+    }
+
+    private void ScheduleAmbientReplay(string path)
+    {
+        ResetAmbientReplayToken();
+        Timer.Spawn(_audio.GetAudioLength(path) + _timeUntilNextAmbientTrack,
+            ReplayAmbientMusic,
+            _ambientMusicCancelToken.Token);
+    }
+
+    private void ResetAmbientReplayToken()
+    {
+        _ambientMusicCancelToken.Cancel();
+        _ambientMusicCancelToken = new CancellationTokenSource();
+    }
+
+    private void ResetCombatMusicToken()
+    {
+        _combatMusicCancelToken.Cancel();
+        _combatMusicCancelToken = new CancellationTokenSource();
     }
 
     private void OnProtoReload(PrototypesReloadedEventArgs obj)
@@ -561,6 +599,9 @@ public sealed partial class ContentAudioSystem
 
     private void OnRoundEndMessage(RoundEndMessageEvent ev)
     {
+        ResetAmbientReplayToken();
+        ResetCombatMusicToken();
+
         if (_ambientMusicStream == null)
         {
             _sawmill.Debug("AMBIENT MUSIC STREAM WAS NULL? FROM OnRoundEndMessage()");
@@ -571,6 +612,9 @@ public sealed partial class ContentAudioSystem
     }
     public void DisableAmbientMusic()
     {
+        ResetAmbientReplayToken();
+        ResetCombatMusicToken();
+
         if (_ambientMusicStream == null)
         {
             _sawmill.Debug("AMBIENT MUSIC STREAM WAS NULL? FROM DisableAmbientMusic()");

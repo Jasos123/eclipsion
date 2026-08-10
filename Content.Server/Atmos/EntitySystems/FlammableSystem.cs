@@ -228,8 +228,8 @@ namespace Content.Server.Atmos.EntitySystems
                 ? (-1f, 1f)
                 : (1f, -1f);
             // bring each entity to the same firestack mass, firestacks being scaled by the other's mass
-            AdjustFireStacks(uid, src * avg * mass2, flammable, ignite: true);
-            AdjustFireStacks(otherUid, dest * avg * mass1, otherFlammable, ignite: true);
+            AdjustFireStacks(uid, src * avg * mass2, flammable, ignite: true, ignitionSource: otherUid);
+            AdjustFireStacks(otherUid, dest * avg * mass1, otherFlammable, ignite: true, ignitionSource: uid);
         }
 
         private void OnIsHot(EntityUid uid, FlammableComponent flammable, IsHotEvent args)
@@ -267,15 +267,23 @@ namespace Content.Server.Atmos.EntitySystems
             _appearance.SetData(uid, ToggleableLightVisuals.Enabled, flammable.OnFire, appearance);
         }
 
-        public void AdjustFireStacks(EntityUid uid, float relativeFireStacks, FlammableComponent? flammable = null, bool ignite = false)
+        public void AdjustFireStacks(EntityUid uid,
+            float relativeFireStacks,
+            FlammableComponent? flammable = null,
+            bool ignite = false,
+            EntityUid? ignitionSource = null)
         {
             if (!Resolve(uid, ref flammable))
                 return;
 
-            SetFireStacks(uid, flammable.FireStacks + relativeFireStacks, flammable, ignite);
+            SetFireStacks(uid, flammable.FireStacks + relativeFireStacks, flammable, ignite, ignitionSource);
         }
 
-        public void SetFireStacks(EntityUid uid, float stacks, FlammableComponent? flammable = null, bool ignite = false)
+        public void SetFireStacks(EntityUid uid,
+            float stacks,
+            FlammableComponent? flammable = null,
+            bool ignite = false,
+            EntityUid? ignitionSource = null)
         {
             if (!Resolve(uid, ref flammable))
                 return;
@@ -285,12 +293,13 @@ namespace Content.Server.Atmos.EntitySystems
             if (flammable.FireStacks <= 0)
             {
                 Extinguish(uid, flammable);
-                ignite = false;
             }
             else
             {
-                ignite = true;
-                UpdateAppearance(uid, flammable);
+                if (ignite)
+                    Ignite(uid, ignitionSource ?? uid, flammable);
+                else
+                    UpdateAppearance(uid, flammable);
             }
         }
 

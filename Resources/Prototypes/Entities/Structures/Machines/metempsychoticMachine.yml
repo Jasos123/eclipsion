@@ -2,7 +2,7 @@
   parent: CloningPod
   id: MetempsychoticMachine
   name: metempsychotic machine
-  description: Originally designed by the TAP families to transfer the consciousness of potent psychics into atryian bodies, it was soon commandeered by the Saint Romaine Militia to punish "xeno sympathizers" by turning them into xenos.
+  description: Originally designed by TAP families to transfer the consciousness of powerful psions into Atryian bodies, this prototype was confiscated by the Saint's Militia and repurposed as a brutal anti-psionic containment device. Its sanction is disputed even within the movement.
   components:
     - type: CloningPod
       doMetempsychosis: true

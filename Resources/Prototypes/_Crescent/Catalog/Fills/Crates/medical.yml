@@ -112,7 +112,7 @@
 - type: entity
   id: CrateVitalsTrackingNCWL
   parent: CrateMedical
-  name: workers league vitals tracking crate
+  name: Workers' Union vitals tracking crate
   description: A crate containing six vitals tracking implanters.
   components:
   - type: StorageFill
@@ -123,7 +123,7 @@
 - type: entity
   id: CrateVitalsTrackingClarizian
   parent: CrateMedical
-  name: clarizian vitals tracking crate
+  name: Aurevienne vitals tracking crate
   description: A crate containing six vitals tracking implanters.
   components:
   - type: StorageFill
@@ -134,7 +134,7 @@
 - type: entity
   id: CrateVitalsTrackingATH
   parent: CrateMedical
-  name: 43rd battlegroup vitals tracking crate
+  name: Crown expedition vitals tracking crate
   description: A crate containing six vitals tracking implanters.
   components:
   - type: StorageFill

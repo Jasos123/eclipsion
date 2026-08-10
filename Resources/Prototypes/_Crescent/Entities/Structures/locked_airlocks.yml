@@ -142,7 +142,7 @@
 - type: entity
   parent: AirlockSyndicate
   id: AirlockSyndicateLockedTFSC
-  suffix: TFSC, Locked
+  suffix: TFCF, Locked
   components:
   - type: ContainerFill
     containers:
@@ -151,7 +151,7 @@
 - type: entity
   parent: AirlockSyndicate
   id: AirlockSyndicateLockedTFSCCommand
-  suffix: TFSC Command, Locked
+  suffix: TFCF Command, Locked
   components:
   - type: ContainerFill
     containers:
@@ -160,7 +160,7 @@
 - type: entity
   parent: AirlockSyndicate
   id: AirlockSyndicateLockedTFSCRingleader
-  suffix: TFSC Ringleader, Locked
+  suffix: TFCF Ringleader, Locked
   components:
   - type: ContainerFill
     containers:
@@ -169,7 +169,7 @@
 - type: entity
   parent: AirlockSyndicate
   id: AirlockSyndicateLockedTFSCGorlex
-  suffix: TFSC Gorlex, Locked
+  suffix: TFCF GSC, Locked
   components:
   - type: ContainerFill
     containers:
@@ -178,7 +178,7 @@
 - type: entity
   parent: AirlockSyndicate
   id: AirlockSyndicateLockedTFSCInterdyne
-  suffix: TFSC Interdyne, Locked
+  suffix: TFCF Interdyne, Locked
   components:
   - type: ContainerFill
     containers:
@@ -187,7 +187,7 @@
 - type: entity
   parent: AirlockSyndicate
   id: AirlockSyndicateLockedTFSCSAWs
-  suffix: TFSC SAWs, Locked
+  suffix: TFCF SAW, Locked
   components:
   - type: ContainerFill
     containers:
@@ -196,7 +196,7 @@
 - type: entity
   parent: WindoorSecure
   id: WindoorSecureTFSCSaws
-  suffix: TFSC Saws, Windoor
+  suffix: TFCF SAW, Windoor
   components:
   - type: ContainerFill
     containers:
@@ -205,7 +205,7 @@
 - type: entity
   parent: AirlockSyndicate
   id: AirlockSyndicateLockedTFSCRamzi
-  suffix: TFSC Ramzi, Locked
+  suffix: TFCF Cyberdawn, Locked
   components:
   - type: ContainerFill
     containers:
@@ -216,7 +216,7 @@
 - type: entity
   parent: AirlockSyndicateHorizontal
   id: AirlockSyndicateHorizontalLockedTFSC
-  suffix: TFSC, Horizontal
+  suffix: TFCF, Horizontal
   components:
   - type: ContainerFill
     containers:
@@ -225,7 +225,7 @@
 - type: entity
   parent: AirlockSyndicateHorizontal
   id: AirlockSyndicateHorizontalLockedTFSCCommand
-  suffix: TFSC Command, Horizontal
+  suffix: TFCF Command, Horizontal
   components:
   - type: ContainerFill
     containers:
@@ -234,7 +234,7 @@
 - type: entity
   parent: AirlockSyndicateHorizontal
   id: AirlockSyndicateHorizontalLockedTFSCRingleader
-  suffix: TFSC Ringleader, Horizontal
+  suffix: TFCF Ringleader, Horizontal
   components:
   - type: ContainerFill
     containers:
@@ -243,7 +243,7 @@
 - type: entity
   parent: AirlockSyndicateHorizontal
   id: AirlockSyndicateHorizontalLockedTFSCGorlex
-  suffix: TFSC Gorlex, Horizontal
+  suffix: TFCF GSC, Horizontal
   components:
   - type: ContainerFill
     containers:
@@ -252,7 +252,7 @@
 - type: entity
   parent: AirlockSyndicateHorizontal
   id: AirlockSyndicateHorizontalLockedTFSCSaws
-  suffix: TFSC SAWS, Horizontal
+  suffix: TFCF SAW, Horizontal
   components:
   - type: ContainerFill
     containers:
@@ -261,7 +261,7 @@
 - type: entity
   parent: AirlockSyndicateHorizontal
   id: AirlockSyndicateHorizontalLockedTFSCInterdyne
-  suffix: TFSC Interdyne, Horizontal
+  suffix: TFCF Interdyne, Horizontal
   components:
   - type: ContainerFill
     containers:
@@ -270,7 +270,7 @@
 - type: entity
   parent: AirlockSyndicateHorizontal
   id: AirlockSyndicateHorizontalLockedTFSCRamzi
-  suffix: TFSC Ramzi, Horizontal
+  suffix: TFCF Cyberdawn, Horizontal
   components:
   - type: ContainerFill
     containers:
@@ -380,7 +380,7 @@
 - type: entity
   parent: AirlockCommand
   id: AirlockCommandLockedDSMGovernor
-  suffix: DSM Governor, Locked
+  suffix: DSM Lord Admiral, Locked
   components:
   - type: ContainerFill
     containers:
@@ -473,7 +473,7 @@
 - type: entity
   parent: AirlockCommandHorizontal
   id: AirlockCommandLockedDSMHorizontalGovernor
-  suffix: DSM Governor, Horizontal
+  suffix: DSM Lord Admiral, Horizontal
   components:
   - type: ContainerFill
     containers:
@@ -907,7 +907,7 @@
 - type: entity
   parent: AirlockCommand
   id: AirlockCommandAuthority
-  suffix: Authority, Locked
+  suffix: Crown Expedition, Locked
   components:
   - type: ContainerFill
     containers:
@@ -916,7 +916,7 @@
 - type: entity
   parent: AirlockCommand
   id: AirlockCommandAuthorityRanking
-  suffix: Authority Ranking, Locked
+  suffix: Crown Expedition Ranking, Locked
   components:
   - type: ContainerFill
     containers:
@@ -925,7 +925,7 @@
 - type: entity
   parent: AirlockCommand
   id: AirlockCommandAuthoritymed
-  suffix: Authority Medical, Locked
+  suffix: Crown Expedition Medical, Locked
   components:
   - type: ContainerFill
     containers:
@@ -934,7 +934,7 @@
 - type: entity
   parent: AirlockCommand
   id: AirlockCommandAuthoritySupply
-  suffix: Authority Supply, Locked
+  suffix: Crown Expedition Supply, Locked
   components:
   - type: ContainerFill
     containers:
@@ -943,7 +943,7 @@
 - type: entity
   parent: AirlockCommandHorizontal
   id: AirlockCommandAuthorityHorizontal
-  suffix: Authority, Locked
+  suffix: Crown Expedition, Locked
   components:
   - type: ContainerFill
     containers:
@@ -952,7 +952,7 @@
 - type: entity
   parent: AirlockCommandHorizontal
   id: AirlockCommandAuthorityRankingHorizontal
-  suffix: Authority Ranking, Locked
+  suffix: Crown Expedition Ranking, Locked
   components:
   - type: ContainerFill
     containers:
@@ -961,7 +961,7 @@
 - type: entity
   parent: AirlockCommandHorizontal
   id: AirlockCommandAuthoritymedHorizontal
-  suffix: Authority Medical, Locked
+  suffix: Crown Expedition Medical, Locked
   components:
   - type: ContainerFill
     containers:
@@ -970,7 +970,7 @@
 - type: entity
   parent: AirlockCommandHorizontal
   id: AirlockCommandAuthoritySupplyHorizontal
-  suffix: Authority Supply, Locked
+  suffix: Crown Expedition Supply, Locked
   components:
   - type: ContainerFill
     containers:
@@ -979,7 +979,7 @@
 - type: entity
   parent: WindoorSecure
   id: WindoorSecureAuthorityCargo
-  suffix: Authority Cargo, Windoor
+  suffix: Crown Expedition Cargo, Windoor
   components:
   - type: ContainerFill
     containers:

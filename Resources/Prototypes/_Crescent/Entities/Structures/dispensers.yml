@@ -252,8 +252,8 @@
 - type: entity
   parent: BaseDispenser
   id: GrinningJackalCargoChute
-  name: syndicate cargo turn-in chute
-  description: A machine with piping systems that lead into the bowels of the station, accepting export goods for trade deeds. The electronic display informs that the TFSC are in need of food.
+  name: TFCF cargo turn-in chute
+  description: A machine with piping systems that lead into the bowels of the station, accepting export goods for trade deeds. The electronic display says the TFCF needs food.
   components:
   - type: Anchorable
     flags:
@@ -289,6 +289,7 @@
   name: passport validity checker
   description: A complicated-looking machine that checks the validity of provided passports.
   components:
+  - type: PassportChecker
   - type: Dispenser
     defaultItem: TemporaryDenialSlip
     inventory:

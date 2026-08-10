@@ -189,7 +189,7 @@
   parent: BaseTurretShipgun
   id: BaseWeaponTurretSwarmer
   suffix: ShipGun
-  name: TFSC 'Swarmer' self-replicating missile pod
+  name: TFCF 'Swarmer' self-replicating missile pod
   components:
     - type: Sprite
       sprite: _Crescent/Objects/Autoturrets/swarmermissile.rsi
@@ -1711,7 +1711,7 @@
   id: FlakCannonRegent
   suffix: ShipGun
   name: NT 88mm 'Regent' flak-screen turret
-  description: A flak-screen turret recovered and fabricated with Abyssal materials and designed according to old NanoTrasen schematics. Fires a trio of explosive slugs and uses surrounding trace exotic matter in space to manufacture it's own ammunition.
+  description: A flak-screen turret recovered and fabricated with recurrence-active materials according to old NanoTrasen schematics. Fires a trio of explosive slugs and uses surrounding trace exotic matter to manufacture its own ammunition.
   components:
     - type: Sprite
       sprite: _Crescent/Objects/Autoturrets/regent.rsi
@@ -1779,7 +1779,7 @@
   id: MissilePodSnapdragon
   suffix: ShipGun
   name: NT 'Snapdragon' SRM missile system
-  description: A small short-range missile pod recovered and fabricated with Abyssal materials and designed according to old NanoTrasen schematics. Fires a blast of guided rockets and uses trace exotic matter in surrounding space to manufacture it's own ammunition.
+  description: A small short-range missile pod recovered and fabricated with recurrence-active materials according to old NanoTrasen schematics. Fires a blast of guided rockets and uses trace exotic matter in surrounding space to manufacture its own ammunition.
   components:
     - type: Sprite
       sprite: _Crescent/Objects/Autoturrets/regent.rsi
@@ -1849,7 +1849,7 @@
   id: BaseWeaponTurretKomodo
   suffix: ShipGun
   name: NT 400c 'Komodo' chemical blaster
-  description: A small laser pulser of antiquated NanoTrasen design, commonly found mounted on droneships or found as scrap in the Abyss. Uses ancient, outdated chemical mixes to create accelerated laser pulses, which are then flung as projectiles. Luckily for you, this one seems to be sourcing it's material from inert dark matter in the void around it.
+  description: A small laser pulser of antiquated NanoTrasen design, commonly mounted on drone ships or recovered as scrap from recurrence fields. It uses ancient chemical mixes to create accelerated laser pulses. Luckily, this one seems to source its material from inert dark matter in the surrounding void.
   components:
     - type: Sprite
       sprite: _Crescent/Objects/Autoturrets/komodo.rsi

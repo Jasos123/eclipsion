@@ -198,7 +198,7 @@
   name: IRM DA-20 Talon 11mm
   parent: [BaseWeaponSubMachineGun, BaseGunWieldable, StreeCredRedeemable]
   id: WeaponSubMachineGunC20rHullrot
-  description: A slick submachinegun produced by Olywir Armaments for the Imperial Navy. Mostly used by pointmen and naval personnel.
+  description: A slick submachine gun produced by Olywier Charter Armaments for the local Imperial Navy. Mostly used by point personnel and naval crews.
   components:
   - type: Sprite
     sprite: _Crescent/Objects/Weapons/Guns/talon.rsi
@@ -454,7 +454,7 @@
       - WeaponSubMachineGunMP49
 
 
-#TFSC
+# TFCF
 - type: entity
   name: CDT C-20R Corsair 11mm
   parent: [BaseWeaponSubMachineGun, StreeCredRedeemable ]
@@ -515,10 +515,10 @@
       - WeaponSubMachineGunAtreidesCyberdawn
 
 - type: entity
-  name: TFSC SR-2MP Atreides 9x19mm
+  name: TFCF SR-2MP Atreides 9x19mm
   parent: BaseWeaponSubMachineGun
   id: WeaponSubMachineGunAtreidesHullrot
-  description: A rapid-fire submachinegun developed by the Shipfitters Union. Eats through ammo like a starving elephant.
+  description: A rapid-fire submachine gun developed by the Shipbreaker Astronautics Workers Union. Eats through ammunition like a starving elephant.
   components:
   - type: Sprite
     sprite: _Crescent/Objects/Weapons/Guns/atreides.rsi

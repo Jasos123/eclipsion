@@ -32,7 +32,7 @@
     shoutBubbleScale: 1.32
     radioScale: 1.23
     radioBold: true
-  supervisors: job-supervisors-imperial
+  supervisors: job-supervisors-imperial-adjutant
   canBeAntag: false
   requirements:
     - !type:FactionRequirement

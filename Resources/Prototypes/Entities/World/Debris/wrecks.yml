@@ -239,7 +239,7 @@
 - type: entity
   id: CocWreck1
   name: Coc Wreck 1
-  description: A derelict TFSC vessel.
+  description: A derelict TFCF vessel.
   abstract: true
 
 - type: entity
@@ -885,7 +885,7 @@
         - type: VesselDesignation
           designation: vessel-designation-wreck
         - type: VesselDescription
-          description: A derelict TFSC vessel, left abandoned and forlorn.
+          description: A derelict TFCF vessel, left abandoned and forlorn.
 
 - type: gameMap
   id: CorvWreck1

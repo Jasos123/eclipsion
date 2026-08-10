@@ -3,6 +3,7 @@ using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
 using Content.Client.Message;
 using Content.Shared.Cloning.CloningConsole;
+using Robust.Shared.Utility;
 
 namespace Content.Client.CloningConsole.UI
 {
@@ -62,7 +63,8 @@ namespace Content.Client.CloningConsole.UI
                     }
                 // Set label depending on if scanner is occupied or not.
                 ScannerInfoLabel.SetMarkup(state.ScannerBodyInfo != null ?
-                    Loc.GetString("cloning-console-window-scanner-id", ("scannerOccupantName", state.ScannerBodyInfo)) :
+                    Loc.GetString("cloning-console-window-scanner-id",
+                        ("scannerOccupantName", FormattedMessage.EscapeText(state.ScannerBodyInfo))) :
                     Loc.GetString("cloning-console-window-id-blank"));
             }
             else
@@ -91,7 +93,8 @@ namespace Content.Client.CloningConsole.UI
                 ClonerBrainActivity.SetMarkup(Loc.GetString(state.MindPresent ? "cloning-console-mind-present-text" : "cloning-console-no-mind-activity-text"));
                 // Set label depending if clonepod is occupied or not
                 ClonerInfoLabel.SetMarkup(state.ClonerBodyInfo != null ?
-                    Loc.GetString("cloning-console-window-pod-id", ("podOccupantName", state.ClonerBodyInfo)) :
+                    Loc.GetString("cloning-console-window-pod-id",
+                        ("podOccupantName", FormattedMessage.EscapeText(state.ClonerBodyInfo))) :
                     Loc.GetString("cloning-console-window-id-blank"));
             }
             else

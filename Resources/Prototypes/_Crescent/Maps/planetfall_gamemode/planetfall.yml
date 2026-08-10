@@ -1,6 +1,6 @@
 - type: gameMap
   id: PlanetfallMap
-  mapName: 'Dominion Planet'
+  mapName: 'Imperial Charter Planet'
   mapPath: /Maps/_Crescent/Planetfall/planetfallmap.yml
   minPlayers: 0
   stations:
@@ -8,7 +8,7 @@
       stationProto: FlagshipCrescentVessel
       components:
         - type: StationNameSetup
-          mapNameTemplate: 'Domain of Olywier'
+          mapNameTemplate: "Olywier's Charter Holding"
           nameGenerator:
             !type:NanotrasenNameGenerator
             prefixCreator: '14'

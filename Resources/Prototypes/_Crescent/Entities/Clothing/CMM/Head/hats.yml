@@ -2,7 +2,7 @@
   parent: ClothingHeadBase
   id: ClothingHeadHatCMMDeputyMarshal
   name: militiaman's slouch hat
-  description: A simple slouch hat in the colors of the now-defunct Colonial Minutemen. Its tarnished golden seal symbolizes hope.
+  description: A simple slouch hat in the colors of the Colonial Minutemen. Its tarnished golden seal recalls their publicly funded patrol tradition and the loss of Analliesse.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/CMM/Head/deputymarshal.rsi
@@ -13,7 +13,7 @@
   parent: ClothingHeadBase
   id: ClothingHeadHatCMMMarshal
   name: marshal's campaign hat
-  description: An officer's hat in the colors of the now-defunct Colonial Minutemen. Its golden seal still exudes authority.
+  description: An officer's hat in the colors of the Colonial Minutemen. Its golden seal carries the authority of their public charter rather than any foreign crown.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/CMM/Head/marshal.rsi

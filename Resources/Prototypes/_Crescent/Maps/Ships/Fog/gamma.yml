@@ -4,7 +4,7 @@
 - type: vessel
   id: Gamma
   name: NT Gamma
-  description: A heavier NanoTrasen autonomous fighter recovered from the Fog. The extra cost buys you more gun and a slightly longer life expectancy.
+  description: A heavier NanoTrasen autonomous fighter recovered from a recurrence-active wreck field. The extra cost buys you more gun and a slightly longer life expectancy.
   price: 48000
   category: Small
   group: None
@@ -31,4 +31,4 @@
         - type: VesselDesignation
           designation: vessel-designation-fighter
         - type: VesselDescription
-          description: Created in response to the spread of the abyssal phenomena emerging from the fracture.
+          description: Created to operate in unstable recurrence fields around the Fracture.

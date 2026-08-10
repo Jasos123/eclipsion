@@ -5,7 +5,7 @@ reagent-name-exile = Exile
 reagent-desc-exile = A common combat stimulant used to both treat wounds sustained during battle and keep an operative on their feet for the duration of the fight.
 
 reagent-name-kaiser = Kaiser
-reagent-desc-kaiser = A sophisticated combat drug - boasting the refined effects of Exile with none of the drawbacks. A feat of Syndicate chemical engineering.
+reagent-desc-kaiser = A sophisticated combat drug boasting the refined effects of Exile with none of the drawbacks. A feat of Free Company chemical engineering.
 
 reagent-name-mechanites = combat mechanites
 reagent-desc-mechanites = A chemical cocktail of healing mechanites intended to localize around damage in the body and repair it on a sub-molecular level.
@@ -20,7 +20,7 @@ reagent-name-jv102 = JV-102
 reagent-desc-jv102 = An experimental battlefield stimulant that keeps a body upright well past the point it should have stopped. Slurred speech is a known and accepted side effect.
 
 reagent-name-naiser = Naiser
-reagent-desc-naiser = A field analgesic brewed to a Saint Romaine's Militia recipe. It smells of incense and closes wounds considerably faster than it has any right to.
+reagent-desc-naiser = A field analgesic brewed to a Saint's Militia recipe. It smells of incense and closes wounds considerably faster than it has any right to.
 
 reagent-name-fall = Fall
 reagent-desc-fall = A cheap street narcotic, cut with whatever happened to be on hand. Users report euphoria and a spring in their step; medics report vomiting and poisoning.

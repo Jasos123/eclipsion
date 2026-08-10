@@ -104,18 +104,16 @@
 - type: entity
   parent: ComputerPaymentBase
   id: ComputerPaymentTFSC
-  name: payroll console TFSC
+  name: payroll console TFCF
   components:
   - type: PaymentConsole
     faction: TFSC
   # Unlike the other factions this is gated on the command tier rather than the base tag: the
-  # Coalition pays out of a treasury any of its privateers would happily write themselves a
-  # salary from. Ringleader plus the department heads only.
+  # The Federation pays from a shared treasury that ordinary privateers would happily raid.
+  # Access is limited to the Ringleader and recognized member-organization leaders.
   - type: AccessReader
     access: [["SyndicateCommand"], ["SyndicateRingleader"], ["SyndicateFunds"]]
 
-# The Interdyne/Shipfitters/Gorlex/Cyberdawn payroll consoles that used to sit here were removed with
-# the Coalition merger. Their rosters keyed off the IPM/SAW/GSC/CD faction ids, which no job grants and
-# no treasury is bound to, so they could never have paid anyone. The Coalition shares one payroll:
-# ComputerPaymentTFSC above.
-
+# Interdyne, Shipbreaker, GSC and Cyberdawn retain separate leadership, but payroll resolves through the
+# Federation's shared gameplay faction. Their old consoles keyed off IPM/SAW/GSC/CD ids that no current job
+# grants and no treasury uses, so the shared ComputerPaymentTFSC console above serves the TFCF roster.

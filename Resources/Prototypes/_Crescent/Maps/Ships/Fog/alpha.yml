@@ -4,7 +4,7 @@
 - type: vessel
   id: Alpha
   name: NT Alpha
-  description: An autonomous NanoTrasen fighter unit recovered from the Fog. The IFF transponder still broadcasts. Whether that's reassuring or unsettling depends on who you ask.
+  description: An autonomous NanoTrasen fighter recovered from a recurrence-active wreck field. Its IFF transponder still broadcasts; whether that is reassuring depends on who you ask.
   price: 42000
   category: Small
   group: None
@@ -31,4 +31,4 @@
         - type: VesselDesignation
           designation: vessel-designation-fighter
         - type: VesselDescription
-          description: Created in response to the spread of the abyssal phenomena emerging from the fracture.
+          description: Created to operate in unstable recurrence fields around the Fracture.

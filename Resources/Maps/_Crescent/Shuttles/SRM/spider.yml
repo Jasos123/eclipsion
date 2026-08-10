@@ -1992,7 +1992,7 @@ entities:
     - type: Transform
       parent: 145
     - type: Paper
-      content: Ezna Vogsburg was here.
+      content: Ezna was here.
     - type: Physics
       canCollide: False
 - proto: PlasmaReinforcedWindowDirectional

@@ -1,3 +1,4 @@
+using Content.Server._Crescent.Barricades;
 using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.IgnitionSource;
@@ -12,24 +13,38 @@ using Robust.Shared.Timing;
 namespace Content.Server._Crescent.Fuel;
 
 /// <summary>
-/// Handles ignition and burning for spilled ship fuel.
+/// Handles ignition and burning for spilled fuel and oil.
+/// A puddle holding enough burnable reagent that sits on a tile with an ignition source lights up
+/// as an RMC-style tile fire, which then walks along the spill for as long as there is fuel left.
 /// </summary>
 public sealed class VolatileFuelSystem : EntitySystem
 {
     [Dependency] private readonly AtmosphereSystem _atmos = default!;
+    [Dependency] private readonly CrescentTileFireSystem _tileFire = default!;
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solution = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     /// <summary>Reagents handled by this system.</summary>
-    public static readonly string[] VolatileReagents = { "BoriaticFuel", "AmeFuel" };
+    public static readonly string[] VolatileReagents =
+    {
+        "BoriaticFuel",
+        "AmeFuel",
+        "WeldingFuel",
+        "Oil",
+        "Napalm",
+    };
+
+    /// <summary>The RMC-style floor fire spawned on top of burning puddles.</summary>
+    private const string TileFireProto = "CrescentTileFire";
 
     private static readonly TimeSpan BurnCooldown = TimeSpan.FromSeconds(1);
 
     private const float BurnRate = 25f;
 
-    private const float VapourPerUnit = 0.02f;
+    private const float MinimumOxygenMoles = 0.5f;
 
     private static readonly FixedPoint2 MinimumBurnableVolume = FixedPoint2.New(5);
 
@@ -66,9 +81,20 @@ public sealed class VolatileFuelSystem : EntitySystem
         foreach (var tile in _burningTiles)
         {
             _ignitionTiles.Add(tile);
+
+            if (!TryComp<MapGridComponent>(tile.Grid, out var grid))
+                continue;
+
             foreach (var offset in Neighbours)
             {
-                _ignitionTiles.Add((tile.Grid, tile.Indices + offset));
+                var neighbour = tile.Indices + offset;
+
+                // Fire must not carry through a wall, window or shut airlock, same as it cannot for
+                // flamers and incendiary rounds. Without this a spill relights itself on the far side.
+                if (_tileFire.IsFireBlocked(tile.Grid, grid, neighbour))
+                    continue;
+
+                _ignitionTiles.Add((tile.Grid, neighbour));
             }
         }
 
@@ -82,7 +108,8 @@ public sealed class VolatileFuelSystem : EntitySystem
                 AddTileOf(uid, xform);
         }
 
-        // Burning entities can ignite the tile beneath them.
+        // Burning entities can ignite the tile beneath them. This is also what lets an existing
+        // tile fire spread down a fuel trail, since those are flammable and permanently lit.
         var burning = EntityQueryEnumerator<FlammableComponent, TransformComponent>();
         while (burning.MoveNext(out var uid, out var flammable, out var xform))
         {
@@ -121,7 +148,7 @@ public sealed class VolatileFuelSystem : EntitySystem
 
             // Do not consume fuel when the atmosphere cannot burn it.
             var air = _atmos.GetTileMixture(gridUid, null, indices, true);
-            if (air == null || air.GetMoles(Gas.Oxygen) < 0.5f)
+            if (air == null || air.GetMoles(Gas.Oxygen) < MinimumOxygenMoles)
                 continue;
 
             var burned = solution.SplitSolutionWithOnly(burnAmount, VolatileReagents);
@@ -130,19 +157,29 @@ public sealed class VolatileFuelSystem : EntitySystem
 
             _solution.UpdateChemicals(puddle.Solution.Value);
 
-            air.AdjustMoles(Gas.Plasma, burned.Volume.Float() * VapourPerUnit);
-            _atmos.HotspotExpose(
-                gridUid,
-                indices,
-                Atmospherics.PlasmaMinimumBurnTemperature * 2f,
-                Atmospherics.CellVolume / 4f,
-                uid,
-                true);
+            TrySpawnTileFire(gridUid, grid, indices);
 
+            // Keep this tile marked so the puddle relights itself next cycle while fuel remains,
+            // and so the flames creep outwards along the rest of the spill.
             _burningTiles.Add((gridUid, indices));
 
             if (solution.Volume <= FixedPoint2.Zero)
                 QueueDel(uid);
         }
+    }
+
+    private void TrySpawnTileFire(EntityUid gridUid, MapGridComponent grid, Vector2i indices)
+    {
+        // Puddles can sit on a tile that is also occupied by a shut airlock, window or grille. Dropping
+        // a fire there would let its BurnNearby reach mobs standing on both sides of the barrier.
+        if (_tileFire.IsFireBlocked(gridUid, grid, indices))
+            return;
+
+        var coordinates = _map.GridTileToLocal(gridUid, grid, indices);
+
+        if (_lookup.GetEntitiesInRange<CrescentTileFireComponent>(coordinates, 0.4f).Count != 0)
+            return;
+
+        Spawn(TileFireProto, coordinates);
     }
 }

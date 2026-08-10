@@ -148,14 +148,6 @@ namespace Content.Server.GameTicking
             if (jobBans == null || jobId != null && jobBans.Contains(jobId))
                 return;
 
-            if (jobId != null)
-            {
-                var ev = new IsJobAllowedEvent(player, new ProtoId<JobPrototype>(jobId));
-                RaiseLocalEvent(ref ev);
-                if (ev.Cancelled)
-                    return;
-            }
-
             SpawnPlayer(player, character, station, jobId, lateJoin, silent);
         }
 
@@ -169,6 +161,22 @@ namespace Content.Server.GameTicking
             // Can't spawn players with a dummy ticker!
             if (DummyTicker)
                 return;
+
+            // Keep explicit-job validation in the common path so both late joins and round-start
+            // assignments are enforced. Round-start spawning already has a resolved profile and calls
+            // this overload directly.
+            if (jobId != null)
+            {
+                var allowedEvent = new IsJobAllowedEvent(player, new ProtoId<JobPrototype>(jobId));
+                RaiseLocalEvent(ref allowedEvent);
+                if (allowedEvent.Cancelled)
+                {
+                    // The player has already committed to entering the round. Leaving them without an
+                    // attached entity makes the refusal a soft-lock, so complete the join as an observer.
+                    JoinAsObserver(player);
+                    return;
+                }
+            }
 
             if (station == EntityUid.Invalid)
             {

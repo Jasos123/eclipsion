@@ -81,8 +81,8 @@
 - type: entity
   parent: [PristineMicroforge, BaseFactionMicroforge]
   id: StationMicroforgeTFSC
-  name: syndicate microforge
-  description: A syndicate microforge, keyed to the coalition at large. Its restricted patterns are held on the syndicate research servers.
+  name: TFCF microforge
+  description: A Federation microforge keyed to the TFCF charter. Restricted patterns remain distributed across its member companies' research servers.
   components:
   - type: FactionMachine
     faction: TFSC

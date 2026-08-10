@@ -1,7 +1,7 @@
 - type: entity
   parent: ClothingBackpackDuffelSyndicateBundle
   id: ClothingBackpackDuffelSyndicateBreachingChargetBundle
-  name: syndicate BreachingCharge bundle
+  name: TFCF breaching-charge bundle
   description: "Contains a lot of BreachingCharge charges."
   components:
   - type: StorageFill

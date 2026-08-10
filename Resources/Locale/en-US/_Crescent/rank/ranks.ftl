@@ -55,7 +55,7 @@ crescent-rank-ncwl-new = Cadet
 crescent-rank-ncwl-doctor = Doktor
 
 # ncwl
-crescent-rank-ncwl-faction-leader = General Major
+crescent-rank-ncwl-faction-leader = Flagman
 crescent-rank-ncwl-home-leader = Kommissar
 crescent-rank-ncwl-mvd-officer = Colonel
 crescent-rank-ncwl-mvd-grunt = Komrade

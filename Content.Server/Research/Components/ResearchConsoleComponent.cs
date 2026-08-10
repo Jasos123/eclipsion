@@ -1,4 +1,5 @@
 using Content.Shared.Radio;
+using Content.Shared.Research.Components;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.Research.Components;
@@ -11,5 +12,11 @@ public sealed partial class ResearchConsoleComponent : Component
     /// </summary>
     [DataField, ViewVariables(VVAccess.ReadWrite)]
     public ProtoId<RadioChannelPrototype> AnnouncementChannel = "Science";
+
+    /// <summary>
+    /// Last complete tree state sent to viewers. Point-only changes use a small BUI
+    /// message while the availability map is unchanged.
+    /// </summary>
+    public ResearchConsoleBoundInterfaceState? LastUiState;
 }
 

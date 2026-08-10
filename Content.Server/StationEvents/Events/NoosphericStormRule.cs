@@ -1,5 +1,4 @@
 using Robust.Shared.Random;
-using Content.Server.Abilities.Psionics;
 using Content.Shared.GameTicking.Components;
 using Content.Server.GameTicking.Rules.Components;
 using Content.Server.StationEvents.Components;
@@ -13,7 +12,7 @@ namespace Content.Server.StationEvents.Events;
 
 internal sealed class NoosphericStormRule : StationEventSystem<NoosphericStormRuleComponent>
 {
-    [Dependency] private readonly PsionicAbilitiesSystem _psionicAbilitiesSystem = default!;
+    [Dependency] private readonly PsionicsSystem _psionicsSystem = default!;
     [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
     [Dependency] private readonly GlimmerSystem _glimmerSystem = default!;
     [Dependency] private readonly IRobustRandom _robustRandom = default!;
@@ -44,7 +43,7 @@ internal sealed class NoosphericStormRule : StationEventSystem<NoosphericStormRu
             if (toAwaken-- == 0)
                 break;
 
-            _psionicAbilitiesSystem.AddPsionics(target);
+            _psionicsSystem.GrantPsionicLevel(target);
         }
 
         // Increase glimmer.

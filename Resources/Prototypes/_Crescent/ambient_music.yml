@@ -293,7 +293,7 @@
    - /Audio/_Crescent/Biomes/Deepwilds/deepwilds_4.ogg
    - /Audio/_Crescent/Biomes/Deepwilds/deepwilds_5.ogg
 
-#fracture / port vladzena. confusingly named hadalbiome??
+# recurrence scar / Port Vladzena (legacy biome ID retained)
 
 - type: ambientMusic
   id: hadalbiome
@@ -306,7 +306,7 @@
   files:
    - /Audio/_Crescent/surfacing.ogg
 
-#hadal deadspace
+# recurrence basin (legacy prototype IDs and asset paths retained)
 
 - type: ambientMusic
   id: hadaldeadspace

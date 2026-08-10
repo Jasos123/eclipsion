@@ -1,6 +1,5 @@
 using Content.Shared.Actions;
 using Content.Shared.CCVar;
-using Content.Shared.Clothing;
 using Content.Shared.Gravity;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Movement.Components;
@@ -24,7 +23,6 @@ public abstract class SharedJetpackSystem : EntitySystem
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly ActionContainerSystem _actionContainer = default!;
     [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly SharedMagbootsSystem _magboots = default!;
 
     public override void Initialize()
     {
@@ -157,24 +155,14 @@ public abstract class SharedJetpackSystem : EntitySystem
             user = container?.Owner;
         }
 
-        // A jetpack needs a wearer before it can be enabled.
+        // A jetpack needs an available wearer before it can be enabled.
+        if (enabled && (user == null || HasComp<JetpackUserComponent>(user.Value)))
+            return;
+
         if (enabled)
-        {
-            if (user == null || HasComp<JetpackUserComponent>(user.Value))
-                return;
-
-            if (_magboots.HasActiveMagboots(user.Value))
-            {
-                _popup.PopupClient(Loc.GetString("jetpack-magboots-active"), uid, user.Value);
-                return;
-            }
-
             EnsureComp<ActiveJetpackComponent>(uid);
-        }
         else
-        {
             RemComp<ActiveJetpackComponent>(uid);
-        }
 
         if (user != null)
         {

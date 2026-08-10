@@ -33,7 +33,7 @@
     shoutBubbleScale: 1.32
     radioScale: 1.23
     radioBold: true
-  supervisors: You answer to the Ringleader. Head the Coalition's medical wing - organize your employees, secure stakeholders and profit.
+  supervisors: You lead Interdyne operations and answer to its recognized leadership; follow the Ringleader on valid Federation-wide matters.
   canBeAntag: false
   requirements:
     - !type:CharacterSpeciesRequirement
@@ -68,7 +68,7 @@
   access:
   - Command
   - Maintenance
-  # One Coalition, one keyring: the old company tags survive only as department names.
+  # Shared TFCF gameplay keyring; company access still marks Interdyne's internal facilities.
   - SyndicateBasic
   - SyndicateGorlex
   - SyndicateInterdyne

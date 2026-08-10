@@ -1073,7 +1073,7 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
             4000 * MinimapScale, 4500 * MinimapScale,
             new Color(0f, 1f, 0f, 0.03f), new Color(0f, 1f, 0f, 0.2f));
 
-        // Hadal zone
+        // Severe recurrence exposure zone (legacy biome implementation)
         DrawFilledRing(handle, uiCenter,
             10000 * MinimapScale, 20000 * MinimapScale,
             new Color(1f, 0f, 0f, 0.01f), new Color(1f, 0f, 0f, 0.1f));

@@ -450,7 +450,7 @@
 - type: entity
   id: PowerCageBananiumCell
   name: charged bananium exosuit powercell
-  description: A gilded powercell based on an artifact recovered from the "Hadal fog" features uninteligible engravings which when removed make the cell non-functional.
+  description: A gilded powercell based on an artifact recovered from a recurrence-active wreck field. Its unintelligible engravings make the cell non-functional when removed.
   parent: PowerCageHigh
   suffix: Mech Battery
   components:
@@ -467,7 +467,7 @@
   id: MechDSMSepulchre
   parent: [ BaseMech, MediumMech ]
   name: DSM MKIV 'Sepulchre' mechanized infantry reliquary
-  description: Commissioned by the noble houses for a legendary hero of the Imperiatoria Eques Exercitus who was mortally wounded in the First Authoritat Incursion. This heavily-armored stasis casket maintains the fragile spark of a reticient, honourbound warrior. Kept comatose and reverently maintained by the scribes, this once-man is a triumph of the Scribes pioneering arts. The Filigree and house etchings are lovingly cared for, but the frame itself has been allowed to take on light battle damage as a badge of honour.
+  description: Commissioned by the noble houses for a legendary Imperial hero mortally wounded during a Crown succession campaign. This heavily armored stasis casket maintains the fragile spark of a reticent, honor-bound warrior. Kept comatose and reverently maintained by the Scribes, the reliquary is a triumph of their art. Its filigree and house etchings are lovingly cared for, while light battle damage remains as a badge of honor.
   components:
   - type: Damageable
     damageModifierSet: MediumArmorNT

@@ -68,13 +68,13 @@
     - SyndicateBasic
     - SyndicateInterdyne
 
-# The Coalition merged its four charters into one, so its command staff hand out a single keyring
-# covering every department. The per-company elevators above are kept for older maps and loadouts.
+# Federation command can issue a shared keyring covering all four member organizations.
+# Per-company elevators remain available because each organization retains its own leadership and facilities.
 - type: entity
   parent: AccessElevatorBase
   id: AccessElevatorTFSC
-  name: Coalition Access Elevator
-  description: Gives a target ID the acces codes for every Taypani Freestations Coalition facility.
+  name: TFCF Access Elevator
+  description: Gives a target ID the access codes used by the Taypani Free Companies Federation.
   components:
   - type: AccesElevator
     acces:

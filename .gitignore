@@ -301,6 +301,9 @@ Resources/MapImages
 # Temporary image-generation working files
 /tmp/imagegen/
 
+# Local passport validation databases
+/tmp/passport-validation-data/
+
 ## Docfx stuff
 /Content.Docfx/api/
 /Content.Docfx/*site

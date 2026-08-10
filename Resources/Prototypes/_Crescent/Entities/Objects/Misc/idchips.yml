@@ -2,7 +2,7 @@
   parent: BaseItem
   id: NanoTrasenIdentificationChipLowRisk
   name: C-11 NTID subdermal identification chip
-  description: A Pre-Collapse identification chip inserted subdermally near the brainstem. Records every piece of information possible about the holder and primarily used for gate-to-gate travel before the Bluespace Collapse. Nowadays, they've been repurposed as digital passports. This one's registered to a known low-risk criminal. You could probably make some scratch turning it in at a bounty office.
+  description: A subdermal identification chip designed to preserve identity, travel, and legal records across unstable frontier routes. This one is registered to a known low-risk criminal. You could probably make some scratch turning it in at a bounty office.
   components:
   - type: Sprite
     sprite: _Crescent/Objects/Misc/ntid.rsi
@@ -15,7 +15,7 @@
   parent: BaseItem
   id: NanoTrasenIdentificationChipBounty
   name: C-11 NTID subdermal identification chip
-  description: A Pre-Collapse identification chip inserted subdermally near the brainstem. Records every piece of information possible about the holder and primarily used for gate-to-gate travel before the Bluespace Collapse. Nowadays, they've been repurposed as digital passports. This one's registered to a known criminal. You could probably make some scratch turning it in at a bounty office.
+  description: A subdermal identification chip designed to preserve identity, travel, and legal records across unstable frontier routes. This one is registered to a known criminal. You could probably make some scratch turning it in at a bounty office.
   components:
   - type: Sprite
     sprite: _Crescent/Objects/Misc/ntid.rsi
@@ -28,7 +28,7 @@
   parent: BaseItem
   id: NanoTrasenIdentificationChipAbyssal
   name: destroyed NTID subdermal identification chip
-  description: A Pre-Collapse identification chip inserted subdermally near the brainstem. Records every piece of information possible about the holder and primarily used for gate-to-gate travel before the Bluespace Collapse. Nowadays, they've been repurposed as digital passports. This one has been smashed beyond repair and contaminated with Abyssal materials. Being a proof of kill for an Abyssal beast, it should sell nicely at a bounty post.
+  description: A subdermal identification chip designed to preserve identity, travel, and legal records across unstable frontier routes. This one has been smashed beyond repair and contaminated with recurrence-active material. As proof of a kill involving a temporally desynchronized predator, it should sell at a bounty post.
   components:
   - type: Sprite
     sprite: _Crescent/Objects/Misc/ntid.rsi

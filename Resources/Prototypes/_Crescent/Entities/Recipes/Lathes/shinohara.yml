@@ -81,7 +81,7 @@
   result: ClothingOuterArmorShinoharaArmor
   completetime: 2
   materials:
-    Durathread: 500
+    Cloth: 250
     Steel: 750
 
 - type: latheRecipe
@@ -90,7 +90,7 @@
   result: ClothingOuterArmorShinoharaHOSVest
   completetime: 2
   materials:
-    Durathread: 500
+    Cloth: 250
     Steel: 500
     Tungsten: 200
 
@@ -100,7 +100,7 @@
   result: ClothingOuterArmorShinoharaArmorHighsec
   completetime: 2
   materials:
-    Durathread: 1000
+    Cloth: 500
     Steel: 1000
     Tungsten: 500
 
@@ -110,7 +110,7 @@
   result: ClothingOuterArmorShinoharaArmorHighsecUA
   completetime: 2
   materials:
-    Durathread: 1000
+    Cloth: 500
     Steel: 800
     Silver: 200
     Tungsten: 500
@@ -121,7 +121,7 @@
   result: ClothingHeadHatShinoharaHelmet
   completetime: 2
   materials:
-    Durathread: 500
+    Cloth: 250
     Steel: 500
     Tungsten: 200
 
@@ -131,7 +131,7 @@
   result: ClothingHeadHatShinoharaHelmetUA
   completetime: 2
   materials:
-    Durathread: 500
+    Cloth: 250
     Steel: 400
     Silver: 100
     Tungsten: 200
@@ -142,7 +142,7 @@
   result: ClothingOuterArmorShinoharaArmorBulwark
   completetime: 2
   materials:
-    Durathread: 1000
+    Cloth: 500
     Steel: 1000
     Tungsten: 500
 
@@ -152,7 +152,7 @@
   result: ClothingHeadHatShinoharaNonevaHelm
   completetime: 2
   materials:
-    Durathread: 500
+    Cloth: 250
     Steel: 500
     Tungsten: 250
 

@@ -82,7 +82,7 @@
   - Maintenance
   - Service
   - External
-  # Sole head of the Coalition: every department keyring plus the treasury/payroll tier.
+  # Joint Federation office: every member keyring plus the shared treasury/payroll tier, without replacing company leadership.
   - SyndicateBasic
   - SyndicateCommand
   - SyndicateRingleader

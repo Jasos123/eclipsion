@@ -2,7 +2,7 @@
   name: IRM FLAM-40 Cauterizer
   parent: BaseItem
   id: WeaponIRMCauteriezrFlamethrower
-  description: A large and simple flametrower designed by Olywir Armaments. Uses compressed boriatic fuel as ammo.
+  description: A large and simple flamethrower designed by Olywier Charter Armaments. Uses compressed boriatic fuel as ammo.
   components:
   - type: Sprite
     sprite: _Crescent/Objects/Weapons/Guns/cauterizer.rsi

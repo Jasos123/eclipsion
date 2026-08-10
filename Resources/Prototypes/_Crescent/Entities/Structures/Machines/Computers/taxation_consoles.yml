@@ -102,10 +102,10 @@
 - type: entity
   parent: ComputerFactionTaxationBase
   id: ComputerFactionTaxationTFSC
-  suffix: Freeport / TFSC
+  suffix: Freeport / TFCF
   components:
   - type: AccessReader
-    # The Coalition's command tier: ringleader, lieutenant, coordinator, foreman, intelligence officer.
+    # The Federation command tier: Ringleader plus the recognized leaders coordinating each member organization.
     access: [["SyndicateCommand"], ["SyndicateRingleader"], ["SyndicateFunds"]]
 
 # ---------------------------------------------------------------------------
@@ -198,10 +198,10 @@
 - type: entity
   parent: ComputerFactionTreasuryBase
   id: ComputerFactionTreasuryTFSC
-  suffix: Freeport / TFSC
+  suffix: Freeport / TFCF
   components:
   - type: FactionTreasuryConsole
     faction: TFSC
   - type: AccessReader
-    # The Coalition's command tier. Rank and file are turned away quietly; outsiders trip the alarm.
+    # The Federation command tier. Rank and file are turned away quietly; outsiders trip the alarm.
     access: [["SyndicateCommand"], ["SyndicateRingleader"], ["SyndicateFunds"]]

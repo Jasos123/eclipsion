@@ -27,7 +27,7 @@ namespace Content.Server.Psionics
                 return;
             }
 
-            _psionicsSystem.AddRandomPsionicPower(_entity);
+            _psionicsSystem.AddPsionics(_entity);
             Close();
         }
     }

@@ -1184,7 +1184,7 @@
   parent: BaseItem
   id: ShipVoucherThanapod
   name: SAW 'Thanapod' pattern LPC fabprint disk
-  description: An LPC fabprint disk loaded with a Shipfitters Aeronautics union Thanapod-class versatile miner pattern. Has to be redeemed at a shipyard console.
+  description: An LPC fabprint disk loaded with a Shipbreaker Astronautics Workers Union Thanapod-class versatile miner pattern. Has to be redeemed at a shipyard console.
   components:
   - type: Item
     size: Small
@@ -1401,7 +1401,7 @@
   parent: BaseItem
   id: ShipVoucherShanty
   name: SAW 'Shanty' pattern LPC fabprint disk
-  description: An LPC fabprint disk loaded with a Shipfitters and Astronautics Workers Union Shanty-class salvage pod pattern. Has to be redeemed at a shipyard console.
+  description: An LPC fabprint disk loaded with a Shipbreaker Astronautics Workers Union Shanty-class salvage pod pattern. Has to be redeemed at a shipyard console.
   components:
   - type: Item
     size: Small
@@ -1420,8 +1420,8 @@
 - type: entity
   parent: BaseItem
   id: ShipVoucherVelator
-  name: TFSC 'Velator' pattern LPC fabprint disk
-  description: An LPC fabprint disk loaded with a TFSC Velator-class stealth corvette pattern. Has to be redeemed at a shipyard console.
+  name: TFCF 'Velator' pattern LPC fabprint disk
+  description: An LPC fabprint disk loaded with a TFCF Velator-class stealth corvette pattern. Has to be redeemed at a shipyard console.
   components:
   - type: Item
     size: Small
@@ -1440,8 +1440,8 @@
 - type: entity
   parent: BaseItem
   id: ShipVoucherTaipan
-  name: TFSC 'Taipan' pattern LPC fabprint disk
-  description: An LPC fabprint disk loaded with a TFSC Taipan-class stealth corvette pattern. Has to be redeemed at a shipyard console.
+  name: TFCF 'Taipan' pattern LPC fabprint disk
+  description: An LPC fabprint disk loaded with a TFCF Taipan-class stealth corvette pattern. Has to be redeemed at a shipyard console.
   components:
   - type: Item
     size: Small
@@ -1480,8 +1480,8 @@
 - type: entity
   parent: BaseItem
   id: ShipVoucherSpriggan
-  name: TFSC 'Spriggan' pattern LPC fabprint disk
-  description: An LPC fabprint disk loaded with a TFSC Spriggan class mining ship. Has to be redeemed at a shipyard console.
+  name: TFCF 'Spriggan' pattern LPC fabprint disk
+  description: An LPC fabprint disk loaded with a TFCF Spriggan-class mining ship pattern. Has to be redeemed at a shipyard console.
   components:
   - type: Item
     size: Small
@@ -1784,7 +1784,7 @@
   parent: BaseItem
   id: ShipVoucherSaintsfall
   name: SRM 'Saintsfall' pattern LPC fabprint disk
-  description: An LPC fabprint disk loaded with a Sixth St. Romaine's Militia Saintsfall-class gunship pattern. Has to be redeemed at a shipyard console.
+  description: An LPC fabprint disk loaded with a Saint's Militia Saintsfall-class gunship pattern. Has to be redeemed at a shipyard console.
   components:
   - type: Item
     size: Small
@@ -1801,7 +1801,7 @@
   parent: BaseItem
   id: ShipVoucherSpider
   name: SRM 'Spider' pattern LPC fabprint disk
-  description: An LPC fabprint disk loaded with a Sixth St. Romaine's Militia Spider-class stealth shuttle pattern. Has to be redeemed at a shipyard console.
+  description: An LPC fabprint disk loaded with a Saint's Militia Spider-class stealth shuttle pattern. Has to be redeemed at a shipyard console.
   components:
   - type: Item
     size: Small
@@ -1942,7 +1942,7 @@
   parent: BaseItem
   id: ShipVoucherArchon
   name: ATH 'Archon' pattern LPC fabprint disk
-  description: An LPC fabprint disk loaded with a Central Sol Authority Archon-class light frigate pattern. Has to be redeemed at a shipyard console.
+  description: An LPC fabprint disk loaded with a Crown expeditionary Archon-class light frigate pattern. Has to be redeemed at a shipyard console.
   components:
   - type: Item
     size: Small
@@ -1959,7 +1959,7 @@
   parent: BaseItem
   id: ShipVoucherLictor
   name: ATH 'Lictor' pattern LPC fabprint disk
-  description: An LPC fabprint disk loaded with a Central Sol Authority Lictor-class Strike Frigate pattern. Has to be redeemed at a shipyard console.
+  description: An LPC fabprint disk loaded with a Crown expeditionary Lictor-class strike frigate pattern. Has to be redeemed at a shipyard console.
   components:
   - type: Item
     size: Small
@@ -1976,7 +1976,7 @@
   parent: BaseItem
   id: ShipVoucherKhorkoi
   name: ATH 'Khorkoi' pattern LPC fabprint disk
-  description: An LPC fabprint disk loaded with a Central Sol Authority Khorkoi-class light fighter pattern. Has to be redeemed at a shipyard console.
+  description: An LPC fabprint disk loaded with a Crown expeditionary Khorkoi-class light fighter pattern. Has to be redeemed at a shipyard console.
   components:
   - type: Item
     size: Small

@@ -11,8 +11,8 @@ namespace Content.Client._Crescent.Diplomacy;
 [GenerateTypedNameReferences]
 public sealed partial class FactionStatusWidget : UIWidget
 {
-    // Must mirror RatDiplomacySystem.AllFactions on the server. TFSC replaced the four company ids
-    // (IPM, SAW, GSC, CD) it used to be split into when the Coalition merged into one faction.
+    // Must mirror RatDiplomacySystem.AllFactions on the server. The legacy TFSC id represents the TFCF's shared
+    // diplomatic front; IPM, SAW, GSC and CD remain distinct member organizations.
     private static readonly string[] AllFactions =
         ["DSM", "NCWL", "SHI", "SRM", "TAP", "TFSC", "TSP"];
 

@@ -17,8 +17,8 @@ public sealed partial class RatDiplomacySystem : EntitySystem
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
 
-    // TFSC replaces the four company ids (IPM, SAW, GSC, CD) it used to be split into: every Coalition
-    // job now writes HullrotFaction "TFSC", so the old ids would only ever show up as empty boards.
+    // The legacy TFSC id represents the TFCF's shared external diplomacy. IPM, SAW, GSC and CD retain their
+    // internal leadership, but their jobs write HullrotFaction "TFSC" so Federation relations stay unified.
     // Load() drops relations naming a faction that is no longer on this roster, so old saves are fine.
     private static readonly string[] AllFactions =
         ["DSM", "NCWL", "SHI", "SRM", "TAP", "TFSC", "TSP"];
@@ -89,11 +89,9 @@ public sealed partial class RatDiplomacySystem : EntitySystem
             _pending[factionId] = new List<PendingProposal>();
         }
 
-        // The Coalition inherits Cyberdawn's standing feud with Shinohara and nothing else. Gorlex used
-        // to start at war with every faction on the board, but that was one arm of four: now that the
-        // whole Coalition answers to the ringleader, opening every round with the entire sector hostile
-        // would leave the Freeport's traders and ripperdocs nothing to sell to. Everyone else starts
-        // neutral and it is settled at the diplomacy console.
+        // The TFCF's strategic conflict is with Shinohara; its four member organizations remain commercial actors
+        // that need customers elsewhere in the sector. Everyone else starts neutral and Federation-wide relations
+        // are settled at the diplomacy console under the Ringleader's joint mandate.
         _relations["TFSC"]["SHI"] = FactionRelation.War;
         _relations["SHI"]["TFSC"] = FactionRelation.War;
 

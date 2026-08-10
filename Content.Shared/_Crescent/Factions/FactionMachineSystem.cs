@@ -76,7 +76,7 @@ public sealed class FactionMachineSystem : EntitySystem
     }
 
     /// <summary>
-    /// Subfactions that resolve to a parent faction for ownership purposes. The TFSC subfactions crew their
+    /// TFCF member organizations resolve to a shared faction for machine ownership while retaining their
     /// own grids and run their own research servers, but syndicate hardware is shared across the umbrella, so
     /// a Gorlex server and a Cyberdawn microforge have to read as the same owner.
     /// </summary>

@@ -280,7 +280,7 @@
       - WeaponLightMachineGunConscript
 
 - type: entity
-  name: TFSC RPD 7.62x51mm
+  name: TFCF RPD 7.62x51mm
   id: WeaponLightMachineGunTFSCRPD
   parent: BaseWeaponLightMachineGun
   description: A bulky machinegun made from ancient schematics. Chambered in 7.62x51mm.

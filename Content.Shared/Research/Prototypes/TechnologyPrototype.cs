@@ -72,6 +72,19 @@ public sealed partial class TechnologyPrototype : IPrototype
 
     [DataField]
     public float SoftCapContribution = 1;
+
+    /// <summary>
+    /// Optional hand-authored position in the research tree. Technologies without a
+    /// position are laid out automatically by discipline, tier, and prerequisites.
+    /// </summary>
+    [DataField]
+    public Vector2i? Position { get; private set; }
+
+    /// <summary>
+    /// Visual style used for prerequisite connections leading to this technology.
+    /// </summary>
+    [DataField]
+    public PrerequisiteLineType PrerequisiteLineType { get; private set; } = PrerequisiteLineType.LShape;
 }
 
 [DataDefinition]
@@ -90,4 +103,15 @@ public partial record struct GenericUnlock()
     /// </summary>
     [DataField]
     public string UnlockDescription = string.Empty;
+}
+
+/// <summary>
+/// Defines how prerequisite connections are routed in the research tree.
+/// </summary>
+public enum PrerequisiteLineType : byte
+{
+    LShape,
+    Diagonal,
+    Tree,
+    Spread,
 }

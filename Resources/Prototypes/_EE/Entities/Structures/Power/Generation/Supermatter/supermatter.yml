@@ -1,6 +1,6 @@
 - type: entity
   id: Supermatter
-  name: hadal crystal fragment
+  name: recurrence crystal fragment
   description: An odd crystal. Your skin prickles when you stand closer to it.
   placement:
     mode: SnapgridCenter

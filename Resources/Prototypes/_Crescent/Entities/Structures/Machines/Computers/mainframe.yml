@@ -144,18 +144,17 @@
 - type: entity
   parent: BaseMainframeConsole
   id: TFSCMainframeConsole
-  name: Coalition Command Console
+  name: TFCF Command Console
   components:
   - type: OverwatchConsole
     faction: TFSC
-  # SyndicateBasic is the tag every Coalition job carries, matching the other factions' base tags.
+  # SyndicateBasic is the legacy access tag every TFCF job carries, matching the other factions' base tags.
   - type: AccessReader
     access: [["SyndicateBasic"]]
 
-# The four company mainframes (Interdyne, Shipfitters, Gorlex, Cyberdawn) that used to sit here were
-# removed with the Coalition merger: no job grants the IPM/SAW/GSC/CD faction ids any more, so their
-# overwatch rosters were permanently empty, and no map placed them. The Freeport runs the single
-# TFSCMainframeConsole above, which every Coalition department shares.
+# Interdyne, Shipbreaker, GSC and Cyberdawn retain separate internal leadership. Their jobs expose the
+# shared TFCF gameplay faction, so old mainframes keyed only to IPM/SAW/GSC/CD showed empty rosters.
+# The Freeport therefore uses TFSCMainframeConsole as shared Federation infrastructure.
 
 - type: entity
   parent: BaseMainframeConsole

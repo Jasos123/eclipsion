@@ -195,14 +195,13 @@
   #   - map: ["computerLayerScreen"]
   #     state: tap
 
-# One console for the whole Coalition. Interdyne, the Shipfitters, Gorlex and Cyberdawn each used to
-# have their own, but the charters were folded into the TFSC and no job grants those subfaction ids any
-# more — a console watching "faction: CD" showed an empty roster. The old company names survive as
-# departments, not as separate overwatch networks.
+# One shared Federation console. Interdyne, Shipbreaker, GSC and Cyberdawn retain their own leadership,
+# but their jobs expose the shared TFCF gameplay faction; a console watching only "faction: CD" would show
+# an empty roster. The shared network represents joint Federation operations, not an internal merger.
 - type: entity
   parent: BaseComputerOverwatch
   id: TFSCOverwatchComputer
-  name: overwatch console TFSC
+  name: overwatch console TFCF
   components:
   - type: OverwatchConsole
     faction: TFSC
@@ -347,11 +346,11 @@
   - type: AccessReader
     access: [["Families"]]
 
-# As above: one Coalition tablet in place of the four per-company ones.
+# As above: one shared Federation tablet for joint operations; internal company leadership remains distinct.
 - type: entity
   parent: BaseOverwatchClipboard
   id: TFSCOverwatchClipboard
-  name: overwatch console TFSC
+  name: overwatch console TFCF
   components:
   - type: OverwatchConsole
     faction: TFSC

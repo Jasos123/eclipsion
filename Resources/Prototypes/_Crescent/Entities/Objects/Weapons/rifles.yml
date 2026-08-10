@@ -550,7 +550,7 @@
   name: IRM DA-8 Miller 5.56x45mm
   parent: [BaseWeaponRifle, StreeCredRedeemable]
   id: WeaponRifleMiller
-  description: A mil-grade assault rifle produced by Olywir Armaments, primarily for the Imperial Garrison and Imperial Naval Forces. Unlike other firearms made by Olywir the miller actually stayed under budget, even if by only a few thousand credits.
+  description: A military assault rifle produced by Olywier Charter Armaments for the local Imperial garrison and navy. The Miller somehow stayed under budget, if only by a few thousand credits.
   components:
   - type: Item
     shape:
@@ -660,7 +660,7 @@
       - WeaponRifleNCWLRezerv
 
 - type: entity
-  name: TFSC AKS-74U Krinkov 5.56x45mm
+  name: TFCF AKS-74U Krinkov 5.56x45mm
   parent: BaseWeaponRifle
   id: WeaponRifleKrinkov
   description: A shortened version of the AKS-74, this one has its foldable stock removed and ben rechambered to 5.56x45mm, commonly attributed to terrorist groups. Cheap and easily made.
@@ -900,10 +900,10 @@
       - WeaponRifleHunter
 
 - type: entity
-  name: TFSC AK-379M Mayflower 7.62x51mm
+  name: TFCF AK-379M Mayflower 7.62x51mm
   parent: BaseWeaponRifle
   id: WeaponRifleMayflower
-  description: A hefty battle carbine produced by the Coalition for the external independent market. Seen often in the hands of the Gorlex during harassment raids.
+  description: A hefty battle carbine produced by the TFCF for the independent market. Often seen in GSC hands during harassment raids.
   components:
   - type: Item
     shape:
@@ -1029,7 +1029,7 @@
       - WeaponSniperHristov
 
 - type: entity
-  name: TFSC SVD 12.7x99mm
+  name: TFCF SVD 12.7x99mm
   parent: BaseWeaponRifleDMR
   id: WeaponRifleSVDMarksman
   description: A large designated marksman rifle. Chambered in 12.7x99mm for long range engagements. Commonly in use by terrorist militia forces.

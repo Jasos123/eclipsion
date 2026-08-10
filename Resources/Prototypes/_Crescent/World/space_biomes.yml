@@ -1,7 +1,7 @@
 #fallback, don't remove
 - type: crescentFactionBiome
   id: default
-  name: Taypani Abyss
+  name: Taypani Wilds
   swapDuration: 2
   parallax: RatAbyssParallax
 
@@ -57,11 +57,11 @@
   swapDuration: 2
   parallax: RatAspidParallax
 
-#syndie
+# TFCF (legacy biome IDs retained)
 
 - type: entity
   id: SyndicateBiomeSource
-  name: syndicate source
+  name: TFCF source
   components:
   - type: SpaceBiomeSource
     biome: syndicatebiome
@@ -192,11 +192,11 @@
   swapDuration: 2
   parallax: RatWildParallax
 
-# breach
+# severe recurrence scar (legacy biome IDs retained)
 
 - type: entity
   id: RuptureSource
-  name: the rupture
+  name: recurrence scar source
   components:
   - type: SpaceBiomeSource
     biome: hadalbiome
@@ -205,13 +205,13 @@
 
 - type: crescentFactionBiome
   id: hadalbiome
-  name: The Fracture
+  name: Recurrence Scar
   swapDuration: 2
   parallax: RatRupture
-  description: "The remnants of Taypan I."
+  description: "An unstable Taypani region repeatedly reshaped by severe Turning fronts."
 
 
-# breach
+# recurrence approach
 
 - type: entity
   id: ApproachSource
@@ -228,11 +228,11 @@
   swapDuration: 2
   parallax: RatMoonApproach
 
-#abyss
+# Recurrence basin (legacy IDs retained for map compatibility)
 
 - type: entity
   id: DeadspaceSource
-  name: hadal deadspace
+  name: recurrence basin source
   components:
   - type: SpaceBiomeSource
     biome: hadaldeadspace
@@ -241,7 +241,7 @@
 
 - type: crescentFactionBiome
   id: hadaldeadspace
-  name: Taypani Abyss
+  name: Recurrence Basin
   swapDuration: 2
   parallax: RatDefault
 #NEW BIOMES - V1
@@ -327,7 +327,7 @@
 
 - type: crescentFactionBiome
   id: balreskabiome
-  name: The Fracture
+  name: Recurrence Scar
   swapDuration: 2
   parallax: RatRupture
 
@@ -341,7 +341,7 @@
   # P.O.I. - 2440 - ATTACHED TO ASTEROID FIELDS, P.O.I. AND SCRAPYARDS
   # BiomeAsteroidFieldSource - 2430 - ATTACHED TO DEFUNCTMININGOUTPOST AT 0,0, RANGE   3,000
   # DEEPWILDS - 2420 - ATTACHED TO DEFUNCTMININGOUTPOST AT 0,0, RANGE 11,500
-  # HADAL DEADSPACE: 2400 - ATTACHED TO DEFUNCTMININGOUTPOST AT 0,0 - RANGE INFINITE
+  # RECURRENCE BASIN: 2400 - ATTACHED TO DEFUNCTMININGOUTPOST AT 0,0 - RANGE INFINITE
 
 #unionfall exclusives, attached to the 2 unionfall grace period rings and the asteroids between them
 
@@ -357,7 +357,7 @@
 
 - type: crescentFactionBiome
   id: unionfallGraceNCWLBiome
-  name: Hadal Storm
+  name: Severe Turning Front
   swapDuration: 2
   parallax: RatAbyssParallax
 
@@ -389,7 +389,7 @@
 
 - type: crescentFactionBiome
   id: unionfallGraceDSMBiome
-  name: Hadal Storm
+  name: Severe Turning Front
   swapDuration: 2
   parallax: RatAbyssParallax
 

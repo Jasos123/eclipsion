@@ -105,12 +105,12 @@
     - MissionConvinceLeague
     finaleAnnouncement: faction-finale-shi
 
-# Shared across every Coalition (TFSC) sub-corp — gated to Coalition command, not one specific corp.
+# Shared across every TFCF member organization and gated to Federation command, not one specific company.
 - type: entity
   parent: BaseFactionRoundEndComputer
   id: FactionRoundEndComputerTFSC
-  name: coalition directive terminal
-  suffix: TFSC
+  name: TFCF directive terminal
+  suffix: TFCF
   components:
   - type: AccessReader
     access: [["SyndicateCommand"], ["SyndicateRingleader"]]

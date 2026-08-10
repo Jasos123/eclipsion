@@ -214,7 +214,7 @@
       collection: FragGrenadeSFX
 
 - type: entity
-  name: TFSC RGD-5 Grenade
+  name: TFCF RGD-5 Grenade
   description: A grenade built from ancient Terran schematics, painted in NSCP colors.
   parent: GrenadeBase
   id: TFSCRGD5Handgrenade
@@ -242,7 +242,7 @@
       collection: FragGrenadeSFX
 
 - type: entity
-  name: TFSC RGD-2B Smoke grenade
+  name: TFCF RGD-2B Smoke grenade
   description: A cheap smoke grenade that resembles a stick of dynamite more than a proper smoke bomb. Produces a small but long-lasting smoke cloud.
   parent: GrenadeBase
   id: TFSCRGD2BSmokeHandgrenade

@@ -3,7 +3,7 @@
 - type: entity
   id: ThrusterTFSCFighter
   parent: Thruster
-  suffix: TFSC, Fighter
+  suffix: TFCF, Fighter
   components:
     - type: NpcFactionMember
       factions:
@@ -44,7 +44,7 @@
 - type: entity
   id: ThrusterTFSCSmuggler
   parent: Thruster
-  suffix: TFSC, Smuggler
+  suffix: TFCF, Smuggler
   components:
     - type: Damageable
       damageContainer: StructuralInorganic
@@ -247,7 +247,7 @@
 - type: entity
   id: ThrusterTFSCWarship
   parent: Thruster
-  suffix: TFSC, Warship
+  suffix: TFCF, Warship
   components:
     - type: NpcFactionMember
       factions:

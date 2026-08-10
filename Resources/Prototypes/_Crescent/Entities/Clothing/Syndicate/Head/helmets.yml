@@ -3,7 +3,7 @@
   parent: ClothingHeadHelmetBasic
   id: ClothingHeadHelmetSyndicateBasic
   name: frontliner's ballistic helmet
-  description: A kevlar-plated nanoweave infantry helmet. Standard issue for the Syndicate.
+  description: A kevlar-plated nanoweave infantry helmet issued by Gorlex Security Consulting.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Syndicate/Head/syndiehelmet.rsi
@@ -40,7 +40,7 @@
   id: ClothingHeadHelmetSyndieDonator
   categories: [ HideSpawnMenu ]
   name: combat technician's hardsuit helmet
-  description: Spaceworthy protection for your fragile skull. A Syndicate design.
+  description: Spaceworthy protection for your fragile skull. A Free Company design.
   components:
   - type: BreathMask
   - type: EyeProtection
@@ -69,7 +69,7 @@
   id: ClothingHeadHelmetHardsuitRamzi
   categories: [ HideSpawnMenu ]
   name: operative's combat hardsuit helmet
-  description: Spaceworthy protection for your fragile skull. A Syndicate design.
+  description: Spaceworthy protection for your fragile skull. A Free Company design.
   components:
   - type: BreathMask
   - type: EyeProtection
@@ -98,7 +98,7 @@
   id: ClothingHeadHelmetHardsuitSyndicateBattlegroup
   categories: [ HideSpawnMenu ]
   name: frontliner's combat hardsuit helmet
-  description: Spaceworthy protection for your fragile skull. A Syndicate design.
+  description: Spaceworthy protection for your fragile skull. A Free Company design.
   components:
   - type: BreathMask
   - type: Sprite
@@ -208,7 +208,7 @@
   id: ClothingHeadHelmetHardsuitSyndicateBattlegroupBulwar
   categories: [ HideSpawnMenu ]
   name: frontliner combat hardsuit helmet mk.II
-  description: Spaceworthy protection for your fragile skull. A Syndicate design.
+  description: Spaceworthy protection for your fragile skull. A Free Company design.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Syndicate/Head/syndicatesbulwar.rsi
@@ -223,7 +223,7 @@
   id: ClothingHeadHelmetHardsuitSyndicateSellsword
   categories: [ HideSpawnMenu ]
   name: sellsword's combat hardsuit helmet
-  description: Spaceworthy protection for your fragile skull. A modified Syndicate design.
+  description: Spaceworthy protection for your fragile skull. A modified Free Company design.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Syndicate/Head/syndicatesellsword.rsi
@@ -238,7 +238,7 @@
   id: ClothingHeadHelmetHardsuitSyndicateFreiritter
   categories: [ HideSpawnMenu ]
   name: freiritter's combat hardsuit helmet
-  description: Spaceworthy protection for your fragile (probably felinid) skull. A custom Syndicate design.
+  description: Spaceworthy protection for your fragile skull. A custom Free Company design.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Syndicate/Head/syndicatefreiritter.rsi
@@ -304,7 +304,7 @@
   parent: ClothingHeadBase
   id: ClothingHeadHatSyndicateOfficer
   name: mercenary officer's peaked cap
-  description: A peaked cap in Syndicate colors.
+  description: A peaked cap in TFCF colors.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Syndicate/Head/syndieofficer.rsi
@@ -318,7 +318,7 @@
   parent: ClothingHeadBase
   id: ClothingHeadHatSyndicateArmaments
   name: armaments technician's cap
-  description: A simple militia cap with the Syndicate logo on it.
+  description: A simple militia cap carrying a Gorlex logo.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Syndicate/Head/syndiegarrison.rsi
@@ -332,7 +332,7 @@
   parent: ClothingHeadBase
   id: ClothingHeadHatHardhatSyndicateForeman
   name: foreman's hard hat
-  description: An aged hardhat in Syndicate tan. Someone's scrawled 'SAWs' on the side with a knife.
+  description: An aged hardhat in SAW tan. Someone has scratched the collective's initials into its side.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Syndicate/Head/foremanhardhat.rsi
@@ -346,7 +346,7 @@
   parent: ClothingHeadBase
   id: ClothingHeadHatHardhatSyndicate
   name: shipbreaker's hard hat
-  description: An aged hardhat in Syndicate red.
+  description: An aged hardhat in TFCF red.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Syndicate/Head/syndiehardhat.rsi

@@ -65,7 +65,7 @@
   name: kaiser autoinjector
   parent: ChemicalMedipen
   id: KaiserAutoinjector
-  description: A sophisticated, potent combat drug - boasting the refined effects of Exile with none of the drawbacks. A feat of Syndicate chemical engineering. Closes brute and piercing wounds with frightening speed, eases suffocation, and the ephedrine chaser keeps you moving. One pen only - a second will cook you alive.
+  description: A sophisticated combat drug boasting the refined effects of Exile with none of the drawbacks. A feat of Free Company chemical engineering, it closes wounds, eases suffocation, and keeps you moving. One pen only; a second will cook you alive.
   components:
   - type: Sprite
     sprite: _Crescent/Objects/Autoinjectors/kaiser.rsi

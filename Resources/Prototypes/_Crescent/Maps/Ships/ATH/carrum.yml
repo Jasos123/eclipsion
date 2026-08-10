@@ -4,7 +4,7 @@
 - type: vessel
   id: Carrum
   name: ATH Carrum
-  description: A light Authoritat torpedo bomber, oft deployed against larger targets.
+  description: A light Crown expeditionary torpedo bomber often deployed against larger targets.
   price: 17500
   category: Small
   group: None

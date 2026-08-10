@@ -14902,7 +14902,7 @@ entities:
   - uid: 1726
     components:
     - type: MetaData
-      desc: This painting depicts a giant devouring the corpse of Taleryn Vogsburg. He has a frightening look in his eyes.
+      desc: This painting depicts a giant devouring the corpse of a nameless lord. He has a frightening look in his eyes.
       name: Saturn Devouring Taleryn
     - type: Transform
       rot: 3.141592653589793 rad

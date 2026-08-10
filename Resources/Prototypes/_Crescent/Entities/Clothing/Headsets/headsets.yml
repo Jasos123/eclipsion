@@ -198,8 +198,8 @@
 - type: entity
   parent: ClothingHeadset
   id: ClothingHeadsetClarizian
-  name: clarizian headset
-  description: A headset issued by lady Clarize for royal forces in Taypan.
+  name: Aurevienne headset
+  description: A headset preserved by Aurevienne expatriate crews descended from independent Vaucelles.
   components:
     - type: ContainerFill
       containers:

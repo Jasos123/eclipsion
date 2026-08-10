@@ -572,7 +572,7 @@
   parent: [WeaponCaseMadrugada, StreeCredRedeemableLow]
   name: hunter's pride Madrugad case
   suffix: Donor - Madrugad
-  description: A fancy wooden case with the 6th Saint Romaine's Militia flag draped over it
+  description: A fancy wooden case draped with the flag of a Saint's Militia Hunt.
   components:
   - type: StorageFill
     contents:
@@ -812,7 +812,7 @@
   name: NT-Pattern Enoch Railgun
   parent: [BaseItem, StreeCredRedeemable, BaseGunWieldable]
   id: WeaponSpecialRailgunEnoch
-  description: A railgun prototype of Nanotrasen design, reclaimed from the depths of the Boundary's fog. On this one's stock is scratched a phrase, Hence nothing remains except for our regrets.
+  description: "A railgun prototype of NanoTrasen design, reclaimed from a recurrence-active wreck field. On its stock is scratched a phrase: Hence nothing remains except for our regrets."
   components:
   - type: Sprite
     sprite: _Crescent/Objects/Weapons/Guns/enoch.rsi
@@ -868,7 +868,7 @@
   name: NT-Pattern Japhet Charge Rifle 6x24mm
   parent: [BaseWeaponRifle, StreeCredRedeemableLow]
   id: WeaponJaphetChargeRifle
-  description: A charge rifle prototype of Nanotrasen design, reclaimed from the depths of the Boundary's fog. An orchid is crudely drawn on the side of the rifle's barrel.
+  description: A charge rifle prototype of NanoTrasen design, reclaimed from a recurrence-active wreck field. An orchid is crudely drawn on the side of the rifle's barrel.
   components:
   - type: Clothing
     sprite: _Crescent/Objects/Weapons/Guns/japhet.rsi

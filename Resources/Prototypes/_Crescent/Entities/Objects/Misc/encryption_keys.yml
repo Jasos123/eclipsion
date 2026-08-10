@@ -31,8 +31,8 @@
 - type: entity
   parent: EncryptionKey
   id: EncryptionKeySyndies
-  name: tfsc encryption key
-  description: An encryption key used by the Syndicate.
+  name: TFCF encryption key
+  description: An encryption key used across the TFCF.
   components:
   - type: EncryptionKey
     channels:
@@ -84,7 +84,7 @@
   parent: EncryptionKey
   id: EncryptionKeySyndiesSaws
   name: SAWs encryption key
-  description: An encryption key used by the Shipfitters and Astronautics Workers Union.
+  description: An encryption key used by the Shipbreaker Astronautics Workers Union.
   components:
   - type: EncryptionKey
     channels:
@@ -214,8 +214,8 @@
 - type: entity
   parent: EncryptionKey
   id: EncryptionKeyAuthority
-  name: 43rd encryption key
-  description: An encryption key used by the 43rd Battlegroup.
+  name: Crown expeditionary encryption key
+  description: An encryption key used by a Crown expeditionary force.
   components:
   - type: EncryptionKey
     channels:
@@ -229,8 +229,8 @@
 - type: entity
   parent: EncryptionKey
   id: EncryptionKeyClarizian
-  name: clarizian encryption key
-  description: An encryption key used by the Clarizians.
+  name: Aurevienne encryption key
+  description: An encryption key used by Aurevienne expatriate crews.
   components:
   - type: EncryptionKey
     channels:
@@ -263,8 +263,8 @@
 - type: entity
   parent: EncryptionKey
   id: EncryptionKeyTFSCCommand
-  name: TFSC Command encryption key
-  description: An encryption key used by the Syndicate Command.
+  name: TFCF Command encryption key
+  description: An encryption key used by TFCF command for Federation-wide matters.
   components:
   - type: EncryptionKey
     channels:

@@ -1,6 +1,6 @@
-# Coalition Technology tree — an EXTRA, combined discipline.
+# TFCF Technology tree — an EXTRA, combined discipline using legacy Coalition prototype IDs.
 # This duplicates the Interdyne (IPM) and Cyberdawn (CD) catalogues into one shared TFSC tree so a station can
-# research everything off a single "coalition technology research server". It does NOT replace the original
+# research everything from a single shared Federation research server. It does NOT replace the original
 # Interdyne/Cyberdawn trees (interdyne.yml / cyberdawn.yml) — those stay intact so existing maps keep working.
 #
 # Technology ids here are prefixed "Coalition" so they never collide with the originals (a duplicate id would

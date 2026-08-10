@@ -1,57 +1,56 @@
-# clarizian
-clarizian_view_imperial_passport = A member of a Monarchist regime that follows a dead emperor.
-clarizian_view_solarian_passport = A member of a regime born from the ashes of a fallen empire.
-clarizian_view_coalition_passport = A member of some backwater pirate gang.
-clarizian_view_union_passport = A member of a young, naive nation.
-clarizian_view_american_passport = A member of a cutthroat, competitive micro-empire. They could be useful.
-clarizian_view_kul-tanyr_passport = A member of some serpentine backwater desert world. They don't interest you much.
+# Aurevienne diaspora (legacy Clarizian keys retained for compatibility)
+clarizian_view_imperial_passport = A subject of the Imperial order that outlived independent Vaucelles.
+clarizian_view_solarian_passport = A servant of Crown institutions in distant Domain.
+clarizian_view_coalition_passport = A member of the armed Taypani market that sells to every side.
+clarizian_view_union_passport = A citizen of the revolution that remade Vaucelles as Chengridz.
+clarizian_view_american_passport = A citizen of a distant commercial polity. They may be useful.
+clarizian_view_kul-tanyr_passport = A traveler from another mobile or frontier society.
 
-# american
-american_view_imperial_passport = A member of a foolish derelict nation still clinging to old ideals.
-american_view_solarian_passport = A member of an opportunist, militarized regime that overthrew their former Monarchist government.
-american_view_clarizian_passport = A member of a nation of matriarchal Monarchists.
-american_view_kul-tanyr_passport = A member of some backwater desert tribe.
-american_view_union_passport = A member of a group of uncivilized rebels and insurgents.
-american_view_coalition_passport = A part of the local pirate and outlaws gang.
+# New American Protectorate
+american_view_imperial_passport = A subject of an old charter order that still turns seals into ships.
+american_view_solarian_passport = A representative of the Imperial Crown's institutions in Domain.
+american_view_clarizian_passport = A descendant of displaced Aurevienne communities.
+american_view_kul-tanyr_passport = A traveler from a distant frontier culture.
+american_view_union_passport = A member of an interstellar revolutionary project.
+american_view_coalition_passport = A participant in Taypan's independent armed market.
 
-# authority
-authority_view_imperial_passport = A member of an extinct, backwards nation.
-authority_view_coalition_passport = A member of the local terrorist cell in this system.
-authority_view_union_passport = A member of a nation founded by insurgents, the lowly worker class, and dogs.
-authority_view_kul-tanyr_passport = A member of a sand ball empire forgotten in the middle of nowhere.
-authority_view_american_passport = A member of the remnants of the New American Protectorate.
-authority_view_clarizian_passport = A Queensman belonging to House Clarize.
+# Crown Domain service (legacy Authority keys retained for compatibility)
+authority_view_imperial_passport = A subject of Count Olywier's regional charter.
+authority_view_coalition_passport = A member of the Taypani Free Companies Federation.
+authority_view_union_passport = A member of the provisional Crescent revolutionary front.
+authority_view_kul-tanyr_passport = A traveler from a distant oath-bound polity.
+authority_view_american_passport = A citizen of the New American Protectorate.
+authority_view_clarizian_passport = A member of the Aurevienne diaspora.
 
-# imperial
-imperial_view_union_passport = A member of a nation founded as a result of an inbred prole rebellion.
-imperial_view_solarian_passport = A member of a nation founded by rebels and insurgents.
-imperial_view_coalition_passport = A member of a gang of outlaws. Scum.
-imperial_view_kul-tanyr_passport = A member of the Empire's old bannermen.
-imperial_view_american_passport = A member of the remnants of the American Commonwealth.
-imperial_view_clarizian_passport = A member of the rebellious and illegitimate Duchy of Clarize.
+# Divine Sol Mandate
+imperial_view_union_passport = A subject of a revolutionary authority that rejects hereditary productive control.
+imperial_view_solarian_passport = A servant of the wider Crown whose seal does not automatically override local charter law.
+imperial_view_coalition_passport = A member of armed companies operating beyond Imperial jurisdiction.
+imperial_view_kul-tanyr_passport = A traveler whose oaths and privileges require careful legal recognition.
+imperial_view_american_passport = A citizen of a foreign commercial polity.
+imperial_view_clarizian_passport = A descendant of independent Vaucelles and its displaced Aurevienne order.
 
+# Workers' Union and NCWL
+union_view_authority_passport = A direct servant of the Imperial Crown in Domain.
+union_view_imperial_passport = A subject of a charter order built on hereditary privilege and unequal estates.
+union_view_coalition_passport = A member of an armed market federation: possible customer, competitor, or obstacle.
+union_view_american_passport = A citizen of a foreign commercial polity.
+union_view_kul-tanyr_passport = A traveler from a community outside Union authority.
+union_view_clarizian_passport = A descendant of the order overthrown on Vaucelles, or simply somebody born into its diaspora.
 
-# union
-union_view_authority_passport = A member of a human-supremacist nation.
-union_view_imperial_passport = A member of a fascist, Monarchist regime.
-union_view_coalition_passport = A member of an illegitimate pirate kingdom.
-union_view_american_passport = A member of the misguided New American Commonwealth.
-union_view_kul-tanyr_passport = A member of a recently-liberated nation of Lacertans and Unathi.
-union_view_clarizian_passport = A member of a rebellious Monarchist regime.
+# TFCF (legacy Coalition keys retained for compatibility)
+coalition_view_authority_passport = A direct Crown servant. Their orders may be important, but importance is not a contract.
+coalition_view_imperial_passport = A member of Count Olywier's charter economy.
+coalition_view_union_passport = A member of the local revolutionary front: possible customer, competitor, or armed obstacle.
+coalition_view_american_passport = A citizen from a distant market.
+coalition_view_clarizian_passport = A member of the Aurevienne diaspora with old routes and older grudges.
+coalition_view_kul-tanyr_passport = A traveler whose family or oath network may be more useful than their flag.
 
-# coalition
-coalition_view_authority_passport = A fascist dog from Sol.
-coalition_view_imperial_passport = A lowly member of the Crowns.
-coalition_view_union_passport = A member of the local worker's union.
-coalition_view_american_passport = A full-blooded American. A rare sight these days.
-coalition_view_clarizian_passport = A subject of some high-and-mighty know-it-all royal House.
-coalition_view_kul-tanyr_passport = A member of some scaleskin tribe. You never bother to memorize the names.
-
-# friends!
+# Familiar identities
 kul-tanyr_view_kul-tanyr_passport = Another member of the Roaming Fleet.
-american_view_american_passport = A red-blooded American, just like me.
-clarizian_view_clarizian_passport = A fellow servant of the Queen, Her Ladyship Isobel Clarize III.
-coalition_view_coalition_passport = Another Freeporter.
-authority_view_authority_passport = A fellow Solarian!
-imperial_view_imperial_passport = A fellow servant of the Kaiser.
-union_view_union_passport = A fellow member of the Worker's Union.
+american_view_american_passport = A fellow citizen of the New American Protectorate.
+clarizian_view_clarizian_passport = Another member of the Aurevienne diaspora.
+coalition_view_coalition_passport = Another participant in the TFCF market.
+authority_view_authority_passport = A fellow servant of Crown institutions in Domain.
+imperial_view_imperial_passport = A fellow subject of the Mandate.
+union_view_union_passport = A fellow worker in the Crescent revolutionary project.

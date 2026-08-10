@@ -20,6 +20,9 @@ public sealed partial class ResearchSystem
         primaryDb.SupportedDisciplines = otherDb.SupportedDisciplines;
         primaryDb.UnlockedTechnologies = otherDb.UnlockedTechnologies;
         primaryDb.UnlockedRecipes = otherDb.UnlockedRecipes;
+        primaryDb.SoftCapMultiplier = TryComp<ResearchServerComponent>(otherUid, out var researchServer)
+            ? researchServer.CurrentSoftCapMultiplier
+            : otherDb.SoftCapMultiplier;
 
         Dirty(primaryUid, primaryDb);
 
@@ -71,22 +74,32 @@ public sealed partial class ResearchSystem
         TechnologyDatabaseComponent? clientDatabase = null)
     {
         if (!Resolve(client, ref component, ref clientDatabase, false)
-            || !TryGetClientServer(client, out var serverEnt, out _, component)
+            || !TryGetClientServer(client, out var serverEnt, out var researchServer, component)
             || !CanServerUnlockTechnology(client, prototype, clientDatabase, component)
             || !PrototypeManager.TryIndex(prototype.Discipline, out var disciplinePrototype)
-            || !TryComp<ResearchServerComponent>(serverEnt.Value, out var researchServer)
-            || prototype.Cost * clientDatabase.SoftCapMultiplier > researchServer.Points)
+            || GetTechnologyCost(prototype, researchServer) > researchServer.Points)
             return false;
+
+        var cost = GetTechnologyCost(prototype, researchServer);
 
         if (prototype.Tier >= disciplinePrototype.LockoutTier)
         {
-            clientDatabase.SoftCapMultiplier *= prototype.SoftCapContribution;
             researchServer.CurrentSoftCapMultiplier *= prototype.SoftCapContribution;
+            clientDatabase.SoftCapMultiplier = researchServer.CurrentSoftCapMultiplier;
+
+            if (TryComp<TechnologyDatabaseComponent>(serverEnt.Value, out var serverDatabase))
+            {
+                serverDatabase.SoftCapMultiplier = researchServer.CurrentSoftCapMultiplier;
+                Dirty(serverEnt.Value, serverDatabase);
+            }
+
+            Dirty(client, clientDatabase);
+            Dirty(serverEnt.Value, researchServer);
         }
 
         AddTechnology(serverEnt.Value, prototype);
         TrySetMainDiscipline(prototype, serverEnt.Value);
-        ModifyServerPoints(serverEnt.Value, -(int) (prototype.Cost * clientDatabase.SoftCapMultiplier));
+        ModifyServerPoints(serverEnt.Value, -cost);
         UpdateTechnologyCards(serverEnt.Value);
 
         _adminLog.Add(LogType.Action, LogImpact.Medium,
@@ -156,11 +169,14 @@ public sealed partial class ResearchSystem
         if (!IsTechnologyAvailable(database, technology))
             return false;
 
-        if (technology.Cost * database.SoftCapMultiplier > serverComp.Points)
+        if (GetTechnologyCost(technology, serverComp) > serverComp.Points)
             return false;
 
         return true;
     }
+
+    private static int GetTechnologyCost(TechnologyPrototype technology, ResearchServerComponent server) =>
+        (int) (technology.Cost * server.CurrentSoftCapMultiplier);
 
     private void OnDatabaseRegistrationChanged(EntityUid uid, TechnologyDatabaseComponent component, ref ResearchRegistrationChangedEvent args)
     {

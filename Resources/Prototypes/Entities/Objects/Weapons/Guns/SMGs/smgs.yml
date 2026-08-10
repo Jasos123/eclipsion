@@ -83,10 +83,10 @@
     sound: /Audio/_Crescent/Weapons/Interact/gun_drop.ogg
 
 - type: entity
-  name: TFSC SR-2MP Atreides 9x19mm
+  name: TFCF SR-2MP Atreides 9x19mm
   parent: BaseWeaponSubMachineGun
   id: WeaponSubMachineGunAtreides
-  description: A rapid-fire submachinegun developed by the Shipfitters Union. Eats through ammo like a starving elephant.
+  description: A rapid-fire submachine gun developed by the Shipbreaker Astronautics Workers Union. Eats through ammunition like a starving elephant.
   components:
   - type: Sprite
     sprite: _Crescent/Objects/Weapons/Guns/atreides.rsi
@@ -112,7 +112,7 @@
   name: IRM DA-20 Talon 11mm
   parent: [BaseWeaponSubMachineGun, BaseGunWieldable, StreeCredRedeemable]
   id: WeaponSubMachineGunC20r
-  description: A slick submachinegun produced by Olywir Armaments for the Imperial Navy. Sees little use in the hands of actual troopers due to the cost of manufacturing.
+  description: A slick submachine gun produced by Olywier Charter Armaments for the local Imperial Navy. It sees little use among ordinary troopers because of its manufacturing cost.
   components:
   - type: Sprite
     sprite: _Crescent/Objects/Weapons/Guns/talon.rsi

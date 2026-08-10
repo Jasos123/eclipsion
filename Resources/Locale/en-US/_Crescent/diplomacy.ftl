@@ -44,15 +44,14 @@ diplomacy-announce-alliance-rejected = [DIPLOMACY] { $to } rejected alliance pro
 diplomacy-announce-trade-rejected = [DIPLOMACY] { $to } rejected trade proposal from { $from }.
 
 diplomacy-faction-DSM = Divine Sol Mandate
-diplomacy-faction-NCWL = New Crescent Worker's League
+diplomacy-faction-NCWL = New Crescent Workers' League
 diplomacy-faction-SHI = Shinohara Heavy Industries
-diplomacy-faction-SRM = Sixth St. Romaine's Militia
+diplomacy-faction-SRM = The Saint's Militia
 diplomacy-faction-TAP = Taypani-Atyrian Pact
-diplomacy-faction-TFSC = Taypani Freestations Coalition
-# The four ids below are the Coalition's pre-merger companies. Nothing writes them any more, but the
-# strings are kept so an old save or an admin-spawned legacy console still renders a name.
+diplomacy-faction-TFSC = Taypani Free Companies Federation
+# These IDs identify the Federation's four member organizations. The legacy TFSC ID remains for save compatibility.
 diplomacy-faction-IPM = Interdyne Pharmaceuticals
-diplomacy-faction-SAW = Shipfitters and Astronautics Workers Union
+diplomacy-faction-SAW = Shipbreaker Astronautics Workers Union
 diplomacy-faction-GSC = Gorlex Security Consulting
 diplomacy-faction-CD = Cyberdawn Technologies
 diplomacy-faction-TSP = Colonial Minutemen

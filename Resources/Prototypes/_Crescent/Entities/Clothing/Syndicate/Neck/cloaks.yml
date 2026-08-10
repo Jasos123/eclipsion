@@ -1,8 +1,8 @@
 - type: entity
   parent: ClothingNeckBase
   id: ClothingNeckCloakRingleader
-  name: syndicate ringleader's cloak
-  description: An ornamental cape worn by the local warlord of the Syndicate.
+  name: TFCF ringleader's cloak
+  description: An ornamental cape worn by the jointly selected leader of the Taypani Free Companies Federation.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Syndicate/Neck/ringleadercloak.rsi

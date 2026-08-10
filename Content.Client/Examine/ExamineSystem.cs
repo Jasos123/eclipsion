@@ -239,8 +239,11 @@ namespace Content.Client.Examine
 
             if (knowTarget)
             {
-                var itemName = FormattedMessage.RemoveMarkup(Identity.Name(target, EntityManager, player));
-                var labelMessage = FormattedMessage.FromMarkup($"[bold]{itemName}[/bold]");
+                // Escape rather than strip: entity names are plain text being embedded into markup, and players
+                // control them (character names, hand labeler, renaming). A stray '[' made the throwing parser
+                // kill the client of whoever examined them.
+                var itemName = FormattedMessage.EscapeText(Identity.Name(target, EntityManager, player));
+                var labelMessage = FormattedMessage.FromMarkupOrThrow($"[bold]{itemName}[/bold]");
                 var label = new RichTextLabel();
                 label.SetMessage(labelMessage);
                 hBox.AddChild(label);
@@ -248,7 +251,7 @@ namespace Content.Client.Examine
             else
             {
                 var label = new RichTextLabel();
-                label.SetMessage(FormattedMessage.FromMarkup("[bold]???[/bold]"));
+                label.SetMessage(FormattedMessage.FromMarkupOrThrow("[bold]???[/bold]"));
                 hBox.AddChild(label);
             }
 

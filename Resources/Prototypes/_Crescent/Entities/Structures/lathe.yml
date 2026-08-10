@@ -1828,7 +1828,7 @@
 - type: entity
   parent: BaseLathe
   id: SawsTradeGoodPrinter
-  name: Shipfitters commodity fablathe
+  name: Shipbreaker commodity fablathe
   description: An hacked fablathe preloaded with many commodity patterns. A salvager merchant's best friend.
   components:
   - type: Sprite
@@ -2159,6 +2159,11 @@
       - WeaponRifleHunter
       - WeaponLauncherM320
       - TubeLoaderDSM
+      # Component feedstock. Most of the guns and gear above are priced in BasicMechatronics or
+      # BasicElectronics, and there is no research server on the surface to unlock the recipes that make
+      # them, so the field forge prints its own. Same recipes the station forges get from research.
+      - BasicMechatronics1Mechatronics
+      - BasicElectronics1Electronics
       # Shared
       - BaseCartridgeRailgun15mm
       - MagazineClip18gBuck
@@ -2404,6 +2409,11 @@
       - NCWLKukri
       - ClothingBeltSheathNCWLKukri
       - TubeLoaderNCWL
+      # Component feedstock. Most of the guns and gear above are priced in BasicMechatronics or
+      # BasicElectronics, and there is no research server on the surface to unlock the recipes that make
+      # them, so the field forge prints its own. Same recipes the station forges get from research.
+      - BasicMechatronics1Mechatronics
+      - BasicElectronics1Electronics
       # Shared
       - BaseCartridgeRailgun15mm
       - MagazineClip18gBuck

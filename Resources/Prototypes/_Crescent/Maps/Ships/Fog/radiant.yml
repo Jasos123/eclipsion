@@ -4,7 +4,7 @@
 - type: vessel
   id: Radiant
   name: NT Radiant
-  description: The largest autonomous hull ever fielded by NanoTrasen, built to hold the line against whatever comes out of the Fog. It's yours now, if you can afford it.
+  description: The largest autonomous hull NanoTrasen fielded for recurrence-zone recovery and perimeter defense. It is yours now, if you can afford it.
   price: 1000000 
   category: Large
   group: None
@@ -31,4 +31,4 @@
         - type: VesselDesignation
           designation: vessel-designation-flagship
         - type: VesselDescription
-          description: A shambling behemoth, created out of necessity to combat the spread of abyssal phenomena.
+          description: A heavy autonomous platform created to survive unstable recurrence fields.

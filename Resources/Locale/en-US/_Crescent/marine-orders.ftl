@@ -8,7 +8,7 @@ move-order-callout-ncwl-6 = Push, workers!
 move-order-callout-ncwl-7 = Go, go, go! For Kane!
 move-order-callout-ncwl-8 = On your feet, comrades!
 move-order-callout-ncwl-9 = Take that ground! It's ours!
-move-order-callout-ncwl-10 = No rest until Olywir falls! Move!
+move-order-callout-ncwl-10 = No rest until Olywier falls! Move!
 move-order-callout-ncwl-11 = Onward, comrades!
 move-order-callout-ncwl-12 = March! The people are with us!
 move-order-callout-ncwl-13 = Peace through power! Advance!
@@ -49,7 +49,7 @@ focus-order-callout-ncwl-15 = Sights on target, comrades!
 focus-order-callout-ncwl-16 = Strike for the League!
 focus-order-callout-ncwl-17 = Mark them and finish them!
 focus-order-callout-ncwl-18 = Aim true! The people are watching!
-focus-order-callout-ncwl-19 = Olywir's dogs! Put them down!
+focus-order-callout-ncwl-19 = Olywier's dogs! Put them down!
 
 # Divine Sol Mandate
 move-order-callout-dsm-1 = Advance for the Count and Kaiser!

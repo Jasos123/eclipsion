@@ -141,7 +141,7 @@ namespace Content.Client.PDA
             {
                 _pdaOwner = state.PdaOwnerInfo.ActualOwnerName;
                 PdaOwnerLabel.SetMarkup(Loc.GetString("comp-pda-ui-owner",
-                    ("actualOwnerName", _pdaOwner)));
+                    ("actualOwnerName", FormattedMessage.EscapeText(_pdaOwner))));
             }
 
 
@@ -150,8 +150,8 @@ namespace Content.Client.PDA
                 _owner = state.PdaOwnerInfo.IdOwner ?? Loc.GetString("comp-pda-ui-unknown");
                 _jobTitle = state.PdaOwnerInfo.JobTitle ?? Loc.GetString("comp-pda-ui-unassigned");
                 IdInfoLabel.SetMarkup(Loc.GetString("comp-pda-ui",
-                    ("owner", _owner),
-                    ("jobTitle", _jobTitle)));
+                    ("owner", FormattedMessage.EscapeText(_owner)),
+                    ("jobTitle", FormattedMessage.EscapeText(_jobTitle))));
             }
             else
             {

@@ -9,7 +9,7 @@
   requireAdminNotify: false
   icon: "JobIconSyndieShipbreaker"
   chatNameColor: "#b67520"
-  supervisors: You answer to the foreman of the shipbreaking wing, and above them the Ringleader.
+  supervisors: You answer to SAW's Foreman and to valid Ringleader decisions on Federation-wide matters.
   canBeAntag: false
   requirements:
     - !type:CharacterSpeciesRequirement
@@ -40,7 +40,7 @@
   access:
   - Command
   - Maintenance
-  # One Coalition, one keyring: the old company tags survive only as department names.
+  # Shared TFCF gameplay keyring; company access still marks SAW's internal facilities.
   - SyndicateBasic
   - SyndicateGorlex
   - SyndicateInterdyne

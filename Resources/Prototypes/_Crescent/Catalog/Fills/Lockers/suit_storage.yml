@@ -241,7 +241,7 @@
 - type: entity
   id: CrescentSuitStorageTSFCVacsuit
   parent: SuitStorageBase
-  suffix: TSFC Vacsuit
+  suffix: TFCF Vacsuit
   components:
   - type: StorageFill
     contents:
@@ -255,7 +255,7 @@
 - type: entity
   id: CrescentSuitStorageTSFCVSAWLugnutHardsuit
   parent: SuitStorageBase
-  suffix: TSFC SAW Mk.I 'LUGNUT' Hardsuit
+  suffix: TFCF SAW Mk.I 'LUGNUT' Hardsuit
   components:
   - type: StorageFill
     contents:
@@ -272,7 +272,7 @@
 - type: entity
   id: CrescentSuitStorageTSFCSAWUnionizerHardsuit
   parent: SuitStorageBase
-  suffix: TSFC SAW 'UNIONIZER' Hardsuit
+  suffix: TFCF SAW 'UNIONIZER' Hardsuit
   components:
   - type: StorageFill
     contents:
@@ -289,7 +289,7 @@
 - type: entity
   id: CrescentSuitStorageTSFCInterdyneTraumasecHardsuit
   parent: SuitStorageBase
-  suffix: TSFC Interdyne Traumasec Hardsuit
+  suffix: TFCF Interdyne Traumasec Hardsuit
   components:
   - type: StorageFill
     contents:
@@ -306,7 +306,7 @@
 - type: entity
   id: CrescentSuitStorageTSFCGorlexBulwarkHardsuit
   parent: SuitStorageBase
-  suffix: TSFC Gorlex Mk.II 'BULWARK' Hardsuit
+  suffix: TFCF Gorlex Mk.II 'BULWARK' Hardsuit
   components:
   - type: StorageFill
     contents:

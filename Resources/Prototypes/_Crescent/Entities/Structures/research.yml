@@ -2,7 +2,7 @@
   id: ResearchAndDevelopmentServerMinutemen
   parent: [ BaseMachinePowered, ConstructibleMachine ]
   name: minutemen research server
-  description: Contains the collective knowledge of the station's scientists. Destroying it would send them back to the stone age. You don't want that do you?
+  description: Stores the station's current-cycle calibrations and working research catalogue. The underlying knowledge survives elsewhere, but losing this server would force a painful local rebuild.
   components:
   - type: Sprite
     sprite: Structures/Machines/server.rsi
@@ -74,7 +74,7 @@
   id: ResearchAndDevelopmentServerInterdyne
   parent: [ BaseMachinePowered, ConstructibleMachine ]
   name: interdyne pharmaceuticals research server
-  description: Contains the collective knowledge of the station's scientists. Destroying it would send them back to the stone age. You don't want that do you?
+  description: Stores the station's current-cycle calibrations and working research catalogue. The underlying knowledge survives elsewhere, but losing this server would force a painful local rebuild.
   components:
   - type: Sprite
     sprite: Structures/Machines/server.rsi
@@ -146,7 +146,7 @@
   id: ResearchAndDevelopmentServerCyberdawn
   parent: [ BaseMachinePowered, ConstructibleMachine ]
   name: cyberdawn technologies research server
-  description: Contains the collective knowledge of the station's scientists. Destroying it would send them back to the stone age. You don't want that do you?
+  description: Stores the station's current-cycle calibrations and working research catalogue. The underlying knowledge survives elsewhere, but losing this server would force a painful local rebuild.
   components:
   - type: Sprite
     sprite: Structures/Machines/server.rsi
@@ -218,7 +218,7 @@
   id: ResearchAndDevelopmentServerImperial
   parent: [ BaseMachinePowered, ConstructibleMachine ]
   name: imperial research server
-  description: Contains the collective knowledge of the station's scientists. Destroying it would send them back to the stone age. You don't want that do you?
+  description: Stores the station's current-cycle calibrations and working research catalogue. The underlying knowledge survives elsewhere, but losing this server would force a painful local rebuild.
   components:
   - type: Sprite
     sprite: Structures/Machines/server.rsi
@@ -290,7 +290,7 @@
   id: ResearchAndDevelopmentServerCommunard
   parent: [ BaseMachinePowered, ConstructibleMachine ]
   name: communard research server
-  description: Contains the collective knowledge of the station's scientists. Destroying it would send them back to the stone age. You don't want that do you?
+  description: Stores the station's current-cycle calibrations and working research catalogue. The underlying knowledge survives elsewhere, but losing this server would force a painful local rebuild.
   components:
   - type: Sprite
     sprite: Structures/Machines/server.rsi
@@ -362,7 +362,7 @@
   id: ResearchAndDevelopmentServerCorporate
   parent: [ BaseMachinePowered, ConstructibleMachine ]
   name: shinohara research server
-  description: Contains the collective knowledge of the station's scientists. Destroying it would send them back to the stone age. You don't want that do you?
+  description: Stores the station's current-cycle calibrations and working research catalogue. The underlying knowledge survives elsewhere, but losing this server would force a painful local rebuild.
   components:
   - type: Sprite
     sprite: Structures/Machines/server.rsi
@@ -434,7 +434,7 @@
   id: ResearchAndDevelopmentServerGliessian
   parent: [ BaseMachinePowered, ConstructibleMachine ]
   name: Gliess Santo research server
-  description: Contains the collective knowledge of the station's scientists. Destroying it would send them back to the stone age. You don't want that do you?
+  description: Stores the station's current-cycle calibrations and working research catalogue. The underlying knowledge survives elsewhere, but losing this server would force a painful local rebuild.
   components:
   - type: Sprite
     sprite: Structures/Machines/server.rsi
@@ -573,13 +573,13 @@
     guides:
     - Science
 
-# Extra combined server: serves the Coalition discipline, which duplicates the whole Interdyne + Cyberdawn
+# Extra combined server: serves the TFCF discipline, which duplicates the whole Interdyne + Cyberdawn
 # catalogue under one tree. Drop this on a TFSC grid to research everything from a single server instead of two.
 - type: entity
   id: ResearchAndDevelopmentServerCoalition
   parent: [ BaseMachinePowered, ConstructibleMachine ]
-  name: coalition technology research server
-  description: Contains the collective knowledge of the station's scientists. Destroying it would send them back to the stone age. You don't want that do you?
+  name: TFCF technology research server
+  description: Stores the station's current-cycle calibrations and working research catalogue. The underlying knowledge survives elsewhere, but losing this server would force a painful local rebuild.
   components:
   - type: Sprite
     sprite: Structures/Machines/server.rsi

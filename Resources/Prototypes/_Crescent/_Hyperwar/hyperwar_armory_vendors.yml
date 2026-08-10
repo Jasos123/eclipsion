@@ -2,7 +2,7 @@
 # Free (no points) CMAutomatedVendor racks that hand out the full WEAPON + ARMOR
 # arsenal from each faction's tech tree, so no research is needed during hyperwar.
 # NCWL pulls from the Communard tree, DSM pulls from the Imperial tree,
-# Shinohara pulls from the Corporate tree, TSFC pulls from Cyberdawn + Interdyne
+# Shinohara pulls from the Corporate tree, TFCF pulls from Cyberdawn + Interdyne
 # (plus the SAW / GSC gear that has no tech tree of its own).
 
 - type: entity
@@ -247,7 +247,7 @@
       - id: WeaponShotgunReno
         name: DA-13 Reno 12 gauge
       - id: WeaponLightMachineGunDSMDominion
-        name: Dominion LMG
+        name: Mandate LMG
       - id: WeaponSniperDSMLegax
         name: Legax sniper rifle
       - id: WeaponSniperImperator
@@ -301,7 +301,7 @@
       - id: MagazineLightRifle
         name: 30-round magazine (5.56x45mm)
       - id: MagazineLightRifleBox
-        name: Dominion box magazine (5.56x45mm)
+        name: Mandate box magazine (5.56x45mm)
       - id: MagazineBoxLightRifleSurplus
         name: surplus ammo box (5.56x45mm)
       - id: BoxSpeedLoaderLightRifle
@@ -692,14 +692,14 @@
       - id: JV102AutoInjector
       - id: NarcanAutoinjector
 
-# TSFC is a coalition, so its arsenal is split by member corp: Cyberdawn and IPM
-# (Interdyne) each have a tech tree, SAW and GSC do not and pull from their
+# The TFCF arsenal is split by member organization: Cyberdawn and IPM
+# (Interdyne) each have a tech tree, while SAW and GSC pull from their
 # dogtag catalogs instead.
 - type: entity
   parent: ColMarTechBase
   id: HyperwarTSFCArmoryVendor
-  name: automated TSFC war armory
-  description: An automated rack wired straight into the Coalition's wartime stockpile. Cyberdawn, SAW, IPM and GSC hardware, no tithe required.
+  name: automated TFCF war armory
+  description: An automated rack wired into the Federation's shared wartime stockpile. Cyberdawn, SAW, IPM and GSC hardware, no tithe required.
   components:
   - type: AccessReader
     access:
@@ -760,7 +760,7 @@
       - id: RCDRecharging
         name: experimental RCD
       - id: ClothingOuterHardsuitRamzi
-        name: Ramzi hardsuit
+        name: LUGNUT hardsuit
     - name: IPM Medical
       entries:
       - id: MedkitCombatFilled
@@ -770,9 +770,9 @@
       - id: SyringeCase
         name: syringe case
       - id: DefibrillatorSyndicate
-        name: syndicate defibrillator
+        name: TFCF defibrillator
       - id: OmnimedToolSyndie
-        name: syndicate omnimed tool
+        name: TFCF omnimed tool
       - id: InterdyneOptics
         name: Interdyne optics
       - id: CyberneticsPainEditor
@@ -828,11 +828,11 @@
       - id: ClothingOuterHardsuitCybersunStealth
         name: Cybersun stealth hardsuit
       - id: ClothingOuterHardsuitSyndieMedic
-        name: syndicate medic hardsuit
+        name: TFCF medic hardsuit
       - id: ClothingOuterHardsuitTraumasec
         name: Traumasec hardsuit
       - id: ClothingOuterHardsuitSyndicateBG
-        name: syndicate bodyguard hardsuit
+        name: TFCF bodyguard hardsuit
       - id: ClothingOuterHardsuitSyndicateBulwar
         name: Bulwark hardsuit
       - id: ClothingOuterArmorCyberdawnPatriarch
@@ -860,11 +860,11 @@
       - id: PowerSink
         name: power sink
       - id: SyndicateJawsOfLife
-        name: syndicate jaws of life
+        name: TFCF jaws of life
       - id: StealthBox
         name: stealth box
       - id: SyndicateBomb
-        name: syndicate bomb
+        name: Free Company bomb
       - id: AgentIDCard
         name: agent ID card
       - id: ClothingBackpackChameleonFill
@@ -922,7 +922,7 @@
     - name: Utilities
       entries:
       - id: ClothingBeltSyndicateWebbing
-        name: syndicate webbing
+        name: TFCF webbing
       - id: ClothingShoesBootsMagSyndie
         name: blood-red magboots
       - id: DoubleEmergencyOxygenTankFilled
@@ -1245,8 +1245,8 @@
 - type: entity
   parent: ColMarTechBase
   id: HyperwarTSFCShipVendor
-  name: automated TSFC LPC printer
-  description: An automated fabprint press stocked with every Coalition ship pattern. Redeem a disk at a shipyard console.
+  name: automated TFCF LPC printer
+  description: An automated fabprint press stocked with shared Federation ship patterns. Redeem a disk at a shipyard console.
   components:
   - type: AccessReader
     access:

@@ -9,6 +9,8 @@
       nationalities:
       - Imperial
 
+# Legacy house IDs are retained for saved-character compatibility. Canonical display text represents
+# Olywier's charter household and a chartered burgher consortium, not fixed dominant houses.
 - type: employer
   id: HouseVogsburg
   nameKey: employer_name_vogsburg

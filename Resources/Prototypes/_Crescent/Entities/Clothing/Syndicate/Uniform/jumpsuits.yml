@@ -124,7 +124,7 @@
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitSyndicateSuit
   name: hired gun's suit
-  description: A button-up and matching slacks in Syndicate colors.
+  description: A button-up shirt and matching slacks in TFCF colors.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Syndicate/Uniform/syndieregular.rsi
@@ -168,8 +168,8 @@
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitSyndicateBunnysuit
-  name: syndicate bunny suit
-  description: Uniform bunny suit for Syndicate subordinates.
+  name: Free Company bunny suit
+  description: A novelty uniform sold through Free Company markets.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Syndicate/Uniform/syndiebunny.rsi
@@ -180,7 +180,7 @@
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitInfinityJersey
   name: infinity jersey
-  description: Arrived from the abyss on the wreckage of the merchant ship "KUNG", and beckon with their ugliness. KILLKILLKILLKILLKILLKILLKILLKILL. This is the first step of infinity.
+  description: Recovered from the merchant ship "KUNG" after a Turning front passed over its route. Its ugliness beckons. KILLKILLKILLKILLKILLKILLKILLKILL. This is the first step of infinity.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Syndicate/Uniform/infinity_jersey.rsi

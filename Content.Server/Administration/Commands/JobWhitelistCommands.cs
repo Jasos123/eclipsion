@@ -9,6 +9,55 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.Administration.Commands;
 
+/// <summary>
+/// Shared argument handling for the jobwhitelist commands. A whitelist target is either a plain job ID or the
+/// name of a <see cref="JobPrototype.WhitelistGroup"/>, which covers every job that declares it.
+/// </summary>
+public static class JobWhitelistTarget
+{
+    /// <summary>
+    /// Resolves a command argument to the key whitelists are stored under, plus a human readable name for it.
+    /// Passing a grouped job resolves to that job's whole group.
+    /// </summary>
+    public static bool TryResolve(IPrototypeManager prototypes, string arg, out string key, out string name)
+    {
+        key = arg;
+        name = arg;
+
+        var isJob = prototypes.TryIndex<JobPrototype>(arg, out var job);
+        if (isJob)
+            key = job!.WhitelistKey;
+
+        var resolvedKey = key;
+        var members = prototypes.EnumeratePrototypes<JobPrototype>()
+            .Where(p => p.WhitelistGroup == resolvedKey)
+            .Select(p => p.LocalizedName)
+            .ToList();
+
+        if (members.Count > 0)
+        {
+            name = string.Join(", ", members);
+            return true;
+        }
+
+        if (!isJob)
+            return false;
+
+        name = job!.LocalizedName;
+        return true;
+    }
+
+    /// <summary>
+    /// Every valid argument: group names for grouped jobs, job IDs for the rest.
+    /// </summary>
+    public static IEnumerable<string> Options(IPrototypeManager prototypes)
+    {
+        return prototypes.EnumeratePrototypes<JobPrototype>()
+            .Select(p => p.WhitelistKey)
+            .Distinct();
+    }
+}
+
 [AdminCommand(AdminFlags.Ban)]
 public sealed class JobWhitelistAddCommand : LocalizedCommands
 {
@@ -32,14 +81,15 @@ public sealed class JobWhitelistAddCommand : LocalizedCommands
         }
 
         var player = args[0].Trim();
-        var job = new ProtoId<JobPrototype>(args[1].Trim());
-        if (!_prototypes.TryIndex(job, out var jobPrototype))
+        var target = args[1].Trim();
+        if (!JobWhitelistTarget.TryResolve(_prototypes, target, out var key, out var jobName))
         {
-            shell.WriteError(Loc.GetString("cmd-jobwhitelist-job-does-not-exist", ("job", job.Id)));
+            shell.WriteError(Loc.GetString("cmd-jobwhitelist-job-does-not-exist", ("job", target)));
             shell.WriteLine(Help);
             return;
         }
 
+        var job = new ProtoId<JobPrototype>(key);
         var data = await _playerLocator.LookupIdByNameAsync(player);
         if (data != null)
         {
@@ -47,10 +97,10 @@ public sealed class JobWhitelistAddCommand : LocalizedCommands
             var isWhitelisted = await _db.IsJobWhitelisted(guid, job);
             if (isWhitelisted)
             {
-                shell.WriteLine(Loc.GetString("cmd-jobwhitelist-already-whitelisted",
+                shell.WriteLine(Loc.GetString("cmd-jobwhitelistadd-already-whitelisted",
                     ("player", player),
                     ("jobId", job.Id),
-                    ("jobName", jobPrototype.LocalizedName)));
+                    ("jobName", jobName)));
                 return;
             }
 
@@ -58,7 +108,7 @@ public sealed class JobWhitelistAddCommand : LocalizedCommands
             shell.WriteLine(Loc.GetString("cmd-jobwhitelistadd-added",
                 ("player", player),
                 ("jobId", job.Id),
-                ("jobName", jobPrototype.LocalizedName)));
+                ("jobName", jobName)));
             return;
         }
 
@@ -77,7 +127,7 @@ public sealed class JobWhitelistAddCommand : LocalizedCommands
         if (args.Length == 2)
         {
             return CompletionResult.FromHintOptions(
-                _prototypes.EnumeratePrototypes<JobPrototype>().Select(p => p.ID),
+                JobWhitelistTarget.Options(_prototypes),
                 Loc.GetString("cmd-jobwhitelist-hint-job"));
         }
 
@@ -160,14 +210,15 @@ public sealed class RemoveJobWhitelistCommand : LocalizedCommands
         }
 
         var player = args[0].Trim();
-        var job = new ProtoId<JobPrototype>(args[1].Trim());
-        if (!_prototypes.TryIndex(job, out var jobPrototype))
+        var target = args[1].Trim();
+        if (!JobWhitelistTarget.TryResolve(_prototypes, target, out var key, out var jobName))
         {
-            shell.WriteError(Loc.GetString("cmd-jobwhitelist-job-does-not-exist", ("job", job)));
+            shell.WriteError(Loc.GetString("cmd-jobwhitelist-job-does-not-exist", ("job", target)));
             shell.WriteLine(Help);
             return;
         }
 
+        var job = new ProtoId<JobPrototype>(key);
         var data = await _playerLocator.LookupIdByNameAsync(player);
         if (data != null)
         {
@@ -178,7 +229,7 @@ public sealed class RemoveJobWhitelistCommand : LocalizedCommands
                 shell.WriteError(Loc.GetString("cmd-jobwhitelistremove-was-not-whitelisted",
                     ("player", player),
                     ("jobId", job.Id),
-                    ("jobName", jobPrototype.LocalizedName)));
+                    ("jobName", jobName)));
                 return;
             }
 
@@ -186,7 +237,7 @@ public sealed class RemoveJobWhitelistCommand : LocalizedCommands
             shell.WriteLine(Loc.GetString("cmd-jobwhitelistremove-removed",
                 ("player", player),
                 ("jobId", job.Id),
-                ("jobName", jobPrototype.LocalizedName)));
+                ("jobName", jobName)));
             return;
         }
 
@@ -205,7 +256,7 @@ public sealed class RemoveJobWhitelistCommand : LocalizedCommands
         if (args.Length == 2)
         {
             return CompletionResult.FromHintOptions(
-                _prototypes.EnumeratePrototypes<JobPrototype>().Select(p => p.ID),
+                JobWhitelistTarget.Options(_prototypes),
                 Loc.GetString("cmd-jobwhitelist-hint-job"));
         }
 

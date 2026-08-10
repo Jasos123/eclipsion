@@ -1,4 +1,5 @@
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.List;
 using Robust.Shared.Utility;
 using System.ComponentModel.DataAnnotations;
@@ -43,6 +44,50 @@ public sealed partial class FactionPrototype : IPrototype
     /// </summary>
     [DataField("enabled")]
     public bool Enabled = false;
+
+    /// <summary>
+    /// How this faction's join slots scale with the server population. Defaults to unrestricted.
+    /// </summary>
+    [DataField("balanceMode")]
+    public FactionBalanceMode BalanceMode = FactionBalanceMode.None;
+
+    /// <summary>
+    /// Relative pull inside the parity group, only read for <see cref="FactionBalanceMode.Parity"/>.
+    /// Two factions on 1.0 are held level with each other; a faction on 0.5 is allowed half as many players.
+    /// </summary>
+    [DataField("balanceWeight")]
+    public float BalanceWeight = 1f;
+
+    /// <summary>
+    /// Fraction of the whole tracked population this faction may hold, only read for
+    /// <see cref="FactionBalanceMode.Share"/>. 0.25 means at most a quarter of everyone playing.
+    /// </summary>
+    [DataField("balanceShare")]
+    public float BalanceShare = 0.25f;
+}
+
+/// <summary>
+/// How a faction takes part in population-scaled join caps.
+/// </summary>
+[Serializable, NetSerializable]
+public enum FactionBalanceMode : byte
+{
+    /// <summary>
+    /// Not capped and not counted. Midround-only and retired factions sit here.
+    /// </summary>
+    None,
+
+    /// <summary>
+    /// Held level against the other parity factions by <see cref="FactionPrototype.BalanceWeight"/>.
+    /// This is the group the war is fought between, so it only ever measures itself.
+    /// </summary>
+    Parity,
+
+    /// <summary>
+    /// Capped at <see cref="FactionPrototype.BalanceShare"/> of the whole tracked population, and never
+    /// constrains anyone else. Support factions belong here: an empty one must not lock out the war.
+    /// </summary>
+    Share,
 }
 
 /// <summary>

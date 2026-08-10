@@ -158,6 +158,10 @@
   name: rock wall
   suffix: tall
   components:
+  # Planet rock keeps the air baked into its tile instead of voiding it, so mining
+  # a tunnel exposes breathable air rather than a vacuum pocket.
+  - type: Airtight
+    noAirWhenFullyAirBlocked: false
   - type: Sprite
     sprite: _Nuclear14/Structures/Walls/ms13/tall/rock.rsi
   - type: Icon

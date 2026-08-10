@@ -16,6 +16,14 @@ public sealed partial class JukeboxComponent : Component
     public EntityUid? AudioStream;
 
     /// <summary>
+    /// Base playback volume in dB, before the listener's own boombox volume slider is applied.
+    /// Jukeboxes used to play at 0 dB, which is over ten times the gain the station's own ambient
+    /// music runs at (-12 dB plus the music slider), so a single boombox drowned out everything.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float Volume = -8f;
+
+    /// <summary>
     /// Upcoming songs to play after the current one finishes, in order.
     /// The currently playing track is not included here.
     /// </summary>

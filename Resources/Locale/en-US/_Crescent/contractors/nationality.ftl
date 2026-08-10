@@ -1,17 +1,19 @@
-nationality_name_union = New Crescent Worker's League
-nationality_description_union = The New Crescent Worker's League was formed shortly after the workers' uprising in the Crescent Sector, spearheaded by loosely-banded laborer gangs and workers unions that would later collectivize under the nation-scale group known as the NCWL today. Operating on socialist ideals and prioritizing freedom for all, they tend to be viewed as naive by most.
+nationality_name_union = Workers' Union — Chengridz
+nationality_description_union = Citizenship or settled affiliation with secure Workers' Union territory in Chengridz. The NCWL is its provisional Crescent front, not the name of a permanent nation; its parties and local committees compete over how the active revolution should be conducted.
 
 nationality_name_empire = Divine Sol Mandate
-nationality_description_empire = Created after the dissolution of the Solarian Ascendancy, the Divine Sol Mandate would rally under feudalist ideals of the (allegedly) all-powerful Kaiser. Conquering most of Known Space, the Imperials would eventually land in the Crescent and stagnate until a series of rebellions and revolutions would weaken them to a secondary power in the galactic political stage today.
+nationality_description_empire = The Mandate is a loose elective imperial order of charters, noble territories, cities, guild jurisdictions, and religious estates. In Crescent, Count Olywier Rabenau's charter connects local law and military service to the wider Crown in Domain.
 
 nationality_name_american = New American Protectorate
-nationality_description_american = Stitched together from the remnants of the American Commonwealth of Old Terra, the New American Protectorate would be formed initally as a loose union of American military outposts scattered outside the reaches of the still-growing Empire. Today, they operate on their ancient ideals of personal liberty and economic freedom, responsible for the logistics of most heavy weaponry to external sectors.
+nationality_description_american = A polity beyond Crescent whose citizens and firms reach Taypan through trade, migration, and private contracts. It is outside the sector's principal conflict but not outside its markets.
 
-nationality_name_clarizian = Free Clarizian Duchies
-nationality_description_clarizian = Founded by then-Governess Ariadne Clarize, the Free Clarizian Duchies were formed shortly after the creation of the Divine Sol Mandate. When the East Asian Combine fell, the Governess would flee to the southeastern reaches of the Known Cluster and settle into the temperate world of Kiraigo with her retinue and citizenry, giving birth to the Duchies as we know it today. Subjugated by the Empire early into it's life and later clawing it's freedom back from Imperial clutches, the Duchies are one of the few constituional monarchies still operating in the Known Cluster, headed by Her Majesty Queen Isobel Clarize II.
+# The Clarizian prototype ID is retained for character compatibility; the Clarize rebellion is no longer canon.
+nationality_name_clarizian = Aurevienne Diaspora
+nationality_description_clarizian = Communities descended from independent Vaucelles and its Aurevienne court and industrial culture. After the Workers' Rising transformed Vaucelles into Chengridz, refugees, families, archives, and expatriate settlements carried that identity under many new flags.
 
-nationality_name_coalition = The Taypani Coalition of Free Stations
-nationality_description_coalition = One of the few Taypani groups actually local to the region, the Coalition consists of unsavory pirate kingdoms, shipbreakers, seedy corporations, booster gangs, and various other shady characters. Considered by most to be illegitimate, it is nevertheless the largest 'independent' polity in the entirety of the system, with several motherships and stations under their control.
+nationality_name_coalition = Taypani Free Companies Federation
+nationality_description_coalition = GSC, Interdyne, Cyberdawn, and SAW joined under a Federation charter to resist Shinohara market absorption. Each member keeps its internal leadership while the jointly chosen Ringleader commands Federation-wide matters.
 
-nationality_name_authority = Central Sol Authority
-nationality_description_authority = The newest galactic player on the scene, the Central Sol Authority is the successor state to the Divine Sol Mandate, having declared sovereignty after a sudden coup d'etat in the Imperial capitalworld of Terra. Doubling down on human supremacist narratives, the Authority hunts and purges psionically-enabled sentients with prejudice and dogged determination, believing the act to delay the end of the Known Cluster as they know it. A hypermilitarized nation that covers a terrifyingly large swathe of territory, they are the primary source of exiles and immigrants into the Crescent Sector.
+# The Authority prototype ID is retained for character compatibility; the obsolete Authoritat is no longer canon.
+nationality_name_authority = Crown Domain Service
+nationality_description_authority = Subjects, officers, and specialists whose obligations run directly to institutions of the wider Imperial Crown in Domain rather than to Count Olywier's regional charter. Their presence in Crescent usually signals observation, diplomacy, audit, or exceptional direct intervention.

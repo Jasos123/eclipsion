@@ -1,7 +1,7 @@
 - type: entity
   parent: ClothingShoesBaseButcherable
   id: ClothingShoesBootsImperialGovernorBoots
-  name: governor's leather boots
+  name: lord admiral's leather boots
   description: Tall boots of heavy leather, adorned with stamped golden buckles.
   components:
   - type: Sprite

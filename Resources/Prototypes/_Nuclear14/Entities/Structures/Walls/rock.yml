@@ -245,6 +245,10 @@
   components:
     - type: Transform
       noRot: true
+    # Planet rock keeps the air baked into its tile instead of voiding it, so mining
+    # a tunnel exposes breathable air rather than a vacuum pocket.
+    - type: Airtight
+      noAirWhenFullyAirBlocked: false
     - type: SoundOnGather
     - type: Gatherable
       toolWhitelist:

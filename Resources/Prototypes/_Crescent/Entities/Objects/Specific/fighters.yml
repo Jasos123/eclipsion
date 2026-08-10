@@ -160,7 +160,7 @@
 #   id: FighterDSMValor
 #   parent: [ LightFighter, BaseMech ]
 #   name: DSM pRAA-2 'Valor' light interceptor
-#   description: A light interceptor starfighter, developed by the Imperial Arms Committee and painted in House Vogsburg colors. A tried and tested vessel that served in many naval conflicts across human history - although most detractors criticize how expensive to maintain and over-engineered the shuttle is.
+#   description: A light interceptor starfighter developed by the Imperial Arms Committee and painted in Olywier charter colors. A tried and tested vessel, though detractors criticize its high maintenance costs and over-engineered frame.
 #   components:
 #   - type: EntityIFFDesignation
 #     name: "DSM Valor"
@@ -239,7 +239,7 @@
 #   id: FighterDSMHonor
 #   parent: [ MediumFighter, BaseMech ]
 #   name: DSM pRAA-3 'Honor' medium gunship
-#   description: A heavier Imperial starfighter adorned in House Vogsburg livery. The Honor-class gunship is, in truth, a miniaturized variant of the Ibis made to fit inside internal hangars and smaller outpost docks. Adorned with energized armor plating and medium weapon points, the Honor is able to act as a standalone vessel in a small engagement, able to start and finish fights on it's own.
+#   description: A heavier Imperial starfighter in Olywier charter livery. The Honor-class gunship is a miniaturized Ibis built for internal hangars and smaller outpost docks, with energized armor and medium weapon points for independent action.
 #   components:
 #   - type: EntityIFFDesignation
 #     name: "DSM Honor"

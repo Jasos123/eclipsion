@@ -69,5 +69,12 @@ public sealed partial class CCVars
     /// Boombox volume (per-client multiplier for boombox/jukebox playback).
     /// </summary>
     public static readonly CVarDef<float> BoomboxVolume =
-        CVarDef.Create("audio.boombox_volume", 1.0f, CVar.ARCHIVE | CVar.CLIENTONLY);
+        CVarDef.Create("audio.boombox_volume", 1.5f, CVar.ARCHIVE | CVar.CLIENTONLY);
+
+    /// <summary>
+    /// How much, in dB, a playing boombox lowers the game's own music by when you are standing on
+    /// top of it. 0 disables the ducking entirely.
+    /// </summary>
+    public static readonly CVarDef<float> BoomboxMusicDuck =
+        CVarDef.Create("audio.boombox_music_duck", 14f, CVar.ARCHIVE | CVar.CLIENTONLY);
 }

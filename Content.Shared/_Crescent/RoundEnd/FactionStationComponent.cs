@@ -7,8 +7,8 @@ namespace Content.Shared._Crescent.RoundEnd;
 /// count — a faction can hold any number of other grids and still be eliminated once its marked stations fall.
 ///
 /// Applied through the gameMap prototype's <c>gridComponents</c>, so which station "counts" is decided per map
-/// rather than by IFF faction. That matters for the Coalition, which owns several stations but fields only one
-/// headquarters in the win condition.
+/// rather than by IFF faction. That matters for the TFCF, whose distinct member organizations share a Federation
+/// gameplay faction and common infrastructure for the win condition.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
 public sealed partial class FactionStationComponent : Component

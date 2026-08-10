@@ -41,6 +41,15 @@ public sealed class JukeboxSystem : SharedJukeboxSystem
         SubscribeLocalEvent<JukeboxComponent, PowerChangedEvent>(OnPowerChanged);
     }
 
+    /// <summary>
+    /// Params every jukebox track is started with. The volume here is only the base level; each
+    /// client scales it further with their own boombox volume slider once the stream arrives.
+    /// </summary>
+    private static AudioParams GetAudioParams(JukeboxComponent component)
+    {
+        return AudioParams.Default.WithMaxDistance(10f).WithVolume(component.Volume);
+    }
+
     private void OnComponentInit(EntityUid uid, JukeboxComponent component, ComponentInit args)
     {
         if (HasComp<ApcPowerReceiverComponent>(uid))
@@ -65,7 +74,7 @@ public sealed class JukeboxSystem : SharedJukeboxSystem
                 return;
             }
 
-            component.AudioStream = Audio.PlayPvs(jukeboxProto.Path, uid, AudioParams.Default.WithMaxDistance(10f))?.Entity;
+            component.AudioStream = Audio.PlayPvs(jukeboxProto.Path, uid, GetAudioParams(component))?.Entity;
             Dirty(uid, component);
         }
 
@@ -167,7 +176,7 @@ public sealed class JukeboxSystem : SharedJukeboxSystem
             return;
         }
 
-        component.AudioStream = Audio.PlayPvs(jukeboxProto.Path, uid, AudioParams.Default.WithMaxDistance(10f))?.Entity;
+        component.AudioStream = Audio.PlayPvs(jukeboxProto.Path, uid, GetAudioParams(component))?.Entity;
 
         // If the track failed to start there is no stream, which would make the queue
         // try to advance again every tick. Stop the queue instead of spinning.

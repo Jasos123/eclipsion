@@ -6,6 +6,16 @@
   description: A passport denoting an individual's nationality and identity.
   components:
     - type: Passport
+    - type: ActivatableUI
+      key: enum.PassportUiKey.Key
+      inHandsOnly: true
+      singleUser: true
+      verbOnly: true
+      verbText: passport-verb-edit
+    - type: UserInterface
+      interfaces:
+        enum.PassportUiKey.Key:
+          type: Content.Client._EE.Contractors.UI.PassportBoundUserInterface
     - type: Sprite
       sprite: _EE/Contractors/Passport.rsi
       layers:
@@ -145,6 +155,8 @@
   id: GoldenDeepPassport
   abstract: true #hullrot
   components:
+    - type: Passport
+      portraitSpecies: ipc
     - type: Sprite
       sprite: _EE/Contractors/Passport.rsi
       layers:
@@ -157,6 +169,8 @@
   id: QiimaeruPassport
   abstract: true #hullrot
   components:
+    - type: Passport
+      portraitSpecies: xelthia
     - type: Sprite
       sprite: _EE/Contractors/Passport.rsi
       layers:

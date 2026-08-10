@@ -148,7 +148,7 @@
 - type: entity
   parent: BaseWeaponPistol
   id: WeaponPistolDeagle
-  name: TFSC DE-7 Deagle .327
+  name: TFCF DE-7 Deagle .327
   description: A Desert eagle milled out of pure gold, as if a steel one wasnt heavy enough. A true sidearm of a warlord. Chambered in .327 Imperial.
   components:
   - type: Sprite
@@ -300,7 +300,7 @@
   name: IRM T-82 Compliance 9x19mm
   parent: BaseWeaponPistol
   id: WeaponPistolComplianceImperial
-  description: A standard-issue Imperial sidearm with a laser-engraved "OLYWIR ARMAMENTS" print. Full of useless flair and polish, yet performs the same as other firearms on the market. Chambered in 9x19mm.
+  description: A standard-issue Imperial sidearm laser-engraved "OLYWIER CHARTER ARMAMENTS". Full of useless flair and polish, yet it performs like any comparable market firearm. Chambered in 9x19mm.
   components:
   - type: Sprite
     sprite: _Crescent/Objects/Weapons/Guns/compliance.rsi

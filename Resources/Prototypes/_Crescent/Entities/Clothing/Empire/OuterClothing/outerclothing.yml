@@ -4,7 +4,7 @@
   parent: ClothingOuterHardsuitBase
   id: ClothingOuterHardsuitImperialWorker
   name: imperial worker hardsuit
-  description: A modular worker's hardsuit, bears the colors of the Kaiserin and House Vogsburg.
+  description: A modular worker's hardsuit bearing the colors of Count Olywier's Crescent charter.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Empire/OuterClothing/mandateworker.rsi
@@ -44,7 +44,7 @@
   parent: [ClothingOuterHardsuitBase, StreeCredRedeemableHigh]
   id: ClothingOuterHardsuitInspector
   name: mk. IV 'ORATEUR' combat hardsuit
-  description: A modular combat hardsuit for the Advocati Compliance Corps. Bears the colors of the Kaiserin's administration.
+  description: A modular combat hardsuit for the Advocati Compliance Corps. Bears the colors of the Crown's administration.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Empire/OuterClothing/inspector.rsi
@@ -79,7 +79,7 @@
 - type: entity
   parent: ClothingOuterHardsuitBase
   id: ClothingOuterHardsuitClarizianWorker
-  name: clarizian maintenance hardsuit
+  name: Aurevienne maintenance hardsuit
   description: A modular worker's hardsuit, bears the colors of the Queen.
   components:
   - type: Sprite
@@ -188,7 +188,7 @@
   parent: [ClothingOuterHardsuitBase, StreeCredRedeemableHigh]
   id: ClothingOuterHardsuitImperialCommand
   name: imperial command hardsuit
-  description: A modular commander's hardsuit, bearing the colors of House Vogsburg.
+  description: A modular commander's hardsuit bearing Count Olywier's charter colors.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Empire/OuterClothing/mandatecommand.rsi
@@ -224,7 +224,7 @@
   parent: [ClothingOuterHardsuitBase,StreeCredRedeemableLow]
   id: ClothingOuterHardsuitImperialSoldier
   name: imperial 'JANNISSARY' mk I combat hardsuit
-  description: A modular soldier's hardsuit, bears the colors of the Kaiserin and House Vogsburg.
+  description: A modular soldier's hardsuit bearing the colors of Count Olywier's Crescent charter.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Empire/OuterClothing/mandatesoldier.rsi
@@ -267,7 +267,7 @@
   parent: [ClothingOuterHardsuitBase, StreeCredRedeemable]
   id: ClothingOuterHardsuitImperialKnight
   name: imperial 'KONIGSCHILD' mk II combat hardsuit
-  description: A modular knight's hardsuit, bears the colors of the Kaiserin and House Vogsburg.
+  description: A modular knight's hardsuit bearing the colors of Count Olywier's Crescent charter.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Empire/OuterClothing/mandateknight.rsi
@@ -513,7 +513,7 @@
   parent: ClothingOuterStorageBase
   id: ClothingOuterCoatImperialAdvocatus
   name: advocati coat
-  description: An ornate, durathread-reinforced officer's coat bearing House Vogsburg colors.
+  description: An ornate, durathread-reinforced officer's coat bearing Count Olywier's charter colors.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Empire/OuterClothing/advocatus.rsi
@@ -566,8 +566,8 @@
 - type: entity
   parent: ClothingOuterStorageBase
   id: ClothingOuterCoatImperialGovernor
-  name: governor's formal coat
-  description: An ornate coat bedecked in Imperial livery and medals, clearly intended for the Imperial Governor. Reinforced with advanced composite weave.
+  name: lord admiral's formal coat
+  description: An ornate coat bedecked in Imperial livery and medals for the charter's Lord Admiral. Reinforced with advanced composite weave.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Empire/OuterClothing/mandategovernor.rsi

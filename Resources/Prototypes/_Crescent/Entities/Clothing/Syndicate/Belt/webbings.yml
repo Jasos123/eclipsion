@@ -2,7 +2,7 @@
   parent: ClothingBeltNfsdWebbing
   id: ClothingBeltSyndicateWebbing
   name: hired gun's webbing
-  description: Built for Syndicate operators on the field - synthread webbings woven with combat pouches.
+  description: "Built for Free Company operators in the field: synthread webbing woven with combat pouches."
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Syndicate/Belt/syn_webbing.rsi
@@ -18,7 +18,7 @@
   parent: ClothingBeltNfsdWebbing
   id: ClothingBeltSyndicateWebbingInterdyne
   name: traumasec officer's webbing
-  description: Built for Syndicate operators on the field - synthread webbings woven with combat pouches. Has the TraumaSec colors.
+  description: "Built for TraumaSec operators in the field: synthread webbing woven with combat pouches in Interdyne colors."
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Syndicate/Belt/int_webbing.rsi

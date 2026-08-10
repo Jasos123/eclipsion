@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Server.Power.EntitySystems;
 using Content.Server.Research.Components;
 using Content.Shared.UserInterface;
@@ -6,6 +7,7 @@ using Content.Shared.Emag.Components;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Research.Components;
 using Content.Shared.Research.Prototypes;
+using Content.Shared._Goobstation.Research;
 
 namespace Content.Server.Research.Systems;
 
@@ -30,14 +32,25 @@ public sealed partial class ResearchSystem
         if (!PrototypeManager.TryIndex<TechnologyPrototype>(args.Id, out var technologyPrototype))
             return;
 
+        // The tree exposes every supported technology, so enforce the rotating card
+        // selection authoritatively instead of trusting the client-side disabled button.
+        if (!TryComp<ResearchClientComponent>(uid, out var researchClient) ||
+            researchClient.Server is not { } serverUid ||
+            !TryComp<ResearchServerComponent>(serverUid, out var researchServer) ||
+            !TryComp<TechnologyDatabaseComponent>(serverUid, out var serverDatabase) ||
+            !serverDatabase.CurrentTechnologyCards.Contains(args.Id))
+        {
+            return;
+        }
+
         if (TryComp<AccessReaderComponent>(uid, out var access) && !_accessReader.IsAllowed(act, uid, access))
         {
             _popup.PopupEntity(Loc.GetString("research-console-no-access-popup"), act);
             return;
         }
 
-        if (!UnlockTechnology(uid, args.Id, act)
-            || !TryComp<TechnologyDatabaseComponent>(uid, out var database))
+        var cost = GetTechnologyCost(technologyPrototype, researchServer);
+        if (!UnlockTechnology(uid, args.Id, act))
             return;
 
         if (!HasComp<EmaggedComponent>(uid))
@@ -48,7 +61,7 @@ public sealed partial class ResearchSystem
             var message = Loc.GetString(
                 "research-console-unlock-technology-radio-broadcast",
                 ("technology", Loc.GetString(technologyPrototype.Name)),
-                ("amount", technologyPrototype.Cost * database.SoftCapMultiplier),
+                ("amount", cost),
                 ("approver", getIdentityEvent.Title ?? string.Empty)
             );
             _radio.SendRadioMessage(uid, message, component.AnnouncementChannel, uid, escapeMarkup: false);
@@ -61,6 +74,8 @@ public sealed partial class ResearchSystem
     private void OnConsoleBeforeUiOpened(EntityUid uid, ResearchConsoleComponent component, BeforeActivatableUIOpenEvent args)
     {
         SyncClientWithServer(uid);
+        component.LastUiState = null;
+        UpdateConsoleInterface(uid, component);
     }
 
     private void UpdateConsoleInterface(EntityUid uid, ResearchConsoleComponent? component = null, ResearchClientComponent? clientComponent = null)
@@ -74,13 +89,59 @@ public sealed partial class ResearchSystem
         {
             var points = clientComponent.ConnectedToServer ? serverComponent.Points : 0;
             var softCap = clientComponent.ConnectedToServer ? serverComponent.CurrentSoftCapMultiplier : 1;
-            state = new ResearchConsoleBoundInterfaceState(points, softCap);
+
+            var researches = new Dictionary<string, ResearchAvailability>();
+            if (clientComponent.ConnectedToServer &&
+                TryComp<TechnologyDatabaseComponent>(clientComponent.Server, out var database))
+            {
+                var unlocked = new HashSet<string>(database.UnlockedTechnologies);
+                var disciplineTiers = GetDisciplineTiers(database);
+
+                researches = PrototypeManager.EnumeratePrototypes<TechnologyPrototype>()
+                    .Where(technology => !technology.Hidden &&
+                        database.SupportedDisciplines.Contains(technology.Discipline))
+                    .ToDictionary(
+                        technology => technology.ID,
+                        technology =>
+                        {
+                            if (unlocked.Contains(technology.ID))
+                                return ResearchAvailability.Researched;
+
+                            if (!IsTechnologyAvailable(database, technology, disciplineTiers))
+                                return ResearchAvailability.Unavailable;
+
+                            var effectiveCost = technology.Cost * softCap;
+                            return database.CurrentTechnologyCards.Contains(technology.ID) &&
+                                   points >= effectiveCost
+                                ? ResearchAvailability.Available
+                                : ResearchAvailability.PrereqsMet;
+                        });
+            }
+
+            state = new ResearchConsoleBoundInterfaceState(points, softCap, researches);
         }
         else
         {
-            state = new ResearchConsoleBoundInterfaceState(default, default);
+            state = new ResearchConsoleBoundInterfaceState(default, 1);
         }
 
+        if (component.LastUiState is { } previous &&
+            previous.SoftCapMultiplier.Equals(state.SoftCapMultiplier) &&
+            ResearchAvailabilityHelper.ResearchesEqual(previous.Researches, state.Researches))
+        {
+            if (previous.Points != state.Points)
+            {
+                _uiSystem.ServerSendUiMessage(
+                    uid,
+                    ResearchConsoleUiKey.Key,
+                    new ResearchConsolePointsChangedMessage(state.Points));
+            }
+
+            component.LastUiState = state;
+            return;
+        }
+
+        component.LastUiState = state;
         _uiSystem.SetUiState(uid, ResearchConsoleUiKey.Key, state);
     }
 
@@ -94,11 +155,15 @@ public sealed partial class ResearchSystem
     private void OnConsoleRegistrationChanged(EntityUid uid, ResearchConsoleComponent component, ref ResearchRegistrationChangedEvent args)
     {
         SyncClientWithServer(uid);
+        if (!_uiSystem.IsUiOpen(uid, ResearchConsoleUiKey.Key))
+            return;
         UpdateConsoleInterface(uid, component);
     }
 
     private void OnConsoleDatabaseModified(EntityUid uid, ResearchConsoleComponent component, ref TechnologyDatabaseModifiedEvent args)
     {
+        if (!_uiSystem.IsUiOpen(uid, ResearchConsoleUiKey.Key))
+            return;
         UpdateConsoleInterface(uid, component);
     }
 

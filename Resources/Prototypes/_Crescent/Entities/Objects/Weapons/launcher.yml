@@ -194,7 +194,7 @@
   name: IRM M320 40mm
   parent: [BaseItem, StreeCredRedeemable]
   id: WeaponLauncherM320
-  description: A cheap and light single-shot grenade launcher, designed by Olywir Armaments.
+  description: A cheap and light single-shot grenade launcher, designed by Olywier Charter Armaments.
   components:
   - type: Sprite
     sprite: _Crescent/Objects/Weapons/Guns/m320.rsi
@@ -294,7 +294,7 @@
       path: /Audio/_Crescent/Weapons/Guns/non_collection/rpg_fire.ogg
 
 - type: entity
-  name: TFSC RPG-2
+  name: TFCF RPG-2
   parent: [BaseWeaponLauncher, BaseGunWieldable]
   id: WeaponLauncherSmallRocket
   description: The lesser known predecessor. A rocket launcher often seen in the hands of terrorists and informal militias.

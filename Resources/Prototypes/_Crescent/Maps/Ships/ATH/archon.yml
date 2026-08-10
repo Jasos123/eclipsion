@@ -4,7 +4,7 @@
 - type: vessel
   id: Archon
   name: ATH Archon
-  description: A light Authoritat frigate, often seen escorting larger targets or leading light patrols.
+  description: A light Crown expeditionary frigate used to escort larger assets or lead patrols.
   price: 75000
   category: Medium
   group: None

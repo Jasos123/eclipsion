@@ -69,7 +69,8 @@ public sealed class JobWhitelistManager : IPostInjectInit
             return true;
         }
 
-        return IsWhitelisted(session.UserId, job);
+        // Grouped jobs are covered by a single whitelist entry stored under the group name.
+        return IsWhitelisted(session.UserId, new ProtoId<JobPrototype>(jobPrototype.WhitelistKey));
     }
 
     public bool IsWhitelisted(NetUserId player, ProtoId<JobPrototype> job)

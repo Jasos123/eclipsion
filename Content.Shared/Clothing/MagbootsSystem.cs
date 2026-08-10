@@ -28,7 +28,6 @@ public sealed class SharedMagbootsSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<MagbootsComponent, ItemToggleActivateAttemptEvent>(OnActivateAttempt);
         SubscribeLocalEvent<MagbootsComponent, ItemToggledEvent>(OnToggled);
         SubscribeLocalEvent<MagbootsComponent, ClothingGotEquippedEvent>(OnGotEquipped);
         SubscribeLocalEvent<MagbootsComponent, ClothingGotUnequippedEvent>(OnGotUnequipped);
@@ -38,26 +37,15 @@ public sealed class SharedMagbootsSystem : EntitySystem
         SubscribeLocalEvent<MagbootsComponent, SlipAttemptEvent>(OnSlipAttempt);
     }
 
-    private void OnActivateAttempt(Entity<MagbootsComponent> ent, ref ItemToggleActivateAttemptEvent args)
-    {
-        if (args.Cancelled ||
-            !TryGetWearer(ent, out var wearer) ||
-            !HasComp<JetpackUserComponent>(wearer))
-        {
-            return;
-        }
-
-        args.Cancelled = true;
-        args.Popup = Loc.GetString("magboots-jetpack-active");
-    }
-
     private void OnToggled(Entity<MagbootsComponent> ent, ref ItemToggledEvent args)
     {
         var (uid, comp) = ent;
         comp.Active = args.Activated;
         // only stick to the floor if being worn in the correct slot
-        if (TryGetWearer(ent, out var wearer))
-            UpdateMagbootEffects(wearer, ent, args.Activated);
+        if (_container.TryGetContainingContainer((uid, null, null), out var container) &&
+            _inventory.TryGetSlotEntity(container.Owner, comp.Slot, out var worn)
+            && uid == worn)
+            UpdateMagbootEffects(container.Owner, ent, args.Activated);
 
         if (comp.ChangeClothingVisuals)
         {
@@ -85,19 +73,8 @@ public sealed class SharedMagbootsSystem : EntitySystem
     private void OnGotUnequipped(Entity<MagbootsComponent> ent, ref ClothingGotUnequippedEvent args) =>
         UpdateMagbootEffects(args.Wearer, ent, false);
 
-    private void OnGotEquipped(Entity<MagbootsComponent> ent, ref ClothingGotEquippedEvent args)
-    {
-        var active = _toggle.IsActivated(ent.Owner);
-
-        // Equipping an already active pair bypasses OnActivateAttempt.
-        if (active && HasComp<JetpackUserComponent>(args.Wearer))
-        {
-            _toggle.TryDeactivate(ent.Owner, args.Wearer);
-            return;
-        }
-
-        UpdateMagbootEffects(args.Wearer, ent, active);
-    }
+    private void OnGotEquipped(Entity<MagbootsComponent> ent, ref ClothingGotEquippedEvent args) =>
+        UpdateMagbootEffects(args.Wearer, ent, _toggle.IsActivated(ent.Owner));
 
     private void OnIsWeightless(Entity<MagbootsComponent> ent, ref InventoryRelayedEvent<IsWeightlessEvent> args) =>
         OnIsWeightless(ent, ref args.Args);
@@ -116,8 +93,14 @@ public sealed class SharedMagbootsSystem : EntitySystem
 
     private void OnIsWeightless(Entity<MagbootsComponent> ent, ref IsWeightlessEvent args)
     {
-        // Keep jetpack movement weightless if both states somehow become active.
-        if (args.Handled || !ent.Comp.Active || HasComp<JetpackUserComponent>(args.Entity))
+        if (args.Handled || !ent.Comp.Active)
+            return;
+
+        // Crescent: an active jetpack keeps its user weightless, magboots or not.
+        // Otherwise the pair grounds you on a zero-gravity grid while the jetpack is still
+        // the mover, which hands out full ground traction at the jetpack's own unmodified
+        // speed - no drift, no magboot/hardsuit slowdown.
+        if (HasComp<JetpackUserComponent>(args.Entity))
             return;
 
         // do not cancel weightlessness if the person is in off-grid.
@@ -126,37 +109,6 @@ public sealed class SharedMagbootsSystem : EntitySystem
 
         args.IsWeightless = false;
         args.Handled = true;
-    }
-
-    public bool HasActiveMagboots(EntityUid user)
-    {
-        var enumerator = _inventory.GetSlotEnumerator(user);
-        while (enumerator.NextItem(out var item, out var slot))
-        {
-            if (TryComp<MagbootsComponent>(item, out var magboots) &&
-                magboots.Active &&
-                magboots.Slot == slot.Name)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private bool TryGetWearer(Entity<MagbootsComponent> ent, out EntityUid wearer)
-    {
-        wearer = default;
-
-        if (!_container.TryGetContainingContainer((ent.Owner, null, null), out var container) ||
-            !_inventory.TryGetSlotEntity(container.Owner, ent.Comp.Slot, out var worn) ||
-            ent.Owner != worn)
-        {
-            return false;
-        }
-
-        wearer = container.Owner;
-        return true;
     }
 }
 

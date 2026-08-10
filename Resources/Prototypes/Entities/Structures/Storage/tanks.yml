@@ -29,6 +29,7 @@
       behaviors:
       - !type:SolutionExplosionBehavior
         solution: tank
+      - !type:TriggerBehavior # Crescent: fires CrescentFireOnTrigger on the fuel variants.
     - trigger:
         !type:DamageTypeTrigger
         damageType: Piercing
@@ -86,9 +87,15 @@
       types:
         Heat: 10
   - type: PacifismDangerousAttack
+  # Crescent: see WeldingFuelTank - the component defaults capped this cook-off at ~4 damage.
   - type: Explosive
     explosionType: Default
-    totalIntensity: 120 # ~ 5 tile radius
+    totalIntensity: 300
+    intensitySlope: 5
+    maxIntensity: 45
+  - type: CrescentFireOnTrigger
+    radius: 2.5
+    count: 9
   - type: Fixtures
     fixtures:
       fix1:

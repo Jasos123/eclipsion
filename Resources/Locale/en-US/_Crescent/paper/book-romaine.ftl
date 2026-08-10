@@ -1,42 +1,38 @@
-book-canticles-romaine = 
-        The Canticles of Saint Romaine, Warsworn Saint of War and Sacrifice.
+book-canticles-romaine =
+        THE CANTICLES OF THE FOUR GREAT SAINTS
+        A Saintsworn primer for frontier houses, ships, schools, and courts.
 
 
-        Chapter 1. Saint Serraine, the Heartsworn Saint of Peace and Grace.
+        Chapter 1. Saint Serraine, the Veil of Life.
 
-        Wife of Romaine, she was a most graceful noble, the bringer of peace to the edges of the Mandate. Her words, smooth as silk and sweet as honey, forced many a pirate to kneel and surrender, yet every time she found it in her heart to forgive them and gift the privateers a second chance.
-        Yet even such divine innocence could not survive the cruelty of the void. 
-        
+        Serraine is remembered as a noble mediator who opened relief stores during famine, protected physicians from military requisition, and used music and public art to reconcile communities after civil conflict. She is the patron of life, peace, love, fertility, healing, and the arts.
 
-        Chapter 2. The mission in Taypan.
-
-        Romaine and Serraine, a prominent noble couple, ventured forth into Sector Crescent. Their goal: to make peace with the Taypani Atyrian Pact and to find the Atyrians a place within the Mandate, much like the Unathi monarchs. 
-        Many moderates within the Kaiser’s court supported this notion, in large part due to TAP’s extensive knowledge of Psychics. The talks progressed well till Serraine suddenly fell deathly ill and had to depart, putting the talks on hold. 
-        Imperial doctors were perplexed by the affliction and hypothesized that it was some wretched Atyrian disease which Serraine had caught during the diplomatic mission, possibly released on purpose to strike a blow to the Mandate. 
-
-        Romaine rushed back towards Terra, hoping that the extensive medical facilities there could cure his beloved wife. Serraine never even made it to her home planet, passing away during the journey. 
-        The entire Mandate justly entered a period of mourning as her remains were buried on the surface of Terra, accompanied by a fitting ceremony that was broadcast throughout Imperial space.
-        Romaine, a steadfast commander of the armed forces, was seen weeping throughout the whole ceremony. The Kaiser canonized Serraine as a Saint for her peace efforts while Romaine entered into seclusion in his orbital habitat. 
-
-        
-        Chapter 3. Saint Romaine's crusade.
-
-        Once Romaine finally ended his years-long seclusion, he gathered his forces and launched a crusade against all Atyrians. In his blind rage, he began slaughtering the yet unconquered tribes. 
-        The Kaiser could not bring himself to stop his lifelong friend Romaine, so the slaughter continued unimpeded. After satiating his bloodlust, Romaine finally set his eyes on Taypan and the same Atyrians that corrupted his beloved Serraine. He gathered his forces and marched forward. 
-        He was never heard from again, presumed lost to the void.
-        The Kaiser was filled with both sorrow and relief, but in the end, he canonized Romaine as the Saint of War. Millions of soldiers have and will continue to invoke his name in wars to come.
+        Her doctrine teaches that life has value because it creates relationship, culture, and continuity. Peace is not mere silence between battles; it is the condition in which families, healing, and ordinary human life can continue.
 
 
-        Chapter 4. The place of lesser species.
+        Chapter 2. Saint Romaine, the Crimson Verdict.
 
-        The Atyrians are a scourge upon the galaxy, deviant and malign in their nature; their only place within our society is as slaves. 
-        They have tricked us once before, and they shall try to do it again; thus, the Atyrian can only exist under an Imperial's boot, for any freedom given shall be abused in due time.
+        Romaine is remembered as a commander who accepted impossible defensive assignments during an early succession conflict and made disciplined service into a public virtue. He is the patron of war, death, discipline, and sacrifice.
 
-        The Unathi were but savages, divided into clans endlessly slaughtering each other, and that was to be their fate. But the arrival of the Mandate saved them from their descent into destruction and civilized them. 
-        For that, they shall be eternally grateful and in debt to us. They make for surprisingly good servants who have shown great dedication to the subjugation of the Atyrian scourge. 
-        But their tribal aspects persist to this day; thus, they shall continue to be our servants, nothing more, nothing less.
-        
-        The felinids are the remnant of the corporate greed and degeneracy that led the corporations to their own demise. Their ancestors saw it fit to adopt feline features for vain appeal.
-        Thus, the felinid must always be shamed and reminded of its dirty heritage, lest others decide to follow the same path. 
-        
-        The Oni were made to be a weapon, a dull weapon for crushing equally dull foes. Their intelligence and purpose are lacking, but they were made a tool for us to use, and that shall be their fate.
+        His doctrine does not praise violence for its own sake. Force must serve legitimate order, and sacrifice has meaning only when freely accepted for something greater than the individual. Officers remain responsible for whether the lives entrusted to them are spent with purpose.
+
+
+        Chapter 3. Saint Remiel, the Silent Ledger.
+
+        Remiel is credited with standardizing Imperial registries, military accounting, archival practice, and interstellar legal records after forged titles and contradictory decrees nearly divided the realm. Remiel is the patron of wisdom, knowledge, strategy, administration, and records.
+
+        Memory without record becomes rumor. Power without record becomes abuse. Contracts, manifests, inheritance, clone certification, identity archives, and court proceedings are therefore public trusts as well as practical tools.
+
+
+        Chapter 4. Saint Guies, the Golden Crown.
+
+        Guies was one of the Mandate's greatest elected Kaisers. He stabilized a fractured order by converting military loyalty into charters, law, taxation, and predictable obligations between estates. He is the patron of nobility, wealth, trade, governance, and the duties of hierarchy.
+
+        Hierarchy is justified only while each level fulfills its obligations. Lords owe protection, merchants fair measure, workers agreed labor, and the Crown law. An office may be granted, purchased, lost, or renegotiated where recognized law permits; no living officeholder is automatically beyond judgment.
+
+
+        Chapter 5. A warning against false doctrine.
+
+        The Saint's Militia claims that the Synod weakened the Saints through compromise. Its four radical currents corrupt familiar virtues: Serraine's Mercy Furnace turns healing into forced human assimilation; Romaine's Final Crusade treats war itself as purification; Remiel's Living Codex makes privacy a form of heresy; Guies's Divine Balance freezes negotiated hierarchy into cosmic rank.
+
+        These currents belong to one militant movement. They are not separate churches, and the Militia does not speak for every Saintsworn court, ordinary believer, noble patron, or servant of the Crown.

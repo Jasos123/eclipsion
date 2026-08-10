@@ -106,7 +106,7 @@
   parent: BaseItem
   id: BlackboxNT
   name: Nanotrasen flight recorder
-  description: Potentially containing leads on NT facilities, hadal breaches, and other wrecks, genuine NT flight recorders from droneships and derelicts are the dream of any salvager.
+  description: Potentially containing leads on NanoTrasen facilities, recurrence fronts, phase maps, and other wrecks, genuine flight recorders from droneships and derelicts are the dream of any salvager.
   components:
   - type: Sprite
     sprite: _Crescent/Objects/Misc/blackbox.rsi

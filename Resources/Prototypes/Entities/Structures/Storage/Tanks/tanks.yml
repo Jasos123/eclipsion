@@ -30,9 +30,52 @@
       types:
         Heat: 10
   - type: PacifismDangerousAttack
+  # Crescent: Default explosions were scaled down hard for shipguns, so a tank left on the
+  # component defaults (slope 1 / maxIntensity 4) cooked off for ~4 damage. Put it on the same
+  # scale as the _Crescent fuel tanks. SolutionExplosionBehavior scales this by how full it is.
   - type: Explosive
     explosionType: Default
-    totalIntensity: 120 # ~ 5 tile radius
+    totalIntensity: 300
+    intensitySlope: 5
+    maxIntensity: 45
+  # Crescent: a fuel tank cook-off leaves the deck burning, not just a bang.
+  - type: CrescentFireOnTrigger
+    radius: 2.5
+    count: 9
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+        - !type:DoActsBehavior
+          acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Heat
+        damage: 5
+      behaviors:
+      - !type:SolutionExplosionBehavior
+        solution: tank
+      - !type:TriggerBehavior
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Piercing
+        damage: 5
+      behaviors:
+      - !type:TankLeakBehavior
+        solution: tank
+        leaksToAdd: 1
+    - trigger:
+        !type:DamageTrigger
+        damage: 10
+      behaviors:
+      - !type:TankLeakBehavior
+        solution: tank
+        leaksToAdd: 1
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
 
 - type: entity
   id: WeldingFuelTankFull
@@ -72,9 +115,14 @@
         - ReagentId: WeldingFuel
           Quantity: 5000
         maxVol: 5000
-  - type: Explosive
+  - type: Explosive # Crescent: see WeldingFuelTank, scaled up for 5000u.
     explosionType: Default
-    totalIntensity: 140
+    totalIntensity: 700
+    intensitySlope: 7
+    maxIntensity: 70
+  - type: CrescentFireOnTrigger
+    radius: 4
+    count: 16
 
 # Water
 

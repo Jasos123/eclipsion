@@ -1,5 +1,5 @@
 - type: entity
-  name: NCWL passport
+  name: Workers' Union passport
   parent: BasePassport
   id: NCWLPassport
   components:
@@ -158,7 +158,7 @@
           - Coalition
 
 - type: entity
-  name: clarizian passport
+  name: Aurevienne diaspora passport
   parent: BasePassport
   id: ClarizianPassport
   components:
@@ -212,7 +212,7 @@
 
 
 - type: entity
-  name: coalition passport
+  name: TFCF passport
   parent: BasePassport
   id: CoalitionPassport
   components:
@@ -265,7 +265,7 @@
           - Coalition
 
 - type: entity
-  name: authoritat passport
+  name: Crown Domain service passport
   parent: BasePassport
   id: AuthorityPassport
   components:

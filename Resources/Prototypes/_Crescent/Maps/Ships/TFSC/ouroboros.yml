@@ -4,7 +4,7 @@
 - type: vessel
   id: Ouroboros
   name: GSC Ouroboros
-  description: A Syndicate stealth carrier.
+  description: A TFCF stealth carrier operated through Cyberdawn and Gorlex expertise.
   price: 80000 
   category: Medium
   group: None

@@ -65,20 +65,20 @@ public sealed class PsionicAbilitiesSystem : EntitySystem
     }
 
     /// <summary>
-    ///     The most shorthand route to creating a Psion. If an entity is not already psionic, it becomes one. This also adds a random new PsionicPower.
-    ///     To create a "Latent Psychic"(Psion with no powers) just add or ensure the PsionicComponent normally.
+    ///     The most shorthand route to creating a Psion. New psions begin at level one with a
+    ///     development point and select their first power through the skill tree.
     /// </summary>
     public void AddPsionics(EntityUid uid)
     {
         if (Deleted(uid))
             return;
 
-        AddRandomPsionicPower(uid);
+        EnsureComp<PsionicComponent>(uid);
     }
 
     /// <summary>
-    ///     Pretty straightforward, adds a random psionic power to a given Entity. If that Entity is not already Psychic, it will be made one.
-    ///     If an entity already has all possible powers, this will not add any new ones.
+    ///     Explicit random-power override retained for admin/debug commands and legacy scripted content.
+    ///     Normal progression should use the psionic skill tree.
     /// </summary>
     public void AddRandomPsionicPower(EntityUid uid, bool forced = false)
     {

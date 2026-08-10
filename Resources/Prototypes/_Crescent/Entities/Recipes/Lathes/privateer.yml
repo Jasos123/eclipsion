@@ -103,7 +103,7 @@
   result: ClothingOuterArmorSyndicateLieutenant
   completetime: 1.5
   materials:
-    Durathread: 500
+    Cloth: 250
     Steel: 500
 
 - type: latheRecipe
@@ -113,7 +113,7 @@
   completetime: 1.5
   materials:
     SilkFilament: 2000
-    Durathread: 500
+    Cloth: 250
     Steel: 300
 
 - type: latheRecipe
@@ -200,7 +200,7 @@
   result: ClothingOuterArmorSyndicateForeman
   completetime: 1.5
   materials:
-    Durathread: 500
+    Cloth: 250
 
 - type: latheRecipe
   id: ClothingHeadHatHardhatSyndicate
@@ -230,7 +230,7 @@
   result: ClothingOuterArmorSyndicateArmorvestInterdyne
   completetime: 1.5
   materials:
-    Durathread: 600
+    Cloth: 300
     Steel: 300
     Plastic: 100
 
@@ -240,7 +240,7 @@
   result: ClothingHeadHelmetSyndicateBasicInterdyne
   completetime: 1.5
   materials:
-    Durathread: 600
+    Cloth: 300
     Steel: 300
     Plastic: 100
 
@@ -250,7 +250,7 @@
   result: ClothingOuterArmorSyndicateArmorvest
   completetime: 1.5
   materials:
-    Durathread: 600
+    Cloth: 300
     Steel: 300
 
 - type: latheRecipe
@@ -259,7 +259,7 @@
   result: ClothingHeadHelmetSyndicateBasic
   completetime: 1.5
   materials:
-    Durathread: 600
+    Cloth: 300
     Steel: 300
 
 # MARK: Equipment

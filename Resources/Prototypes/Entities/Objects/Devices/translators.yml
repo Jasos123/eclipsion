@@ -107,7 +107,7 @@
   id: FreespeakTranslator
   parent: [ TranslatorPoweredBase ]
   name: Freespeak translator
-  description: Translates Freespeak, mainly spoken by TFSC. Has a little display with a friendly-looking Gorlex Infanteer performing Spacer's Sign for you to understand.
+  description: Translates Freespeak, common across the TFCF. Its little display shows a friendly GSC infanteer signing the output in Spacer's Sign.
   components:
   - type: HandheldTranslator
     spoken:

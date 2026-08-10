@@ -134,22 +134,22 @@ private void OnComponentInit(EntityUid uid, UnionfallCapturePointComponent compo
     private void AnnouncementWarStart(TimeSpan time)
     {
         _announcer.SendAnnouncement(_announcer.GetAnnouncementId("unionfallBegin"), Filter.Broadcast(),
-                "HADAL STORM DETECTED - Emergency repulsion field deployed, estimated storm dispersion time: <" + time + ">...  Dispersion pattern confirms presence of a hostile fleet in the operating area.");
+                "SEVERE TURNING FRONT DETECTED - Emergency chronal field deployed, estimated front passage time: <" + time + ">... Recurrence telemetry confirms a hostile fleet in the operating area.");
     }
     private void AnnouncementWarPeriodic(TimeSpan time)
     {
         _announcer.SendAnnouncement(_announcer.GetAnnouncementId("unionfallPeriodic"), Filter.Broadcast(),
-                "<" + time + "> until the Hadal storm disperses.");
+                "<" + time + "> until the Turning front passes.");
     }
 
     private void AnnouncementWarAlmost()
     {
         _announcer.SendAnnouncement(_announcer.GetAnnouncementId("unionfallAlmost"), Filter.Broadcast(),
-                "<00:01:00> LEFT UNTIL FULL HADAL STORM DISPERSION.");
+                "<00:01:00> LEFT UNTIL THE TURNING FRONT PASSES.");
     }
     private void AnnouncementWarGraceOver()
     {
         _announcer.SendAnnouncement(_announcer.GetAnnouncementId("unionfallGraceOver"), Filter.Broadcast(),
-                "HADAL STORM HAS DISPERSED. Emergency dispersion field has been disabled. Long-Range radar readings confirm presence of hostile fleet, with interception course set to NanoTransen Vladzena Extraction Station");
+                "TURNING FRONT HAS PASSED. Emergency chronal field has been disabled. Long-range radar confirms a hostile fleet on an interception course for NanoTrasen Vladzena Extraction Station.");
     }
 }

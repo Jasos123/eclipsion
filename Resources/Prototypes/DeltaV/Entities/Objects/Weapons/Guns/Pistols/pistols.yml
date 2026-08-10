@@ -1,5 +1,5 @@
 - type: entity
-  name: TFSC Anaconda 9x19mm
+  name: TFCF Anaconda 9x19mm
   parent: BaseWeaponPistol
   id: WeaponPistolViperWood
   description: A small, low-power pistol with full-auto firemode. Uses 9x19mm PSTF ammo.

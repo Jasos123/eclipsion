@@ -4,7 +4,7 @@
 - type: vessel
   id: Fulgur
   name: NT Fulgur
-  description: A long-range autonomous missile platform from NanoTrasen's Fog campaign. Recovered, refitted, and sold. The original paperwork didn't survive the salvage.
+  description: A long-range autonomous missile platform built for NanoTrasen operations in recurrence-active fields. Recovered, refitted, and sold; the original paperwork did not survive the salvage.
   price: 400000
   category: Large
   group: None
@@ -31,4 +31,4 @@
         - type: VesselDesignation
           designation: vessel-designation-missile
         - type: VesselDescription
-          description: Created in response to the spread of the abyssal phenomena emerging from the fracture.
+          description: Created to operate in unstable recurrence fields around the Fracture.

@@ -4,14 +4,16 @@
   text: "/ServerInfo/_Crescent/Guidebook/Lore.xml"
   priority: 30
   children:
-  - LoreHadalAbyss
+  - LoreRecurrence
   - LoreTaypan
-  - LoreCollapse
+  - LoreHistory
+  - Psionics
+  - LoreContinuity
 
 - type: guideEntry
-  id: LoreHadalAbyss
-  name: The Hadal Abyss
-  text: "/ServerInfo/_Crescent/Guidebook/LoreHadalAbyss.xml"
+  id: LoreRecurrence
+  name: The Crescent Recurrence
+  text: "/ServerInfo/_Crescent/Guidebook/LoreRecurrence.xml"
 
 - type: guideEntry
   id: LoreTaypan
@@ -19,9 +21,14 @@
   text: "/ServerInfo/_Crescent/Guidebook/LoreTaypan.xml"
 
 - type: guideEntry
-  id: LoreCollapse
-  name: Count Olywir and the Collapse
-  text: "/ServerInfo/_Crescent/Guidebook/LoreCollapse.xml"
+  id: LoreHistory
+  name: Crescent History and the Charter
+  text: "/ServerInfo/_Crescent/Guidebook/LoreHistory.xml"
+
+- type: guideEntry
+  id: LoreContinuity
+  name: Cloning, Cybernetics, and Continuity
+  text: "/ServerInfo/_Crescent/Guidebook/LoreContinuity.xml"
 
 - type: guideEntry
   id: Factions

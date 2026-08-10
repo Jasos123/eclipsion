@@ -23,7 +23,7 @@
   requireAdminNotify: false
   icon: "JobIconSyndieOperative"
   chatNameColor: "#264180"
-  supervisors: You answer to the patriarch of the research wing, and above them the Ringleader.
+  supervisors: You answer to Cyberdawn's Intelligence Officer and to valid Ringleader decisions on Federation-wide matters.
   canBeAntag: false
   requirements:
     - !type:CharacterSpeciesRequirement
@@ -55,7 +55,7 @@
   access:
   - Command
   - Maintenance
-  # One Coalition, one keyring: the old company tags survive only as department names.
+  # Shared TFCF gameplay keyring; company access still marks Cyberdawn's internal facilities.
   - SyndicateBasic
   - SyndicateGorlex
   - SyndicateInterdyne

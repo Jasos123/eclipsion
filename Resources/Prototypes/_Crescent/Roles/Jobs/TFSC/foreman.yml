@@ -15,7 +15,7 @@
     shoutBubbleScale: 1.32
     radioScale: 1.23
     radioBold: true
-  supervisors: You answer to the Ringleader. Head the Coalition's shipbreaking and engineering wing.
+  supervisors: You lead SAW crews and answer to the collective's recognized leadership; follow the Ringleader on valid Federation-wide matters.
   canBeAntag: false
   requirements:
     - !type:CharacterSpeciesRequirement
@@ -49,7 +49,7 @@
   access:
   - Command
   - Maintenance
-  # One Coalition, one keyring: the old company tags survive only as department names.
+  # Shared TFCF gameplay keyring; company access still marks SAW's internal facilities.
   - SyndicateBasic
   - SyndicateGorlex
   - SyndicateInterdyne

@@ -1,6 +1,6 @@
 #allows mappers to automate random hardpoint loot
 - type: entity
-  name: TFSC Hardpoint Wreck Randomizer
+  name: TFCF Hardpoint Wreck Randomizer
   id: TFSCHardpointWreckRandomizer
   parent: MarkerBase
   components:

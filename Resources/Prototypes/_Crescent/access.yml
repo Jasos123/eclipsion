@@ -54,7 +54,7 @@
   id: SyndicateGorlex
   name: id-card-access-level-syndicategorlex
 
-# The company tags above and below are on every Coalition keyring, so they cannot
+# The company tags above and below are on the shared TFCF keyring, so they cannot
 # gate company-only gear. These two go to that company's own jobs alone.
 - type: accessLevel
   id: SyndicateGorlexArmory

@@ -8,28 +8,33 @@ namespace Content.Server._Crescent.PlanetfallObjectives;
 public sealed class PlanetfallBarrierAnnouncerCommand : IConsoleCommand
 {
     public string Command => "planetfall_releasebarrier";
-    public string Description => "Immediately releases the Planetfall barrier on your current map.";
-    public string Help => "Run while attached to an entity on the Planetfall map.";
+    public string Description => "Immediately releases the Planetfall barrier.";
+    public string Help => "In-game, releases the barrier on your current map. From the server console, releases the active Planetfall barrier.";
 
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        if (shell.Player?.AttachedEntity is not { } playerEntity)
-        {
-            shell.WriteError("You must be attached to an entity on the target map.");
-            return;
-        }
-
         var entityManager = IoCManager.Resolve<IEntityManager>();
-        if (!entityManager.TryGetComponent<TransformComponent>(playerEntity, out var transform))
+        var announcerSystem = entityManager.System<PlanetfallBarrierAnnouncerSystem>();
+        bool released;
+
+        if (shell.Player?.AttachedEntity is { } playerEntity)
         {
-            shell.WriteError("Attached entity has no transform.");
-            return;
+            if (!entityManager.TryGetComponent<TransformComponent>(playerEntity, out var transform))
+            {
+                shell.WriteError("Attached entity has no transform.");
+                return;
+            }
+
+            released = announcerSystem.TryReleaseOnMap(transform.MapID);
+        }
+        else
+        {
+            released = announcerSystem.TryReleaseAny();
         }
 
-        var released = entityManager.System<PlanetfallBarrierAnnouncerSystem>().TryReleaseOnMap(transform.MapID);
         if (!released)
         {
-            shell.WriteError("No unreleased Planetfall barrier announcer was found on your current map.");
+            shell.WriteError("No unreleased Planetfall barrier announcer was found.");
             return;
         }
 

@@ -25,7 +25,7 @@
   - adventure
   name: Freeplay
   showInVote: true
-  description: The final hours of Taypan. Last 2-4 hours.
+  description: An open shift on Taypan's volatile commercial frontier. Lasts 2-4 hours.
   excludedJobs:
   - UnionfallCadetDSM
   - UnionfallRiflemanDSM
@@ -86,7 +86,7 @@
         posY: 1000
         IFFColor: White
         IFFFaction: SHI
-      # The Coalition merged its four company stations into the rebuilt Freeport: one station, one faction.
+      # TFCF members retain their own leadership while sharing Federation infrastructure at the rebuilt Freeport.
       Freeport:
         gameMapID: Freeport
         posX: 6000
@@ -122,7 +122,7 @@
   - freeplaydsmncwl
   name: Freeplay | DSM & NCWL
   showInVote: true
-  description: The final hours of Taypan, fought over by the Dominion and the Union. Last 2-4 hours.
+  description: A contested stretch of Taypan fought over by the Divine Sol Mandate and Workers' Union forces. Lasts 2-4 hours.
   excludedJobs:
   - UnionfallCadetDSM
   - UnionfallRiflemanDSM
@@ -203,9 +203,9 @@
   id: FreeplayTFSCSHI
   alias:
   - freeplaytfscshi
-  name: Freeplay | TFSC & SHI
+  name: Freeplay | TFCF & SHI
   showInVote: true
-  description: The final hours of Taypan, fought over by the Coalition and the Shogunate. Last 2-4 hours.
+  description: A volatile stretch of the Taypan frontier contested by the TFCF and Shinohara interests. Lasts 2-4 hours.
   excludedJobs:
   - UnionfallCadetDSM
   - UnionfallRiflemanDSM
@@ -254,7 +254,7 @@
         posY: 1000
         IFFColor: White
         IFFFaction: SHI
-      # The Coalition merged its four company stations into the rebuilt Freeport: one station, one faction.
+      # TFCF members retain their own leadership while sharing Federation infrastructure at the rebuilt Freeport.
       Freeport:
         gameMapID: Freeport
         posX: 6000

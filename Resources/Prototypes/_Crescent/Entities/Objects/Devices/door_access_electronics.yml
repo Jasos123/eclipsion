@@ -53,7 +53,7 @@
 - type: entity
   parent: DoorElectronics
   id: DoorElectronicsTFSC
-  suffix: TFSC General, Locked
+  suffix: TFCF General, Locked
   components:
   - type: AccessReader
     access: [["SyndicateBasic"]]
@@ -61,7 +61,7 @@
 - type: entity
   parent: DoorElectronics
   id: DoorElectronicsTFSCCommand
-  suffix: TFSC Command, Locked
+  suffix: TFCF Command, Locked
   components:
   - type: AccessReader
     access: [["SyndicateCommand"]]
@@ -69,7 +69,7 @@
 - type: entity
   parent: DoorElectronics
   id: DoorElectronicsTFSCRingleader
-  suffix: TFSC Ringleader, Locked
+  suffix: TFCF Ringleader, Locked
   components:
   - type: AccessReader
     access: [["SyndicateRingleader"]]
@@ -77,7 +77,7 @@
 - type: entity
   parent: DoorElectronics
   id: DoorElectronicsTFSCGorlex
-  suffix: TFSC Gorlex, Locked
+  suffix: TFCF GSC, Locked
   components:
   - type: AccessReader
     access: [["SyndicateGorlex"]]
@@ -85,7 +85,7 @@
 - type: entity
   parent: DoorElectronics
   id: DoorElectronicsTFSCInterdyne
-  suffix: TFSC Interdyne, Locked
+  suffix: TFCF Interdyne, Locked
   components:
   - type: AccessReader
     access: [["SyndicateInterdyne"]]
@@ -93,7 +93,7 @@
 - type: entity
   parent: DoorElectronics
   id: DoorElectronicsTFSCSaws
-  suffix: TFSC SAWs, Locked
+  suffix: TFCF SAW, Locked
   components:
   - type: AccessReader
     access: [["SyndicateSaws"]]
@@ -101,7 +101,7 @@
 - type: entity
   parent: DoorElectronics
   id: DoorElectronicsTFSCRamzi
-  suffix: TFSC Ramzi, Locked
+  suffix: TFCF Cyberdawn, Locked
   components:
   - type: AccessReader
     access: [["SyndicateRamzi"]]
@@ -175,7 +175,7 @@
 - type: entity
   parent: DoorElectronics
   id: DoorElectronicsDSMEmpireGovernor
-  suffix: Empire Governor, Locked
+  suffix: DSM Lord Admiral, Locked
   components:
   - type: AccessReader
     access: [["EmpireGovernor"]]
@@ -340,7 +340,7 @@
 - type: entity
   parent: DoorElectronics
   id: DoorElectronicsAuthority
-  suffix: Authority
+  suffix: Crown Expedition
   components:
   - type: AccessReader
     access: [["Authority"]]
@@ -348,7 +348,7 @@
 - type: entity
   parent: DoorElectronics
   id: DoorElectronicsAuthorityRanking
-  suffix: Authority, Ranking
+  suffix: Crown Expedition, Ranking
   components:
   - type: AccessReader
     access: [["AuthorityRanking"]]
@@ -356,7 +356,7 @@
 - type: entity
   parent: DoorElectronics
   id: DoorElectronicsAuthoritymed
-  suffix: Authority, Medical
+  suffix: Crown Expedition, Medical
   components:
   - type: AccessReader
     access: [["Authoritymed"]]
@@ -364,7 +364,7 @@
 - type: entity
   parent: DoorElectronics
   id: DoorElectronicsAuthoritySupply
-  suffix: Authority, Supply
+  suffix: Crown Expedition, Supply
   components:
   - type: AccessReader
     access: [["AuthoritySupply"]]
@@ -372,7 +372,7 @@
 - type: entity
   parent: DoorElectronics
   id: DoorElectronicsAuthorityKommandant
-  suffix: Authority, Kommandant
+  suffix: Crown Expedition, Commander
   components:
   - type: AccessReader
     access: [["Kommandant"]]
@@ -394,4 +394,3 @@
   components:
   - type: AccessReader
     access: [["GliessSheriff"]]
-

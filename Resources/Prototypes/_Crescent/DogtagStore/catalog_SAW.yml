@@ -399,7 +399,7 @@
 - type: listing
   id: StoreListingSAWShanty
   name: SAW Shanty LPC
-  description: THE classic Shipfitters salvaging vessel, capable of recieving nearly any modification assuming ample user creativity.
+  description: The classic Shipbreaker salvage vessel, capable of receiving nearly any modification given enough creativity.
   icon: { sprite: _Crescent/Objects/Misc/lpcchip.rsi, state: icon }
   productEntity: ShipVoucherShanty
   cost:
@@ -421,7 +421,7 @@
 - type: listing
   id: StoreListingSAWScabrak
   name: SAW Scabrak LPC
-  description: A Shipfitters original design of a cruiser-sized mining barge.
+  description: A Shipbreaker original design for a cruiser-sized mining barge.
   icon: { sprite: _Crescent/Objects/Misc/lpcchip.rsi, state: icon }
   productEntity: ShipVoucherScabrak
   cost:

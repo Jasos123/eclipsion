@@ -451,7 +451,7 @@
 - type: entity
   id: SpawnPointGovernor
   parent: SpawnPointJobBase
-  name: governor
+  name: lord admiral
   components:
   - type: SpawnPoint
     job_id: GovernorDSM

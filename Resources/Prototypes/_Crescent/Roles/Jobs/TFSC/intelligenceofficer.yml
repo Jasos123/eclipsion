@@ -25,7 +25,7 @@
     shoutBubbleScale: 1.32
     radioScale: 1.23
     radioBold: true
-  supervisors: You answer to the Ringleader. Head the Coalition's research wing - protect your technology, make money, take out competition.
+  supervisors: You direct Cyberdawn intelligence and answer to its recognized leadership; follow the Ringleader on valid Federation-wide matters.
   canBeAntag: false
   requirements:
     - !type:CharacterSpeciesRequirement
@@ -64,7 +64,7 @@
   access:
   - Command
   - Maintenance
-  # One Coalition, one keyring: the old company tags survive only as department names.
+  # Shared TFCF gameplay keyring; company access still marks Cyberdawn's internal facilities.
   - SyndicateBasic
   - SyndicateGorlex
   - SyndicateInterdyne

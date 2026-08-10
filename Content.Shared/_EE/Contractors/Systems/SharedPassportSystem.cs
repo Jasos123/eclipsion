@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Content.Shared._EE.Contractors.Components;
 using Content.Shared._EE.Contractors.Prototypes;
 using Content.Shared.Administration.Logs;
@@ -9,14 +10,17 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory;
 using Content.Shared.Item;
 using Content.Shared.Preferences;
+using Content.Shared.Popups;
 using Content.Shared.Storage;
 using Content.Shared.Storage.EntitySystems;
+using Content.Shared.UserInterface;
 using Robust.Shared;
 using Content.Shared.CCVar;
 using Content.Shared.Roles;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+using Robust.Shared.Utility;
 
 
 namespace Content.Shared._EE.Contractors.Systems;
@@ -24,7 +28,10 @@ namespace Content.Shared._EE.Contractors.Systems;
 public class SharedPassportSystem : EntitySystem
 {
     public const int CurrentYear = 2450;
-    const string PIDChars = "ABCDEFGHJKLMNPQRSTUVWXYZ0123456789";
+    public const int PassportLifetimeYears = 5;
+    private const int MaxTextFieldLength = 64;
+    private const string PIDChars = "ABCDEFGHJKLMNPQRSTUVWXYZ0123456789";
+    private static readonly Regex PassportIdRegex = new("^[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}$");
 
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IEntityManager _entityManager = default!;
@@ -34,6 +41,8 @@ public class SharedPassportSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _sharedTransformSystem = default!;
     [Dependency] private readonly IConfigurationManager _configManager = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLogManager = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {
@@ -42,31 +51,36 @@ public class SharedPassportSystem : EntitySystem
         SubscribeLocalEvent<PassportComponent, UseInHandEvent>(OnUseInHand);
         SubscribeLocalEvent<PlayerLoadoutAppliedEvent>(OnPlayerLoadoutApplied);
         SubscribeLocalEvent<PassportComponent, ExaminedEvent>(OnExamined);
+        SubscribeLocalEvent<PassportComponent, BoundUIOpenedEvent>(OnUiOpened);
+        SubscribeLocalEvent<PassportComponent, PassportSaveMessage>(OnSave);
     }
 
     private void OnExamined(EntityUid uid, PassportComponent component, ExaminedEvent args)
     {
-        if (!args.IsInDetailsRange
-            || component.IsClosed
-            || component.OwnerProfile == null)
+        if (!args.IsInDetailsRange || component.IsClosed)
             return;
 
-        var species = _prototypeManager.Index<SpeciesPrototype>(component.OwnerProfile.Species);
+        var religion = DisplayOrUnspecified(component.Religion);
 
-        // Ratgore start - RU localization
-        args.PushMarkup(Loc.GetString("passport-registered-to", ("name", component.OwnerProfile.Name)), 50);
-        args.PushMarkup(Loc.GetString("passport-species", ("species", Loc.GetString(species.Name))), 49);
-        args.PushMarkup(Loc.GetString("passport-gender", ("gender", component.OwnerProfile.Gender.ToString())), 48);
-        args.PushMarkup(Loc.GetString("passport-height", ("height", MathF.Round(component.OwnerProfile.Height * species.AverageHeight))), 47);
-        args.PushMarkup(Loc.GetString("passport-year-of-birth", ("year", CurrentYear - component.OwnerProfile.Age)), 46);
-        args.PushMarkup(
-            Loc.GetString("passport-pid", ("pid", GenerateIdentityString(component.OwnerProfile.Name
-            + component.OwnerProfile.Height
-            + component.OwnerProfile.Age
-            + component.OwnerProfile.Height
-            + component.OwnerProfile.FlavorText))),
-            45);
-        // Ratgore end
+        args.PushMarkup(Loc.GetString("passport-registered-to", ("name", DisplayOrUnspecified(component.FullName))), 60);
+        args.PushMarkup(Loc.GetString("passport-age", ("age", component.Age)), 59);
+        args.PushMarkup(Loc.GetString("passport-species", ("species", DisplayOrUnspecified(component.Species))), 58);
+        args.PushMarkup(Loc.GetString("passport-gender", ("gender", DisplayOrUnspecified(component.Sex))), 57);
+        args.PushMarkup(Loc.GetString("passport-height", ("height", component.HeightCm)), 56);
+        args.PushMarkup(Loc.GetString("passport-skin-color", ("color", DisplayOrUnspecified(component.SkinColor))), 55);
+        args.PushMarkup(Loc.GetString("passport-eye-color", ("color", DisplayOrUnspecified(component.EyeColor))), 54);
+        args.PushMarkup(Loc.GetString("passport-nationality", ("nationality", DisplayOrUnspecified(component.Nationality))), 53);
+        args.PushMarkup(Loc.GetString("passport-religion", ("religion", religion)), 52);
+        args.PushMarkup(Loc.GetString("passport-year-of-birth", ("year", CurrentYear - component.Age)), 51);
+        args.PushMarkup(Loc.GetString("passport-issued", ("year", component.IssueYear)), 50);
+        args.PushMarkup(Loc.GetString("passport-expires", ("year", component.ExpirationYear)), 49);
+        args.PushMarkup(Loc.GetString("passport-pid", ("pid", DisplayOrUnspecified(component.PassportId))), 48);
+        var status = component.Tampered
+            ? "passport-status-tampered"
+            : IsPassportValid(component)
+                ? "passport-status-valid"
+                : "passport-status-invalid";
+        args.PushMarkup(Loc.GetString(status), 47);
     }
 
     private void OnPlayerLoadoutApplied(PlayerLoadoutAppliedEvent ev) =>
@@ -116,9 +130,110 @@ public class SharedPassportSystem : EntitySystem
 
     public void UpdatePassportProfile(Entity<PassportComponent> passport, HumanoidCharacterProfile profile)
     {
-        passport.Comp.OwnerProfile = profile;
-        var evt = new PassportProfileUpdatedEvent(profile);
-        RaiseLocalEvent(passport, ref evt);
+        var species = _prototypeManager.Index<SpeciesPrototype>(profile.Species);
+        var nationality = _prototypeManager.TryIndex(profile.Nationality, out NationalityPrototype? nationalityPrototype)
+            ? Loc.GetString(nationalityPrototype.NameKey)
+            : profile.Nationality;
+
+        passport.Comp.FullName = profile.Name;
+        passport.Comp.Age = profile.Age;
+        passport.Comp.Species = string.IsNullOrWhiteSpace(profile.Customspeciename)
+            ? Loc.GetString(species.Name)
+            : profile.Customspeciename;
+        passport.Comp.PortraitSpecies = profile.Species;
+        passport.Comp.Sex = profile.Sex.ToString();
+        passport.Comp.HeightCm = (int) MathF.Round(profile.Height * species.AverageHeight);
+        passport.Comp.SkinColor = profile.Appearance.SkinColor.ToHexNoAlpha();
+        passport.Comp.EyeColor = profile.Appearance.EyeColor.ToHexNoAlpha();
+        passport.Comp.Nationality = nationality;
+        passport.Comp.Religion = string.Empty;
+        passport.Comp.IssueYear = CurrentYear;
+        passport.Comp.ExpirationYear = CurrentYear + PassportLifetimeYears;
+        passport.Comp.PassportId = GenerateIdentityString(profile.Name
+            + profile.Species
+            + profile.Height
+            + profile.Age
+            + profile.Nationality
+            + profile.FlavorText);
+        passport.Comp.Authentic = true;
+        passport.Comp.Tampered = false;
+        Dirty(passport);
+    }
+
+    private void OnUiOpened(Entity<PassportComponent> passport, ref BoundUIOpenedEvent args)
+    {
+        if (args.UiKey is PassportUiKey.Key)
+            UpdateUiState(passport);
+    }
+
+    private void OnSave(Entity<PassportComponent> passport, ref PassportSaveMessage args)
+    {
+        var fullName = Clean(args.FullName);
+        var age = Math.Clamp(args.Age, 0, 1000);
+        var species = Clean(args.Species);
+        var sex = Clean(args.Sex, 32);
+        var heightCm = Math.Clamp(args.HeightCm, 0, 1000);
+        var skinColor = CleanColor(args.SkinColor);
+        var eyeColor = CleanColor(args.EyeColor);
+        var nationality = Clean(args.Nationality);
+        var religion = Clean(args.Religion);
+        var passportId = Clean(args.PassportId, 32).ToUpperInvariant();
+        var issueYear = Math.Clamp(args.IssueYear, 0, 9999);
+        var expirationYear = Math.Clamp(args.ExpirationYear, 0, 9999);
+
+        var changed = passport.Comp.FullName != fullName
+            || passport.Comp.Age != age
+            || passport.Comp.Species != species
+            || passport.Comp.Sex != sex
+            || passport.Comp.HeightCm != heightCm
+            || passport.Comp.SkinColor != skinColor
+            || passport.Comp.EyeColor != eyeColor
+            || passport.Comp.Nationality != nationality
+            || passport.Comp.Religion != religion
+            || passport.Comp.PassportId != passportId
+            || passport.Comp.IssueYear != issueYear
+            || passport.Comp.ExpirationYear != expirationYear;
+
+        if (changed)
+        {
+            passport.Comp.FullName = fullName;
+            passport.Comp.Age = age;
+            passport.Comp.Species = species;
+            passport.Comp.Sex = sex;
+            passport.Comp.HeightCm = heightCm;
+            passport.Comp.SkinColor = skinColor;
+            passport.Comp.EyeColor = eyeColor;
+            passport.Comp.Nationality = nationality;
+            passport.Comp.Religion = religion;
+            passport.Comp.PassportId = passportId;
+            passport.Comp.IssueYear = issueYear;
+            passport.Comp.ExpirationYear = expirationYear;
+            passport.Comp.Tampered = true;
+            Dirty(passport);
+        }
+
+        UpdateUiState(passport);
+        _popup.PopupPredicted(Loc.GetString("passport-edit-saved"), passport, args.Actor);
+    }
+
+    private void UpdateUiState(Entity<PassportComponent> passport)
+    {
+        var component = passport.Comp;
+        _ui.SetUiState(passport.Owner, PassportUiKey.Key, new PassportBoundUserInterfaceState(
+            component.FullName,
+            component.Age,
+            component.Species,
+            component.Sex,
+            component.HeightCm,
+            component.SkinColor,
+            component.EyeColor,
+            component.Nationality,
+            component.Religion,
+            component.PassportId,
+            component.IssueYear,
+            component.ExpirationYear,
+            IsPassportValid(component),
+            component.Tampered));
     }
 
     private void OnUseInHand(Entity<PassportComponent> passport, ref UseInHandEvent evt)
@@ -128,6 +243,7 @@ public class SharedPassportSystem : EntitySystem
 
         evt.Handled = true;
         passport.Comp.IsClosed = !passport.Comp.IsClosed;
+        Dirty(passport);
 
         var passportEvent = new PassportToggleEvent();
         RaiseLocalEvent(passport, ref passportEvent);
@@ -153,12 +269,45 @@ public class SharedPassportSystem : EntitySystem
         return new string(result);
     }
 
+    public static bool IsPassportValid(PassportComponent component)
+    {
+        return component.Authentic
+            && !component.Tampered
+            && component.IssueYear is > 0 and <= CurrentYear
+            && component.ExpirationYear >= CurrentYear
+            && component.Age is > 0 and <= 1000
+            && component.HeightCm is > 0 and <= 1000
+            && !string.IsNullOrWhiteSpace(component.FullName)
+            && !string.IsNullOrWhiteSpace(component.Species)
+            && !string.IsNullOrWhiteSpace(component.Sex)
+            && !string.IsNullOrWhiteSpace(component.Nationality)
+            && PassportIdRegex.IsMatch(component.PassportId)
+            && Color.TryFromHex(component.SkinColor, out _)
+            && Color.TryFromHex(component.EyeColor, out _);
+    }
+
+    private static string Clean(string value, int maxLength = MaxTextFieldLength)
+    {
+        var cleaned = value.Trim();
+        return cleaned.Length <= maxLength ? cleaned : cleaned[..maxLength];
+    }
+
+    private static string CleanColor(string value)
+    {
+        var cleaned = Clean(value, 16);
+        return Color.TryFromHex(cleaned, out var color)
+            ? color.ToHexNoAlpha()
+            : cleaned;
+    }
+
+    private string DisplayOrUnspecified(string value)
+    {
+        return string.IsNullOrWhiteSpace(value)
+            ? Loc.GetString("passport-unspecified")
+            : FormattedMessage.EscapeText(value);
+    }
+
     [ByRefEvent]
     public sealed class PassportToggleEvent : HandledEntityEventArgs {}
 
-    [ByRefEvent]
-    public sealed class PassportProfileUpdatedEvent(HumanoidCharacterProfile profile) : HandledEntityEventArgs
-    {
-        public HumanoidCharacterProfile Profile { get; } = profile;
-    }
 }

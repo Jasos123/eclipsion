@@ -2,7 +2,7 @@
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitAuthorityKommandant
   name: kommandant's suit
-  description: An officer's suit and pants. The name and rank decorations inform you that this belongs to the Kommandant of the 43rd Battlegroup.
+  description: An officer's suit and pants bearing the rank marks of a Crown expedition commander.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/ATH/Uniform/kommandant.rsi
@@ -24,7 +24,7 @@
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitAuthoritySteward
   name: steward's suit
-  description: An officer's suit and pants. The name and rank decorations inform you that this belongs to the First Steward of the 43rd Battlegroup.
+  description: An officer's suit and pants bearing the records-and-supply marks of a Crown expedition's First Steward.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/ATH/Uniform/steward.rsi
@@ -35,7 +35,7 @@
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitAuthorityOberartz
   name: oberartz's jumpsuit
-  description: A medical officer's jumpsuit, the coloring and rank insignias belonging to the Oberartz of the 43rd Battlegroup.
+  description: A medical officer's jumpsuit bearing the insignia of a Crown expedition's senior physician.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/ATH/Uniform/oberartz.rsi

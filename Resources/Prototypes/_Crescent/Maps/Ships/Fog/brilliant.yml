@@ -4,7 +4,7 @@
 - type: vessel
   id: Brilliant
   name: NT Brilliant
-  description: A massive autonomous warship deployed by NanoTrasen to push back the abyssal spread from the Fracture. It's been adrift in the Fog for years. It still fires. Nobody's sure how.
+  description: A massive autonomous warship deployed by NanoTrasen around the recurrence-active Fracture. It has drifted through repeated Turnings and still fires. Nobody is sure how much of its current state is original.
   price: 450000
   category: Large
   group: None
@@ -31,4 +31,4 @@
         - type: VesselDesignation
           designation: vessel-designation-destroyer
         - type: VesselDescription
-          description: A shambling behemoth, created out of necessity to combat the spread of abyssal phenomena.
+          description: A heavy autonomous platform created to survive unstable recurrence fields.

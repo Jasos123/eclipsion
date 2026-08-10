@@ -2,7 +2,7 @@
   parent: ClothingHeadHelmetBasic
   id: ClothingHeadHelmetAuthoritySoldat
   name: soldat's armored gas mask
-  description: A kevlar-plated nanoweave gas mask. Standard issue for Authoritat soldats.
+  description: A kevlar-plated nanoweave gas mask issued to Crown expeditionary infantry.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/ATH/Head/soldathelmet.rsi

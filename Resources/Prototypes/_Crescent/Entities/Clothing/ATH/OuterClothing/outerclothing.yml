@@ -4,7 +4,7 @@
   parent: [ClothingOuterHardsuitBase, StreeCredRedeemableHigh]
   id: ClothingOuterHardsuitAuthorityPanzer
   name: heavy 'Panzer' mk II combat hardsuit
-  description: A heavy shocktrooper's combat hardsuit belonging to the 43rd Battlegroup of the Authoritat.
+  description: A heavy combat hardsuit issued to an exceptional Crown expeditionary force.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/ATH/OuterClothing/panzer.rsi
@@ -116,7 +116,7 @@
   parent: ClothingOuterArmorBasic
   id: ClothingOuterArmorAuthoritySoldat
   name: soldat's armoured vest
-  description: The standard-issued protective vest worn by the Authoritat.
+  description: A protective vest issued to Crown expeditionary personnel.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/ATH/OuterClothing/soldat.rsi

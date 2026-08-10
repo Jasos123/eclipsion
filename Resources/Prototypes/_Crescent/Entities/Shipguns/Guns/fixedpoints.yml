@@ -939,7 +939,7 @@
   id: SAWCleanser
   name: SAW 20mm "Cleanser" gatlingun
   suffix: ShipGun
-  description: A retrofit of the 20mm vulcan made by TSFC SAW Engineers. All safety considerations seem to be missing on this..
+  description: A retrofit of the 20mm Vulcan made by TFCF Shipbreaker engineers. Every safety consideration seems to be missing.
   components:
   - type: ApcPowerReceiver
     powerLoad: 2000

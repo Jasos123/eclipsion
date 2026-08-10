@@ -66,7 +66,7 @@
   parent: ClothingHeadHardsuitWithLightBase
   id: ClothingHeadHelmetHardsuitClarizeWorker
   categories: [ HideSpawnMenu ]
-  name: clarizian technician's hardsuit helmet
+  name: Aurevienne technician's hardsuit helmet
   description: A miner's hardsuit helmet with internal pressurization systems and a scanning hud for nearby ore and minerals.
   components:
   - type: BreathMask
@@ -277,7 +277,7 @@
   parent: ClothingHeadBase
   id: ClothingHeadHatAdvocatus
   name: advocati peaked cap
-  description: A peaked cap, stamped with the Vogsburg Eagle of office.
+  description: A peaked cap stamped with Count Olywier's charter eagle.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Empire/Head/advocati.rsi
@@ -345,7 +345,7 @@
   parent: ClothingHeadBase
   id: ClothingHeadHelmetImperialTrooperHelmet
   name: imperial helmet
-  description: A sturdy helmet to enforce the Kaiserin's will.
+  description: A sturdy helmet to enforce the Crown's will.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Empire/Head/mandatehelmet.rsi
@@ -378,7 +378,7 @@
 - type: entity
   parent: ClothingHeadBase
   id: ClothingHeadHelmetClarizianTrooperHelmet
-  name: clarizian helmet
+  name: Aurevienne helmet
   description: A sturdy helmet to enforce the Queen's will.
   components:
   - type: Sprite
@@ -413,7 +413,7 @@
   parent: ClothingHeadBase
   id: ClothingHeadHelmetImperialKnightCommanderHelmet
   name: prestigous imperial helmet
-  description: A sturdy helmet to enforce the Kaiserin's will. Comes with paint-of-gold to signify rank and status.
+  description: A sturdy helmet to enforce the Crown's will. Comes with paint-of-gold to signify rank and status.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Empire/Head/mandatecommanderhelmet.rsi
@@ -502,7 +502,7 @@
   parent: ClothingHeadBase
   id: ClothingHeadHatImperialPeakedCap
   name: imperial peaked cap
-  description: An Imperial peaked cap bearing the House Vogsburg coat of arms.
+  description: An Imperial peaked cap bearing Count Olywier's charter arms.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Empire/Head/mandatecap.rsi

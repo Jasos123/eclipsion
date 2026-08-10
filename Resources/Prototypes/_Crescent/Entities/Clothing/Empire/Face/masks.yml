@@ -14,8 +14,8 @@
 - type: entity
   parent: ClothingMaskBase
   id: ClothingMaskImperialGovernorMask
-  name: governor's mask
-  description: A stylish masquerade mask for the Governor.
+  name: lord admiral's mask
+  description: A stylish masquerade mask for the Lord Admiral.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Empire/Face/governormask.rsi

@@ -50,8 +50,7 @@
   result: ClothingOuterArmorServileAlseik
   completetime: 2
   materials:
-    Durathread: 700
-    Cloth: 500
+    Cloth: 850
     Steel: 500
 
 - type: latheRecipe
@@ -69,8 +68,7 @@
   result: ClothingOuterArmorDraugrAlseik
   completetime: 2
   materials:
-    Durathread: 800
-    Cloth: 400
+    Cloth: 800
     Steel: 1000
     Gold: 100
 

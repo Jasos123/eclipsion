@@ -72,8 +72,8 @@
 - type: entity
   parent: ConquestFlag
   id: ConquestFlagTFSC
-  suffix: TFSC
-  name: TFSC conquest banner
+  suffix: TFCF
+  name: TFCF conquest banner
   components:
     - type: Sprite
       color: "#4CAF50" # coalition green

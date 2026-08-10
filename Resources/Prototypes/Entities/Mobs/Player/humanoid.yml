@@ -79,7 +79,7 @@
   components:
     - type: GhostRole
       name: Hunter
-      description: Saint Romaine's Militia, Hunter. You are here for great hunt.
+      description: A Hunter of the Saint's Militia. You are here to conduct a declared Hunt.
       rules: Help imperials, kill commies.
       raffle:
         settings: short
@@ -155,7 +155,7 @@
   components:
     - type: GhostRole
       name: Hunt Overseer
-      description: Saint Romaine's Militia, Hunter. You are here for great hunt.
+      description: A Hunter of the Saint's Militia. You are here to conduct a declared Hunt.
       rules: Command your squad, help dsm, kill commies.
       raffle:
         settings: short

@@ -173,7 +173,7 @@
 - type: entity
   parent: RubberStampBase
   id: RatRubberStampTFSCGorlex
-  name: coalition gorlex rubber stamp
+  name: TFCF GSC rubber stamp
   suffix: DoNotMap
   components:
   - type: Stamp
@@ -187,7 +187,7 @@
 - type: entity
   parent: RubberStampBase
   id: RatRubberStampTFSCInterdyne
-  name: coalition interdyne rubber stamp
+  name: TFCF Interdyne rubber stamp
   suffix: DoNotMapstamp-syndicate
   components:
   - type: Stamp
@@ -201,7 +201,7 @@
 - type: entity
   parent: RubberStampBase
   id: RatRubberStampTFSCCyberDawn
-  name: coalition cyberdawn rubber stamp
+  name: TFCF Cyberdawn rubber stamp
   suffix: DoNotMap
   components:
   - type: Stamp
@@ -215,7 +215,7 @@
 - type: entity
   parent: RubberStampBase
   id: RatRubberStampTFSCSAW
-  name: coalition saw rubber stamp
+  name: TFCF Shipbreaker rubber stamp
   suffix: DoNotMap
   components:
   - type: Stamp

@@ -59,9 +59,10 @@
       components:
         - type: Psionic
           baselinePowerCost: 75
-          nextPowerCost: 75
           removable: false
           powerPool: PsychoHistorianPowerPool
+          skillTree: PsionicMindTree
+          psionicLevel: 2
     - !type:TraitAddPsionics
       psionicPowers:
         - TelepathyPower
@@ -92,6 +93,7 @@
       components:
         - type: Psionic
           powerPool: BiomancerPowerPool
+          skillTree: PsionicLifeTree
     - !type:TraitAddPsionics
   requirements:
     - !type:CharacterItemGroupRequirement
@@ -120,6 +122,7 @@
       components:
         - type: Psionic
           powerPool: PyromancerPowerPool
+          skillTree: PsionicFireTree
     - !type:TraitAddPsionics
   requirements:
     - !type:CharacterItemGroupRequirement

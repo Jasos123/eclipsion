@@ -5,11 +5,11 @@ job-description-nt-utility-ipc = Load ammunition and upkeep Nanotrasen ships. Co
 
 # ncwl
 
-job-description-ncwl-faction-leader = Lead the League from the external end. Maintain relations or war plans with other factions. Manage the Homeguard. Don't die.
-job-description-ncwl-kommissar = Be the brain of the Communist Party's will. Keep the proletarian masses in line, and order around your small MVD detachment.
-job-description-ncwl-mvd-grunt = Be the hand of the Chengridz Communist Party. Ensure the proletariat are cohesive.
-job-description-ncwl-mvd-officer = Be the hand of the Central Committee. Lead your small squad and carry out the Kommissar's orders. 
-job-description-ncwl-fleetkapitan = Command the mass of Partisans. Listen to the Major. Maintain battlefield cohesion.
+job-description-ncwl-faction-leader = Lead the provisional League front. Maintain diplomacy and war plans, manage the Homeguard, and preserve the revolutionary mandate ratified by Chengridz.
+job-description-ncwl-kommissar = Coordinate political work at the front. Keep League administration aligned with the revolution without treating Workers' Union MVD personnel as your private detachment.
+job-description-ncwl-mvd-grunt = Serve the Workers' Union in Crescent. Protect Union assets and revolutionary legitimacy independently of local party politics.
+job-description-ncwl-mvd-officer = Lead Workers' Union political-security personnel. Investigate counter-revolution, major corruption, and threats to the League's provisional mandate.
+job-description-ncwl-fleetkapitan = Command the mass of Partisans. Listen to the Flagman. Maintain battlefield cohesion.
 job-description-ncwl-partisan = Defend the League. Listen to your Unionkapitan. Do what you're told.
 job-description-ncwl-industry-taskmaster = Run every worker below you. Turn the orders handed down from above into labour on the floor. Keep the Sindikat's crews working.
 job-description-ncwl-industry-artificer = Listen to the Overseer. Gather resources for the League. Do repairs and shipmods.
@@ -21,105 +21,105 @@ job-description-ncwl-newbie = Listen to union leaders. Work where you are needed
 
 # syndicate
 
-job-description-ringleader = Coordinate the TFSC. Approve and uphold contracts.
-job-description-lieutenant = Assist your Ringleader to coordinate the TFSC. Approve and uphold contracts.
-job-description-infanteer = Follow your contracts. Hunt bounties. Sell to the highest bidder.
-job-description-technician = Follow your contracts. Hunt bounties. Maintain your vessel's artillery.
-job-description-coordinator = Coordinate Interdyne Pharmaceuticals. Keep track of stock. See to it that contracts are fulfilled.
-job-description-ripperdoc = Follow your contracts. Tend to your fellow mercenaries.
+job-description-ringleader = Lead the TFCF in Federation-wide war, diplomacy, territorial claims, common infrastructure, and major joint contracts.
+job-description-lieutenant = Support the Ringleader and coordinate GSC operations without usurping the internal leadership of other Federation companies.
+job-description-infanteer = Enforce Gorlex contracts, escort clients, conduct boarding operations, and follow valid Federation decisions.
+job-description-technician = Maintain Gorlex vessels and artillery while keeping accepted contracts operational.
+job-description-coordinator = Lead Interdyne operations, protect policyholders, manage medical cover, and deliver the capabilities promised to the Federation.
+job-description-ripperdoc = Provide Interdyne trauma medicine, cybernetics, cloning support, and contractually covered care.
 job-description-traumasec = Secure policyholders. Tend to their medical needs. Eliminate threats to the policyholder.
-job-description-operative = Sabotage enemy vessels and gather intelligence for the Syndicate.
-job-description-intelligenceofficer = Represent the interests of the Family. Sabotage the enemies of the Syndicate.
-job-description-cyberdawntech = Research new technologies for the Family.
-job-description-shipbreaker = Repair Syndicate vessels, take the others apart for scrap.
-job-description-foreman = Coordinate the SAWs. Lead pirate boardings. Scrap vessels.
+job-description-operative = Protect Cyberdawn assets, sabotage hostile vessels, and gather intelligence for company and Federation operations.
+job-description-intelligenceofficer = Direct Cyberdawn intelligence and ensure promised capabilities reach joint TFCF operations without surrendering proprietary methods.
+job-description-cyberdawntech = Develop electronic warfare, experimental systems, recurrence calibration, and psionic countermeasures for Cyberdawn.
+job-description-shipbreaker = Repair Federation vessels and recover useful material from wrecks for the worker-owned SAW collective.
+job-description-foreman = Coordinate SAW crews, salvage, shipbreaking, repair, mining, and improvised construction.
 ghost-role-information-CS-core-description = An advanced artificial intelligence created by Cybersun. You have been operating for hundreds of years, complete the goals of CDT, and protect your ship and crew.
-ghost-role-information-syndicate-cyborg-description = You are a piece of technology lost to the ages. Fulfill your laws and bring glory to Cybersun.
+ghost-role-information-syndicate-cyborg-description = You are an old Cyberdawn machine operating under inherited laws. Protect company assets and fulfill valid Federation commitments.
 
 # empire
 
-job-description-freeholder = Obey the Imperial hierarchy. Earn Credits for the Lord Admiral.
-job-description-levyman = Obey your liege, the Lord Admiral. Uphold the will of the Kaiserin.
-job-description-knight = Organize the Imperial Navy. Obey your liege, the Lord Admiral.
-job-description-ritter = Don your Exoplate. Obey your liege, the Lord Admiral. Bring glory in battle.
-job-description-courtier = Obey your liege, the Lord Admiral. Intrigue for power and rank within his prestigious court.
-job-description-labor = Oversee industrial and trade efforts on behalf of your liege, the Lord Admiral.
-job-description-adjutant = Obey the Kaiserin, and your liege, the Lord Admiral. Attempt to coordinate the Empire.
-job-description-governor = Exercise the Kaiserin's will. Protect your fief. The Mandate must survive.
-job-description-logistics = Outfit your liege, the Lord Admiral's military with vessels and munitions.
-job-description-wealth = Oversee the barony's economy, generate revenue for your liege, the Lord Admiral and pay his men.
-job-description-foremanimp = Run every worker below you. Turn the orders of your liege, the Lord Admiral, into labour on the floor. Keep the barony's crews working.
+job-description-freeholder = Work, trade, mine, or fight within Count Olywier's charter. Protect your rights and survive the demands of the privileged estates.
+job-description-levyman = Serve the charter's military chain of command and uphold the obligations recognized by Count Olywier and the Crown.
+job-description-knight = Organize Imperial forces under the Lord Admiral and represent the martial obligations of the local nobility.
+job-description-ritter = Don your Exoplate, serve the charter's military command, and uphold your house's honor in battle.
+job-description-courtier = Advance patrons, favors, marriages, and house influence within Count Olywier's charter politics.
+job-description-labor = Manage labor supply, production agreements, quotas, guild privileges, and commercial negotiations for the charter.
+job-description-adjutant = Observe, report, and negotiate for the Crown. Carry Domain's correspondence and witness major agreements without assuming routine local command.
+job-description-governor = Command Count Olywier's active frontier military as Lord Admiral. Defend charter holdings and coordinate noble and local forces.
+job-description-logistics = Supply the Lord Admiral's military with vessels, munitions, and the contracts needed to sustain them.
+job-description-wealth = Connect noble service to economic administration. Keep the charter solvent and its military supplied.
+job-description-foremanimp = Translate charter production agreements into safe, sustained industrial output while balancing quotas, skilled labor, and guild privilege.
 job-description-scribe = Explore, discover new technologies, and recover derelicts.
 job-description-archmaester = Coordinate the Scribes Guild, discover new technologies for the Lord Admiral.
 job-description-surgeon = Tend to the bodily ails of your comrades.
-job-description-advocatus = Scrutinise the loyalty of your liege, the Kaiser's subjects. Question violators of His will. Ensure compliance to the Mandate.
-job-description-advocatustemplar = Protect the Advocatus and carry out their will. Ensure compliance to the Mandate.
+job-description-advocatus = Exercise Saintsworn authority over heresy, oath-breaking, prohibited cults, forged records, and crimes crossing religious and Imperial law.
+job-description-advocatustemplar = Protect the Head of Questions, execute lawful Saintsworn orders, and defend religious jurisdiction without replacing charter command.
 
 # srm
 
-job-description-tender = Tend to the wounds of your comrades. Tend to the vessels of the Saint. Carry out menial chores.
-job-description-apprenticehunter = Learn the Hunt from your assigned Master Hunter.
-job-description-hunter = Partake in the Hunt. Capture non-conformists for sale.
-job-description-montagne = Assist your Overseer in organizing the Hunters in the Sector.
-job-description-overseer = Oversee the Great Hunt.
+job-description-tender = Tend the Hunt's wounded, vessels, records, and supplies while learning the Militia's radical doctrines.
+job-description-apprenticehunter = Learn the Hunt and its declared purpose from your assigned Master Hunter.
+job-description-hunter = Pursue targets declared corrupt, psionic, heretical, or subject to forced correction under Militia doctrine.
+job-description-montagne = Assist the Overseer in organizing disciplined Militia cells for the Hunt.
+job-description-overseer = Declare and oversee the Hunt, keeping its cells disciplined, recorded, and directed toward a stated purpose.
 
 # shi
 
-job-description-executive = Manage Shinohara assets within Taypan.
-job-description-board = Assist your Manager in coordinating Shinohara assets within the System.
-job-description-corpsec = Secure assets of the Corporation. Detain unruly customers or employees.
-job-description-highsec = Secure the military interests of the Corporation. Respond to high-risk missions.
-job-description-employee = Serve in various departments of the Corporation.
-job-description-medtech = Research and develop new technologies, tend to the ailments of employees.
-job-description-boardhr = Ensure Corporate Standards are being met alongside with handling public relations.
-job-description-hos-shi = Organize the security force of the corporation.
+job-description-executive = Direct Shinohara's Taypani assets, credit, infrastructure, and strategic dependencies. Keep enemies usable as customers when the books allow it.
+job-description-board = Coordinate contracts and policy between Tatsumoto, Prometheus Shipyards, and the wider corporate hierarchy.
+job-description-corpsec = Prevent loss. Protect personnel, patents, contracts, infrastructure, and customers whose accounts remain valuable.
+job-description-highsec = Act as Corporate Liquidation when prevention has failed. End high-risk situations with a clear accounting purpose.
+job-description-employee = Keep Shinohara infrastructure productive and make corporate standards the easiest standards for Taypan to use.
+job-description-medtech = Treat employees, maintain medical capability, and perform the calibration work advanced systems require each cycle.
+job-description-boardhr = Enforce corporate standards, manage labor and public relations, and turn policy into enforceable contract language.
+job-description-hos-shi = Direct CorpSec as the Corporation's loss-prevention arm and decide when a problem must be escalated to Liquidation.
 
 # cmm
 
-job-description-ordnanceman = Man the artillery of Minuteman vessels.
-job-description-machinist = Repair and maintain Minuteman vessels.
-job-description-physician = Tend to the prisoners and warriors of the CMM.
-job-description-minuteman = Arrest criminals. Police the lawful areas of the System.
-job-description-watchmaster = Coordinate your underlings for the Deputy Marshal.
-job-description-deputymarshal = Coordinate the Minutemen in the absence of the Marshal. Whip the militia into shape.
-job-description-marshal = Coordinate the Minutemen. Oversee martial and civil court. Protect the System.
+job-description-ordnanceman = Man the artillery of Minuteman vessels in defense of public routes, patrols, and lawful warrants.
+job-description-machinist = Repair and maintain Minuteman vessels and the public patrol capability they represent.
+job-description-physician = Treat civilians, detainees, and Minutemen without turning medical care into a foreign power's leverage.
+job-description-minuteman = Protect routes and civilians under Minutemen law. Reject bribery and foreign orders that override the communities you serve.
+job-description-watchmaster = Coordinate patrol personnel for the Deputy Marshal and keep warrants, evidence, and use of force accountable.
+job-description-deputymarshal = Coordinate the Minutemen in the Marshal's absence and preserve their public mandate under pressure.
+job-description-marshal = Coordinate the Minutemen, oversee their civil and martial proceedings, and preserve public accountability.
 
 # tap
 
-job-description-prophet = Lead your flock into the light. Ensure order within the Families.
-job-description-acolytetap = Follow your Prophet. Ensure their safety.
-job-description-tinkerer = Tend to the always-ailing Aasim. Ensure things are always operational. Research new technologies.
-job-description-hangartech = Tend to the Thukker storefront, move freight, mind the cargo hold of the Aasim.
-job-description-techminer = Go scavenging for scrap. Find artifacts and lost technology for the Tinkerers.
-job-description-beltrunner = Move the Izdari product from the Aasim to relevant parties. Ensure the security of your family's operations.
-job-description-draugr = Assert your superiority over the Serviles. Protect the war-freighter. Listen to the Prophet. Their word is law.
-job-description-servile = Listen to your Draugrs - earn your stay in the family. Make a name for yourself.
-job-description-antiquarian = Fulfill the system's blackmarketing needs. Make sure your office stays in one piece.
+job-description-prophet = Guide the Arabet faithful aboard the Aasim while respecting the oaths that hold four mobile Pact families together.
+job-description-acolytetap = Serve the Arabet Prophet, protect the flock, and keep faith from breaking the Aasim's family compact.
+job-description-tinkerer = Keep the always-ailing Aasim operational and adapt technology for a society that must carry its home between ports.
+job-description-hangartech = Tend the Thukker storefront, move freight, and mind the Aasim's cargo holds and visiting craft.
+job-description-techminer = Scavenge scrap, artifacts, and lost technology for the Thukker tinkerers and the common vessel.
+job-description-beltrunner = Move Izdari product from the Aasim to relevant parties and protect your family's commercial reputation.
+job-description-draugr = Protect Pact kin, uphold public oaths, and prove Al'Seik courage and competence in battle.
+job-description-servile = Serve your adopted ship-family, earn trust through long service, and build a reputation within Pact society.
+job-description-antiquarian = Trade rare and restricted goods through Pact routes while protecting the Aasim and your family's reputation.
 
 # ath
 
-job-description-kommandant = Command the 43rd Battlegroup. Ensure total integration of this system.
-job-description-leutnant = Lead the 43rd Battlegroup's battle fleets.
-job-description-kanoneer = Tend to repairs and maintenance of the armaments and shuttles of the 43rd Battlegroup.
-job-description-soldat = Be the boots on the ground of the 43rd Battlegroup. Patrol the sector. Vanquish psionicists.
-job-description-sanitat = Tend to the wounded and the sickly of the 43rd Battlegroup. Diagnose the many mental illnesses of your peers.
-job-description-steward = Ensure the smooth running of the 43rd Battlegroup. Be the glue that holds it together.
-job-description-oberartz = Lead the medical and research wing of the 43rd Battlegroup. Sector Crescent is trapped with your magnificent mind and your overwhelming Faustian Spirit.
-job-description-logistat = Organise the vast cargoes that maintain the 43rd Battlegroup. Forget where the Battlegroup's container of speakers went.
-job-description-handels = Peddle the cargoes that maintain the 43rd Battlegroup and your credit balance.
-job-description-forscher = Research new technologies and study anomalies for the 43rd Battlegroup. Trapped within such a bountiful space of curiosities, such potential is within your grasp.
-job-description-chirurgeon = Tend to the wounded of the 43rd Battlegroup as its surgeon. So many new dissections to catalog... but do you delay that amputation another hour?
-job-description-vorarbeiter = Guide the Arbeiters in new industrial conquests. Mine the stars and forge the 43rd Battlegroup's might.
-job-description-arbeiter = The industrial life blood of the Authoritat. Follow the Vorarbeiter's direction. Fear the psionicist.
+job-description-kommandant = Command a rare Crown expedition and carry the authenticated purpose that brought it into Olywier's charter.
+job-description-leutnant = Lead the Crown contingent's battle fleets and coordinate carefully with the regional Lord Admiral.
+job-description-kanoneer = Maintain the armaments and shuttles of the Crown expeditionary force.
+job-description-soldat = Serve as Crown infantry during an exceptional direct Imperial intervention in Crescent.
+job-description-sanitat = Tend the wounded and sick of the Crown expeditionary force.
+job-description-steward = Keep the Crown contingent supplied, recorded, and connected to its authority in Domain.
+job-description-oberartz = Lead the medical and research wing of the Crown expeditionary force.
+job-description-logistat = Organize the cargo and supply obligations sustaining the Crown expedition.
+job-description-handels = Negotiate purchases and move the cargo required by the Crown mission.
+job-description-forscher = Preserve theory, study recurrence conditions, and calibrate advanced systems for the current Taypani cycle.
+job-description-chirurgeon = Serve as surgeon to the Crown expedition and keep its personnel operational.
+job-description-vorarbeiter = Direct industrial work supporting the Crown mission while respecting the charter's local obligations.
+job-description-arbeiter = Provide the industrial labor that keeps the Crown expedition supplied and operational.
 
 
 # misc
 job-description-vagrant = Be an independent nomad of Taypan. Survive and keep your head low.
 job-description-spacer = Be an independent citizen of Taypan.
-job-description-gliess-sheriff = Maintain law and order on Gliess Santo. Organize your militia, and protect the independent civilians of Taypan.
-job-description-gliess-deputy = Assist the Sheriff in keeping the law. Defend independent spacers and maintain peace with much bigger fish.
-job-description-gliess-dockmaster = Make sure nobody blows up your station.
-job-description-dockhand = Assist the Dockmaster in upkeeping Gliess Santo.
+job-description-gliess-sheriff = Enforce Leo King's Articles on Gliess Santo. Protect civilians, maintain neutral station law, and refuse foreign warrants that claim automatic precedence.
+job-description-gliess-deputy = Assist the Sheriff, document force and evidence, and keep independent spacers safe without surrendering local jurisdiction.
+job-description-gliess-dockmaster = Keep Gliess Santo neutral, solvent, and operational under Leo King's Articles while hostile powers continue to use its docks.
+job-description-dockhand = Maintain Gliess Santo, serve traffic from every flag, and uphold the practical neutrality that keeps the port alive.
 
 # conscript-ncwl - for PLANETFALL
 job-description-conscript-ncwl-ship-captain = Pilot the Clementine. Ensure its safety and use its armaments well. Go down with the ship.

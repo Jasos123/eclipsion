@@ -40,8 +40,7 @@
   result: ClothingOuterArmorCyberdawnPatriarch
   completetime: 1.5
   materials:
-    Durathread: 250
-    Cloth: 750
+    Cloth: 850
 
 - type: latheRecipe
   id: ClothingOuterArmorKendoBoguCyberdawn
@@ -49,8 +48,7 @@
   result: ClothingOuterArmorKendoBogu
   completetime: 1.5
   materials:
-    Durathread: 500
-    Cloth: 500
+    Cloth: 750
     Steel: 250
 
 # MARK: Hardsuits

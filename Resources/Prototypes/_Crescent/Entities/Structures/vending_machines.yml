@@ -231,7 +231,7 @@
   parent: VendingMachine
   id: SyndicateCigVendor
   name: Interdyne Corporation Cigarette Machine
-  description: A generic looking smokes machine selling "Ethically sourced tobacco" produced by Interdyne and other members of the Freestations Coalition.
+  description: A generic-looking smokes machine selling "ethically sourced tobacco" produced by Interdyne and other TFCF members.
   components:
   - type: VendingMachine
     pack: SyndieCigVendorPack

@@ -169,7 +169,7 @@
   parent: TrackingImplant
   name : vitals tracker (NCWL)
   id: TrackingImplantNCWL
-  description: This implant has a vitals tracking device for the Workers League frequency.
+  description: This implant has a vitals tracking device for the Workers' Union frequency.
   components:
   - type: Rattle
     radioChannel: "NCWL"
@@ -198,7 +198,7 @@
   parent: TrackingImplant
   name : vitals tracker (CRN)
   id: TrackingImplantCRN
-  description: This implant has a vitals tracking device for the Clarizian expeditionary frequency.
+  description: This implant has a vitals tracker tuned to an Aurevienne expatriate frequency.
   components:
   - type: Rattle
     radioChannel: "Clarizian"
@@ -216,7 +216,7 @@
 - type: entity
   parent: BaseImplantOnlyImplanter
   id: VitalsTrackingImplanterCRN
-  name: clarizian vitals tracking implanter
+  name: Aurevienne vitals tracking implanter
   components:
     - type: Implanter
       implant: TrackingImplantCRN
@@ -226,7 +226,7 @@
   parent: TrackingImplant
   name : vitals tracker (ATH)
   id: TrackingImplantATH
-  description: This implant has a vitals tracking device for the Solarian 43rd Battlegroup frequency.
+  description: This implant has a vitals tracker tuned to a Crown expeditionary frequency.
   components:
   - type: Rattle
     radioChannel: "Authority"
@@ -244,7 +244,7 @@
 - type: entity
   parent: BaseImplantOnlyImplanter
   id: VitalsTrackingImplanterATH
-  name: authoritat vitals tracking implanter
+  name: Crown expeditionary vitals tracking implanter
   components:
     - type: Implanter
       implant: TrackingImplantATH

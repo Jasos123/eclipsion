@@ -109,6 +109,10 @@
       totalIntensity: 45
       intensitySlope: 3
       maxIntensity: 10
+    # A ruptured canister leaves burning fuel behind, not just a bang.
+    - type: CrescentFireOnTrigger
+      radius: 1.5
+      count: 4
     - type: Destructible
       thresholds:
       - trigger:
@@ -118,6 +122,7 @@
         behaviors:
         - !type:SolutionExplosionBehavior
           solution: beaker
+        - !type:TriggerBehavior
       - trigger:
           !type:DamageTrigger
           damage: 20
@@ -129,6 +134,7 @@
               volume: -4
         - !type:SolutionExplosionBehavior
           solution: beaker
+        - !type:TriggerBehavior
         - !type:SpawnEntitiesBehavior
           spawn:
             SheetPlastic1:

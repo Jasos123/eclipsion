@@ -52,8 +52,8 @@
 - type: entity
   parent: BaseItem
   id: AbyssalSurvey
-  name: abyssal survey data
-  description: A NanoTrasen-brand tablet, barely functional and on backup power. Contains gathered survey data of the local Taypani Abyss. You can name several scientists just off the top of your head who'd kill you for one of these.
+  name: recurrence survey data
+  description: A NanoTrasen-brand tablet, barely functional and on backup power. It contains old phase maps and observations of Taypan's recurrence basins. Several calibration teams would kill for a certified copy.
   components:
   - type: Sprite
     sprite: _Crescent/Objects/Misc/abyssal_survey.rsi

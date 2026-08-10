@@ -2,7 +2,7 @@ book-accelerated-conscript-training-manual-1 = GS-10095-W-1
         Accelerated Conscript Training manual
         part 1/2
 
-        This is a classified document issued by the New Crescent Worker’s League, if found elsewhere, report it immediately for investigation.
+        This is a classified document issued by the New Crescent Workers' League. If found elsewhere, report it immediately for investigation.
 
         Chapter 0: Introduction
 
@@ -170,8 +170,8 @@ book-accelerated-conscript-training-manual-2 = GS-10095-W-2
 
         The following outposts may pose danger:
         0, 0 - Gliess Santo, an independent outpost.
-        4000, 2800 - Hayes Medical Waystation, a Coalition-aligned outpost operated by IPM.
-        5250, 6600 - Dochenskaya Engineering Outpost, a Coalition-aligned outpost operated by SAW.
+        4000, 2800 - Hayes Medical Waystation, a TFCF-aligned outpost operated by Interdyne.
+        5250, 6600 - Dochenskaya Engineering Outpost, a TFCF-aligned outpost operated by SAW.
 
         Chapter 3.3 Boarder Defense
 

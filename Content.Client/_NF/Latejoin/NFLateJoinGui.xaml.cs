@@ -3,6 +3,7 @@ using Content.Client.GameTicking.Managers;
 using Content.Client.Lobby;
 using Content.Client.Players.PlayTimeTracking;
 using Content.Client.UserInterface.Controls;
+using Content.Client._Crescent.Factions;
 using Content.Shared.Customization.Systems;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.Preferences;
@@ -29,6 +30,7 @@ public sealed partial class NFLateJoinGui : FancyWindow
 
     private ClientGameTicker _gameTicker;
     private CharacterRequirementsSystem _characterRequirements;
+    private FactionBalanceSystem _factionBalance;
 
     private NetEntity _lastSelection;
 
@@ -41,6 +43,8 @@ public sealed partial class NFLateJoinGui : FancyWindow
         _gameTicker = EntitySystem.Get<ClientGameTicker>();
         _gameTicker.LobbyJobsAvailableUpdated += UpdateUi;
         _characterRequirements = EntitySystem.Get<CharacterRequirementsSystem>();
+        _factionBalance = EntitySystem.Get<FactionBalanceSystem>();
+        _factionBalance.Updated += OnFactionBalanceUpdated;
         VesselSelection.VesselItemList.OnItemSelected += args =>
         {
             UpdateUi(_gameTicker.JobsAvailable);
@@ -61,6 +65,12 @@ public sealed partial class NFLateJoinGui : FancyWindow
     {
         base.Dispose(disposing);
         _gameTicker.LobbyJobsAvailableUpdated -= UpdateUi;
+        _factionBalance.Updated -= OnFactionBalanceUpdated;
+    }
+
+    private void OnFactionBalanceUpdated()
+    {
+        UpdateUi(_gameTicker.JobsAvailable);
     }
 
     public void UpdateUi(IReadOnlyDictionary<NetEntity, Dictionary<string, uint?>> obj)
@@ -123,6 +133,19 @@ public sealed partial class NFLateJoinGui : FancyWindow
                 {
                     newButton.ToolTip = _characterRequirements.GetRequirementsText(reasons).ToString();
                 }
+            }
+
+            // Population-scaled join caps. The server refuses this anyway, so lock the button and say why
+            // rather than letting the player press it and quietly get nothing.
+            if (_factionBalance.IsJobBlocked(jobId, out var fullFaction, out var balance))
+            {
+                newButton.Disabled = true;
+                newButton.ToolTip = Loc.GetString("faction-balance-job-locked",
+                    ("faction", _prototypeManager.TryIndex<FactionPrototype>(fullFaction, out var factionProto)
+                        ? factionProto.Name
+                        : fullFaction),
+                    ("count", balance.Count),
+                    ("cap", balance.Cap));
             }
 
             JobList.AddChild(newButton);

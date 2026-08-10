@@ -17,7 +17,7 @@
   parent: ClothingHeadBase
   id: ClothingHeadHatAuthorityLeutnant
   name: leutnant's beret
-  description: A no-bullshit military officer's beret emblazoned with Authoritat sigils.
+  description: A severe military officer's beret emblazoned with direct Crown-service sigils.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/ATH/Head/leutnant.rsi
@@ -47,7 +47,7 @@
   parent: ClothingHeadBase
   id: ClothingHeadHatAuthoritySteward
   name: steward's service cap
-  description: A military assistant's service cap. This one belongs to the First Steward of the 43rd Battlegroup of the Central Sol Authoritat.
+  description: A military assistant's service cap belonging to the First Steward of a Crown expedition.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/ATH/Head/steward.rsi

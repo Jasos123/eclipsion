@@ -1,4 +1,6 @@
 using Content.Server.Body.Components;
+using Content.Shared._EE.Contractors.Components;
+using Content.Shared._EE.Contractors.Systems;
 using Content.Shared._Crescent.Mind;
 using Content.Shared.Body.Part;
 using Content.Shared.Crescent.Dispenser;
@@ -11,6 +13,7 @@ using Content.Server.Cargo.Systems;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Server.Crescent.Dispenser;
 
@@ -77,6 +80,29 @@ public sealed class DispenserSystem : SharedDispenserSystem
             used = virtualItem.BlockingEntity;
         else
             used = args.Used;
+
+        // Modern passports carry structured identity and issuer data. A checker reads that data
+        // in place so checking a document no longer destroys it. The legacy prototype mappings
+        // below are intentionally left intact for old bare legit/fake passports.
+        if (HasComp<PassportCheckerComponent>(uid)
+            && TryComp<PassportComponent>(used, out var passport))
+        {
+            args.Handled = true;
+            var valid = SharedPassportSystem.IsPassportValid(passport);
+            var popup = passport.Tampered
+                ? Loc.GetString("passport-checker-tampered")
+                : valid
+                    ? Loc.GetString("passport-checker-valid",
+                    ("name", FormattedMessage.EscapeText(passport.FullName)),
+                    ("id", FormattedMessage.EscapeText(passport.PassportId)),
+                    ("year", passport.ExpirationYear))
+                    : Loc.GetString("passport-checker-invalid");
+
+            _popup.PopupEntity(popup, uid, args.User,
+                valid ? PopupType.Medium : PopupType.MediumCaution);
+            _audioSystem.PlayPvs(valid ? component.DispenseSound : component.DenySound, uid);
+            return;
+        }
 
         // Check if the dispenser is HuntersBounty and validate the head
         if (TryComp<MetaDataComponent>(uid, out var meta) &&

@@ -98,7 +98,7 @@ public sealed partial class JobRequirementsManager : ISharedPlaytimeManager
         if (!_cfg.GetCVar(CCVars.GameRoleWhitelist))
             return true;
 
-        if (job.Whitelisted && !_jobWhitelists.Contains(job.ID))
+        if (job.Whitelisted && !_jobWhitelists.Contains(job.WhitelistKey))
         {
             reason = FormattedMessage.FromUnformatted(Loc.GetString("role-not-whitelisted"));
             return false;

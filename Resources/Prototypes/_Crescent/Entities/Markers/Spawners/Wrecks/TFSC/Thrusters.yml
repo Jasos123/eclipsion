@@ -1,6 +1,6 @@
 #allows mappers to automate random holes and damage in a wreck
 - type: entity
-  name: TFSC Thrust Wreck Randomizer
+  name: TFCF Thrust Wreck Randomizer
   id: TFSCThrustWreckRandomizer
   parent: MarkerBase
   components:

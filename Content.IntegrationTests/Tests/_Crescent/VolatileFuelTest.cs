@@ -15,7 +15,7 @@ namespace Content.IntegrationTests.Tests._Crescent;
 public sealed class VolatileFuelTest
 {
     [Test]
-    public async Task FuelsIgniteWhatTheyTouch()
+    public async Task FuelsSoakWhatTheyTouchWithoutLightingIt()
     {
         await using var pair = await PoolManager.GetServerClient();
         var protoMan = pair.Server.ResolveDependency<IPrototypeManager>();
@@ -31,10 +31,13 @@ public sealed class VolatileFuelTest
                     $"{reagentId} must be in the Flammable reactive group.");
                 Assert.That(flammable!.Methods, Contains.Item(ReactionMethod.Touch));
 
-                Assert.That(flammable.Effects.Any(e => e is Ignite), Is.True,
-                    $"{reagentId} must actually ignite what it is splashed on, not just add fire stacks.");
                 Assert.That(flammable.Effects.Any(e => e is FlammableReaction), Is.True,
                     $"{reagentId} must still add fire stacks - restating reactiveEffects drops the parent's.");
+
+                // Raw fuel is not hypergolic. Splashing it, or slipping in a puddle of it,
+                // must only coat the target; an actual ignition source has to light them.
+                Assert.That(flammable.Effects.Any(e => e is Ignite), Is.False,
+                    $"{reagentId} must not self-ignite what it touches - that sets people alight with no flame present.");
 
                 Assert.That(reagent.TileReactions.Any(), Is.True,
                     $"{reagentId} must react with the tile it is spilled on.");

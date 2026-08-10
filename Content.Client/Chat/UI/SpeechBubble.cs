@@ -223,7 +223,9 @@ namespace Content.Client.Chat.UI
             var msg = new FormattedMessage();
             if (fontColor != null)
                 msg.PushColor(fontColor.Value);
-            msg.AddMarkup(message);
+            // Permissive: the bubble text is a raw substring cut out of the wrapped message, so it can carry
+            // half-open tags, and it also carries player-typed text. Invalid markup renders as text instead of throwing.
+            msg.AddMarkupPermissive(message);
             return msg;
         }
 

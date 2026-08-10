@@ -39,7 +39,7 @@ public sealed class UnionfallAnnouncerSystem : EntitySystem
         _currentGeneration++;
 
         _announcer.SendAnnouncement(_announcer.GetAnnouncementId("unionfallGraceOver"), Filter.Broadcast(),
-            "HADAL STORM HAS DISPERSED. Emergency dispersion field has been disabled. Long-Range radar readings confirm presence of hostile fleet.");
+            "TURNING FRONT HAS PASSED. Emergency chronal field has been disabled. Long-range radar confirms a hostile fleet.");
 
         var query = EntityQueryEnumerator<UnionfallGraceBarrierComponent>();
         while (query.MoveNext(out var barrierUid, out var _))
@@ -86,19 +86,19 @@ public sealed class UnionfallAnnouncerSystem : EntitySystem
     private void AnnouncementWarStart(TimeSpan time)
     {
         _announcer.SendAnnouncement(_announcer.GetAnnouncementId("unionfallBegin"), Filter.Broadcast(),
-                "HADAL STORM DETECTED - Emergency repulsion field deployed, estimated storm dispersion time: <" + time.ToString(@"hh\:mm\:ss") + ">...  Dispersion pattern confirms presence of a hostile fleet in the operating area.");
+                "SEVERE TURNING FRONT DETECTED - Emergency chronal field deployed, estimated front passage time: <" + time.ToString(@"hh\:mm\:ss") + ">... Recurrence telemetry confirms a hostile fleet in the operating area.");
     }
 
     private void AnnouncementWarPeriodic(TimeSpan time)
     {
         _announcer.SendAnnouncement(_announcer.GetAnnouncementId("unionfallPeriodic"), Filter.Broadcast(),
-                "<" + time.ToString(@"hh\:mm\:ss") + "> until the Hadal storm disperses.");
+                "<" + time.ToString(@"hh\:mm\:ss") + "> until the Turning front passes.");
     }
 
     private void AnnouncementWarAlmost()
     {
         _announcer.SendAnnouncement(_announcer.GetAnnouncementId("unionfallAlmost"), Filter.Broadcast(),
-                "<00:01:00> LEFT UNTIL FULL HADAL STORM DISPERSION.");
+                "<00:01:00> LEFT UNTIL THE TURNING FRONT PASSES.");
     }
 
     private void AnnouncementWarGraceOver(int myGeneration)
@@ -110,7 +110,7 @@ public sealed class UnionfallAnnouncerSystem : EntitySystem
             {
                 if (_currentGeneration != myGeneration) return;
                 _announcer.SendAnnouncement(_announcer.GetAnnouncementId("unionfallCountdown"), Filter.Broadcast(),
-                    "HADAL STORM DISPERSING IN <00:00:" + countdown.ToString("D2") + ">...");
+                    "TURNING FRONT PASSING IN <00:00:" + countdown.ToString("D2") + ">...");
             });
         }
 
@@ -118,7 +118,7 @@ public sealed class UnionfallAnnouncerSystem : EntitySystem
         {
             if (_currentGeneration != myGeneration) return;
             _announcer.SendAnnouncement(_announcer.GetAnnouncementId("unionfallGraceOver"), Filter.Broadcast(),
-                "HADAL STORM HAS DISPERSED. Emergency dispersion field has been disabled. Long-Range radar readings confirm presence of hostile fleet.");
+                "TURNING FRONT HAS PASSED. Emergency chronal field has been disabled. Long-range radar confirms a hostile fleet.");
         });
     }
 }

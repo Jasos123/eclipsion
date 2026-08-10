@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Server.Administration.Managers;
 using Content.Server.Database;
 using Content.Server.EUI;
@@ -37,11 +38,14 @@ public sealed class JobWhitelistsEui : BaseEui
 
     public async void LoadWhitelists()
     {
-        var jobs = await _db.GetJobWhitelists(PlayerId.UserId);
-        foreach (var id in jobs)
+        // A set, not the list the DB hands back: this is tested once per job prototype, and there are
+        // hundreds of those.
+        var jobs = (await _db.GetJobWhitelists(PlayerId.UserId)).ToHashSet();
+        foreach (var job in _proto.EnumeratePrototypes<JobPrototype>())
         {
-            if (_proto.HasIndex<JobPrototype>(id))
-                Whitelists.Add(id);
+            // Entries are stored per whitelist key, so a single group entry ticks every job in that group.
+            if (jobs.Contains(job.WhitelistKey))
+                Whitelists.Add(job.ID);
         }
 
         StateDirty();
@@ -65,18 +69,25 @@ public sealed class JobWhitelistsEui : BaseEui
             return;
         }
 
-        if (!_proto.HasIndex<JobPrototype>(args.Job))
+        if (!_proto.TryIndex<JobPrototype>(args.Job, out var job))
             return;
+
+        // Grouped jobs share one entry, so toggling any of them toggles the whole group.
+        var key = new ProtoId<JobPrototype>(job.WhitelistKey);
+        var affected = _proto.EnumeratePrototypes<JobPrototype>()
+            .Where(p => p.WhitelistKey == job.WhitelistKey)
+            .Select(p => new ProtoId<JobPrototype>(p.ID))
+            .ToList();
 
         if (args.Whitelisting)
         {
-            _jobWhitelist.AddWhitelist(PlayerId, args.Job);
-            Whitelists.Add(args.Job);
+            _jobWhitelist.AddWhitelist(PlayerId, key);
+            Whitelists.UnionWith(affected);
         }
         else
         {
-            _jobWhitelist.RemoveWhitelist(PlayerId, args.Job);
-            Whitelists.Remove(args.Job);
+            _jobWhitelist.RemoveWhitelist(PlayerId, key);
+            Whitelists.ExceptWith(affected);
         }
 
         var verb = args.Whitelisting ? "added" : "removed";

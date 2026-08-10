@@ -260,7 +260,7 @@ public sealed class FactionRecruitmentConsoleSystem : EntitySystem
         }
 
         // Chat rank is the primary signal, but it only works for factions that hand ranks out: Shinohara
-        // gives none at all, and two of the Coalition's department heads carry none either. So also refuse
+        // gives none at all, and two TFCF member-organization leaders carry none either. So also refuse
         // anyone whose round-start job belongs to this faction yet is off this console's list — that job is
         // command by definition. The faction check matters: a drifter recruited off the street holds a job
         // that is on nobody's list, and moving them between the faction's own roles is not a demotion.

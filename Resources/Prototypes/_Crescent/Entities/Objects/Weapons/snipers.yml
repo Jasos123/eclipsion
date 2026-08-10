@@ -194,7 +194,7 @@
       - WeaponSniperNCWLNovomosin
 
 - type: entity
-  name: TFSC AK-60 15.2x169mm
+  name: TFCF AK-60 15.2x169mm
   parent: [BaseWeaponRifleDMR, BaseGunWieldableDMR]
   id: WeaponSniperAK60
   description: A unlicensed .60 version of a AK. Its a less simple than a AK-74 but pack a massive 15.2x169mm Pounch.

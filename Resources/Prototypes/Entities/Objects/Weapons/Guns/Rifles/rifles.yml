@@ -149,7 +149,7 @@
     staminaCost: 7.5
 
 - type: entity
-  name: TFSC AKMS Kalash 7.62x51mm
+  name: TFCF AKMS Kalash 7.62x51mm
   parent: BaseWeaponRifle
   id: WeaponRifleAk
   description: An iconic weapon of war. this one has ben rechambered to 7.62x51mm, commonly attributed to terrorist groups. Cheap and easily made.

@@ -4,7 +4,7 @@
 - type: vessel
   id: Beta
   name: NT Beta
-  description: One of NanoTrasen's autonomous frontline drones, salvaged from the Fog. Lighter than the Alpha and cheaper to run, with just as much willingness to shoot at things.
+  description: One of NanoTrasen's autonomous frontline drones, salvaged from a recurrence-active wreck field. Lighter than the Alpha and cheaper to run, with just as much willingness to shoot at things.
   price: 36000
   category: Small
   group: None
@@ -31,4 +31,4 @@
         - type: VesselDesignation
           designation: vessel-designation-fighter
         - type: VesselDescription
-          description: Created in response to the spread of the abyssal phenomena emerging from the fracture.
+          description: Created to operate in unstable recurrence fields around the Fracture.

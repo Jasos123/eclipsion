@@ -1,7 +1,7 @@
 - type: entity
   parent: BookBase
-  name: canticles of st. Romaine
-  description: Stained by Alien blood and marked by time, its worn cover reminds all who gaze upon it of Man's Aristocratic genome.
+  name: canticles of the four great saints
+  description: A worn Saintsworn primer on Serraine, Romaine, Remiel, Guies, and the doctrines extremists built by corrupting their virtues.
   id: RomaineBible
   components:
   - type: Sprite

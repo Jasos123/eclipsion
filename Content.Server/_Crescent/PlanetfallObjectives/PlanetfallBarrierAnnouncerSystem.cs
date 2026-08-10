@@ -78,6 +78,21 @@ public sealed class PlanetfallBarrierAnnouncerSystem : EntitySystem
         return false;
     }
 
+    public bool TryReleaseAny()
+    {
+        var query = EntityQueryEnumerator<PlanetfallBarrierAnnouncerComponent>();
+        while (query.MoveNext(out var uid, out var component))
+        {
+            if (component.Released)
+                continue;
+
+            if (TryRelease(uid))
+                return true;
+        }
+
+        return false;
+    }
+
     private bool TryRelease(EntityUid uid)
     {
         if (!TryComp<PlanetfallBarrierAnnouncerComponent>(uid, out var component) || component.Released)

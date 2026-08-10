@@ -4,7 +4,7 @@
   parent: ClothingOuterHardsuitBase
   id: ClothingOuterHardsuitRamzi
   name: LUGNUT mk.I combat technician's hardsuit
-  description: A modular hardsuit, bears the colors of the Shipfitters and Astronautics Workers Union of the Syndicate.
+  description: A modular hardsuit bearing the colors of the Shipbreaker Astronautics Workers Union, the TFCF's worker-owned industrial collective.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Syndicate/OuterClothing/syndicateramzi.rsi
@@ -46,7 +46,7 @@
   parent: ClothingOuterHardsuitBase
   id: ClothingOuterHardsuitSyndieDonator
   name: UNIONIZER modified combat technician's hardsuit
-  description: A modular hardsuit, bears the colors of the Shipfitters and Astronautics Workers Union of the Syndicate. Hard-worn and modified after many years of use.
+  description: A modular hardsuit bearing the colors of the Shipbreaker Astronautics Workers Union. It is hard-worn and modified after years of independent repair.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Syndicate/OuterClothing/syndicatedonator.rsi
@@ -90,7 +90,7 @@
   parent: ClothingOuterHardsuitRamzi
   id: ClothingOuterHardsuitCybersun
   name: RONIN mk.III modular hardsuit
-  description: A modular hardsuit, bears the colors of Cybersun Technologies of the Syndicate.
+  description: A modular hardsuit bearing the colors of Cyberdawn Technologies, the TFCF's intelligence and experimental-systems member.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Syndicate/OuterClothing/syndicatecybersun.rsi
@@ -121,7 +121,7 @@
   parent: ClothingOuterHardsuitBase
   id: ClothingOuterHardsuitSyndicateBG
   name: BULWARK mk.II frontliner hardsuit
-  description: A modular hardsuit painted in the colors of the Syndicate. Bulky nanokevlar pads the light titanium skeleton, shielding flimsy electronics and the fleshy operator underneath.
+  description: A modular hardsuit painted in TFCF colors. Bulky nanokevlar pads its light titanium skeleton, shielding electronics and the operator underneath.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Syndicate/OuterClothing/syndicatesbg.rsi
@@ -246,7 +246,7 @@
   parent: ClothingOuterHardsuitSyndieMedic
   id: ClothingOuterHardsuitSyndicateBulwar
   name: BULWARK mk.III frontliner hardsuit
-  description: An upgraded modular hardsuit painted in the colors of the Syndicate. Bulky plasteel pads the titanium skeleton, shielding flimsy electronics and the fleshy operator underneath. This seems more durable and technological. On back of this suit is carved a logo "S.I.".
+  description: An upgraded modular Free Company hardsuit. Bulky plasteel pads its titanium skeleton, shielding electronics and the operator underneath. The back carries an old manufacturer's "S.I." mark.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Syndicate/OuterClothing/syndicatesbulwar.rsi
@@ -263,7 +263,7 @@
   parent: ClothingOuterHardsuitSyndicateBG
   id: ClothingOuterHardsuitSyndicateSellsword
   name: SELLSWORD mk.IIB modified hardsuit
-  description: A modular Syndicate hardsuit modified for use by the Hedgeknights. Bulky nanokevlar lined with composite gold decor pads the light titanium skeleton, shielding flimsy electronics and the fleshy operator underneath.
+  description: A modular Free Company hardsuit modified for use by Hedgeknights. Gold-trimmed nanokevlar pads the light titanium skeleton and protects its electronics and operator.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Syndicate/OuterClothing/syndicatesellsword.rsi
@@ -281,7 +281,7 @@
   parent: ClothingOuterHardsuitSyndicateBG
   id: ClothingOuterHardsuitSyndicateFreiritter
   name: FREIRITTER mk.IIC custom hardsuit
-  description: A custom-commissioned Syndicate hardsuit, patterned after Imperial ritter neurosuits and up-armored with Syndicate ceramic plate, lined with composite gold decor padding the light titanium skeleton. Protects flimsy electronics and the fleshy (likely felinid) operator underneath.
+  description: A custom Free Company hardsuit patterned after Imperial ritter neurosuits, up-armored with ceramic plate and composite-gold trim over a light titanium skeleton.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Syndicate/OuterClothing/syndicatefreiritter.rsi
@@ -387,7 +387,7 @@
   parent: ClothingOuterBaseLarge
   id: ClothingOuterArmorSyndicateWorker
   name: shipfitter's high-vis worker vest
-  description: A rubber vest with hi-vis sprites. Comes in TFSC colors.
+  description: A rubber vest with high-visibility strips in TFCF colors.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Syndicate/OuterClothing/syndiehazardvest.rsi
@@ -450,7 +450,7 @@
   parent: ClothingOuterArmorBasic
   id: ClothingOuterArmorSyndicateArmorvest
   name: frontliner's ballistic vest
-  description: A bulky ceramic-faced ballistic vest, touched with the colors of the TFSC.
+  description: A bulky ceramic-faced ballistic vest marked in TFCF colors.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Syndicate/OuterClothing/syndiearmor.rsi
@@ -558,7 +558,7 @@
   parent: [ClothingOuterStorageBase, ClothingOuterArmorBasic]
   id: ClothingOuterArmorSyndicateLieutenant
   name: mercenary lieutenant's overcoat
-  description: A tall durathread officer's coat, bearing the insignia stripes of the Syndicate's second-in-command.
+  description: A tall durathread officer's coat bearing the insignia of a senior TFCF officer.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Syndicate/OuterClothing/syndicatelieutenant.rsi

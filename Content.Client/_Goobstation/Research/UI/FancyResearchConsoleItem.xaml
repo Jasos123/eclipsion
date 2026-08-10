@@ -1,0 +1,23 @@
+<LayoutContainer xmlns="https://spacestation14.io"
+                 xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+                 xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+                 xmlns:goob="clr-namespace:Content.Client._Goobstation.Research.UI"
+                 Margin="3"
+                 HorizontalExpand="False">  <!-- Frontier: Margin="5" < Margin="4" -->
+    <BoxContainer Orientation="Vertical" SetSize="52 52">
+        <PanelContainer VerticalExpand="True"
+                        HorizontalExpand="True"
+                        Name="Panel">
+            <goob:DrawButton Name="Button"
+                             Access="Public"
+                             ModulateSelfOverride="#00000000"
+                             HorizontalExpand="True"/>
+            <TextureRect
+                Name="ResearchDisplay"
+                TextureScale="1.4 1.4"
+                Stretch="KeepCentered"
+                SetSize="44 44">
+            </TextureRect> <!-- Encore: research prototypes use SpriteSpecifier icons. -->
+        </PanelContainer>
+    </BoxContainer>
+</LayoutContainer>

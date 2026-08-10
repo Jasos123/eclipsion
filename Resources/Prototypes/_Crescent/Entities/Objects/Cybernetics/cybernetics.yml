@@ -142,7 +142,7 @@
   id: CyberneticsCortexBomb
   parent: HullrotCyberneticBase
   name: ATH FRx-90 pulmonary bomb
-  description: Developed by the Authoritat Naval Development Institution, the FRx-90 is a standard-issue implant for most Authority shocktroops sent to Taypan. Besides basic pulmonary capabilities that allow it's user to breathe, it also doubles as a suicide bomb by agitating the onboard bluespace matter that powers it via a prerecorded neural signal.
+  description: Developed for high-risk Imperial expeditionary troops, the FRx-90 provides basic pulmonary support and an illegal dead-man function that agitates its onboard bluespace power source through a prerecorded neural signal.
   components:
     - type: Lung
     - type: Metabolizer

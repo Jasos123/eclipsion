@@ -7,7 +7,8 @@
   startingGear: planetfall_governor_gear
   alwaysUseSpawner: true
   requireAdminNotify: true
-  whitelisted: false
+  whitelisted: true
+  whitelistGroup: Planetfall
   icon: "JobIconImperialGovernor"
   chatNameColor: "#ffd000"
   chatAmplification:
