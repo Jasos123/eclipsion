@@ -6,6 +6,27 @@
   weight: 100
   startingGear: planetfall_governor_gear
   alwaysUseSpawner: true
+  characterOverride:
+    name: Olywier Rabenau
+    flavorText: >-
+      Count Olywier Rabenau carries himself with the immaculate bearing of a charter lord.
+      His carefully groomed, graying hair and precise beard frame a measured, imperious expression.
+    species: Human
+    age: 42
+    sex: Male
+    gender: Male
+    height: 1
+    width: 1
+    hairStyle: HumanHairDandypompadour
+    hairColor: "#4a3a35"
+    facialHairStyle: HumanFacialHairVandyke
+    facialHairColor: "#554741"
+    eyeColor: "#64819a"
+    humanSkinTone: 24
+    nationality: Imperial
+    employer: HouseVogsburg
+    lifepath: Aristocrat
+    faction: DSM
   requireAdminNotify: true
   whitelisted: true
   whitelistGroup: Planetfall
@@ -21,13 +42,8 @@
   requirements:
     - !type:FactionRequirement
       factionID: "DSM"
-    - !type:CharacterSpeciesRequirement
-      species:
-        - Human
     - !type:CharacterOverallTimeRequirement
       min: 100000
-    - !type:SexRequirement
-      sex: Male
     - !type:CharacterTraitRequirement
       inverted: true
       traits:

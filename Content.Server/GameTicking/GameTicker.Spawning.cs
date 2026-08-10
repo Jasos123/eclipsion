@@ -254,6 +254,12 @@ namespace Content.Server.GameTicking
 
             var jobPrototype = _prototypeManager.Index<JobPrototype>(jobId);
 
+            // Canonical job characters use an in-memory profile copy. This keeps the mob, mind,
+            // ID/PDA, station records, passports, announcements, and spawn events consistent while
+            // leaving the player's saved lobby character untouched.
+            if (jobPrototype.CharacterOverride is { } characterOverride)
+                character = characterOverride.ApplyTo(character);
+
             _playTimeTrackings.PlayerRolesChanged(player);
 
             var spawnPointType = !lateJoin && jobPrototype.AlwaysUseSpawner

@@ -130,6 +130,13 @@ namespace Content.Shared.Roles
         [DataField("jobEntity", customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
         public string? JobEntity = null;
 
+        /// <summary>
+        /// Optional canonical humanoid identity applied only while spawning as this job.
+        /// The player's saved character profile is not modified.
+        /// </summary>
+        [DataField("characterOverride")]
+        public JobCharacterOverride? CharacterOverride { get; private set; }
+
         [DataField]
         public ProtoId<JobIconPrototype> Icon { get; private set; } = "JobIconUnknown";
 

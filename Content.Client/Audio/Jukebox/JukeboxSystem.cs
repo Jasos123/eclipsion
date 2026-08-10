@@ -29,6 +29,7 @@ public sealed class JukeboxSystem : SharedJukeboxSystem
     // without scanning every jukebox every frame.
     private readonly Dictionary<EntityUid, (EntityUid Jukebox, float BaseVolume)> _jukeboxStreams = new();
     private readonly Dictionary<EntityUid, EntityUid> _ownerStreams = new();
+    private readonly List<EntityUid> _staleStreams = new();
 
     public override void Initialize()
     {
@@ -37,8 +38,6 @@ public sealed class JukeboxSystem : SharedJukeboxSystem
         SubscribeLocalEvent<JukeboxComponent, AnimationCompletedEvent>(OnAnimationCompleted);
         SubscribeLocalEvent<JukeboxComponent, AfterAutoHandleStateEvent>(OnJukeboxAfterState);
         SubscribeLocalEvent<JukeboxComponent, ComponentShutdown>(OnJukeboxShutdown);
-        SubscribeLocalEvent<AudioComponent, AfterAutoHandleStateEvent>(OnAudioAfterState);
-        SubscribeLocalEvent<AudioComponent, ComponentShutdown>(OnAudioShutdown);
 
         Subs.CVar(_cfg, CCVars.BoomboxVolume, OnVolumeCVarChanged, true);
 
@@ -105,25 +104,44 @@ public sealed class JukeboxSystem : SharedJukeboxSystem
             ApplyListenerVolume(stream, ent.Comp.Volume, audio);
     }
 
-    private void OnAudioAfterState(Entity<AudioComponent> ent, ref AfterAutoHandleStateEvent args)
+    /// <summary>
+    /// Re-asserts the listener's local volume on tracked jukebox streams. The engine owns
+    /// AudioComponent's state and shutdown subscriptions, and re-applies the server's audio params
+    /// whenever a stream's state arrives, which wipes the local slider. Only tracked streams are
+    /// visited (at most one per jukebox) and <see cref="ApplyListenerVolume"/> no-ops when the volume
+    /// already matches, so this stays free while nothing is playing.
+    /// </summary>
+    public override void FrameUpdate(float frameTime)
     {
-        if (_jukeboxStreams.TryGetValue(ent.Owner, out var data))
-            ApplyListenerVolume(ent.Owner, data.BaseVolume, ent.Comp);
+        base.FrameUpdate(frameTime);
+
+        if (_jukeboxStreams.Count == 0)
+            return;
+
+        foreach (var (stream, data) in _jukeboxStreams)
+        {
+            if (TryComp(stream, out AudioComponent? audio))
+                ApplyListenerVolume(stream, data.BaseVolume, audio);
+            else
+                _staleStreams.Add(stream);
+        }
+
+        foreach (var stream in _staleStreams)
+        {
+            if (!_jukeboxStreams.Remove(stream, out var data))
+                continue;
+
+            if (_ownerStreams.TryGetValue(data.Jukebox, out var owned) && owned == stream)
+                _ownerStreams.Remove(data.Jukebox);
+        }
+
+        _staleStreams.Clear();
     }
 
     private void OnJukeboxShutdown(Entity<JukeboxComponent> ent, ref ComponentShutdown args)
     {
         if (_ownerStreams.Remove(ent.Owner, out var stream))
             _jukeboxStreams.Remove(stream);
-    }
-
-    private void OnAudioShutdown(Entity<AudioComponent> ent, ref ComponentShutdown args)
-    {
-        if (!_jukeboxStreams.Remove(ent.Owner, out var data))
-            return;
-
-        if (_ownerStreams.TryGetValue(data.Jukebox, out var stream) && stream == ent.Owner)
-            _ownerStreams.Remove(data.Jukebox);
     }
 
     private void ApplyListenerVolume(EntityUid stream, float baseVolume, AudioComponent audio)
