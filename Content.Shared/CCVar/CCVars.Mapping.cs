@@ -1,4 +1,4 @@
-﻿using Robust.Shared.Configuration;
+using Robust.Shared.Configuration;
 
 namespace Content.Shared.CCVar;
 
@@ -14,7 +14,14 @@ public sealed partial class CCVars
     ///     Autosave interval in seconds.
     /// </summary>
     public static readonly CVarDef<float>
-        AutosaveInterval = CVarDef.Create("mapping.autosave_interval", 600f, CVar.SERVERONLY);
+        AutosaveInterval = CVarDef.Create("mapping.autosave_interval", 3600f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     How many autosaves to keep per map. Older ones get deleted as new ones are made.
+    ///     Zero or less keeps every autosave forever.
+    /// </summary>
+    public static readonly CVarDef<int>
+        AutosaveRotation = CVarDef.Create("mapping.autosave_rotation", 3, CVar.SERVERONLY);
 
     /// <summary>
     ///     Directory in server user data to save to. Saves will be inside folders in this directory.

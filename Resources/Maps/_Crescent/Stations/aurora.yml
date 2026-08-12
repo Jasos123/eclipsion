@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 07/25/2026 02:37:20
-  entityCount: 16211
+  entityCount: 16220
 maps: []
 grids:
 - 1
@@ -156183,190 +156183,6 @@ entities:
     - type: Transform
       pos: -6.5240717,32.941856
       parent: 1
-- proto: HandheldGPSBasic
-  entities:
-  - uid: 71
-    components:
-    - type: Transform
-      parent: 60
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 84
-    components:
-    - type: Transform
-      parent: 73
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 96
-    components:
-    - type: Transform
-      parent: 86
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 8525
-    components:
-    - type: Transform
-      parent: 8517
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 8537
-    components:
-    - type: Transform
-      parent: 8528
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 8548
-    components:
-    - type: Transform
-      parent: 8540
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 8560
-    components:
-    - type: Transform
-      parent: 8553
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 8570
-    components:
-    - type: Transform
-      parent: 8563
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 8579
-    components:
-    - type: Transform
-      parent: 8573
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 8588
-    components:
-    - type: Transform
-      parent: 8582
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 8609
-    components:
-    - type: Transform
-      parent: 8603
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 8617
-    components:
-    - type: Transform
-      parent: 8611
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 8625
-    components:
-    - type: Transform
-      parent: 8619
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 8633
-    components:
-    - type: Transform
-      parent: 8627
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 8641
-    components:
-    - type: Transform
-      parent: 8635
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 8649
-    components:
-    - type: Transform
-      parent: 8643
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 8657
-    components:
-    - type: Transform
-      parent: 8651
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 8665
-    components:
-    - type: Transform
-      parent: 8659
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 8673
-    components:
-    - type: Transform
-      parent: 8667
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 8681
-    components:
-    - type: Transform
-      parent: 8675
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 8689
-    components:
-    - type: Transform
-      parent: 8683
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 8697
-    components:
-    - type: Transform
-      parent: 8691
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 8705
-    components:
-    - type: Transform
-      parent: 8699
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 8713
-    components:
-    - type: Transform
-      parent: 8707
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 8721
-    components:
-    - type: Transform
-      parent: 8715
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 8729
-    components:
-    - type: Transform
-      parent: 8723
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: HandheldHealthAnalyzer
   entities:
   - uid: 8466
@@ -169005,6 +168821,53 @@ entities:
     - type: Transform
       pos: 14.5,40.5
       parent: 1
+- proto: SpawnPointOathbound
+  entities:
+  - uid: 16212
+    components:
+    - type: Transform
+      pos: -27.5,-5.5
+      parent: 1
+  - uid: 16213
+    components:
+    - type: Transform
+      pos: -28.5,-5.5
+      parent: 1
+  - uid: 16214
+    components:
+    - type: Transform
+      pos: -29.5,-5.5
+      parent: 1
+  - uid: 16215
+    components:
+    - type: Transform
+      pos: -34.5,-3.5
+      parent: 1
+  - uid: 16216
+    components:
+    - type: Transform
+      pos: -34.5,-4.5
+      parent: 1
+  - uid: 16217
+    components:
+    - type: Transform
+      pos: -34.5,-6.5
+      parent: 1
+  - uid: 16218
+    components:
+    - type: Transform
+      pos: -38.5,-4.5
+      parent: 1
+  - uid: 16219
+    components:
+    - type: Transform
+      pos: -38.5,-6.5
+      parent: 1
+  - uid: 16220
+    components:
+    - type: Transform
+      pos: -38.5,-3.5
+      parent: 1
 - proto: SpawnPointRitter
   entities:
   - uid: 13793
@@ -170147,7 +170010,6 @@ entities:
           - 68
           - 70
           - 63
-          - 71
           - 69
           - 72
   - uid: 73
@@ -170167,7 +170029,6 @@ entities:
           - 80
           - 79
           - 82
-          - 84
           - 74
           - 78
           - 85
@@ -170183,7 +170044,6 @@ entities:
           occludes: True
           ents:
           - 91
-          - 96
           - 90
           - 93
           - 95
@@ -170208,7 +170068,6 @@ entities:
           - 8524
           - 8523
           - 8521
-          - 8525
           - 8522
           - 8527
           - 8520
@@ -170226,7 +170085,6 @@ entities:
           - 8530
           - 8535
           - 8536
-          - 8537
           - 8539
           - 8531
           - 8532
@@ -170252,7 +170110,6 @@ entities:
           - 8550
           - 8546
           - 8545
-          - 8548
           - 8549
           - 8541
   - uid: 8553
@@ -170271,7 +170128,6 @@ entities:
           - 8559
           - 8562
           - 8557
-          - 8560
           - 8558
           - 8556
           - 8554
@@ -170289,7 +170145,6 @@ entities:
           - 8565
           - 8568
           - 8564
-          - 8570
           - 8572
           - 8571
           - 8566
@@ -170312,7 +170167,6 @@ entities:
           - 8577
           - 8581
           - 8578
-          - 8579
           - 8580
   - uid: 8582
     components:
@@ -170328,7 +170182,6 @@ entities:
           - 8589
           - 8583
           - 8590
-          - 8588
           - 8587
           - 8586
           - 8585
@@ -170349,7 +170202,6 @@ entities:
           - 8607
           - 8610
           - 8608
-          - 8609
           - 8604
   - uid: 8611
     components:
@@ -170363,7 +170215,6 @@ entities:
           occludes: True
           ents:
           - 8618
-          - 8617
           - 8615
           - 8612
           - 8613
@@ -170385,7 +170236,6 @@ entities:
           - 8624
           - 8626
           - 8623
-          - 8625
           - 8622
   - uid: 8627
     components:
@@ -170400,7 +170250,6 @@ entities:
           ents:
           - 8631
           - 8634
-          - 8633
           - 8628
           - 8629
           - 8632
@@ -170418,7 +170267,6 @@ entities:
           ents:
           - 8640
           - 8638
-          - 8641
           - 8642
           - 8639
           - 8637
@@ -170440,7 +170288,6 @@ entities:
           - 8646
           - 8644
           - 8645
-          - 8649
   - uid: 8651
     components:
     - type: Transform
@@ -170452,7 +170299,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 8657
           - 8653
           - 8658
           - 8652
@@ -170472,7 +170318,6 @@ entities:
           ents:
           - 8660
           - 8666
-          - 8665
           - 8663
           - 8662
           - 8661
@@ -170490,7 +170335,6 @@ entities:
           ents:
           - 8674
           - 8671
-          - 8673
           - 8668
           - 8669
           - 8672
@@ -170507,7 +170351,6 @@ entities:
           occludes: True
           ents:
           - 8679
-          - 8681
           - 8677
           - 8682
           - 8680
@@ -170529,7 +170372,6 @@ entities:
           - 8684
           - 8685
           - 8688
-          - 8689
           - 8686
   - uid: 8691
     components:
@@ -170543,7 +170385,6 @@ entities:
           occludes: True
           ents:
           - 8695
-          - 8697
           - 8692
           - 8693
           - 8696
@@ -170564,7 +170405,6 @@ entities:
           - 8703
           - 8706
           - 8701
-          - 8705
           - 8704
           - 8702
   - uid: 8707
@@ -170583,7 +170423,6 @@ entities:
           - 8712
           - 8708
           - 8714
-          - 8713
           - 8710
   - uid: 8715
     components:
@@ -170602,7 +170441,6 @@ entities:
           - 8717
           - 8716
           - 8720
-          - 8721
   - uid: 8723
     components:
     - type: Transform
@@ -170615,7 +170453,6 @@ entities:
           occludes: True
           ents:
           - 8724
-          - 8729
           - 8728
           - 8730
           - 8725

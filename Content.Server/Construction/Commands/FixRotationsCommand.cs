@@ -27,7 +27,7 @@ namespace Content.Server.Construction.Commands
             switch (args.Length)
             {
                 case 0:
-                    if (player?.AttachedEntity is not {Valid: true} playerEntity)
+                    if (player?.AttachedEntity is not { Valid: true } playerEntity)
                     {
                         shell.WriteError("Only a player can run this command.");
                         return;
@@ -82,7 +82,7 @@ namespace Content.Server.Construction.Commands
                     valid |= occluder.Enabled;
                 }
                 // low walls & grilles
-                valid |= _entManager.HasComponent<SharedCanBuildWindowOnTopComponent>(child);
+                valid |= _entManager.HasComponent<CanBuildWindowOnTopComponent>(child);
                 // cables
                 valid |= _entManager.HasComponent<CableComponent>(child);
                 // anything else that might need this forced

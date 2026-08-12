@@ -72,4 +72,10 @@ public sealed partial class PsionicFamiliarComponent : Component
     /// </summary>
     [DataField]
     public bool InheritMasterFactions = true;
+
+    /// <summary>
+    /// Whether the master can issue explicit move and attack orders to this familiar.
+    /// </summary>
+    [DataField]
+    public bool Commandable;
 }

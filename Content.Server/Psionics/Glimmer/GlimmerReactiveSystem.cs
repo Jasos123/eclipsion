@@ -53,15 +53,15 @@ public sealed class GlimmerReactiveSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<RoundRestartCleanupEvent>(Reset);
 
-        SubscribeLocalEvent<SharedGlimmerReactiveComponent, MapInitEvent>(OnMapInit);
-        SubscribeLocalEvent<SharedGlimmerReactiveComponent, ComponentRemove>(OnComponentRemove);
-        SubscribeLocalEvent<SharedGlimmerReactiveComponent, PowerChangedEvent>(OnPowerChanged);
-        SubscribeLocalEvent<SharedGlimmerReactiveComponent, GlimmerTierChangedEvent>(OnTierChanged);
-        SubscribeLocalEvent<SharedGlimmerReactiveComponent, GetVerbsEvent<AlternativeVerb>>(AddShockVerb);
-        SubscribeLocalEvent<SharedGlimmerReactiveComponent, DamageChangedEvent>(OnDamageChanged);
-        SubscribeLocalEvent<SharedGlimmerReactiveComponent, DestructionEventArgs>(OnDestroyed);
-        SubscribeLocalEvent<SharedGlimmerReactiveComponent, UnanchorAttemptEvent>(OnUnanchorAttempt);
-        SubscribeLocalEvent<SharedGlimmerReactiveComponent, AttemptMeleeThrowOnHitEvent>(OnMeleeThrowOnHitAttempt);
+        SubscribeLocalEvent<GlimmerReactiveComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<GlimmerReactiveComponent, ComponentRemove>(OnComponentRemove);
+        SubscribeLocalEvent<GlimmerReactiveComponent, PowerChangedEvent>(OnPowerChanged);
+        SubscribeLocalEvent<GlimmerReactiveComponent, GlimmerTierChangedEvent>(OnTierChanged);
+        SubscribeLocalEvent<GlimmerReactiveComponent, GetVerbsEvent<AlternativeVerb>>(AddShockVerb);
+        SubscribeLocalEvent<GlimmerReactiveComponent, DamageChangedEvent>(OnDamageChanged);
+        SubscribeLocalEvent<GlimmerReactiveComponent, DestructionEventArgs>(OnDestroyed);
+        SubscribeLocalEvent<GlimmerReactiveComponent, UnanchorAttemptEvent>(OnUnanchorAttempt);
+        SubscribeLocalEvent<GlimmerReactiveComponent, AttemptMeleeThrowOnHitEvent>(OnMeleeThrowOnHitAttempt);
     }
 
     /// <summary>
@@ -70,7 +70,7 @@ public sealed class GlimmerReactiveSystem : EntitySystem
     /// <param name="glimmerTierDelta">The number of steps in tier
     /// difference since last update. This can be zero for the sake of
     /// toggling the enabled states.</param>
-    private void UpdateEntityState(EntityUid uid, SharedGlimmerReactiveComponent component, GlimmerTier currentGlimmerTier, int glimmerTierDelta)
+    private void UpdateEntityState(EntityUid uid, GlimmerReactiveComponent component, GlimmerTier currentGlimmerTier, int glimmerTierDelta)
     {
         var isEnabled = true;
 
@@ -103,7 +103,7 @@ public sealed class GlimmerReactiveSystem : EntitySystem
     /// current status of the glimmer tier, if it wasn't around when an
     /// update went out.
     /// </summary>
-    private void OnMapInit(EntityUid uid, SharedGlimmerReactiveComponent component, MapInitEvent args)
+    private void OnMapInit(EntityUid uid, GlimmerReactiveComponent component, MapInitEvent args)
     {
         if (component.RequiresApcPower && !HasComp<ApcPowerReceiverComponent>(uid))
             _sawmill.Warning($"{ToPrettyString(uid)} had RequiresApcPower set to true but no ApcPowerReceiverComponent was found on init.");
@@ -116,7 +116,7 @@ public sealed class GlimmerReactiveSystem : EntitySystem
     /// just in case some objects can temporarily become reactive to the
     /// glimmer.
     /// </summary>
-    private void OnComponentRemove(EntityUid uid, SharedGlimmerReactiveComponent component, ComponentRemove args)
+    private void OnComponentRemove(EntityUid uid, GlimmerReactiveComponent component, ComponentRemove args)
     {
         UpdateEntityState(uid, component, GlimmerTier.Minimal, -1 * (int) LastGlimmerTier);
     }
@@ -125,7 +125,7 @@ public sealed class GlimmerReactiveSystem : EntitySystem
     /// If the Entity has RequiresApcPower set to true, this will force an
     /// update to the entity's state.
     /// </summary>
-    private void OnPowerChanged(EntityUid uid, SharedGlimmerReactiveComponent component, ref PowerChangedEvent args)
+    private void OnPowerChanged(EntityUid uid, GlimmerReactiveComponent component, ref PowerChangedEvent args)
     {
         if (component.RequiresApcPower)
             UpdateEntityState(uid, component, LastGlimmerTier, 0);
@@ -134,7 +134,7 @@ public sealed class GlimmerReactiveSystem : EntitySystem
     /// <summary>
     ///     Enable / disable special effects from higher tiers.
     /// </summary>
-    private void OnTierChanged(EntityUid uid, SharedGlimmerReactiveComponent component, GlimmerTierChangedEvent args)
+    private void OnTierChanged(EntityUid uid, GlimmerReactiveComponent component, GlimmerTierChangedEvent args)
     {
         if (!TryComp<ApcPowerReceiverComponent>(uid, out var receiver))
             return;
@@ -153,7 +153,7 @@ public sealed class GlimmerReactiveSystem : EntitySystem
         }
     }
 
-    private void AddShockVerb(EntityUid uid, SharedGlimmerReactiveComponent component, GetVerbsEvent<AlternativeVerb> args)
+    private void AddShockVerb(EntityUid uid, GlimmerReactiveComponent component, GetVerbsEvent<AlternativeVerb> args)
     {
         if (!args.CanAccess
             || !args.CanInteract
@@ -175,7 +175,7 @@ public sealed class GlimmerReactiveSystem : EntitySystem
         args.Verbs.Add(verb);
     }
 
-    private void OnDamageChanged(EntityUid uid, SharedGlimmerReactiveComponent component, DamageChangedEvent args)
+    private void OnDamageChanged(EntityUid uid, GlimmerReactiveComponent component, DamageChangedEvent args)
     {
         if (args.Origin == null
             || !_random.Prob((float) _glimmerSystem.GetGlimmerEquilibriumRatio() / 10))
@@ -187,7 +187,7 @@ public sealed class GlimmerReactiveSystem : EntitySystem
         Beam(uid, args.Origin.Value, tier);
     }
 
-    private void OnDestroyed(EntityUid uid, SharedGlimmerReactiveComponent component, DestructionEventArgs args)
+    private void OnDestroyed(EntityUid uid, GlimmerReactiveComponent component, DestructionEventArgs args)
     {
         Spawn("MaterialBluespace1", Transform(uid).Coordinates);
 
@@ -206,7 +206,7 @@ public sealed class GlimmerReactiveSystem : EntitySystem
         _explosionSystem.QueueExplosion(uid, "Default", totalIntensity, slope, maxIntensity);
     }
 
-    private void OnUnanchorAttempt(EntityUid uid, SharedGlimmerReactiveComponent component, UnanchorAttemptEvent args)
+    private void OnUnanchorAttempt(EntityUid uid, GlimmerReactiveComponent component, UnanchorAttemptEvent args)
     {
         if (_glimmerSystem.GetGlimmerTier() < GlimmerTier.Dangerous)
             return;
@@ -223,7 +223,7 @@ public sealed class GlimmerReactiveSystem : EntitySystem
             if (status.AllowedEffects.Contains("Electrocution"))
                 targetList.Add(target);
 
-        foreach (var reactive in _entityLookupSystem.GetEntitiesInRange<SharedGlimmerReactiveComponent>(_transformSystem.GetMapCoordinates(prober), range))
+        foreach (var reactive in _entityLookupSystem.GetEntitiesInRange<GlimmerReactiveComponent>(_transformSystem.GetMapCoordinates(prober), range))
             targetList.Add(reactive);
 
         _random.Shuffle(targetList);
@@ -281,7 +281,7 @@ public sealed class GlimmerReactiveSystem : EntitySystem
             _transformSystem.AnchorEntity(uid, Transform(uid));
     }
 
-    private void OnMeleeThrowOnHitAttempt(Entity<SharedGlimmerReactiveComponent> ent, ref AttemptMeleeThrowOnHitEvent args)
+    private void OnMeleeThrowOnHitAttempt(Entity<GlimmerReactiveComponent> ent, ref AttemptMeleeThrowOnHitEvent args)
     {
         if (_glimmerSystem.GetGlimmerTier() < GlimmerTier.Dangerous)
             return;
@@ -320,7 +320,7 @@ public sealed class GlimmerReactiveSystem : EntitySystem
         {
             var currentGlimmerTier = _glimmerSystem.GetGlimmerTier();
 
-            var reactives = EntityQuery<SharedGlimmerReactiveComponent>();
+            var reactives = EntityQuery<GlimmerReactiveComponent>();
             if (currentGlimmerTier != LastGlimmerTier)
             {
                 var glimmerTierDelta = (int) currentGlimmerTier - (int) LastGlimmerTier;

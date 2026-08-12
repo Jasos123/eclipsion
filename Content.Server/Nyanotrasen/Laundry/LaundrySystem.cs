@@ -16,14 +16,14 @@ public sealed class LaundrySystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<SharedWashingMachineComponent, MapInitEvent>(OnMapInit);
-        SubscribeLocalEvent<SharedWashingMachineComponent, BreakageEventArgs>(OnBreak);
-        SubscribeLocalEvent<SharedWashingMachineComponent, EntInsertedIntoContainerMessage>(OnContainerModified);
-        SubscribeLocalEvent<SharedWashingMachineComponent, EntRemovedFromContainerMessage>(OnContainerModified);
+        SubscribeLocalEvent<WashingMachineComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<WashingMachineComponent, BreakageEventArgs>(OnBreak);
+        SubscribeLocalEvent<WashingMachineComponent, EntInsertedIntoContainerMessage>(OnContainerModified);
+        SubscribeLocalEvent<WashingMachineComponent, EntRemovedFromContainerMessage>(OnContainerModified);
 
     }
 
-    private void OnMapInit(EntityUid uid, SharedWashingMachineComponent component, MapInitEvent args)
+    private void OnMapInit(EntityUid uid, WashingMachineComponent component, MapInitEvent args)
     {
         if (!_containerSystem.TryGetContainer(uid, "storagebase", out var container))
             return;
@@ -31,12 +31,12 @@ public sealed class LaundrySystem : EntitySystem
         _appearanceSystem.SetData(uid, StorageVisuals.HasContents, container.ContainedEntities.Count > 0);
     }
 
-    private void OnBreak(EntityUid uid, SharedWashingMachineComponent component, BreakageEventArgs args)
+    private void OnBreak(EntityUid uid, WashingMachineComponent component, BreakageEventArgs args)
     {
         _appearanceSystem.SetData(uid, WashingMachineVisualState.Broken, true);
     }
 
-    private void OnContainerModified(EntityUid uid, SharedWashingMachineComponent component, ContainerModifiedMessage args)
+    private void OnContainerModified(EntityUid uid, WashingMachineComponent component, ContainerModifiedMessage args)
     {
         if (args.Container.ID == "storagebase")
             _appearanceSystem.SetData(uid, StorageVisuals.HasContents, args.Container.ContainedEntities.Count > 0);

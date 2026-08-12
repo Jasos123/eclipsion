@@ -2,10 +2,14 @@
   id: LatentPsychic
   category: Psionics
   points: -4
+  priority: -10 # Caster configuration must exist before dependent psionic feats are applied.
   functions:
     - !type:TraitAddComponent
       components:
         - type: Psionic
+          skillTree: PsionicGeneralTree
+          psionicLevel: 1
+          skillPoints: 1
   requirements:
     - !type:CharacterItemGroupRequirement
       group: TraitsCasterType
@@ -23,11 +27,13 @@
           species:
             - IPC
             - Oni
+            - Voidborn
 
 - type: trait
   id: PsionicInsulation
   category: Psionics
   points: -10 #Buy a significant disability to get this.
+  priority: -10
   functions:
     - !type:TraitAddComponent
       components:
@@ -49,11 +55,13 @@
           species:
             - IPC
             - Oni
+            - Voidborn
 
 - type: trait
   id: PsychoHistorian
   category: Psionics
   points: -4
+  priority: -10
   functions:
     - !type:TraitAddComponent
       components:
@@ -62,7 +70,8 @@
           removable: false
           powerPool: PsychoHistorianPowerPool
           skillTree: PsionicMindTree
-          psionicLevel: 2
+          psionicLevel: 1
+          skillPoints: 0 # Telepathy is the specialist's free first node.
     - !type:TraitAddPsionics
       psionicPowers:
         - TelepathyPower
@@ -83,18 +92,21 @@
           species:
             - IPC
             - Oni
+            - Voidborn
 
 - type: trait
   id: Biomancer
   category: Psionics
   points: -4
+  priority: -10
   functions:
     - !type:TraitAddComponent
       components:
         - type: Psionic
           powerPool: BiomancerPowerPool
           skillTree: PsionicLifeTree
-    - !type:TraitAddPsionics
+          psionicLevel: 1
+          skillPoints: 1
   requirements:
     - !type:CharacterItemGroupRequirement
       group: TraitsCasterType
@@ -112,18 +124,21 @@
           species:
             - IPC
             - Oni
+            - Voidborn
 
 - type: trait
   id: Pyromancer
   category: Psionics
   points: -4
+  priority: -10
   functions:
     - !type:TraitAddComponent
       components:
         - type: Psionic
           powerPool: PyromancerPowerPool
           skillTree: PsionicFireTree
-    - !type:TraitAddPsionics
+          psionicLevel: 1
+          skillPoints: 1
   requirements:
     - !type:CharacterItemGroupRequirement
       group: TraitsCasterType
@@ -141,3 +156,4 @@
           species:
             - IPC
             - Oni
+            - Voidborn

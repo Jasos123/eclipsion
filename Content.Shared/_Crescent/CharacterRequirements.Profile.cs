@@ -34,17 +34,13 @@ public sealed partial class FactionRequirement : CharacterRequirement
         MindComponent? mind = null
     )
     {
-        if (profile.Faction == FactionID)
-        {
-            reason = null;
-            return true;
-        }
+        // The reason is always populated: CharacterRequirementsSystem applies Inverted itself, so
+        // returning null here left inverted requirements failing with no explanation in the UI.
+        reason = Inverted
+            ? $"Your faction must NOT be {FactionID}."
+            : $"Your faction must be {FactionID}.";
 
-        if (Inverted)
-            reason = $"Your faction must NOT be {FactionID}.";
-        else
-            reason = $"Your faction must be {FactionID}.";
-        return false;
+        return profile.Faction == FactionID;
     }
 
 }
@@ -53,8 +49,8 @@ public sealed partial class FactionRequirement : CharacterRequirement
 [Serializable, NetSerializable]
 public sealed partial class WealthRequirement : CharacterRequirement
 {
-    [DataField("below")] public int below = int.MaxValue;
-    [DataField("above")] public int above = 0;
+    [DataField("below")] public int Below = int.MaxValue;
+    [DataField("above")] public int Above = 0;
 
     public override bool IsValid(JobPrototype job,
         HumanoidCharacterProfile profile,
@@ -68,9 +64,9 @@ public sealed partial class WealthRequirement : CharacterRequirement
         int depth = 0,
         MindComponent? mind = null)
     {
-        if (profile.BankBalance > above || profile.BankBalance < below)
+        if (profile.BankBalance > Above || profile.BankBalance < Below)
         {
-            reason = $"Your bank balance must be between {below} and {above} !";
+            reason = $"Your bank balance must be between {Below} and {Above} !";
             return false;
         }
 

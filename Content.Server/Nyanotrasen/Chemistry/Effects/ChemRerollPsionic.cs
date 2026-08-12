@@ -23,11 +23,15 @@ namespace Content.Server.Chemistry.ReagentEffects
 
         public override void Effect(EntityEffectBaseArgs args)
         {
-            if (args is not EntityEffectReagentArgs _)
+            if (args is not EntityEffectReagentArgs reagentArgs
+                || reagentArgs.Reagent is null)
                 return;
 
             var psySys = args.EntityManager.EntitySysManager.GetEntitySystem<PsionicsSystem>();
-            psySys.RerollPsionics(args.TargetEntity, bonusMuliplier: BonusMuliplier);
+            psySys.RerollPsionics(
+                args.TargetEntity,
+                reagentArgs.Reagent.ID,
+                bonusMuliplier: BonusMuliplier);
         }
     }
 }

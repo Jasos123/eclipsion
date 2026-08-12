@@ -119,6 +119,7 @@
         - ArchmaesterDSM
         - ForemanDSM
         - FreeholderDSM
+        - OathboundDSM
         - GovernorDSM
         - KnightDSM
         - LaborDSM
@@ -146,6 +147,7 @@
         - ArchmaesterDSM
         - ForemanDSM
         - FreeholderDSM
+        - OathboundDSM
         - GovernorDSM
         - KnightDSM
         - LaborDSM

@@ -32,3 +32,5 @@ cmd-panicbunker_min_overall_hours-desc = Gets or sets the minimum overall playti
 cmd-panicbunker_min_overall_hours-help = Usage: panicbunker_min_overall_hours <hours>
 panicbunker-command-min-overall-hours-is = The minimum overall playtime for the panic bunker is {$hours} hours.
 panicbunker-command-min-overall-hours-set = Set the minimum overall playtime for the panic bunker to {$hours} hours.
+panicbunker-command-min-overall-minutes-is = Panic bunker minimum overall playtime is {$minutes} minutes.
+panicbunker-command-overall-minutes-age-set = Panic bunker minimum overall playtime set to {$minutes} minutes.

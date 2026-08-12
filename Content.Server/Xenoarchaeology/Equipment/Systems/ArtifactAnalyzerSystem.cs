@@ -33,6 +33,8 @@ namespace Content.Server.Xenoarchaeology.Equipment.Systems;
 /// </summary>
 public sealed class ArtifactAnalyzerSystem : EntitySystem
 {
+    private const double MinimumAnalysisDurationSeconds = 0.1;
+
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
@@ -169,13 +171,19 @@ public sealed class ArtifactAnalyzerSystem : EntitySystem
 
     private void OnRefreshParts(EntityUid uid, ArtifactAnalyzerComponent component, RefreshPartsEvent args)
     {
-        var rating = args.PartRatings[component.MachinePartTimeReduction];
-        component.AnalysisDuration = component.BaseAnalysisDuration - TimeSpan.FromSeconds(component.UpgradeTimeReductionMultiplier * (rating - 1));
+        var rating = args.GetRating(component.MachinePartTimeReduction);
+        var duration = component.BaseAnalysisDuration.TotalSeconds -
+                       component.UpgradeTimeReductionMultiplier * (rating - 1);
+        component.AnalysisDuration = TimeSpan.FromSeconds(Math.Max(MinimumAnalysisDurationSeconds, duration));
     }
 
     private void OnUpgradeExamine(EntityUid uid, ArtifactAnalyzerComponent component, UpgradeExamineEvent args)
     {
-        args.AddPercentageUpgrade("analyzer-artifact-component-upgrade-analysis", component.UpgradeTimeReductionMultiplier); // this is broken and i have no clue how to fix it
+        var durationMultiplier = component.BaseAnalysisDuration > TimeSpan.Zero
+            ? (float) (component.AnalysisDuration.TotalSeconds / component.BaseAnalysisDuration.TotalSeconds)
+            : 1f;
+
+        args.AddPercentageUpgrade("analyzer-artifact-component-upgrade-analysis", durationMultiplier);
     }
 
     private void OnNewLink(EntityUid uid, AnalysisConsoleComponent component, NewLinkEvent args)

@@ -1,7 +1,6 @@
 using Content.Shared.GameTicking.Components;
 using Content.Server.GameTicking.Rules.Components;
 using Content.Server.Popups;
-using Content.Server.Psionics;
 using Content.Server.StationEvents.Components;
 using Content.Server.Stunnable;
 using Content.Shared.Abilities.Psionics;
@@ -12,14 +11,13 @@ using Content.Shared.StatusEffect;
 namespace Content.Server.StationEvents.Events;
 
 /// <summary>
-/// Zaps everyone, rolling psionics and disorienting them
+/// Zaps and disorients every uninsulated psion, restoring a spent catalyst roll where applicable.
 /// </summary>
 internal sealed class NoosphericZapRule : StationEventSystem<NoosphericZapRuleComponent>
 {
     [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
     [Dependency] private readonly StunSystem _stunSystem = default!;
     [Dependency] private readonly PopupSystem _popupSystem = default!;
-    [Dependency] private readonly PsionicsSystem _psionicsSystem = default!;
     [Dependency] private readonly StatusEffectsSystem _statusEffectsSystem = default!;
 
     protected override void Started(EntityUid uid, NoosphericZapRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
@@ -39,13 +37,11 @@ internal sealed class NoosphericZapRule : StationEventSystem<NoosphericZapRuleCo
             if (!psionicComponent.CanReroll)
             {
                 psionicComponent.CanReroll = true;
+                Dirty(psion, psionicComponent);
                 _popupSystem.PopupEntity(Loc.GetString("noospheric-zap-seize-potential-regained"), psion, psion, Shared.Popups.PopupType.LargeCaution);
             }
             else
-            {
-                _psionicsSystem.RollPsionics(psion, psionicComponent, true, component.PowerRerollMultiplier);
                 _popupSystem.PopupEntity(Loc.GetString("noospheric-zap-seize"), psion, psion, Shared.Popups.PopupType.LargeCaution);
-            }
         }
     }
 }

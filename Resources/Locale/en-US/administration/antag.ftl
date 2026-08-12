@@ -14,3 +14,4 @@ admin-verb-text-make-head-rev = Make Head Rev
 admin-verb-text-make-thief = Make Thief
 
 admin-overlay-antag-classic = ANTAG
+admin-verb-text-make-blob = Make Blob

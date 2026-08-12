@@ -51,3 +51,7 @@
     - type: loadout
       id: LoadoutBackpackCMMDuffel
 #Hullrot edit end
+    - type: loadout
+      id: LoadoutBackpackDuffelHydroponics
+    - type: loadout
+      id: LoadoutBackpackHydroponics

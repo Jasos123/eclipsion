@@ -48,3 +48,10 @@ shell-argument-number-invalid = Argument {$index} must be a valid number!
 # Hints
 shell-argument-username-hint = <username>
 shell-argument-username-optional-hint = [username]
+shell-entity-is-not-node-container = That entity has no node container.
+shell-node-group-is-invalid = That node group is invalid.
+cmd-parse-failure-int = "{$arg}" is not a valid integer.
+cmd-savemap-server = The map can only be saved on the server.
+upgradeaction-command-help = Usage: upgradeaction <uid> [level]
+color-network-command-description = Sets the color of all cables in a node network.
+color-network-command-help-text = Usage: {$command} <entity uid> <node group> <color>

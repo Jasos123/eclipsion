@@ -19,7 +19,7 @@ namespace Content.Server.Power.EntitySystems
 
         public void OnRefreshParts(EntityUid uid, UpgradeBatteryComponent component, RefreshPartsEvent args)
         {
-            var powerCellRating = args.PartRatings[component.MachinePartPowerCapacity];
+            var powerCellRating = args.GetRating(component.MachinePartPowerCapacity);
 
             if (TryComp<BatteryComponent>(uid, out var batteryComp))
             {

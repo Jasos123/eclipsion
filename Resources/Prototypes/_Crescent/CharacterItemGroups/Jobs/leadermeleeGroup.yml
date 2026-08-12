@@ -4,3 +4,5 @@
   items:
     - type: loadout
       id: LoadoutBeltSheathSabre
+    - type: loadout
+      id: LoadoutItemSabre

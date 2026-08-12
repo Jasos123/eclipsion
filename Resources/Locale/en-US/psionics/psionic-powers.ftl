@@ -35,6 +35,7 @@ pyrokinesis-power-initialization-feedback =
     fly beckons me to offer my service. When I reach out to shake his hand, the vision fades, and I find myself standing in the prime materium.
     I know His name now, it is the Secret of Fire. Merely by thinking of it, I can feel the heat of that place come to my hands.
 pyrokinesis-power-metapsionic-feedback = The Secret of Fire dwells within {CAPITALIZE($entity)}
+flame-breath-power-metapsionic-feedback = A furnace-like current coils around {CAPITALIZE($entity)}'s hands.
 
 # Metapsionic Pulse
 metapsionic-power-description = Send a mental pulse through the area to see if there are any psychics nearby.

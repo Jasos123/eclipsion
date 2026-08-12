@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Made by Shiptest",
+  "copyright": "Made by Shiptest. Source repository: https://github.com/shiptest-ss13/Shiptest. Ported to SS14's RSI format; further visual changes, if any, were not documented in the original port.",
   "size": {
     "x": 32,
     "y": 32

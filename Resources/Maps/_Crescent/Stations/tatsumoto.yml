@@ -62607,78 +62607,6 @@ entities:
     - type: Transform
       pos: 15.488338,30.606936
       parent: 1
-- proto: HandheldGPSBasic
-  entities:
-  - uid: 4043
-    components:
-    - type: Transform
-      parent: 4039
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4050
-    components:
-    - type: Transform
-      parent: 4046
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4063
-    components:
-    - type: Transform
-      parent: 4060
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4069
-    components:
-    - type: Transform
-      parent: 4066
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4075
-    components:
-    - type: Transform
-      parent: 4072
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4081
-    components:
-    - type: Transform
-      parent: 4078
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4087
-    components:
-    - type: Transform
-      parent: 4084
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4093
-    components:
-    - type: Transform
-      parent: 4090
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4099
-    components:
-    - type: Transform
-      parent: 4096
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4105
-    components:
-    - type: Transform
-      parent: 4102
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: HandHeldMassScannerEE
   entities:
   - uid: 4044
@@ -69870,7 +69798,6 @@ entities:
           occludes: True
           ents:
           - 4041
-          - 4043
           - 4044
           - 4040
           - 4045
@@ -69887,7 +69814,6 @@ entities:
           occludes: True
           ents:
           - 4052
-          - 4050
           - 4047
           - 4051
           - 4049
@@ -69904,7 +69830,6 @@ entities:
           occludes: True
           ents:
           - 4064
-          - 4063
           - 4065
           - 4062
           - 4061
@@ -69922,7 +69847,6 @@ entities:
           - 4067
           - 4071
           - 4068
-          - 4069
           - 4070
   - uid: 4072
     components:
@@ -69936,7 +69860,6 @@ entities:
           occludes: True
           ents:
           - 4076
-          - 4075
           - 4074
           - 4077
           - 4073
@@ -69951,7 +69874,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 4081
           - 4083
           - 4080
           - 4082
@@ -69971,7 +69893,6 @@ entities:
           - 4089
           - 4085
           - 4086
-          - 4087
   - uid: 4090
     components:
     - type: Transform
@@ -69986,7 +69907,6 @@ entities:
           - 4094
           - 4095
           - 4092
-          - 4093
           - 4091
   - uid: 4096
     components:
@@ -70002,7 +69922,6 @@ entities:
           - 4097
           - 4100
           - 4101
-          - 4099
           - 4098
   - uid: 4102
     components:
@@ -70017,7 +69936,6 @@ entities:
           ents:
           - 4106
           - 4107
-          - 4105
           - 4104
           - 4103
 - proto: SurveillanceCameraRouterSecurity

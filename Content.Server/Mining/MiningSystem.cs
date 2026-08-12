@@ -1,8 +1,10 @@
 using Content.Server.Mining.Components;
+using Content.Server.Stack;
 using Content.Shared.Destructible;
 using Content.Shared.Mining;
 using Content.Shared.Random;
 using Content.Shared.Random.Helpers;
+using Content.Shared.Stacks;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
@@ -15,6 +17,7 @@ public sealed class MiningSystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly StackSystem _stack = default!;
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -36,9 +39,29 @@ public sealed class MiningSystem : EntitySystem
 
         var coords = Transform(uid).Coordinates;
         var toSpawn = _random.Next(proto.MinOreYield, proto.MaxOreYield);
-        for (var i = 0; i < toSpawn; i++)
+
+        if (toSpawn <= 0)
+            return;
+
+        var firstOre = Spawn(proto.OreEntity, coords.Offset(_random.NextVector2(0.2f)));
+
+        if (!TryComp<StackComponent>(firstOre, out var stack))
         {
-            Spawn(proto.OreEntity, coords.Offset(_random.NextVector2(0.2f)));
+            for (var i = 1; i < toSpawn; i++)
+            {
+                Spawn(proto.OreEntity, coords.Offset(_random.NextVector2(0.2f)));
+            }
+
+            return;
+        }
+
+        var maxStackSize = Math.Max(1, _stack.GetMaxCount(stack));
+        _stack.SetCount(firstOre, Math.Min(toSpawn, maxStackSize), stack);
+
+        for (var remaining = toSpawn - maxStackSize; remaining > 0; remaining -= maxStackSize)
+        {
+            var ore = Spawn(proto.OreEntity, coords.Offset(_random.NextVector2(0.2f)));
+            _stack.SetCount(ore, Math.Min(remaining, maxStackSize));
         }
     }
 

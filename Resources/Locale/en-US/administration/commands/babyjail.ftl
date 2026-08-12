@@ -17,3 +17,4 @@ cmd-babyjail_max_overall_hours-desc = Gets or sets the maximum overall playtime 
 cmd-babyjail_max_overall_hours-help = Usage: babyjail_max_overall_hours <hours>
 babyjail-command-max-overall-hours-is = The maximum overall playtime for the baby jail is {$hours} hours.
 babyjail-command-max-overall-hours-set = Set the maximum overall playtime for the baby jail to {$hours} hours.
+babyjail-command-overall-hours-set = Baby jail maximum overall playtime set to {$hours} hours.

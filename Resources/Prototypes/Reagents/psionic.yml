@@ -116,6 +116,12 @@
             - !type:ReagentThreshold
               reagent: OusianaDust
               min: 5
+        - !type:ChemRerollPsionic
+          bonusMultiplier: 2
+          conditions:
+            - !type:ReagentThreshold
+              reagent: OusianaDust
+              min: 5
         - !type:GenericStatusEffect
           key: SeeingRainbows
           component: SeeingRainbows

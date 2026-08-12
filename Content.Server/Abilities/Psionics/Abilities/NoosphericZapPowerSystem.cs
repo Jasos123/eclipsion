@@ -27,8 +27,8 @@ namespace Content.Server.Abilities.Psionics
 
             _beam.TryCreateBeam(args.Performer, args.Target, "LightningNoospheric");
 
-            _stunSystem.TryParalyze(args.Target, TimeSpan.FromSeconds(5), false);
-            _statusEffectsSystem.TryAddStatusEffect(args.Target, "Stutter", TimeSpan.FromSeconds(10), false, "StutteringAccent");
+            _stunSystem.TryParalyze(args.Target, TimeSpan.FromSeconds(2), false);
+            _statusEffectsSystem.TryAddStatusEffect(args.Target, "Stutter", TimeSpan.FromSeconds(5), false, "StutteringAccent");
 
             _psionics.LogPowerUsed(args.Performer, "noospheric zap");
             args.Handled = true;

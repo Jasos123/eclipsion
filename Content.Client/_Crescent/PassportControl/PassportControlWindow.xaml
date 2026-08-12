@@ -1,0 +1,26 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+               Title="{Loc 'passport-control-title'}"
+               MinSize="480 330">
+    <BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="8">
+        <Label Text="{Loc 'passport-control-description'}" StyleClasses="LabelSecondaryColor" />
+
+        <PanelContainer StyleClasses="BackgroundDark">
+            <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="4">
+                <Label Text="{Loc 'passport-control-connections'}" StyleClasses="LabelHeading" />
+                <Label Name="PassportConnectionLabel" />
+                <Label Name="FingerprintConnectionLabel" />
+            </BoxContainer>
+        </PanelContainer>
+
+        <PanelContainer StyleClasses="BackgroundDark">
+            <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="5">
+                <Label Name="ResultLabel" StyleClasses="LabelHeading" />
+                <Label Name="PassportLabel" />
+                <Label Name="DocumentLabel" />
+                <Label Name="FingerprintLabel" />
+            </BoxContainer>
+        </PanelContainer>
+
+        <Button Name="ResetButton" Text="{Loc 'passport-control-reset'}" />
+    </BoxContainer>
+</DefaultWindow>

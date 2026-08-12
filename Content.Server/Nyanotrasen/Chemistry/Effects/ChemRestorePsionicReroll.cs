@@ -22,5 +22,6 @@ public sealed partial class ChemRestorePsionicReroll : EntityEffect
             return;
 
         psionicComp.CanReroll = true;
+        args.EntityManager.Dirty(args.TargetEntity, psionicComp);
     }
 }

@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Numerics;
 using Content.Shared._Goobstation.Research;
 using Content.Shared.Research.Prototypes;
@@ -13,7 +12,6 @@ namespace Content.Client._Goobstation.Research.UI;
 public sealed partial class ResearchesContainerPanel : LayoutContainer
 {
     private readonly List<PrerequisiteConnectionGroup> _connectionCache = new();
-    private readonly List<DisciplineRootGroup> _disciplineRootCache = new();
 
     public ResearchesContainerPanel()
     {
@@ -24,7 +22,7 @@ public sealed partial class ResearchesContainerPanel : LayoutContainer
     /// Resolves prerequisite controls once after the menu rebuilds instead of searching
     /// every child for every technology on every frame.
     /// </summary>
-    public void RebuildConnectionCache(IReadOnlyDictionary<string, int> depths)
+    public void RebuildConnectionCache()
     {
         ClearConnectionCache();
 
@@ -45,59 +43,14 @@ public sealed partial class ResearchesContainerPanel : LayoutContainer
                     prerequisites.Add(prerequisite);
             }
 
-            if (prerequisites.Count == 0 && depths.TryGetValue(dependent.Prototype.ID, out var dependentDepth))
-            {
-                var nearestDepth = int.MinValue;
-                FancyResearchConsoleItem? nearest = null;
-                var nearestDistance = float.MaxValue;
-
-                foreach (var candidate in itemsById.Values)
-                {
-                    if (candidate.Prototype.Discipline != dependent.Prototype.Discipline ||
-                        !depths.TryGetValue(candidate.Prototype.ID, out var candidateDepth) ||
-                        candidateDepth >= dependentDepth)
-                    {
-                        continue;
-                    }
-
-                    var verticalDistance = MathF.Abs(candidate.Position.Y - dependent.Position.Y);
-                    if (candidateDepth > nearestDepth ||
-                        candidateDepth == nearestDepth && verticalDistance < nearestDistance)
-                    {
-                        nearestDepth = candidateDepth;
-                        nearestDistance = verticalDistance;
-                        nearest = candidate;
-                    }
-                }
-
-                if (nearest != null)
-                    prerequisites.Add(nearest);
-            }
-
             if (prerequisites.Count > 0)
                 _connectionCache.Add(new PrerequisiteConnectionGroup(dependent, prerequisites));
-        }
-
-        foreach (var discipline in itemsById.Values.GroupBy(item => item.Prototype.Discipline))
-        {
-            var minimumDepth = discipline.Min(item => depths.GetValueOrDefault(item.Prototype.ID));
-            var roots = discipline
-                .Where(item => depths.GetValueOrDefault(item.Prototype.ID) == minimumDepth)
-                .GroupBy(item => item.Position.X)
-                .Select(group => group.OrderBy(item => item.Position.Y).ToList());
-
-            foreach (var rootColumn in roots)
-            {
-                if (rootColumn.Count > 1)
-                    _disciplineRootCache.Add(new DisciplineRootGroup(rootColumn, rootColumn[0].DisciplineColor));
-            }
         }
     }
 
     public void ClearConnectionCache()
     {
         _connectionCache.Clear();
-        _disciplineRootCache.Clear();
     }
 
     protected override void Draw(DrawingHandleScreen handle)
@@ -111,23 +64,47 @@ public sealed partial class ResearchesContainerPanel : LayoutContainer
 
     private void DrawPrerequisiteLines(DrawingHandleScreen handle)
     {
-        DrawDisciplineRoots(handle);
+        var hasSelection = false;
+        foreach (var connection in _connectionCache)
+        {
+            if (connection.Dependent.IsSelected)
+            {
+                hasSelection = true;
+                break;
+            }
+
+            foreach (var prerequisite in connection.Prerequisites)
+            {
+                if (!prerequisite.IsSelected)
+                    continue;
+
+                hasSelection = true;
+                break;
+            }
+
+            if (hasSelection)
+                break;
+        }
 
         foreach (var connection in _connectionCache)
         {
             var dependentItem = connection.Dependent;
             var prerequisiteItems = connection.Prerequisites;
+            var isSelectedPath = dependentItem.IsSelected;
+            foreach (var prerequisite in prerequisiteItems)
+                isSelectedPath |= prerequisite.IsSelected;
+
+            var lineColor = GetConnectionColor(dependentItem)
+                .WithAlpha(hasSelection ? isSelectedPath ? 1f : 0.2f : 0.72f);
 
             // Special handling for Tree line type - draw all prerequisites as a unified tree
             if (dependentItem.Prototype.PrerequisiteLineType == PrerequisiteLineType.Tree && prerequisiteItems.Count > 1)
             {
-                var lineColor = GetConnectionColor(dependentItem);
                 DrawTreeConnections(handle, prerequisiteItems, dependentItem, lineColor);
             }
             // Special handling for Spread line type - draw with anti-overlap logic
             else if (dependentItem.Prototype.PrerequisiteLineType == PrerequisiteLineType.Spread && prerequisiteItems.Count > 1)
             {
-                var lineColor = GetConnectionColor(dependentItem);
                 DrawSpreadConnections(handle, prerequisiteItems, dependentItem, lineColor);
             }
             else
@@ -139,44 +116,9 @@ public sealed partial class ResearchesContainerPanel : LayoutContainer
                     var startCoords = GetTechSideConnection(prerequisiteItem, dependentItem);
                     var endCoords = GetTechSideConnection(dependentItem, prerequisiteItem);
 
-                    // Determine line color based on dependent tech's availability
-                    var lineColor = GetConnectionColor(dependentItem);
-
                     // Draw connection based on the dependent tech's line type configuration
                     DrawConfigurableConnection(handle, startCoords, endCoords, lineColor, dependentItem.Prototype.PrerequisiteLineType);
                 }
-            }
-        }
-    }
-
-    /// <summary>
-    /// Groups the first visual layer of every discipline with a subtle backbone. These
-    /// are grouping lines, while subsequent connections represent explicit prerequisites
-    /// or the discipline's tier progression.
-    /// </summary>
-    private void DrawDisciplineRoots(DrawingHandleScreen handle)
-    {
-        foreach (var discipline in _disciplineRootCache)
-        {
-            var firstRect = GetTechRect(discipline.Roots[0]);
-            var top = firstRect.Center.Y;
-            var bottom = top;
-            var trunkX = firstRect.Left - 18f;
-
-            foreach (var root in discipline.Roots)
-            {
-                var rect = GetTechRect(root);
-                top = MathF.Min(top, rect.Center.Y);
-                bottom = MathF.Max(bottom, rect.Center.Y);
-                trunkX = MathF.Min(trunkX, rect.Left - 18f);
-            }
-
-            var color = discipline.Color.WithAlpha(0.42f);
-            handle.DrawLine(new Vector2(trunkX, top), new Vector2(trunkX, bottom), color);
-            foreach (var root in discipline.Roots)
-            {
-                var rect = GetTechRect(root);
-                handle.DrawLine(new Vector2(trunkX, rect.Center.Y), new Vector2(rect.Left, rect.Center.Y), color);
             }
         }
     }
@@ -212,6 +154,7 @@ public sealed partial class ResearchesContainerPanel : LayoutContainer
 
         // Draw clean trunk line from junction to dependent
         DrawCleanLine(handle, trunkPoint, endCoords, color);
+        DrawArrowHead(handle, trunkPoint, endCoords, color);
 
         // Draw clean branches from each prerequisite to the trunk junction
         foreach (var prerequisite in prerequisites)
@@ -262,7 +205,7 @@ public sealed partial class ResearchesContainerPanel : LayoutContainer
         // Create perpendicular offset direction for each connection to avoid overlaps
         var mainAngle = Math.Atan2(delta.Y, delta.X);
         var offsetAngle = mainAngle + Math.PI / 2;
-        var offsetDirection = new Vector2((float)Math.Cos(offsetAngle), (float)Math.Sin(offsetAngle));
+        var offsetDirection = new Vector2((float) Math.Cos(offsetAngle), (float) Math.Sin(offsetAngle));
 
         // Calculate unique offset for this connection based on its index
         var totalOffset = baseOffset + (Math.Abs(spreadIndex) * indexMultiplier);
@@ -274,6 +217,7 @@ public sealed partial class ResearchesContainerPanel : LayoutContainer
         // Draw two-segment angled line: start -> midpoint -> end
         DrawCleanLine(handle, start, midPoint, color);
         DrawCleanLine(handle, midPoint, end, color);
+        DrawArrowHead(handle, midPoint, end, color);
     }
 
     /// <summary>
@@ -340,6 +284,7 @@ public sealed partial class ResearchesContainerPanel : LayoutContainer
         {
             // Direct line for aligned connections
             DrawCleanLine(handle, start, end, color);
+            DrawArrowHead(handle, start, end, color);
         }
         else
         {
@@ -358,6 +303,7 @@ public sealed partial class ResearchesContainerPanel : LayoutContainer
 
             DrawCleanLine(handle, start, corner, color);
             DrawCleanLine(handle, corner, end, color);
+            DrawArrowHead(handle, corner, end, color);
         }
     }
 
@@ -453,14 +399,17 @@ public sealed partial class ResearchesContainerPanel : LayoutContainer
         if (Math.Abs(delta.X) < straightLineThreshold) // Same column - direct vertical
         {
             DrawCleanLine(handle, start, end, color);
+            DrawArrowHead(handle, start, end, color);
         }
         else if (Math.Abs(delta.Y) < straightLineThreshold) // Same row - direct horizontal
         {
             DrawCleanLine(handle, start, end, color);
+            DrawArrowHead(handle, start, end, color);
         }
         else if (delta.Length() < directDiagonalThreshold) // Close diagonal - use direct line
         {
             DrawCleanLine(handle, start, end, color);
+            DrawArrowHead(handle, start, end, color);
         }
         else // Longer distance - use L-shape
         {
@@ -487,6 +436,7 @@ public sealed partial class ResearchesContainerPanel : LayoutContainer
 
         DrawCleanLine(handle, start, corner, color);
         DrawCleanLine(handle, corner, end, color);
+        DrawArrowHead(handle, corner, end, color);
     }
 
     /// <summary>
@@ -495,6 +445,7 @@ public sealed partial class ResearchesContainerPanel : LayoutContainer
     private void DrawDiagonalConnection(DrawingHandleScreen handle, Vector2 start, Vector2 end, Color color)
     {
         DrawCleanLine(handle, start, end, color);
+        DrawArrowHead(handle, start, end, color);
     }
 
     /// <summary>
@@ -517,7 +468,7 @@ public sealed partial class ResearchesContainerPanel : LayoutContainer
         // Calculate perpendicular direction for avoidance at midpoint
         var mainAngle = Math.Atan2(delta.Y, delta.X);
         var offsetAngle = mainAngle + Math.PI / 2;
-        var avoidanceDirection = new Vector2((float)Math.Cos(offsetAngle), (float)Math.Sin(offsetAngle));
+        var avoidanceDirection = new Vector2((float) Math.Cos(offsetAngle), (float) Math.Sin(offsetAngle));
 
         // Determine avoidance direction based on connection direction for consistency
         // Use the direction of the connection to determine which side to offset
@@ -531,6 +482,7 @@ public sealed partial class ResearchesContainerPanel : LayoutContainer
         // Draw two-segment angled line: start -> midpoint -> end
         DrawCleanLine(handle, start, midPoint, color);
         DrawCleanLine(handle, midPoint, end, color);
+        DrawArrowHead(handle, midPoint, end, color);
     }
 
     /// <summary>
@@ -560,8 +512,31 @@ public sealed partial class ResearchesContainerPanel : LayoutContainer
             ResearchAvailability.Researched => Color.LimeGreen,
             ResearchAvailability.Available => Color.FromHex("#e8fa25"),
             ResearchAvailability.PrereqsMet => Color.FromHex("#cca031"),
-            _ => Color.Crimson,
+            _ => Color.FromHex("#77808f"),
         };
+    }
+
+    /// <summary>
+    /// Makes the left-to-right prerequisite direction explicit without covering the icon.
+    /// </summary>
+    private static void DrawArrowHead(
+        DrawingHandleScreen handle,
+        Vector2 previous,
+        Vector2 end,
+        Color color)
+    {
+        var delta = end - previous;
+        if (delta == Vector2.Zero)
+            return;
+
+        const float length = 7f;
+        const float width = 3.5f;
+        var direction = delta.Normalized();
+        var perpendicular = new Vector2(-direction.Y, direction.X);
+        var arrowBase = end - direction * length;
+
+        handle.DrawLine(end, arrowBase + perpendicular * width, color);
+        handle.DrawLine(end, arrowBase - perpendicular * width, color);
     }
 
     /// <summary>
@@ -587,8 +562,4 @@ public sealed partial class ResearchesContainerPanel : LayoutContainer
     private sealed record PrerequisiteConnectionGroup(
         FancyResearchConsoleItem Dependent,
         List<FancyResearchConsoleItem> Prerequisites);
-
-    private sealed record DisciplineRootGroup(
-        List<FancyResearchConsoleItem> Roots,
-        Color Color);
 }

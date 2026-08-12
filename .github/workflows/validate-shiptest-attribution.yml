@@ -1,0 +1,22 @@
+name: Shiptest Attribution Validator
+
+on:
+  push:
+    branches: [ master, staging, trying ]
+  merge_group:
+  pull_request:
+    paths:
+      - 'Resources/Textures/**/*.rsi/meta.json'
+      - 'Resources/ShiptestAttribution.txt'
+      - 'Scripts/check_shiptest_attribution.py'
+      - 'LEGAL.md'
+      - 'README.md'
+
+jobs:
+  validate_shiptest_attribution:
+    name: Validate Shiptest attribution
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Validate attribution metadata
+        run: python3 Scripts/check_shiptest_attribution.py

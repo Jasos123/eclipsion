@@ -30,6 +30,8 @@ public sealed partial class PsionicFamiliarSystem : EntitySystem
         SubscribeLocalEvent<PsionicFamiliarComponent, ComponentShutdown>(OnFamiliarShutdown);
         SubscribeLocalEvent<PsionicFamiliarComponent, AttackAttemptEvent>(OnFamiliarAttack);
         SubscribeLocalEvent<PsionicFamiliarComponent, MobStateChangedEvent>(OnFamiliarDeath);
+        SubscribeLocalEvent<PsionicComponent, CommandPsionicFamiliarMoveActionEvent>(OnMoveCommand);
+        SubscribeLocalEvent<PsionicComponent, CommandPsionicFamiliarAttackActionEvent>(OnAttackCommand);
     }
 
     private void OnSummon(EntityUid uid, PsionicComponent psionicComponent, SummonPsionicFamiliarActionEvent args)
@@ -123,6 +125,48 @@ public sealed partial class PsionicFamiliarSystem : EntitySystem
             return;
 
         DespawnFamiliar(uid, component);
+    }
+
+    private void OnMoveCommand(
+        Entity<PsionicComponent> ent,
+        ref CommandPsionicFamiliarMoveActionEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        foreach (var familiar in ent.Comp.Familiars)
+        {
+            if (!TryComp<PsionicFamiliarComponent>(familiar, out var familiarComp)
+                || !familiarComp.Commandable
+                || !TryComp<HTNComponent>(familiar, out var htn))
+                continue;
+
+            htn.Blackboard.Remove<EntityUid>(NPCBlackboard.CurrentOrderedTarget);
+            _npc.SetBlackboard(familiar, NPCBlackboard.FollowTarget, args.Target, htn);
+            _htn.Replan(htn);
+            args.Handled = true;
+        }
+    }
+
+    private void OnAttackCommand(
+        Entity<PsionicComponent> ent,
+        ref CommandPsionicFamiliarAttackActionEvent args)
+    {
+        if (args.Handled || args.Target == ent.Owner)
+            return;
+
+        foreach (var familiar in ent.Comp.Familiars)
+        {
+            if (!TryComp<PsionicFamiliarComponent>(familiar, out var familiarComp)
+                || !familiarComp.Commandable
+                || args.Target == familiar
+                || !TryComp<HTNComponent>(familiar, out var htn))
+                continue;
+
+            _npc.SetBlackboard(familiar, NPCBlackboard.CurrentOrderedTarget, args.Target, htn);
+            _htn.Replan(htn);
+            args.Handled = true;
+        }
     }
 
     public void DespawnFamiliar(EntityUid uid)

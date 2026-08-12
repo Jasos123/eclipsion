@@ -18,3 +18,4 @@ bwoink-system-player-reconnecting = has reconnected.
 bwoink-system-player-banned = has been banned for: {$banReason}
 
 bwoink-title-none-selected = None selected
+bwoink-none-selected = No player selected

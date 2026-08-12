@@ -88,3 +88,4 @@ changeling-chameleon-end = Your skin is losing it's translucency
 changeling-hivemind-start = You tune your brainwaves to match the hivemind frequency
 
 changeling-lastresort-activate = CURRENT BODY WILL BE LOST! Use it again to confirm.
+changeling-sting-fail = The sting fails to take hold.

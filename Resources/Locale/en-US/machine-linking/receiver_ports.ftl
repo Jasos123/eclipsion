@@ -52,6 +52,12 @@ signal-port-description-med-scanner-sender = Medical scanner signal sender
 signal-port-name-med-scanner-receiver = Medical scanner
 signal-port-description-med-scanner-receiver = Medical scanner signal receiver
 
+signal-port-name-passport-scan-receiver = Passport reader
+signal-port-description-passport-scan-receiver = Receives passport data for identity verification.
+
+signal-port-name-fingerprint-scan-receiver = Fingerprint reader
+signal-port-description-fingerprint-scan-receiver = Receives a live fingerprint scan for identity verification.
+
 signal-port-name-hold-open = Hold
 signal-port-description-hold-open = Turns off automatic closing.
 

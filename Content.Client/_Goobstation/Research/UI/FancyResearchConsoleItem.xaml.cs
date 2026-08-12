@@ -17,7 +17,6 @@ public sealed partial class FancyResearchConsoleItem : LayoutContainer
     public TechnologyPrototype Prototype;
     public Action<TechnologyPrototype, ResearchAvailability>? SelectAction;
     public ResearchAvailability Availability;
-    public Color DisciplineColor { get; }
 
     // Some visuals
     public static readonly Color DefaultColor = Color.FromHex("#2e2e2e");
@@ -54,7 +53,6 @@ public sealed partial class FancyResearchConsoleItem : LayoutContainer
         // Get the discipline for background color
         var discipline = _prototype.Index<TechDisciplinePrototype>(proto.Discipline);
         var disciplineColor = discipline.Color;
-        DisciplineColor = disciplineColor;
 
         ResearchDisplay.Texture = sprite.Frame0(proto.Icon);
 

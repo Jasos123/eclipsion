@@ -2,11 +2,10 @@ character-item-group-TraitsCasterType = Psicaster Type
 
 trait-name-LatentPsychic = Latent Psychic
 trait-description-LatentPsychic =
-    Your mind and soul are open to the noosphere, allowing for use of Telepathy.
-    Thus, you are eligible for potentially receiving psychic powers.
-    It is possible that you may be hunted by otherworldly forces, so consider keeping your powers a secret.
-    Latent psychics have no special abilities, modifiers, or unique features compared to other psions.
-    However they can become more or less anything given time and resources.
+    Your mind and soul are open to the noosphere. You begin at psionic level 1 with one development point.
+    Use the Psionic Development action to choose Fire, Veil, Life, Mind, or Kinetic as your discipline.
+    Choosing a discipline permanently locks the other four, but further levels let you advance along the chosen branch.
+    You are not automatically telepathic; Telepathy is the first node of the Mind discipline.
 
 trait-name-PsionicInsulation = χ Waveform Misalignment
 trait-description-PsionicInsulation =
@@ -32,23 +31,28 @@ trait-description-PsychoHistorian =
     Psycho-Historians are a fairly common and well-studied branch of psionic users, whose powers are documented in the public domain
     as far back as the 1970s on Earth. Mythological accounts of such individuals can also be traced back thousands of years. Today,
     Psycho-Historians make up the overwhelming bulk of the Epistemics Cult's awakened members. Your powers are generally regarded as "Safe", as they
-    exclusively interact from one mind to another without need of interacting with extra-planar forces. However, you will never be able
-    to learn any powers known as "Kinesis".
+    exclusively interact from one mind to another without need of interacting with extra-planar forces.
 
-    - Your powers are developed at a significantly faster rate than other psychics.
-    - Your available powers are strictly limited to "Mentalics"
-    - You are automatically considered Telepathic.
+    - You begin with Telepathy as the first node of the Mind discipline and no unspent development points.
+    - You gain psionic levels faster than other psychics, with a base Potentia threshold of 75 instead of 100.
+    - Your skill tree is strictly limited to the Mind discipline.
 
 
 trait-name-Biomancer = Biomancer
 trait-description-Biomancer =
     Every night, I have a strange but specific dream. I see myself in an operating room, one me standing over another, in a coma.
     This version of me that is awake whispers unintelligable words that refuse to leave my brain, like it was something I've said all my life.
-    The comatose version of me wakes up. (you are not telepathic, nor can you obtain most powers, but you are able to learn healing word, psionic regeneration, and revivify)
+    The comatose version of me wakes up.
+
+    You begin with one development point and access only to the Life discipline: Healing Word, Psionic Regeneration, and Revivify.
+    You are not automatically telepathic.
 
 trait-name-Pyromancer = Pyromancer
 trait-description-Pyromancer =
     For years, my sleep had been restless. every time I tried to sleep, it was always too hot, and it felt like something was trying to shine a light in my closed eyes.
     Then, I had a strange dream. an unrelenting flame in the middle of a frozen forest, refusing to give out and die. I get closer to the fire as the cold got more and more intense.
     The cold worsened until my only option was to step into the fire. It did not burn me, but instead surrounded me like it was clothing, protecting me from the relentless cold.
-    The flame was my shield. (you are not telepathic, nor can you obtain most powers, but you can learn flame flare and can unlock other pyrokinetic abilities)
+    The flame was my shield.
+
+    You begin with one development point and access only to the Fire discipline: Pyrokinetic Flare, Pyrokinesis, and Summon Imp.
+    You are not automatically telepathic.

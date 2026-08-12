@@ -24774,7 +24774,6 @@ entities:
           - 2445
           - 2446
           - 2447
-          - 2448
           - 2449
           - 2450
           - 2451
@@ -24810,7 +24809,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 2455
           - 2456
           - 2457
           - 2458
@@ -34978,134 +34976,6 @@ entities:
       rot: 3.141592653589793 rad
       pos: 5.5401692,-20.63216
       parent: 1
-- proto: HandheldGPSBasic
-  entities:
-  - uid: 2233
-    components:
-    - type: Transform
-      parent: 2232
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2312
-    components:
-    - type: Transform
-      parent: 2311
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2341
-    components:
-    - type: Transform
-      parent: 2333
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2368
-    components:
-    - type: Transform
-      parent: 2346
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2448
-    components:
-    - type: Transform
-      parent: 2444
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2455
-    components:
-    - type: Transform
-      parent: 2454
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 3243
-    components:
-    - type: Transform
-      parent: 3241
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 3248
-    components:
-    - type: Transform
-      parent: 3247
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 3255
-    components:
-    - type: Transform
-      parent: 3253
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 3260
-    components:
-    - type: Transform
-      parent: 3259
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 3769
-    components:
-    - type: Transform
-      parent: 3768
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 3778
-    components:
-    - type: Transform
-      parent: 3777
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 3787
-    components:
-    - type: Transform
-      parent: 3786
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 3796
-    components:
-    - type: Transform
-      parent: 3795
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 3805
-    components:
-    - type: Transform
-      parent: 3804
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 3814
-    components:
-    - type: Transform
-      parent: 3813
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4983
-    components:
-    - type: Transform
-      parent: 4980
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4988
-    components:
-    - type: Transform
-      parent: 4987
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: HandheldHealthAnalyzer
   entities:
   - uid: 3352
@@ -45213,7 +45083,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 2233
           - 2283
           - 2284
           - 2295
@@ -45247,7 +45116,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 2312
           - 2314
           - 2317
           - 2321
@@ -45283,7 +45151,6 @@ entities:
           ents:
           - 2345
           - 2344
-          - 2341
           - 2340
           - 2337
   - uid: 2346
@@ -45315,7 +45182,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 2368
           - 2351
           - 2349
           - 2348
@@ -45350,7 +45216,6 @@ entities:
           occludes: True
           ents:
           - 3242
-          - 3243
           - 3244
           - 3245
           - 3246
@@ -45383,7 +45248,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 3248
           - 3249
           - 3250
           - 3251
@@ -45418,7 +45282,6 @@ entities:
           occludes: True
           ents:
           - 3254
-          - 3255
           - 3256
           - 3257
           - 3258
@@ -45451,7 +45314,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 3260
           - 3261
           - 3262
           - 3263
@@ -45467,7 +45329,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 3769
           - 3770
           - 3771
           - 3772
@@ -45486,7 +45347,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 3778
           - 3779
           - 3780
           - 3781
@@ -45505,7 +45365,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 3787
           - 3788
           - 3789
           - 3790
@@ -45524,7 +45383,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 3796
           - 3797
           - 3798
           - 3799
@@ -45543,7 +45401,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 3805
           - 3806
           - 3807
           - 3808
@@ -45562,7 +45419,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 3814
           - 3815
           - 3816
           - 3817
@@ -45601,7 +45457,6 @@ entities:
           ents:
           - 4981
           - 4982
-          - 4983
           - 4984
           - 4985
           - 4986
@@ -45634,7 +45489,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 4988
           - 4989
           - 4990
           - 4991

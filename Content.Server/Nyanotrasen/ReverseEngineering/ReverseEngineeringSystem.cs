@@ -56,7 +56,7 @@ public sealed class ReverseEngineeringSystem : EntitySystem
 
         SubscribeLocalEvent<ReverseEngineeringComponent, ExaminedEvent>(OnExamined);
 
-        SubscribeLocalEvent<ReverseEngineeringMachineComponent, BeforeActivatableUIOpenEvent>((e,c,_) => UpdateUserInterface(e,c));
+        SubscribeLocalEvent<ReverseEngineeringMachineComponent, BeforeActivatableUIOpenEvent>((e, c, _) => UpdateUserInterface(e, c));
 
     }
 
@@ -106,8 +106,8 @@ public sealed class ReverseEngineeringSystem : EntitySystem
 
     private void OnRefreshParts(EntityUid uid, ReverseEngineeringMachineComponent component, RefreshPartsEvent args)
     {
-        var bonusRating = args.PartRatings[component.MachinePartScanBonus];
-        var aversionRating = args.PartRatings[component.MachinePartDangerAversionScore];
+        var bonusRating = args.GetRating(component.MachinePartScanBonus);
+        var aversionRating = args.GetRating(component.MachinePartDangerAversionScore);
 
         component.ScanBonus = (int) bonusRating;
         component.DangerAversionScore = (int) aversionRating;
@@ -124,7 +124,7 @@ public sealed class ReverseEngineeringSystem : EntitySystem
         _ambientSoundSystem.SetAmbience(uid, true);
     }
 
-    private void OnShutdown(EntityUid uid,ActiveReverseEngineeringMachineComponent component, ComponentShutdown args)
+    private void OnShutdown(EntityUid uid, ActiveReverseEngineeringMachineComponent component, ComponentShutdown args)
     {
         _ambientSoundSystem.SetAmbience(uid, false);
     }
@@ -258,7 +258,8 @@ public sealed class ReverseEngineeringSystem : EntitySystem
                 _audio.PlayPvs(component.FailSound2, uid);
                 _popupSystem.PopupEntity(Loc.GetString("reverse-engineering-popup-failure", ("machine", uid)), uid, Shared.Popups.PopupType.MediumCaution);
                 CancelProbe(uid, component);
-            } else
+            }
+            else
             {
                 result = ReverseEngineeringTickResult.Stagnation;
             }
@@ -271,30 +272,30 @@ public sealed class ReverseEngineeringSystem : EntitySystem
         switch (result)
         {
             case ReverseEngineeringTickResult.Stagnation:
-            {
-                bonus += 1;
-                break;
-            }
+                {
+                    bonus += 1;
+                    break;
+                }
             case ReverseEngineeringTickResult.SuccessMinor:
-            {
-                bonus += 10;
-                break;
-            }
+                {
+                    bonus += 10;
+                    break;
+                }
             case ReverseEngineeringTickResult.SuccessAverage:
-            {
-                bonus += 25;
-                break;
-            }
+                {
+                    bonus += 25;
+                    break;
+                }
             case ReverseEngineeringTickResult.SuccessMajor:
-            {
-                bonus += 40;
-                break;
-            }
+                {
+                    bonus += 40;
+                    break;
+                }
             case ReverseEngineeringTickResult.InstantSuccess:
-            {
-                bonus += 100;
-                break;
-            }
+                {
+                    bonus += 100;
+                    break;
+                }
         }
 
         component.Progress += bonus;
@@ -310,14 +311,16 @@ public sealed class ReverseEngineeringSystem : EntitySystem
             {
                 RemComp<ActiveReverseEngineeringMachineComponent>(uid);
             }
-        } else
+        }
+        else
         {
             CreateDisk(uid, component.DiskPrototype, rev.Recipes);
             _audio.PlayPvs(component.SuccessSound, uid);
             if (rev.NewItem == null)
             {
                 Eject(uid, component);
-            } else
+            }
+            else
             {
                 _slots.SetLock(uid, TargetSlot, false);
                 Spawn(rev.NewItem, Transform(uid).Coordinates);

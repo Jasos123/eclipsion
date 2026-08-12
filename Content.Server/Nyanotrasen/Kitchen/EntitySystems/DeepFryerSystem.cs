@@ -233,7 +233,7 @@ public sealed partial class DeepFryerSystem : SharedDeepfryerSystem
         {
             foreach (var (_, solution) in solutions.Solutions)
             {
-                if(_solutionContainerSystem.TryGetSolution(item, solution.Name, out var solutionRef))
+                if (_solutionContainerSystem.TryGetSolution(item, solution.Name, out var solutionRef))
                     _solutionContainerSystem.SetTemperature(solutionRef!.Value, component.PoweredTemperature);
             }
         }
@@ -361,7 +361,8 @@ public sealed partial class DeepFryerSystem : SharedDeepfryerSystem
 
         var oilToUse = 0;
 
-        if (HasComp<ItemComponent>(item)) {
+        if (HasComp<ItemComponent>(item))
+        {
             var itemComponent = Comp<ItemComponent>(item);
 
             oilToUse = (int) (itemComponent.Size.Id switch
@@ -374,7 +375,9 @@ public sealed partial class DeepFryerSystem : SharedDeepfryerSystem
                 "Ginormous" => 50,
                 _ => 10
             } * component.SolutionSizeCoefficient);
-        } else {
+        }
+        else
+        {
             oilToUse = (int) (TryComp<PhysicsComponent>(item, out var physicsComponent) ? physicsComponent.Mass : 10);
         }
 
@@ -470,7 +473,7 @@ public sealed partial class DeepFryerSystem : SharedDeepfryerSystem
 
     private void OnRefreshParts(EntityUid uid, DeepFryerComponent component, RefreshPartsEvent args)
     {
-        var ratingStorage = args.PartRatings[component.MachinePartStorageMax];
+        var ratingStorage = args.GetRating(component.MachinePartStorageMax);
 
         component.StorageMaxEntities = component.BaseStorageMaxEntities +
                                        (int) (component.StoragePerPartRating * (ratingStorage - 1));

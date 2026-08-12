@@ -86,6 +86,9 @@
   id: JobFreeholderDSM
 
 - type: playTimeTracker
+  id: JobOathboundDSM
+
+- type: playTimeTracker
   id: JobAdvocatusDSM
 
 - type: playTimeTracker

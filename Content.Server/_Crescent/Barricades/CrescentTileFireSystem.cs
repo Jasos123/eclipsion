@@ -347,6 +347,22 @@ public sealed class CrescentTileFireSystem : EntitySystem
         return _turf.IsTileBlocked(gridUid, indices, FireBlockingMask, grid);
     }
 
+    /// <summary>
+    /// Spawns one floor-fire entity at a tile if it is valid and is not already burning.
+    /// </summary>
+    public bool TrySpawnTileFire(EntityUid gridUid, MapGridComponent grid, Vector2i indices)
+    {
+        if (IsFireBlocked(gridUid, grid, indices))
+            return false;
+
+        var coordinates = _mapSystem.GridTileToLocal(gridUid, grid, indices);
+        if (_lookup.GetEntitiesInRange<CrescentTileFireComponent>(coordinates, 0.4f).Count != 0)
+            return false;
+
+        Spawn("CrescentTileFire", coordinates);
+        return true;
+    }
+
     private bool HasEnoughOxygen(EntityUid uid, CrescentTileFireComponent fire)
     {
         var mixture = _atmosphere.GetTileMixture((uid, Transform(uid)));

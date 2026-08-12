@@ -23008,50 +23008,6 @@ entities:
       rot: 3.141592653589793 rad
       pos: -11.5,-4.5
       parent: 1
-- proto: HandheldGPSBasic
-  entities:
-  - uid: 8
-    components:
-    - type: Transform
-      parent: 2
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 800
-    components:
-    - type: Transform
-      parent: 797
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 806
-    components:
-    - type: Transform
-      parent: 803
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 812
-    components:
-    - type: Transform
-      parent: 809
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 818
-    components:
-    - type: Transform
-      parent: 815
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 824
-    components:
-    - type: Transform
-      parent: 821
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: HandHeldMassScannerEE
   entities:
   - uid: 9
@@ -24624,7 +24580,6 @@ entities:
           occludes: True
           ents:
           - 3
-          - 8
           - 7
           - 9
           - 6
@@ -24643,7 +24598,6 @@ entities:
           - 802
           - 799
           - 798
-          - 800
   - uid: 803
     components:
     - type: Transform
@@ -24659,7 +24613,6 @@ entities:
           - 805
           - 807
           - 808
-          - 806
   - uid: 809
     components:
     - type: Transform
@@ -24672,7 +24625,6 @@ entities:
           occludes: True
           ents:
           - 814
-          - 812
           - 811
           - 813
           - 810
@@ -24690,7 +24642,6 @@ entities:
           - 820
           - 816
           - 817
-          - 818
           - 819
   - uid: 821
     components:
@@ -24705,7 +24656,6 @@ entities:
           ents:
           - 825
           - 823
-          - 824
           - 822
           - 826
 - proto: Syringe

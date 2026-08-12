@@ -54,7 +54,7 @@ public sealed partial class ConstructionSystem
             Text = Loc.GetString("machine-upgrade-examinable-verb-text"),
             Message = Loc.GetString("machine-upgrade-examinable-verb-message"),
             Category = VerbCategory.Examine,
-            Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/pickup.svg.192dpi.png"))
+            Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/pickup.svg.192dpi.png"))
         };
 
         args.Verbs.Add(verb);
@@ -162,7 +162,7 @@ public sealed partial class ConstructionSystem
             {
                 var c = EntityManager.SpawnEntity(info.DefaultPrototype, Transform(uid).Coordinates);
 
-                if(!_container.Insert(c, partContainer))
+                if (!_container.Insert(c, partContainer))
                     throw new Exception($"Couldn't insert machine component part with default prototype '{compName}' to machine with prototype {MetaData(uid).EntityPrototype?.ID ?? "N/A"}");
             }
         }
@@ -173,7 +173,7 @@ public sealed partial class ConstructionSystem
             {
                 var c = EntityManager.SpawnEntity(info.DefaultPrototype, Transform(uid).Coordinates);
 
-                if(!_container.Insert(c, partContainer))
+                if (!_container.Insert(c, partContainer))
                     throw new Exception($"Couldn't insert machine component part with default prototype '{tagName}' to machine with prototype {MetaData(uid).EntityPrototype?.ID ?? "N/A"}");
             }
         }
@@ -185,15 +185,25 @@ public sealed class RefreshPartsEvent : EntityEventArgs
     public IReadOnlyList<MachinePartComponent> Parts = new List<MachinePartComponent>();
 
     public Dictionary<string, float> PartRatings = new Dictionary<string, float>();
+
+    /// <summary>
+    ///     Rating of the given machine part, or 1 (the unupgraded baseline) when the machine has no
+    ///     such part. <see cref="PartRatings"/> is pre-filled with 0 for every part type the machine
+    ///     lacks, so indexing it directly silently zeroes out multipliers on boardless machines.
+    /// </summary>
+    public float GetRating(string partId)
+    {
+        return PartRatings.TryGetValue(partId, out var rating) && rating > 0f ? rating : 1f;
+    }
 }
 
 public sealed class UpgradeExamineEvent : EntityEventArgs
 {
-    private FormattedMessage Message;
+    private FormattedMessage _message;
 
     public UpgradeExamineEvent(ref FormattedMessage message)
     {
-        Message = message;
+        _message = message;
     }
 
     /// <summary>
@@ -202,13 +212,14 @@ public sealed class UpgradeExamineEvent : EntityEventArgs
     public void AddPercentageUpgrade(string upgradedLocId, float multiplier)
     {
         var percent = Math.Round(100 * MathF.Abs(multiplier - 1), 2);
-        var locId = multiplier switch {
+        var locId = multiplier switch
+        {
             < 1 => "machine-upgrade-decreased-by-percentage",
             1 or float.NaN => "machine-upgrade-not-upgraded",
             > 1 => "machine-upgrade-increased-by-percentage",
         };
         var upgraded = Loc.GetString(upgradedLocId);
-        this.Message.AddMarkup(Loc.GetString(locId, ("upgraded", upgraded), ("percent", percent)) + '\n');
+        _message.AddMarkup(Loc.GetString(locId, ("upgraded", upgraded), ("percent", percent)) + '\n');
     }
 
     /// <summary>
@@ -217,12 +228,13 @@ public sealed class UpgradeExamineEvent : EntityEventArgs
     public void AddNumberUpgrade(string upgradedLocId, int number)
     {
         var difference = Math.Abs(number);
-        var locId = number switch {
+        var locId = number switch
+        {
             < 0 => "machine-upgrade-decreased-by-amount",
             0 => "machine-upgrade-not-upgraded",
             > 0 => "machine-upgrade-increased-by-amount",
         };
         var upgraded = Loc.GetString(upgradedLocId);
-        this.Message.AddMarkup(Loc.GetString(locId, ("upgraded", upgraded), ("difference", difference)) + '\n');
+        _message.AddMarkup(Loc.GetString(locId, ("upgraded", upgraded), ("difference", difference)) + '\n');
     }
 }

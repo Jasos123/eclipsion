@@ -28,11 +28,15 @@ psionic-skill-branch-mind-name = Mind
 psionic-skill-branch-mind-description = Read the noosphere and impose your will upon other minds.
 psionic-skill-branch-kinetic-name = Kinetic
 psionic-skill-branch-kinetic-description = Manipulate matter, force and hostile supernatural effects.
+psionic-skill-branch-defense-name = Defense
+psionic-skill-branch-defense-description = Reinforce armor and project heat-resistant, blast-resistant energy shields.
 
 psionic-skill-fireball-name = Fireball
 psionic-skill-fireball-description = Release a close-range pyrokinetic flare around yourself.
 psionic-skill-pyrokinesis-name = Pyrokinesis
 psionic-skill-pyrokinesis-description = Ignite a flammable target at range.
+psionic-skill-flame-breath-name = Flame Breath
+psionic-skill-flame-breath-description = Breathe a four-tile cone of persistent floor fire. Walls stop the flames.
 psionic-skill-summon-imp-name = Summon Imp
 psionic-skill-summon-imp-description = Call a fiery psionic familiar into the world.
 
@@ -58,6 +62,8 @@ psionic-skill-metapsionics-name = Metapsionic Pulse
 psionic-skill-metapsionics-description = Sense nearby psychics and examine psionic signatures.
 psionic-skill-zap-name = Noospheric Zap
 psionic-skill-zap-description = Shock a target's consciousness through the noosphere.
+psionic-skill-telekinetic-manipulation-name = Telekinetic Manipulation
+psionic-skill-telekinetic-manipulation-description = Select an unanchored object at range, then hurl it toward a chosen location.
 psionic-skill-mass-sleep-name = Mass Sleep
 psionic-skill-mass-sleep-description = Apex choice: force several nearby minds into sleep.
 psionic-skill-mind-swap-name = Mind Swap
@@ -69,6 +75,15 @@ psionic-skill-telekinetic-pulse-name = Telekinetic Pulse
 psionic-skill-telekinetic-pulse-description = Release a violent wave of telekinetic force around yourself.
 psionic-skill-dispel-name = Dispel
 psionic-skill-dispel-description = Unmake summoned entities and supernatural barriers.
+psionic-skill-kinetic-slam-name = Kinetic Slam
+psionic-skill-kinetic-slam-description = Exhaust and violently throw a single target away from you.
+
+psionic-skill-self-shield-name = Energy Aegis
+psionic-skill-self-shield-description = Surround yourself with a 15-second shield against heat and explosions.
+psionic-skill-armor-upgrade-name = Reinforced Aegis
+psionic-skill-armor-upgrade-description = Permanently improve your worn armor's effective protection by 10 percent.
+psionic-skill-ally-shield-name = Projected Aegis
+psionic-skill-ally-shield-description = Project your energy shield around yourself or another nearby character.
 
 command-grant-psionic-level-description = Grants one or more psionic levels and development points.
 command-grant-psionic-level-help = Usage: grantpsioniclevel <entityUid> [amount]

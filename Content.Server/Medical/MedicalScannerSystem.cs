@@ -226,7 +226,7 @@ namespace Content.Server.Medical
 
         private void OnRefreshParts(EntityUid uid, MedicalScannerComponent component, RefreshPartsEvent args)
         {
-            var ratingFail = args.PartRatings[component.MachinePartCloningFailChance];
+            var ratingFail = args.GetRating(component.MachinePartCloningFailChance);
 
             component.CloningFailChanceMultiplier = MathF.Pow(component.PartRatingFailMultiplier, ratingFail - 1);
         }

@@ -21,7 +21,6 @@ using Robust.Shared.Prototypes;
 using Content.Shared.Mobs;
 using Content.Shared.Damage;
 using Content.Shared.Interaction.Events;
-using Timer = Robust.Shared.Timing.Timer;
 using Content.Shared.Alert;
 using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Systems;
@@ -58,21 +57,12 @@ public sealed class PsionicsSystem : EntitySystem
     private const int PsionicLevelUpFontSize = 14;
     private const ChatChannel PsionicLevelUpChatChannel = ChatChannel.Emotes;
 
-    /// <summary>
-    ///     Unfortunately, since spawning as a normal role and anything else is so different,
-    ///     this is the only way to unify them, for now at least.
-    /// </summary>
-    Queue<(PsionicComponent component, EntityUid uid)> _rollers = new();
-    public override void Update(float frameTime)
-    {
-        base.Update(frameTime);
-        if (!_cfg.GetCVar(CCVars.PsionicRollsEnabled))
-            return;
+    private static readonly HashSet<string> ProgressionCatalysts =
+    [
+        "LotophagoiOil",
+        "OusianaDust",
+    ];
 
-        foreach (var roller in _rollers)
-            RollPsionics(roller.uid, roller.component, true);
-        _rollers.Clear();
-    }
     public override void Initialize()
     {
         base.Initialize();
@@ -89,26 +79,8 @@ public sealed class PsionicsSystem : EntitySystem
 
     private void OnStartup(EntityUid uid, PsionicComponent component, MapInitEvent args)
     {
-        if (!component.CanReroll)
-            return;
-
-        Timer.Spawn(TimeSpan.FromSeconds(30), () => DeferRollers(uid));
-
-    }
-
-    /// <summary>
-    ///     We wait a short time before starting up the rolled powers, so that other systems have a chance to modify the list first.
-    ///     This is primarily for the sake of TraitSystem and AddJobSpecial.
-    /// </summary>
-    private void DeferRollers(EntityUid uid)
-    {
-        if (!Exists(uid)
-            || !TryComp(uid, out PsionicComponent? component))
-            return;
-
         CheckPowerCost(uid, component);
         GenerateAvailablePowers(component);
-        _rollers.Enqueue((component, uid));
     }
 
     /// <summary>
@@ -127,7 +99,7 @@ public sealed class PsionicsSystem : EntitySystem
     }
 
     /// <summary>
-    ///     The power pool is itself a DataField, and things like Traits/Antags are allowed to modify or replace the pool.
+    ///     Populate the legacy random-power pool for admin/debug and scripted overrides.
     /// </summary>
     private void GenerateAvailablePowers(PsionicComponent component)
     {
@@ -256,10 +228,10 @@ public sealed class PsionicsSystem : EntitySystem
     }
 
     /// <summary>
-    ///     This function attempts to generate a psionic power by incrementing a Psion's Potentia stat by a random amount, then checking if it beats a certain threshold.
-    ///     Please consider going through RerollPsionics or PsionicAbilitiesSystem.InitializePsionicPower instead of this function, particularly if you don't have a good reason to call this directly.
+    ///     Adds a randomized amount of Potentia and converts crossed thresholds into psionic levels
+    ///     and development points.
     /// </summary>
-    public void RollPsionics(EntityUid uid, PsionicComponent component, bool applyGlimmer = true, float rollEventMultiplier = 1f)
+    private void RollPsionics(EntityUid uid, PsionicComponent component, bool applyGlimmer = true, float rollEventMultiplier = 1f)
     {
         if (!_cfg.GetCVar(CCVars.PsionicRollsEnabled)
             || !component.Roller)
@@ -276,7 +248,7 @@ public sealed class PsionicsSystem : EntitySystem
             ? _glimmerSystem.GetGlimmerEquilibriumRatio() * 25
             : 0);
 
-        // Certain sources of power rolls provide their own multiplier.
+        // Certain sources of Potentia rolls provide their own multiplier.
         baselineChance *= rollEventMultiplier;
 
         // Ask if the Roller has any other effects to contribute, such as Traits.
@@ -304,17 +276,23 @@ public sealed class PsionicsSystem : EntitySystem
     }
 
     /// <summary>
-    ///     Each person has a single free reroll for their Psionics, which certain conditions can restore.
-    ///     This function attempts to "Spend" a reroll, if one is available.
+    ///     Spends a Psion's additional progression roll, if one is available.
     /// </summary>
-    public void RerollPsionics(EntityUid uid, PsionicComponent? psionic = null, float bonusMuliplier = 1f)
+    public bool RerollPsionics(
+        EntityUid uid,
+        string catalyst,
+        PsionicComponent? psionic = null,
+        float bonusMuliplier = 1f)
     {
-        if (!Resolve(uid, ref psionic, false)
+        if (!ProgressionCatalysts.Contains(catalyst)
+            || !Resolve(uid, ref psionic, false)
             || !psionic.CanReroll)
-            return;
+            return false;
 
         psionic.CanReroll = false;
         RollPsionics(uid, psionic, true, bonusMuliplier);
+        Dirty(uid, psionic);
+        return true;
     }
     private void OnMobstateChanged(EntityUid uid, PsionicComponent component, MobStateChangedEvent args)
     {

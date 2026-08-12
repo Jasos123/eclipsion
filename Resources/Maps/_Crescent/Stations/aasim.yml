@@ -19894,113 +19894,6 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 10.5,1.5
       parent: 1
-- proto: HandheldGPSBasic
-  entities:
-  - uid: 1037
-    components:
-    - type: Transform
-      parent: 1034
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1330
-    components:
-    - type: Transform
-      parent: 1327
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1334
-    components:
-    - type: Transform
-      parent: 1333
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1471
-    components:
-    - type: Transform
-      parent: 1469
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1560
-    components:
-    - type: Transform
-      parent: 1559
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1568
-    components:
-    - type: Transform
-      parent: 1567
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1987
-    components:
-    - type: Transform
-      parent: 1981
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1990
-    components:
-    - type: Transform
-      parent: 1989
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1998
-    components:
-    - type: Transform
-      parent: 1997
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2006
-    components:
-    - type: Transform
-      parent: 2005
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2019
-    components:
-    - type: Transform
-      parent: 2013
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2025
-    components:
-    - type: Transform
-      parent: 2021
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2034
-    components:
-    - type: Transform
-      parent: 2029
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2044
-    components:
-    - type: Transform
-      parent: 2037
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2442
-    components:
-    - type: Transform
-      parent: 2441
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: HandheldHealthAnalyzer
   entities:
   - uid: 2532
@@ -20194,7 +20087,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 2442
           - 2443
           - 2444
           - 2445
@@ -24064,7 +23956,6 @@ entities:
           occludes: True
           ents:
           - 1036
-          - 1037
           - 1038
           - 1039
   - uid: 1327
@@ -24097,7 +23988,6 @@ entities:
           occludes: True
           ents:
           - 1329
-          - 1330
           - 1331
           - 1332
   - uid: 1333
@@ -24129,7 +24019,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 1334
           - 1336
           - 1337
           - 1338
@@ -24163,7 +24052,6 @@ entities:
           occludes: True
           ents:
           - 1470
-          - 1471
           - 1472
           - 1475
           - 1476
@@ -24196,7 +24084,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 1560
           - 1561
           - 1563
           - 1564
@@ -24230,7 +24117,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 1568
           - 1569
           - 1570
           - 1572
@@ -24269,7 +24155,6 @@ entities:
           - 1984
           - 1985
           - 1986
-          - 1987
           - 1988
   - uid: 1989
     components:
@@ -24300,7 +24185,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 1990
           - 1991
           - 1992
           - 1993
@@ -24336,7 +24220,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 1998
           - 1999
           - 2000
           - 2001
@@ -24372,7 +24255,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 2006
           - 2007
           - 2008
           - 2009
@@ -24413,7 +24295,6 @@ entities:
           - 2016
           - 2017
           - 2018
-          - 2019
           - 2020
   - uid: 2021
     components:
@@ -24447,7 +24328,6 @@ entities:
           - 2022
           - 2023
           - 2024
-          - 2025
           - 2026
           - 2027
           - 2028
@@ -24484,7 +24364,6 @@ entities:
           - 2031
           - 2032
           - 2033
-          - 2034
           - 2035
           - 2036
   - uid: 2037
@@ -24521,7 +24400,6 @@ entities:
           - 2041
           - 2042
           - 2043
-          - 2044
           - 2045
 - proto: SurveillanceCameraRouterGeneral
   entities:

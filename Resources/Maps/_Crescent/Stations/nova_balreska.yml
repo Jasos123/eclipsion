@@ -293631,110 +293631,6 @@ entities:
       rot: 3.141592653589793 rad
       pos: 23.5,-1.5
       parent: 1
-- proto: HandheldGPSBasic
-  entities:
-  - uid: 38
-    components:
-    - type: Transform
-      parent: 28
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4599
-    components:
-    - type: Transform
-      parent: 4592
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4608
-    components:
-    - type: Transform
-      parent: 4601
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4619
-    components:
-    - type: Transform
-      parent: 4613
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4627
-    components:
-    - type: Transform
-      parent: 4621
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4635
-    components:
-    - type: Transform
-      parent: 4629
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4643
-    components:
-    - type: Transform
-      parent: 4637
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4658
-    components:
-    - type: Transform
-      parent: 4645
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4659
-    components:
-    - type: Transform
-      parent: 4645
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4675
-    components:
-    - type: Transform
-      parent: 4662
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4676
-    components:
-    - type: Transform
-      parent: 4662
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4685
-    components:
-    - type: Transform
-      parent: 4679
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: HolopadLongRange
   entities:
   - uid: 6571
@@ -303453,7 +303349,6 @@ entities:
           - 37
           - 35
           - 36
-          - 38
           - 29
   - uid: 4592
     components:
@@ -303466,7 +303361,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 4599
           - 4600
           - 4593
           - 4598
@@ -303485,7 +303379,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 4608
           - 4609
           - 4604
           - 4607
@@ -303505,7 +303398,6 @@ entities:
           occludes: True
           ents:
           - 4620
-          - 4619
           - 4615
           - 4614
           - 4617
@@ -303522,7 +303414,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 4627
           - 4625
           - 4626
           - 4624
@@ -303544,7 +303435,6 @@ entities:
           - 4630
           - 4631
           - 4636
-          - 4635
           - 4634
           - 4633
   - uid: 4637
@@ -303561,7 +303451,6 @@ entities:
           - 4640
           - 4638
           - 4642
-          - 4643
           - 4644
           - 4641
           - 4639
@@ -303580,7 +303469,6 @@ entities:
           - 4681
           - 4686
           - 4684
-          - 4685
           - 4680
           - 4682
 - proto: SurveillanceCameraGeneral
@@ -324359,7 +324247,6 @@ entities:
           occludes: True
           ents:
           - 4647
-          - 4658
           - 4646
           - 4648
           - 4652
@@ -324372,7 +324259,6 @@ entities:
           - 4660
           - 4657
           - 4661
-          - 4659
           - 4649
         paper_label: !type:ContainerSlot
           showEnts: False
@@ -324390,10 +324276,8 @@ entities:
           occludes: True
           ents:
           - 4664
-          - 4676
           - 4663
           - 4665
-          - 4675
           - 4669
           - 4666
           - 4671

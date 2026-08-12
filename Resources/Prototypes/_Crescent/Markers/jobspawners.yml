@@ -293,6 +293,18 @@
       - state: passenger
 
 - type: entity
+  id: SpawnPointOathbound
+  parent: SpawnPointJobBase
+  name: oathbound
+  components:
+  - type: SpawnPoint
+    job_id: OathboundDSM
+  - type: Sprite
+    layers:
+      - state: green
+      - state: passenger
+
+- type: entity
   id: SpawnPointAdvocatus
   parent: SpawnPointJobBase
   name: advocati
@@ -1341,6 +1353,18 @@
   components:
   - type: SpawnPoint
     job_id: planetfall_freeholder
+  - type: Sprite
+    layers:
+      - state: green
+      - state: passenger
+
+- type: entity
+  id: SpawnPointPlanetfallOathboundDSM
+  parent: SpawnPointJobBase
+  name: PlanetfallOathboundDSM
+  components:
+  - type: SpawnPoint
+    job_id: planetfall_oathbound
   - type: Sprite
     layers:
       - state: green

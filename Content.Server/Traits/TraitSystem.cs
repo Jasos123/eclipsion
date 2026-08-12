@@ -37,6 +37,11 @@ public sealed class TraitSystem : EntitySystem
     [Dependency] private readonly IChatManager _chatManager = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLogManager = default!;
 
+    /// <summary>
+    ///     Job used to evaluate job requirements when the spawn has no job of its own.
+    /// </summary>
+    private static readonly ProtoId<JobPrototype> FallbackJob = "Passenger";
+
     public override void Initialize()
     {
         base.Initialize();
@@ -57,14 +62,26 @@ public sealed class TraitSystem : EntitySystem
     {
         var pointsTotal = _configuration.GetCVar(CCVars.GameTraitsDefaultPoints);
         var traitSelections = _configuration.GetCVar(CCVars.GameTraitsMax);
-        if (jobId is not null && !_prototype.TryIndex(jobId, out var jobPrototype)
-            && jobPrototype is not null && !jobPrototype.ApplyTraits)
+
+        // TryIndex succeeding is what tells us the job opted out. The old condition required
+        // TryIndex to *fail* and still produce a non-null prototype, so it could never be true and
+        // "applyTraits: false" jobs (borgs) were given the player's character traits anyway.
+        if (jobId is not null
+            && _prototype.TryIndex(jobId, out var jobPrototype)
+            && !jobPrototype.ApplyTraits)
             return;
 
         if (_prototype.TryIndex<SpeciesPrototype>(profile.Species, out var speciesProto))
             pointsTotal += speciesProto.BonusTraitPoints;
 
-        var jobPrototypeToUse = _prototype.Index(jobId ?? _prototype.EnumeratePrototypes<JobPrototype>().First().ID);
+        // Job requirements need some job to evaluate against. Callers such as cloning may have no
+        // job at all, so fall back to the neutral civilian role rather than whatever prototype
+        // happens to enumerate first - that order is not stable, which made jobless spawns gain or
+        // lose job-gated traits at random.
+        if (!_prototype.TryIndex(jobId ?? FallbackJob, out var jobPrototypeToUse)
+            && !_prototype.TryIndex(FallbackJob, out jobPrototypeToUse))
+            return;
+
         var sortedTraits = new List<TraitPrototype>();
 
         foreach (var traitId in profile.TraitPreferences)
@@ -151,7 +168,7 @@ public sealed class TraitSystem : EntitySystem
     /// <summary>
     ///     https://www.youtube.com/watch?v=X2QMN0a_TrA
     /// </summary>
-    private void VaporizeCheater (Robust.Shared.Player.ICommonSession targetPlayer)
+    private void VaporizeCheater(Robust.Shared.Player.ICommonSession targetPlayer)
     {
         _adminSystem.Erase(targetPlayer);
 

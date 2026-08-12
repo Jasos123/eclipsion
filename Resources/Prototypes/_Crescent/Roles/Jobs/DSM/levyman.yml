@@ -36,8 +36,6 @@
     - !type:CharacterSpeciesRequirement
       species:
         - Human
-        - Oni
-        - IPC
     - !type:CharacterTraitRequirement
       inverted: true
       traits:

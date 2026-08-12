@@ -111,3 +111,23 @@ DefaultStationBeaconKeep: DefaultStationBeacon
 DefaultStationBeaconQuestions: DefaultStationBeacon
 ReinforcedPlasmaWindowStation: ReinforcedPlasmaWindow
 ComputerShipyard : ComputerShipyardCrescent
+
+# Legacy map references that survived their prototype ports.
+PoweredlightColoredFrostyBlue: PoweredLightColoredFrostyBlue
+PoweredlightColoredBlack: PoweredLightColoredBlack
+ClothingShoesBootsWinterHoS: ClothingShoesBootsWinterHeadOfSecurity
+ClothingUniformJumpsuitImperialGovernorCasual: ClothingUniformJumpsuitImperialGovernor
+DeathAcidifierImplanterNF: DeathAcidifierImplanter
+DVSmartFridgeMedical: SmartFridgeMedical
+WeaponTurretSwarmerFilled: BaseWeaponTurretSwarmerFilled
+WeaponTurretSwarmerTFSC: BaseWeaponTurretSwarmer
+ScribesMothershipComputer: CountsmanMothershipComputer
+LaborMothershipComputer: CountsmanMothershipComputer
+SingingParasite: Boombox
+
+# These prototypes were deliberately removed without replacements.
+ImperialFabdiskAvionics: null
+ImperialFabdiskCompliance: null
+SyndicateFabdiskAviation: null
+ShipVoucherProbe: null
+SpawnFighterBroadsword: null

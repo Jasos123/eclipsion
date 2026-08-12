@@ -53,6 +53,9 @@ public sealed partial class GatherableSystem : EntitySystem
 
     public void Gather(EntityUid gatheredUid, EntityUid? gatherer = null, GatherableComponent? component = null)
     {
+        if (TerminatingOrDeleted(gatheredUid) || EntityManager.IsQueuedForDeletion(gatheredUid))
+            return;
+
         if (!Resolve(gatheredUid, ref component))
             return;
 

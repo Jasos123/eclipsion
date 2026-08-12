@@ -25,3 +25,4 @@ ghost-role-information-bingle-rules = You are a [color=red][bold]Team Antagonist
 bingle-upgrade-success = You feel stronger
 bingle-pit-grow =  The pit grows larger
 bingle-pit-end-of-round = The Binglepit near {$location} grew to level [color=teal]{$level}[/color] and collected [color=teal]{$points}[/color] Bingle points
+heretic-ascension-bingle = A Bingle has ascended! The pit hungers.

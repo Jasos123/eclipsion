@@ -105595,43 +105595,6 @@ entities:
     - type: Transform
       pos: -29.5,-3.5
       parent: 1
-- proto: HandheldGPSBasic
-  entities:
-  - uid: 4821
-    components:
-    - type: Transform
-      parent: 4815
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4831
-    components:
-    - type: Transform
-      parent: 4825
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4841
-    components:
-    - type: Transform
-      parent: 4835
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4851
-    components:
-    - type: Transform
-      parent: 4845
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4899
-    components:
-    - type: Transform
-      parent: 4894
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: HandHeldMassScannerEE
   entities:
   - uid: 4822
@@ -114369,7 +114332,6 @@ entities:
           - 4822
           - 4819
           - 4817
-          - 4821
           - 4818
           - 4820
           - 4823
@@ -114386,7 +114348,6 @@ entities:
           ents:
           - 4826
           - 4832
-          - 4831
           - 4828
           - 4833
           - 4829
@@ -114407,7 +114368,6 @@ entities:
           - 4836
           - 4838
           - 4837
-          - 4841
           - 4839
           - 4842
           - 4840
@@ -114424,7 +114384,6 @@ entities:
           ents:
           - 4850
           - 4848
-          - 4851
           - 4846
           - 4853
           - 4847
@@ -114447,7 +114406,6 @@ entities:
           - 4900
           - 4898
           - 4897
-          - 4899
           - 4895
           - 4901
           - 4903

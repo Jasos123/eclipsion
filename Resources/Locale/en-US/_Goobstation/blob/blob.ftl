@@ -190,3 +190,5 @@ speak-vv-blob-core = Blob core
 language-Blob-name = Blob
 chat-language-Blob-name = Blob
 language-Blob-description = Bleeb bob! Blob blob!
+blob-no-using-guns-popup = Your malformed hands cannot grip a weapon.
+blob-target-close-to-tile = That is too close to an existing blob tile.

@@ -205,8 +205,8 @@ namespace Content.Server.Medical.BiomassReclaimer
 
         private void OnRefreshParts(EntityUid uid, BiomassReclaimerComponent component, RefreshPartsEvent args)
         {
-            var laserRating = args.PartRatings[component.MachinePartProcessingSpeed];
-            var manipRating = args.PartRatings[component.MachinePartYieldAmount];
+            var laserRating = args.GetRating(component.MachinePartProcessingSpeed);
+            var manipRating = args.GetRating(component.MachinePartYieldAmount);
 
             // Processing time slopes downwards with part rating.
             component.ProcessingTimePerUnitMass =

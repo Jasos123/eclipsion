@@ -107,10 +107,13 @@ public class SharedPassportSystem : EntitySystem
 
         UpdatePassportProfile(new(passportEntity, passportComponent), profile);
 
+        var issued = new PassportIssuedEvent(mob);
+        RaiseLocalEvent(passportEntity, ref issued);
+
         // Try to find back-mounted storage apparatus
         if (_inventory.TryGetSlotEntity(mob, "back", out var item) &&
                 EntityManager.TryGetComponent<StorageComponent>(item, out var inventory))
-            // Try inserting the entity into the storage, if it can't, it leaves the loadout item on the ground
+        // Try inserting the entity into the storage, if it can't, it leaves the loadout item on the ground
         {
             if (!EntityManager.TryGetComponent<ItemComponent>(passportEntity, out var itemComp)
                 || !_storage.CanInsert(item.Value, passportEntity, out _, inventory, itemComp)
@@ -308,6 +311,6 @@ public class SharedPassportSystem : EntitySystem
     }
 
     [ByRefEvent]
-    public sealed class PassportToggleEvent : HandledEntityEventArgs {}
+    public sealed class PassportToggleEvent : HandledEntityEventArgs { }
 
 }

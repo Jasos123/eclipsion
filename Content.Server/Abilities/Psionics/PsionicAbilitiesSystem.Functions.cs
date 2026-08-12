@@ -33,13 +33,19 @@ public sealed partial class AddPsionicActions : PsionicPowerFunction
         PsionicPowerPrototype proto)
     {
         var actions = entityManager.System<SharedActionsSystem>();
+        if (!psionicComponent.Actions.TryGetValue(proto.ID, out var powerActions))
+        {
+            powerActions = new List<EntityUid?>();
+            psionicComponent.Actions.Add(proto.ID, powerActions);
+        }
+
         foreach (var id in Actions)
         {
             EntityUid? actionId = null;
             if (actions.AddAction(uid, ref actionId, id))
             {
                 actions.StartUseDelay(actionId);
-                psionicComponent.Actions.Add(proto.ID, actionId);
+                powerActions.Add(actionId);
             }
         }
     }
@@ -68,12 +74,15 @@ public sealed partial class RemovePsionicActions : PsionicPowerFunction
 
         var copy = serializationManager.CreateCopy(psionicComponent.Actions, notNullableOverride: true);
 
-        foreach (var (id, actionUid) in copy)
+        foreach (var (id, actionUids) in copy)
         {
             if (id != proto.ID)
                 continue;
 
-            actions.RemoveAction(uid, actionUid);
+            foreach (var actionUid in actionUids)
+                actions.RemoveAction(uid, actionUid);
+
+            psionicComponent.Actions.Remove(id);
         }
     }
 }

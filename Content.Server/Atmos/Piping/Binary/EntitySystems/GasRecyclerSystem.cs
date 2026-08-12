@@ -102,8 +102,8 @@ namespace Content.Server.Atmos.Piping.Binary.EntitySystems
                 return 0;
             }
             float overPressConst = 300; // pressure difference (in atm) to get 200 L/sec transfer rate
-            float alpha = Atmospherics.MaxTransferRate * _atmosphereSystem.PumpSpeedup() / (float)Math.Sqrt(overPressConst*Atmospherics.OneAtmosphere);
-            return alpha * (float)Math.Sqrt(inlet.Pressure - outlet.Pressure);
+            float alpha = Atmospherics.MaxTransferRate * _atmosphereSystem.PumpSpeedup() / (float) Math.Sqrt(overPressConst * Atmospherics.OneAtmosphere);
+            return alpha * (float) Math.Sqrt(inlet.Pressure - outlet.Pressure);
         }
 
         private void OnDisabled(EntityUid uid, GasRecyclerComponent comp, ref AtmosDeviceDisabledEvent args)
@@ -122,8 +122,8 @@ namespace Content.Server.Atmos.Piping.Binary.EntitySystems
 
         private void OnRefreshParts(EntityUid uid, GasRecyclerComponent component, RefreshPartsEvent args)
         {
-            var ratingTemp = args.PartRatings[component.MachinePartMinTemp];
-            var ratingPressure = args.PartRatings[component.MachinePartMinPressure];
+            var ratingTemp = args.GetRating(component.MachinePartMinTemp);
+            var ratingPressure = args.GetRating(component.MachinePartMinPressure);
 
             component.MinTemp = component.BaseMinTemp * MathF.Pow(component.PartRatingMinTempMultiplier, ratingTemp - 1);
             component.MinPressure = component.BaseMinPressure * MathF.Pow(component.PartRatingMinPressureMultiplier, ratingPressure - 1);

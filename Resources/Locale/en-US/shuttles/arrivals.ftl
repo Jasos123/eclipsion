@@ -8,3 +8,4 @@ cmd-arrivals-invalid = Invalid arg supplied.
 
 cmd-arrivals-force-hint = Forces players to arrive.
 cmd-arrivals-forced = Forced {$uid} to arrive to the station.
+map-name-terminal = Arrivals Terminal

@@ -4647,14 +4647,6 @@ entities:
     - type: Transform
       pos: -3.5,4.5
       parent: 1
-- proto: HandheldGPSBasic
-  entities:
-  - uid: 1069
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 0.50727177,-0.6013231
-      parent: 1
 - proto: HospitalCurtainsOpen
   entities:
   - uid: 800

@@ -20,3 +20,4 @@ cmd-dungen_preset_vis-help = dungen_preset_vis <mapid> <preset>
 cmd-dungen_pack_vis-success = Success
 cmd-dungen_pack_vis-desc = Generates a tile-based preview of a dungeon pack.
 cmd-dungen_pack_vis-help = dungen_pack_vis <mapid> <pack>
+cmd-dungen_pack_vis = Toggled dungeon pack visualisation.

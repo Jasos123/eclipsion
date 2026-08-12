@@ -290,6 +290,10 @@
   description: A complicated-looking machine that checks the validity of provided passports.
   components:
   - type: PassportChecker
+  - type: PassportReader
+  - type: DeviceLinkSource
+    ports:
+    - PassportScanSender
   - type: Dispenser
     defaultItem: TemporaryDenialSlip
     inventory:
@@ -303,6 +307,25 @@
     radius: 1.5
     energy: 1.6
     color: "#9dc5c9"
+
+- type: entity
+  parent: BaseDispenser
+  id: FingerprintScanner
+  name: fingerprint scanner
+  description: A fixed biometric reader. Link it to a passport control computer and use it with an empty hand to submit your fingerprint.
+  components:
+  - type: FingerprintScanner
+  - type: DeviceLinkSource
+    ports:
+    - FingerprintScanSender
+  - type: Sprite
+    sprite: _Crescent/Structures/fingerprintscanner.rsi
+    layers:
+    - state: "icon"
+  - type: PointLight
+    radius: 1.5
+    energy: 1.6
+    color: "#3fe4ed"
 
 - type: entity
   parent: BaseDispenser

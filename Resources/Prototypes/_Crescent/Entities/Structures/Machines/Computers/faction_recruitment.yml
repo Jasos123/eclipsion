@@ -59,6 +59,7 @@
     # leadership roles must never be assignable from a console.
     roles:
     - FreeholderDSM
+    - OathboundDSM
     - LevymanDSM
     - ScribeDSM
     - SurgeonDSM

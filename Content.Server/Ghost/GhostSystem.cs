@@ -79,6 +79,55 @@ namespace Content.Server.Ghost
 
             SubscribeLocalEvent<RoundEndTextAppendEvent>(_ => MakeVisible(true));
             SubscribeLocalEvent<ToggleGhostVisibilityToAllEvent>(OnToggleGhostVisibilityToAll);
+
+            SubscribeLocalEvent<GhostVisionComponent, GetVisMaskEvent>(OnGhostVisionGetVisMask);
+            SubscribeLocalEvent<GhostComponent, GetVisMaskEvent>(OnGhostGetVisMask);
+        }
+
+        private void OnGhostVisionGetVisMask(Entity<GhostVisionComponent> ent, ref GetVisMaskEvent args)
+        {
+            args.VisibilityMask |= (int) VisibilityFlags.Ghost;
+        }
+
+        /// <summary>
+        ///     Ghosts see other ghosts. This has to be contributed through the event rather than only
+        ///     being set once on map init, because RefreshVisibilityMask rebuilds the mask from scratch -
+        ///     without this, a ghost that toggled subfloor view or held a ship repair tool silently lost
+        ///     the ability to see other ghosts.
+        /// </summary>
+        private void OnGhostGetVisMask(Entity<GhostComponent> ent, ref GetVisMaskEvent args)
+        {
+            args.VisibilityMask |= (int) VisibilityFlags.Ghost;
+        }
+
+        /// <summary>
+        ///     Grants or revokes private ghost vision for a single entity's eye. Unlike
+        ///     <see cref="MakeVisible"/> this changes nothing about the ghosts themselves, so no other
+        ///     player is affected and it can be turned back off.
+        /// </summary>
+        /// <returns>True if the entity's ghost vision state changed.</returns>
+        public bool SetGhostVision(EntityUid uid, bool enabled)
+        {
+            if (!HasComp<EyeComponent>(uid))
+                return false;
+
+            if (enabled == HasComp<GhostVisionComponent>(uid))
+                return false;
+
+            if (enabled)
+                AddComp<GhostVisionComponent>(uid);
+            else
+                RemComp<GhostVisionComponent>(uid);
+
+            // The mask is rebuilt from scratch out of GetVisMaskEvent, so this both applies our flag
+            // and preserves anything else contributing to it (t-ray goggles, repair tools, ...).
+            _eye.RefreshVisibilityMask(uid);
+            return true;
+        }
+
+        public bool HasGhostVision(EntityUid uid)
+        {
+            return HasComp<GhostVisionComponent>(uid);
         }
 
         private void OnGhostHearingAction(EntityUid uid, GhostComponent component, ToggleGhostHearingActionEvent args)
@@ -172,6 +221,10 @@ namespace Content.Server.Ghost
             if (!Resolve(uid, ref eyeComponent, false))
                 return;
 
+            // An admin who turned on their own private ghost vision keeps it when they stop being a ghost.
+            if (!canSee && HasComp<GhostVisionComponent>(uid))
+                return;
+
             if (canSee)
                 _eye.SetVisibilityMask(uid, eyeComponent.VisibilityMask | (int) VisibilityFlags.Ghost, eyeComponent);
             else
@@ -241,7 +294,7 @@ namespace Content.Server.Ghost
 
         private void OnGhostReturnToBodyRequest(GhostReturnToBodyRequest msg, EntitySessionEventArgs args)
         {
-            if (args.SenderSession.AttachedEntity is not {Valid: true} attached
+            if (args.SenderSession.AttachedEntity is not { Valid: true } attached
                 || !_ghostQuery.TryComp(attached, out var ghost)
                 || !ghost.CanReturnToBody
                 || !TryComp(attached, out ActorComponent? actor))
@@ -257,7 +310,7 @@ namespace Content.Server.Ghost
 
         private void OnGhostWarpsRequest(GhostWarpsRequestEvent msg, EntitySessionEventArgs args)
         {
-            if (args.SenderSession.AttachedEntity is not {Valid: true} entity
+            if (args.SenderSession.AttachedEntity is not { Valid: true } entity
                 || !_ghostQuery.HasComp(entity))
             {
                 Log.Warning($"User {args.SenderSession.Name} sent a {nameof(GhostWarpsRequestEvent)} without being a ghost.");
@@ -270,7 +323,7 @@ namespace Content.Server.Ghost
 
         private void OnGhostWarpToTargetRequest(GhostWarpToTargetRequestEvent msg, EntitySessionEventArgs args)
         {
-            if (args.SenderSession.AttachedEntity is not {Valid: true} attached
+            if (args.SenderSession.AttachedEntity is not { Valid: true } attached
                 || !_ghostQuery.HasComp(attached))
             {
                 Log.Warning($"User {args.SenderSession.Name} tried to warp to {msg.Target} without being a ghost.");
@@ -290,14 +343,14 @@ namespace Content.Server.Ghost
 
         private void OnGhostnadoRequest(GhostnadoRequestEvent msg, EntitySessionEventArgs args)
         {
-            if (args.SenderSession.AttachedEntity is not {} uid
+            if (args.SenderSession.AttachedEntity is not { } uid
                 || !_ghostQuery.HasComp(uid))
             {
                 Log.Warning($"User {args.SenderSession.Name} tried to ghostnado without being a ghost.");
                 return;
             }
 
-            if (_followerSystem.GetMostFollowed() is not {} target)
+            if (_followerSystem.GetMostFollowed() is not { } target)
                 return;
 
             WarpTo(uid, target);
@@ -332,7 +385,7 @@ namespace Content.Server.Ghost
         {
             foreach (var player in _playerManager.Sessions)
             {
-                if (player.AttachedEntity is not {Valid: true} attached)
+                if (player.AttachedEntity is not { Valid: true } attached)
                     continue;
 
                 if (attached == except) continue;

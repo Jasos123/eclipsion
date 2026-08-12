@@ -449,3 +449,48 @@ reagent-effect-guidebook-crit-modifier =
         [-1] Lowers
        *[1] Raises
     } critical threshold by {$amount} points
+
+reagent-effect-guidebook-add-to-solution-reaction =
+    { $chance ->
+        [1] Adds
+        *[other] add
+    } the produced reagent to the solution
+
+reagent-effect-guidebook-area-reaction =
+    { $chance ->
+        [1] Creates
+        *[other] create
+    } a cloud of smoke or foam lasting {NATURALFIXED($duration, 3)} {MANY("second", $duration)}
+
+reagent-effect-guidebook-deal-stamina-damage =
+    { $chance ->
+        [1] { $deltasign ->
+                [1] Deals
+                *[-1] Heals
+             }
+        *[other] { $deltasign ->
+                [1] deal
+                *[-1] heal
+             }
+    } {NATURALFIXED($amount, 2)} stamina damage{ $immediate ->
+        [true] {" "}immediately
+        *[false] {""}
+    }
+
+reagent-effect-guidebook-plant-attribute =
+    { $chance ->
+        [1] Adjusts
+        *[other] adjust
+    } the plant's [color={$colorName}]{$attribute}[/color] by {$amount}
+
+reagent-effect-guidebook-plant-cryoxadone =
+    { $chance ->
+        [1] Rejuvenates
+        *[other] rejuvenate
+    } the plant, reducing its age
+
+reagent-effect-guidebook-plant-phalanximine =
+    { $chance ->
+        [1] Restores
+        *[other] restore
+    } viability to a dead plant's seeds

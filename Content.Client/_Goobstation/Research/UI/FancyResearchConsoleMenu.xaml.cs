@@ -194,7 +194,7 @@ public sealed partial class FancyResearchConsoleMenu : FancyWindow
                 SelectTech(proto, tech.Value);
         }
 
-        DragContainer.RebuildConnectionCache(layout.Depths);
+        DragContainer.RebuildConnectionCache();
     }
 
     /// <summary>
@@ -262,10 +262,10 @@ public sealed partial class FancyResearchConsoleMenu : FancyWindow
                     : disciplinePrototype.Color;
 
                 headers.Add(new TreeHeaderLayout(
-                    sectionName.ToUpperInvariant(),
+                    $"{sectionName.ToUpperInvariant()} · {Loc.GetString("research-console-tree-prerequisite-legend")}",
                     sectionColor,
                     new Vector2i(0, laneTop),
-                    290,
+                    430,
                     true));
                 laneTop++;
                 currentSectionIsCivilian = isCivilian;
@@ -302,13 +302,42 @@ public sealed partial class FancyResearchConsoleMenu : FancyWindow
                         "research-console-tree-tier-range",
                         ("minimum", minimumTier),
                         ("maximum", maximumTier));
+                string? tierTooltip = null;
+
+                if (minimumTier == maximumTier &&
+                    minimumTier > 1 &&
+                    disciplinePrototype.TierPrerequisites.TryGetValue(minimumTier, out var requiredFraction))
+                {
+                    var previousTier = minimumTier - 1;
+                    var previousTierTechnologies = discipline
+                        .Where(technology => technology.Tier == previousTier)
+                        .ToList();
+                    var researchedCount = previousTierTechnologies.Count(technology =>
+                        List.GetValueOrDefault(technology.ID) == ResearchAvailability.Researched);
+                    var requiredCount = (int) Math.Ceiling(previousTierTechnologies.Count * requiredFraction);
+                    var requiredPercent = (int) MathF.Round(requiredFraction * 100f);
+
+                    tierLabel = Loc.GetString(
+                        "research-console-tree-tier-gated",
+                        ("tier", minimumTier),
+                        ("percent", requiredPercent));
+                    tierTooltip = Loc.GetString(
+                        "research-console-tree-tier-gated-tooltip",
+                        ("tier", minimumTier),
+                        ("previousTier", previousTier),
+                        ("researched", researchedCount),
+                        ("total", previousTierTechnologies.Count),
+                        ("required", requiredCount),
+                        ("percent", requiredPercent));
+                }
 
                 headers.Add(new TreeHeaderLayout(
                     tierLabel,
                     disciplinePrototype.Color,
                     new Vector2i(columnX, laneTop),
                     wrappedColumnCount * LayerColumnStride * GridSize - 12,
-                    false));
+                    false,
+                    tierTooltip));
 
                 for (var index = 0; index < orderedTechnologies.Count; index++)
                 {
@@ -333,7 +362,7 @@ public sealed partial class FancyResearchConsoleMenu : FancyWindow
             laneTop = laneItemTop + laneHeight + 1;
         }
 
-        return new ResearchTreeLayout(positions, depths, headers);
+        return new ResearchTreeLayout(positions, headers);
 
         static float GetPrerequisiteBarycenter(
             TechnologyPrototype technology,
@@ -359,7 +388,9 @@ public sealed partial class FancyResearchConsoleMenu : FancyWindow
         var panel = new PanelContainer
         {
             SetSize = new Vector2(header.Width, header.Major ? 30 : 24),
-            MouseFilter = MouseFilterMode.Ignore,
+            MouseFilter = header.Tooltip == null ? MouseFilterMode.Ignore : MouseFilterMode.Pass,
+            ToolTip = header.Tooltip,
+            TooltipDelay = 0.15f,
             PanelOverride = new StyleBoxFlat
             {
                 BackgroundColor = header.Color.WithAlpha(header.Major ? 0.24f : 0.13f),
@@ -552,7 +583,6 @@ public sealed partial class FancyResearchConsoleMenu : FancyWindow
 
     private sealed record ResearchTreeLayout(
         Dictionary<string, Vector2i> Positions,
-        Dictionary<string, int> Depths,
         List<TreeHeaderLayout> Headers);
 
     private sealed record TreeHeaderLayout(
@@ -560,6 +590,7 @@ public sealed partial class FancyResearchConsoleMenu : FancyWindow
         Color Color,
         Vector2i Position,
         float Width,
-        bool Major);
+        bool Major,
+        string? Tooltip = null);
 
 }

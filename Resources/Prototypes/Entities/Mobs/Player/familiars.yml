@@ -224,6 +224,33 @@
       - TelepathyPower
       - PyrokineticFlare
       - XenoglossyPower
+  - type: PsionicFamiliar
+    commandable: true
+  # Corporeal spirits halve ordinary ballistic damage. At 20 total damage this makes
+  # the imp die to roughly two rifle rounds or three standard pistol rounds.
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      20: Dead
+  - type: HTN
+    rootTask:
+      task: RangedPsionicFamiliarCompound
+  - type: NPCRangedCombat
+  - type: Gun
+    fireRate: 0.4
+    useKey: false
+    showExamineText: false
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/laser_cannon.ogg
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 3
+  - type: BasicEntityAmmoProvider
+    proto: ProjectileImpFireball
+    capacity: 1
+    count: 1
   - type: MeleeWeapon
     damage:
       types:

@@ -3,15 +3,22 @@
   name: entity-category-name-actions
   hideSpawnMenu: true
 
+# components: anything carrying a GameRule joins this category on its own, so a rule that forgets
+# `categories: [ HideSpawnMenu ]` can't leak into the spawn and mapping menus as an errored sprite.
 - type: entityCategory
   id: GameRules
   name: entity-category-name-game-rules
   hideSpawnMenu: true
+  components:
+  - GameRule
 
+# Same deal: objectives live on minds, are never placed in the world, and have no sprite to show.
 - type: entityCategory
   id: Objectives
   name: entity-category-name-objectives
   hideSpawnMenu: true
+  components:
+  - Objective
 
 - type: entityCategory
   id: Roles

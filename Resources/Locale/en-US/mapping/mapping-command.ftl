@@ -1,3 +1,10 @@
+cmd-toggleautosave-desc = Toggles autosaving for a map.
+cmd-toggleautosave-help = Usage: toggleautosave <map> <path if enabling>
+cmd-toggleautosave-started = Autosaving map {$mapId} to {$path} every {$minutes} minutes.
+cmd-toggleautosave-stopped = Stopped autosaving map {$mapId}.
+cmd-toggleautosave-disabled = Autosaving is disabled. Set the mapping.autosave cvar to true to enable it.
+cmd-toggleautosave-failed = Can't autosave map {$mapId}. It has to exist and must not be initialized.
+
 cmd-mapping-desc = Create or load a map and teleports you to it.
 cmd-mapping-help = Usage: mapping [MapID] [Path]
 cmd-mapping-server = Only players can use this command.

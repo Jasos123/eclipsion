@@ -32,10 +32,10 @@ public sealed partial class ArtifactAnalyzerComponent : Component
     public string MachinePartTimeReduction = "Manipulator";
 
     /// <summary>
-    /// A multiplier applied to the amount of points generated based on the machine parts inserted.
+    /// Seconds removed from the analysis duration for each machine-part tier above one.
     /// </summary>
     [DataField]
-    public float UpgradeTimeReductionMultiplier = 10;
+    public float UpgradeTimeReductionMultiplier = 1.25f;
 
     // Nyano - Summary - Begin modified code block: tie artifacts to glimmer.
     /// <summary>

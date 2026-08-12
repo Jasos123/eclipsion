@@ -23259,36 +23259,6 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 10.5,29.5
       parent: 1
-- proto: HandheldGPSBasic
-  entities:
-  - uid: 30
-    components:
-    - type: Transform
-      parent: 22
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1691
-    components:
-    - type: Transform
-      parent: 1684
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1700
-    components:
-    - type: Transform
-      parent: 1693
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1709
-    components:
-    - type: Transform
-      parent: 1702
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: HolopadLongRange
   entities:
   - uid: 2494
@@ -27418,7 +27388,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 30
           - 28
           - 26
           - 25
@@ -27438,7 +27407,6 @@ entities:
           occludes: True
           ents:
           - 1692
-          - 1691
           - 1688
           - 1689
           - 1687
@@ -27460,7 +27428,6 @@ entities:
           occludes: True
           ents:
           - 1701
-          - 1700
           - 1696
           - 1695
           - 1699
@@ -27482,7 +27449,6 @@ entities:
           occludes: True
           ents:
           - 1704
-          - 1709
           - 1706
           - 1708
           - 1703

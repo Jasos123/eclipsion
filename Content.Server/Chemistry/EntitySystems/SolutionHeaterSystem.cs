@@ -67,7 +67,7 @@ public sealed class SolutionHeaterSystem : EntitySystem
 
     private void OnRefreshParts(Entity<SolutionHeaterComponent> entity, ref RefreshPartsEvent args)
     {
-        var heatRating = args.PartRatings[entity.Comp.MachinePartHeatMultiplier] - 1;
+        var heatRating = args.GetRating(entity.Comp.MachinePartHeatMultiplier) - 1;
 
         entity.Comp.HeatPerSecond = entity.Comp.BaseHeatPerSecond * MathF.Pow(entity.Comp.PartRatingHeatMultiplier, heatRating);
     }

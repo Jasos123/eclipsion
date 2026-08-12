@@ -34,3 +34,4 @@ mining-voucher-conscription-name = Mining Conscription Kit
 mining-voucher-conscription-description =
     Contains a whole new mining starter kit for one crewmember, including
     a proto-kinetic accelerator, mineral scanner and other useful gear.
+mining-voucher-vendor-unpowered = {CAPITALIZE(THE($vendor))} has no power.

@@ -21,3 +21,4 @@ time-transfer-panel-no-player-database-message = Player not found in database
 
 # Please change it if you really-really need to do it
 time-transfer-panel-author = Made by BombasterDS for Goobstation
+time-transfer-panel-warning-no-perms = You do not have permission to do that.

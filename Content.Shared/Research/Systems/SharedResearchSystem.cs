@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Shared.Lathe;
 using Content.Shared.Research.Components;
 using Content.Shared.Research.Prototypes;
@@ -116,6 +116,11 @@ public abstract class SharedResearchSystem : EntitySystem
                 continue;
             allUnlocked.Add(proto);
         }
+
+        // Max() throws on an empty sequence, and tierPrerequisites is optional on the prototype.
+        // A discipline that omits it has no gates at all, so it sits at the always-granted tier 1.
+        if (techDiscipline.TierPrerequisites.Count == 0)
+            return 1;
 
         var highestTier = techDiscipline.TierPrerequisites.Keys.Max();
         var tier = 2; //tier 1 is always given

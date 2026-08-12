@@ -73,5 +73,11 @@ signal-port-description-power-discharging = This port is invoked with HIGH when 
 signal-port-name-material-silo = Material silo
 signal-port-description-material-silo = Bluespace storage for station materials
 
+signal-port-name-passport-scan-sender = Passport scan
+signal-port-description-passport-scan-sender = Sends the most recently scanned passport to a border-control computer.
+
+signal-port-name-fingerprint-scan-sender = Fingerprint scan
+signal-port-description-fingerprint-scan-sender = Sends the most recently scanned biometric template to a border-control computer.
+
 signal-port-name-fillitems = Fillbot Items
 signal-port-description-fillitems = Items picked up by the Fillbot.

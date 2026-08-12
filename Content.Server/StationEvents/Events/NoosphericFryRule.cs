@@ -69,7 +69,8 @@ internal sealed class NoosphericFryRule : StationEventSystem<NoosphericFryRuleCo
                 Spawn("Ash", Transform(pair.wearer).Coordinates);
                 _popupSystem.PopupEntity(Loc.GetString("psionic-burns-up", ("item", pair.worn.Owner)), pair.wearer, Filter.Pvs(pair.worn.Owner), true, Shared.Popups.PopupType.MediumCaution);
                 _audioSystem.PlayEntity("/Audio/Effects/lightburn.ogg", Filter.Pvs(pair.worn.Owner), pair.worn.Owner, true);
-            } else
+            }
+            else
             {
                 _popupSystem.PopupEntity(Loc.GetString("psionic-burn-resist", ("item", pair.worn.Owner)), pair.wearer, Filter.Pvs(pair.worn.Owner), true, Shared.Popups.PopupType.SmallCaution);
                 _audioSystem.PlayEntity("/Audio/Effects/lightburn.ogg", Filter.Pvs(pair.worn.Owner), pair.worn.Owner, true);
@@ -87,7 +88,8 @@ internal sealed class NoosphericFryRule : StationEventSystem<NoosphericFryRuleCo
                     flammableComponent.FireStacks += 1;
                     _flammableSystem.Ignite(pair.wearer, pair.wearer, flammableComponent);
                 }
-            } else if (_glimmerSystem.GlimmerOutput > component.FryHeadgearMajorThreshold)
+            }
+            else if (_glimmerSystem.GlimmerOutput > component.FryHeadgearMajorThreshold)
             {
                 damage *= 3;
                 if (TryComp<FlammableComponent>(pair.wearer, out var flammableComponent))
@@ -101,7 +103,7 @@ internal sealed class NoosphericFryRule : StationEventSystem<NoosphericFryRuleCo
         }
 
         // for probers:
-        var queryReactive = EntityQueryEnumerator<SharedGlimmerReactiveComponent, TransformComponent, PhysicsComponent>();
+        var queryReactive = EntityQueryEnumerator<GlimmerReactiveComponent, TransformComponent, PhysicsComponent>();
         while (queryReactive.MoveNext(out var reactive, out _, out var xform, out var physics))
         {
             // shoot out three bolts of lighting...

@@ -40,6 +40,7 @@ ghost-role-information-syndicate-cyborg-saboteur-name = CS 3201 Sun Wukong Comba
 # empire
 
 job-name-freeholder = Freeholder
+job-name-oathbound = Oathbound
 job-name-levyman = Man-at-Arms
 job-name-knight = Knight Banneret
 job-name-ritter = Baronial Ritter

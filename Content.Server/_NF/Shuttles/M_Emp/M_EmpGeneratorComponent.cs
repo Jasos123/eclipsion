@@ -4,13 +4,15 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Content.Shared.DeviceLinking;
 
+#pragma warning disable IDE1006 // Legacy serialized/component names; renaming them would break prototype compatibility.
+
 namespace Content.Server._NF.M_Emp
 {
     /// <summary>
     /// A M_Emp generator.
     /// </summary>
     [NetworkedComponent, RegisterComponent]
-    [Access(typeof(M_EmpSystem))]
+    [Access(typeof(MEmpSystem))]
     public sealed partial class M_EmpGeneratorComponent : SharedM_EmpGeneratorComponent
     {
         /// <summary>
@@ -97,7 +99,7 @@ namespace Content.Server._NF.M_Emp
     [CopyByRef, DataRecord]
     public partial record struct GeneratorState(GeneratorStateType StateType, TimeSpan Until)
     {
-        public static readonly GeneratorState Inactive = new (GeneratorStateType.Inactive, TimeSpan.Zero);
+        public static readonly GeneratorState Inactive = new(GeneratorStateType.Inactive, TimeSpan.Zero);
     };
 
     public sealed class M_EmpGeneratorActivatedEvent : EntityEventArgs
@@ -118,3 +120,5 @@ namespace Content.Server._NF.M_Emp
         Recharging,
     }
 }
+
+#pragma warning restore IDE1006

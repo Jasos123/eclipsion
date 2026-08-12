@@ -108339,281 +108339,6 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 15.5,35.5
       parent: 1
-- proto: HandheldGPSBasic
-  entities:
-  - uid: 56
-    components:
-    - type: Transform
-      parent: 42
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 57
-    components:
-    - type: Transform
-      parent: 42
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 58
-    components:
-    - type: Transform
-      parent: 42
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 59
-    components:
-    - type: Transform
-      parent: 42
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1246
-    components:
-    - type: Transform
-      parent: 1239
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1254
-    components:
-    - type: Transform
-      parent: 1247
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4381
-    components:
-    - type: Transform
-      parent: 4375
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4409
-    components:
-    - type: Transform
-      parent: 4396
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4410
-    components:
-    - type: Transform
-      parent: 4396
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4426
-    components:
-    - type: Transform
-      parent: 4413
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4427
-    components:
-    - type: Transform
-      parent: 4413
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4436
-    components:
-    - type: Transform
-      parent: 4430
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4444
-    components:
-    - type: Transform
-      parent: 4438
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4452
-    components:
-    - type: Transform
-      parent: 4446
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4460
-    components:
-    - type: Transform
-      parent: 4454
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4468
-    components:
-    - type: Transform
-      parent: 4462
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4476
-    components:
-    - type: Transform
-      parent: 4470
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4484
-    components:
-    - type: Transform
-      parent: 4478
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4492
-    components:
-    - type: Transform
-      parent: 4486
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4509
-    components:
-    - type: Transform
-      parent: 4503
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4517
-    components:
-    - type: Transform
-      parent: 4511
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4525
-    components:
-    - type: Transform
-      parent: 4519
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4533
-    components:
-    - type: Transform
-      parent: 4527
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4542
-    components:
-    - type: Transform
-      parent: 4536
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4578
-    components:
-    - type: Transform
-      parent: 4567
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4579
-    components:
-    - type: Transform
-      parent: 4567
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4580
-    components:
-    - type: Transform
-      parent: 4567
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4594
-    components:
-    - type: Transform
-      parent: 4583
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4595
-    components:
-    - type: Transform
-      parent: 4583
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4596
-    components:
-    - type: Transform
-      parent: 4583
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4610
-    components:
-    - type: Transform
-      parent: 4599
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4611
-    components:
-    - type: Transform
-      parent: 4599
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 4612
-    components:
-    - type: Transform
-      parent: 4599
-    - type: Physics
-      angularDamping: 0
-      linearDamping: 0
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: HolopadLongRange
   entities:
   - uid: 6202
@@ -115817,7 +115542,6 @@ entities:
           - 1240
           - 1242
           - 1241
-          - 1246
           - 1244
           - 1245
           - 1243
@@ -115833,7 +115557,6 @@ entities:
           occludes: True
           ents:
           - 1252
-          - 1254
           - 1251
           - 1249
           - 1250
@@ -115852,7 +115575,6 @@ entities:
           ents:
           - 4380
           - 4376
-          - 4381
           - 4377
           - 4382
           - 4379
@@ -115870,7 +115592,6 @@ entities:
           ents:
           - 4434
           - 4435
-          - 4436
           - 4432
           - 4433
           - 4431
@@ -115891,7 +115612,6 @@ entities:
           - 4441
           - 4439
           - 4445
-          - 4444
           - 4442
   - uid: 4446
     components:
@@ -115904,7 +115624,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 4452
           - 4453
           - 4447
           - 4449
@@ -115928,7 +115647,6 @@ entities:
           - 4461
           - 4457
           - 4459
-          - 4460
   - uid: 4462
     components:
     - type: Transform
@@ -115943,7 +115661,6 @@ entities:
           - 4469
           - 4466
           - 4465
-          - 4468
           - 4467
           - 4464
           - 4463
@@ -115959,7 +115676,6 @@ entities:
           occludes: True
           ents:
           - 4474
-          - 4476
           - 4475
           - 4472
           - 4471
@@ -115982,7 +115698,6 @@ entities:
           - 4479
           - 4480
           - 4483
-          - 4484
   - uid: 4486
     components:
     - type: Transform
@@ -115999,7 +115714,6 @@ entities:
           - 4487
           - 4488
           - 4491
-          - 4492
           - 4490
   - uid: 4494
     components:
@@ -116033,7 +115747,6 @@ entities:
           ents:
           - 4506
           - 4510
-          - 4509
           - 4504
           - 4508
           - 4505
@@ -116051,7 +115764,6 @@ entities:
           ents:
           - 4518
           - 4515
-          - 4517
           - 4512
           - 4516
           - 4513
@@ -116068,7 +115780,6 @@ entities:
           occludes: True
           ents:
           - 4526
-          - 4525
           - 4524
           - 4523
           - 4521
@@ -116086,7 +115797,6 @@ entities:
           occludes: True
           ents:
           - 4534
-          - 4533
           - 4532
           - 4531
           - 4529
@@ -116103,7 +115813,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 4542
           - 4539
           - 4537
           - 4543
@@ -123902,8 +123611,6 @@ entities:
           - 4401
           - 4398
           - 4408
-          - 4409
-          - 4410
           - 4404
           - 4402
           - 4406
@@ -123922,7 +123629,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 4426
           - 4428
           - 4424
           - 4422
@@ -123932,7 +123638,6 @@ entities:
           - 4420
           - 4415
           - 4429
-          - 4427
           - 4419
           - 4423
           - 4425
@@ -123953,12 +123658,10 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 4579
           - 4573
           - 4577
           - 4572
           - 4574
-          - 4578
           - 4576
           - 4570
           - 4581
@@ -123966,7 +123669,6 @@ entities:
           - 4575
           - 4569
           - 4582
-          - 4580
           - 4571
         paper_label: !type:ContainerSlot
           showEnts: False
@@ -123988,14 +123690,11 @@ entities:
           - 4589
           - 4588
           - 4590
-          - 4594
           - 4592
           - 4587
           - 4597
           - 4584
           - 4591
-          - 4595
-          - 4596
           - 4598
           - 4585
         paper_label: !type:ContainerSlot
@@ -124013,14 +123712,11 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 4610
-          - 4611
           - 4601
           - 4606
           - 4600
           - 4613
           - 4604
-          - 4612
           - 4602
           - 4608
           - 4614
@@ -124052,11 +123748,7 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 56
-          - 57
-          - 58
           - 46
-          - 59
           - 50
           - 47
           - 52

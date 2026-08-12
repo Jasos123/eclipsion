@@ -24,3 +24,4 @@ strippable-bound-user-interface-stripping-menu-ensnare-button = Remove Leg Restr
 # Stealth
 thieving-component-user = Someone
 thieving-component-item = something
+strippable-component-item-slot-occupied = {CAPITALIZE(THE($owner))} already has something in that slot.

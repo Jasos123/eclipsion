@@ -90,6 +90,7 @@ Major upstreams include:
 | [Nyanotrasen](https://github.com/Nyanotrasen/Nyanotrasen) | `Nyanotrasen` |
 | [RMC-14](https://github.com/RMC-14/RMC-14) | `_RMC14` |
 | [tgstation](https://github.com/tgstation/tgstation) | `_TG` (assets) |
+| [Shiptest](https://github.com/shiptest-ss13/Shiptest) | Sprites and other assets; see each asset's metadata |
 | [HULLROT](https://github.com/Sector-Crescent/Hullrot) | `_Crescent` — the fork this project continues |
 
 Additional upstreams are present under the prefixes `_ADT`, `_Arcadis`, `_CS4875`, `_Corvax`, `_DEN`,
@@ -97,6 +98,11 @@ Additional upstreams are present under the prefixes `_ADT`, `_Arcadis`, `_CS4875
 `_Starlight`, `_White`, `_ds14`, `Corvax`, `EstacaoPirata` and `WhiteDream`.
 Refer to the per-file headers and `meta.json` metadata for the authoritative copyright and licensing of any
 individual file.
+
+Shiptest-derived assets retain the CC-BY-SA 3.0 license unless an asset carries documented evidence of a
+different upstream license. Their source and modification notices are recorded in the containing `meta.json`.
+The attribution notice shipped with the game resources is available at
+[Resources/ShiptestAttribution.txt](./Resources/ShiptestAttribution.txt).
 
 ## 📜 License
 

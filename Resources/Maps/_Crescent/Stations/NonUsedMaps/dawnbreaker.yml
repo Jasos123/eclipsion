@@ -25206,50 +25206,6 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 8.698219,9.423022
       parent: 1
-- proto: HandheldGPSBasic
-  entities:
-  - uid: 1397
-    components:
-    - type: Transform
-      parent: 1392
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1405
-    components:
-    - type: Transform
-      parent: 1400
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1413
-    components:
-    - type: Transform
-      parent: 1408
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1421
-    components:
-    - type: Transform
-      parent: 1416
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1429
-    components:
-    - type: Transform
-      parent: 1424
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1437
-    components:
-    - type: Transform
-      parent: 1432
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: HandHeldMassScannerEE
   entities:
   - uid: 1398
@@ -30125,7 +30081,6 @@ entities:
           - 1396
           - 1394
           - 1393
-          - 1397
   - uid: 1400
     components:
     - type: Transform
@@ -30142,7 +30097,6 @@ entities:
           - 1406
           - 1407
           - 1402
-          - 1405
           - 1403
           - 1401
           - 1404
@@ -30164,7 +30118,6 @@ entities:
           - 1411
           - 1410
           - 1409
-          - 1413
           - 1412
   - uid: 1416
     components:
@@ -30181,7 +30134,6 @@ entities:
           ents:
           - 1422
           - 1423
-          - 1421
           - 1419
           - 1417
           - 1418
@@ -30204,7 +30156,6 @@ entities:
           - 1427
           - 1426
           - 1425
-          - 1429
           - 1431
   - uid: 1432
     components:
@@ -30224,7 +30175,6 @@ entities:
           - 1434
           - 1433
           - 1435
-          - 1437
           - 1436
 - proto: TableGlass
   entities:

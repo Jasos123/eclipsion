@@ -53,7 +53,7 @@ This project is the direct continuation of
 [HULLROT](https://github.com/Sector-Crescent/Hullrot) (content under `_Crescent`).
 
 Other major upstream projects include Space Station 14, Robust Toolbox, Einstein Engines,
-Goob-Station, Frontier Station 14, Delta-v, Nyanotrasen, RMC-14 and tgstation.
+Goob-Station, Frontier Station 14, Delta-v, Nyanotrasen, RMC-14, Shiptest and tgstation.
 A fuller list is given in the [README](./README.md#-attribution).
 
 ### Assets
@@ -63,6 +63,12 @@ Most assets are licensed under
 
 Each asset’s license and copyright information is specified in its metadata file.  
 [Example](./Resources/Textures/Objects/Tools/crowbar.rsi/meta.json).
+
+Assets derived from [Shiptest](https://github.com/shiptest-ss13/Shiptest) retain
+[CC-BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) unless a specific upstream source
+documents another license. Each Shiptest-derived asset identifies Shiptest, its source, and known
+modifications in the containing `meta.json`. A copy of the attribution notice is distributed with the
+game resources at [Resources/ShiptestAttribution.txt](./Resources/ShiptestAttribution.txt).
 
 Please note that some assets are licensed under non-commercial licenses such as  
 [CC-BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/) or similar.  

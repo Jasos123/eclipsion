@@ -1,0 +1,137 @@
+using System.Numerics;
+using Content.Shared.Abilities.Psionics;
+using Content.Shared.Actions.Events;
+using Content.Shared.Damage;
+using Content.Shared.Explosion;
+using Content.Shared.Popups;
+using Robust.Shared.Timing;
+
+namespace Content.Server.Abilities.Psionics;
+
+/// <summary>
+/// Implements the defense tree's passive armor reinforcement and temporary energy shields.
+/// </summary>
+public sealed class PsionicDefensePowerSystem : EntitySystem
+{
+    private static readonly DamageModifierSet ArmorReinforcement = new()
+    {
+        Coefficients =
+        {
+            ["Blunt"] = 0.9f,
+            ["Slash"] = 0.9f,
+            ["Piercing"] = 0.9f,
+            ["Heat"] = 0.9f,
+            ["Cold"] = 0.9f,
+            ["Shock"] = 0.9f,
+            ["Caustic"] = 0.9f,
+            ["Poison"] = 0.9f,
+            ["Radiation"] = 0.9f,
+        },
+    };
+
+    private static readonly TimeSpan ShieldDuration = TimeSpan.FromSeconds(15);
+
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly SharedPsionicAbilitiesSystem _psionics = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        SubscribeLocalEvent<PsionicSelfShieldActionEvent>(OnSelfShield);
+        SubscribeLocalEvent<PsionicAllyShieldActionEvent>(OnAllyShield);
+        SubscribeLocalEvent<PsionicArmorUpgradeComponent, DamageModifyEvent>(OnArmorDamage);
+        SubscribeLocalEvent<PsionicEnergyShieldComponent, DamageModifyEvent>(OnShieldDamage);
+        SubscribeLocalEvent<PsionicEnergyShieldComponent, GetExplosionResistanceEvent>(OnExplosionResistance);
+        SubscribeLocalEvent<PsionicEnergyShieldComponent, ComponentShutdown>(OnShieldShutdown);
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        var query = EntityQueryEnumerator<PsionicEnergyShieldComponent>();
+        while (query.MoveNext(out var uid, out var shield))
+        {
+            if (_timing.CurTime >= shield.ExpiresAt)
+                RemCompDeferred<PsionicEnergyShieldComponent>(uid);
+        }
+    }
+
+    private void OnSelfShield(PsionicSelfShieldActionEvent args)
+    {
+        if (args.Handled || !_psionics.OnAttemptPowerUse(args.Performer, "energy aegis", true))
+            return;
+
+        ApplyShield(args.Performer, args.Performer);
+        _psionics.LogPowerUsed(args.Performer, "energy aegis", 4, 6);
+        args.Handled = true;
+    }
+
+    private void OnAllyShield(PsionicAllyShieldActionEvent args)
+    {
+        if (args.Handled
+            || !_psionics.OnAttemptPowerUse(args.Performer, args.Target, "projected aegis", true))
+            return;
+
+        ApplyShield(args.Target, args.Performer);
+        _psionics.LogPowerUsed(args.Performer, "projected aegis", 6, 9);
+        args.Handled = true;
+    }
+
+    private void ApplyShield(EntityUid target, EntityUid caster)
+    {
+        var shield = EnsureComp<PsionicEnergyShieldComponent>(target);
+        shield.ExpiresAt = _timing.CurTime + ShieldDuration;
+
+        if (shield.Visual is not { } visual || !Exists(visual))
+        {
+            visual = Spawn("EffectPsionicEnergyShield", Transform(target).Coordinates);
+            _transform.SetParent(visual, target);
+            _transform.SetLocalPosition(visual, Vector2.Zero);
+            shield.Visual = visual;
+        }
+
+        Dirty(target, shield);
+        _popup.PopupEntity(
+            Loc.GetString("psionic-energy-shield-applied", ("target", target)),
+            target,
+            caster,
+            PopupType.Medium);
+    }
+
+    private void OnArmorDamage(
+        EntityUid uid,
+        PsionicArmorUpgradeComponent component,
+        DamageModifyEvent args)
+    {
+        args.Damage = DamageSpecifier.ApplyModifierSet(args.Damage, ArmorReinforcement);
+    }
+
+    private void OnShieldDamage(
+        EntityUid uid,
+        PsionicEnergyShieldComponent component,
+        DamageModifyEvent args)
+    {
+        if (args.Damage.DamageDict.TryGetValue("Heat", out var heat))
+            args.Damage.DamageDict["Heat"] = heat * Math.Max(0f, component.HeatCoefficient);
+    }
+
+    private void OnExplosionResistance(
+        EntityUid uid,
+        PsionicEnergyShieldComponent component,
+        ref GetExplosionResistanceEvent args)
+    {
+        args.DamageCoefficient *= Math.Max(0f, component.ExplosionCoefficient);
+    }
+
+    private void OnShieldShutdown(
+        EntityUid uid,
+        PsionicEnergyShieldComponent component,
+        ComponentShutdown args)
+    {
+        if (component.Visual is { } visual && Exists(visual))
+            QueueDel(visual);
+    }
+}

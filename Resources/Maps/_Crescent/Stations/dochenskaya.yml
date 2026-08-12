@@ -49481,25 +49481,6 @@ entities:
     - type: Transform
       pos: 9.5,14.5
       parent: 1
-- proto: HandheldGPSBasic
-  entities:
-  - uid: 74
-    components:
-    - type: Transform
-      parent: 69
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2038
-    components:
-    - type: Transform
-      pos: 11.307016,38.841465
-      parent: 1
-  - uid: 2039
-    components:
-    - type: Transform
-      pos: 11.719342,38.819748
-      parent: 1
 - proto: HandheldHealthAnalyzerUnpowered
   entities:
   - uid: 2040
@@ -52843,7 +52824,6 @@ entities:
           ents:
           - 70
           - 73
-          - 74
           - 72
           - 71
           - 75

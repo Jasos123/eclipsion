@@ -25,9 +25,8 @@
     - !type:FactionRequirement
       factionID: "DSM"
     - !type:CharacterSpeciesRequirement
-      inverted: true
       species:
-        - Voidborn
+        - Human
     - !type:CharacterOverallTimeRequirement
       min: 10800
     - !type:CharacterTraitRequirement

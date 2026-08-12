@@ -20911,64 +20911,6 @@ entities:
     - type: Transform
       pos: -1.5,-24.5
       parent: 1
-- proto: HandheldGPSBasic
-  entities:
-  - uid: 25
-    components:
-    - type: Transform
-      parent: 18
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1222
-    components:
-    - type: Transform
-      parent: 1216
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1231
-    components:
-    - type: Transform
-      parent: 1225
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1240
-    components:
-    - type: Transform
-      parent: 1234
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1249
-    components:
-    - type: Transform
-      parent: 1243
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1258
-    components:
-    - type: Transform
-      parent: 1252
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1267
-    components:
-    - type: Transform
-      parent: 1261
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1276
-    components:
-    - type: Transform
-      parent: 1270
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: HandHeldMassScannerEE
   entities:
   - uid: 26
@@ -23385,7 +23327,6 @@ entities:
           - 23
           - 19
           - 27
-          - 25
   - uid: 1216
     components:
     - type: Transform
@@ -23421,7 +23362,6 @@ entities:
           - 1218
           - 1224
           - 1220
-          - 1222
           - 1219
           - 1217
           - 1223
@@ -23459,7 +23399,6 @@ entities:
           - 1226
           - 1230
           - 1228
-          - 1231
           - 1229
           - 1233
           - 1227
@@ -23500,7 +23439,6 @@ entities:
           - 1238
           - 1237
           - 1242
-          - 1240
           - 1239
           - 1241
   - uid: 1243
@@ -23538,7 +23476,6 @@ entities:
           - 1245
           - 1248
           - 1251
-          - 1249
           - 1247
           - 1244
           - 1250
@@ -23577,7 +23514,6 @@ entities:
           - 1254
           - 1253
           - 1256
-          - 1258
           - 1260
           - 1257
           - 1259
@@ -23600,7 +23536,6 @@ entities:
           - 1262
           - 1269
           - 1264
-          - 1267
           - 1266
   - uid: 1270
     components:
@@ -23619,7 +23554,6 @@ entities:
           - 1275
           - 1271
           - 1278
-          - 1276
           - 1274
           - 1272
           - 1277

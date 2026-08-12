@@ -126,6 +126,17 @@
 
 - type: entity
   parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitImperialOathbound
+  name: oathbound's jumpsuit
+  description: A practical Imperial jumpsuit issued to xeno subjects who have sworn service to the Mandate.
+  components:
+  - type: Sprite
+    sprite: _Crescent/Clothing/Empire/Uniform/mandateoathbound.rsi
+  - type: Clothing
+    sprite: _Crescent/Clothing/Empire/Uniform/mandateoathbound.rsi
+
+- type: entity
+  parent: ClothingUniformBase
   id: ClothingUniformJumpsuitImperialArchmaester
   name: archmaester's suit
   description: A noble's elegant shirt and slacks, of genuine purple mothsilk.

@@ -126,7 +126,7 @@ public sealed class ThrusterSystem : EntitySystem
                         var xform = xformQuery.GetComponent(ent.Value);
                         var direction = xform.LocalRotation.ToWorldVec();
 
-                        if (new Vector2i((int)direction.X, (int)direction.Y) != new Vector2i(x, y))
+                        if (new Vector2i((int) direction.X, (int) direction.Y) != new Vector2i(x, y))
                             continue;
 
                         DisableThruster(ent.Value, thruster, xform.GridUid);
@@ -436,7 +436,7 @@ public sealed class ThrusterSystem : EntitySystem
 
         var xform = Transform(uid);
 
-        if (!xform.Anchored ||!this.IsPowered(uid, EntityManager))
+        if (!xform.Anchored || !this.IsPowered(uid, EntityManager))
         {
             return false;
         }
@@ -593,7 +593,7 @@ public sealed class ThrusterSystem : EntitySystem
         if (component.IsOn) // safely disable thruster to prevent negative thrust
             DisableThruster(uid, component);
 
-        var thrustRating = args.PartRatings[component.MachinePartThrust];
+        var thrustRating = args.GetRating(component.MachinePartThrust);
 
         component.Thrust = component.BaseThrust * MathF.Pow(component.PartRatingThrustMultiplier, thrustRating - 1);
 

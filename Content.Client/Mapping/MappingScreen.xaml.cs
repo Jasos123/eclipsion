@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Numerics;
 using Content.Client.Decals;
 using Content.Client.Decals.UI;
@@ -112,6 +112,7 @@ public sealed partial class MappingScreen : InGameScreen
         RemoveGrid.Texture.TexturePath = "/Textures/Interface/VerbIcons/delete_transparent.svg.192dpi.png";
         MoveGrid.Texture.TexturePath = "/Textures/Interface/VerbIcons/point.svg.192dpi.png";
         GridVV.Texture.TexturePath = "/Textures/Interface/VerbIcons/vv.svg.192dpi.png";
+        GridScreenshot.Texture.TexturePath = "/Textures/Interface/VerbIcons/eject.svg.192dpi.png";
         PipesColor.Texture.TexturePath = "/Textures/Interface/VerbIcons/paint-roller-solid.svg.192dpi.png";
         ChatButton.Texture.TexturePath = "/Textures/Interface/VerbIcons/comment-dots-regular.svg.192dpi.png";
     }
@@ -273,6 +274,7 @@ public sealed partial class MappingScreen : InGameScreen
         RemoveGrid.Pressed = RemoveGrid == except;
         MoveGrid.Pressed = MoveGrid == except;
         GridVV.Pressed = GridVV == except;
+        GridScreenshot.Pressed = GridScreenshot == except;
         PipesColor.Pressed = PipesColor == except;
 
         EraseEntityButton.Pressed = EraseEntityButton == except;

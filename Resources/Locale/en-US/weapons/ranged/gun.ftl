@@ -53,3 +53,4 @@ gun-revolver-insert = Inserted
 gun-revolver-spin = Spin revolver
 gun-revolver-spun = Spun
 gun-speedloader-empty = Speedloader empty
+gun-magazine-fired-empty = *click*

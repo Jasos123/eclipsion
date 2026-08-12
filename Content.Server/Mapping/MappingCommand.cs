@@ -2,8 +2,6 @@ using System.Linq;
 using Content.Server.Administration;
 using Content.Server.GameTicking;
 using Content.Shared.Administration;
-using Content.Shared.CCVar;
-using Robust.Shared.Configuration;
 using Robust.Shared.Console;
 using Robust.Shared.ContentPack;
 using Robust.Shared.EntitySerialization;
@@ -18,8 +16,7 @@ namespace Content.Server.Mapping
     {
         [Dependency] private readonly IEntityManager _entities = default!;
         // SharedMapSystem is an entity system, not an IoC service.
-        private SharedMapSystem _map => _entities.System<SharedMapSystem>();
-        [Dependency] private readonly IConfigurationManager _cfg = default!;
+        private SharedMapSystem Map => _entities.System<SharedMapSystem>();
 
         public string Command => "mapping";
         public string Description => Loc.GetString("cmd-mapping-desc");
@@ -80,7 +77,7 @@ namespace Content.Server.Mapping
                     return;
                 }
 
-                if (_map.MapExists(mapId))
+                if (Map.MapExists(mapId))
                 {
                     shell.WriteError(Loc.GetString("cmd-mapping-exists", ("mapId", mapId)));
                     return;
@@ -94,12 +91,13 @@ namespace Content.Server.Mapping
                 else
                 {
                     var path = new ResPath(args[1]);
-                    var opts = new DeserializationOptions {StoreYamlUids = true};
+                    var opts = new DeserializationOptions { StoreYamlUids = true };
                     _entities.System<MapLoaderSystem>().TryLoadMapWithId(mapId, path, out _, out _, opts);
+                    toLoad = args[1];
                 }
 
                 // was the map actually created or did it fail somehow?
-                if (!_map.MapExists(mapId))
+                if (!Map.MapExists(mapId))
                 {
                     shell.WriteError(Loc.GetString("cmd-mapping-error"));
                     return;
@@ -121,16 +119,25 @@ namespace Content.Server.Mapping
             shell.ExecuteCommand("sudo cvar events.enabled false");
             shell.ExecuteCommand("sudo cvar shuttle.auto_call_time 0");
 
-            if (_cfg.GetCVar(CCVars.AutosaveEnabled))
-                shell.ExecuteCommand($"toggleautosave {mapId} {toLoad ?? "NEWMAP"}");
+            // Called directly instead of through the console so that map paths containing spaces still work.
+            var mapping = _entities.System<MappingSystem>();
+            mapping.StartAutosave(mapId, toLoad);
             shell.ExecuteCommand($"tp 0 0 {mapId}");
             shell.RemoteExecuteCommand("mappingclientsidesetup");
-            _map.SetPaused(mapId, true);
+            Map.SetPaused(mapId, true);
 
             if (args.Length == 2)
-                shell.WriteLine(Loc.GetString("cmd-mapping-success-load",("mapId",mapId),("path", args[1])));
+                shell.WriteLine(Loc.GetString("cmd-mapping-success-load", ("mapId", mapId), ("path", args[1])));
             else
                 shell.WriteLine(Loc.GetString("cmd-mapping-success", ("mapId", mapId)));
+
+            if (mapping.GetAutosaveDirectory(mapId) is { } autosaveDir)
+            {
+                shell.WriteLine(Loc.GetString("cmd-toggleautosave-started",
+                    ("mapId", mapId),
+                    ("path", autosaveDir.ToString()),
+                    ("minutes", Math.Round(mapping.AutosaveInterval.TotalMinutes, 1))));
+            }
         }
     }
 }

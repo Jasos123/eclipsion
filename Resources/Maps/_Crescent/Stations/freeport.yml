@@ -41787,120 +41787,6 @@ entities:
     - type: Transform
       pos: 0.5814114,46.61692
       parent: 1
-- proto: HandheldGPSBasic
-  entities:
-  - uid: 33
-    components:
-    - type: Transform
-      parent: 27
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 146
-    components:
-    - type: Transform
-      parent: 142
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 154
-    components:
-    - type: Transform
-      parent: 148
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 3013
-    components:
-    - type: Transform
-      parent: 3008
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 3021
-    components:
-    - type: Transform
-      parent: 3016
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 3029
-    components:
-    - type: Transform
-      parent: 3024
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 3037
-    components:
-    - type: Transform
-      parent: 3032
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 3045
-    components:
-    - type: Transform
-      parent: 3040
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 3053
-    components:
-    - type: Transform
-      parent: 3048
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 3061
-    components:
-    - type: Transform
-      parent: 3056
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 3069
-    components:
-    - type: Transform
-      parent: 3064
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 3077
-    components:
-    - type: Transform
-      parent: 3072
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 3085
-    components:
-    - type: Transform
-      parent: 3080
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 3093
-    components:
-    - type: Transform
-      parent: 3088
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 3101
-    components:
-    - type: Transform
-      parent: 3096
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 3109
-    components:
-    - type: Transform
-      parent: 3104
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: HandheldHealthAnalyzer
   entities:
   - uid: 4237
@@ -50346,7 +50232,6 @@ entities:
           - 32
           - 34
           - 30
-          - 33
   - uid: 142
     components:
     - type: Transform
@@ -50379,7 +50264,6 @@ entities:
           - 145
           - 143
           - 147
-          - 146
           - 144
   - uid: 148
     components:
@@ -50415,7 +50299,6 @@ entities:
           - 151
           - 155
           - 152
-          - 154
           - 153
   - uid: 3008
     components:
@@ -50449,7 +50332,6 @@ entities:
           - 3012
           - 3010
           - 3009
-          - 3013
           - 3011
           - 3014
           - 3015
@@ -50468,7 +50350,6 @@ entities:
           - 3020
           - 3017
           - 3022
-          - 3021
           - 3023
           - 3018
   - uid: 3024
@@ -50506,7 +50387,6 @@ entities:
           - 3027
           - 3030
           - 3031
-          - 3029
   - uid: 3032
     components:
     - type: Transform
@@ -50541,7 +50421,6 @@ entities:
           - 3039
           - 3038
           - 3035
-          - 3037
           - 3034
   - uid: 3040
     components:
@@ -50575,7 +50454,6 @@ entities:
           - 3044
           - 3042
           - 3041
-          - 3045
           - 3047
           - 3043
           - 3046
@@ -50610,7 +50488,6 @@ entities:
           ents:
           - 3050
           - 3054
-          - 3053
           - 3051
           - 3055
           - 3049
@@ -50626,7 +50503,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 3061
           - 3062
           - 3058
           - 3059
@@ -50645,7 +50521,6 @@ entities:
           occludes: True
           ents:
           - 3070
-          - 3069
           - 3067
           - 3071
           - 3065
@@ -50662,7 +50537,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 3077
           - 3075
           - 3079
           - 3076
@@ -50681,7 +50555,6 @@ entities:
           occludes: True
           ents:
           - 3086
-          - 3085
           - 3082
           - 3083
           - 3084
@@ -50699,7 +50572,6 @@ entities:
           occludes: True
           ents:
           - 3092
-          - 3093
           - 3091
           - 3094
           - 3095
@@ -50721,7 +50593,6 @@ entities:
           - 3103
           - 3100
           - 3098
-          - 3101
           - 3102
   - uid: 3104
     components:
@@ -50739,7 +50610,6 @@ entities:
           - 3111
           - 3107
           - 3108
-          - 3109
           - 3106
 - proto: SurveillanceCameraRouterScience
   entities:

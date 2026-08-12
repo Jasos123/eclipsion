@@ -73,6 +73,14 @@ public sealed partial class PassportComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public bool Tampered;
+
+    /// <summary>
+    /// Server-side biometric reference recorded when the passport is issued. This is a hash of
+    /// the holder's fingerprint rather than the raw forensic identifier, and is deliberately not
+    /// networked to clients or exposed by the passport editing UI.
+    /// </summary>
+    [DataField]
+    public string BiometricHash = string.Empty;
 }
 
 /// <summary>
@@ -81,6 +89,13 @@ public sealed partial class PassportComponent : Component
 /// </summary>
 [RegisterComponent]
 public sealed partial class PassportCheckerComponent : Component;
+
+/// <summary>
+/// Raised after a passport has been populated for a character so the server can bind its
+/// machine-readable biometric reference to the holder.
+/// </summary>
+[ByRefEvent]
+public readonly record struct PassportIssuedEvent(EntityUid Holder);
 
 [Serializable, NetSerializable]
 public enum PassportUiKey : byte

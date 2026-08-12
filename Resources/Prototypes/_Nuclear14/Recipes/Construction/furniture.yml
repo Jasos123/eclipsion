@@ -51,7 +51,7 @@
   canBuildInImpassable: false
   conditions:
     - !type:TileNotBlocked
-  hide: false
+  hide: true # Duplicate of the base MedicalBed construction recipe.
 
 - type: construction
   id: N14Bedroll

@@ -63,6 +63,28 @@ action-name-pyrokinesis = Pyrokinesis
 action-description-pyrokinesis = Light a flammable target on fire.
 pyrokinesis-power-used = A wisp of flame engulfs {THE($target)}, igniting {OBJECT($target)}!
 
+action-name-psionic-flame-breath = Flame Breath
+action-description-psionic-flame-breath = Project a four-tile cone of persistent fire in the chosen direction.
+action-name-select-telekinetic-object = Select Telekinetic Object
+action-description-select-telekinetic-object = Select a nearby unanchored object weighing no more than 60 kilograms.
+action-name-move-telekinetic-object = Move Telekinetic Object
+action-description-move-telekinetic-object = Hurl the selected object toward the chosen location.
+telekinetic-manipulation-selected = You seize {THE($target)} with your mind.
+
+action-name-command-psionic-familiar-move = Command Imp: Move
+action-description-command-psionic-familiar-move = Order your summoned imp to move to the chosen location.
+action-name-command-psionic-familiar-attack = Command Imp: Attack
+action-description-command-psionic-familiar-attack = Order your summoned imp to attack the chosen target with fireballs.
+
+action-name-psionic-self-shield = Energy Aegis
+action-description-psionic-self-shield = Protect yourself from heat and explosions for 15 seconds.
+action-name-psionic-ally-shield = Projected Aegis
+action-description-psionic-ally-shield = Protect yourself or another nearby character from heat and explosions for 15 seconds.
+psionic-energy-shield-applied = A field of psionic energy surrounds {THE($target)}!
+
+action-name-kinetic-slam = Kinetic Slam
+action-description-kinetic-slam = Exhaust and throw a target away with concentrated kinetic force.
+
 action-name-psychokinesis = Psychokinesis
 action-description-psychokinesis = Bend the fabric of space to instantly move across it.
 

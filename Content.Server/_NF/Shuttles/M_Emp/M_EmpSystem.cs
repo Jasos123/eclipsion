@@ -28,7 +28,7 @@ using Robust.Shared.Audio.Systems;
 
 namespace Content.Server._NF.M_Emp
 {
-    public sealed partial class M_EmpSystem : EntitySystem
+    public sealed partial class MEmpSystem : EntitySystem
     {
         [Dependency] private readonly IChatManager _chat = default!;
         [Dependency] private readonly IConfigurationManager _configurationManager = default!;
@@ -46,7 +46,7 @@ namespace Content.Server._NF.M_Emp
         [Dependency] private readonly DeviceLinkSystem _signalSystem = default!;
 
         // TODO: This is probably not compatible with multi-station
-        private readonly Dictionary<EntityUid, M_EmpGridState> _M_EmpGridStates = new();
+        private readonly Dictionary<EntityUid, MEmpGridState> _mEmpGridStates = new();
 
         public override void Initialize()
         {
@@ -54,9 +54,9 @@ namespace Content.Server._NF.M_Emp
 
             SubscribeLocalEvent<M_EmpGeneratorComponent, SignalReceivedEvent>(OnSignalReceived);
 
-            SubscribeLocalEvent<M_EmpGeneratorComponent, UiButtonPressedMessage >(OnUiButtonPressed);
+            SubscribeLocalEvent<M_EmpGeneratorComponent, UiButtonPressedMessage>(OnUiButtonPressed);
 
-//            SubscribeLocalEvent<M_EmpGeneratorComponent, InteractHandEvent>(OnInteractHand);
+            //            SubscribeLocalEvent<M_EmpGeneratorComponent, InteractHandEvent>(OnInteractHand);
             SubscribeLocalEvent<M_EmpGeneratorComponent, RefreshPartsEvent>(OnRefreshParts);
             SubscribeLocalEvent<M_EmpGeneratorComponent, UpgradeExamineEvent>(OnUpgradeExamine);
             SubscribeLocalEvent<M_EmpGeneratorComponent, ExaminedEvent>(OnExamined);
@@ -74,9 +74,9 @@ namespace Content.Server._NF.M_Emp
 
         private void OnRoundEnd(GameRunLevelChangedEvent ev)
         {
-            if(ev.New != GameRunLevel.InRound)
+            if (ev.New != GameRunLevel.InRound)
             {
-                _M_EmpGridStates.Clear();
+                _mEmpGridStates.Clear();
             }
         }
 
@@ -116,13 +116,13 @@ namespace Content.Server._NF.M_Emp
         private void OnGridRemoval(GridRemovalEvent ev)
         {
             // If we ever want to give generators names, and announce them individually, we would need to loop this, before removing it.
-            if (_M_EmpGridStates.Remove(ev.EntityUid))
+            if (_mEmpGridStates.Remove(ev.EntityUid))
             {
                 // For the very unlikely possibility that the M_Emp generator was on a M_Emp, we will not return here
             }
-            foreach(var gridState in _M_EmpGridStates)
+            foreach (var gridState in _mEmpGridStates)
             {
-                foreach(var generator in gridState.Value.ActiveGenerators)
+                foreach (var generator in gridState.Value.ActiveGenerators)
                 {
                     if (!TryComp<M_EmpGeneratorComponent>(generator, out var generatorComponent))
                         continue;
@@ -139,7 +139,7 @@ namespace Content.Server._NF.M_Emp
                 return;
 
             var generatorTranform = Transform(uid);
-            if (generatorTranform.GridUid is not { } gridId || !_M_EmpGridStates.TryGetValue(gridId, out var M_EmpGridState))
+            if (generatorTranform.GridUid is not { } gridId || !_mEmpGridStates.TryGetValue(gridId, out var mEmpGridState))
                 return;
 
             component.GeneratorState = GeneratorState.Inactive;
@@ -147,7 +147,7 @@ namespace Content.Server._NF.M_Emp
 
         private void OnRefreshParts(EntityUid uid, M_EmpGeneratorComponent component, RefreshPartsEvent args)
         {
-            var rating = args.PartRatings[component.MachinePartDelay] - 1;
+            var rating = args.GetRating(component.MachinePartDelay) - 1;
             var factor = MathF.Pow(component.PartRatingDelay, rating);
             component.CoolingDownTime = component.BaseCoolingDownTime * factor;
             component.Recharging = component.BaseRecharging * factor;
@@ -167,9 +167,9 @@ namespace Content.Server._NF.M_Emp
             var remainingTime = TimeSpan.Zero;
 
             if (Transform(uid).GridUid is { } gridId &&
-                _M_EmpGridStates.TryGetValue(gridId, out var M_EmpGridState))
+                _mEmpGridStates.TryGetValue(gridId, out var mEmpGridState))
             {
-                remainingTime = component.GeneratorState.Until - M_EmpGridState.CurrentTime;
+                remainingTime = component.GeneratorState.Until - mEmpGridState.CurrentTime;
                 gotGrid = true;
             }
             else
@@ -203,7 +203,7 @@ namespace Content.Server._NF.M_Emp
 
         private void OnSignalReceived(EntityUid uid, M_EmpGeneratorComponent component, ref SignalReceivedEvent args)
         {
-           // _signalSystem.EnsureSinkPorts(uid, component.ReceiverPort);
+            // _signalSystem.EnsureSinkPorts(uid, component.ReceiverPort);
 
             if (args.Port == component.ReceiverPort)
             {
@@ -239,10 +239,10 @@ namespace Content.Server._NF.M_Emp
                 case GeneratorStateType.Inactive:
                     var generatorTransform = Transform(uid);
                     var gridId = generatorTransform.GridUid ?? throw new InvalidOperationException("Generator had no grid associated");
-                    if (!_M_EmpGridStates.TryGetValue(gridId, out var gridState))
+                    if (!_mEmpGridStates.TryGetValue(gridId, out var gridState))
                     {
-                        gridState = new M_EmpGridState();
-                        _M_EmpGridStates[gridId] = gridState;
+                        gridState = new MEmpGridState();
+                        _mEmpGridStates[gridId] = gridState;
                     }
                     gridState.ActiveGenerators.Add(uid);
 
@@ -337,7 +337,7 @@ namespace Content.Server._NF.M_Emp
         {
             var secondsPassed = TimeSpan.FromSeconds(frameTime);
             // Keep track of time, and state per grid
-            foreach (var (uid, state) in _M_EmpGridStates)
+            foreach (var (uid, state) in _mEmpGridStates)
             {
                 if (state.ActiveGenerators.Count == 0) continue;
                 // Not handling the case where the M_Emp we spawned got paused
@@ -347,7 +347,7 @@ namespace Content.Server._NF.M_Emp
 
                 var deleteQueue = new RemQueue<EntityUid>();
 
-                foreach(var generator in state.ActiveGenerators)
+                foreach (var generator in state.ActiveGenerators)
                 {
                     if (!TryComp<M_EmpGeneratorComponent>(generator, out var generatorComp))
                         continue;
@@ -361,7 +361,7 @@ namespace Content.Server._NF.M_Emp
                     }
                 }
 
-                foreach(var generator in deleteQueue)
+                foreach (var generator in deleteQueue)
                 {
                     state.ActiveGenerators.Remove(generator);
                 }
@@ -373,10 +373,9 @@ namespace Content.Server._NF.M_Emp
         }
     }
 
-    public sealed class M_EmpGridState
+    public sealed class MEmpGridState
     {
         public TimeSpan CurrentTime { get; set; }
         public List<EntityUid> ActiveGenerators { get; } = new();
     }
 }
-

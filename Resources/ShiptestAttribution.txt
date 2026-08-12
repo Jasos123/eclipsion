@@ -1,0 +1,17 @@
+SHIPTEST ASSET ATTRIBUTION
+
+Source project: Shiptest
+Source repository: https://github.com/shiptest-ss13/Shiptest
+License: Creative Commons Attribution-ShareAlike 3.0 Unported (CC-BY-SA-3.0)
+License URI: https://creativecommons.org/licenses/by-sa/3.0/
+
+This distribution contains sprites and other assets copied or adapted from Shiptest.
+The metadata file in each Shiptest-derived .rsi directory identifies the source and
+describes known modifications. Existing artist and contributor credits are preserved
+when they are known. An attribution to Shiptest does not imply endorsement by Shiptest
+or its contributors.
+
+Shiptest-derived assets and adaptations remain available under CC BY-SA 3.0 unless
+the asset metadata cites evidence that the upstream asset was published under another
+license. Other code and assets in this distribution may use different licenses; consult
+their file headers, metadata, and the repository's LEGAL.md for details.

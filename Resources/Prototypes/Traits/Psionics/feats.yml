@@ -32,6 +32,7 @@
   id: PowerOverwhelming
   category: Psionics
   points: -10
+  priority: 10 # Apply after the selected caster trait has configured PsionicComponent.
   requirements:
     - !type:CharacterLogicOrRequirement
       requirements:

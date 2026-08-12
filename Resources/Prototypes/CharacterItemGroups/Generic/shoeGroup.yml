@@ -63,3 +63,5 @@
       id: LoadoutShoesSandalsFlipFlops
     - type: loadout
       id: LoadoutShoesSandalsFlipFlopsAlt
+    - type: loadout
+      id: LoadoutShoesBootsMVDParade

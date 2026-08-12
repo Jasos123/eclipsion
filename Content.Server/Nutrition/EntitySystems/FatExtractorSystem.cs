@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Server.Construction;
 using Content.Server.Nutrition.Components;
@@ -40,7 +40,7 @@ public sealed class FatExtractorSystem : EntitySystem
 
     private void OnRefreshParts(EntityUid uid, FatExtractorComponent component, RefreshPartsEvent args)
     {
-        var rating = args.PartRatings[component.MachinePartNutritionRate] - 1;
+        var rating = args.GetRating(component.MachinePartNutritionRate) - 1;
         component.NutritionPerSecond = component.BaseNutritionPerSecond + (int) (component.PartRatingRateMultiplier * rating);
     }
 

@@ -31,7 +31,7 @@ trait-description-LowImperial = [color = green]
 
 trait-name-Freespeak = Freespeak
 trait-description-Freespeak = [color = green]
-    This is the primary language of the TFCF faction. All TFCF members are able to speak and understand it. [/color]
+    This is the primary language of the TFSC faction. All TFSC members are able to speak and understand it. [/color]
     A language of renegades and frontiersmen descending from various languages from Earth-- like Hindi,
     combined into a multi-rooted jumble that sounds incoherent or even barbarian to non-native speakers.[color = red]
     A translator device for this language is available as a T1 research for all factions, and printable at a Pristine Microforge. [/color]

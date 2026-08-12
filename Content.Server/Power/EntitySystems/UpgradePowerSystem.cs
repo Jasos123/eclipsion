@@ -37,7 +37,7 @@ public sealed class UpgradePowerSystem : EntitySystem
     private void OnRefreshParts(EntityUid uid, UpgradePowerDrawComponent component, RefreshPartsEvent args)
     {
         var load = component.BaseLoad;
-        var rating = args.PartRatings[component.MachinePartPowerDraw];
+        var rating = args.GetRating(component.MachinePartPowerDraw);
         switch (component.Scaling)
 
         {
@@ -80,7 +80,7 @@ public sealed class UpgradePowerSystem : EntitySystem
     private void OnSupplierRefreshParts(EntityUid uid, UpgradePowerSupplierComponent component, RefreshPartsEvent args)
     {
         var supply = component.BaseSupplyRate;
-        var rating = args.PartRatings[component.MachinePartPowerSupply];
+        var rating = args.GetRating(component.MachinePartPowerSupply);
         switch (component.Scaling)
 
         {
@@ -120,7 +120,7 @@ public sealed class UpgradePowerSystem : EntitySystem
     private void OnSupplyRampingRefreshParts(EntityUid uid, UpgradePowerSupplyRampingComponent component, RefreshPartsEvent args)
     {
         var rampRate = component.BaseRampRate;
-        var rating = args.PartRatings[component.MachinePartRampRate];
+        var rating = args.GetRating(component.MachinePartRampRate);
         switch (component.Scaling)
 
         {

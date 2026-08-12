@@ -119,7 +119,7 @@ public sealed partial class CargoSystem
 
     private void OnRefreshParts(EntityUid uid, CargoTelepadComponent component, RefreshPartsEvent args)
     {
-        var rating = args.PartRatings[component.MachinePartTeleportDelay] - 1;
+        var rating = args.GetRating(component.MachinePartTeleportDelay) - 1;
         component.Delay = component.BaseDelay * MathF.Pow(component.PartRatingTeleportDelay, rating);
     }
 

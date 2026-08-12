@@ -53,3 +53,7 @@
     - type: loadout
       id: LoadoutClothingBeltSheathSHIKatana
     #Hullrot edit end
+    - type: loadout
+      id: LoadoutBeltSheathNCWLKukri
+    - type: loadout
+      id: LoadoutBeltSheathSRMDuelingKhopesh

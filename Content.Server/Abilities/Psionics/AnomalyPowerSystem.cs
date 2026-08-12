@@ -113,7 +113,8 @@ public sealed partial class AnomalyPowerSystem : EntitySystem
             _damageable.TryChangeDamage(uid, args.Settings.OverchargeRecoil / component.CurrentDampening, true, true, damageable, uid);
 
         if (args.Settings.OverchargeCooldown > 0)
-            foreach (var action in component.Actions)
-                _actions.SetCooldown(action.Value, TimeSpan.FromSeconds(args.Settings.OverchargeCooldown / component.CurrentDampening));
+            foreach (var powerActions in component.Actions.Values)
+                foreach (var action in powerActions)
+                    _actions.SetCooldown(action, TimeSpan.FromSeconds(args.Settings.OverchargeCooldown / component.CurrentDampening));
     }
 }

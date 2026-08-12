@@ -61,3 +61,4 @@ borg-type-service-desc = Help out with a wide range of crew services, ranging fr
 borg-type-service-transponder = service cyborg
 
 
+borg-module-duplicate = An identical module is already installed.

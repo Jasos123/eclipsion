@@ -377,7 +377,7 @@ namespace Content.Server.Kitchen.EntitySystems
 
         private void OnRefreshParts(Entity<MicrowaveComponent> ent, ref RefreshPartsEvent args)
         {
-            var cookRating = args.PartRatings[ent.Comp.MachinePartCookTimeMultiplier];
+            var cookRating = args.GetRating(ent.Comp.MachinePartCookTimeMultiplier);
             ent.Comp.CookTimeMultiplier = MathF.Pow(ent.Comp.CookTimeScalingConstant, cookRating - 1);
         }
 

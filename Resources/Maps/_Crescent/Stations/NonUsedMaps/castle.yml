@@ -24235,92 +24235,6 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 13.230914,8.670041
       parent: 1
-- proto: HandheldGPSBasic
-  entities:
-  - uid: 46
-    components:
-    - type: Transform
-      parent: 36
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 58
-    components:
-    - type: Transform
-      parent: 48
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 70
-    components:
-    - type: Transform
-      parent: 60
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2394
-    components:
-    - type: Transform
-      parent: 2388
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2403
-    components:
-    - type: Transform
-      parent: 2397
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2412
-    components:
-    - type: Transform
-      parent: 2406
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2421
-    components:
-    - type: Transform
-      parent: 2415
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2430
-    components:
-    - type: Transform
-      parent: 2424
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2439
-    components:
-    - type: Transform
-      parent: 2433
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2448
-    components:
-    - type: Transform
-      parent: 2442
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2457
-    components:
-    - type: Transform
-      parent: 2451
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2466
-    components:
-    - type: Transform
-      parent: 2460
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: HandHeldMassScannerEE
   entities:
   - uid: 47
@@ -28234,7 +28148,6 @@ entities:
           - 37
           - 43
           - 45
-          - 46
           - 42
           - 44
           - 39
@@ -28249,7 +28162,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 58
           - 49
           - 56
           - 57
@@ -28271,7 +28183,6 @@ entities:
           occludes: True
           ents:
           - 71
-          - 70
           - 66
           - 69
           - 61
@@ -28289,7 +28200,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 2394
           - 2392
           - 2391
           - 2393
@@ -28313,7 +28223,6 @@ entities:
           - 2401
           - 2402
           - 2404
-          - 2403
           - 2399
           - 2398
   - uid: 2406
@@ -28333,7 +28242,6 @@ entities:
           - 2414
           - 2408
           - 2411
-          - 2412
           - 2407
   - uid: 2415
     components:
@@ -28347,7 +28255,6 @@ entities:
           occludes: True
           ents:
           - 2418
-          - 2421
           - 2420
           - 2416
           - 2422
@@ -28367,7 +28274,6 @@ entities:
           ents:
           - 2432
           - 2426
-          - 2430
           - 2427
           - 2425
           - 2428
@@ -28389,7 +28295,6 @@ entities:
           - 2435
           - 2437
           - 2434
-          - 2439
           - 2440
           - 2438
   - uid: 2442
@@ -28410,7 +28315,6 @@ entities:
           - 2445
           - 2447
           - 2443
-          - 2448
   - uid: 2451
     components:
     - type: Transform
@@ -28429,7 +28333,6 @@ entities:
           - 2455
           - 2453
           - 2456
-          - 2457
   - uid: 2460
     components:
     - type: Transform
@@ -28442,7 +28345,6 @@ entities:
           occludes: True
           ents:
           - 2462
-          - 2466
           - 2468
           - 2461
           - 2465

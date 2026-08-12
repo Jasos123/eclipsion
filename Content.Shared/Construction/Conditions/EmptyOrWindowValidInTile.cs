@@ -1,4 +1,4 @@
-﻿using Content.Shared.Maps;
+using Content.Shared.Maps;
 using JetBrains.Annotations;
 using Robust.Shared.Map;
 
@@ -17,7 +17,7 @@ namespace Content.Shared.Construction.Conditions
 
             foreach (var entity in location.GetEntitiesInTile(LookupFlags.Approximate | LookupFlags.Static))
             {
-                if (IoCManager.Resolve<IEntityManager>().HasComponent<SharedCanBuildWindowOnTopComponent>(entity))
+                if (IoCManager.Resolve<IEntityManager>().HasComponent<CanBuildWindowOnTopComponent>(entity))
                     result = true;
             }
 

@@ -39,6 +39,7 @@ ghost-role-information-syndicate-cyborg-description = You are an old Cyberdawn m
 # empire
 
 job-description-freeholder = Work, trade, mine, or fight within Count Olywier's charter. Protect your rights and survive the demands of the privileged estates.
+job-description-oathbound = Serve Count Olywier's charter as a non-human subject bound to the Mandate by solemn oath. Work, trade, mine, or fight beside its freeholders; your rights and place endure only while your oath does.
 job-description-levyman = Serve the charter's military chain of command and uphold the obligations recognized by Count Olywier and the Crown.
 job-description-knight = Organize Imperial forces under the Lord Admiral and represent the martial obligations of the local nobility.
 job-description-ritter = Don your Exoplate, serve the charter's military command, and uphold your house's honor in battle.

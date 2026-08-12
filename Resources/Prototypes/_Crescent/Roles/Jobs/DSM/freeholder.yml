@@ -24,9 +24,8 @@
     - !type:FactionRequirement
       factionID: "DSM"
     - !type:CharacterSpeciesRequirement
-      inverted: true
       species:
-        - Voidborn
+        - Human
   special:
   - !type:AddComponentSpecial
     components:

@@ -175,7 +175,7 @@
     - type: loadout
       id: LoadoutOuterArmorNCWLHeavyCarapace
     - type: loadout
-      id: ClothingOuterArmorNCWLCarapaceDoktor
+      id: LoadoutOuterArmorNCWLCarapaceDoktor
     - type: loadout
       id: LoadoutOuterArmorSHIHighsecUA
     - type: loadout
@@ -199,3 +199,11 @@
     - type: loadout
       id: LoadoutOuterArmorSyndicateArmorvestInterdyne
     #Hullrot edit end
+    - type: loadout
+      id: LoadoutOuterArmorDSMImperialNullweavePsion
+    - type: loadout
+      id: LoadoutOuterArmorMVDCoat
+    - type: loadout
+      id: LoadoutOuterArmorNCWLCarapaceVrachev
+    - type: loadout
+      id: LoadoutOuterArmorNCWLLightCarapace

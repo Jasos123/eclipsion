@@ -104,3 +104,37 @@
     - type: EmitSoundOnSpawn
       sound:
         path: "/Audio/Effects/flash_bang.ogg"
+
+- type: entity
+  id: EffectPsionicFlameBreath
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Effects/fire.rsi
+    state: fire
+    drawdepth: Effects
+    noRot: true
+  - type: PointLight
+    radius: 2
+    energy: 3
+    color: "#ff6500"
+  - type: TimedDespawn
+    lifetime: 0.8
+  - type: EmitSoundOnSpawn
+    sound:
+      path: /Audio/Effects/holy.ogg
+
+- type: entity
+  id: EffectPsionicEnergyShield
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _ADT/Mobs/Customization/Voidborn/voidborn_overlay.rsi
+    state: body_shield
+    drawdepth: Effects
+    noRot: true
+    color: "#66ccff"
+  - type: PointLight
+    radius: 1.5
+    energy: 1.5
+    color: "#66ccff"

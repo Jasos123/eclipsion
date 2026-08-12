@@ -9,3 +9,4 @@ shuttle-curse-message-8 = The shuttle dispatcher was found dead with bloody symb
 shuttle-curse-message-9 = The shuttle's custodian was found washing the windows with their own blood.
 shuttle-curse-message-10 = The shuttle's navigation programming was replaced by a file containing just two words: IT COMES.
 shuttle-curse-message-11 = The shuttle's transponder is emitting the encoded message 'FEAR THE OLD BLOOD' in lieu of its assigned identification signal.
+shuttle-curse-success = The dagger crumbles to dust. The shuttle has been delayed.

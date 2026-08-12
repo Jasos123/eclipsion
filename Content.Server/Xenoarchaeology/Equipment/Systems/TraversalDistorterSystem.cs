@@ -1,4 +1,4 @@
-﻿using Content.Server.Construction;
+using Content.Server.Construction;
 using Content.Server.Popups;
 using Content.Server.Power.EntitySystems;
 using Content.Server.Xenoarchaeology.Equipment.Components;
@@ -70,7 +70,7 @@ public sealed class TraversalDistorterSystem : EntitySystem
 
     private void OnRefreshParts(EntityUid uid, TraversalDistorterComponent component, RefreshPartsEvent args)
     {
-        var biasRating = args.PartRatings[component.MachinePartBiasChance];
+        var biasRating = args.GetRating(component.MachinePartBiasChance);
 
         component.BiasChance = component.BaseBiasChance * MathF.Pow(component.PartRatingBiasChance, biasRating - 1);
     }

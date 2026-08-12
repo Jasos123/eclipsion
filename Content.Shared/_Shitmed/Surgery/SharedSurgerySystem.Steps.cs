@@ -691,8 +691,8 @@ public abstract partial class SharedSurgerySystem
     private void OnSurgeryTargetStepChosen(Entity<SurgeryTargetComponent> ent, ref SurgeryStepChosenBuiMsg args)
     {
         var user = args.Actor;
-        if (GetEntity(args.Entity) is {} body &&
-            GetEntity(args.Part) is {} targetPart)
+        if (GetEntity(args.Entity) is { } body &&
+            GetEntity(args.Part) is { } targetPart)
         {
             TryDoSurgeryStep(body, targetPart, user, args.Surgery, args.Step);
         }
@@ -746,10 +746,6 @@ public abstract partial class SharedSurgerySystem
 
         var ev = new SurgeryDoAfterEvent(surgeryId, stepId);
         var duration = GetSurgeryDuration(step, user, body, speed);
-
-        if (TryComp(user, out SurgerySpeedModifierComponent? surgerySpeedMod)
-            && surgerySpeedMod is not null)
-            duration = duration / surgerySpeedMod.SpeedModifier;
 
         var doAfter = new DoAfterArgs(EntityManager, user, TimeSpan.FromSeconds(duration), ev, body, part)
         {

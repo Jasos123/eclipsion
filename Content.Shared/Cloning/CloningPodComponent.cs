@@ -52,9 +52,15 @@ public sealed partial class CloningPodComponent : Component
     public ProtoId<MachinePartPrototype> MachinePartCloningSpeed = "Manipulator";
 
     /// <summary>
-    ///     The current amount of time it takes to clone a body
+    ///     The amount of time it takes to clone a body without machine-part upgrades.
     /// </summary>
     [DataField]
+    public float BaseCloningTime = 30f;
+
+    /// <summary>
+    ///     The current amount of time it takes to clone a body, including machine-part upgrades.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite)]
     public float CloningTime = 30f;
 
     /// <summary>

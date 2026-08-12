@@ -21,6 +21,8 @@ mapping-fixgridatmos-tooltip = Add atmosphere to the grid
 mapping-remove-grid-tooltip = Remove grid
 mapping-move-grid-tooltip = Move grid
 mapping-grid-vv-tooltip = View grid variables
+mapping-grid-screenshot-tooltip = Export the entire grid as a Full HD PNG
+                                  Select this tool, then click the grid to export
 mapping-pipes-color-tooltip = Paint the pipes
                               Click on the pipe to paint in the currently selected color
 mapping-chat-button-tooltip = Toggle chat visibility

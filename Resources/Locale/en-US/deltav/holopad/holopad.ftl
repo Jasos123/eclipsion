@@ -59,3 +59,4 @@ holopad-security-perma-mineshaft = Security - Perma Mineshaft
 holopad-security-perma-arena = Security - Arena
 holopad-security-perma-gladiator-lounge = Security - Gladiator Lounge
 holopad-general-spesscar-track = General - Spesscar Track
+holopad-ai-is-unable-to-activate-projector = You are unable to activate the holographic projector.

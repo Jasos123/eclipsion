@@ -138,7 +138,11 @@ public sealed class PsionicSkillTreeWindow : DefaultWindow
         if (!_prototypeManager.TryIndex<PsionicSkillTreePrototype>(state.TreeId, out var tree))
             return;
 
-        var stateById = state.Skills.ToDictionary(node => node.SkillId);
+        // Indexer rather than ToDictionary: a tree prototype that lists the same skill twice would
+        // otherwise throw and take the whole window down.
+        var stateById = new Dictionary<string, PsionicSkillNodeState>();
+        foreach (var node in state.Skills)
+            stateById[node.SkillId] = node;
         foreach (var branchId in tree.Branches)
         {
             if (!_prototypeManager.TryIndex(branchId, out var branch))
@@ -256,11 +260,16 @@ public sealed class PsionicSkillTreeWindow : DefaultWindow
             Orientation = BoxContainer.LayoutOrientation.Vertical,
             HorizontalExpand = true,
         };
-        text.AddChild(new Label
+        // Labels are single-line controls, so longer localized power names were clipped by the
+        // fixed-width branch cards. RichTextLabel wraps to the available width and lets the card
+        // grow vertically when the title needs a second line.
+        var nameLabel = new RichTextLabel
         {
-            Text = Loc.GetString(skill.Name),
-            StyleClasses = { StyleBase.StyleClassLabelHeading },
-        });
+            HorizontalExpand = true,
+        };
+        var name = FormattedMessage.EscapeText(Loc.GetString(skill.Name));
+        nameLabel.SetMessage(FormattedMessage.FromMarkupOrThrow($"[bold][font size=16]{name}[/font][/bold]"));
+        text.AddChild(nameLabel);
         text.AddChild(new RichTextLabel
         {
             Text = Loc.GetString(skill.Description),

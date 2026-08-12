@@ -15,17 +15,21 @@ Using powers contributes to local Glimmer. Greater Amplification generally produ
 
 ## Psionic potential
 
-Characters with the Latent Psionic trait possess the potential to awaken powers. Naturals are rare individuals with an innate telepathic voice. Not every psionic entity has telepathy, and an apparently human voice is no proof of identity.
+Characters with a caster trait possess a psionic skill tree. Most begin at psionic level 1 with one development point. Use the [bold]Psionic Development[/bold] action to inspect the tree and unlock a power. Unlocking an active power adds its own button to the action bar.
+
+Latent Psychics can inspect all five primary disciplines: Fire, Veil, Life, Mind, and Kinetic. The first root they unlock becomes their permanent primary discipline and locks the other four. Specialist traits expose only their associated discipline. Each later node requires the preceding node, the listed psionic level, and a development point.
+
+Naturals are rare individuals with an innate telepathic voice. Not every psionic entity has telepathy, and an apparently human voice is no proof of identity.
 
 Telepathy is used by starting a message with the [bold]=[/bold] sign. The user must be alive and conscious, but ordinary muteness does not prevent it. Telepathic messages are anonymous, so trust them carefully.
 
-## Acquiring powers
+## Psionic development
 
-In gameplay, a Latent begins with baseline Potentia and a randomized amount of additional potential. Certain powerful hallucinogens and noetic events can trigger another attempt to awaken a power. The threshold rises exponentially:
+Potentia measures progress toward the next psionic level. Initial sensitivity, certain powerful hallucinogens, and noetic events can grant Potentia. Crossing the threshold spends the required Potentia, increases psionic level by one, and grants one development point; it does not select a random power.
 
-Potentia Threshold = 100 × 2^(total powers)
+Next Level Threshold = Baseline Power Cost × 2^(current psionic level - 1)
 
-The first power costs 100 Potentia, the second 200, the third 400, and so on. Awakening is never medically trivial; seizures, instability, unwanted attention, and factional control are all credible consequences.
+For a standard level 1 psion, successive thresholds are 100, 200, 400, and 800 Potentia. A Psycho-Historian begins with Telepathy, no unspent point, and a lower baseline cost of 75, allowing faster progression within the Mind discipline. Development is never medically trivial; seizures, instability, unwanted attention, and factional control are all credible consequences.
 
 ## Faction approaches
 

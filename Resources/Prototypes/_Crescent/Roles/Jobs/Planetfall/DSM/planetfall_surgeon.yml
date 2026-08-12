@@ -15,9 +15,8 @@
     - !type:FactionRequirement
       factionID: "DSM"
     - !type:CharacterSpeciesRequirement
-      inverted: true
       species:
-        - Voidborn
+        - Human
     - !type:CharacterTraitRequirement
       inverted: true
       traits:

@@ -9,3 +9,4 @@ examine-verb-name = Basic
 examinable-anchored = It is [color=darkgreen]anchored[/color] to the floor
 
 examinable-unanchored = It is [color=darkred]unanchored[/color] from the floor
+examine-headset-default-channel = Use [color={$color}]{$prefix}[/color] for the default channel ([color={$color}]{$channel}[/color]).

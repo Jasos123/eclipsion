@@ -4075,18 +4075,6 @@ entities:
     - type: Transform
       pos: -22.5,8.5
       parent: 1
-- proto: HandheldGPSBasic
-  entities:
-  - uid: 388
-    components:
-    - type: Transform
-      pos: -11.817938,5.5989404
-      parent: 1
-  - uid: 389
-    components:
-    - type: Transform
-      pos: -11.654456,5.6138062
-      parent: 1
 - proto: HandHeldMassScannerEE
   entities:
   - uid: 293

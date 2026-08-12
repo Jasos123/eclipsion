@@ -28838,127 +28838,6 @@ entities:
     - type: Transform
       pos: 4.251147,-8.411977
       parent: 1
-- proto: HandheldGPSBasic
-  entities:
-  - uid: 424
-    components:
-    - type: Transform
-      parent: 421
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 764
-    components:
-    - type: Transform
-      parent: 745
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 772
-    components:
-    - type: Transform
-      parent: 767
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 777
-    components:
-    - type: Transform
-      parent: 773
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1236
-    components:
-    - type: Transform
-      parent: 890
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1609
-    components:
-    - type: Transform
-      parent: 1599
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 1615
-    components:
-    - type: Transform
-      parent: 1614
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2652
-    components:
-    - type: Transform
-      parent: 2647
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2654
-    components:
-    - type: Transform
-      parent: 2653
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2660
-    components:
-    - type: Transform
-      parent: 2659
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2666
-    components:
-    - type: Transform
-      parent: 2665
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2681
-    components:
-    - type: Transform
-      parent: 2678
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2685
-    components:
-    - type: Transform
-      parent: 2684
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2690
-    components:
-    - type: Transform
-      parent: 2688
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 2696
-    components:
-    - type: Transform
-      parent: 2694
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 6847
-    components:
-    - type: Transform
-      parent: 3243
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 6855
-    components:
-    - type: Transform
-      parent: 3244
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: HandheldHealthAnalyzer
   entities:
   - uid: 2793
@@ -36341,7 +36220,6 @@ entities:
           ents:
           - 422
           - 423
-          - 424
           - 425
           - 426
           - 427
@@ -36378,7 +36256,6 @@ entities:
           - 750
           - 762
           - 763
-          - 764
   - uid: 767
     components:
     - type: Transform
@@ -36412,7 +36289,6 @@ entities:
           - 770
           - 769
           - 768
-          - 772
   - uid: 773
     components:
     - type: Transform
@@ -36445,7 +36321,6 @@ entities:
           - 774
           - 775
           - 776
-          - 777
           - 778
   - uid: 890
     components:
@@ -36480,7 +36355,6 @@ entities:
           - 1049
           - 1050
           - 1235
-          - 1236
   - uid: 1599
     components:
     - type: Transform
@@ -36512,7 +36386,6 @@ entities:
           ents:
           - 1600
           - 1608
-          - 1609
           - 1612
           - 1613
   - uid: 1614
@@ -36544,7 +36417,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 1615
           - 1616
           - 1617
           - 1618
@@ -36614,7 +36486,6 @@ entities:
           - 2649
           - 2650
           - 2651
-          - 2652
   - uid: 2653
     components:
     - type: Transform
@@ -36644,7 +36515,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 2654
           - 2655
           - 2656
           - 2657
@@ -36678,7 +36548,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 2660
           - 2661
           - 2662
           - 2663
@@ -36712,7 +36581,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 2666
           - 2667
           - 2668
           - 2669
@@ -36748,7 +36616,6 @@ entities:
           ents:
           - 2683
           - 2682
-          - 2681
           - 2680
           - 2679
   - uid: 2684
@@ -36780,7 +36647,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 2685
           - 2686
           - 2687
           - 2109
@@ -36815,7 +36681,6 @@ entities:
           occludes: True
           ents:
           - 2689
-          - 2690
           - 2691
           - 2692
           - 2693
@@ -36849,7 +36714,6 @@ entities:
           occludes: True
           ents:
           - 2695
-          - 2696
           - 2697
           - 2698
           - 2699
@@ -36882,7 +36746,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 6847
           - 6848
           - 6849
           - 6850
@@ -36919,7 +36782,6 @@ entities:
           - 6852
           - 6853
           - 6854
-          - 6855
           - 6856
   - uid: 3561
     components:

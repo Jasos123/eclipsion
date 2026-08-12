@@ -31,6 +31,26 @@
     fireStacks: 0.35
 
 - type: entity
+  id: ProjectileImpFireball
+  name: imp fireball
+  parent: ProjectileFireball
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Heat: 8
+  - type: Explosive
+    explosionType: Default
+    maxIntensity: 3
+    intensitySlope: 1
+    totalIntensity: 6
+    maxTileBreak: 0
+    canCreateVacuum: false
+  - type: TimedDespawn
+    lifetime: 8
+
+- type: entity
   categories: [ HideSpawnMenu ]
   parent: BaseBulletTrigger
   id: ProjectileDragonsBreath

@@ -17,3 +17,7 @@ cult-rending-target-alive = Can not start the ritual: the target is alive.
 cult-rending-already-summoning = Can not start the ritual: it's already in progress.
 cult-rending-started = The Geometer Of Blood has started the ritual of Dimensional Rending {$location}!
 cult-rending-prevented = Someone has stopped the ritual.
+blood-cult-summon-being-pulled = They are being held onto by someone else.
+blood-cult-summon-cuffed = They must be freed of their restraints first.
+cult-blood-boil-rune-no-targets = There are no valid targets in sight.
+cult-cant-draw-rune = You cannot draw a rune here.

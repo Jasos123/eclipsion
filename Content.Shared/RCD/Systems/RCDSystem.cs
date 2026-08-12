@@ -443,7 +443,7 @@ public class RCDSystem : EntitySystem
 
         foreach (var ent in _intersectingEntities)
         {
-            if (isWindow && HasComp<SharedCanBuildWindowOnTopComponent>(ent))
+            if (isWindow && HasComp<CanBuildWindowOnTopComponent>(ent))
                 continue;
 
             if (isCatwalk && _tags.HasTag(ent, "Catwalk"))
@@ -547,8 +547,8 @@ public class RCDSystem : EntitySystem
                     return true;
                 }
                 else
-                if (popMsgs)
-                    _popup.PopupClient(Loc.GetString("rcd-component-deconstruct-target-not-on-whitelist-message"), uid, user);
+                    if (popMsgs)
+                        _popup.PopupClient(Loc.GetString("rcd-component-deconstruct-target-not-on-whitelist-message"), uid, user);
 
                 return false;
             }

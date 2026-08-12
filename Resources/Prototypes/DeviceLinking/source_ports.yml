@@ -67,6 +67,18 @@
   description: signal-port-description-med-scanner-sender
 
 - type: sourcePort
+  id: PassportScanSender
+  name: signal-port-name-passport-scan-sender
+  description: signal-port-description-passport-scan-sender
+  defaultLinks: [ PassportScanReceiver ]
+
+- type: sourcePort
+  id: FingerprintScanSender
+  name: signal-port-name-fingerprint-scan-sender
+  description: signal-port-description-fingerprint-scan-sender
+  defaultLinks: [ FingerprintScanReceiver ]
+
+- type: sourcePort
   id: ArtifactAnalyzerSender
   name: signal-port-name-artifact-analyzer-sender
   description: signal-port-description-artifact-analyzer-sender

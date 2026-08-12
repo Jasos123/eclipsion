@@ -97,13 +97,13 @@ namespace Content.Client.Ghost
             }
             else if (!light?.Enabled ?? false) // skip this option if we have no PointLightComponent
             {
-            //WE DO NOT HAVE A POINTLIGHT COMPONENT, SKIPPED - WABASH
-            //     // enable personal light
-            //     Popup.PopupEntity(Loc.GetString("ghost-gui-toggle-lighting-manager-popup-personal-light"), args.Performer);
-            //     _pointLightSystem.SetEnabled(uid, true, light);
-            // }
-            // else
-            // {
+                //WE DO NOT HAVE A POINTLIGHT COMPONENT, SKIPPED - WABASH
+                //     // enable personal light
+                //     Popup.PopupEntity(Loc.GetString("ghost-gui-toggle-lighting-manager-popup-personal-light"), args.Performer);
+                //     _pointLightSystem.SetEnabled(uid, true, light);
+                // }
+                // else
+                // {
                 // fullbright mode
                 Popup.PopupEntity(Loc.GetString("ghost-gui-toggle-lighting-manager-popup-fullbright"), args.Performer);
                 _contentEye.RequestEye(component.DrawFov, false);
@@ -127,7 +127,12 @@ namespace Content.Client.Ghost
             if (args.Handled)
                 return;
 
-            Popup.PopupEntity(Loc.GetString("ghost-gui-toggle-ghost-visibility-popup"), args.Performer);
+            // Report the state we are switching *to*, matching the -on/-off strings.
+            Popup.PopupEntity(
+                Loc.GetString(GhostVisibility
+                    ? "ghost-gui-toggle-ghost-visibility-popup-off"
+                    : "ghost-gui-toggle-ghost-visibility-popup-on"),
+                args.Performer);
 
             if (uid == _playerManager.LocalEntity)
                 ToggleGhostVisibility();

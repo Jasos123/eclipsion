@@ -1,4 +1,5 @@
 using Content.Shared.FixedPoint;
+using Content.Shared._Shitmed.Medical.Surgery;
 using Content.Shared.Traits;
 using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
@@ -86,6 +87,29 @@ public sealed partial class TraitAddComponent : TraitFunction
                 continue;
             entityManager.Dirty(uid, comp);
         }
+    }
+}
+
+/// <summary>
+///     Ensures a surgery-speed trait only improves the character's existing job bonus.
+/// </summary>
+[UsedImplicitly]
+public sealed partial class TraitSetMinimumSurgerySpeed : TraitFunction
+{
+    [DataField(required: true)]
+    public float SpeedModifier;
+
+    public override void OnPlayerSpawn(EntityUid uid,
+        IComponentFactory factory,
+        IEntityManager entityManager,
+        ISerializationManager serializationManager)
+    {
+        var component = entityManager.EnsureComponent<SurgerySpeedModifierComponent>(uid);
+        if (component.SpeedModifier >= SpeedModifier)
+            return;
+
+        component.SpeedModifier = SpeedModifier;
+        entityManager.Dirty(uid, component);
     }
 }
 

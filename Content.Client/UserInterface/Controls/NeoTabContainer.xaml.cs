@@ -49,6 +49,17 @@ public sealed partial class NeoTabContainer : BoxContainer
         ScrollingChanged(HScrollEnabled, VScrollEnabled);
     }
 
+    protected override void EnteredTree()
+    {
+        // BaseButton clears its group when it exits the UI tree. NeoTabContainer instances can be
+        // orphaned and reused, so restore the group or every previously visited tab stays pressed.
+        foreach (var button in _tabs.Values)
+            button.Group = _tabGroup;
+
+        if (CurrentControl != null && _tabs.TryGetValue(CurrentControl, out var current))
+            current.Pressed = true;
+    }
+
     protected override void ChildRemoved(Control child)
     {
         if (_tabs.Remove(child, out var button))
@@ -130,7 +141,10 @@ public sealed partial class NeoTabContainer : BoxContainer
 
         if (updateTabMerging)
             UpdateTabMerging();
-        return ChildCount - 1;
+
+        // Tabs live in ContentContainer, so this container's own ChildCount never moves. Return the
+        // index into _controls, which is what RemoveTab(int) and GetTab(int) expect.
+        return _controls.Count - 1;
     }
 
     /// <summary>
@@ -157,8 +171,25 @@ public sealed partial class NeoTabContainer : BoxContainer
     /// <returns>True if the tab was removed, false otherwise</returns>
     public bool RemoveTab(Control control, bool updateTabMerging = true)
     {
-        if (!_tabs.TryGetValue(control, out var button))
+        // Tab contents live in ContentContainer, not directly on this container, so ChildRemoved
+        // never fires for them. Without doing the bookkeeping here, disposed tabs stayed in _tabs
+        // and _controls forever and every rebuild stacked another set of tabs on top.
+        if (!_tabs.Remove(control, out var button))
             return false;
+
+        var index = _controls.IndexOf(control);
+        _controls.Remove(control);
+
+        if (CurrentControl == control)
+        {
+            CurrentControl = null;
+
+            // Prefer the tab to the left, otherwise the one that shifted into this slot.
+            if (index > 0)
+                SelectTab(_controls[index - 1]);
+            else if (_controls.Count > 0)
+                SelectTab(_controls[0]);
+        }
 
         button.Dispose();
         control.Dispose();

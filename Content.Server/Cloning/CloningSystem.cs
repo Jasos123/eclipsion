@@ -113,16 +113,20 @@ public sealed partial class CloningSystem : EntitySystem
     }
     private void OnPartsRefreshed(EntityUid uid, CloningPodComponent component, RefreshPartsEvent args)
     {
-        var materialRating = args.PartRatings[component.MachinePartMaterialUse];
-        var speedRating = args.PartRatings[component.MachinePartCloningSpeed];
+        var materialRating = args.GetRating(component.MachinePartMaterialUse);
+        var speedRating = args.GetRating(component.MachinePartCloningSpeed);
 
         component.BiomassCostMultiplier = MathF.Pow(component.PartRatingMaterialMultiplier, materialRating - 1);
-        component.CloningTime = component.CloningTime * MathF.Pow(component.PartRatingSpeedMultiplier, speedRating - 1);
+        component.CloningTime = component.BaseCloningTime * MathF.Pow(component.PartRatingSpeedMultiplier, speedRating - 1);
     }
 
     private void OnUpgradeExamine(EntityUid uid, CloningPodComponent component, UpgradeExamineEvent args)
     {
-        args.AddPercentageUpgrade("cloning-pod-component-upgrade-speed", component.CloningTime / component.CloningTime);
+        var speedMultiplier = component.CloningTime > 0f
+            ? component.BaseCloningTime / component.CloningTime
+            : 1f;
+
+        args.AddPercentageUpgrade("cloning-pod-component-upgrade-speed", speedMultiplier);
         args.AddPercentageUpgrade("cloning-pod-component-upgrade-biomass-requirement", component.BiomassCostMultiplier);
     }
     private void OnPortDisconnected(EntityUid uid, CloningPodComponent pod, PortDisconnectedEvent args)

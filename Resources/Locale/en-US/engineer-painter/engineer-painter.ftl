@@ -12,3 +12,4 @@ spray-painter-color-cyan = cyan
 spray-painter-color-blue = blue
 spray-painter-color-white = white
 spray-painter-color-black = black
+pipe-painter-no-color-selected = No color selected

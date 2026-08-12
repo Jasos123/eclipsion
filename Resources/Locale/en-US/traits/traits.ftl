@@ -102,7 +102,7 @@ trait-description-Snoring = You tend to snore loudly while sleeping.
 
 trait-name-CPRTraining = CPR Training
 trait-description-CPRTraining = At some point in your life, you have received training in how to perform CPR.
-                                This trait is automatically given for free to medical doctors, and is intended for non-medical characters
+                                This trait is automatically given for free to trained medical roles, and is intended for characters who do not already know CPR.
 
 trait-name-Nearsighted = Nearsighted
 trait-description-Nearsighted = Your eyes are not what they once were, you have difficulty seeing things far away without corrective glasses.
@@ -186,14 +186,14 @@ trait-description-LowPainTolerance =
 trait-name-Steadfast = Steadfast
 trait-description-Steadfast =
     When others would buckle from the weight of your injuries, you still march forward unrelentingly.
-    For most species [color=gray](excluding IPC/Voidborn)[/color], this trait modifies:
+    For most species [color=gray](excluding Felinid/Tajaran)[/color], this trait modifies:
     - [color=yellow]25%[/color] movement slow at [color=red]60[/color] damage ➔ [color=yellow]17%[/color] movement slow at [color=red]70[/color] damage
     - [color=yellow]45%[/color] movement slow at [color=red]80[/color] damage ➔ [color=yellow]30%[/color] movement slow at [color=red]90[/color] damage
 
 trait-name-Feeble = Feeble
 trait-description-Feeble =
     Your body responds poorly to injuries, making damage affect your movement more severely.
-    For most species [color=gray](excluding IPC/Voidborn)[/color], this trait modifies:
+    For most species [color=gray](excluding Felinid/Tajaran)[/color], this trait modifies:
     - [color=yellow]25%[/color] movement slow at [color=red]60[/color] damage ➔ [color=yellow]30%[/color] movement slow at [color=red]45[/color] damage
     - [color=yellow]45%[/color] movement slow at [color=red]80[/color] damage ➔ [color=yellow]54%[/color] movement slow at [color=red]65[/color] damage
 
@@ -405,7 +405,8 @@ trait-description-LowPotential =
 
 trait-name-HighPotential = High Psi-Potential
 trait-description-HighPotential =
-    Your connection to the noösphere is greater than average, making it easier to obtain new psionic powers.
+    Your connection to the noösphere is greater than average. You gain 50% more Potentia from psionic rolls,
+    allowing you to gain levels and development points faster. This trait does not grant a free level or power.
 
 trait-name-LowAmplification = kα Deficiency
 trait-description-LowAmplification =
@@ -418,6 +419,7 @@ trait-description-HighAmplification =
 trait-name-PowerOverwhelming = Power Overwhelming
 trait-description-PowerOverwhelming =
     WITNESS MY HATE MORTALS, COWER BEFORE MY PSIONIC MIGHT! REALITY IS AS I DEEM IT.
+    Passively adds 2 Amplification. It does not grant an active power or development point.
 
 trait-name-LowDampening = kδ Defect
 trait-description-LowDampening =
@@ -614,12 +616,14 @@ trait-description-SurgeryTraining =
     At some point in your life you acquired the knowledge and experience necessary for performing surgery effectively.
     This trait boosts your surgery speed to 1.6, and is intended for non-medical characters, as medical jobs already have faster surgery.
     (This is slightly faster than a medical intern (1.5) but slower than a normal doctor (1.75))
+    This trait cannot be combined with Experienced Surgeon.
 
 trait-name-ExperiencedSurgeon = Experienced Surgeon
 trait-description-ExperiencedSurgeon =
     Surgery is your specialty. You are faster than most at your craft.
     This trait boosts your surgery speed to 2.5, which is the same as the innate boost CMO gets.
-    (This is either a boost from 1.75 or 2 depending on your job)
+    Existing job bonuses above this value are never reduced. Jobs that already have 2.5 surgery speed cannot select this trait.
+    This trait cannot be combined with Surgery Training.
 
 trait-name-BionicPryArm = Prybar Prosthetics
 trait-description-BionicPryArm =

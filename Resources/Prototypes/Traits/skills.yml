@@ -18,6 +18,20 @@
         - Brigmedic
         - SeniorPhysician
         - BlueshieldOfficer
+        - APRTSanitatATH
+        - SanitatATH
+        - SurgeonDSM
+        - ChirurgeonATH
+        - TenderSRM
+        - planetfall_surgeon
+        - MedtechSHI
+        - planetfall_doctor
+        - DoctorNCWL
+        - PhysicianCMM
+        - DirectorNCWL
+        - CoordinatorTFSC
+        - TraumasecTFSC
+        - RipperdocTFSC
 
 - type: trait
   id: SelfAware
@@ -130,7 +144,7 @@
 - type: trait
   id: ParkourTraining
   category: Physical
-  points: -5
+  points: -4
   requirements:
     - !type:CharacterTraitRequirement
       inverted: true
@@ -203,19 +217,56 @@
   id: SurgeryTraining
   category: Mental
   points: -3
+  requirements:
+    - !type:CharacterTraitRequirement
+      inverted: true
+      traits:
+        - ExperiencedSurgeon
+    - !type:CharacterJobRequirement
+      inverted: true
+      jobs:
+        - MedicalDoctor
+        - Chemist
+        - MedicalIntern
+        - Paramedic
+        - ChiefMedicalOfficer
+        - Brigmedic
+        - SeniorPhysician
+        - APRTSanitatATH
+        - SanitatATH
+        - SurgeonDSM
+        - ChirurgeonATH
+        - TenderSRM
+        - planetfall_surgeon
+        - MedtechSHI
+        - planetfall_doctor
+        - DoctorNCWL
+        - PhysicianCMM
+        - DirectorNCWL
+        - CoordinatorTFSC
+        - TraumasecTFSC
+        - RipperdocTFSC
   functions:
-    - !type:TraitAddComponent
-      components:
-        - type: SurgerySpeedModifier
-          speedModifier: 1.5
+    - !type:TraitSetMinimumSurgerySpeed
+      speedModifier: 1.6
 
 - type: trait
   id: ExperiencedSurgeon
   category: Mental
   points: -4
+  requirements:
+    - !type:CharacterTraitRequirement
+      inverted: true
+      traits:
+        - SurgeryTraining
+    - !type:CharacterJobRequirement
+      inverted: true
+      jobs:
+        - ChiefMedicalOfficer
+        - ChirurgeonATH
+        - DirectorNCWL
+        - CoordinatorTFSC
   functions:
-    - !type:TraitReplaceComponent
-      components:
-      - type: SurgerySpeedModifier
-        speedModifier: 2
+    - !type:TraitSetMinimumSurgerySpeed
+      speedModifier: 2.5
 

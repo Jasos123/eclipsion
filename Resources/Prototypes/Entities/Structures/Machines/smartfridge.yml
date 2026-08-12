@@ -93,3 +93,12 @@
         Blunt: 5
     soundHit:
       collection: MetalThud
+
+- type: entity
+  parent: SmartFridge
+  id: SmartFridgeMedical
+  name: medical SmartFridge
+  description: A refrigerated storage unit for keeping lifesaving medications cold and fresh.
+  components:
+  - type: AccessReader
+    access: [["Medical"]]

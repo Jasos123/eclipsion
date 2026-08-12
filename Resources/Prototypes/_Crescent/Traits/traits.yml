@@ -1,8 +1,11 @@
 - type: trait
   id: LowImperial
   category: TraitsSpeechLanguages
-  points: -4
+  points: -3
   requirements:
+    - !type:FactionRequirement
+      inverted: true
+      factionID: DSM
     - !type:CharacterTraitRequirement
       inverted: true
       traits:
@@ -30,8 +33,11 @@
 - type: trait
   id: Dockta
   category: TraitsSpeechLanguages
-  points: -4
+  points: -3
   requirements:
+    - !type:FactionRequirement
+      inverted: true
+      factionID: NCWL
     - !type:CharacterTraitRequirement
       inverted: true
       traits:
@@ -48,8 +54,11 @@
 - type: trait
   id: Freespeak
   category: TraitsSpeechLanguages
-  points: -4
+  points: -3
   requirements:
+    - !type:FactionRequirement
+      inverted: true
+      factionID: TFSC
     - !type:CharacterTraitRequirement
       inverted: true
       traits:
@@ -66,8 +75,11 @@
 - type: trait
   id: Kaishago
   category: TraitsSpeechLanguages
-  points: -4
+  points: -3
   requirements:
+    - !type:FactionRequirement
+      inverted: true
+      factionID: SHI
     - !type:CharacterTraitRequirement
       inverted: true
       traits:

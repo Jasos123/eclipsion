@@ -1,0 +1,14 @@
+- type: constructionGraph
+  id: MothroachSilkObjects
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: cloth
+      steps:
+      - material: SilkFilament
+        amount: 1
+        doAfter: 5
+
+  - node: cloth
+    entity: MaterialCloth1

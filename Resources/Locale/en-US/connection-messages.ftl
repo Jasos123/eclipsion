@@ -1,4 +1,4 @@
-﻿cmd-whitelistadd-desc = Adds the player with the given username to the server whitelist.
+cmd-whitelistadd-desc = Adds the player with the given username to the server whitelist.
 cmd-whitelistadd-help = Usage: whitelistadd <username or User ID>
 cmd-whitelistadd-existing = {$username} is already on the whitelist!
 cmd-whitelistadd-added = {$username} added to the whitelist
@@ -55,3 +55,7 @@ baby-jail-account-denied = This server is a newbie server, intended for new play
 baby-jail-account-denied-reason = This server is a newbie server, intended for new players and those who want to help them. New connections by accounts that are too old or are not on a whitelist are not accepted. Check out some other servers and see everything Space Station 14 has to offer. Have fun! Reason: "{$reason}"
 baby-jail-account-reason-account = Your Space Station 14 account is too old. It must be younger than {$hours} hours.
 baby-jail-account-reason-overall = Your overall playtime on the server must be younger than {$hours} hours.
+whitelist-not-whitelisted = You are not whitelisted on this server.
+whitelist-not-whitelisted-peri = You are not whitelisted on this server.
+whitelist-playercount-invalid = The whitelist is only enforced between {$min} and {$max} players.
+whitelist-sponsor = This server is currently open to sponsors only.

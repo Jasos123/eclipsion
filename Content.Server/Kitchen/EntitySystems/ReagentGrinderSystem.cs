@@ -206,8 +206,8 @@ namespace Content.Server.Kitchen.EntitySystems
         /// </remarks>
         private void OnRefreshParts(Entity<ReagentGrinderComponent> entity, ref RefreshPartsEvent args)
         {
-            var ratingWorkTime = args.PartRatings[entity.Comp.MachinePartWorkTime];
-            var ratingStorage = args.PartRatings[entity.Comp.MachinePartStorageMax];
+            var ratingWorkTime = args.GetRating(entity.Comp.MachinePartWorkTime);
+            var ratingStorage = args.GetRating(entity.Comp.MachinePartStorageMax);
 
             entity.Comp.WorkTimeMultiplier = MathF.Pow(entity.Comp.PartRatingWorkTimerMulitplier, ratingWorkTime - 1);
             entity.Comp.StorageMaxEntities = entity.Comp.BaseStorageMaxEntities + (int) (entity.Comp.StoragePerPartRating * (ratingStorage - 1));
@@ -324,7 +324,7 @@ namespace Content.Server.Kitchen.EntitySystems
             var active = AddComp<ActiveReagentGrinderComponent>(uid);
             active.EndTime = _timing.CurTime + reagentGrinder.WorkTime * reagentGrinder.WorkTimeMultiplier;
             active.Program = program;
-            
+
             // slightly higher pitched
             var audio = _audioSystem.PlayPvs(sound, uid,
                 AudioParams.Default.WithPitchScale(1 / reagentGrinder.WorkTimeMultiplier));

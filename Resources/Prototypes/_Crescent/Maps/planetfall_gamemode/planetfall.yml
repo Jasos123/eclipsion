@@ -32,6 +32,7 @@
             planetfall_surgeon: [ 3, 3 ]
             planetfall_courtier: [ 6, 6 ]
             planetfall_freeholder: [ -1, -1 ]
+            planetfall_oathbound: [ -1, -1 ]
 
             planetfall_mvdofficer: [ 1, 1 ]
             planetfall_mvdgrunt: [ 2, 2 ]

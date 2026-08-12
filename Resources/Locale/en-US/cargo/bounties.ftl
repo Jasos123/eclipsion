@@ -132,3 +132,4 @@ bounty-description-cardobard-box = "The Cardborgs Cometh" is a new play premieri
 bounty-description-wine = The new cataloger and the Logistics Officer are falling head over heels for each other after she caught him disassembling the bookshelves for wood. Send a couple bottles of wine (Or cans, if you must) to help make the date go well.
 bounty-description-cotton-boll = A massive swarm of mothroaches ate all the paper and cloth on the station. Send us some cotton to help keep our winged crewmembers fed.
 bounty-description-microwave-machine-board = Mr. Giggles thought it'd be funny to stick forks in all the kitchen microwaves. Help us replace them before the chefs start making clown burgers.
+bounty-console-manifest-reward = Reward: ${$reward}

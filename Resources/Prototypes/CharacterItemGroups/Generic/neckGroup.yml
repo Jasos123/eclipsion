@@ -121,3 +121,5 @@
     - type: loadout
       id: LoadoutNeckTFSCCloakRingleader
     #Hullrot edit end
+    - type: loadout
+      id: ClothingNeckImperialGreatcoat

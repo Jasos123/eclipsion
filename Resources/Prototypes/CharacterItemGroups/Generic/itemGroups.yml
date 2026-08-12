@@ -431,3 +431,13 @@
     - type: loadout
       id: LoadoutUniformJumpsuitSyndicateInterdyneScrubs
     #Hullrot edit end
+    - type: loadout
+      id: LoadoutUniformInfinityJersey
+    - type: loadout
+      id: LoadoutUniformJumpsuitNCWLSkirt
+    - type: loadout
+      id: LoadoutUniformNCWLTelnikSleeved
+    - type: loadout
+      id: LoadoutUniformNCWLTelnikSleeveless
+    - type: loadout
+      id: LoadoutUniformSyndicateBunnysuit

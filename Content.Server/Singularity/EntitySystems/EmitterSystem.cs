@@ -182,7 +182,7 @@ namespace Content.Server.Singularity.EntitySystems
 
         private void OnRefreshParts(EntityUid uid, EmitterComponent component, RefreshPartsEvent args)
         {
-            var fireRateRating = args.PartRatings[component.MachinePartFireRate];
+            var fireRateRating = args.GetRating(component.MachinePartFireRate);
 
             component.FireInterval = component.BaseFireInterval * MathF.Pow(component.FireRateMultiplier, fireRateRating - 1);
             component.FireBurstDelayMin = component.BaseFireBurstDelayMin * MathF.Pow(component.FireRateMultiplier, fireRateRating - 1);

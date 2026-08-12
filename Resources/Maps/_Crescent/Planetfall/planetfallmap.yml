@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 07/26/2026 19:18:54
-  entityCount: 18680
+  entityCount: 18689
 maps: []
 grids:
 - 1
@@ -101196,6 +101196,53 @@ entities:
       pos: 191.5,-58.5
       parent: 1
   - uid: 15732
+    components:
+    - type: Transform
+      pos: 183.5,-58.5
+      parent: 1
+- proto: SpawnPointPlanetfallOathboundDSM
+  entities:
+  - uid: 18681
+    components:
+    - type: Transform
+      pos: 192.5,-46.5
+      parent: 1
+  - uid: 18682
+    components:
+    - type: Transform
+      pos: 193.5,-58.5
+      parent: 1
+  - uid: 18683
+    components:
+    - type: Transform
+      pos: 185.5,-15.5
+      parent: 1
+  - uid: 18684
+    components:
+    - type: Transform
+      pos: 185.5,-13.5
+      parent: 1
+  - uid: 18685
+    components:
+    - type: Transform
+      pos: 193.5,-15.5
+      parent: 1
+  - uid: 18686
+    components:
+    - type: Transform
+      pos: 194.5,-12.5
+      parent: 1
+  - uid: 18687
+    components:
+    - type: Transform
+      pos: 186.5,-58.5
+      parent: 1
+  - uid: 18688
+    components:
+    - type: Transform
+      pos: 191.5,-58.5
+      parent: 1
+  - uid: 18689
     components:
     - type: Transform
       pos: 183.5,-58.5
