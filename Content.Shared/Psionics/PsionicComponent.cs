@@ -47,6 +47,28 @@ namespace Content.Shared.Abilities.Psionics
         public bool CanReroll = true;
 
         /// <summary>
+        ///     Diminishing-returns counter for Potentia earned by using powers. Each cast adds a stack and
+        ///     stacks decay over time, so a Psion who spams their cheapest power on a wall earns a fraction
+        ///     of what one who uses their powers when the round calls for them does.
+        /// </summary>
+        [ViewVariables(VVAccess.ReadWrite)]
+        public float CastFatigue;
+
+        /// <summary>
+        ///     When <see cref="CastFatigue"/> was last brought up to date. Decay is applied lazily on use so
+        ///     progression does not need a per-tick pass over every Psion.
+        /// </summary>
+        [ViewVariables]
+        public TimeSpan CastFatigueUpdated;
+
+        /// <summary>
+        ///     Multiplier applied to all Potentia this Psion earns from powers and from ambient glimmer.
+        ///     Traits and species can push this around without touching the roll maths.
+        /// </summary>
+        [DataField]
+        public float PotentiaGainMultiplier = 1f;
+
+        /// <summary>
         ///     The Base amount of time (in minutes) this Psion is given the stutter effect if they become mindbroken.
         /// </summary>
         [DataField]

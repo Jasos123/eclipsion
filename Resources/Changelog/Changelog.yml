@@ -530,3 +530,17 @@ Entries:
   id: 6041
   time: '2026-08-10T00:00:00.0000000+00:00'
   url: null
+
+- author: Taleryn
+  changes:
+    - message: Psions now earn Potentia by using their powers. The heavier the power, the more it is worth, with diminishing returns so casting the same cheap power at a wall on a loop earns almost nothing.
+      type: Add
+    - message: Awake psions also earn Potentia from ambient glimmer, scaled to how loud the noosphere is. A station whose psions are pushing hard advances all of them, and pays for it with the events a high glimmer brings.
+      type: Add
+    - message: Psionic levels past the first are now reachable in a normal round. Previously the only source of progression was a single one-shot dose of Lotophagoi Oil, which left every skill above the first tier of the tree unreachable outside admin intervention.
+      type: Fix
+    - message: The psionic skill tree window now refreshes while it is open, instead of showing a stale point count and progress bar until you close and reopen it.
+      type: Fix
+  id: 6042
+  time: '2026-08-13T00:00:00.0000000+00:00'
+  url: null

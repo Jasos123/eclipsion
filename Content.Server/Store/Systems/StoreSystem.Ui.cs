@@ -286,6 +286,11 @@ public sealed partial class StoreSystem
     private void OnRequestWithdraw(EntityUid uid, StoreComponent component, StoreRequestWithdrawMessage msg)
     {
         //make sure we have enough cash in the bank and we actually support this currency
+        //the amount is checked for sign first: a negative one passes the balance check below and would
+        //otherwise be credited back onto the balance at the end of this handler
+        if (msg.Amount <= 0)
+            return;
+
         if (!component.Balance.TryGetValue(msg.Currency, out var currentAmount) || currentAmount < msg.Amount)
             return;
 
@@ -307,8 +312,16 @@ public sealed partial class StoreSystem
         {
             var cashId = proto.Cash[value];
             var amountToSpawn = (int) MathF.Floor((float) (amountRemaining / value));
+
+            //nothing to hand over for this denomination: SpawnMultiple returns an empty list for a
+            //non-positive count, and taking the first element of it throws
+            if (amountToSpawn <= 0)
+                continue;
+
             var ents = _stack.SpawnMultiple(cashId, amountToSpawn, coordinates);
-            _hands.PickupOrDrop(buyer, ents.First());
+            if (ents.Count > 0)
+                _hands.PickupOrDrop(buyer, ents[0]);
+
             amountRemaining -= value * amountToSpawn;
         }
 

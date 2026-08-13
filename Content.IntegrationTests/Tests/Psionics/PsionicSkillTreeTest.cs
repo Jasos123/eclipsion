@@ -5,6 +5,7 @@ using Content.Shared.Abilities.Psionics;
 using Content.Shared.Actions;
 using Content.Shared.Customization.Systems;
 using Content.Shared.Psionics;
+using Content.Shared.Psionics.Glimmer;
 using Content.Shared.Traits;
 using Content.Shared.Voidborn;
 using Robust.Shared.GameObjects;
@@ -97,7 +98,7 @@ public sealed class PsionicSkillTreeTest
     }
 
     [Test]
-    public async Task OnlyOilAndDustCanTriggerProgressionRolls()
+    public async Task OnlyOilAndDustCanTriggerRerolls()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -120,6 +121,73 @@ public sealed class PsionicSkillTreeTest
 
             psionic.CanReroll = true;
             Assert.That(psionics.RerollPsionics(entity, "OusianaDust", psionic), Is.True);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task UsingAPowerEarnsPotentiaWithDiminishingReturns()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var caster = entMan.SpawnEntity("MobHuman", map.GridCoords);
+            var psionic = entMan.EnsureComponent<PsionicComponent>(caster);
+            var abilities = server.System<SharedPsionicAbilitiesSystem>();
+            psionic.Potentia = 0;
+
+            abilities.LogPowerUsed(caster, "test power");
+            var firstCast = psionic.Potentia;
+
+            abilities.LogPowerUsed(caster, "test power");
+            var secondCast = psionic.Potentia - firstCast;
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(firstCast, Is.GreaterThan(0));
+
+                // Fatigue has had no time to decay between the two, so the follow-up is worth about half.
+                Assert.That(secondCast, Is.GreaterThan(0));
+                Assert.That(secondCast, Is.LessThan(firstCast));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task AmbientGlimmerFeedsPotentia()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        var timing = server.ResolveDependency<IGameTiming>();
+        var glimmer = server.System<GlimmerSystem>();
+        PsionicComponent psionic = default!;
+
+        await server.WaitAssertion(() =>
+        {
+            var psion = server.EntMan.SpawnEntity("MobHuman", map.GridCoords);
+            psionic = server.EntMan.EnsureComponent<PsionicComponent>(psion);
+            psionic.Potentia = 0;
+            glimmer.SetGlimmerOutput(500);
+        });
+
+        // The ambient tick runs on a five second timer, so give it room for at least one pass.
+        await server.WaitRunTicks(timing.TickRate * 6);
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(psionic.Potentia, Is.GreaterThan(0));
+
+            // Glimmer is process-wide state, so leave it as we found it for the next test out of the pool.
+            glimmer.SetGlimmerInput(0);
         });
 
         await pair.CleanReturnAsync();

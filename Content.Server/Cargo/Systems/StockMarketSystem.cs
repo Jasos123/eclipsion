@@ -8,6 +8,7 @@ using Content.Server.DeltaV.CartridgeLoader.Cartridges;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.Bank.Components;
+using Content.Shared.Cargo.Cartridges;
 using Content.Shared.CartridgeLoader;
 using Content.Shared.CartridgeLoader.Cartridges;
 using Content.Shared.Database;
@@ -140,11 +141,23 @@ public sealed class StockMarketSystem : EntitySystem
         if (amount == 0 || companyIndex < 0 || companyIndex >= stockMarket.Companies.Count)
             return false;
 
+        // The amount comes straight off the wire, so bound it before it reaches any arithmetic. A large
+        // enough amount used to overflow the cast below into a negative total, which then slipped past the
+        // affordability check and handed out shares for free.
+        if (amount < -StockMarketTrading.MaxStockAmount || amount > StockMarketTrading.MaxStockAmount)
+            return false;
+
         if (!TryComp<BankAccountComponent>(user, out var bank))
             return false;
 
         var company = stockMarket.Companies[companyIndex];
-        var totalValue = (int)Math.Round(company.CurrentPrice * amount);
+
+        // Kept in double until it is known to fit, so that an extreme price cannot wrap the cast either.
+        var value = Math.Round(company.CurrentPrice * (double) amount);
+        if (double.IsNaN(value) || value < int.MinValue || value > int.MaxValue)
+            return false;
+
+        var totalValue = (int) value;
 
         if (!stockMarket.StockOwnership.TryGetValue(companyIndex, out var currentOwned))
             currentOwned = 0;
@@ -163,19 +176,25 @@ public sealed class StockMarketSystem : EntitySystem
                 return false;
         }
 
+        // Update the bank account (take away for buying and give for selling). This settles before the shares
+        // change hands: a rejected withdrawal must not leave the buyer holding stock they never paid for.
+        totalValue *= -1;
+        if (totalValue > 0)
+        {
+            if (!_bankSystem.TryBankDeposit(user, totalValue))
+                return false;
+        }
+        else if (totalValue < 0 && !_bankSystem.TryBankWithdraw(user, -totalValue))
+        {
+            return false;
+        }
+        //_cargo.UpdateBankAccount(station, bank, -totalValue);
+
         var newAmount = currentOwned + amount;
         if (newAmount > 0)
             stockMarket.StockOwnership[companyIndex] = newAmount;
         else
             stockMarket.StockOwnership.Remove(companyIndex);
-
-        // Update the bank account (take away for buying and give for selling)
-        totalValue *= -1;
-        if (totalValue > 0)
-            _bankSystem.TryBankDeposit(user, totalValue);
-        else
-            _bankSystem.TryBankWithdraw(user, -totalValue);
-        //_cargo.UpdateBankAccount(station, bank, -totalValue);
 
         // Log the transaction
         var verb = amount > 0 ? "bought" : "sold";

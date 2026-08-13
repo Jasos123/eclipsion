@@ -1,6 +1,7 @@
 using Content.Shared.Administration.Logs;
 using Content.Shared.Contests;
 using Content.Shared.Popups;
+using Content.Shared.Psionics;
 using Content.Shared.Psionics.Glimmer;
 using Robust.Shared.Random;
 using Robust.Shared.Serialization;
@@ -93,7 +94,14 @@ namespace Content.Shared.Abilities.Psionics
             var ev = new PsionicPowerUsedEvent(uid, power);
             RaiseLocalEvent(uid, ev, false);
 
-            _glimmerSystem.DeltaGlimmerInput(_robustRandom.NextFloat(minGlimmer, maxGlimmer));
+            var glimmer = _robustRandom.NextFloat(minGlimmer, maxGlimmer);
+
+            // Progression is paid out of the same number that feeds the noosphere, so a power that stirs
+            // glimmer harder is also worth more experience.
+            var castEv = new PsionicPowerCastEvent(uid, power, glimmer);
+            RaiseLocalEvent(uid, ref castEv);
+
+            _glimmerSystem.DeltaGlimmerInput(glimmer);
         }
 
         /// <summary>

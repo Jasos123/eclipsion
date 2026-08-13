@@ -8,7 +8,7 @@
     scale: 0.8, 0.8
     sprite: _Crescent/Objects/Consumables/Smokeables/Cigars/freeports_cigar.rsi
   - type: Item
-    sprite: _Crescent/Objects/Consumable/Smokeables/Cigars/freeports_cigar.rsi
+    sprite: _Crescent/Objects/Consumables/Smokeables/Cigars/freeports_cigar.rsi
     size: Normal
     shape:
     - 0,0,2,1

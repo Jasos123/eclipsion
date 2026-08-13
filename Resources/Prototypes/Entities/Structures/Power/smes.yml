@@ -40,6 +40,15 @@
           state: "smes-op1"
           shader: unshaded
     - type: Smes
+    - type: PowerStorageControl
+    - type: UserInterface
+      interfaces:
+        enum.PowerStorageControlUiKey.Key:
+          type: PowerStorageControlBoundUserInterface
+    - type: ActivatableUI
+      inHandsOnly: false
+      singleUser: true
+      key: enum.PowerStorageControlUiKey.Key
     - type: UpgradeBattery
       maxChargeMultiplier: 2
       baseMaxCharge: 120000000

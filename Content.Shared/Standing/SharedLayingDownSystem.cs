@@ -110,13 +110,23 @@ public abstract class SharedLayingDownSystem : EntitySystem
 
     private void OnStandingUpDoAfter(EntityUid uid, StandingStateComponent component, StandingUpDoAfterEvent args)
     {
-        if (args.Handled || args.Cancelled
+        if (args.Handled)
+            return;
+
+        args.Handled = true;
+
+        // Ignore a stale do-after if another system already changed the entity's standing state.
+        if (component.CurrentState is not StandingState.GettingUp)
+            return;
+
+        if (args.Cancelled
             || HasComp<KnockedDownComponent>(uid)
             || _mobState.IsIncapacitated(uid)
-            || !_standing.Stand(uid))
+            || !_standing.Stand(uid, component))
+        {
             component.CurrentState = StandingState.Lying;
-
-        component.CurrentState = StandingState.Standing;
+            Dirty(uid, component);
+        }
     }
 
     private void OnRefreshMovementSpeed(EntityUid uid, LayingDownComponent component, RefreshMovementSpeedModifiersEvent args)
@@ -163,6 +173,8 @@ public abstract class SharedLayingDownSystem : EntitySystem
 
         standingState.CurrentState = StandingState.GettingUp;
         layingDown.IsCrawlingUnder = false;
+        Dirty(uid, standingState);
+        Dirty(uid, layingDown);
         return true;
     }
 

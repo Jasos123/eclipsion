@@ -9,6 +9,11 @@ public sealed class PsionicSkillTreeEui : BaseEui
     private readonly EntityUid _owner;
     private readonly PsionicSkillTreeSystem _system;
 
+    /// <summary>
+    /// The body this window was opened from, so progression can refresh the right open window.
+    /// </summary>
+    internal EntityUid Owner => _owner;
+
     public PsionicSkillTreeEui(EntityUid owner, PsionicSkillTreeSystem system)
     {
         _owner = owner;

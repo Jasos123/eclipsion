@@ -1,0 +1,59 @@
+<controls:FancyWindow xmlns="https://spacestation14.io"
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      MinSize="450 330"
+                      SetSize="450 330"
+                      Resizable="False"
+                      Title="{Loc 'power-storage-control-window-title'}">
+    <BoxContainer Orientation="Vertical" Margin="6 2 6 6" SeparationOverride="6">
+        <BoxContainer Orientation="Horizontal" SeparationOverride="10">
+            <PanelContainer StyleClasses="Inset" VerticalAlignment="Center">
+                <SpriteView Name="EntityView" SetSize="64 64" Scale="2 2" OverrideDirection="South" Margin="8" />
+            </PanelContainer>
+            <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalAlignment="Center">
+                <Label Text="{Loc 'power-storage-control-window-charge'}" StyleClasses="StatusFieldTitle" />
+                <ProgressBar Name="ChargeBar" MinValue="0" MaxValue="1" MinHeight="24" HorizontalExpand="True">
+                    <Label Name="ChargePercentage" Margin="4 0" Text="0 %" />
+                </ProgressBar>
+                <Label Name="StoredEnergy" HorizontalAlignment="Center" />
+            </BoxContainer>
+        </BoxContainer>
+
+        <PanelContainer StyleClasses="Inset" HorizontalExpand="True">
+            <BoxContainer Orientation="Vertical" Margin="6" SeparationOverride="4">
+                <Label Text="{Loc 'power-storage-control-window-input-title'}" StyleClasses="StatusFieldTitle" />
+                <GridContainer Columns="2" HorizontalExpand="True">
+                    <Label Text="{Loc 'power-storage-control-window-voltage'}" />
+                    <Label Name="InputVoltage" />
+                    <Label Text="{Loc 'power-storage-control-window-current-power'}" />
+                    <Label Name="InputCurrent" />
+                    <Label Text="{Loc 'power-storage-control-window-limit'}" />
+                    <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
+                        <SpinBox Name="InputLimit" MinWidth="110" HorizontalExpand="True" />
+                        <Label Text="{Loc 'power-storage-control-window-kilowatts'}" Margin="4 0 0 0" VerticalAlignment="Center" />
+                    </BoxContainer>
+                    <Label Name="InputMaximum" StyleClasses="Disabled" />
+                    <Button Name="InputToggle" HorizontalExpand="True" />
+                </GridContainer>
+            </BoxContainer>
+        </PanelContainer>
+
+        <PanelContainer StyleClasses="Inset" HorizontalExpand="True">
+            <BoxContainer Orientation="Vertical" Margin="6" SeparationOverride="4">
+                <Label Text="{Loc 'power-storage-control-window-output-title'}" StyleClasses="StatusFieldTitle" />
+                <GridContainer Columns="2" HorizontalExpand="True">
+                    <Label Text="{Loc 'power-storage-control-window-voltage'}" />
+                    <Label Name="OutputVoltage" />
+                    <Label Text="{Loc 'power-storage-control-window-current-power'}" />
+                    <Label Name="OutputCurrent" />
+                    <Label Text="{Loc 'power-storage-control-window-limit'}" />
+                    <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
+                        <SpinBox Name="OutputLimit" MinWidth="110" HorizontalExpand="True" />
+                        <Label Text="{Loc 'power-storage-control-window-kilowatts'}" Margin="4 0 0 0" VerticalAlignment="Center" />
+                    </BoxContainer>
+                    <Label Name="OutputMaximum" StyleClasses="Disabled" />
+                    <Button Name="OutputToggle" HorizontalExpand="True" />
+                </GridContainer>
+            </BoxContainer>
+        </PanelContainer>
+    </BoxContainer>
+</controls:FancyWindow>

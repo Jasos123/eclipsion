@@ -76,6 +76,21 @@ public sealed class PsionicSkillTreeSystem : EntitySystem
     }
 
     /// <summary>
+    /// Pushes fresh state to the given Psion's open tree window, if they have one.
+    /// </summary>
+    public void RefreshEui(EntityUid uid)
+    {
+        foreach (var eui in _openEuis.Values)
+        {
+            if (eui.Owner != uid || eui.IsShutDown)
+                continue;
+
+            eui.StateDirty();
+            return;
+        }
+    }
+
+    /// <summary>
     /// Grants a full level and one spendable point. Potentia is handled by <see cref="PsionicsSystem"/>.
     /// </summary>
     public void GainLevel(EntityUid uid, PsionicComponent component, int amount = 1, bool feedback = true)
@@ -86,6 +101,10 @@ public sealed class PsionicSkillTreeSystem : EntitySystem
         component.PsionicLevel += amount;
         component.SkillPoints += amount;
         Dirty(uid, component);
+
+        // A tree left open while the Psion levels would otherwise keep showing the old point count and
+        // greyed-out nodes until it was closed and reopened.
+        RefreshEui(uid);
 
         if (feedback)
         {

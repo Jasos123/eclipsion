@@ -8,6 +8,15 @@
   placement:
     mode: SnapgridCenter
   components:
+  - type: PowerStorageControl
+  - type: UserInterface
+    interfaces:
+      enum.PowerStorageControlUiKey.Key:
+        type: PowerStorageControlBoundUserInterface
+  - type: ActivatableUI
+    inHandsOnly: false
+    singleUser: true
+    key: enum.PowerStorageControlUiKey.Key
   - type: Sprite # TODO: add sprite for maintenance panel open
     sprite: Structures/Power/substation.rsi
     snapCardinals: true
@@ -133,6 +142,15 @@
   placement:
     mode: SnapgridCenter
   components:
+  - type: PowerStorageControl
+  - type: UserInterface
+    interfaces:
+      enum.PowerStorageControlUiKey.Key:
+        type: PowerStorageControlBoundUserInterface
+  - type: ActivatableUI
+    inHandsOnly: false
+    singleUser: true
+    key: enum.PowerStorageControlUiKey.Key
   - type: AmbientOnPowered
   - type: AmbientSound
     volume: -10

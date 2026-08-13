@@ -181,17 +181,32 @@ public sealed class PsionicsSystem : EntitySystem
     /// <summary>
     ///     Potentia is psionic experience. Crossing a threshold grants a level and a point;
     ///     the player chooses the power through the skill tree instead of rolling one randomly.
+    ///     This is the single entry point for every source of progression, so all of them share the
+    ///     same level maths and the same feedback.
     /// </summary>
     /// <remarks>
     ///     This exponential cost is mainly done to prevent stations from becoming "Space Hogwarts",
     ///     which was a common complaint with Psionic Refactor opening up the opportunity for people to have multiple powers.
     /// </remarks>
-    private bool HandlePotentiaCalculations(EntityUid uid, PsionicComponent component, float psionicChance)
+    /// <returns>True if the Psion gained at least one level.</returns>
+    public bool AddPotentia(EntityUid uid, PsionicComponent component, float amount)
     {
-        component.Potentia += _random.NextFloat(0 + psionicChance, 100 + psionicChance);
+        if (amount <= 0
+            || !component.Roller
+            || HasComp<MindbrokenComponent>(uid))
+            return false;
+
+        component.Potentia += amount;
 
         if (component.Potentia < component.NextPowerCost)
+        {
+            Dirty(uid, component);
+
+            // Keep the progress bar of an open tree window moving. Cheap: this is a no-op unless the
+            // Psion actually has the window up.
+            _skillTreeSystem.RefreshEui(uid);
             return false;
+        }
 
         while (component.Potentia >= component.NextPowerCost)
         {
@@ -201,6 +216,7 @@ public sealed class PsionicsSystem : EntitySystem
         }
 
         Dirty(uid, component);
+        HandleLevelUpFeedback(uid, component);
         return true;
     }
 
@@ -255,10 +271,7 @@ public sealed class PsionicsSystem : EntitySystem
         var ev = new OnRollPsionicsEvent(uid, baselineChance);
         RaiseLocalEvent(uid, ref ev);
 
-        if (!HandlePotentiaCalculations(uid, component, ev.BaselineChance))
-            return;
-
-        HandleLevelUpFeedback(uid, component);
+        AddPotentia(uid, component, _random.NextFloat(0 + ev.BaselineChance, 100 + ev.BaselineChance));
     }
 
     /// <summary>
