@@ -8,6 +8,8 @@ using Content.Shared.Mapping;
 using Content.Shared.Maps;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
+using Robust.Shared;
+using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -21,9 +23,33 @@ namespace Content.Client.Mapping;
 
 public sealed class MappingManager : IPostInjectInit
 {
-    private static readonly Vector2i GridScreenshotSize = new(1920, 1080);
+    /// <summary>
+    ///     Smallest grid screenshot. Grids smaller than this get padding rather than a tiny image.
+    /// </summary>
+    private static readonly Vector2i MinScreenshotSize = new(1920, 1080);
+
+    /// <summary>
+    ///     Ceiling on either side of the render target. Big enough that a station still reads clearly, small
+    ///     enough that allocating the viewport's render targets doesn't blow up video memory.
+    /// </summary>
+    private const int MaxScreenshotDimension = 4096;
+
+    /// <summary>
+    ///     Entities per tick the client accepts while streaming a grid in for a screenshot. Far above the normal
+    ///     budget, which exists to keep gameplay smooth and would otherwise take minutes on a station.
+    /// </summary>
+    private const int ScreenshotPvsBudget = 2048;
+
+    private static readonly TimeSpan ScreenshotPvsPollInterval = TimeSpan.FromMilliseconds(100);
+    private static readonly TimeSpan ScreenshotPvsTimeout = TimeSpan.FromSeconds(30);
+
+    /// <summary>
+    ///     How many polls in a row the entity count has to hold still before the grid counts as fully streamed in.
+    /// </summary>
+    private const int ScreenshotPvsStablePolls = 5;
 
     [Dependency] private readonly IClyde _clyde = default!;
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IEntityManager _entityManager = default!;
     [Dependency] private readonly IFileDialogManager _file = default!;
     [Dependency] private readonly ILogManager _log = default!;
@@ -47,6 +73,7 @@ public sealed class MappingManager : IPostInjectInit
         _net.RegisterNetMessage<MappingMapDataMessage>(OnMapData);
         _net.RegisterNetMessage<MappingFavoritesDataMessage>(OnFavoritesData);
         _net.RegisterNetMessage<MappingFavoritesSaveMessage>();
+        _net.RegisterNetMessage<MappingScreenshotPvsMessage>();
     }
 
     private async void OnSaveError(MappingSaveMapErrorMessage message)
@@ -181,7 +208,7 @@ public sealed class MappingManager : IPostInjectInit
     }
 
     /// <summary>
-    ///     Renders a complete grid into a separate 1920x1080 viewport and lets the mapper save it as PNG.
+    ///     Renders a complete grid into a separate viewport and lets the mapper save it as PNG.
     ///     This does not resize or move the main mapping viewport.
     /// </summary>
     public async Task ExportGridScreenshot(Entity<MapGridComponent> grid)
@@ -200,8 +227,14 @@ public sealed class MappingManager : IPostInjectInit
         var padding = MathF.Max(grid.Comp.TileSize, bounds.MaxDimension * 0.015f);
         bounds = bounds.Enlarged(padding);
 
-        var visibleWorldWidth = GridScreenshotSize.X / (float) EyeManager.PixelsPerMeter;
-        var visibleWorldHeight = GridScreenshotSize.Y / (float) EyeManager.PixelsPerMeter;
+        // Grow the render target with the grid instead of squeezing a whole station into 1920x1080, where a
+        // single tile ends up a handful of pixels wide and small items are no longer recognisable.
+        var size = new Vector2i(
+            Math.Clamp((int) MathF.Ceiling(bounds.Width * EyeManager.PixelsPerMeter), MinScreenshotSize.X, MaxScreenshotDimension),
+            Math.Clamp((int) MathF.Ceiling(bounds.Height * EyeManager.PixelsPerMeter), MinScreenshotSize.Y, MaxScreenshotDimension));
+
+        var visibleWorldWidth = size.X / (float) EyeManager.PixelsPerMeter;
+        var visibleWorldHeight = size.Y / (float) EyeManager.PixelsPerMeter;
         var zoom = MathF.Max(bounds.Width / visibleWorldWidth, bounds.Height / visibleWorldHeight);
         zoom = MathF.Max(zoom, 0.01f);
 
@@ -211,31 +244,109 @@ public sealed class MappingManager : IPostInjectInit
 
         await using (stream)
         {
-            var eye = new FixedEye
+            var netGrid = _entityManager.GetNetEntity(grid.Owner);
+            var oldSpawnBudget = _cfg.GetCVar(CVars.NetPVSEntityBudget);
+            var oldEnterBudget = _cfg.GetCVar(CVars.NetPVSEntityEnterBudget);
+
+            try
             {
-                Position = new MapCoordinates(bounds.Center, xform.MapID),
-                Zoom = new Vector2(zoom),
-                DrawFov = false,
-                DrawLight = true,
-            };
+                // The renderer can only draw what the client has, and PVS only ever sends the entities within
+                // net.pvs_range of the mapper's own eye. On anything bigger than that box the far half of the ship
+                // was never on the client at all, which is why parts of it came out empty. Ask the server for the
+                // whole grid, and lift the per-tick spawn budget so it arrives in a few ticks instead of a minute.
+                _cfg.SetCVar(CVars.NetPVSEntityBudget, ScreenshotPvsBudget);
+                _cfg.SetCVar(CVars.NetPVSEntityEnterBudget, ScreenshotPvsBudget);
+                SetScreenshotPvs(netGrid, true);
 
-            using var viewport = _clyde.CreateViewport(GridScreenshotSize, "MappingGridScreenshot");
-            viewport.Eye = eye;
-            viewport.Render();
+                await WaitForGridEntities(grid.Owner);
 
-            var screenshotSource = new TaskCompletionSource<Image<Rgba32>>();
+                var eye = new FixedEye
+                {
+                    Position = new MapCoordinates(bounds.Center, xform.MapID),
+                    Zoom = new Vector2(zoom),
+                    DrawFov = false,
+                    DrawLight = true,
+                };
 
-            viewport.RenderTarget.CopyPixelsToMemory<Rgba32>(image => screenshotSource.SetResult(image));
+                using var viewport = _clyde.CreateViewport(size, "MappingGridScreenshot");
+                viewport.Eye = eye;
+                viewport.Render();
 
-            using var screenshot = await screenshotSource.Task;
-            await Task.Run(() => screenshot.SaveAsPng(stream));
-            await stream.FlushAsync();
+                var screenshotSource = new TaskCompletionSource<Image<Rgba32>>();
 
-            _sawmill.Info("Exported grid {0} as a {1}x{2} PNG.",
-                grid.Owner,
-                GridScreenshotSize.X,
-                GridScreenshotSize.Y);
+                viewport.RenderTarget.CopyPixelsToMemory<Rgba32>(image => screenshotSource.SetResult(image));
+
+                using var screenshot = await screenshotSource.Task;
+                await Task.Run(() => screenshot.SaveAsPng(stream));
+                await stream.FlushAsync();
+
+                _sawmill.Info("Exported grid {0} as a {1}x{2} PNG.", grid.Owner, size.X, size.Y);
+            }
+            finally
+            {
+                // Put the mapper back on normal streaming even if the render or the save threw, otherwise they
+                // keep receiving the entire grid for the rest of the session.
+                SetScreenshotPvs(netGrid, false);
+                _cfg.SetCVar(CVars.NetPVSEntityBudget, oldSpawnBudget);
+                _cfg.SetCVar(CVars.NetPVSEntityEnterBudget, oldEnterBudget);
+            }
         }
+    }
+
+    private void SetScreenshotPvs(NetEntity grid, bool enabled)
+    {
+        _net.ClientSendMessage(new MappingScreenshotPvsMessage
+        {
+            Grid = grid,
+            Enabled = enabled,
+        });
+    }
+
+    /// <summary>
+    ///     Waits for the server to finish streaming the grid in. There is no "you have it all now" signal, so
+    ///     this settles for the entity count on the grid holding still for a few polls in a row.
+    /// </summary>
+    private async Task WaitForGridEntities(EntityUid grid)
+    {
+        var polls = (int) (ScreenshotPvsTimeout / ScreenshotPvsPollInterval);
+        var previous = -1;
+        var stable = 0;
+
+        for (var i = 0; i < polls; i++)
+        {
+            await Task.Delay(ScreenshotPvsPollInterval);
+
+            var count = CountGridEntities(grid);
+
+            if (count != previous)
+            {
+                previous = count;
+                stable = 0;
+                continue;
+            }
+
+            if (++stable >= ScreenshotPvsStablePolls)
+                return;
+        }
+
+        _sawmill.Warning(
+            "Timed out waiting for grid {0} to finish streaming in; the screenshot may be missing entities.",
+            grid);
+    }
+
+    private int CountGridEntities(EntityUid grid)
+    {
+        // Entities that PVS has taken away are detached from their parent, so they stop counting towards this.
+        var count = 0;
+        var query = _entityManager.AllEntityQueryEnumerator<TransformComponent>();
+
+        while (query.MoveNext(out var xform))
+        {
+            if (xform.GridUid == grid)
+                count++;
+        }
+
+        return count;
     }
 
     public void SaveFavorites(List<MappingPrototype> prototypes)

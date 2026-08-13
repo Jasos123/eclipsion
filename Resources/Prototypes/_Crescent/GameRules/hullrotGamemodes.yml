@@ -51,6 +51,7 @@
   - planetfall_advocatus
   - planetfall_governor
   - planetfall_freeholder
+  - planetfall_oathbound
   - planetfall_levyman
   - planetfall_surgeon
   rules:
@@ -148,6 +149,7 @@
   - planetfall_advocatus
   - planetfall_governor
   - planetfall_freeholder
+  - planetfall_oathbound
   - planetfall_levyman
   - planetfall_surgeon
   rules:
@@ -231,6 +233,7 @@
   - planetfall_advocatus
   - planetfall_governor
   - planetfall_freeholder
+  - planetfall_oathbound
   - planetfall_levyman
   - planetfall_surgeon
   rules:
@@ -320,6 +323,7 @@
   - planetfall_advocatus
   - planetfall_governor
   - planetfall_freeholder
+  - planetfall_oathbound
   - planetfall_levyman
   - planetfall_surgeon
   rules:
@@ -444,6 +448,7 @@
   - planetfall_advocatus
   - planetfall_governor
   - planetfall_freeholder
+  - planetfall_oathbound
   - planetfall_levyman
   - planetfall_surgeon
   rules:

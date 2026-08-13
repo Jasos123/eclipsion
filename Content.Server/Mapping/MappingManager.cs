@@ -4,11 +4,13 @@ using Content.Server.Administration.Managers;
 using Content.Shared.Administration;
 using Content.Shared.Mapping;
 using Robust.Server.GameObjects;
+using Robust.Server.GameStates;
 using Robust.Server.Player;
 using Robust.Shared.ContentPack;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
@@ -52,6 +54,7 @@ public sealed class MappingManager : IPostInjectInit
         _net.RegisterNetMessage<MappingSaveMapMessage>(OnMappingSaveMap);
         _net.RegisterNetMessage<MappingSaveMapErrorMessage>();
         _net.RegisterNetMessage<MappingMapDataMessage>();
+        _net.RegisterNetMessage<MappingScreenshotPvsMessage>(OnScreenshotPvs);
 
         _zstd = new ZStdCompressionContext();
     }
@@ -116,6 +119,33 @@ public sealed class MappingManager : IPostInjectInit
             var msg = new MappingSaveMapErrorMessage();
             _net.ServerSendMessage(msg, message.MsgChannel);
         }
+    }
+
+    /// <summary>
+    ///     Lifts (or restores) PVS range culling on a single grid for a single mapper, so that the client actually
+    ///     has every entity on a large ship or station while it renders a grid screenshot.
+    /// </summary>
+    private void OnScreenshotPvs(MappingScreenshotPvsMessage message)
+    {
+        if (!_players.TryGetSessionByChannel(message.MsgChannel, out var session) ||
+            !_admin.IsAdmin(session, true) ||
+            !(_admin.HasAdminFlag(session, AdminFlags.Host) || _admin.HasAdminFlag(session, AdminFlags.Mapping)))
+        {
+            return;
+        }
+
+        if (!_ent.TryGetEntity(message.Grid, out var grid) || !_ent.HasComponent<MapGridComponent>(grid))
+            return;
+
+        // A session override on the grid covers everything parented to it, so this is a single call for the whole
+        // ship instead of one per entity. The client sends the disable half itself; if it never gets there because
+        // the mapper disconnected, the engine drops the session's overrides anyway.
+        var pvs = _systems.GetEntitySystem<PvsOverrideSystem>();
+
+        if (message.Enabled)
+            pvs.AddSessionOverride(grid.Value, session);
+        else
+            pvs.RemoveSessionOverride(grid.Value, session);
     }
 
     private void OnMappingFavoritesSave(MappingFavoritesSaveMessage message)

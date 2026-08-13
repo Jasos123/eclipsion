@@ -17,7 +17,7 @@ public sealed class TargetingConsoleBoundUserInterface : BoundUserInterface
 {
     private IEntityManager _entMan;
     private TransformSystem _formSys;
-    private InputSystem _inputSystem;
+    private IInputManager _inputMan;
 
     private TargetingConsoleWindow? _window;
     private bool _isFiring;
@@ -29,16 +29,32 @@ public sealed class TargetingConsoleBoundUserInterface : BoundUserInterface
     {
         _entMan = IoCManager.Resolve<IEntityManager>();
         _formSys = _entMan.System<TransformSystem>();
-        _inputSystem = _entMan.System<InputSystem>();
+        _inputMan = IoCManager.Resolve<IInputManager>();
         Timer.SpawnRepeating(100, Update, _updTimerTok.Token);
+    }
+
+    /// <summary>
+    /// Whether the fire button is physically held down right now.
+    /// </summary>
+    /// <remarks>
+    /// Has to read the raw keybind state: a click that lands on a UI control is consumed by the
+    /// UI and never reaches the simulation, so InputSystem.CmdStates reports UIClick as Up the
+    /// entire time the user is dragging across the radar.
+    /// </remarks>
+    private bool IsFireHeld()
+    {
+        // If UIClick somehow isn't bound, fall back to the radar's own release event.
+        if (!_inputMan.TryGetKeyBinding(EngineKeyFunctions.UIClick, out var binding))
+            return true;
+
+        return binding.State == BoundKeyState.Down;
     }
 
     private void Update()
     {
         // A key-up can be missed when the mouse leaves the radar, the window closes, or focus changes.
         // Never let the repeating timer preserve a stale fire command.
-        if (_isFiring &&
-            (!IsOpened || _inputSystem.CmdStates.GetState(EngineKeyFunctions.UIClick) != BoundKeyState.Down))
+        if (_isFiring && (!IsOpened || !IsFireHeld()))
         {
             StopFiring();
         }

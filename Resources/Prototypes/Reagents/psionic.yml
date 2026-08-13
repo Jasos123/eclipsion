@@ -111,13 +111,12 @@
     Narcotic:
       metabolismRate: 5
       effects:
+        # Restores a spent roll only - deliberately no ChemRerollPsionic alongside it. Metabolism
+        # effects run in list order within a single tick, so pairing the two here refilled
+        # CanReroll and immediately spent it again, which both nullified the restore this reagent
+        # exists for and handed out a psionic level per tick. Spending a roll is LotophagoiOil's
+        # job, at its own (higher) multiplier.
         - !type:ChemRestorePsionicReroll
-          conditions:
-            - !type:ReagentThreshold
-              reagent: OusianaDust
-              min: 5
-        - !type:ChemRerollPsionic
-          bonusMultiplier: 2
           conditions:
             - !type:ReagentThreshold
               reagent: OusianaDust
