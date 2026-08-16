@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Content.Server._Crescent.Factions;
 using Content.Server.GameTicking.Events;
 using Content.Shared._Crescent.CCVar;
@@ -48,6 +49,65 @@ public sealed class FactionBalanceTest
                 Assert.That(ev.Cancelled, Is.True);
                 Assert.That(balance.IsJobBlocked(session, job, out var faction), Is.True);
                 Assert.That(faction, Is.EqualTo("DSM"));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    /// <summary>
+    /// A round run between the two share factions alone has to keep accepting players. Measured against a
+    /// share of a population only they can grow, a quarter each never reaches the next whole player, so
+    /// both sides jam at their base slots forever.
+    /// </summary>
+    [Test]
+    public async Task ShareFactionsHoldEachOtherLevelWithNoWarFactionInTheRound()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var balance = pair.Server.System<FactionBalanceSystem>();
+
+        await pair.Server.WaitAssertion(() =>
+        {
+            var counts = new Dictionary<string, int> { ["SHI"] = 4, ["TFSC"] = 3 };
+            var inPlay = new HashSet<string> { "SHI", "TFSC" };
+            var caps = balance.CalculateCaps(counts, baseSlots: 3, tolerance: 0, inPlay);
+
+            Assert.Multiple(() =>
+            {
+                // ceil((7 + 1) * 0.25 / 0.5): the side that is behind can always take one more.
+                Assert.That(caps["SHI"].Cap, Is.EqualTo(4));
+                Assert.That(caps["TFSC"].Cap, Is.EqualTo(4));
+                Assert.That(caps["TFSC"].Full, Is.False);
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    /// <summary>
+    /// With the war factions in the round nothing about the old maths may change: parity between them,
+    /// and the support factions still held to their quarter of everyone playing.
+    /// </summary>
+    [Test]
+    public async Task WarFactionsInTheRoundKeepTheParityAndShareSplit()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var balance = pair.Server.System<FactionBalanceSystem>();
+
+        await pair.Server.WaitAssertion(() =>
+        {
+            var counts = new Dictionary<string, int> { ["DSM"] = 6, ["NCWL"] = 5, ["SHI"] = 4, ["TFSC"] = 3 };
+            var inPlay = new HashSet<string> { "DSM", "NCWL", "SHI", "TFSC" };
+            var caps = balance.CalculateCaps(counts, baseSlots: 3, tolerance: 0, inPlay);
+
+            Assert.Multiple(() =>
+            {
+                // ceil((11 + 1) * 1 / 2) for the parity pair, floor(18 * 0.25) for the share factions.
+                Assert.That(caps["DSM"].Cap, Is.EqualTo(6));
+                Assert.That(caps["NCWL"].Cap, Is.EqualTo(6));
+                Assert.That(caps["SHI"].Cap, Is.EqualTo(4));
+                Assert.That(caps["TFSC"].Cap, Is.EqualTo(4));
+                Assert.That(caps["SHI"].Full, Is.True);
             });
         });
 

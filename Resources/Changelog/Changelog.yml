@@ -544,3 +544,183 @@ Entries:
   id: 6042
   time: '2026-08-13T00:00:00.0000000+00:00'
   url: null
+
+- author: Taleryn
+  changes:
+    - message: The sector now gets a recurrence advisory fifteen minutes before the round time cap. It is written in character as a reversion front closing on Taypan, so the round no longer just stops dead on everyone mid-sentence.
+      type: Add
+  id: 6043
+  time: '2026-08-14T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: AI-piloted ships now read the diplomacy table before opening fire. An AI flying a faction's colours only engages factions that faction is at war with, instead of shooting at everything in range including its own side and passing civilians.
+      type: Fix
+    - message: Unaligned AI hulls (derelict rammer and attacker cores) are unchanged and still attack anything nearby.
+      type: Tweak
+    - message: AI attack ships now break off and open the range once their hull has taken heavy damage, rather than orbiting a fight to the last plate.
+      type: Add
+  id: 6044
+  time: '2026-08-14T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Escape no longer gets eaten by a window you cannot see. Opening a bag inside a bag, or watching a camera from an overwatch console, left a hidden-but-open window on top of the stack, so the first Escape closed that instead of the window you were looking at.
+      type: Fix
+    - message: The close button on the DNA database, passport control, poker table and diplomacy consoles now actually hangs up the console instead of only hiding the window, so it no longer takes two interactions to reopen them.
+      type: Fix
+    - message: Same fix for the handheld anomaly scanner.
+      type: Fix
+  id: 6045
+  time: '2026-08-15T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: AI ships and drones now turn to whichever bearing actually brings their guns to bear, instead of always pointing the nose at the target. A broadside-armed hull flies its broadside; a ship whose guns fire forward is unaffected and flies exactly as before.
+      type: Tweak
+    - message: A ship that loses the cannons on one side mid-fight now turns to bring the surviving battery around.
+      type: Add
+  id: 6046
+  time: '2026-08-15T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Fixed console lists being thrown away and rebuilt every refresh. Typing a tax rate or a salary no longer gets wiped by the console's three-second update, and the list stops jumping back to the top while you read it.
+      type: Fix
+    - message: The payroll console no longer rebuilds its roster while you are looking at a different mainframe tab, which was making the other tabs stutter.
+      type: Fix
+    - message: Added filter boxes to the taxation and payroll consoles. Payroll filters on name or role, so you can pull up a whole department at once.
+      type: Add
+    - message: Greyed-out console buttons now explain themselves on hover instead of just being dead - no access, no salary set, member off duty, and so on.
+      type: Add
+    - message: Reworked the taxation console to match the payroll console's layout, with a treasury header, column titles and consistent status colours across both machines.
+      type: Tweak
+  id: 6047
+  time: '2026-08-15T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Allied factions no longer read as neutral to each other for the whole round. Ships that already existed when the round started cached their diplomacy before the table was built, which let heat-seeking rounds treat an ally as a valid target.
+      type: Fix
+    - message: The taxation console no longer accepts a rate of "NaN". Entering one used to stick, silently drop the station's entire cut to zero, and leave the console reading NaN until somebody set the rate again.
+      type: Fix
+    - message: The taxation console now caps entry at the rate the server will actually accept, so a figure above the ceiling no longer gets taken and then snaps back on the next refresh.
+      type: Fix
+    - message: AI ships now measure their own firing arcs instead of relying on a targeting console to have done it. Drone hulls carry no console, so the turn-to-bring-guns-to-bear behaviour was doing nothing at all on every drone in the game.
+      type: Fix
+    - message: Fixed-mount weapons no longer skew that calculation - they cannot track a target, so they no longer vote on which way the hull should face.
+      type: Fix
+    - message: A ship that loses a battery now re-reads its arcs immediately instead of keeping the old bearing for up to ten seconds.
+      type: Fix
+    - message: Ship hull damage taken in the first few seconds of a ship's life is no longer folded into its own baseline, which had a badly damaged ship still reporting a pristine hull and refusing to break off.
+      type: Fix
+    - message: A round time limit rule sitting behind an inactive one in the query is no longer skipped, which could drop the round cap and its warning entirely.
+      type: Fix
+  id: 6048
+  time: '2026-08-15T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Psionic invisibility no longer removes you from everyone else's screen. Both the invisibility power and DarkSwap now cloak you the way a stealth suit does - a shimmer with a faint silhouette that anyone looking carefully can pick out, instead of an entity the other players never even receive.
+      type: Tweak
+  id: 6049
+  time: '2026-08-15T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Skeletons are now a playable species at round start. They have no blood, no lungs and no organs, so they never breathe, eat or drink and ignore vacuum, poison, radiation and asphyxiation - but chemicals cannot be injected into them either.
+      type: Add
+    - message: A dead skeleton no longer crumbles the instant it dies. Heal the remains back under the death threshold with milk, brute packs or ointment and a defibrillator will bring them back, though enough further damage still shatters the body for good.
+      type: Add
+    - message: Skeletons have no thermal regulation, so they cool to whatever the room is instead of holding body heat. Cold now slows them down far faster than it slows anyone else, which is the price of walking through a breach without a suit. It still does them no damage.
+      type: Add
+    - message: Milk heals skeletons for about half of what it used to.
+      type: Tweak
+    - message: Skeletons no longer shrug off piercing damage. Bullets and other piercing hits now land on bone exactly as hard as they land on a human.
+      type: Tweak
+    - message: Skeletons are restricted to the TFSC. The species no longer appears in the character editor for any other faction, and a profile that somehow keeps it is reset to human on validation.
+      type: Tweak
+    - message: Within the TFSC, only the command tier can be a skeleton - Ringleader, Lieutenant, Coordinator, Intelligence Officer and Foreman. The rank and file roles now refuse skeleton characters the same way they already refused voidborn.
+      type: Tweak
+  id: 6050
+  time: '2026-08-15T00:00:00.0000000+00:00'
+  url: null
+- author: Taleryn
+  changes:
+    - message: The stock market screen now separates the trend from the lifetime figure. The left column is how a share has moved over the last five minutes, which is what to trade on; the right column is where the price stands against what the company first opened at, which never resets. A share climbing hard all shift could previously still show a red down arrow, which read as the market being random.
+      type: Tweak
+    - message: A share with movement still being paid out now says so, with the size of the move and how long it has left to run. Casualties, a lost station or a draining treasury push a price over several minutes, so a trader who missed the headline can still see what is already committed.
+      type: Add
+    - message: The News tab now shows how big each move was and how long ago it landed, and no longer prints the raw faction tag under the company name.
+      type: Tweak
+    - message: Added a Guide tab to the stock market app covering the shared pool, why faction shares never move on their own, why rises are slower than falls, how prices carry between shifts, and what war liquidation costs you.
+      type: Add
+    - message: Every figure on the market screen now has a tooltip explaining what it measures, including the price chart and the buy and sell buttons.
+      type: Add
+    - message: The price chart's line is now coloured by the same five-minute trend printed underneath it. It used to colour itself by comparing the oldest and newest point of the whole half-hour history, a window nothing on screen named, so it could be drawn green directly beside a red percentage.
+      type: Fix
+  id: 6051
+  time: '2026-08-16T00:00:00.0000000+00:00'
+  url: null
+- author: Taleryn
+  changes:
+    - message: The jobs tab in the character editor has a search bar. Typing filters the list down to matching roles and hides the departments left empty.
+      type: Add
+    - message: The join window now groups a ship's open roles by department and sorts them, instead of listing them in whatever order they happened to arrive in.
+      type: Tweak
+    - message: The join window's role list scrolls, so ships with a lot of roles no longer run off the bottom of the window.
+      type: Fix
+    - message: Picking a vessel in the join window no longer throws you back to the top of the list every time a slot anywhere changes.
+      type: Fix
+    - message: Pressing Join while the join window is already open now brings that window to the front instead of stacking a second copy on top of it.
+      type: Fix
+    - message: Closing the join window now actually releases it. Each one used to keep rebuilding itself in the background for the rest of the session, and switching character slot in the lobby kept feeding closed windows.
+      type: Fix
+    - message: A locked role in the join window stays locked. A slot count update could re-enable a job the character was not allowed to take, and the reason tooltip now reads as text rather than raw markup.
+      type: Fix
+    - message: The faction screen no longer comes up empty when preferences finish loading after the lobby does, and it highlights the faction the character is already on.
+      type: Fix
+    - message: The faction screen's Confirm button is disabled until a faction is picked. Confirming with none selected used to save an empty faction, which put you straight back on the same screen.
+      type: Fix
+    - message: The species dropdown now shows what the character actually is when the species is sponsor locked, instead of naming a different species.
+      type: Fix
+    - message: The ready button's label now follows the real ready state. Opening character setup or being unreadied by the server used to leave the button reading the opposite of what it showed.
+      type: Fix
+  id: 6052
+  time: '2026-08-16T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: The action hotbar now runs down the left of the screen as a column instead of a single row across the top. Actions that do not fit the screen height wrap into another column beside it.
+      type: Tweak
+    - message: Added a Vertical action bar toggle under Options > Misc > UI Style for anyone who wants the old horizontal row back.
+      type: Add
+    - message: The action bar no longer splits into pages. Every action is on the bar at once instead of the eleventh onward being hidden behind the arrow buttons, which are gone along with the loadout keys that flipped between pages.
+      type: Tweak
+  id: 6053
+  time: '2026-08-16T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Reskinned the shuttle console as a retro instrument panel - flat bezel, pixel-terminal typeface, green CRT readouts and a NAV // MAP // DOCK // CREW tab strip in place of the old window chrome and buttons.
+      type: Tweak
+  id: 6054
+  time: '2026-08-16T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Fixed faction join caps locking players out of rounds played between TFCF and SHI. With no war faction in the round the two of them are now held level against each other instead of each being capped at a quarter of a population only they could grow, which jammed both sides at three players.
+      type: Fix
+  id: 6055
+  time: '2026-08-16T00:00:00.0000000+00:00'
+  url: null

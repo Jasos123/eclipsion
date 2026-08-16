@@ -86,6 +86,8 @@ public enum FactionBalanceMode : byte
     /// <summary>
     /// Capped at <see cref="FactionPrototype.BalanceShare"/> of the whole tracked population, and never
     /// constrains anyone else. Support factions belong here: an empty one must not lock out the war.
+    /// In a round played without any parity faction these become the war group and are held level
+    /// against each other by their shares instead, or they would cap each other out of the round.
     /// </summary>
     Share,
 }

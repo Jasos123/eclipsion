@@ -5,6 +5,8 @@ using Content.Server.GameTicking.Events;
 using Content.Shared._Crescent.CCVar;
 using Content.Shared._Crescent.Factions.FactionBalance;
 using Content.Shared._Crescent.HullrotFaction;
+using Content.Server.Station.Components;
+using Content.Server.Station.Events;
 using Content.Shared.GameTicking;
 using Content.Shared.Roles;
 using Robust.Server.Player;
@@ -41,11 +43,18 @@ public sealed class FactionBalanceSystem : SharedFactionBalanceSystem
 
     private Dictionary<string, FactionBalanceEntry> _state = new();
 
+    /// <summary>
+    /// Factions this round can be joined as, cached because the answer only changes when a station is set
+    /// up. Null means it has to be worked out again.
+    /// </summary>
+    private HashSet<string>? _factionsInPlay;
+
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
+        SubscribeLocalEvent<StationPostInitEvent>(OnStationPostInit);
         SubscribeLocalEvent<PlayerJoinedLobbyEvent>(OnPlayerJoinedLobby);
         SubscribeLocalEvent<IsJobAllowedEvent>(OnIsJobAllowed);
         SubscribeLocalEvent<GetDisallowedJobsEvent>(OnGetDisallowedJobs);
@@ -136,7 +145,14 @@ public sealed class FactionBalanceSystem : SharedFactionBalanceSystem
     private void OnRoundRestart(RoundRestartCleanupEvent ev)
     {
         _state.Clear();
+        _factionsInPlay = null;
         _nextRecount = TimeSpan.Zero;
+    }
+
+    private void OnStationPostInit(ref StationPostInitEvent ev)
+    {
+        // The new station's jobs may belong to a faction that was not in the round a moment ago.
+        _factionsInPlay = null;
     }
 
     private void OnPlayerJoinedLobby(PlayerJoinedLobbyEvent ev)
@@ -167,15 +183,41 @@ public sealed class FactionBalanceSystem : SharedFactionBalanceSystem
             counts[faction.Faction] = counts.GetValueOrDefault(faction.Faction) + 1;
         }
 
+        _factionsInPlay ??= GetFactionsInPlay();
+
         var updated = CalculateCaps(counts,
             _cfg.GetCVar(RatCCVars.FactionBalanceBaseSlots),
-            _cfg.GetCVar(RatCCVars.FactionBalanceTolerance));
+            _cfg.GetCVar(RatCCVars.FactionBalanceTolerance),
+            _factionsInPlay);
 
         if (Matches(updated, _state))
             return;
 
         _state = updated;
         RaiseNetworkEvent(BuildStateEvent());
+    }
+
+    /// <summary>
+    /// Which factions the round was set up to be played as, read from the job lists the stations carry.
+    /// A gamemode that leaves a faction off the map list leaves it out of the balance entirely, so the
+    /// sides that are being played are never measured against one that cannot arrive. Depleted jobs still
+    /// count: a faction whose slots are all taken is in the round, it is just full.
+    /// </summary>
+    private HashSet<string> GetFactionsInPlay()
+    {
+        var inPlay = new HashSet<string>();
+        var query = EntityQueryEnumerator<StationJobsComponent>();
+
+        while (query.MoveNext(out var stationJobs))
+        {
+            foreach (var jobId in stationJobs.JobList.Keys)
+            {
+                if (TryGetJobFaction(jobId, out var faction))
+                    inPlay.Add(faction);
+            }
+        }
+
+        return inPlay;
     }
 
     private FactionBalanceStateEvent BuildStateEvent()
