@@ -12,6 +12,7 @@
   <GuideEntityEmbed Entity="MobMoth" Caption="Atyrian"/>
   <GuideEntityEmbed Entity="MobOni" Caption="Oni"/>
   <GuideEntityEmbed Entity="MobReptilian" Caption="Reptilian"/>
+  <GuideEntityEmbed Entity="MobSkeletonPerson" Caption="Skeleton"/>
   <GuideEntityEmbed Entity="MobSlimePerson" Caption="Slime Person"/>
   <GuideEntityEmbed Entity="MobVoidbornDummy" Caption="Voidborn"/>
   <GuideEntityEmbed Entity="MobThaven" Caption="Thaven"/>

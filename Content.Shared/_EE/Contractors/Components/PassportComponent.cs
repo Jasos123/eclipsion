@@ -62,25 +62,62 @@ public sealed partial class PassportComponent : Component
     public int ExpirationYear;
 
     /// <summary>
-    /// Issuer-side authenticity marker. It is intentionally not exposed by the editing UI.
+    /// Issuer-side authenticity marker. It is intentionally not exposed by the editing UI. A
+    /// document issued while this is false is filled in like any other but never gains a
+    /// registry record, so a checker machine finds nothing to print for it.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public bool Authentic = true;
 
     /// <summary>
-    /// Set when a player saves changes through the passport editor. Initial issuer/profile data
-    /// does not count as tampering.
-    /// </summary>
-    [DataField, AutoNetworkedField]
-    public bool Tampered;
-
-    /// <summary>
-    /// Server-side biometric reference recorded when the passport is issued. This is a hash of
-    /// the holder's fingerprint rather than the raw forensic identifier, and is deliberately not
-    /// networked to clients or exposed by the passport editing UI.
+    /// The issuing registry's copy of the identity this document was issued with. It is never
+    /// networked to clients and never reachable from the editing UI, so a forger can change what
+    /// the passport reads but not what the issuer recorded. A checker machine prints this copy
+    /// verbatim and leaves the comparison to whoever is reading it.
     /// </summary>
     [DataField]
-    public string BiometricHash = string.Empty;
+    public PassportRecord? Record;
+}
+
+/// <summary>
+/// A frozen copy of the identity fields as the issuer recorded them. Deliberately separate from
+/// <see cref="PassportComponent"/> so editing the document cannot touch it.
+/// </summary>
+[DataDefinition]
+public sealed partial class PassportRecord
+{
+    [DataField]
+    public string FullName = string.Empty;
+
+    [DataField]
+    public int Age;
+
+    [DataField]
+    public string Species = string.Empty;
+
+    [DataField]
+    public string Sex = string.Empty;
+
+    [DataField]
+    public int HeightCm;
+
+    [DataField]
+    public string SkinColor = string.Empty;
+
+    [DataField]
+    public string EyeColor = string.Empty;
+
+    [DataField]
+    public string Nationality = string.Empty;
+
+    [DataField]
+    public string PassportId = string.Empty;
+
+    [DataField]
+    public int IssueYear;
+
+    [DataField]
+    public int ExpirationYear;
 }
 
 /// <summary>
@@ -89,13 +126,6 @@ public sealed partial class PassportComponent : Component
 /// </summary>
 [RegisterComponent]
 public sealed partial class PassportCheckerComponent : Component;
-
-/// <summary>
-/// Raised after a passport has been populated for a character so the server can bind its
-/// machine-readable biometric reference to the holder.
-/// </summary>
-[ByRefEvent]
-public readonly record struct PassportIssuedEvent(EntityUid Holder);
 
 [Serializable, NetSerializable]
 public enum PassportUiKey : byte
@@ -116,9 +146,7 @@ public sealed class PassportBoundUserInterfaceState(
     string religion,
     string passportId,
     int issueYear,
-    int expirationYear,
-    bool isValid,
-    bool tampered) : BoundUserInterfaceState
+    int expirationYear) : BoundUserInterfaceState
 {
     public string FullName { get; } = fullName;
     public int Age { get; } = age;
@@ -132,8 +160,6 @@ public sealed class PassportBoundUserInterfaceState(
     public string PassportId { get; } = passportId;
     public int IssueYear { get; } = issueYear;
     public int ExpirationYear { get; } = expirationYear;
-    public bool IsValid { get; } = isValid;
-    public bool Tampered { get; } = tampered;
 }
 
 [Serializable, NetSerializable]

@@ -37,9 +37,10 @@ public sealed class TargetingConsoleBoundUserInterface : BoundUserInterface
     /// Whether the fire button is physically held down right now.
     /// </summary>
     /// <remarks>
-    /// Has to read the raw keybind state: a click that lands on a UI control is consumed by the
-    /// UI and never reaches the simulation, so InputSystem.CmdStates reports UIClick as Up the
-    /// entire time the user is dragging across the radar.
+    /// Read off the keybind itself rather than InputSystem.CmdStates: a click that lands on a UI control is
+    /// consumed by the UI and never reaches the simulation, so CmdStates reports UIClick as Up for the whole
+    /// drag. The binding's own state is written in InputManager.SetBindState before dispatch, so it is Down
+    /// either way - and ReleaseAllKeys drives it Up when the window loses focus.
     /// </remarks>
     private bool IsFireHeld()
     {
@@ -52,15 +53,25 @@ public sealed class TargetingConsoleBoundUserInterface : BoundUserInterface
 
     private void Update()
     {
-        // A key-up can be missed when the mouse leaves the radar, the window closes, or focus changes.
-        // Never let the repeating timer preserve a stale fire command.
+        // The radar announces the release itself on mouse-up and on the cursor leaving it, and that is the
+        // primary path. This is the backstop for the releases the radar never gets to see: the console closing
+        // under a held button, and the window losing focus mid-drag - alt-tab drops the button without the UI
+        // ever raising a KeyBindUp, which is how the guns ended up firing on their own with nobody at the
+        // console. Both halves are needed; each on its own leaves one of the two holes open.
         if (_isFiring && (!IsOpened || !IsFireHeld()))
-        {
             StopFiring();
-        }
 
         if (_isFiring)
+        {
+            // Re-resolve the target every tick rather than firing at the map point the cursor was over when
+            // it last moved. That point is fixed in the world while the ship is not, so a held crosshair
+            // walks off the target and eventually ends up somewhere behind the hull - which is how the guns
+            // came to swing round and shoot back through their own ship.
+            if (_window != null && _window.Radar.TryGetHoveredCoordinates(out var hovered))
+                _coords = _formSys.ToMapCoordinates(hovered).Position;
+
             SendMessage(new TargetingConsoleFireMessage(_coords));
+        }
 
         if (_controlled == null || _window == null)
             return;
@@ -133,7 +144,16 @@ public sealed class TargetingConsoleBoundUserInterface : BoundUserInterface
 
     private void StopFiring()
     {
+        if (!_isFiring)
+            return;
+
         _isFiring = false;
+
+        // Tells the server to drop the order now instead of waiting for it to lapse, so a tap does not carry on
+        // shooting for the length of the expiry window. Not needed for correctness - the order times out on its
+        // own - so it is fine that a console already on its way out cannot send it.
+        if (IsOpened)
+            SendMessage(new TargetingConsoleStopFireMessage());
     }
 
     private void OnWindowClosed()

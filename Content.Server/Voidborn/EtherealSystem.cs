@@ -18,7 +18,6 @@ namespace Content.Server.Voidborn;
 
 public sealed class EtherealSystem : SharedEtherealSystem
 {
-    [Dependency] private readonly VisibilitySystem _visibilitySystem = default!;
     [Dependency] private readonly SharedStealthSystem _stealth = default!;
     [Dependency] private readonly EyeSystem _eye = default!;
     [Dependency] private readonly NpcFactionSystem _factions = default!;
@@ -49,16 +48,16 @@ public sealed class EtherealSystem : SharedEtherealSystem
     {
         base.OnStartup(uid, component, args);
 
-        var visibility = EnsureComp<VisibilityComponent>(uid);
-        _visibilitySystem.RemoveLayer((uid, visibility), (int) VisibilityFlags.Normal, false);
-        _visibilitySystem.AddLayer((uid, visibility), (int) VisibilityFlags.Ethereal, false);
-        _visibilitySystem.RefreshVisibility(uid, visibility);
-
+        // Eclipsion - the shadow state carries no visibility layer, so a DarkSwapped psion is a shimmer everyone
+        // can spot if they look rather than an entity the client never hears about. PVS only sends an entity when
+        // the viewer's mask holds every bit the entity carries, and the engine forces bit 1 on regardless, so
+        // adding the Ethereal layer alone was enough to hide it from everybody without the ShowEthereal bit -
+        // dropping the Normal layer next to it never mattered. Hiding is StealthComponent's job below.
         if (TryComp<EyeComponent>(uid, out var eye))
             _eye.SetVisibilityMask(uid, eye.VisibilityMask | (int) (VisibilityFlags.Ethereal), eye);
 
         var stealth = EnsureComp<StealthComponent>(uid);
-        _stealth.SetVisibility(uid, 0.8f, stealth);
+        _stealth.SetVisibility(uid, SharedPsionicAbilitiesSystem.ConcealmentVisibility, stealth); // Eclipsion
 
         SuppressFactions(uid, component, true);
 
@@ -70,13 +69,7 @@ public sealed class EtherealSystem : SharedEtherealSystem
     {
         base.OnShutdown(uid, component, args);
 
-        if (TryComp<VisibilityComponent>(uid, out var visibility))
-        {
-            _visibilitySystem.AddLayer((uid, visibility), (int) VisibilityFlags.Normal, false);
-            _visibilitySystem.RemoveLayer((uid, visibility), (int) VisibilityFlags.Ethereal, false);
-            _visibilitySystem.RefreshVisibility(uid, visibility);
-        }
-
+        // Eclipsion - nothing to undo on the visibility layer; the shadow state never puts one on.
         if (TryComp<EyeComponent>(uid, out var eye))
             _eye.SetVisibilityMask(uid, (int) VisibilityFlags.Normal, eye);
 

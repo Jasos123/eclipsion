@@ -2,7 +2,9 @@
     xmlns="https://spacestation14.io"
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client">
     <PanelContainer.PanelOverride>
-        <graphics:StyleBoxFlat BackgroundColor="#2F2F35"
+        <!-- Alpha to match the translucent lobby panels around it; opaque it read as a dark slab
+             floating over the background art. -->
+        <graphics:StyleBoxFlat BackgroundColor="#2F2F35CC"
                                ContentMarginTopOverride="10"
                                ContentMarginBottomOverride="10"
                                ContentMarginLeftOverride="10"

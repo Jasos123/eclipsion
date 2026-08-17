@@ -17,6 +17,12 @@
                Text="{Loc hardliner-fire-control-window-hint}"
                FontColorOverride="#9aa7b5"
                Margin="0,6,0,8"/>
+        <!-- Eclipsion - permanent empty-state label, so the panel list itself is only ever reused. -->
+        <Label Name="NoWeaponsLabel"
+               Text="{Loc hardliner-fire-control-no-weapons}"
+               FontColorOverride="#c4ccd6"
+               Margin="4,12,4,4"
+               Visible="False"/>
         <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
             <BoxContainer Name="WeaponsColumn"
                           Orientation="Vertical"

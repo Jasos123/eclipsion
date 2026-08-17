@@ -27,7 +27,6 @@ public sealed partial class OverlayChatGameScreen : InGameScreen
         Chat.OnResized += ChatOnResized;
         Chat.OnChatResizeFinish += ChatOnResizeFinish;
         MainViewport.OnResized += ResizeAlertsContainer; // Shitmed Change
-        Actions.ActionsContainer.Columns = 1;
     }
 
     private void ResizeAlertsContainer()

@@ -47,7 +47,7 @@ psionic-skill-invisibility-description = Become invisible to psychically suscept
 psionic-skill-shadeskip-name = Shadeskip
 psionic-skill-shadeskip-description = Tear open the local veil with a burst of shadow.
 psionic-skill-dark-swap-name = Dark Swap
-psionic-skill-dark-swap-description = Shift between the material world and a shadowed state.
+psionic-skill-dark-swap-description = Shift between the material world and a shadowed state. Walls stop mattering, but you never fully vanish - a careful eye still catches the shimmer.
 
 psionic-skill-healing-word-name = Healing Word
 psionic-skill-healing-word-description = Restore another being with the Lesser Secret of Life.

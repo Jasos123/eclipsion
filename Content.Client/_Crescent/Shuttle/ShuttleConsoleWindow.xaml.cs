@@ -11,7 +11,7 @@ using Robust.Shared.Map;
 
 namespace Content.Client.Shuttles.UI;
 
-public sealed partial class ShuttleConsoleWindow : FancyWindow,
+public sealed partial class ShuttleConsoleWindow : Content.Client._KS14.UI.KsBaseWindow, // KS14: instrument shell
     IComputerWindow<ShuttleBoundUserInterfaceState>
 {
 

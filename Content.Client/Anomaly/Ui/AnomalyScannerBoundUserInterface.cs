@@ -19,6 +19,7 @@ public sealed class AnomalyScannerBoundUserInterface : BoundUserInterface
         base.Open();
 
         _menu = new AnomalyScannerMenu();
+        _menu.OnClose += Close;
         _menu.OpenCentered();
     }
 

@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using Content.Shared._EE.Contractors.Components;
 using Content.Shared._EE.Contractors.Prototypes;
 using Content.Shared.Administration.Logs;
@@ -31,7 +30,6 @@ public class SharedPassportSystem : EntitySystem
     public const int PassportLifetimeYears = 5;
     private const int MaxTextFieldLength = 64;
     private const string PIDChars = "ABCDEFGHJKLMNPQRSTUVWXYZ0123456789";
-    private static readonly Regex PassportIdRegex = new("^[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}$");
 
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IEntityManager _entityManager = default!;
@@ -75,12 +73,6 @@ public class SharedPassportSystem : EntitySystem
         args.PushMarkup(Loc.GetString("passport-issued", ("year", component.IssueYear)), 50);
         args.PushMarkup(Loc.GetString("passport-expires", ("year", component.ExpirationYear)), 49);
         args.PushMarkup(Loc.GetString("passport-pid", ("pid", DisplayOrUnspecified(component.PassportId))), 48);
-        var status = component.Tampered
-            ? "passport-status-tampered"
-            : IsPassportValid(component)
-                ? "passport-status-valid"
-                : "passport-status-invalid";
-        args.PushMarkup(Loc.GetString(status), 47);
     }
 
     private void OnPlayerLoadoutApplied(PlayerLoadoutAppliedEvent ev) =>
@@ -106,9 +98,6 @@ public class SharedPassportSystem : EntitySystem
         var passportComponent = _entityManager.GetComponent<PassportComponent>(passportEntity);
 
         UpdatePassportProfile(new(passportEntity, passportComponent), profile);
-
-        var issued = new PassportIssuedEvent(mob);
-        RaiseLocalEvent(passportEntity, ref issued);
 
         // Try to find back-mounted storage apparatus
         if (_inventory.TryGetSlotEntity(mob, "back", out var item) &&
@@ -158,8 +147,29 @@ public class SharedPassportSystem : EntitySystem
             + profile.Age
             + profile.Nationality
             + profile.FlavorText);
-        passport.Comp.Authentic = true;
-        passport.Comp.Tampered = false;
+
+        // The registry copy is taken here, once, from the data the issuer put on the document.
+        // Everything after this point is the holder's business: the editor can rewrite every
+        // printed field but has no path to this snapshot, which is what makes a forgery findable.
+        // Religion is left out on purpose — the issuer never fills it, so a holder writing their
+        // own religion in must not read as a discrepancy.
+        passport.Comp.Record = passport.Comp.Authentic
+            ? new PassportRecord
+            {
+                FullName = passport.Comp.FullName,
+                Age = passport.Comp.Age,
+                Species = passport.Comp.Species,
+                Sex = passport.Comp.Sex,
+                HeightCm = passport.Comp.HeightCm,
+                SkinColor = passport.Comp.SkinColor,
+                EyeColor = passport.Comp.EyeColor,
+                Nationality = passport.Comp.Nationality,
+                PassportId = passport.Comp.PassportId,
+                IssueYear = passport.Comp.IssueYear,
+                ExpirationYear = passport.Comp.ExpirationYear,
+            }
+            : null;
+
         Dirty(passport);
     }
 
@@ -211,7 +221,6 @@ public class SharedPassportSystem : EntitySystem
             passport.Comp.PassportId = passportId;
             passport.Comp.IssueYear = issueYear;
             passport.Comp.ExpirationYear = expirationYear;
-            passport.Comp.Tampered = true;
             Dirty(passport);
         }
 
@@ -234,9 +243,7 @@ public class SharedPassportSystem : EntitySystem
             component.Religion,
             component.PassportId,
             component.IssueYear,
-            component.ExpirationYear,
-            IsPassportValid(component),
-            component.Tampered));
+            component.ExpirationYear));
     }
 
     private void OnUseInHand(Entity<PassportComponent> passport, ref UseInHandEvent evt)
@@ -270,23 +277,6 @@ public class SharedPassportSystem : EntitySystem
         }
 
         return new string(result);
-    }
-
-    public static bool IsPassportValid(PassportComponent component)
-    {
-        return component.Authentic
-            && !component.Tampered
-            && component.IssueYear is > 0 and <= CurrentYear
-            && component.ExpirationYear >= CurrentYear
-            && component.Age is > 0 and <= 1000
-            && component.HeightCm is > 0 and <= 1000
-            && !string.IsNullOrWhiteSpace(component.FullName)
-            && !string.IsNullOrWhiteSpace(component.Species)
-            && !string.IsNullOrWhiteSpace(component.Sex)
-            && !string.IsNullOrWhiteSpace(component.Nationality)
-            && PassportIdRegex.IsMatch(component.PassportId)
-            && Color.TryFromHex(component.SkinColor, out _)
-            && Color.TryFromHex(component.EyeColor, out _);
     }
 
     private static string Clean(string value, int maxLength = MaxTextFieldLength)

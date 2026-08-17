@@ -17,7 +17,7 @@
                 TextureScale="1.4 1.4"
                 Stretch="KeepCentered"
                 SetSize="44 44">
-            </TextureRect> <!-- Encore: research prototypes use SpriteSpecifier icons. -->
+            </TextureRect> <!-- Eclipsion: research prototypes use SpriteSpecifier icons. -->
         </PanelContainer>
     </BoxContainer>
 </LayoutContainer>

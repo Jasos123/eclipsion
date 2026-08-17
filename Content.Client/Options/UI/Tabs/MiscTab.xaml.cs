@@ -76,6 +76,7 @@ namespace Content.Client.Options.UI.Tabs
             ShowOocPatronColor.Visible = _playerManager.LocalSession?.Channel?.UserData.PatronTier is { };
 
             HudThemeOption.OnItemSelected += OnHudThemeChanged;
+            ActionBarVerticalCheckBox.OnToggled += OnCheckBoxToggled;
             DiscordRich.OnToggled += OnCheckBoxToggled;
             ShowOocPatronColor.OnToggled += OnCheckBoxToggled;
             ShowLoocAboveHeadCheckBox.OnToggled += OnCheckBoxToggled;
@@ -96,6 +97,7 @@ namespace Content.Client.Options.UI.Tabs
             DisableFiltersCheckBox.OnToggled += OnCheckBoxToggled;
 
             HudThemeOption.SelectId(_hudThemeIdToIndex.GetValueOrDefault(_cfg.GetCVar(CVars.InterfaceTheme), 0));
+            ActionBarVerticalCheckBox.Pressed = _cfg.GetCVar(CCVars.HudActionBarVertical);
             DiscordRich.Pressed = _cfg.GetCVar(CVars.DiscordEnabled);
             ShowOocPatronColor.Pressed = _cfg.GetCVar(CCVars.ShowOocPatronColor);
             ShowLoocAboveHeadCheckBox.Pressed = _cfg.GetCVar(CCVars.LoocAboveHeadShow);
@@ -149,6 +151,7 @@ namespace Content.Client.Options.UI.Tabs
                 break;
             }
 
+            _cfg.SetCVar(CCVars.HudActionBarVertical, ActionBarVerticalCheckBox.Pressed);
             _cfg.SetCVar(CVars.DiscordEnabled, DiscordRich.Pressed);
             _cfg.SetCVar(CCVars.HudHeldItemShow, ShowHeldItemCheckBox.Pressed);
             _cfg.SetCVar(CCVars.CombatModeIndicatorsPointShow, ShowCombatModeIndicatorsCheckBox.Pressed);
@@ -182,6 +185,7 @@ namespace Content.Client.Options.UI.Tabs
         {
             var isHudThemeSame = HudThemeOption.SelectedId == _hudThemeIdToIndex.GetValueOrDefault(_cfg.GetCVar(CVars.InterfaceTheme), 0);
             var isLayoutSame = HudLayoutOption.SelectedMetadata is string opt && opt == _cfg.GetCVar(CCVars.UILayout);
+            var isActionBarVerticalSame = ActionBarVerticalCheckBox.Pressed == _cfg.GetCVar(CCVars.HudActionBarVertical);
             var isDiscordSame = DiscordRich.Pressed == _cfg.GetCVar(CVars.DiscordEnabled);
             var isShowHeldItemSame = ShowHeldItemCheckBox.Pressed == _cfg.GetCVar(CCVars.HudHeldItemShow);
             var isCombatModeIndicatorsSame = ShowCombatModeIndicatorsCheckBox.Pressed == _cfg.GetCVar(CCVars.CombatModeIndicatorsPointShow);
@@ -204,6 +208,7 @@ namespace Content.Client.Options.UI.Tabs
 
             ApplyButton.Disabled = isHudThemeSame &&
                                    isLayoutSame &&
+                                   isActionBarVerticalSame &&
                                    isDiscordSame &&
                                    isShowHeldItemSame &&
                                    isCombatModeIndicatorsSame &&

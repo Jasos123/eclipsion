@@ -1,11 +1,19 @@
 # Hard round-length cap. Rounds end and the server restarts after this, no matter what state play is in.
 #
-# MaxTimeRestartRule fires on a real-time timer that (re)starts whenever the round goes InRound and is cancelled
-# in lobby/post-round, so it measures actual round time. On fire it calls EndRound, then RestartRound after the
+# MaxTimeRestartRule counts toward a deadline that is (re)armed whenever the round goes InRound and cleared in
+# lobby/post-round, so it measures actual round time. On fire it calls EndRound, then RestartRound after the
 # delay. This is attached to every Crescent preset as a backstop — modes that finish on their own objectives just
 # never reach it.
 #
+# The numbers below are the DEFAULT, not the final word: admins with the Round flag can move the deadline live with
+# the `roundtimer` command (`roundtimer` to read it, `extend 30m` to postpone, `pause`, `cancel`, `reset`). Change
+# these only to move the default for every round; a one-off round that needs longer is a `roundtimer extend`.
+#
 # roundMaxTime / roundEndDelay are TimeSpans serialised in SECONDS (the vanilla MaxTimeRestart uses 300 = 5 min).
+#
+# `warnings` are in-character announcements timed off the cap — `before` is how long BEFORE the end each one goes
+# out, in seconds, so more of them is just more list entries. They are dressed as a Recurrence forecast because the
+# round ending IS a Turning in-universe (see Guidebook/LoreRecurrence); nothing about them touches the round timer.
 
 - type: entity
   id: HullrotRoundTimeLimit
@@ -15,3 +23,10 @@
   - type: MaxTimeRestartRule
     roundMaxTime: 14400 # 4 hours
     roundEndDelay: 60
+    warnings:
+    - before: 900 # 15 minutes
+      message: round-time-recurrence-warning
+      sender: round-time-recurrence-sender
+      color: "#9c1a00"
+      sound:
+        path: /Audio/Announcements/attention.ogg

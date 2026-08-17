@@ -64,6 +64,50 @@
       - Prosecutor  #Delta V: Add Prosecutor Access
       - Justice  #Delta V: Add Justice Access
       - Clerk  #Delta V: Add Clerk Access
+      # Eclipsion: faction access levels, otherwise the configurator can't touch any faction door.
+      - NCWLGeneral
+      - NCWLCommand
+      - NCWLKommissar
+      - NCWLAdministrator
+      - NCWLArmory
+      - NCWLJail
+      - NCWLFunds
+      - Empire
+      - EmpireSoldier
+      - EmpireNoble
+      - EmpireAdjutant
+      - EmpireGovernor
+      - Archmaester
+      - ScribesGuild
+      - Advocatus
+      - LogisticsWealth
+      - DSMFunds
+      - Hunter
+      - HunterSenior
+      - HunterOverseer
+      - Shinohara
+      - ShinoharaOfficer
+      - ShinoharaSecurity
+      - ShinoharaExecutive
+      - Minuteman
+      - MinutemanRankingOfficer
+      - MinutemanPrison
+      - MinutemanMarshal
+      - CMMFunds
+      - Authority
+      - AuthorityRanking
+      - Authoritymed
+      - AuthoritySupply
+      - Antiquarian
+      - GliessDockmaster
+      - GliessSheriff
+      - Kommandant
+      - Arabet
+      - Thukker
+      - Alseik
+      - AlseikServile
+      - Families
+      - Izdari
       privilegedIdSlot:
         name: id-card-console-privileged-id
         ejectSound: /Audio/Machines/id_swipe.ogg

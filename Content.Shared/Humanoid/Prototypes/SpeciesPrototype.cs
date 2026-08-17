@@ -1,6 +1,7 @@
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 using Content.Shared._Forge.Sponsors;
+using Content.Shared.Roles;
 
 namespace Content.Shared.Humanoid.Prototypes;
 
@@ -193,6 +194,15 @@ public sealed partial class SpeciesPrototype : IPrototype
     [DataField("sponsorLevel")]
     public SponsorLevel SponsorLevel = SponsorLevel.None;
     // Forge-Change-End
+
+    /// <summary>
+    ///     If non-empty, only characters whose <see cref="HumanoidCharacterProfile.Faction"/> is in this
+    ///     list may pick this species. An empty list - the default - leaves the species open to everyone.
+    ///     Enforced both in the lobby species dropdown and in EnsureValid, so a hand-edited profile cannot
+    ///     smuggle a restricted species into a faction that is not allowed to field it.
+    /// </summary>
+    [DataField]
+    public List<ProtoId<FactionPrototype>> Factions = new();
 
 }
 

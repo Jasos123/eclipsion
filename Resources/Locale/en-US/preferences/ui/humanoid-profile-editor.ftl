@@ -50,6 +50,9 @@ humanoid-profile-editor-preference-spawn-priority-cryosleep = Cryosleep
 
 humanoid-profile-editor-jobs-amount-in-department-tooltip = Jobs in the {$departmentName} department
 humanoid-profile-editor-department-jobs-label = {$departmentName} jobs
+# Catch-all category for gamemode roles that belong to no department
+humanoid-profile-editor-gamemode-roles-department = Gamemode
+humanoid-profile-editor-job-search-placeholder = Search jobs
 humanoid-profile-editor-antags-tab = Antags
 humanoid-profile-editor-antag-preference-yes-button = Yes
 humanoid-profile-editor-antag-preference-no-button = No

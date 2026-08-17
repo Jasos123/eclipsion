@@ -77,6 +77,9 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
     private Vector2 MousePosition = Vector2.Zero;
     private Vector2 MouseUIPosition = Vector2.Zero;
     private bool MouseOverRadar;
+    // Crescent - the raw control-relative cursor position, kept so callers can re-resolve what is under the
+    // crosshair on demand. Null while the cursor is off the radar.
+    private Vector2? _hoveredRelativePosition;
     private Angle LastRotation = Angle.Zero;
     private Vector2 LastWorldCoordinates = Vector2.Zero;
 	public List<NetEntity>? ActiveCannons { get; set; } // Rat
@@ -283,17 +286,14 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
     {
         base.KeyBindUp(args);
 
-        if (_coordinates == null || _rotation == null || args.Function != EngineKeyFunctions.UIClick ||
-            OnRadarClick == null)
-        {
+        if (args.Function != EngineKeyFunctions.UIClick)
             return;
-        }
 
-        var a = InverseScalePosition(args.RelativePosition);
-        var relativeWorldPos = new Vector2(a.X, -a.Y);
-        relativeWorldPos = _rotation.Value.RotateVec(relativeWorldPos);
-        var coords = _coordinates.Value.Offset(relativeWorldPos);
-        // OnRadarClick?.Invoke(coords);
+        // The release is announced unconditionally, before anything that could bail out. A console that
+        // holds an order for as long as the button is down (the targeting console's fire order) has no
+        // other way to learn the button came up: gating this on the radar still having a frame of
+        // reference meant a nav state with null coordinates arriving mid-drag swallowed the release and
+        // left the guns firing on their own.
         OnRadarRelease?.Invoke();
     }
 
@@ -304,6 +304,7 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
         if (_coordinates == null || _rotation == null || args.Function != EngineKeyFunctions.UIClick)
             return;
 
+        _hoveredRelativePosition = args.RelativePosition;
         OnRadarClick?.Invoke(PureRelativePosition(args.RelativePosition));
         foreach (var (shipkey, shipdata) in drawJob.gridData)
         {
@@ -318,6 +319,7 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
     {
         base.MouseMove(args);
 
+        _hoveredRelativePosition = args.RelativePosition;
         var returned = PureRelativePosition(args.RelativePosition);
 
         OnRadarMouseMove?.Invoke(returned);
@@ -332,7 +334,29 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
     {
         base.MouseExited();
         MouseOverRadar = false;
+        _hoveredRelativePosition = null;
         OnRadarRelease?.Invoke();
+    }
+
+    /// <summary>
+    ///     Crescent - the point the crosshair is over <i>right now</i>, resolved against the radar's current
+    ///     frame of reference.
+    /// </summary>
+    /// <remarks>
+    ///     The screen position of the cursor maps to a different place in the world every frame, because the
+    ///     radar is drawn relative to a grid that moves and turns underneath it. Anything that acts on a held
+    ///     cursor rather than on a single click has to re-resolve the point instead of caching what
+    ///     <see cref="OnRadarMouseMove"/> handed it, or it ends up acting on wherever the ship used to be.
+    /// </remarks>
+    public bool TryGetHoveredCoordinates(out EntityCoordinates coordinates)
+    {
+        coordinates = EntityCoordinates.Invalid;
+
+        if (_hoveredRelativePosition is not { } relative)
+            return false;
+
+        coordinates = PureRelativePosition(relative);
+        return coordinates.EntityId.IsValid();
     }
 
     private EntityCoordinates RelativePositionToEntityCoords(Vector2 pos)

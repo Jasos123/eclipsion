@@ -28,8 +28,8 @@
         Caustic: 15
         Radiation: 35
   - type: ClothingSpeedModifier
-    walkModifier: 1
-    sprintModifier: 1
+    walkModifier: 0.90
+    sprintModifier: 0.90
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitRamzi
   - type: StaticPrice
@@ -70,8 +70,8 @@
         Caustic: 15
         Radiation: 35
   - type: ClothingSpeedModifier
-    walkModifier: 1
-    sprintModifier: 1
+    walkModifier: 0.90
+    sprintModifier: 0.90
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetSyndieDonator
   - type: StaticPrice
@@ -228,8 +228,8 @@
         Heat: 15
         Caustic: 15
   - type: ClothingSpeedModifier
-    walkModifier: 1
-    sprintModifier: 1
+    walkModifier: 0.90
+    sprintModifier: 0.90
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitCoordinator
   - type: Contraband

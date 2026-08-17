@@ -7,6 +7,18 @@ namespace Content.Shared.Cargo.Cartridges;
 public static class StockMarketTrading
 {
     public const int MaxStockAmount = 100000;
+
+    /// <summary>
+    /// Seconds between market ticks. Shared rather than server-only so the trading screen can quote a
+    /// pending pressure as "45s left" instead of "3 ticks left", which means nothing to a player.
+    /// </summary>
+    public const float TickSeconds = 15f;
+
+    /// <summary>
+    /// How far back the screen looks when it quotes a stock's trend. Five minutes is long enough that a
+    /// single tick of noise does not flip the arrow, and short enough to still read as "right now".
+    /// </summary>
+    public const int TrendTicks = 20;
 }
 
 [Serializable, NetSerializable]

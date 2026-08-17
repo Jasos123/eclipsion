@@ -10,11 +10,13 @@
         </GridContainer>
         <Label Name="TargetNameLabel" />
         <Control MinSize="0 8"/>
-        <GridContainer Name="AccessLevelGrid" Columns="5" HorizontalAlignment="Center">
+        <ScrollContainer VerticalExpand="True" ReturnMeasure="True" MaxHeight="420">
+            <GridContainer Name="AccessLevelGrid" Columns="5" HorizontalAlignment="Center">
 
-            <!-- Access level buttons are added here by the C# code -->
+                <!-- Access level buttons are added here by the C# code -->
 
-        </GridContainer>
+            </GridContainer>
+        </ScrollContainer>
         <Control MinSize="0 8"/>
         <Label Name="MissingPrivilegesLabel" />
         <Control MinSize="0 4"/>

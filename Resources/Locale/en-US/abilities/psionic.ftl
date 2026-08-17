@@ -23,7 +23,7 @@ accept-psionics-window-prompt-text-part = You rolled a psionic power!
                                          Do you still wish to be psionic?
 
 action-name-psionic-invisibility = Psionic Invisibility
-action-description-psionic-invisibility = Render yourself invisible to any entity that could potentially be psychic. Borgs, animals, and so on are not affected.
+action-description-psionic-invisibility = Bend light around yourself, leaving only a faint shimmer where you stand. A careful eye can still pick you out, and attacking or being hurt drops the veil.
 
 action-name-psionic-invisibility-off = Turn Off Psionic Invisibility
 action-description-psionic-invisibility-off = Return to visibility, and receive a stun.

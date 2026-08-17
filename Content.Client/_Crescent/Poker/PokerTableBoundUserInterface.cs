@@ -17,6 +17,7 @@ public sealed class PokerTableBoundUserInterface : BoundUserInterface
         base.Open();
         _window = new PokerTableWindow();
 
+        _window.OnClose += Close;
         _window.OnJoin += () => SendMessage(new PokerJoinMessage());
         _window.OnLeave += () => SendMessage(new PokerLeaveMessage());
         _window.OnFold += () => SendMessage(new PokerFoldMessage());

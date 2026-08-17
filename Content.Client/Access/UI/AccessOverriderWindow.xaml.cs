@@ -87,12 +87,10 @@ namespace Content.Client.Access.UI
 
             foreach (var (accessName, button) in _accessButtons)
             {
-                button.Disabled = !interfaceEnabled;
-                if (!interfaceEnabled)
-                    return;
-
+                // Always show what the target currently requires, even while the interface is locked.
                 button.Pressed = state.TargetAccessReaderIdAccessList?.Contains<ProtoId<AccessLevelPrototype>>(accessName) ?? false;
-                button.Disabled = (!state.AllowedModifyAccessList?.Contains<ProtoId<AccessLevelPrototype>>(accessName)) ?? true;
+                button.Disabled = !interfaceEnabled
+                    || ((!state.AllowedModifyAccessList?.Contains<ProtoId<AccessLevelPrototype>>(accessName)) ?? true);
             }
         }
     }

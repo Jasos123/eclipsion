@@ -11,7 +11,6 @@ namespace Content.Server.Psionics
 {
     public sealed class PsionicInvisibilitySystem : EntitySystem
     {
-        [Dependency] private readonly VisibilitySystem _visibilitySystem = default!;
         [Dependency] private readonly PsionicInvisibilityPowerSystem _invisSystem = default!;
         [Dependency] private readonly NpcFactionSystem _npcFactonSystem = default!;
         [Dependency] private readonly SharedEyeSystem _eye = default!;
@@ -75,26 +74,22 @@ namespace Content.Server.Psionics
             component.SuppressedFactions.Clear();
         }
 
+        // Eclipsion - concealment is a stealth field, not a PVS layer swap, so no visibility layer goes on at all.
+        // PVS only sends an entity when the viewer's mask contains every bit the entity carries
+        // ((mask & visMask) == visMask) and the engine forces bit 1 on for everything regardless, so adding the
+        // PsionicInvisibility layer was on its own enough to delete the psion from every ordinary client -
+        // dropping the Normal layer alongside it never made any difference. With the layer off everyone keeps
+        // receiving the entity and renders it through the stealth shader, which is the point: the power hides a
+        // silhouette instead of the whole person. Only the eye bit is still set, for legacy content on that layer.
         private void OnInvisInit(EntityUid uid, PsionicallyInvisibleComponent component, ComponentStartup args)
         {
-            var visibility = EntityManager.EnsureComponent<VisibilityComponent>(uid);
-
-            _visibilitySystem.AddLayer((uid, visibility), (int) VisibilityFlags.PsionicInvisibility, false);
-            _visibilitySystem.RemoveLayer((uid, visibility), (int) VisibilityFlags.Normal, false);
-            _visibilitySystem.RefreshVisibility(uid, visibility);
             SetCanSeePsionicInvisiblity(uid, true);
         }
 
 
         private void OnInvisShutdown(EntityUid uid, PsionicallyInvisibleComponent component, ComponentShutdown args)
         {
-            if (TryComp<VisibilityComponent>(uid, out var visibility))
-            {
-                _visibilitySystem.RemoveLayer((uid, visibility), (int) VisibilityFlags.PsionicInvisibility, false);
-                _visibilitySystem.AddLayer((uid, visibility), (int) VisibilityFlags.Normal, false);
-                _visibilitySystem.RefreshVisibility(uid, visibility);
-                SetCanSeePsionicInvisiblity(uid, false);
-            }
+            SetCanSeePsionicInvisiblity(uid, false);
         }
 
         private void OnEntInserted(EntityUid uid, PsionicallyInvisibleComponent component, EntInsertedIntoContainerMessage args)

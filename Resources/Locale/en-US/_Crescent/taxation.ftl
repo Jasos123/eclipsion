@@ -3,15 +3,24 @@ rat-station-trade-market = Sold for {$finalAmount} cr ({$pct}% market value) —
 
 # --- Taxation console ---
 taxation-console-title = Trade Taxation Console
-taxation-console-treasury = Faction treasury: {$balance} cr
+taxation-console-treasury-label = FACTION TREASURY
+taxation-console-treasury = {$balance} cr
 taxation-console-access-granted = Authorized — you may adjust tax rates.
 taxation-console-access-view = View only — a faction card is required to change rates.
 taxation-console-access-denied = Access denied. A valid faction card is required.
 taxation-console-default-label = Default tax rate:
-taxation-console-goods-header = Trade goods
+taxation-console-goods-header = TRADE GOODS
 taxation-console-good-price = base {$price} cr
 taxation-console-set = Set
 taxation-console-clear = Reset
+taxation-console-filter-placeholder = Filter goods...
+taxation-console-col-good = GOOD
+taxation-console-col-price = BASE PRICE
+taxation-console-col-rate = RATE
+taxation-console-no-goods = No taxable goods registered.
+taxation-console-no-matches = No goods match that filter.
+taxation-console-denied-tooltip = You need a faction card with treasury access to change rates.
+taxation-console-no-override-tooltip = This good has no override to reset — it uses the default rate.
 
 # --- Faction treasury console ---
 treasury-console-title = Faction Treasury Vault

@@ -24,6 +24,15 @@ public sealed partial class JukeboxComponent : Component
     public float Volume = -8f;
 
     /// <summary>
+    /// Audible radius in tiles. Attenuation is linear from the listener out to this range, so this
+    /// also sets how steeply the track fades as you walk away: a smaller range is both quieter at a
+    /// distance and gone sooner. A hand-carried boombox wants a much tighter range than a jukebox
+    /// bolted to a bar wall.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float Range = 10f;
+
+    /// <summary>
     /// Upcoming songs to play after the current one finishes, in order.
     /// The currently playing track is not included here.
     /// </summary>

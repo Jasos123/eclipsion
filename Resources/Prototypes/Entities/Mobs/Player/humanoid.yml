@@ -50,19 +50,21 @@
     - type: RandomHumanoidSpawner
       settings: DeathSquad
 
+## SRM ghost roles
+
 - type: entity
-  id: RandomHumanoidSpawnerAPRTHunter
-  name: APRT Hunter
-  suffix: Hunter, APRT Hunter
+  id: RandomHumanoidSpawnerSRMHunter
+  name: SRM Hunter
+  suffix: SRM, Hunter, Ghost Role
   components:
     - type: Sprite
       sprite: _Crescent/Clothing/SRM/OuterClothing/huntercoat.rsi
       state: icon
     - type: RandomHumanoidSpawner
-      settings: APRTHunterSpawner
+      settings: SRMHunterSpawner
 
 - type: randomHumanoidSettings
-  id: APRTHunterSpawner
+  id: SRMHunterSpawner
   randomizeName: true
   speciesBlacklist:
     - Voidborn
@@ -127,18 +129,18 @@
       - Portafib
 
 - type: entity
-  id: RandomHumanoidSpawnerAPRTHuntoverseer
-  name: APRT Hunt Overseer
-  suffix: Hunt Overseer, APRT Hunt Overseer
+  id: RandomHumanoidSpawnerSRMHuntOverseer
+  name: SRM Hunt Overseer
+  suffix: SRM, Hunter, Hunt Overseer, Ghost Role
   components:
     - type: Sprite
       sprite: _Crescent/Clothing/SRM/OuterClothing/huntercoat.rsi
       state: icon
     - type: RandomHumanoidSpawner
-      settings: APRTHuntOverseerSpawner
+      settings: SRMHuntOverseerSpawner
 
 - type: randomHumanoidSettings
-  id: APRTHuntOverseerSpawner
+  id: SRMHuntOverseerSpawner
   randomizeName: true
   speciesBlacklist:
     - Voidborn
@@ -201,7 +203,281 @@
       - MagazineRifle
       - MagazineRifle
 
-        
+## TAP ghost roles
+
+- type: entity
+  id: RandomHumanoidSpawnerTAPDraugr
+  name: TAP Draugr
+  suffix: TAP, Draugr, Ghost Role
+  components:
+    - type: Sprite
+      sprite: _Crescent/Clothing/FourFamilies/OuterClothing/draugrexo.rsi
+      state: icon
+    - type: RandomHumanoidSpawner
+      settings: TAPDraugrSpawner
+
+- type: randomHumanoidSettings
+  id: TAPDraugrSpawner
+  randomizeName: true
+  speciesBlacklist:
+    - Voidborn
+    - Monkey
+    - Kobold
+    - Diona
+    - Arachnid
+    - Felinid
+    - Oni
+    - Vox
+    - IPC
+    - Moth
+    - Abductor
+  components:
+    - type: GhostRole
+      name: Al'Seik Draugr
+      description: A warrior of the Taypani-Atyrian Pact, deployed to defend Pact kin and uphold its oaths.
+      rules: Protect Pact kin, uphold your public oaths, and honor the Pact's current alliances.
+      raffle:
+        settings: short
+    - type: LanguageAdder
+      addSpoken:
+        - OldTaypani
+      addUnderstood:
+        - OldTaypani
+    - type: GhostTakeoverAvailable
+    - type: Loadout
+      prototypes: [ DraugrGhostGear ]
+    - type: HullrotFaction
+      faction: TAP
+    - type: Telepathic
+
+- type: startingGear
+  id: DraugrGhostGear
+  equipment:
+    id: DraugrPDA
+    ears: ClothingHeadsetFamilies
+    eyes: ClothingEyesGlassesSunglasses
+    jumpsuit: ClothingUniformJumpsuitDraugr
+    shoes: ClothingShoesBootsMagCombatFilled
+    outerClothing: ClothingOuterHardsuitDraugr
+    suitstorage: JetpackBlackFilled
+    gloves: ClothingHandsGlovesCombat
+    pocket1: HandHeldMassScannerEE
+    pocket2: KaiserAutoinjector
+    back: ClothingBackpackSatchel
+  inhand:
+    - WeaponShotgunHarba
+  storage:
+    back:
+      - MedkitCombatFilled
+      - BoxLethalshot
+      - BoxLethalshot
+      - Portafib
+
+- type: entity
+  id: RandomHumanoidSpawnerTAPProphet
+  name: TAP Prophet
+  suffix: TAP, Prophet, Ghost Role
+  components:
+    - type: Sprite
+      sprite: _Crescent/Clothing/FourFamilies/OuterClothing/prophetsuit.rsi
+      state: icon
+    - type: RandomHumanoidSpawner
+      settings: TAPProphetSpawner
+
+- type: randomHumanoidSettings
+  id: TAPProphetSpawner
+  randomizeName: true
+  speciesBlacklist:
+    - Voidborn
+    - Monkey
+    - Kobold
+    - Human
+    - Reptilian
+    - Diona
+    - Arachnid
+    - Felinid
+    - Oni
+    - Vox
+    - IPC
+    - Abductor
+  components:
+    - type: GhostRole
+      name: Arabet Prophet
+      description: A spiritual authority of the Taypani-Atyrian Pact, deployed to guide a Pact war party.
+      rules: Lead your kin, uphold the Pact's oaths, and honor its current alliances.
+      raffle:
+        settings: short
+    - type: LanguageAdder
+      addSpoken:
+        - Tradeband
+        - OldTaypani
+      addUnderstood:
+        - Tradeband
+        - OldTaypani
+    - type: GhostTakeoverAvailable
+    - type: Loadout
+      prototypes: [ ProphetGhostGear ]
+    - type: HullrotFaction
+      faction: TAP
+    - type: Telepathic
+
+- type: startingGear
+  id: ProphetGhostGear
+  equipment:
+    id: ProphetPDA
+    ears: ClothingHeadsetFamilies
+    eyes: ClothingEyesGlassesSunglasses
+    jumpsuit: ClothingUniformJumpsuitBodysuit
+    shoes: ClothingShoesBootsMagCombatFilled
+    outerClothing: ClothingOuterHardsuitArabet
+    suitstorage: JetpackBlackFilled
+    gloves: ClothingHandsGlovesCombat
+    pocket1: HandHeldMassScannerEE
+    pocket2: KaiserAutoinjector
+    back: ClothingBackpackSatchel
+  inhand:
+    - WeaponShotgunHarba
+    - EnergySwordFamilies
+  storage:
+    back:
+      - MedkitCombatFilled
+      - BoxLethalshot
+      - BoxLethalshot
+
+## CMM ghost roles (legacy Hullrot faction ID: TSP)
+
+- type: entity
+  id: RandomHumanoidSpawnerCMMMinuteman
+  name: CMM Minuteman
+  suffix: CMM, Minuteman, Ghost Role
+  components:
+    - type: Sprite
+      sprite: _Crescent/Clothing/CMM/OuterClothing/midshipman.rsi
+      state: icon
+    - type: RandomHumanoidSpawner
+      settings: CMMMinutemanSpawner
+
+- type: randomHumanoidSettings
+  id: CMMMinutemanSpawner
+  randomizeName: true
+  speciesBlacklist:
+    - Voidborn
+    - Monkey
+    - Kobold
+    - Abductor
+  components:
+    - type: GhostRole
+      name: Colonial Minuteman
+      description: A Colonial Minuteman deployed to protect civilians and public routes under Minutemen law.
+      rules: Follow your Watchmaster, protect civilians, and enforce lawful warrants.
+      raffle:
+        settings: short
+    - type: LanguageAdder
+      addSpoken:
+        - American
+        - Tradeband
+      addUnderstood:
+        - American
+        - Tradeband
+    - type: GhostTakeoverAvailable
+    - type: Loadout
+      prototypes: [ MinutemanGhostGear ]
+    - type: HullrotFaction
+      faction: TSP
+
+- type: startingGear
+  id: MinutemanGhostGear
+  equipment:
+    id: MinutemanPDA
+    ears: ClothingHeadsetCMM
+    eyes: ClothingEyesGlassesSunglasses
+    jumpsuit: ClothingUniformJumpsuitCMM
+    neck: ClothingNeckScarfCMMCloak
+    shoes: ClothingShoesBootsMagCombatFilled
+    outerClothing: ClothingOuterHardsuitMidshipman
+    suitstorage: JetpackBlackFilled
+    gloves: ClothingHandsGlovesCombat
+    pocket1: WeaponPistolHKUSP
+    pocket2: KaiserAutoinjector
+    back: ClothingBackpackMinuteman
+    belt: ClothingBeltMinutemanPouches
+  inhand:
+    - WeaponSubMachineGunMP5
+  storage:
+    back:
+      - MedkitCombatFilled
+      - MagazinePistolSubMachineGun
+      - MagazinePistolSubMachineGun
+      - MagazinePistolSubMachineGun
+      - MagazinePistolSubMachineGun
+      - MagazinePistol
+      - MagazinePistol
+      - Portafib
+
+- type: entity
+  id: RandomHumanoidSpawnerCMMWatchmaster
+  name: CMM Watchmaster
+  suffix: CMM, Watchmaster, Ghost Role
+  components:
+    - type: Sprite
+      sprite: _Crescent/Clothing/CMM/OuterClothing/patrol.rsi
+      state: icon
+    - type: RandomHumanoidSpawner
+      settings: CMMWatchmasterSpawner
+
+- type: randomHumanoidSettings
+  id: CMMWatchmasterSpawner
+  randomizeName: true
+  speciesBlacklist:
+    - Voidborn
+    - Monkey
+    - Kobold
+    - Abductor
+  components:
+    - type: GhostRole
+      name: Colonial Watchmaster
+      description: A Colonial Watchmaster deployed to lead a Minutemen patrol.
+      rules: Command your patrol and keep warrants, evidence, and use of force accountable.
+      raffle:
+        settings: short
+    - type: LanguageAdder
+      addSpoken:
+        - American
+        - Tradeband
+      addUnderstood:
+        - American
+        - Tradeband
+    - type: GhostTakeoverAvailable
+    - type: Loadout
+      prototypes: [ WatchmasterGhostGear ]
+    - type: HullrotFaction
+      faction: TSP
+
+- type: startingGear
+  id: WatchmasterGhostGear
+  equipment:
+    id: WatchmasterPDA
+    ears: ClothingHeadsetCMM
+    eyes: ClothingEyesGlassesSunglasses
+    jumpsuit: ClothingUniformJumpsuitCMMOfficer
+    neck: ClothingNeckScarfCMMCloak
+    shoes: ClothingShoesBootsMagCombatFilled
+    outerClothing: ClothingOuterHardsuitCMMPatrol
+    suitstorage: JetpackBlackFilled
+    gloves: ClothingHandsGlovesCombat
+    pocket1: WeaponPistolHKUSP
+    pocket2: KaiserAutoinjector
+    back: ClothingBackpackMinuteman
+    belt: ClothingBeltMinutemanPouches
+  inhand:
+    - WeaponRifleCMMNimrod
+  storage:
+    back:
+      - MedkitCombatFilled
+      - MagazineBoxRifle
+      - MagazineBoxRifle
+      - MagazinePistol
+      - MagazinePistol
 
 - type: randomHumanoidSettings
   id: DeathSquad

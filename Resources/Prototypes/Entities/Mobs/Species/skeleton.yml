@@ -34,11 +34,16 @@
       100: Critical
       150: Dead
   - type: TransferMindOnGib
+  # Gibbing used to sit exactly on the 150 death threshold, so a skeleton
+  # crumbled the instant it died and left nothing to revive. The gap between
+  # 150 and 250 is the window a medic has to heal the remains back under the
+  # death threshold (milk, brute packs, ointment) and then defib them. Overkill
+  # past 250 still shatters the body for good.
   - type: Destructible
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 150
+        damage: 250
       behaviors:
       - !type:GibBehavior
         gibContents: Skip
@@ -46,6 +51,29 @@
     speedModifierThresholds:
       60: 0.9
       80: 0.7
+  # Skeletons deliberately get no ThermalRegulator, so bare bones simply settle
+  # at whatever the room is instead of holding 310 K. Combined with the low
+  # specific heat below, a skeleton chills to ambient far faster than a human
+  # ever could, which is what makes the slowdown bite almost immediately.
+  # No coldDamage/heatDamage is defined, so temperature only ever slows a
+  # skeleton down - it never hurts one. Note that TemperatureSystem applies
+  # those with ignoreResistances, so listing cold damage here would punch
+  # straight through the species' Cold 0.0 immunity.
+  - type: Temperature
+    currentTemperature: 293.15
+    specificHeat: 20 # less than half a human's 42, so it swings twice as fast
+    atmosTemperatureTransferEfficiency: 0.3 # default is 0.1
+    coldDamageThreshold: 0 # never reached, cold is a movement penalty only
+    heatDamageThreshold: 10000
+  # Top threshold sits below the 293.15 K of a pressurised room, so a skeleton
+  # walking a normal station is never penalised. Anything genuinely cold - a
+  # breached compartment, cold storage, a hull section open to space - hits hard.
+  - type: TemperatureSpeed
+    thresholds:
+      285: 0.8
+      275: 0.6
+      265: 0.4
+      250: 0.25
   - type: Speech
     speechVerb: Skeleton
   - type: ZombieImmune
@@ -86,8 +114,11 @@
         scaleByQuantity: true
         damage:
           groups:
-            Burn: -2 # healing obviously up to discussion
-            Brute: -1.5 # these groups are the only 2 possible ways to damage a skeleton
+            # Halved. Milk is now the main way to bring a dead skeleton back under
+            # its death threshold, so a full carton should be worth roughly one
+            # brute pack rather than two of them plus a burn kit.
+            Burn: -1
+            Brute: -0.75 # these groups are the only 2 possible ways to damage a skeleton
       - !type:PopupMessage
         type: Local
         visualType: Large

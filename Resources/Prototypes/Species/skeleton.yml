@@ -1,15 +1,38 @@
 - type: species
   id: Skeleton
   name: species-name-skeleton
-  roundStart: false
+  roundStart: true
   prototype: MobSkeletonPerson
   sprites: MobSkeletonSprites
   defaultSkinTone: "#fff9e2"
-  markingLimits: MobHumanMarkingLimits
+  markingLimits: MobSkeletonMarkingLimits
   maleFirstNames: skeletonNamesFirst
   femaleFirstNames: skeletonNamesFirst
   dollPrototype: MobSkeletonPersonDummy
   skinColoration: TintedHues
+  # Skeletons are a TFSC-only species. Command-tier gating is handled separately,
+  # on the TFSC jobs themselves, since that is per-job rather than per-faction.
+  factions:
+  - TFSC
+  # Height/width are locked like the other round-start species on this fork.
+  minHeight: 1
+  defaultHeight: 1
+  maxHeight: 1
+  minWidth: 1
+  defaultWidth: 1
+  maxWidth: 1
+
+# Skeletons have no flesh, so the fur/snout/underwear layers that the human
+# limits hand out do not apply. Hair still renders on the mob's Hair layer.
+- type: markingPoints
+  id: MobSkeletonMarkingLimits
+  points:
+    Hair:
+      points: 1
+      required: false
+    FacialHair:
+      points: 1
+      required: false
 
 - type: speciesBaseSprites
   id: MobSkeletonSprites

@@ -724,3 +724,19 @@ Entries:
   id: 6055
   time: '2026-08-16T00:00:00.0000000+00:00'
   url: null
+
+- author: Taleryn
+  changes:
+    - message: Fixed the four automated equipment racks in the Gliess Santo sheriff's office being unusable by everyone on the station. They demanded Minutemen access, which no Gliessian role carries, so they now run on sheriff access instead and are open to the sheriff, the deputies and the dockmaster.
+      type: Fix
+  id: 6056
+  time: '2026-08-17T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Toned down the boombox. It played at the same volume and reach as a jukebox bolted to a bar wall, so a carried one blanketed a 10 tile radius at near full volume and drowned out everyone around it. It is now quieter and audible over about 6 tiles, fading out properly as you walk away. The wall jukebox is unchanged.
+      type: Tweak
+  id: 6057
+  time: '2026-08-17T00:00:00.0000000+00:00'
+  url: null

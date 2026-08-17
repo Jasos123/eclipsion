@@ -143,15 +143,7 @@ public sealed class InventoryUIController : UIController, IOnStateEntered<Gamepl
             if (!data.ShowInWindow || !_slotGroups.TryGetValue(data.SlotGroup, out var container))
                 continue;
 
-            if (!container.TryGetButton(data.SlotName, out var button))
-            {
-                button = CreateSlotButton(data);
-                container.AddButton(button);
-            }
-
-            var showStorage = _entities.HasComponent<StorageComponent>(data.HeldEntity);
-            var update = new SlotSpriteUpdate(data.HeldEntity, data.SlotGroup, data.SlotName, showStorage);
-            SpriteUpdated(update);
+            UpdateSlotButton(container, data);
         }
 
         if (_inventoryHotbar == null)
@@ -199,6 +191,19 @@ public sealed class InventoryUIController : UIController, IOnStateEntered<Gamepl
         {
             return position.Y * maxWidth + position.X;
         }
+    }
+
+    private void UpdateSlotButton(ItemSlotButtonContainer container, SlotData data)
+    {
+        if (!container.TryGetButton(data.SlotName, out var button))
+        {
+            button = CreateSlotButton(data);
+            container.AddButton(button);
+        }
+
+        var showStorage = _entities.HasComponent<StorageComponent>(data.HeldEntity);
+        var update = new SlotSpriteUpdate(data.HeldEntity, data.SlotGroup, data.SlotName, showStorage);
+        SpriteUpdated(update);
     }
 
     private void UpdateStrippingWindow(InventorySlotsComponent? clientInv)
@@ -450,10 +455,26 @@ public sealed class InventoryUIController : UIController, IOnStateEntered<Gamepl
 
     public bool RegisterSlotGroupContainer(ItemSlotButtonContainer slotContainer)
     {
-        if (_slotGroups.TryAdd(slotContainer.SlotGroup, slotContainer))
-            return true;
+        if (!_slotGroups.TryAdd(slotContainer.SlotGroup, slotContainer))
+            return false;
 
-        return false;
+        // The HUD can finish loading after the local player's inventory has already been linked.
+        // Populate late-registered slot groups immediately instead of waiting for the inventory toggle to refresh them.
+        if (_playerInventory != null)
+            UpdateSlotGroup(slotContainer, _playerInventory);
+
+        return true;
+    }
+
+    private void UpdateSlotGroup(ItemSlotButtonContainer slotContainer, InventorySlotsComponent clientInv)
+    {
+        foreach (var data in clientInv.SlotData.Values)
+        {
+            if (!data.ShowInWindow || data.SlotGroup != slotContainer.SlotGroup)
+                continue;
+
+            UpdateSlotButton(slotContainer, data);
+        }
     }
 
     public void RemoveSlotGroup(string slotGroupName)

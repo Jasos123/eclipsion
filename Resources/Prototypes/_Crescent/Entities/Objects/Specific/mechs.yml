@@ -40,7 +40,7 @@
     baseSprintSpeed: 2.3
     weightlessFriction: 0.4
     weightlessAcceleration: 0.1
-    weightlessModifier: 4 # 9ish ship speed - weightless speed is influenced by weightlessModifier and base(Walk/Sprint)Speed
+    weightlessModifier: 4.4 # 10ish ship speed - weightless speed is influenced by weightlessModifier and base(Walk/Sprint)Speed
   - type: CanMoveInAir
   - type: MovementAlwaysTouching
   - type: ProjectileIFF
@@ -111,7 +111,7 @@
     baseSprintSpeed: 1.8
     weightlessFriction: 0.4
     weightlessAcceleration: 0.1
-    weightlessModifier: 3.6 # 6ish ship speed - weightless speed is influenced by weightlessModifier and base(Walk/Sprint)Speed
+    weightlessModifier: 4 # 7ish ship speed - weightless speed is influenced by weightlessModifier and base(Walk/Sprint)Speed
   - type: CanMoveInAir
   - type: MovementAlwaysTouching
   - type: ProjectileIFF
@@ -179,7 +179,7 @@
     baseSprintSpeed: 2.45
     weightlessFriction: 0.4
     weightlessAcceleration: 0.2
-    weightlessModifier: 3.5 # 9ish ship speed - weightless speed is influenced by weightlessModifier and base(Walk/Sprint)Speed
+    weightlessModifier: 3.85 # 9ish ship speed - weightless speed is influenced by weightlessModifier and base(Walk/Sprint)Speed
   - type: CanMoveInAir
   - type: MovementAlwaysTouching
   - type: ProjectileIFF
@@ -246,7 +246,7 @@
     baseSprintSpeed: 2.6
     weightlessFriction: 0.4
     weightlessAcceleration: 0.3 #best handling mech in space
-    weightlessModifier: 3 # 8ish ship speed - weightless speed is influenced by weightlessModifier and base(Walk/Sprint)Speed
+    weightlessModifier: 3.3 # 9ish ship speed - weightless speed is influenced by weightlessModifier and base(Walk/Sprint)Speed
   - type: CanMoveInAir
   - type: MovementAlwaysTouching
   - type: ProjectileIFF
@@ -317,7 +317,7 @@
     baseSprintSpeed: 1.4
     weightlessFriction: 0.1
     weightlessAcceleration: 0.1 #handles still the worst
-    weightlessModifier: 3.5 # 5ish ship speed - weightless speed is influenced by weightlessModifier and base(Walk/Sprint)Speed
+    weightlessModifier: 3.85 # 5ish ship speed - weightless speed is influenced by weightlessModifier and base(Walk/Sprint)Speed
   - type: CanMoveInAir
   - type: MovementAlwaysTouching
   - type: ProjectileIFF
@@ -389,7 +389,7 @@
     baseSprintSpeed: 1.9
     weightlessFriction: 0
     weightlessAcceleration: 0.15 # handles well for a medium mech
-    weightlessModifier: 3.4 # 6ish ship speed - weightless speed is influenced by weightlessModifier and base(Walk/Sprint)Speed
+    weightlessModifier: 3.75 # 7ish ship speed - weightless speed is influenced by weightlessModifier and base(Walk/Sprint)Speed
   - type: CanMoveInAir
   - type: MovementAlwaysTouching
   - type: ProjectileIFF
@@ -507,7 +507,7 @@
     baseSprintSpeed: 1.85
     weightlessFriction: 0
     weightlessAcceleration: 0.33
-    weightlessModifier: 3.5 # 6ish ship speed - weightless speed is influenced by weightlessModifier and base(Walk/Sprint)Speed
+    weightlessModifier: 3.85 # 7ish ship speed - weightless speed is influenced by weightlessModifier and base(Walk/Sprint)Speed
   - type: CanMoveInAir
   - type: MovementAlwaysTouching
   - type: ProjectileIFF
@@ -574,7 +574,7 @@
     baseSprintSpeed: 2.5
     weightlessFriction: 0.4
     weightlessAcceleration: 0.2
-    weightlessModifier: 3.5 # 9ish ship speed - weightless speed is influenced by weightlessModifier and base(Walk/Sprint)Speed
+    weightlessModifier: 3.85 # 10ish ship speed - weightless speed is influenced by weightlessModifier and base(Walk/Sprint)Speed
   - type: CanMoveInAir
   - type: MovementAlwaysTouching
   - type: ProjectileIFF

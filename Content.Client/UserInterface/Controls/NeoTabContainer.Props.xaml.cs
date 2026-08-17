@@ -37,6 +37,27 @@ public sealed partial class NeoTabContainer
         set => ScrollingChanged(_hScrollEnabled, value);
     }
 
+    /// <summary>
+    ///     If the tab strip pushes its full natural width onto whatever contains this container.
+    ///     <br />
+    ///     The strip is measured with an infinite width (it scrolls horizontally), so leaving this on
+    ///     makes a container with many tabs demand more room than one with few, which resizes the
+    ///     surrounding layout every time you switch to it. Turn it off to keep the layout still and let
+    ///     the strip scroll instead.
+    /// </summary>
+    private bool _tabsFitContent = true;
+    /// <inheritdoc cref="_tabsFitContent"/>
+    public bool TabsFitContent
+    {
+        get => _tabsFitContent;
+        set
+        {
+            _tabsFitContent = value;
+            TabScrollContainer.ReturnMeasure = value;
+            TabScrollContainer.InvalidateMeasure();
+        }
+    }
+
     /// The margin around the whole UI element
     private Thickness _containerMargin = new(0);
     /// <inheritdoc cref="_containerMargin"/>

@@ -51,17 +51,20 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
     [UISystemDependency] private readonly TargetOutlineSystem? _targetOutline = default;
     [UISystemDependency] private readonly SpriteSystem _spriteSystem = default!;
 
-    private const int DefaultPageIndex = 0;
     private ActionButtonContainer? _container;
-    private readonly List<ActionPage> _pages = new();
-    private int _currentPageIndex = DefaultPageIndex;
+
+    /// <summary>
+    /// Every auto-populated action, in one continuous list. The bar used to be split into fixed size
+    /// pages you had to arrow through, which simply hid everything past the tenth action.
+    /// </summary>
+    private readonly ActionPage _page = new(ContentKeyFunctions.GetHotbarBoundKeys().Length);
+
     private readonly DragDropHelper<ActionButton> _menuDragHelper;
     private readonly TextureRect _dragShadow;
     private ActionsWindow? _window;
 
     private ActionsBar? ActionsBar => UIManager.GetActiveUIWidgetOrNull<ActionsBar>();
     private MenuButton? ActionButton => UIManager.GetActiveUIWidgetOrNull<MenuBar.Widgets.GameTopMenuBar>()?.ActionButton;
-    private ActionPage CurrentPage => _pages[_currentPageIndex];
 
     public bool IsDragging => _menuDragHelper.IsDragging;
 
@@ -81,11 +84,6 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
             SetSize = new Vector2(64, 64),
             MouseFilter = MouseFilterMode.Ignore,
         };
-
-        var pageCount = ContentKeyFunctions.GetLoadoutBoundKeys().Length;
-        var buttonCount = ContentKeyFunctions.GetHotbarBoundKeys().Length;
-        for (var i = 0; i < pageCount; i++)
-            _pages.Add(new ActionPage(buttonCount));
     }
 
     public override void Initialize()
@@ -138,14 +136,8 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
             }, false, true));
         }
 
-        var loadoutKeys = ContentKeyFunctions.GetLoadoutBoundKeys();
-        for (var i = 0; i < loadoutKeys.Length; i++)
-        {
-            var boundId = i; // This is needed, because the lambda captures it.
-            var boundKey = loadoutKeys[i];
-            builder = builder.Bind(boundKey,
-                InputCmdHandler.FromDelegate(_ => ChangePage(boundId)));
-        }
+        // The loadout keys used to flip between action pages. There is only one list now, so they are
+        // deliberately left unbound rather than switching to something empty.
 
         builder
             .Bind(ContentKeyFunctions.OpenActionsMenu,
@@ -367,7 +359,9 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
     private void TriggerAction(int index)
     {
         if (_actionsSystem == null ||
-            CurrentPage[index] is not { } actionId ||
+            index < 0 ||
+            index >= _page.Size ||
+            _page[index] is not { } actionId ||
             !_actionsSystem.TryGetActionData(actionId, out var baseAction))
             return;
 
@@ -376,28 +370,6 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
         else
             _actionsSystem?.TriggerAction(actionId, baseAction);
     }
-
-    private void ChangePage(int index)
-    {
-        if (_actionsSystem == null)
-            return;
-
-        var lastPage = _pages.Count - 1;
-        if (index < 0)
-            index = lastPage;
-        else if (index > lastPage)
-            index = 0;
-
-        _currentPageIndex = index;
-        var page = _pages[_currentPageIndex];
-        _container?.SetActionData(_actionsSystem, page);
-
-        ActionsBar!.PageButtons.Label.Text = $"{_currentPageIndex + 1}";
-    }
-
-    private void OnLeftArrowPressed(ButtonEventArgs args) => ChangePage(_currentPageIndex - 1);
-
-    private void OnRightArrowPressed(ButtonEventArgs args) => ChangePage(_currentPageIndex + 1);
 
     private void AppendAction(EntityUid action)
     {
@@ -413,16 +385,17 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
             return;
         }
 
-        foreach (var page in _pages)
-            for (var i = 0; i < page.Size; i++)
-            {
-                var pageAction = page[i];
-                if (pageAction != null)
-                    continue;
+        for (var i = 0; i < _page.Size; i++)
+        {
+            if (_page[i] != null)
+                continue;
 
-                page[i] = action;
-                return;
-            }
+            _page[i] = action;
+            return;
+        }
+
+        // No free slot anywhere, so the list simply gets longer.
+        _page.Add(action);
     }
 
     private void OnActionAdded(EntityUid actionId)
@@ -435,10 +408,9 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
         if (action is BaseTargetActionComponent targetAction && action.Toggled)
             StartTargeting(actionId, targetAction);
 
-        foreach (var page in _pages)
-            for (var i = 0; i < page.Size; i++)
-                if (page[i] == actionId)
-                    return;
+        for (var i = 0; i < _page.Size; i++)
+            if (_page[i] == actionId)
+                return;
 
         AppendAction(actionId);
     }
@@ -451,26 +423,23 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
         if (actionId == SelectingTargetFor)
             StopTargeting();
 
-        var currentPageChanged = false;
-        for (var pageIndex = 0; pageIndex < _pages.Count; pageIndex++)
+        var changed = false;
+        for (var i = 0; i < _page.Size; i++)
         {
-            var page = _pages[pageIndex];
-            for (var i = 0; i < page.Size; i++)
-            {
-                if (page[i] == actionId)
-                {
-                    page[i] = null;
+            if (_page[i] != actionId)
+                continue;
 
-                    if (pageIndex == _currentPageIndex)
-                        currentPageChanged = true;
-                }
-            }
+            _page[i] = null;
+            changed = true;
         }
 
-        // Only redraw if the visible page changed. This avoids clearing slot indices on the
-        // currently shown page for actions that were removed from a different page.
-        if (currentPageChanged && _actionsSystem != null)
-            _container.SetActionData(_actionsSystem, _pages[_currentPageIndex]);
+        // Otherwise a round of picking up and dropping action items leaves the bar trailing columns
+        // of empty slots that never go away.
+        if (changed)
+            _page.TrimEnd(ContentKeyFunctions.GetHotbarBoundKeys().Length);
+
+        if (changed && _actionsSystem != null)
+            _container.SetActionData(_actionsSystem, _page);
     }
 
     private void OnActionsUpdated()
@@ -484,7 +453,7 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
         _menuDragHelper.EndDrag();
 
         if (_actionsSystem != null)
-            _container?.SetActionData(_actionsSystem, _pages[_currentPageIndex]);
+            _container?.SetActionData(_actionsSystem, _page);
     }
 
     private void ActionButtonPressed(ButtonEventArgs args)
@@ -641,29 +610,23 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
         if (actionId == null)
         {
             button.ClearData();
-            if (_container?.TryGetButtonIndex(button, out position) ?? false)
-                CurrentPage[position] = null;
+            if ((_container?.TryGetButtonIndex(button, out position) ?? false)
+                && position >= 0
+                && position < _page.Size)
+            {
+                _page[position] = null;
+            }
         }
         else if (button.TryReplaceWith(actionId.Value, _actionsSystem) &&
             _container != null &&
-            _container.TryGetButtonIndex(button, out position))
-            if (position >= 0 && position < CurrentPage.Size)
-                CurrentPage[position] = actionId;
-            else
-            {
-                if (_pages.Count <= _currentPageIndex)
-                    return;
-                // Add the button to the next page if there's no space on the current one
-                var nextPage = _pages[_currentPageIndex + 1];
-                int i;
-                for (i = 0; i < nextPage.Size; i++)
-                    if (nextPage[i] == null)
-                    {
-                        nextPage[i] = actionId;
-                        break;
-                    }
-                ChangePage(_currentPageIndex + 1); //TODO: Make this a client config?
-            }
+            _container.TryGetButtonIndex(button, out position) &&
+            position >= 0)
+        {
+            // The bar always keeps one empty slot past the end as a drop target. Dropping onto it
+            // grows the list rather than spilling the action onto a page you have to arrow to.
+            _page.EnsureSize(position + 1);
+            _page[position] = actionId;
+        }
     }
 
     private void DragAction()
@@ -686,7 +649,7 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
             SetAction(dragged, swapAction);
 
         if (_actionsSystem != null)
-            _container?.SetActionData(_actionsSystem, _pages[_currentPageIndex]);
+            _container?.SetActionData(_actionsSystem, _page);
 
         _menuDragHelper.EndDrag();
     }
@@ -833,9 +796,6 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
         if (ActionsBar == null)
             return;
 
-        ActionsBar.PageButtons.LeftArrow.OnPressed -= OnLeftArrowPressed;
-        ActionsBar.PageButtons.RightArrow.OnPressed -= OnRightArrowPressed;
-
         if (_window != null)
         {
             _window.OnOpen -= OnWindowOpened;
@@ -863,9 +823,6 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
 
         if (ActionsBar == null)
             return;
-
-        ActionsBar.PageButtons.LeftArrow.OnPressed += OnLeftArrowPressed;
-        ActionsBar.PageButtons.RightArrow.OnPressed += OnRightArrowPressed;
 
         RegisterActionContainer(ActionsBar.ActionsContainer);
 
@@ -895,10 +852,37 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
         if (_actionsSystem == null)
             return;
 
-        foreach (ref var assignment in CollectionsMarshal.AsSpan(assignments))
-            _pages[assignment.Hotbar][assignment.Slot] = assignment.ActionId;
+        // Hotbar used to pick which page the slot lived on. There is one list now, so a saved
+        // assignment file that still names higher hotbars gets folded onto the end of it.
+        var pageStride = ContentKeyFunctions.GetHotbarBoundKeys().Length;
 
-        _container?.SetActionData(_actionsSystem, _pages[_currentPageIndex]);
+        // Only pages that hold something get a place in the list. Multiplying the raw hotbar number by the
+        // stride reserved a full page of blanks for every page the player never filled, so a file saved with a
+        // single action on the fifth page unpacked into fifty slots with one action among them.
+        var pages = new SortedSet<int>();
+        foreach (ref var assignment in CollectionsMarshal.AsSpan(assignments))
+        {
+            pages.Add(assignment.Hotbar);
+        }
+
+        var packed = new Dictionary<int, int>(pages.Count);
+        foreach (var hotbar in pages)
+        {
+            packed[hotbar] = packed.Count;
+        }
+
+        foreach (ref var assignment in CollectionsMarshal.AsSpan(assignments))
+        {
+            var slot = packed[assignment.Hotbar] * pageStride + assignment.Slot;
+            _page.EnsureSize(slot + 1);
+            _page[slot] = assignment.ActionId;
+        }
+
+        // Gaps inside a page are the player's own layout and stay put, but a page that only fills its first few
+        // slots must not pad the list out to a full stride behind them.
+        _page.TrimEnd(pageStride);
+
+        _container?.SetActionData(_actionsSystem, _page);
     }
 
     public void RemoveActionContainer() =>
@@ -933,7 +917,7 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
             return;
 
         LoadDefaultActions();
-        _container?.SetActionData(_actionsSystem, _pages[_currentPageIndex]);
+        _container?.SetActionData(_actionsSystem, _page);
         QueueWindowUpdate();
     }
 
@@ -952,28 +936,11 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
         var actions = _actionsSystem.GetClientActions().Where(action => action.Comp.AutoPopulate).ToList();
         actions.Sort(ActionComparer);
 
-        var offset = 0;
-        var totalPages = _pages.Count;
-        var pagesLeft = totalPages;
-        var currentPage = DefaultPageIndex;
-        while (pagesLeft > 0)
-        {
-            var page = _pages[currentPage];
-            var pageSize = page.Size;
+        // Everything goes in one list. Keep at least the keybound slots so 1-0 always have a home.
+        _page.EnsureSize(Math.Max(ContentKeyFunctions.GetHotbarBoundKeys().Length, actions.Count));
 
-            for (var slot = 0; slot < pageSize; slot++)
-                if (slot + offset < actions.Count)
-                    page[slot] = actions[slot + offset].Id;
-                else
-                    page[slot] = null;
-
-            offset += pageSize;
-            currentPage++;
-            if (currentPage == totalPages)
-                currentPage = 0;
-
-            pagesLeft--;
-        }
+        for (var slot = 0; slot < _page.Size; slot++)
+            _page[slot] = slot < actions.Count ? actions[slot].Id : null;
     }
 
     /// <summary>
@@ -1084,21 +1051,49 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
         handOverlay.EntityOverride = null;
     }
 
+    /// <summary>
+    /// The player's action slots. Grows as actions are added instead of overflowing onto a second page.
+    /// </summary>
     //TODO: Serialize this shit
     private sealed class ActionPage(int size)
     {
-        public readonly EntityUid?[] Data = new EntityUid?[size];
+        private readonly List<EntityUid?> _data = new(Enumerable.Repeat((EntityUid?) null, size));
 
         public EntityUid? this[int index]
         {
-            get => Data[index];
-            set => Data[index] = value;
+            get => _data[index];
+            set => _data[index] = value;
         }
 
-        public static implicit operator EntityUid?[](ActionPage p) => p.Data.ToArray();
+        public static implicit operator EntityUid?[](ActionPage p) => p._data.ToArray();
 
-        public void Clear() => Array.Fill(Data, null);
+        public void Clear()
+        {
+            for (var i = 0; i < _data.Count; i++)
+                _data[i] = null;
+        }
 
-        public int Size => Data.Length;
+        public void Add(EntityUid action) => _data.Add(action);
+
+        /// <summary>
+        /// Pads the list out with empty slots so <paramref name="size"/> indices are addressable.
+        /// Never shrinks, so slots a player has dragged an action into survive a repopulate.
+        /// </summary>
+        public void EnsureSize(int size)
+        {
+            while (_data.Count < size)
+                _data.Add(null);
+        }
+
+        /// <summary>
+        /// Drops empty slots off the end, down to <paramref name="minSize"/>.
+        /// </summary>
+        public void TrimEnd(int minSize)
+        {
+            while (_data.Count > minSize && _data[^1] == null)
+                _data.RemoveAt(_data.Count - 1);
+        }
+
+        public int Size => _data.Count;
     }
 }

@@ -1,41 +1,57 @@
-<controls:FancyWindow xmlns="https://spacestation14.io"
-                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
-                      xmlns:ui="clr-namespace:Content.Client.Shuttles.UI"
-                      xmlns:shuttle="clr-namespace:Content.Client._Crescent.Shuttle"
-                      Title="{Loc 'shuttle-console-window-title'}"
-                      SetSize="960 762"
-                      MinSize="960 762">
-    <BoxContainer Orientation="Vertical">
-        <!-- Top row mode buttons -->
+<!--
+  KS14: instrument-styled shell, ported from Klovnstation14 (AGPL-3.0-or-later).
+  Visuals only: the stock FancyWindow chrome is replaced by a flat bezel, a VT323 title bar
+  and a NAV // MAP // DOCK // CREW tab strip, but every screen below and all of their
+  behaviour is this fork's own and unchanged.
+-->
+<ksui:KsBaseWindow xmlns="https://spacestation14.io"
+                   xmlns:ksui="clr-namespace:Content.Client._KS14.UI"
+                   xmlns:ui="clr-namespace:Content.Client.Shuttles.UI"
+                   xmlns:shuttle="clr-namespace:Content.Client._Crescent.Shuttle"
+                   MouseFilter="Stop"
+                   SetSize="960 762"
+                   MinSize="960 762">
+    <!-- The instrument bezel: the whole window IS the instrument, no stock chrome. -->
+    <PanelContainer Name="Bezel"/>
+    <BoxContainer Orientation="Vertical" Margin="2">
+        <!-- Custom title bar: VT323 title + close button. -->
+        <PanelContainer Name="TitleBar">
+            <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="8 2 4 2">
+                <Label Name="TitleLabel"
+                       StyleClasses="KsInstrumentTitle"
+                       HorizontalExpand="True"
+                       VAlign="Center"
+                       Text="{Loc 'shuttle-console-window-title'}"/>
+                <Button Name="CloseChromeButton"
+                        StyleClasses="KsInstrumentAction"
+                        VerticalAlignment="Center"
+                        Text="{Loc 'ks-instrument-window-close'}"/>
+            </BoxContainer>
+        </PanelContainer>
+        <!-- Instrument tab strip: NAV // MAP // DOCK // CREW -->
         <BoxContainer Name="ModeButtons"
-                       Orientation="Horizontal"
-                       HorizontalAlignment="Stretch"
-                       MinSize="52 52"
-                       Margin="5">
+                      Orientation="Horizontal"
+                      HorizontalAlignment="Stretch"
+                      Margin="8 6 8 4">
             <Button Name="NavModeButton"
+                    StyleClasses="KsInstrumentTab"
                     ToggleMode="True"
-                    HorizontalExpand="True"
-                    VerticalExpand="True"
-                    Text="NAV"
-                    Margin="5"/>
+                    Text="{Loc 'ks-instrument-tab-nav'}"/>
+            <Label Name="Sep1" StyleClasses="KsInstrumentStrong" Text="{Loc 'ks-instrument-tab-separator'}" Margin="6 0 6 0"/>
             <Button Name="MapModeButton"
+                    StyleClasses="KsInstrumentTab"
                     ToggleMode="True"
-                    HorizontalExpand="True"
-                    VerticalExpand="True"
-                    Text="MAP"
-                    Margin="5"/>
+                    Text="{Loc 'ks-instrument-tab-map'}"/>
+            <Label Name="Sep2" StyleClasses="KsInstrumentStrong" Text="{Loc 'ks-instrument-tab-separator'}" Margin="6 0 6 0"/>
             <Button Name="DockModeButton"
+                    StyleClasses="KsInstrumentTab"
                     ToggleMode="True"
-                    HorizontalExpand="True"
-                    VerticalExpand="True"
-                    Text="DOCK"
-                    Margin="5"/>
+                    Text="{Loc 'ks-instrument-tab-dock'}"/>
+            <Label Name="Sep3" StyleClasses="KsInstrumentStrong" Text="{Loc 'ks-instrument-tab-separator'}" Margin="6 0 6 0"/>
             <Button Name="CrewManagementButton"
+                    StyleClasses="KsInstrumentTab"
                     ToggleMode="True"
-                    HorizontalExpand="True"
-                    VerticalExpand="True"
-                    Text="CREW"
-                    Margin="5"/>
+                    Text="{Loc 'ks-instrument-tab-crew'}"/>
         </BoxContainer>
         <!-- Contents box -->
         <BoxContainer Name="Contents"
@@ -48,4 +64,4 @@
             <shuttle:CrewScreen Name="CrewContainer" Visible="False"/>
         </BoxContainer>
     </BoxContainer>
-</controls:FancyWindow>
+</ksui:KsBaseWindow>

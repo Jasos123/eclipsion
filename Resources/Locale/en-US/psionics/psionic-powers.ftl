@@ -84,7 +84,7 @@ telegnosis-power-metapsionic-feedback = {CAPITALIZE($entity)}'s soul travels acr
 
 # Psionic Invisibility
 psionic-invisibility-power-description =
-    Render yourself invisible to any entity that could potentially be psychic. Borgs, animals, and so on are not affected.
+    Bend light around yourself, leaving only a faint shimmer where you stand. A careful eye can still pick you out.
     This doesn't last forever, and its duration scales with your psychic amplification factor.
 psionic-invisibility-power-initialization-feedback =
     I suddenly find myself plunged into a world utterly without light, yet I can feel the rays of warmth cast upon me.

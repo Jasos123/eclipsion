@@ -268,6 +268,81 @@
 
 - type: entity
   parent: ColMarTechBase
+  id: ColMarTechEquipmentGliess
+  name: automated militia equipment rack
+  description: An automated rack connected to a massive storage of standard Gliessian militia equipment.
+  components:
+  - type: AccessReader
+    access:
+    - [ "GliessSheriff" ]
+  - type: Sprite
+    sprite: _Crescent/Structures/syndicatearmory.rsi
+  - type: CMAutomatedVendor
+    jobs:
+    - GliessianDeputy
+    - GliessianSheriff
+    - GliessianDockmaster
+    sections:
+    - name: Class Kit
+      choices: { CMClass: 1 }
+      entries:
+      - id: CMVendorBundleRiflemanApparelCMM
+        name: basic militia kit
+        recommended: true
+    - name: Armor
+      choices: { CMArmour: 1 }
+      entries:
+      - id: ClothingOuterHardsuitMidshipman
+        name: Minutemen "Midshipman" hardsuit
+        recommended: true
+      - id: ClothingOuterArmorCMM
+        name: patrol cuirass
+    - name: Primary Weapon
+      choices: { CMWeapon: 1 }
+      entries:
+      - id: WeaponShotgunSHIDoubleBarreled4g
+        name: SHI M135 Double-Barrel 12g
+      - id: WeaponRifleCMMNimrod
+        name: CMM M32 Nimrod 7.62x51mm
+        recommended: true
+      - id: WeaponSubMachineGunMP5
+        name: NT MP5 9x19mm
+    - name: Secondary Weapon
+      choices: { CMPistol: 1 }
+      entries:
+      - id: WeaponRevolverSnubnose
+        name: NT-6R Bulldog .327
+      - id: WeaponPistolHKUSP
+        name: NT MX-32 Lockwell 9x19mm
+        recommended: true
+    - name: Utilities
+      choices: { CMUtilities: 2 }
+      entries:
+      - id: ExGrenade
+        name: fragmentation grenade
+      - id: EmpGrenade
+        name: EMP Grenade
+      - id: BreachingCharge
+        name: breaching charge
+      - id: HandHeldMassScannerEE
+        name: handheld mass scanner
+        recommended: true
+    - name: Ammunition
+      choices: { CMAmmo: 4 }
+      entries:
+      - id: MagazinePistolSubMachineGun
+        name: 35-round SMG magazine (9x19mm PSTF auto)
+      - id: MagazineBoxRifle
+        name: ammunition box (7.62x51mm)
+      - id: BoxLethalshot
+        name: shotgun shell box (.50 lethal)
+      - id: MagazinePistol
+        name: 18-round pistol magazine (9x19mm PSTF auto)
+      - id: SpeedLoaderMagnum
+        name: speed loader (.45 magnum)
+
+- type: entity
+  parent: ColMarTechBase
   id: ColMarTechEquipmentSHI
   name: automated corporate equipment rack
   description: An automated rack connected to a massive storage of standard Shinohara corporate security equipment.

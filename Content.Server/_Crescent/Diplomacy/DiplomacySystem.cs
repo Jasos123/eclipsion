@@ -49,6 +49,12 @@ public sealed partial class DiplomacySystem : EntitySystem
 
     private void InitializeComponent(EntityUid uid, DiplomacyComponent component, ComponentInit args)
     {
+        // Claim the entity here rather than waiting for Spawn() to return. ComponentInit runs *inside* that
+        // Spawn call, so HandleDiplomacyChanged below would otherwise push relations while _diplomacyEntity is
+        // still null - GetRelationsForFaction hands back an empty dictionary and every IFF grid that already
+        // exists at round start caches "neutral" toward its own allies until somebody changes a relation.
+        _diplomacyEntity = uid;
+
         BuildDefaults(component);
 
         // Anything an admin changed in an earlier round goes on top of the prototype defaults.
@@ -163,6 +169,31 @@ public sealed partial class DiplomacySystem : EntitySystem
             return Relations.Neutral;
 
         return diplo.DiplomaticSituation[diplo.DiplomacyIndicies[faction1], diplo.DiplomacyIndicies[faction2]];
+    }
+
+    /// <summary>
+    ///     A grid's diplomatic faction, or null if it has none we recognise. Bare grids default their IFF
+    ///     faction to the literal string "Neutral", which is not a diplomacy prototype - debris, asteroids and
+    ///     unaligned hulls all land here, and must never be mistaken for a real faction in either direction.
+    /// </summary>
+    public string? GetGridFaction(EntityUid grid)
+    {
+        if (!TryComp<IFFComponent>(grid, out var iff) || string.IsNullOrEmpty(iff.Faction))
+            return null;
+
+        return _prototypeManager.HasIndex<DiplomacyPrototype>(iff.Faction) ? iff.Faction : null;
+    }
+
+    /// <summary>
+    ///     Whether <paramref name="faction"/> should consider <paramref name="targetFaction"/> a valid thing to
+    ///     shoot at. With <paramref name="warOnly"/> it takes a declared war; without it, anything that is not
+    ///     an ally counts.
+    /// </summary>
+    public bool IsHostile(string faction, string targetFaction, bool warOnly = true)
+    {
+        var relation = GetRelations(faction, targetFaction);
+
+        return warOnly ? relation == Relations.War : relation != Relations.Ally;
     }
 
     public Dictionary<string, Relations> GetRelationsForFaction(string faction)

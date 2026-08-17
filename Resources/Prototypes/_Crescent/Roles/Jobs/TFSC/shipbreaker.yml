@@ -16,6 +16,7 @@
       inverted: true
       species:
         - Voidborn
+        - Skeleton # TFSC command only
     - !type:CharacterOverallTimeRequirement
       min: 0
     - !type:FactionRequirement

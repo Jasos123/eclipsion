@@ -53,6 +53,7 @@ public sealed class DiplomacyConsoleBoundUserInterface : BoundUserInterface
         else
         {
             _menu = new DiplomacyConsoleMenu();
+            _menu.OnClose += Close;
             _menu.SetPanel(_panel);
             _menu.OpenCentered();
         }

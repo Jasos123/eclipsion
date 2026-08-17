@@ -18,10 +18,6 @@ public sealed partial class ContentAudioSystem
 {
     [Dependency] private readonly SharedTransformSystem _xform = default!;
 
-    // Distance (in tiles) at which ducking begins. At this range there is no duck,
-    // ramping up to the full amount right next to the boombox.
-    private const float DuckRange = 12f;
-
     // How fast (dB per second) the duck eases in and out. Lower = smoother/slower.
     private const float DuckChangeSpeed = 9f;
 
@@ -120,12 +116,18 @@ public sealed partial class ContentAudioSystem
         if (coords.MapId == MapId.Nullspace || coords.MapId != playerCoords.MapId)
             return 0f;
 
+        // Duck over exactly the radius the stream is audible at, not a fixed distance. A fixed one
+        // outruns a quiet source, so a boombox you can barely hear would still kill your own music.
+        var range = audio.Params.MaxDistance;
+        if (range <= 0f)
+            return 0f;
+
         var dist = (coords.Position - playerCoords.Position).Length();
-        if (dist >= DuckRange)
+        if (dist >= range)
             return 0f;
 
         // 1 right on top of the boombox, 0 at the edge of the range.
-        var factor = 1f - dist / DuckRange;
+        var factor = 1f - dist / range;
         return _maxDuckDb * factor;
     }
 

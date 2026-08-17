@@ -1,3 +1,4 @@
+using Content.Server._Crescent.ShipAI; // Eclipsion
 using Content.Server.NPC;
 using Content.Server.NPC.HTN;
 using Content.Server.NPC.HTN.PrimitiveTasks;
@@ -18,6 +19,7 @@ public sealed partial class ShipMoveToOperator : HTNOperator, IHtnConditionalShu
     [Dependency] private readonly IEntityManager _entManager = default!;
     private PowerReceiverSystem _power = default!;
     private ShipSteeringSystem _steering = default!;
+    private ShipWeaponArcSystem _arc = default!; // Eclipsion
 
     /// <summary>
     /// When to shut the task down.
@@ -136,6 +138,15 @@ public sealed partial class ShipMoveToOperator : HTNOperator, IHtnConditionalShu
     [DataField]
     public float TargetRotation = 0f;
 
+    // Eclipsion - weapon-arc-aware facing.
+    /// <summary>
+    /// Turn the hull to whatever bearing brings the most of its cannons to bear instead of using
+    /// <see cref="TargetRotation"/>. A ship whose guns already fire forward is unaffected, so this only ever
+    /// changes how a broadside-armed hull fights.
+    /// </summary>
+    [DataField]
+    public bool UseWeaponArc = false;
+
     private const string MovementCancelToken = "ShipMovementCancelToken";
 
     public override void Initialize(IEntitySystemManager sysManager)
@@ -143,6 +154,20 @@ public sealed partial class ShipMoveToOperator : HTNOperator, IHtnConditionalShu
         base.Initialize(sysManager);
         _power = sysManager.GetEntitySystem<PowerReceiverSystem>();
         _steering = sysManager.GetEntitySystem<ShipSteeringSystem>();
+        _arc = sysManager.GetEntitySystem<ShipWeaponArcSystem>(); // Eclipsion
+    }
+
+    // Eclipsion - resolved per call rather than latched at startup, so a ship that loses the guns on one side
+    // mid-fight turns to bring what is left to bear.
+    private float ResolveTargetRotation(EntityUid owner)
+    {
+        if (!UseWeaponArc)
+            return TargetRotation;
+
+        if (_entManager.GetComponent<TransformComponent>(owner).GridUid is not { } gridUid)
+            return TargetRotation;
+
+        return _arc.GetFiringOffset(gridUid);
     }
 
     public override async Task<(bool Valid, Dictionary<string, object>? Effects)> Plan(NPCBlackboard blackboard,
@@ -188,7 +213,7 @@ public sealed partial class ShipMoveToOperator : HTNOperator, IHtnConditionalShu
         comp.OrbitOffset = Angle.FromDegrees(OrbitOffset);
         comp.Range = Range;
         comp.RangeTolerance = RangeTolerance;
-        comp.TargetRotation = TargetRotation;
+        comp.TargetRotation = ResolveTargetRotation(uid); // Eclipsion
     }
 
     public override HTNOperatorStatus Update(NPCBlackboard blackboard, float frameTime)
@@ -210,6 +235,8 @@ public sealed partial class ShipMoveToOperator : HTNOperator, IHtnConditionalShu
         var comp = _steering.Steer(owner, target);
         if (comp == null)
             return HTNOperatorStatus.Failed;
+
+        comp.TargetRotation = ResolveTargetRotation(owner); // Eclipsion - track guns lost mid-fight
 
         if (target.EntityId == EntityUid.Invalid || !xform.Coordinates.TryDistance(_entManager, target, out var distance) || distance > MaxTargetingRange)
             return HTNOperatorStatus.Finished;

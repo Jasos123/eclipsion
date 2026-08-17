@@ -43,6 +43,7 @@ public sealed class FactionRecruitmentConsoleSystem : EntitySystem
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly SharedJobSystem _jobs = default!;
+    [Dependency] private readonly HullrotNpcFactionSyncSystem _hullrotNpcFaction = default!;
 
     public override void Initialize()
     {
@@ -325,6 +326,9 @@ public sealed class FactionRecruitmentConsoleSystem : EntitySystem
         var factionComp = EnsureComp<HullrotFactionComponent>(target);
         factionComp.Faction = comp.Faction;
         Dirty(target, factionComp);
+        // Assigning the field raises nothing, so the NPC-facing membership has to be pushed by hand or the
+        // recruit still reads as their old side to every turret in the sector.
+        _hullrotNpcFaction.Sync(target, factionComp);
 
         // 3. ID card: title, icon, department, and (additively) the role's access.
         if (_idCard.TryFindIdCard(target, out var idCard))
@@ -387,6 +391,7 @@ public sealed class FactionRecruitmentConsoleSystem : EntitySystem
 
         factionComp.Faction = string.Empty;
         Dirty(target, factionComp);
+        _hullrotNpcFaction.Sync(target, factionComp);
 
         var factionName = FactionDisplayName(comp.Faction);
 

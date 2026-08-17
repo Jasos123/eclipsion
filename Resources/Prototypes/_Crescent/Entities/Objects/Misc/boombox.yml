@@ -19,6 +19,10 @@
     - Back
     - SuitStorage
   - type: Jukebox
+    # Quieter and much tighter than the anchored jukebox: this thing gets carried around the ship,
+    # so anyone standing more than a few tiles away should barely register it.
+    volume: -13
+    range: 6
   - type: Appearance
   - type: ActivatableUI
     key: enum.JukeboxUiKey.Key

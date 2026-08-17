@@ -16,12 +16,19 @@ public sealed class StockPriceChart : Control
     private readonly List<float> _data = new();
     private float _baseline;
     private bool _hasBaseline;
+    private Color? _lineColor;
 
     public float Padding { get; set; } = 4f;
 
     public int GridDivisions { get; set; } = 3;
 
-    public void SetData(IReadOnlyList<float>? prices, float? baseline = null)
+    /// <param name="lineColor">
+    /// Colour for the plotted line. Pass the colour of whatever trend figure sits beside the chart:
+    /// left to itself the chart colours by first-versus-last across the entire history, which is a
+    /// window nothing on screen names, and it ends up drawn green next to a red percentage. Both are
+    /// right about different spans, and readers reasonably conclude the market is broken.
+    /// </param>
+    public void SetData(IReadOnlyList<float>? prices, float? baseline = null, Color? lineColor = null)
     {
         _data.Clear();
         if (prices != null)
@@ -29,6 +36,7 @@ public sealed class StockPriceChart : Control
 
         _hasBaseline = baseline != null;
         _baseline = baseline ?? 0f;
+        _lineColor = lineColor;
         InvalidateMeasure();
     }
 
@@ -91,9 +99,9 @@ public sealed class StockPriceChart : Control
             handle.DrawLine(new Vector2(left, by), new Vector2(right, by), BaselineColor);
         }
 
-        var color = _data[^1] > _data[0] ? UpColor
+        var color = _lineColor ?? (_data[^1] > _data[0] ? UpColor
             : _data[^1] < _data[0] ? DownColor
-            : NeutralColor;
+            : NeutralColor);
 
         var spacing = (right - left) / (_data.Count - 1);
         for (var i = 0; i + 1 < _data.Count; i++)

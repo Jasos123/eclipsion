@@ -156,6 +156,28 @@
     delay: 1.0
   - type: Contraband
 
+#registry printout
+
+- type: entity
+  parent: Paper
+  id: PaperPassportRecord
+  name: registry record printout
+  description: A slip spat out by a passport validity checker. It lists what the issuing registry
+    holds on a document, and nothing about whether the document in front of you still matches it.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/bureaucracy.rsi
+    layers:
+    - state: paper
+      color: "#d3c39a"
+    - state: paper_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#d3c39a"
+      visible: false
+    - state: paper_stamp-generic
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+
 #trade permit
 
 - type: entity

@@ -91321,7 +91321,7 @@ entities:
       parent: 4856
     - type: Physics
       canCollide: False
-- proto: ColMarTechEquipmentCMM
+- proto: ColMarTechEquipmentGliess
   entities:
   - uid: 4915
     components:

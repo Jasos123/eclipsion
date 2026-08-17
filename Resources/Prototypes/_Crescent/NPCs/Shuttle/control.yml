@@ -51,10 +51,10 @@
   - type: WiresPanel
   - type: Transform
     anchored: true
-  - type: OnToolsUse # Encore - drone server is fixed in place, can't be unbolted/pulled
+  - type: OnToolsUse # Eclipsion - drone server is fixed in place, can't be unbolted/pulled
     disabled: true
   - type: DroneControl
-  - type: AutoDrone # Encore - auto-deploy, formation-follow and auto-engage. Remove for a manual-only drone.
+  - type: AutoDrone # Eclipsion - auto-deploy, formation-follow and auto-engage. Remove for a manual-only drone.
   - type: ShipNpcTarget
   - type: HTN
     sleepPlayerCheckRangeOverride: 100000 # 100k aka basically never sleep
@@ -69,7 +69,7 @@
     range: 100000 # keep same as sleep range
 
 - type: entity
-  parent: [ BaseComputerAiAccess, BaseStructureDisableToolUse ] # Encore - fixed in place (can't be unbolted), still destructible
+  parent: [ BaseComputerAiAccess, BaseStructureDisableToolUse ] # Eclipsion - fixed in place (can't be unbolted), still destructible
   id: ComputerDroneControl
   name: drone control console
   description: A console that produces and commands a squadron of drones.
@@ -88,7 +88,7 @@
     board: DroneControlCircuitboard
   - type: DroneControlConsole
     maxOrderRadius: 4000
-  - type: DroneCarrier # Encore - produces and commands its own drone squadron. Override spawnableDrones per faction.
+  - type: DroneCarrier # Eclipsion - produces and commands its own drone squadron. Override spawnableDrones per faction.
     spawnableDrones:
     - ValorDrone
     - RocinanteDrone

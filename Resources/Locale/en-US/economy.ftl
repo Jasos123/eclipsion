@@ -125,17 +125,88 @@ stock-company-tccc = Taypan Civil Construction Company
 stock-market-tab-news = News
 stock-market-delisted = {$shares} — delisted this shift
 stock-market-no-news = The market is quiet
-stock-news-casualties = {$faction} taking casualties
+
+# The news feed already prints the company name on the line above the reason, so the reason must not
+# repeat it. It used to name the raw faction tag ("DSM treasury draining") under a company headed
+# "Olywier Charter Holdings", which read as two unrelated things happening at once.
+stock-news-casualties = Taking casualties
 stock-news-merchant-war = Wartime demand up
 stock-news-station-lost = {$station} lost
 stock-news-rebuild = Rebuild contracts for {$station}
-stock-news-victory = {$faction} won the war
-stock-news-contract = {$faction} contract fulfilled
-stock-news-treasury-up = {$faction} treasury growing
-stock-news-treasury-down = {$faction} treasury draining
+stock-news-victory = Won the war
+stock-news-contract = Contract fulfilled
+stock-news-treasury-up = Treasury growing
+stock-news-treasury-down = Treasury draining
 stock-news-admin = Unexplained market movement
 
 stock-war-liquidation = {$company} has gone to war with your faction and closed your position. Your {$shares} shares were sold at the floor price of {$price}cr and {$total}cr has been transferred to your account.
+
+# --- Market screen: the figures, and what each one is actually measuring ---
+stock-market-price-now = {$price}cr
+stock-market-price-now-tooltip = What one share costs right now, to buy or to sell.
+stock-market-trend-row = {$window} {$change}
+stock-market-trend-row-unknown = {$window} —
+stock-market-trend-tooltip = The trend: how this share has moved over the last {$window}. This is the figure that tells you which way the price is going right now.
+stock-market-vs-open-row = open {$change}
+stock-market-vs-open-tooltip = Where the price stands against the {$open}cr this company first opened at, counted across every shift it has ever traded. This is NOT a trend — a share can be climbing hard all shift and still read below its opening price.
+stock-market-pending-row = {$change} locked in, {$time} left
+stock-market-pending-tooltip = A move that events in the round have already bought and that is still being paid out, tick by tick. It is not a forecast and nothing you do will call it off — it is going to land.
+stock-market-chart-tooltip = The last {$minutes} minutes of price. The flat line is the {$open}cr this company opened at, and the plotted line is coloured by the trend figure below it.
+stock-market-kind-faction-tooltip = A faction company. It has no randomness at all: it moves only when something happens to that faction in the round. Every move has a line in the News tab.
+stock-market-kind-neutral-tooltip = A neutral company. It drifts a little on its own and pulls back toward its opening price, and it profits from the chaos the factions generate — somewhere to hide when every faction is sinking.
+stock-market-owned-worth = Owned: {$shares} ({$value}cr)
+stock-market-buy-tooltip = Buy {$amount} shares for {$total}cr.
+stock-market-sell-tooltip = Sell {$amount} shares for {$total}cr.
+stock-market-delisted-tooltip = This faction is not fielded this shift, so its company is not trading. You still own the shares and they carry over — you just cannot sell them until it is back.
+stock-market-duration-seconds = {$value}s
+stock-market-duration-minutes = {$value}m
+
+stock-market-news-header = Why prices moved:
+stock-market-news-detail = {$reason} · {$ago} ago
+
+# --- Guide tab ---
+stock-market-tab-guide = Guide
+stock-guide-basics-title = How it works
+stock-guide-basics-body =
+    Prices update every 15 seconds.
+
+    The listed companies split one fixed pool of market value between them. A company can only rise by taking value from the others, so the whole market can never go up at once. If something is climbing, something else is paying for it.
+stock-guide-row-title = Reading a row
+stock-guide-row-body =
+    327cr — what one share costs right now.
+
+    5m ▲2.1% — the trend. How the price moved over the last five minutes. This is the number to trade on.
+
+    open ▼6.5% — where the price stands against what the company first opened at, ever. It does not reset between shifts. It is not a trend: a share climbing hard all shift can still read open ▼6.5%.
+
+    "locked in" — a move that events in the round have already bought and that has not finished arriving yet. It is not a guess. It will land, and the line tells you how long it has left to run.
+stock-guide-faction-title = Faction companies
+stock-guide-faction-body =
+    SHI, TFCF, Olywier Charter Holdings and Potato Trade Corp have no randomness whatsoever. They never move on their own.
+
+    They move only when something happens to that faction: its people dying, one of its stations lost, its treasury rising or draining, a contract fulfilled, the war won. Every single one of those writes a line in the News tab, so you can always find out exactly why a price moved.
+
+    A faction that is not fielded this shift is delisted. Its price freezes, it cannot be traded, and it does not recover.
+stock-guide-neutral-title = Neutral companies
+stock-guide-neutral-body =
+    Free Merchant Nobles and Taypan Civil Construction do drift on their own, and they pull back toward their opening price over time.
+
+    They also feed on the war: the Merchants gain from casualties, Taypan from stations needing rebuilt. They are where you hide when every faction is sinking at once.
+stock-guide-asymmetry-title = Rising is slow, falling is fast
+stock-guide-asymmetry-body =
+    Every upward push lands at 70% of its strength and every downward one at 120%. The same size of event moves a price further down than it does up.
+
+    Holding a winning position is work, not a coast.
+stock-guide-persistence-title = Prices carry over
+stock-guide-persistence-body =
+    The market does not reset when the round does. A faction that spent three shifts losing opens the fourth cheap.
+
+    A company that traded this shift closes 20% of the gap back toward its opening price at the round change. A delisted one does not — it comes back at exactly the price it crashed to. You recover by playing.
+stock-guide-liquidation-title = War liquidation
+stock-guide-liquidation-body =
+    If you are holding shares in a company whose faction goes to war with yours, your position is closed for you at the floor price — 25% of what the company opened at.
+
+    That is well below what the shares are worth on the open market. Being liquidated is a loss, not an exit.
 
 cmd-stockmarket-desc = Inspect and control the sector stock market.
 cmd-stockmarket-help = Usage: {$command} <list | reset | freeze | clearportfolios | shock <company> <percent> [ticks]>

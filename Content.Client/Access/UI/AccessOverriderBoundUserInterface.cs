@@ -50,7 +50,8 @@ namespace Content.Client.Access.UI
 
             if (EntMan.TryGetComponent<AccessOverriderComponent>(Owner, out var accessOverrider))
             {
-                accessLevels = accessOverrider.AccessLevels;
+                // Copy, otherwise we'd be re-ordering the component's networked list in place.
+                accessLevels = new List<ProtoId<AccessLevelPrototype>>(accessOverrider.AccessLevels);
                 accessLevels.Sort();
             }
             else

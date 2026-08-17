@@ -42,7 +42,7 @@ public sealed class StockCompanySystem : EntitySystem
     /// <summary>Bumped when the save format changes so stale files are dropped instead of misread.</summary>
     private const int SaveVersion = 2;
 
-    private const float UpdateInterval = 15f;
+    private const float UpdateInterval = StockMarketTrading.TickSeconds;
 
     public const int MaxHistoryLength = 120;
 
@@ -212,6 +212,17 @@ public sealed class StockCompanySystem : EntitySystem
         RaiseLocalEvent(ref ev);
     }
 
+    /// <summary>
+    /// What a raw magnitude is actually worth once the rise/fall asymmetry has been applied. Public so
+    /// the trading screen can quote committed pressure at the size it will really land, rather than the
+    /// size the signal system asked for — a trader told "-2%" who then watches -2.4% arrive has been
+    /// misled by the display, not by the market.
+    /// </summary>
+    public static float EffectiveShift(float magnitude)
+    {
+        return magnitude * (magnitude >= 0f ? RiseFactor : FallFactor);
+    }
+
     /// <summary>Advances every running pressure on a company by one tick and returns their combined shift.</summary>
     private static float ConsumePressure(StockCompanyData company)
     {
@@ -260,7 +271,7 @@ public sealed class StockCompanySystem : EntitySystem
         // here rather than at each call site so it catches war pressures, instant shifts and the neutral
         // companies' own drift in one place, and before any weight is computed so the pool stays conserved.
         for (var i = 0; i < shifts.Length; i++)
-            shifts[i] *= shifts[i] >= 0f ? RiseFactor : FallFactor;
+            shifts[i] = EffectiveShift(shifts[i]);
 
         var weights = new float[_companies.Count];
         var totalWeight = 0f;
@@ -392,7 +403,7 @@ public sealed class StockCompanySystem : EntitySystem
         company.Pressures.Add(new StockPressure(magnitude / durationTicks, durationTicks));
 
         if (!string.IsNullOrWhiteSpace(reason))
-            PushNews(companyId, reason, magnitude > 0f);
+            PushNews(companyId, reason, magnitude);
 
         _dirty = true;
         return true;
@@ -415,7 +426,7 @@ public sealed class StockCompanySystem : EntitySystem
         ApplyShifts(shifts);
 
         if (!string.IsNullOrWhiteSpace(reason))
-            PushNews(companyId, reason, magnitude > 0f);
+            PushNews(companyId, reason, magnitude);
 
         _dirty = true;
         var ev = new StockCompaniesUpdatedEvent();
@@ -423,9 +434,15 @@ public sealed class StockCompanySystem : EntitySystem
         return true;
     }
 
-    private void PushNews(string companyId, string reason, bool positive)
+    private void PushNews(string companyId, string reason, float magnitude)
     {
-        _news.Add(new StockNewsRecord(companyId, reason, positive, _timing.CurTime));
+        _news.Add(new StockNewsRecord(
+            companyId,
+            reason,
+            magnitude > 0f,
+            _timing.CurTime,
+            EffectiveShift(magnitude)));
+
         while (_news.Count > MaxNews)
             _news.RemoveAt(0);
     }
@@ -478,6 +495,31 @@ public sealed class StockCompanySystem : EntitySystem
     {
         EnsureInitialized();
         return _companies;
+    }
+
+    /// <summary>
+    /// Everything already committed to move this company but not yet paid out: the net shift still to
+    /// come, and how many ticks the longest-running pressure has left to run.
+    ///
+    /// The market screen quotes this because the alternative is worse. A casualty pushes a company down
+    /// over four ticks, so a trader who checks the price a minute later sees it still falling with the
+    /// news that caused it already scrolled away, and concludes the whole thing is random. Showing the
+    /// committed move turns that into a decision: sell now, or ride it out.
+    /// </summary>
+    public (float Shift, int Ticks) GetPendingPressure(StockCompanyData company)
+    {
+        var shift = 0f;
+        var ticks = 0;
+
+        foreach (var pressure in company.Pressures)
+        {
+            shift += pressure.ShiftPerTick * pressure.RemainingTicks;
+            ticks = Math.Max(ticks, pressure.RemainingTicks);
+        }
+
+        // Netted first, then scaled: two opposing pressures that cancel out are worth nothing, and
+        // quoting each leg through the asymmetry separately would invent a downward move from nowhere.
+        return (EffectiveShift(shift), ticks);
     }
 
     public StockCompanyData? GetCompany(string id)

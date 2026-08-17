@@ -31,6 +31,9 @@ namespace Content.Client.Lobby
         private ContentAudioSystem _contentAudioSystem = default!;
         private ReadyManifestSystem _readyManifest = default!;
 
+        /// The late-join window, while one is open. Pressing join again focuses it instead of stacking another.
+        private NFLateJoinGui? _lateJoin;
+
         protected override Type? LinkedScreenType { get; } = typeof(LobbyGui);
         public LobbyGui? Lobby;
 
@@ -82,6 +85,10 @@ namespace Content.Client.Lobby
             Lobby!.ReadyButton.OnPressed -= OnReadyPressed;
             Lobby!.ReadyButton.OnToggled -= OnReadyToggled;
 
+            // Leaving the lobby (joining or observing) should not leave the join window floating over the game.
+            _lateJoin?.Close();
+            _lateJoin = null;
+
             Lobby = null;
         }
 
@@ -102,12 +109,34 @@ namespace Content.Client.Lobby
             if (!_gameTicker.IsGameStarted)
                 return;
 
-            new NFLateJoinGui().OpenCentered();
+            // Every window listens to the ticker for job counts, so opening a second one doubles that work
+            // and leaves the player with a stack of identical windows to close.
+            if (_lateJoin is { Disposed: false, IsOpen: true })
+            {
+                _lateJoin.MoveToFront();
+                return;
+            }
+
+            _lateJoin = new NFLateJoinGui();
+            _lateJoin.OnClose += () => _lateJoin = null;
+            _lateJoin.OpenCentered();
         }
 
         private void OnReadyToggled(BaseButton.ButtonToggledEventArgs args)
         {
             SetReady(args.Pressed);
+            // Don't wait for the server to echo the new state back before the label agrees with the button.
+            UpdateReadyButtonText(args.Pressed);
+        }
+
+        private void UpdateReadyButtonText(bool ready)
+        {
+            if (Lobby == null)
+                return;
+
+            Lobby.ReadyButton.Text = Loc.GetString(ready
+                ? "lobby-state-player-status-ready"
+                : "lobby-state-player-status-not-ready");
         }
 
         private void OnManifestPressed(BaseButton.ButtonEventArgs args)
@@ -174,10 +203,13 @@ namespace Content.Client.Lobby
             else
             {
                 Lobby!.StartTime.Text = string.Empty;
-                Lobby!.ReadyButton.Text = Loc.GetString(Lobby!.ReadyButton.Pressed ? "lobby-state-player-status-ready" : "lobby-state-player-status-not-ready");
                 Lobby!.ReadyButton.ToggleMode = true;
                 Lobby!.ReadyButton.Disabled = false;
                 Lobby!.ReadyButton.Pressed = _gameTicker.AreWeReady;
+                // Read from the ticker, not from the button: the label used to be built before Pressed was
+                // updated, so anything that changed readiness without a click (opening character setup, the
+                // server unreadying you) left the button saying the opposite of what it showed.
+                UpdateReadyButtonText(_gameTicker.AreWeReady);
                 Lobby!.ManifestButton.Disabled = false;
                 Lobby!.ObserveButton.Disabled = true;
             }

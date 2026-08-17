@@ -9,6 +9,8 @@ using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
 using Content.Shared._Crescent.ShipShields; // Rat
+using Content.Client._KS14.UI; // KS14
+using Robust.Client.UserInterface; // KS14
 
 namespace Content.Client.Shuttles.UI;
 
@@ -34,6 +36,31 @@ public sealed partial class NavScreen : BoxContainer
 
         NfInitialize(); // Frontier Initialization for the NavScreen
         HullrotInitialize();
+
+        KsApplyInstrumentLook(); // KS14
+    }
+
+    /// <summary>
+    ///     KS14: dresses this screen in the instrument look - VT323 face, green CRT palette,
+    ///         flat bordered buttons. Cosmetic only: it retitles the two panels and walks the
+    ///         side column applying style classes, touching no control's behaviour, name or
+    ///         layout. Runtime colour overrides (status readouts that tint themselves) are
+    ///         left alone, so anything that already paints itself keeps winning.
+    /// </summary>
+    private void KsApplyInstrumentLook()
+    {
+        var palette = KsInstrumentPalette.Nav;
+
+        DisplayPanel.Title = Loc.GetString("shuttle-console-display-label");
+        SettingsPanel.Title = Loc.GetString("shuttle-console-nav-settings");
+
+        foreach (var panel in new[] { DisplayPanel, SettingsPanel })
+        {
+            panel.Accent = palette.Accent;
+            panel.Background = palette.Background;
+        }
+
+        KsInstrumentDressing.Apply(RightDisplayNav, palette);
     }
 
     public void SetShuttle(EntityUid? shuttle)

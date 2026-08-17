@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Server._Crescent.Diplomacy;
 using Content.Server._Crescent.Economy;
+using Content.Server._Crescent.ShipAI;
 using Content.Server._Mono.NPC.HTN;
 using Content.Server.DeviceNetwork.Systems;
 using Content.Server.Explosion.EntitySystems;
@@ -60,13 +61,13 @@ public sealed class AutoDroneSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly ShipSteeringSystem _steering = default!;
     [Dependency] private readonly ShipTargetingSystem _targeting = default!;
+    [Dependency] private readonly ShipWeaponArcSystem _arc = default!;
     [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly StationTradeMarketSystem _market = default!;
 
     private EntityQuery<ApcPowerReceiverComponent> _powerQuery;
     private EntityQuery<AutoDroneComponent> _autoQuery;
     private EntityQuery<DroneControlComponent> _droneServerQuery;
-    private EntityQuery<IFFComponent> _iffQuery;
     private EntityQuery<MapGridComponent> _gridQuery;
     private EntityQuery<ShipTargetingComponent> _targetingQuery;
     private EntityQuery<ShipSteererComponent> _steererQuery;
@@ -107,7 +108,6 @@ public sealed class AutoDroneSystem : EntitySystem
         _powerQuery = GetEntityQuery<ApcPowerReceiverComponent>();
         _autoQuery = GetEntityQuery<AutoDroneComponent>();
         _droneServerQuery = GetEntityQuery<DroneControlComponent>();
-        _iffQuery = GetEntityQuery<IFFComponent>();
         _gridQuery = GetEntityQuery<MapGridComponent>();
         _targetingQuery = GetEntityQuery<ShipTargetingComponent>();
         _steererQuery = GetEntityQuery<ShipSteererComponent>();
@@ -195,16 +195,12 @@ public sealed class AutoDroneSystem : EntitySystem
     }
 
     /// <summary>
-    ///     A grid's diplomatic faction, or null if it has none we recognise. Bare grids default their IFF
-    ///     faction to the literal string "Neutral", which is not a diplomacy prototype - debris, asteroids and
-    ///     unaligned hulls all land here, and must never be mistaken for a real faction in either direction.
+    ///     A grid's diplomatic faction, or null if it has none we recognise. See
+    ///     <see cref="DiplomacySystem.GetGridFaction"/> for what "none we recognise" covers.
     /// </summary>
     private string? GetGridFaction(EntityUid grid)
     {
-        if (!_iffQuery.TryComp(grid, out var iff) || string.IsNullOrEmpty(iff.Faction))
-            return null;
-
-        return _proto.HasIndex<DiplomacyPrototype>(iff.Faction) ? iff.Faction : null;
+        return _diplomacy.GetGridFaction(grid);
     }
 
     #region deployment
@@ -927,6 +923,7 @@ public sealed class AutoDroneSystem : EntitySystem
                         launch.AlwaysFaceTarget = false;
                         launch.AvoidCollisions = true;
                         launch.AvoidTargetGrid = false; // target is empty space
+                        launch.TargetRotation = 0f;     // reset from attack
                     }
 
                     StopFiring(drone);
@@ -954,6 +951,7 @@ public sealed class AutoDroneSystem : EntitySystem
         steer.AvoidCollisions = true;
         steer.AvoidProjectiles = false;
         steer.AvoidTargetGrid = true; // route around the carrier instead of ramming through it
+        steer.TargetRotation = 0f;    // reset from attack, or a broadside drone sits sideways in formation
 
         StopFiring(drone);
         comp.Mode = AutoDroneMode.Follow;
@@ -982,6 +980,11 @@ public sealed class AutoDroneSystem : EntitySystem
             steer.AvoidCollisions = true;
             steer.AvoidProjectiles = true;  // dodge incoming shipgun rounds
             steer.AvoidTargetGrid = false;
+
+            // Hold whatever bearing actually lets this hull shoot. A drone with forward-firing guns gets 0
+            // here and orbits nose-on exactly as before; only a broadside-armed one starts flying sideways.
+            if (Transform(drone).GridUid is { } droneGrid)
+                steer.TargetRotation = _arc.GetFiringOffset(droneGrid);
         }
 
         comp.Mode = AutoDroneMode.Attack;
@@ -1075,6 +1078,10 @@ public sealed class AutoDroneSystem : EntitySystem
                 steer.AlwaysFaceTarget = true;
                 steer.AvoidCollisions = true;
                 steer.AvoidTargetGrid = false;
+
+                // A manual fire order is still an attack, so bring the guns to bear the same way.
+                if (Transform(drone).GridUid is { } manualGrid)
+                    steer.TargetRotation = _arc.GetFiringOffset(manualGrid);
             }
 
             Fire(drone, target);
@@ -1094,6 +1101,7 @@ public sealed class AutoDroneSystem : EntitySystem
                 steer.AlwaysFaceTarget = true;
                 steer.AvoidCollisions = true;
                 steer.AvoidTargetGrid = false;
+                steer.TargetRotation = 0f; // a move order is not a firing pass
             }
 
             StopFiring(drone);

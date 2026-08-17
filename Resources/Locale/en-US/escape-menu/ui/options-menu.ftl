@@ -111,6 +111,8 @@ ui-options-fps-counter = Show FPS counter
 ui-options-mood-visual-effects = Enable the mood system's visual effects
 ui-options-vp-width = Viewport width: { $width }
 ui-options-hud-layout = HUD layout:
+ui-options-action-bar-vertical = Vertical action bar
+ui-options-action-bar-vertical-tooltip = Stack the action hotbar down the left of the screen instead of across the top. Actions that do not fit wrap into another column.
 
 ## Controls menu
 

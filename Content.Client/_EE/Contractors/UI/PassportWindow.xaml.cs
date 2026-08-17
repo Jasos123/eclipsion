@@ -31,11 +31,6 @@ public sealed partial class PassportWindow : DefaultWindow
         PassportIdEdit.Text = state.PassportId;
         IssueYearEdit.Text = state.IssueYear.ToString();
         ExpirationYearEdit.Text = state.ExpirationYear.ToString();
-        FormStatusLabel.Text = Loc.GetString(state.Tampered
-            ? "passport-ui-tampered"
-            : state.IsValid
-                ? "passport-ui-valid"
-                : "passport-ui-invalid");
     }
 
     private void OnSavePressed(BaseButton.ButtonEventArgs args)

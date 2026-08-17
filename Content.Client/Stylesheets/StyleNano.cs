@@ -1882,7 +1882,14 @@ namespace Content.Client.Stylesheets
                     .Prop(TextureButton.StylePropertyTexture, resCache.GetTexture("/Textures/_Shitmed/Interface/Targeting/Doll/mouth_hover.png")),
                 // Shitmed Change End
 
-            }).ToList());
+            }
+            // KS14: instrument-shell chrome for the shuttle console (VT323 face, flat bordered
+            //   tab/action buttons). Upstream registered these through the Redux stylesheet
+            //   manager's sheetlet discovery, which this fork does not have; concatenated here
+            //   instead. Appended last so the instrument rules win over the vanilla button
+            //   rules they deliberately override.
+            .Concat(Content.Client._KS14.UI.KsInstrumentSheetlet.GetRules(resCache))
+            ).ToList());
         }
     }
 }

@@ -651,6 +651,12 @@ public abstract partial class SharedGunSystem : EntitySystem
                     //in the situation when user == null, means that the cannon fires on its own (via signals). And we need the gun to not fire by itself in this case
                     var lastUser = user ?? gunUid;
 
+                    // hullrot fix for mechs: the pilot sits in a container at the mech's own origin, so
+                    // ignoring the pilot ignores nothing the ray can hit. The ray then starts inside the
+                    // mech's own fixture and the shot lands on the mech at distance 0. Ignore the mech instead.
+                    if (TryComp<MechPilotComponent>(lastUser, out var hitscanMechPilot))
+                        lastUser = hitscanMechPilot.Mech;
+
                     if (hitscan.Reflective != ReflectType.None)
                     {
                         for (var reflectAttempt = 0; reflectAttempt < 3; reflectAttempt++)

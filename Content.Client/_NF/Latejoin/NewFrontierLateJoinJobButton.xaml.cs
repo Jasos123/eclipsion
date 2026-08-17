@@ -18,6 +18,23 @@ public sealed partial class NewFrontierLateJoinJobButton : Button
     private readonly NetEntity _station;
     private readonly string _jobId;
 
+    private bool _locked;
+
+    /// <summary>
+    /// The player may not take this role at all - whitelist, character requirements or a faction cap.
+    /// Tracked apart from <see cref="Button.Disabled"/> so a slot-count refresh cannot re-enable it.
+    /// </summary>
+    public bool Locked
+    {
+        get => _locked;
+        set
+        {
+            _locked = value;
+            if (value)
+                Disabled = true;
+        }
+    }
+
     public NewFrontierLateJoinJobButton(NetEntity station, string jobId, ClientGameTicker gameTicker, IPrototypeManager prototypeManager)
     {
         RobustXamlLoader.Load(this);
@@ -33,24 +50,38 @@ public sealed partial class NewFrontierLateJoinJobButton : Button
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-        _gameTicker.LobbyJobsAvailableUpdated -= UpdateButton;
+
+        if (disposing)
+            _gameTicker.LobbyJobsAvailableUpdated -= UpdateButton;
     }
 
     private void UpdateButton(IReadOnlyDictionary<NetEntity, Dictionary<string, uint?>> obj)
     {
-        if (!obj.ContainsKey(_station) || !obj[_station].ContainsKey(_jobId))
+        // An event already being dispatched keeps calling handlers that unsubscribed part-way through it,
+        // so a button the window replaced during this very update can still land here.
+        if (Disposed)
+            return;
+
+        if (!obj.TryGetValue(_station, out var stationJobs) || !stationJobs.TryGetValue(_jobId, out var slots))
         {
             Visible = false;
             return;
         }
 
-        var prototype = _prototypeManager.Index<JobPrototype>(_jobId);
-        var jobIcon = _prototypeManager.Index(prototype.Icon);
-        JobIcon.Texture = jobIcon.Icon.Frame0();
+        // TryIndex: the station can advertise a job this client has no prototype for.
+        if (!_prototypeManager.TryIndex<JobPrototype>(_jobId, out var prototype))
+        {
+            Visible = false;
+            return;
+        }
 
+        Visible = true;
 
-        JobText.Text = $"{prototype.LocalizedName} ({obj[_station][_jobId]?.ToString() ?? Loc.GetString("late-join-unlimited")})";
+        if (_prototypeManager.TryIndex(prototype.Icon, out var jobIcon))
+            JobIcon.Texture = jobIcon.Icon.Frame0();
 
-        Disabled = obj[_station][_jobId] == 0;
+        JobText.Text = $"{prototype.LocalizedName} ({slots?.ToString() ?? Loc.GetString("late-join-unlimited")})";
+
+        Disabled = _locked || slots == 0;
     }
 }

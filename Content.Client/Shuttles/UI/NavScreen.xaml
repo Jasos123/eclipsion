@@ -2,7 +2,8 @@
               HorizontalExpand="True"
               xmlns:controls="https://spacestation14.io"
               xmlns:ui="clr-namespace:Content.Client.Shuttles.UI"
-              xmlns:controls1="clr-namespace:Content.Client.UserInterface.Controls">
+              xmlns:controls1="clr-namespace:Content.Client.UserInterface.Controls"
+              xmlns:ksui="clr-namespace:Content.Client._KS14.UI">
                 <ui:ShuttleNavControl Name="NavRadar"
                                  MouseFilter="Stop"
                                  VerticalAlignment="Stretch"
@@ -18,12 +19,8 @@
                       MaxWidth="256"
                       Margin="5 0 5 5"
                       Orientation="Vertical">
-                    <controls1:StripeBack
-                        MinSize="48 48">
-                        <controls:Label Name="NavDisplayLabel" Text="{controls:Loc 'shuttle-console-display-label'}"
-                               VerticalExpand="True"
-                               HorizontalAlignment="Center"/>
-                    </controls1:StripeBack>
+                    <!-- KS14: instrument panel in place of the stock StripeBack header. -->
+                    <ksui:KsInstrumentPanel Name="DisplayPanel" Margin="0 0 0 4">
                     <controls:GridContainer Columns="2"
                                    HorizontalAlignment="Stretch"
                                    VerticalAlignment="Top"
@@ -63,12 +60,10 @@
                                HorizontalExpand="True"
                                Align="Right"/>
                     </controls:GridContainer>
-                    <controls1:StripeBack
-                        MinSize="48 48">
-                        <controls:Label Name="NavSettingsLabel" Text="{controls:Loc 'shuttle-console-nav-settings'}"
-                               VerticalExpand="True"
-                               HorizontalAlignment="Center"/>
-                    </controls1:StripeBack>
+                    </ksui:KsInstrumentPanel>
+                    <!-- KS14: instrument panel in place of the stock StripeBack header. -->
+                    <ksui:KsInstrumentPanel Name="SettingsPanel">
+                    <controls:BoxContainer Orientation="Vertical" HorizontalExpand="True">
                     <controls:Button Name="IFFToggle"
                             Text="{controls:Loc 'shuttle-console-iff-toggle'}"
                             TextAlign="Center"
@@ -159,5 +154,7 @@
                                      Text="{controls:Loc 'Renaming mode'}"
                                      TextAlign="Center"
                                      ToggleMode="True"/>
+                    </controls:BoxContainer>
+                    </ksui:KsInstrumentPanel>
                     </controls:BoxContainer>
                 </controls:BoxContainer>

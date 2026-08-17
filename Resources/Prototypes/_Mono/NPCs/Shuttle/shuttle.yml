@@ -38,6 +38,18 @@
 - type: htnCompound
   id: AttackerShuttleCompound
   branches:
+  # Eclipsion - break off once the hull is too chewed up to keep trading fire. This has to be the FIRST branch:
+  # a replan only replaces a running plan when it lands on a lower branch index, which is what lets this
+  # preempt an attack already in progress.
+  - preconditions:
+    - !type:ShipHullIntegrityPrecondition
+      maxIntegrity: 0.4
+    tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:UtilityOperator
+        proto: NearbyShuttleTargets
+    - !type:HTNCompoundTask
+      task: ShuttleRetreatCompound
   - tasks:
     - !type:HTNPrimitiveTask
       operator: !type:UtilityOperator
@@ -120,6 +132,37 @@
         rangeTolerance: 100
         targetKey: TargetCoordinates
 
+# Eclipsion - opens the range on whatever we were fighting, then holds off for a while before reconsidering.
+# The hold is what stops a crippled ship from re-planning into the same losing fight every half second.
+- type: htnCompound
+  id: ShuttleRetreatCompound
+  branches:
+  - preconditions:
+    - !type:KeyExistsPrecondition
+      key: TargetCoordinates
+    tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:ShipMoveToOperator
+        shutdownState: TaskFinished
+        removeKeyOnFinish: false
+        finishOnCollide: false # we may well be right on top of them
+        inRangeMaxSpeed: null # don't wait around to brake
+        leadingEnabled: false
+        avoidProjectiles: true
+        # well outside the 250m the attack compound fights at
+        range: 1200
+        rangeTolerance: 200
+        targetKey: TargetCoordinates
+
+    - !type:HTNPrimitiveTask
+      operator: !type:SetFloatOperator
+        targetKey: ShipRetreatTime
+        amount: 20
+
+    - !type:HTNPrimitiveTask
+      operator: !type:WaitOperator
+        key: ShipRetreatTime
+
 - type: htnCompound
   id: ShuttleApproachCompound
   branches:
@@ -160,6 +203,7 @@
         rangeTolerance: 50
         targetKey: TargetCoordinates
         mode: Orbit
+        useWeaponArc: true # Eclipsion - fly the broadside if that is where the guns are
     - !type:HTNPrimitiveTask
       operator: !type:ShipFireGunsOperator
         shutdownState: TaskFinished

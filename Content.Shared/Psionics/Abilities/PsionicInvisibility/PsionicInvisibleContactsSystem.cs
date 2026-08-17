@@ -1,3 +1,4 @@
+using Content.Shared.Abilities.Psionics;
 using Content.Shared.Stealth;
 using Content.Shared.Stealth.Components;
 using Content.Shared.Whitelist;
@@ -40,7 +41,7 @@ public sealed class PsionicInvisibleContactsSystem : EntitySystem
 
         EnsureComp<PsionicallyInvisibleComponent>(ourEntity);
         var stealth = EnsureComp<StealthComponent>(ourEntity);
-        _stealth.SetVisibility(ourEntity, 0.66f, stealth);
+        _stealth.SetVisibility(ourEntity, SharedPsionicAbilitiesSystem.ConcealmentVisibility, stealth); // Eclipsion
     }
 
     private void OnEntityExit(EntityUid uid, PsionicInvisibleContactsComponent component, ref EndCollideEvent args)

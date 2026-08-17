@@ -19,6 +19,9 @@
                     <Control MinSize="4 0" />
                     <OptionButton Name="HudLayoutOption" />
                 </BoxContainer>
+                <CheckBox Name="ActionBarVerticalCheckBox"
+                          Text="{Loc 'ui-options-action-bar-vertical'}"
+                          ToolTip="{Loc 'ui-options-action-bar-vertical-tooltip'}" />
                 <Label Text="{Loc 'ui-options-general-accessibility'}"
                        FontColorOverride="{xNamespace:Static s:StyleNano.NanoGold}"
                        StyleClasses="LabelKeyText"/>

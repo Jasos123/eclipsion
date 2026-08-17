@@ -1,6 +1,7 @@
 // Ratgore Start
 using System.Globalization;
 using System.Numerics;
+using Content.Client._Crescent.UI; // Eclipsion
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Controls;
 using Content.Shared._Crescent.HardlinerFireControl;
@@ -15,103 +16,129 @@ namespace Content.Client._Crescent.HardlinerFireControl;
 [GenerateTypedNameReferences]
 public sealed partial class HardlinerFireControlMenu : FancyWindow
 {
+    // Eclipsion - telemetry arrives on a poll, so the panels are reused rather than rebuilt. Rebuilding threw
+    // away every progress bar several times a second, which cost a full relayout to redraw the same numbers.
+    private readonly ConsoleRowList<string, WeaponPanel> _panels;
+
     public HardlinerFireControlMenu()
     {
         RobustXamlLoader.Load(this);
+
+        _panels = new ConsoleRowList<string, WeaponPanel>(WeaponsColumn, () => new WeaponPanel());
     }
 
     public void ApplyTelemetry(List<HardlinerTelemetryRowState> rows)
     {
-        WeaponsColumn.RemoveAllChildren();
+        _panels.Sync(rows, row => row.DeviceAddress, (panel, row) => panel.Update(row));
 
-        if (rows.Count == 0)
-        {
-            WeaponsColumn.AddChild(new Label
-            {
-                Text = Loc.GetString("hardliner-fire-control-no-weapons"),
-                FontColorOverride = Color.FromHex("#c4ccd6"),
-                Margin = new Thickness(4, 12, 4, 4),
-            });
-            return;
-        }
-
-        foreach (var row in rows)
-            WeaponsColumn.AddChild(BuildWeaponPanel(row));
+        NoWeaponsLabel.Visible = rows.Count == 0;
     }
 
-    private PanelContainer BuildWeaponPanel(HardlinerTelemetryRowState row)
+    /// <summary>
+    ///     One weapon's telemetry readout. Eclipsion - built once per device address and updated in place.
+    /// </summary>
+    private sealed class WeaponPanel : PanelContainer
     {
-        var outer = new PanelContainer
+        private readonly Label _address;
+        private readonly StatusChip _grid;
+        private readonly StatusChip _arm;
+        private readonly BarRow _capacitor;
+        private readonly Label _capacitorDetail;
+        private readonly BarRow _recycle;
+        private readonly Label _magazineCount;
+        private readonly BarRow _magazine;
+
+        public WeaponPanel()
         {
-            Margin = new Thickness(0, 0, 0, 10),
-        };
-        outer.AddStyleClass("AngleRect");
+            Margin = new Thickness(0, 0, 0, 10);
+            AddStyleClass("AngleRect");
 
-        var root = new BoxContainer
+            var root = new BoxContainer
+            {
+                Orientation = BoxContainer.LayoutOrientation.Vertical,
+                Margin = new Thickness(12, 12, 12, 12),
+            };
+
+            AddChild(root);
+
+            _address = new Label
+            {
+                StyleClasses = { StyleNano.StyleClassLabelKeyText },
+                FontColorOverride = Color.FromHex("#b8f7ff"),
+            };
+            root.AddChild(_address);
+
+            var statusRow = new BoxContainer
+            {
+                Orientation = BoxContainer.LayoutOrientation.Horizontal,
+                Margin = new Thickness(0, 8, 0, 6),
+            };
+
+            _grid = new StatusChip();
+            statusRow.AddChild(_grid);
+            statusRow.AddChild(new PanelContainer { MinSize = new Vector2(8, 0) });
+
+            _arm = new StatusChip();
+            statusRow.AddChild(_arm);
+
+            root.AddChild(statusRow);
+
+            root.AddChild(SectionLabel("hardliner-fire-control-capacitor-header"));
+            _capacitor = new BarRow("#39ffc8");
+            root.AddChild(_capacitor);
+
+            _capacitorDetail = new Label
+            {
+                StyleClasses = { StyleNano.StyleClassItemStatus },
+                FontColorOverride = Color.FromHex("#c8d6df"),
+                Margin = new Thickness(0, 4, 0, 10),
+            };
+            root.AddChild(_capacitorDetail);
+
+            root.AddChild(SectionLabel("hardliner-fire-control-recycle-header"));
+            _recycle = new BarRow("#7eb8ff");
+            root.AddChild(_recycle);
+
+            root.AddChild(SectionLabel("hardliner-fire-control-magazine-header"));
+
+            _magazineCount = new Label
+            {
+                StyleClasses = { StyleNano.StyleClassLabelKeyText },
+                FontColorOverride = Color.FromHex("#e6f2ff"),
+                Margin = new Thickness(0, 2, 0, 4),
+            };
+            root.AddChild(_magazineCount);
+
+            _magazine = new BarRow("#ffcf66");
+            root.AddChild(_magazine);
+        }
+
+        public void Update(HardlinerTelemetryRowState row)
         {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            Margin = new Thickness(12, 12, 12, 12),
-        };
+            _address.SetTextIfChanged(Loc.GetString("hardliner-fire-control-address", ("address", row.DeviceAddress)));
 
-        outer.AddChild(root);
+            _grid.Update(
+                row.GridPowered ? "hardliner-fire-control-grid-online" : "hardliner-fire-control-grid-offline",
+                row.GridPowered ? "#143d28" : "#3d1414");
 
-        root.AddChild(new Label
-        {
-            Text = Loc.GetString("hardliner-fire-control-address", ("address", row.DeviceAddress)),
-            StyleClasses = { StyleNano.StyleClassLabelKeyText },
-            FontColorOverride = Color.FromHex("#b8f7ff"),
-        });
+            _arm.Update(
+                row.Armed ? "hardliner-fire-control-armed" : "hardliner-fire-control-safe",
+                row.Armed ? "#3d3014" : "#142b3d");
 
-        var statusRow = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Horizontal,
-            Margin = new Thickness(0, 8, 0, 6),
-        };
+            _capacitor.Update(row.CapacitorFraction);
 
-        statusRow.AddChild(StatusChip(
-            row.GridPowered ? "hardliner-fire-control-grid-online" : "hardliner-fire-control-grid-offline",
-            row.GridPowered ? "#143d28" : "#3d1414"));
-
-        statusRow.AddChild(new PanelContainer { MinSize = new Vector2(8, 0) });
-
-        statusRow.AddChild(StatusChip(
-            row.Armed ? "hardliner-fire-control-armed" : "hardliner-fire-control-safe",
-            row.Armed ? "#3d3014" : "#142b3d"));
-
-        root.AddChild(statusRow);
-
-        root.AddChild(SectionLabel("hardliner-fire-control-capacitor-header"));
-        root.AddChild(MakeBarRow(row.CapacitorFraction, "#39ffc8"));
-
-        root.AddChild(new Label
-        {
-            Text = Loc.GetString("hardliner-fire-control-capacitor-detail",
+            _capacitorDetail.SetTextIfChanged(Loc.GetString("hardliner-fire-control-capacitor-detail",
                 ("current", row.CapacitorJoules),
-                ("cost", row.ShotEnergyJoules)),
-            StyleClasses = { StyleNano.StyleClassItemStatus },
-            FontColorOverride = Color.FromHex("#c8d6df"),
-            Margin = new Thickness(0, 4, 0, 10),
-        });
+                ("cost", row.ShotEnergyJoules)));
 
-        root.AddChild(SectionLabel("hardliner-fire-control-recycle-header"));
-        root.AddChild(MakeBarRow(row.RecycleFraction, "#7eb8ff"));
+            _recycle.Update(row.RecycleFraction);
 
-        root.AddChild(SectionLabel("hardliner-fire-control-magazine-header"));
-
-        root.AddChild(new Label
-        {
-            Text = Loc.GetString("hardliner-fire-control-magazine-count",
+            _magazineCount.SetTextIfChanged(Loc.GetString("hardliner-fire-control-magazine-count",
                 ("current", row.ShotsRemaining),
-                ("max", row.ShotsCapacity)),
-            StyleClasses = { StyleNano.StyleClassLabelKeyText },
-            FontColorOverride = Color.FromHex("#e6f2ff"),
-            Margin = new Thickness(0, 2, 0, 4),
-        });
+                ("max", row.ShotsCapacity)));
 
-        var magFrac = row.ShotsCapacity <= 0 ? 0f : row.ShotsRemaining / (float) row.ShotsCapacity;
-        root.AddChild(MakeBarRow(magFrac, "#ffcf66"));
-
-        return outer;
+            _magazine.Update(row.ShotsCapacity <= 0 ? 0f : row.ShotsRemaining / (float) row.ShotsCapacity);
+        }
     }
 
     private static Label SectionLabel(string locId)
@@ -125,66 +152,77 @@ public sealed partial class HardlinerFireControlMenu : FancyWindow
         };
     }
 
-    private static PanelContainer StatusChip(string locId, string backdropHex)
+    private sealed class StatusChip : PanelContainer
     {
-        var panel = new PanelContainer();
-        panel.PanelOverride = new StyleBoxFlat
-        {
-            BackgroundColor = Color.FromHex(backdropHex),
-            BorderColor = Color.FromHex("#2b3540"),
-            BorderThickness = new Thickness(1),
-        };
+        private readonly StyleBoxFlat _box;
+        private readonly Label _label;
 
-        panel.AddChild(new Label
+        public StatusChip()
         {
-            Text = Loc.GetString(locId),
-            Margin = new Thickness(10, 4, 10, 4),
-            FontColorOverride = Color.FromHex("#f5fbff"),
-            StyleClasses = { StyleNano.StyleClassLabelSubText },
-        });
+            _box = new StyleBoxFlat
+            {
+                BorderColor = Color.FromHex("#2b3540"),
+                BorderThickness = new Thickness(1),
+            };
+            PanelOverride = _box;
 
-        return panel;
+            _label = new Label
+            {
+                Margin = new Thickness(10, 4, 10, 4),
+                FontColorOverride = Color.FromHex("#f5fbff"),
+                StyleClasses = { StyleNano.StyleClassLabelSubText },
+            };
+
+            AddChild(_label);
+        }
+
+        public void Update(string locId, string backdropHex)
+        {
+            _label.SetTextIfChanged(Loc.GetString(locId));
+            _box.BackgroundColor = Color.FromHex(backdropHex);
+        }
     }
 
-    private static BoxContainer MakeBarRow(float fraction, string accentHint)
+    private sealed class BarRow : BoxContainer
     {
-        fraction = Math.Clamp(fraction, 0f, 1f);
+        private readonly ProgressBar _bar;
+        private readonly Label _pct;
 
-        var row = new BoxContainer
+        public BarRow(string accentHint)
         {
-            Orientation = BoxContainer.LayoutOrientation.Horizontal,
-            HorizontalExpand = true,
-            Margin = new Thickness(0, 0, 0, 4),
-        };
+            Orientation = LayoutOrientation.Horizontal;
+            HorizontalExpand = true;
+            Margin = new Thickness(0, 0, 0, 4);
 
-        var bar = new ProgressBar
+            _bar = new ProgressBar
+            {
+                MinValue = 0,
+                MaxValue = 1,
+                HorizontalExpand = true,
+                MinHeight = 16,
+                ForegroundStyleBoxOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex(accentHint) },
+            };
+
+            _pct = new Label
+            {
+                Align = Label.AlignMode.Right,
+                FontColorOverride = Color.FromHex("#dfeaf5"),
+                StyleClasses = { StyleNano.StyleClassItemStatus },
+                MinWidth = 52,
+                Margin = new Thickness(8, 0, 0, 0),
+            };
+
+            AddChild(_bar);
+            AddChild(_pct);
+        }
+
+        public void Update(float fraction)
         {
-            MinValue = 0,
-            MaxValue = 1,
-            Value = fraction,
-            HorizontalExpand = true,
-            MinHeight = 16,
-        };
+            fraction = Math.Clamp(fraction, 0f, 1f);
 
-        bar.ForegroundStyleBoxOverride = new StyleBoxFlat
-        {
-            BackgroundColor = Color.FromHex(accentHint),
-        };
-
-        var pct = new Label
-        {
-            Text = (fraction * 100f).ToString("0", CultureInfo.InvariantCulture) + "%",
-            Align = Label.AlignMode.Right,
-            FontColorOverride = Color.FromHex("#dfeaf5"),
-            StyleClasses = { StyleNano.StyleClassItemStatus },
-            MinWidth = 52,
-            Margin = new Thickness(8, 0, 0, 0),
-        };
-
-        row.AddChild(bar);
-        row.AddChild(pct);
-
-        return row;
+            _bar.Value = fraction;
+            _pct.SetTextIfChanged((fraction * 100f).ToString("0", CultureInfo.InvariantCulture) + "%");
+        }
     }
 }
 // Ratgore End

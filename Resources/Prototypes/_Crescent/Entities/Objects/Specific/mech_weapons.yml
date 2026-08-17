@@ -604,7 +604,6 @@
   description: An Exo-portable laser gun providing rapid high-power response to spaceborne mechs and ulralight fighters. The Lumen's inbuilt vents dissipate most of the generated heat, but cannot offset the heavy battery cost of sustained fire and will struggle to penetrate ship hull.
   suffix: Mech Weapon, Gun, Combat, Autolaser
   parent: [ BaseMechWeaponRange, ScoutMechEquipment ]
-  categories: [ HideSpawnMenu ] #Lasers literally dont work so fix it
   components:
   - type: Sprite
     sprite: _Crescent/Objects/Specific/mechaweapons.rsi

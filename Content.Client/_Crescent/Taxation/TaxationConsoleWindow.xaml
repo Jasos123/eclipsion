@@ -1,19 +1,66 @@
 <controls:FancyWindow xmlns="https://spacestation14.io"
                       xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
                       SetSize="680 720"
                       MinSize="520 400">
     <BoxContainer Orientation="Vertical" Margin="10 6 10 10">
-        <Label Name="TreasuryLabel" StyleClasses="LabelKeyText" />
-        <Label Name="AccessLabel" Margin="0 2 0 6" />
-        <BoxContainer Orientation="Horizontal" VerticalAlignment="Center" Margin="0 0 0 6">
-            <Label Text="{Loc 'taxation-console-default-label'}" VerticalAlignment="Center" />
+
+        <!-- Treasury / access readout -->
+        <PanelContainer Margin="0 0 0 6">
+            <PanelContainer.PanelOverride>
+                <gfx:StyleBoxFlat BorderColor="#4d4d55" BorderThickness="2"/>
+            </PanelContainer.PanelOverride>
+
+            <BoxContainer Orientation="Horizontal" Margin="8 6">
+                <Label Text="{Loc 'taxation-console-treasury-label'}" StyleClasses="ConsoleSubHeading"/>
+                <Label Name="TreasuryLabel" StyleClasses="ConsoleHeading" Margin="8 0 0 0"/>
+                <Control HorizontalExpand="True"/>
+                <Label Name="AccessLabel" StyleClasses="ConsoleText"/>
+            </BoxContainer>
+        </PanelContainer>
+
+        <!-- Default rate -->
+        <BoxContainer Orientation="Horizontal" VerticalAlignment="Center" Margin="2 0 0 6">
+            <Label Text="{Loc 'taxation-console-default-label'}" StyleClasses="ConsoleText" VerticalAlignment="Center" />
             <LineEdit Name="DefaultRateEdit" MinWidth="90" PlaceHolder="0" VerticalAlignment="Center" Margin="6 0 2 0" />
-            <Label Text="%" VerticalAlignment="Center" Margin="0 0 6 0" />
+            <Label Text="%" StyleClasses="ConsoleText" VerticalAlignment="Center" Margin="0 0 6 0" />
             <Button Name="DefaultSetButton" Text="{Loc 'taxation-console-set'}" />
         </BoxContainer>
-        <Label Text="{Loc 'taxation-console-goods-header'}" StyleClasses="LabelKeyText" Margin="0 4 0 4" />
-        <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
-            <BoxContainer Name="GoodsContainer" Orientation="Vertical" />
-        </ScrollContainer>
+
+        <!-- Goods table -->
+        <PanelContainer VerticalExpand="True" HorizontalExpand="True">
+            <PanelContainer.PanelOverride>
+                <gfx:StyleBoxFlat BorderColor="#4d4d55" BorderThickness="2"/>
+            </PanelContainer.PanelOverride>
+
+            <BoxContainer Orientation="Vertical" Margin="6" VerticalExpand="True" HorizontalExpand="True">
+                <BoxContainer Orientation="Horizontal">
+                    <Label Text="{Loc 'taxation-console-goods-header'}" StyleClasses="ConsoleSubHeading"
+                           VerticalAlignment="Center"/>
+                    <Control HorizontalExpand="True"/>
+                    <LineEdit Name="FilterEdit" MinWidth="180"
+                              PlaceHolder="{Loc 'taxation-console-filter-placeholder'}"/>
+                </BoxContainer>
+
+                <PanelContainer StyleClasses="LowDivider" HorizontalExpand="True" SetHeight="2" Margin="0 4"/>
+
+                <!-- Column headers, kept in step with the row layout in TaxationConsoleWindow.BuildRow. -->
+                <BoxContainer Orientation="Horizontal" Margin="6 0 6 4" SeparationOverride="4">
+                    <Label Text="{Loc 'taxation-console-col-good'}" StyleClasses="LabelSecondaryColor"
+                           HorizontalExpand="True"/>
+                    <Label Text="{Loc 'taxation-console-col-price'}" StyleClasses="LabelSecondaryColor" MinWidth="110"/>
+                    <Label Text="{Loc 'taxation-console-col-rate'}" StyleClasses="LabelSecondaryColor" MinWidth="94"/>
+                    <Control MinWidth="120"/>
+                </BoxContainer>
+
+                <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
+                    <BoxContainer Name="GoodsContainer" Orientation="Vertical" SeparationOverride="2"
+                                  HorizontalExpand="True" />
+                </ScrollContainer>
+
+                <Label Name="EmptyLabel" Text="{Loc 'taxation-console-no-goods'}"
+                       StyleClasses="LabelSecondaryColor" HorizontalAlignment="Center" Margin="0 6" Visible="False"/>
+            </BoxContainer>
+        </PanelContainer>
     </BoxContainer>
 </controls:FancyWindow>

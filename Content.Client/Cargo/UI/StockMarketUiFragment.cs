@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Shared.Cargo.Cartridges;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.IoC;
 using Robust.Shared.Timing;
 
 namespace Content.Client.Cargo.UI;
@@ -11,6 +12,11 @@ public sealed partial class StockMarketUiFragment : BoxContainer
     private static readonly Color UpColor = StockPriceChart.UpColor;
     private static readonly Color DownColor = StockPriceChart.DownColor;
     private static readonly Color NeutralColor = StockPriceChart.NeutralColor;
+
+    /// <summary>Dimmer than the body text, for the explanatory lines that sit under a figure.</summary>
+    private static readonly Color HintColor = Color.FromHex("#7d848c");
+
+    private readonly IGameTiming _timing = IoCManager.Resolve<IGameTiming>();
 
     private readonly Label _balanceLabel;
     private readonly OptionButton _amountSelector;
@@ -28,6 +34,23 @@ public sealed partial class StockMarketUiFragment : BoxContainer
     private int _lastHistoryCount = -1;
     private float _toastTimer;
     private StockMarketUiState? _lastState;
+
+    /// <summary>
+    /// The written explanation of how the market works, as heading/body pairs. It exists because every
+    /// figure on the market screen is answering a different question and no amount of labelling makes
+    /// that obvious in the width of a PDA: players were reading the lifetime figure as a trend, and
+    /// concluding the whole market was random noise.
+    /// </summary>
+    private static readonly (string Title, string Body)[] GuideSections =
+    {
+        ("stock-guide-basics-title", "stock-guide-basics-body"),
+        ("stock-guide-row-title", "stock-guide-row-body"),
+        ("stock-guide-faction-title", "stock-guide-faction-body"),
+        ("stock-guide-neutral-title", "stock-guide-neutral-body"),
+        ("stock-guide-asymmetry-title", "stock-guide-asymmetry-body"),
+        ("stock-guide-persistence-title", "stock-guide-persistence-body"),
+        ("stock-guide-liquidation-title", "stock-guide-liquidation-body"),
+    };
 
     public Action<string, int>? OnBuyPressed;
     public Action<string, int>? OnSellPressed;
@@ -100,21 +123,31 @@ public sealed partial class StockMarketUiFragment : BoxContainer
             VerticalExpand = true,
         };
 
-        _marketList = MakeTab("stock-market-tab-market", 0, out var marketScroll);
-        _portfolioList = MakeTab("stock-market-tab-portfolio", 1, out var portfolioScroll);
-        _historyList = MakeTab("stock-market-tab-history", 2, out var historyScroll);
-        _newsList = MakeTab("stock-market-tab-news", 3, out var newsScroll);
+        _marketList = MakeTab(out var marketScroll);
+        _portfolioList = MakeTab(out var portfolioScroll);
+        _historyList = MakeTab(out var historyScroll);
+        _newsList = MakeTab(out var newsScroll);
+
+        // The only tab whose content is prose. It has to wrap to the panel, which means giving up
+        // horizontal scrolling; the other tabs keep it, since their rows are figures that must not
+        // be silently clipped on a narrow PDA.
+        var guideList = MakeTab(out var guideScroll, wrapContent: true);
 
         _tabs.AddChild(marketScroll);
         _tabs.AddChild(portfolioScroll);
         _tabs.AddChild(historyScroll);
         _tabs.AddChild(newsScroll);
+        _tabs.AddChild(guideScroll);
 
         _tabs.SetTabTitle(0, Loc.GetString("stock-market-tab-market"));
         _tabs.SetTabTitle(1, Loc.GetString("stock-market-tab-portfolio"));
         _tabs.SetTabTitle(2, Loc.GetString("stock-market-tab-history"));
         _tabs.SetTabTitle(3, Loc.GetString("stock-market-tab-news"));
+        _tabs.SetTabTitle(4, Loc.GetString("stock-market-tab-guide"));
         AddChild(_tabs);
+
+        // The guide never changes, so it is filled once rather than rebuilt on every price update.
+        BuildGuideTab(guideList);
 
         _toastLabel = new Label
         {
@@ -125,7 +158,7 @@ public sealed partial class StockMarketUiFragment : BoxContainer
         AddChild(_toastLabel);
     }
 
-    private static BoxContainer MakeTab(string locKey, int index, out ScrollContainer scroll)
+    private static BoxContainer MakeTab(out ScrollContainer scroll, bool wrapContent = false)
     {
         var list = new BoxContainer
         {
@@ -137,6 +170,7 @@ public sealed partial class StockMarketUiFragment : BoxContainer
         {
             HorizontalExpand = true,
             VerticalExpand = true,
+            HScrollEnabled = !wrapContent,
         };
         scroll.AddChild(list);
         return list;
@@ -236,32 +270,47 @@ public sealed partial class StockMarketUiFragment : BoxContainer
             Text = TruncateString(displayName, 20),
             HorizontalExpand = true,
             StyleClasses = { "LabelHeading" },
+            MouseFilter = MouseFilterMode.Stop,
+            ToolTip = Loc.GetString(price.Neutral
+                ? "stock-market-kind-neutral-tooltip"
+                : "stock-market-kind-faction-tooltip"),
         });
 
-        var trendColor = price.PriceChange > 0 ? UpColor
-            : price.PriceChange < 0 ? DownColor
-            : NeutralColor;
-
-        var changeText = price.PriceChange >= 0 ? "▲" : "▼";
         infoRow.AddChild(new Label
         {
-            Text = $"{price.CurrentPrice:F0}cr {changeText}{Math.Abs(price.PriceChange * 100):F1}%",
+            Text = Loc.GetString("stock-market-price-now", ("price", $"{price.CurrentPrice:F0}")),
             HorizontalAlignment = HAlignment.Right,
-            FontColorOverride = trendColor,
+            MouseFilter = MouseFilterMode.Stop,
+            ToolTip = Loc.GetString("stock-market-price-now-tooltip"),
         });
         container.AddChild(infoRow);
 
-        if (price.PriceHistory is { Count: > 1 })
+        // Worked out once and then used for both the chart line and the figure printed under it, so the
+        // picture and the number can never disagree about which way the price is going.
+        var trend = RecentTrend(price.PriceHistory, StockMarketTrading.TrendTicks);
+
+        if (price.PriceHistory is { Count: > 1 } history)
         {
             var chart = new StockPriceChart
             {
                 HorizontalExpand = true,
                 MinHeight = 42,
                 Margin = new Thickness(0, 2),
+                MouseFilter = MouseFilterMode.Stop,
+                ToolTip = Loc.GetString("stock-market-chart-tooltip",
+                    ("minutes", Math.Max(1, (int) MathF.Round(history.Count * StockMarketTrading.TickSeconds / 60f))),
+                    ("open", $"{price.BasePrice:F0}")),
             };
-            chart.SetData(price.PriceHistory, (float) price.BasePrice);
+            chart.SetData(history, (float) price.BasePrice, trend is { } t ? ChangeColor(t.Change) : null);
             container.AddChild(chart);
         }
+
+        container.AddChild(CreateTrendRow(price, trend));
+
+        // Only shown when something is actually running. A permanently visible "nothing incoming" line
+        // would train people to stop reading the one row that tells them a move is already locked in.
+        if (MathF.Abs(price.PendingShift) > 0.0005f && price.PendingTicks > 0)
+            container.AddChild(CreatePendingRow(price));
 
         var actionRow = new BoxContainer
         {
@@ -269,9 +318,15 @@ public sealed partial class StockMarketUiFragment : BoxContainer
             HorizontalExpand = true,
         };
 
+        var ownedText = owned > 0
+            ? Loc.GetString("stock-market-owned-worth",
+                ("shares", owned),
+                ("value", $"{owned * price.CurrentPrice:F0}"))
+            : Loc.GetString("stock-market-owned") + ": 0";
+
         actionRow.AddChild(new Label
         {
-            Text = Loc.GetString("stock-market-owned") + $": {owned}",
+            Text = ownedText,
             HorizontalExpand = true,
             VerticalAlignment = VAlignment.Center,
         });
@@ -294,7 +349,9 @@ public sealed partial class StockMarketUiFragment : BoxContainer
             Text = Loc.GetString("stock-market-sell-btn"),
             MinWidth = 50,
             Disabled = sellAmount <= 0 || owned < sellAmount,
-            ToolTip = $"x{sellAmount} = {proceeds:F0}cr",
+            ToolTip = Loc.GetString("stock-market-sell-tooltip",
+                ("amount", sellAmount),
+                ("total", $"{proceeds:F0}")),
         };
         var sellCapture = sellAmount;
         sellButton.OnPressed += _ => OnSellPressed?.Invoke(id, sellCapture);
@@ -305,7 +362,9 @@ public sealed partial class StockMarketUiFragment : BoxContainer
             Text = Loc.GetString("stock-market-buy-btn"),
             MinWidth = 50,
             Disabled = buyAmount <= 0 || (state.Balance is { } bal && bal < cost),
-            ToolTip = $"x{buyAmount} = {cost:F0}cr",
+            ToolTip = Loc.GetString("stock-market-buy-tooltip",
+                ("amount", buyAmount),
+                ("total", $"{cost:F0}")),
         };
         var buyCapture = buyAmount;
         buyButton.OnPressed += _ => OnBuyPressed?.Invoke(id, buyCapture);
@@ -322,6 +381,71 @@ public sealed partial class StockMarketUiFragment : BoxContainer
         });
 
         return container;
+    }
+
+    /// <summary>
+    /// The two figures players kept confusing for each other, now side by side and named.
+    ///
+    /// On the left is the trend: how the price has moved recently, which is what someone deciding
+    /// whether to buy actually wants. On the right is the lifetime figure against the company's opening
+    /// price, which never resets — that is the one that used to carry the arrow, so a share that was
+    /// climbing all shift still displayed a red ▼ and looked broken.
+    /// </summary>
+    private static Control CreateTrendRow(StockPriceData price, (float Change, int Ticks)? trend)
+    {
+        var row = new BoxContainer
+        {
+            Orientation = LayoutOrientation.Horizontal,
+            HorizontalExpand = true,
+        };
+
+        // Quoted over however much history there actually is, not over the window that was asked for.
+        // A market that has only been running two minutes must not label a two-minute move "5m".
+        var window = FormatDuration(
+            (trend?.Ticks ?? StockMarketTrading.TrendTicks) * StockMarketTrading.TickSeconds);
+
+        row.AddChild(new Label
+        {
+            Text = trend is { } value
+                ? Loc.GetString("stock-market-trend-row", ("window", window), ("change", SignedPercent(value.Change)))
+                : Loc.GetString("stock-market-trend-row-unknown", ("window", window)),
+            HorizontalExpand = true,
+            FontColorOverride = trend is { } t ? ChangeColor(t.Change) : NeutralColor,
+            MouseFilter = MouseFilterMode.Stop,
+            ToolTip = Loc.GetString("stock-market-trend-tooltip", ("window", window)),
+        });
+
+        row.AddChild(new Label
+        {
+            Text = Loc.GetString("stock-market-vs-open-row", ("change", SignedPercent(price.PriceChange))),
+            HorizontalAlignment = HAlignment.Right,
+            FontColorOverride = ChangeColor(price.PriceChange),
+            MouseFilter = MouseFilterMode.Stop,
+            ToolTip = Loc.GetString("stock-market-vs-open-tooltip", ("open", $"{price.BasePrice:F0}")),
+        });
+
+        return row;
+    }
+
+    /// <summary>
+    /// Movement the round has already bought and paid for but that has not finished arriving. This is
+    /// the answer to "how much will it keep going down, and for how long" — it is not a prediction, and
+    /// nothing a trader does will call it off.
+    /// </summary>
+    private static Control CreatePendingRow(StockPriceData price)
+    {
+        var remaining = price.PendingTicks * StockMarketTrading.TickSeconds;
+
+        return new Label
+        {
+            Text = Loc.GetString("stock-market-pending-row",
+                ("change", SignedPercent(price.PendingShift)),
+                ("time", FormatDuration(remaining))),
+            HorizontalExpand = true,
+            FontColorOverride = ChangeColor(price.PendingShift),
+            MouseFilter = MouseFilterMode.Stop,
+            ToolTip = Loc.GetString("stock-market-pending-tooltip"),
+        };
     }
 
     private void UpdatePortfolioTab(StockMarketUiState state)
@@ -383,6 +507,10 @@ public sealed partial class StockMarketUiFragment : BoxContainer
             {
                 Text = valueText,
                 HorizontalAlignment = HAlignment.Right,
+                MouseFilter = MouseFilterMode.Stop,
+                ToolTip = state.Prices.ContainsKey(id)
+                    ? null
+                    : Loc.GetString("stock-market-delisted-tooltip"),
             });
 
             _portfolioList.AddChild(row);
@@ -436,6 +564,10 @@ public sealed partial class StockMarketUiFragment : BoxContainer
     /// <summary>
     /// The feed that tells a trader *why* a price moved. Without it the faction stocks look like
     /// random noise, when in fact they only ever move because of something that happened in the round.
+    ///
+    /// Each entry carries the size of the move and how long ago it landed, because "DSM treasury
+    /// draining" on its own does not tell anyone whether to sell — the same headline is worth 0.1% or
+    /// 4% depending on what caused it.
     /// </summary>
     private void UpdateNewsTab(StockMarketUiState state)
     {
@@ -452,32 +584,140 @@ public sealed partial class StockMarketUiFragment : BoxContainer
             return;
         }
 
+        _newsList.AddChild(new Label
+        {
+            Text = Loc.GetString("stock-market-news-header"),
+            FontColorOverride = HintColor,
+            Margin = new Thickness(0, 0, 0, 4),
+        });
+
         for (var i = state.News.Count - 1; i >= 0; i--)
         {
             var entry = state.News[i];
 
-            var row = new BoxContainer
+            var block = new BoxContainer
             {
-                Orientation = LayoutOrientation.Horizontal,
+                Orientation = LayoutOrientation.Vertical,
                 HorizontalExpand = true,
                 Margin = new Thickness(0, 1),
             };
 
-            row.AddChild(new Label
+            var titleRow = new BoxContainer
             {
-                Text = $"{(entry.Positive ? "▲" : "▼")} {TruncateString(Loc.GetString(entry.CompanyId), 16)}",
-                FontColorOverride = entry.Positive ? UpColor : DownColor,
-                MinWidth = 110,
-            });
-
-            row.AddChild(new Label
-            {
-                Text = entry.Reason,
+                Orientation = LayoutOrientation.Horizontal,
                 HorizontalExpand = true,
+            };
+
+            titleRow.AddChild(new Label
+            {
+                Text = $"{(entry.Positive ? "▲" : "▼")} {TruncateString(Loc.GetString(entry.CompanyId), 18)}",
+                HorizontalExpand = true,
+                FontColorOverride = entry.Positive ? UpColor : DownColor,
             });
 
-            _newsList.AddChild(row);
+            // A magnitude of zero means the entry predates this field or came from an admin command,
+            // in which case quoting "0.0%" would be a worse lie than saying nothing.
+            if (MathF.Abs(entry.Magnitude) > 0.00005f)
+            {
+                titleRow.AddChild(new Label
+                {
+                    Text = SignedPercent(entry.Magnitude),
+                    HorizontalAlignment = HAlignment.Right,
+                    FontColorOverride = ChangeColor(entry.Magnitude),
+                });
+            }
+
+            block.AddChild(titleRow);
+
+            block.AddChild(new Label
+            {
+                Text = Loc.GetString("stock-market-news-detail",
+                    ("reason", entry.Reason),
+                    ("ago", FormatAgo(entry.Time))),
+                FontColorOverride = HintColor,
+                Margin = new Thickness(10, 0, 0, 2),
+            });
+
+            _newsList.AddChild(block);
         }
+    }
+
+    private static void BuildGuideTab(BoxContainer list)
+    {
+        foreach (var (titleKey, bodyKey) in GuideSections)
+        {
+            list.AddChild(new Label
+            {
+                Text = Loc.GetString(titleKey),
+                StyleClasses = { "LabelHeading" },
+                Margin = new Thickness(0, 6, 0, 2),
+            });
+
+            var body = new RichTextLabel
+            {
+                HorizontalExpand = true,
+                Margin = new Thickness(0, 0, 0, 2),
+            };
+
+            // Plain text rather than markup: these strings are long, translated, and full of the "%"
+            // and bracket characters that the markup parser throws on.
+            body.SetMessage(Loc.GetString(bodyKey));
+            list.AddChild(body);
+        }
+    }
+
+    /// <summary>
+    /// How the price has actually moved lately, which is what people mean by "trend".
+    ///
+    /// Deliberately not <see cref="StockPriceData.PriceChange"/>: that measures the price against what
+    /// the company opened at and never resets, so a share can be climbing hard and still read negative.
+    ///
+    /// Returns the ticks it actually managed to span alongside the change, so the caller can label the
+    /// figure with the window it really covers rather than the one it asked for.
+    /// </summary>
+    private static (float Change, int Ticks)? RecentTrend(IReadOnlyList<float>? history, int ticks)
+    {
+        if (history is not { Count: > 1 })
+            return null;
+
+        var span = Math.Min(ticks, history.Count - 1);
+        var from = history[history.Count - 1 - span];
+        if (from <= 0f)
+            return null;
+
+        return ((history[^1] - from) / from, span);
+    }
+
+    private static Color ChangeColor(float change)
+    {
+        return change > 0.00005f ? UpColor
+            : change < -0.00005f ? DownColor
+            : NeutralColor;
+    }
+
+    private static string SignedPercent(float change)
+    {
+        var arrow = change > 0.00005f ? "▲" : change < -0.00005f ? "▼" : "";
+        return $"{arrow}{MathF.Abs(change) * 100:F1}%";
+    }
+
+    private static string FormatDuration(float seconds)
+    {
+        if (seconds < 60f)
+            return Loc.GetString("stock-market-duration-seconds", ("value", Math.Max(1, (int) MathF.Round(seconds))));
+
+        return Loc.GetString("stock-market-duration-minutes", ("value", Math.Max(1, (int) MathF.Round(seconds / 60f))));
+    }
+
+    private string FormatAgo(TimeSpan when)
+    {
+        // Server and client clocks are close but not identical, and a news entry that arrives a frame
+        // early would otherwise read as having happened in the future.
+        var elapsed = _timing.CurTime - when;
+        if (elapsed < TimeSpan.Zero)
+            elapsed = TimeSpan.Zero;
+
+        return FormatDuration((float) elapsed.TotalSeconds);
     }
 
     private static string TruncateString(string str, int maxLength)

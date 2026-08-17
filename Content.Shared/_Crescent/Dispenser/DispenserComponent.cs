@@ -46,8 +46,15 @@ public sealed partial class DispenserComponent : Component
     // Yoinked from: https://github.com/discordia-space/CEV-Eris/blob/35bbad6764b14e15c03a816e3e89aa1751660ba9/sound/machines/Custom_deny.ogg
     public SoundSpecifier DenySound = new SoundPathSpecifier("/Audio/Machines/custom_deny.ogg");  
   
-    public bool Dispensing;  
-    public string DispensingItemId;  
-    public float DispenseTimer;  
-    public int PendingDynamicAmount = 0;  
+    public bool Dispensing;
+    public string DispensingItemId;
+    public float DispenseTimer;
+    public int PendingDynamicAmount = 0;
+
+    /// <summary>
+    /// Text written onto the next item this dispenser spawns, when that item is a printout.
+    /// Queued at interaction time and consumed once the dispense timer elapses, so a printing
+    /// machine runs through the same animation and cooldown as any other dispense.
+    /// </summary>
+    public string? PendingPrintout;
 }

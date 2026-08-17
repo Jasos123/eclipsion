@@ -27,8 +27,8 @@
         Heat: 20
         Caustic: 5
   - type: ClothingSpeedModifier
-    walkModifier: 1
-    sprintModifier: 1
+    walkModifier: 0.90
+    sprintModifier: 0.90
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitDraugr
   - type: StaticPrice
@@ -70,8 +70,8 @@
         Heat: 55
         Caustic: 25
   - type: ClothingSpeedModifier
-    walkModifier: 1
-    sprintModifier: 1
+    walkModifier: 0.90
+    sprintModifier: 0.90
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitArabet
   - type: StaticPrice
@@ -107,8 +107,8 @@
         Heat: 30
         Caustic: 25
   - type: ClothingSpeedModifier
-    walkModifier: 1
-    sprintModifier: 1
+    walkModifier: 0.90
+    sprintModifier: 0.90
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitIzdari
   - type: StaticPrice
@@ -151,8 +151,8 @@
         Caustic: 25
         Radiation: 35
   - type: ClothingSpeedModifier
-    walkModifier: 1
-    sprintModifier: 1
+    walkModifier: 0.90
+    sprintModifier: 0.90
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitThukker
   - type: StaticPrice

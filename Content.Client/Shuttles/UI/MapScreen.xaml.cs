@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Client._KS14.UI; // KS14
 using System.Numerics;
 using Content.Client.Shuttles.Systems;
 using Content.Shared.Shuttles.BUIStates;
@@ -97,6 +98,9 @@ public sealed partial class MapScreen : BoxContainer
         {
             MapRadar.ShowBeacons = args.Pressed;
         };
+
+        // KS14: instrument look (cosmetic only - see KsInstrumentDressing).
+        KsInstrumentDressing.Apply(this, KsInstrumentPalette.Map);
     }
 
     public void UpdateState(ShuttleMapInterfaceState state)

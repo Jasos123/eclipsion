@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Client._KS14.UI; // KS14
 using System.Numerics;
 using System.Text;
 using Content.Shared.Shuttles.BUIStates;
@@ -45,6 +46,9 @@ public sealed partial class DockingScreen : BoxContainer
         {
             UndockRequest?.Invoke(entity);
         };
+
+        // KS14: instrument look (cosmetic only - see KsInstrumentDressing).
+        KsInstrumentDressing.Apply(this, KsInstrumentPalette.Map);
     }
 
     private void OnView(NetEntity obj)

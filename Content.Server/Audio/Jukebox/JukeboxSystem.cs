@@ -47,7 +47,7 @@ public sealed class JukeboxSystem : SharedJukeboxSystem
     /// </summary>
     private static AudioParams GetAudioParams(JukeboxComponent component)
     {
-        return AudioParams.Default.WithMaxDistance(10f).WithVolume(component.Volume);
+        return AudioParams.Default.WithMaxDistance(component.Range).WithVolume(component.Volume);
     }
 
     private void OnComponentInit(EntityUid uid, JukeboxComponent component, ComponentInit args)

@@ -39,3 +39,12 @@ payment-console-member-unpayable = That member can't be paid right now — they 
 
 payment-console-bonus-cooldown = Disbursement authoriser busy. { $seconds }s until the next payment.
 payment-console-bonus-limit = Refused: this would exceed your { $percent }% share of the treasury for this round.
+
+# Filtering and disabled-control explanations
+payment-console-filter-placeholder = Filter by name or role...
+payment-console-no-matches = No members match that filter.
+payment-console-payroll-over-tooltip = Committed salaries exceed the treasury balance — payments will start failing.
+payment-console-no-salary-tooltip = This member has no salary set, so there is nothing to clear.
+payment-console-not-payable-tooltip = A bonus can only be paid to a member who is on duty.
+payment-console-status-stale-tooltip = Still on the payroll but no longer in the faction — clear their salary to prune them.
+payment-console-status-unpayable-tooltip = Disconnected, so they are earning nothing right now.

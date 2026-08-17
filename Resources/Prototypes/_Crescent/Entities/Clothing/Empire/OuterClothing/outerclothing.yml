@@ -27,8 +27,8 @@
         Heat: 15
         Caustic: 25
   - type: ClothingSpeedModifier
-    walkModifier: 1
-    sprintModifier: 1
+    walkModifier: 0.90
+    sprintModifier: 0.90
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitImperialWorker
   - type: StaticPrice
@@ -169,8 +169,8 @@
         Heat: 30
         Caustic: 25
   - type: ClothingSpeedModifier
-    walkModifier: 1
-    sprintModifier: 1
+    walkModifier: 0.90
+    sprintModifier: 0.90
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitClarize
   - type: StaticPrice
@@ -211,8 +211,8 @@
         Heat: 20
         Caustic: 25
   - type: ClothingSpeedModifier
-    walkModifier: 1
-    sprintModifier: 1
+    walkModifier: 0.90
+    sprintModifier: 0.90
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitImperialCommand
   - type: StaticPrice
@@ -386,8 +386,8 @@
         Heat: 25
         Caustic: 25
   - type: ClothingSpeedModifier
-    walkModifier: 0.85
-    sprintModifier: 0.85
+    walkModifier: 0.95
+    sprintModifier: 0.95
   - type: ExplosionResistance
     damageCoefficient: 0.90
   - type: AllowSuitStorage
@@ -424,8 +424,8 @@
         Heat: 25
         Caustic: 25
   - type: ClothingSpeedModifier
-    walkModifier: 0.85
-    sprintModifier: 0.85
+    walkModifier: 0.95
+    sprintModifier: 0.95
   - type: ExplosionResistance
     damageCoefficient: 0.80
   - type: StaticPrice
@@ -461,8 +461,8 @@
         Heat: 25
         Caustic: 25
   - type: ClothingSpeedModifier
-    walkModifier: 0.90
-    sprintModifier: 0.90
+    walkModifier: 0.95
+    sprintModifier: 0.95
   - type: ExplosionResistance
     damageCoefficient: 0.80
   - type: StaticPrice
@@ -682,8 +682,8 @@
         Heat: 20
         Caustic: 25
   - type: ClothingSpeedModifier
-    walkModifier: 1
-    sprintModifier: 1
+    walkModifier: 0.90
+    sprintModifier: 0.90
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetImperialRitter
   - type: StaticPrice
@@ -723,8 +723,8 @@
         Heat: 25
         Caustic: 25
   - type: ClothingSpeedModifier
-    walkModifier: 1
-    sprintModifier: 1
+    walkModifier: 0.90
+    sprintModifier: 0.90
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitImperialNullweavePsion
   - type: StaticPrice

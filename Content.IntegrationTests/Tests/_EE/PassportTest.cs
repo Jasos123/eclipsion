@@ -8,8 +8,13 @@ namespace Content.IntegrationTests.Tests._EE;
 [TestOf(typeof(PassportComponent))]
 public sealed class PassportTest
 {
+    /// <summary>
+    /// The forgery minigame rests on a single invariant: the editor rewrites what a passport
+    /// reads but can never reach the issuer's record, so a checker printout still shows the
+    /// identity the document was issued with and the discrepancy stays findable by hand.
+    /// </summary>
     [Test]
-    public async Task NoOpSaveDoesNotMarkPassportAsTampered()
+    public async Task EditingPassportLeavesIssuerRecordIntact()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -35,10 +40,26 @@ public sealed class PassportTest
             component.PassportId = "ABCDE-FGHIJ-KLMNO";
             component.IssueYear = 2450;
             component.ExpirationYear = 2455;
+            component.Record = new PassportRecord
+            {
+                FullName = component.FullName,
+                Age = component.Age,
+                Species = component.Species,
+                Sex = component.Sex,
+                HeightCm = component.HeightCm,
+                SkinColor = component.SkinColor,
+                EyeColor = component.EyeColor,
+                Nationality = component.Nationality,
+                PassportId = component.PassportId,
+                IssueYear = component.IssueYear,
+                ExpirationYear = component.ExpirationYear,
+            };
 
             var noOpSave = CreateSaveMessage(component, actor);
             entMan.EventBus.RaiseLocalEvent(passport, noOpSave);
-            Assert.That(component.Tampered, Is.False);
+
+            Assert.That(component.Record, Is.Not.Null);
+            Assert.That(component.Record!.FullName, Is.EqualTo("Test Person"));
 
             var changedSave = new PassportSaveMessage(
                 "Changed Person",
@@ -50,14 +71,24 @@ public sealed class PassportTest
                 component.EyeColor,
                 component.Nationality,
                 component.Religion,
-                component.PassportId,
+                "ZZZZZ-YYYYY-XXXXX",
                 component.IssueYear,
                 component.ExpirationYear)
             {
                 Actor = actor,
             };
             entMan.EventBus.RaiseLocalEvent(passport, changedSave);
-            Assert.That(component.Tampered, Is.True);
+
+            Assert.Multiple(() =>
+            {
+                // What the document reads follows the forger.
+                Assert.That(component.FullName, Is.EqualTo("Changed Person"));
+                Assert.That(component.PassportId, Is.EqualTo("ZZZZZ-YYYYY-XXXXX"));
+
+                // What the registry holds does not, which is what the printout exposes.
+                Assert.That(component.Record!.FullName, Is.EqualTo("Test Person"));
+                Assert.That(component.Record.PassportId, Is.EqualTo("ABCDE-FGHIJ-KLMNO"));
+            });
         });
 
         await pair.CleanReturnAsync();

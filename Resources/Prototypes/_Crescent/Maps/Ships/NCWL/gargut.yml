@@ -32,4 +32,4 @@
           designation: vessel-designation-cruiser
         - type: StationJobs
           overflowJobs: []
-          availableJobs: {} # Encore - drone cruiser, no crew roles spawn here
+          availableJobs: {} # Eclipsion - drone cruiser, no crew roles spawn here

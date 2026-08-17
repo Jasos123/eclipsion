@@ -59,7 +59,19 @@ public sealed class PointCannonSystem : EntitySystem
     private readonly Dictionary<EntityUid, GridCannonCacheComponent> _dirtyGridScratch = new();
     private static readonly TimeSpan RelinkDebounce = TimeSpan.FromSeconds(2);
 
-    private int CannonCheckRange = 25;
+    /// <summary>
+    ///     How long a fire order stands before it lapses on its own. Two and a half of the console's 100ms
+    ///     message intervals: long enough that a dropped message does not stutter the guns, short enough that
+    ///     a client which stops sending for any reason silences them almost at once.
+    /// </summary>
+    private static readonly TimeSpan FireOrderLifetime = TimeSpan.FromMilliseconds(250);
+
+    /// <summary>
+    ///     Clearance radius, in tiles, that a cannon's obstruction arcs are measured over. Public because
+    ///     anything that measures a gun itself (the ship AI's arc solver) has to use the same figure, or a
+    ///     console-linked gun and an AI-measured one on the same hull disagree about which lanes are blocked.
+    /// </summary>
+    public const int CannonCheckRange = 25;
     private HashSet<EntityUid> QueuedGrids = new();
 
     private readonly record struct PendingRelink(TimeSpan Due, bool Full);
@@ -87,6 +99,7 @@ public sealed class PointCannonSystem : EntitySystem
         SubscribeLocalEvent<TargetingConsoleComponent, BoundUIOpenedEvent>(OnConsoleOpened);
         SubscribeLocalEvent<TargetingConsoleComponent, BoundUIClosedEvent>(OnConsoleClosed);
         SubscribeLocalEvent<TargetingConsoleComponent, TargetingConsoleFireMessage>(OnConsoleFire);
+        SubscribeLocalEvent<TargetingConsoleComponent, TargetingConsoleStopFireMessage>(OnConsoleStopFire);
         SubscribeLocalEvent<TargetingConsoleComponent, TargetingConsoleGroupChangedMessage>(OnConsoleGroupChanged);
         SubscribeLocalEvent<TargetingConsoleComponent, FireControlConsoleRefreshServerMessage>(OnRefreshServer);
         SubscribeLocalEvent<TargetingConsoleComponent, ComponentRemove>(OnConsoleDelete);
@@ -259,6 +272,10 @@ public sealed class PointCannonSystem : EntitySystem
 
         ProcessPendingRelinks();
 
+        // Every tick, deliberately: this is what lets a gun keep its own burst rate instead of inheriting the
+        // console's message rate. It must sit above the UI throttle below, which returns early.
+        ProcessSustainedFire();
+
         _accumulatedFrameTime += frameTime;
         float targetTime = _uiTps > 0 ? 1.0f / _uiTps : 1.0f;
         if (_accumulatedFrameTime < targetTime)
@@ -388,6 +405,20 @@ public sealed class PointCannonSystem : EntitySystem
         if (gridUid is not null && _gridCacheQuery.TryGetComponent(gridUid.Value, out var cache))
             cache.Dirty = true;
 
+        // A cannon is only ever measured on the tick it gets linked, so arcs describe the hull as it was when
+        // the console first picked the gun up. Walls come and go - a breach opens a lane the arcs still call
+        // blocked, a rebuilt section leaves one they still call clear, and a gun firing down a lane it thinks
+        // is clear puts the shot through its own ship. Refresh is the one place the player can say "the hull
+        // changed", so re-measure everything aboard rather than only re-deriving the links.
+        if (gridUid is not null)
+        {
+            foreach (var cannonUid in GetGridCannons(gridUid.Value))
+            {
+                if (IsCannonMounted(cannonUid))
+                    RefreshFiringRanges(cannonUid, range: CannonCheckRange);
+            }
+        }
+
         QueueConsoleRelink(console, full: true, immediate: true);
     }
 
@@ -414,6 +445,7 @@ public sealed class PointCannonSystem : EntitySystem
         UnlinkAllCannonsFromConsole(console, comp);
         comp.CurrentGroup.Clear();
         comp.ActiveGroups.Clear();
+        comp.FireOrderExpiry = TimeSpan.Zero;
         _activeConsoles.Remove(console);
         _pendingRelinks.Remove(console);
     }
@@ -494,6 +526,8 @@ public sealed class PointCannonSystem : EntitySystem
         if (_uiSys.IsUiOpen(uid.Owner, TargetingConsoleUiKey.Key))
             return;
 
+        // Nobody is driving it any more, so drop the standing order rather than letting it run out its expiry.
+        uid.Comp.FireOrderExpiry = TimeSpan.Zero;
         _activeConsoles.Remove(uid.Owner);
         _pendingRelinks.Remove(uid.Owner);
     }
@@ -527,6 +561,13 @@ public sealed class PointCannonSystem : EntitySystem
         {
             if (cannonComponent.LinkedConsoleId is null)
                 cannonComponent.LinkedConsoleId = consoleUid;
+
+            // Relinking an already-grouped cannon takes this path, so it is the only chance a gun that
+            // somehow never got measured has to pick up its arcs. An empty list reads as "nothing is in the
+            // way" and lets the gun fire straight through the hull, so never leave one that way.
+            if (cannonComponent.ObstructedRanges.Count == 0)
+                RefreshFiringRanges(cannonUid, null, null, cannonComponent, CannonCheckRange);
+
             return;
         }
 
@@ -619,10 +660,46 @@ public sealed class PointCannonSystem : EntitySystem
         _uiSys.SetUiState(uid, TargetingConsoleUiKey.Key, consoleState);
     }
 
+    /// <summary>
+    ///     Crescent - a fire message renews the standing order rather than firing on the spot.
+    /// </summary>
+    /// <remarks>
+    ///     Firing directly off the message capped every console-driven gun at the console's own message rate of
+    ///     ten rounds a second: <c>AttemptShoot</c> measures its cadence against how long it has been since the
+    ///     gun last fired, and a hundred milliseconds is longer than the interval of anything quicker than 10/s,
+    ///     so it re-based the clock to now and handed back exactly one shot every time. A 16/s burst lost a third
+    ///     of its rate and a 24/s one lost well over half, permanently, with no way to catch up.
+    /// </remarks>
     private void OnConsoleFire(EntityUid uid, TargetingConsoleComponent console, TargetingConsoleFireMessage ev)
+    {
+        console.FireCoordinates = ev.Coordinates;
+        console.FireOrderExpiry = _timing.CurTime + FireOrderLifetime;
+    }
+
+    private void OnConsoleStopFire(EntityUid uid, TargetingConsoleComponent console, TargetingConsoleStopFireMessage ev)
+    {
+        console.FireOrderExpiry = TimeSpan.Zero;
+    }
+
+    /// <summary>
+    ///     Crescent - applies every console's standing fire order, once per tick.
+    /// </summary>
+    private void ProcessSustainedFire()
     {
         var now = _timing.CurTime;
 
+        var query = EntityQueryEnumerator<TargetingConsoleComponent>();
+        while (query.MoveNext(out var uid, out var console))
+        {
+            if (console.FireOrderExpiry <= now || console.CurrentGroup.Count == 0)
+                continue;
+
+            FireGroup(uid, console, console.FireCoordinates, now);
+        }
+    }
+
+    private void FireGroup(EntityUid uid, TargetingConsoleComponent console, Vector2 coordinates, TimeSpan now)
+    {
         for (int i = 0; i < console.CurrentGroup.Count;)
         {
             EntityUid cannonUid = console.CurrentGroup[i];
@@ -642,7 +719,7 @@ public sealed class PointCannonSystem : EntitySystem
                 }
             }
 
-            if (TryFireCannon(cannonUid, ev.Coordinates))
+            if (TryFireCannon(cannonUid, coordinates))
             {
                 if (cooldown != null)
                     cooldown.NextFire = now + TimeSpan.FromSeconds(cooldown.FireCooldown);
@@ -699,26 +776,63 @@ public sealed class PointCannonSystem : EntitySystem
         if (form.MapUid == null || !_gunSys.CanShoot(gun))
             return false;
 
-        if (!_anchorQuery.TryGetComponent(uid, out var anchorComp) || anchorComp.anchoredTo is null)
+        if (!CanCannonFire(uid, out var hardpoint))
+            return false;
+
+        var entPos = new EntityCoordinates(uid, new Vector2(0, -1));
+        var swings = !_fixedMountQuery.HasComponent(hardpoint);
+
+        // The bearing the shot would actually leave along: a turret swings onto the target, while a fixed mount
+        // never moves and fires down the axis it is already welded to.
+        var bearing = form.LocalRotation;
+        Angle targetRot = default;
+
+        if (swings)
+        {
+            Vector2 cannonPos = _formSys.GetWorldPosition(form);
+            targetRot = Angle.FromWorldVec(pos - cannonPos);
+
+            // Taking the parent's rotation off is exactly what SetWorldRotation does, so this is the local
+            // rotation the cannon would land on - worked out without having to move it there to find out.
+            bearing = targetRot - (_formSys.GetWorldRotation(form) - form.LocalRotation);
+        }
+
+        // Tested before the swing rather than after it. Rotating first and letting the check refuse the shot
+        // afterwards left the gun parked in the arc it was refused on, and the console repeats the same order ten
+        // times a second, so it stayed there: a turret visibly stuck facing its own hull instead of holding the
+        // last bearing it could actually shoot from.
+        if (!SafetyCheck(bearing - Math.PI / 2, cannon))
+            return false;
+
+        if (swings)
+        {
+            _formSys.SetWorldRotation(uid, targetRot);
+            entPos = new EntityCoordinates(form.MapUid.Value, pos);
+        }
+
+        _gunSys.AttemptShoot(uid, uid, gun, entPos);
+        return true;
+    }
+
+    /// <summary>
+    ///     Crescent - the standing conditions <see cref="TryFireCannon"/> needs before a gun will fire at all:
+    ///     mounted on a hardpoint, and that hardpoint powered while ship power draw is on. Deliberately leaves out
+    ///     the transient ones (cooldown, having a map) so that anything reasoning about what a hull can bring to
+    ///     bear - the ship AI's arc solver - counts exactly the guns this system will actually shoot.
+    /// </summary>
+    public bool CanCannonFire(EntityUid cannonUid, out EntityUid hardpoint)
+    {
+        hardpoint = default;
+
+        if (!_anchorQuery.TryGetComponent(cannonUid, out var anchorComp) || anchorComp.anchoredTo is not { } mount)
             return false;
 
         // The hardpoint must not reintroduce a power requirement while ship-weapon power is opted out.
         if (_shipPowerDrawEnabled &&
-            (!_powerQuery.TryGetComponent(anchorComp.anchoredTo.Value, out var powerComp) || !powerComp.Powered))
+            (!_powerQuery.TryGetComponent(mount, out var powerComp) || !powerComp.Powered))
             return false;
 
-        var entPos = new EntityCoordinates(uid, new Vector2(0, -1));
-        if (!_fixedMountQuery.HasComponent(anchorComp.anchoredTo.Value))
-        {
-            Vector2 cannonPos = _formSys.GetWorldPosition(form);
-            _formSys.SetWorldRotation(uid, Angle.FromWorldVec(pos - cannonPos));
-            entPos = new EntityCoordinates(form.MapUid.Value, pos);
-        }
-
-        if (!SafetyCheck(form.LocalRotation - Math.PI / 2, cannon))
-            return false;
-
-        _gunSys.AttemptShoot(uid, uid, gun, entPos);
+        hardpoint = mount;
         return true;
     }
 

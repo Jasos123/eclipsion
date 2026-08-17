@@ -3,7 +3,6 @@
     xmlns:humanoid="clr-namespace:Content.Client.Humanoid"
     xmlns:prefUi="clr-namespace:Content.Client.Lobby.UI"
     xmlns:ui="clr-namespace:Content.Client.UserInterface.Controls"
-    xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     HorizontalExpand="True">
     <!-- Left side -->
     <BoxContainer Orientation="Vertical" Margin="10 10 10 10" HorizontalExpand="True">
@@ -183,6 +182,10 @@
                 <ScrollContainer HorizontalExpand="True" HScrollEnabled="True" VerticalExpand="True" VScrollEnabled="True">
                     <BoxContainer HorizontalExpand="True" Orientation="Vertical">
                         <OptionButton Name="PreferenceUnavailableButton" StyleClasses="OpenRight" />
+                        <LineEdit Name="JobSearchBar"
+                                  HorizontalExpand="True"
+                                  Margin="0 4 0 4"
+                                  PlaceHolder="{Loc 'humanoid-profile-editor-job-search-placeholder'}" />
                         <BoxContainer Name="JobList" Orientation="Vertical" />
                     </BoxContainer>
                 </ScrollContainer>
@@ -215,7 +218,7 @@
                         StyleClasses="OpenLeft" />
                 </BoxContainer>
 
-                <ui:NeoTabContainer Name="TraitsTabs" VerticalExpand="True" SeparatorMargin="0" />
+                <ui:NeoTabContainer Name="TraitsTabs" VerticalExpand="True" SeparatorMargin="0" TabsFitContent="False" />
             </BoxContainer>
             <BoxContainer Name="LoadoutsTab" HorizontalExpand="True" Orientation="Vertical">
                 <Label Name="LoadoutPointsLabel" HorizontalAlignment="Stretch" Align="Center" />
@@ -239,7 +242,9 @@
                         StyleClasses="OpenLeft" />
                 </BoxContainer>
 
-                <ui:NeoTabContainer Name="LoadoutsTabs" VerticalExpand="True" SeparatorMargin="0" />
+                <!-- TabsFitContent: 12 category tabs used to make this tab, and only this tab, widen the
+                     whole character editor when it was opened. See NeoTabContainer.TabsFitContent. -->
+                <ui:NeoTabContainer Name="LoadoutsTabs" VerticalExpand="True" SeparatorMargin="0" TabsFitContent="False" />
             </BoxContainer>
             <BoxContainer Name="MarkingsTab" HorizontalExpand="True" Orientation="Vertical">
                 <ScrollContainer HorizontalExpand="True" HScrollEnabled="True" VerticalExpand="True" VScrollEnabled="True">
@@ -251,12 +256,10 @@
     </BoxContainer>
     <!-- Right side -->
     <!-- Sprite View -->
-    <PanelContainer VerticalExpand="True" VerticalAlignment="Center">
-        <PanelContainer.PanelOverride>
-            <graphics:StyleBoxFlat BackgroundColor="#2f2f2f" />
-        </PanelContainer.PanelOverride>
-
-        <BoxContainer Orientation="Vertical" VerticalExpand="True" VerticalAlignment="Center">
+    <!-- The lobby draws its panels translucent over the background art; this one used to be a flat
+         opaque slab, which read as a dark box cut out around the character. -->
+    <PanelContainer StyleClasses="LobbyPanel" VerticalExpand="True" VerticalAlignment="Center" Margin="5 0 0 0">
+        <BoxContainer Orientation="Vertical" VerticalExpand="True" VerticalAlignment="Center" Margin="4">
             <SpriteView Name="SpriteViewS" OverrideDirection="South" Scale="4 4" />
             <SpriteView Name="SpriteViewN" OverrideDirection="North" Scale="4 4" />
             <SpriteView Name="SpriteViewE" OverrideDirection="East" Scale="4 4" />

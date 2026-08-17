@@ -37,18 +37,11 @@ public sealed class CloseRecentWindowUIController : UIController
     /// </summary>
     public void CloseMostRecentWindow()
     {
-        // Search backwards through the recency list to find a still open window and close it
-        for (int i=recentlyInteractedWindows.Count-1; i>=0; i--)
-        {
-            var window = recentlyInteractedWindows[i];
-            recentlyInteractedWindows.RemoveAt(i); // Should always be removed as either the reference is stale or we're closing it
-            if (window.IsOpen)
-            {
-                window.Close();
-                return;
-            }
-            // continue going down the list, hoping to find a still-open window
-        }
+        if (GetClosableWindow() is not { } window)
+            return;
+
+        recentlyInteractedWindows.Remove(window);
+        window.Close();
     }
 
     private void OnKeyBindDown(Control control)
@@ -128,15 +121,60 @@ public sealed class CloseRecentWindowUIController : UIController
     /// <returns></returns>
     public bool HasClosableWindow()
     {
+        return GetClosableWindow() != null;
+    }
+
+    /// <summary>
+    /// Picks the window Escape should close: the frontmost one the player can actually see.
+    /// </summary>
+    /// <remarks>
+    /// The recency list on its own is not trustworthy for this. It is fed by
+    /// <see cref="IUserInterfaceManager.OnKeyBindDown"/>, which fires for every bound key routed to
+    /// the UI, and the engine routes keys nothing else claimed to whatever sits under the mouse. So
+    /// resting the cursor over a window and pressing any key - Escape included - promoted that
+    /// window, and Escape then closed something behind the window in view instead of the one on top.
+    /// The window root draws its children back to front and both opening a window and clicking its
+    /// frame move it last, so its child order is the ordering the player is looking at.
+    /// </remarks>
+    private BaseWindow? GetClosableWindow()
+    {
+        var root = _uiManager.WindowRoot;
+        for (var i = root.ChildCount - 1; i >= 0; i--)
+        {
+            if (root.GetChild(i) is BaseWindow window && window.IsOpen && IsOnScreen(window))
+                return window;
+        }
+
+        // Windows parented somewhere other than the window root are only known through interaction,
+        // so fall back to the recency list for those.
         for (var i = recentlyInteractedWindows.Count - 1; i >= 0; i--)
         {
             var window = recentlyInteractedWindows[i];
-            if (window.IsOpen)
-                return true;
 
-            // continue going down the list, hoping to find a still-open window
+            if (!window.IsOpen)
+            {
+                // Stale reference, drop it and keep looking.
+                recentlyInteractedWindows.RemoveAt(i);
+                continue;
+            }
+
+            // Still parented, so IsOpen is true, but the player cannot see it: nested storage hides
+            // the outer bag, spectating a camera hides the console behind it. Closing one of these
+            // looks exactly like Escape doing nothing, so skip it and leave it tracked for later.
+            if (IsOnScreen(window))
+                return window;
         }
 
-        return false;
+        return null;
+    }
+
+    /// <summary>
+    /// Whether the window is actually on screen for the player, and not merely parented.
+    /// <see cref="BaseWindow.IsOpen"/> only checks parenting, so a window that was hidden rather
+    /// than closed still counts as open.
+    /// </summary>
+    private static bool IsOnScreen(BaseWindow window)
+    {
+        return window.VisibleInTree;
     }
 }

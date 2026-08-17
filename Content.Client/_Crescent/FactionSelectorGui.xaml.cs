@@ -56,10 +56,19 @@ namespace Content.Client._Crescent
         public event Action<HumanoidCharacterProfile, int >? Save;
         private BoxContainer _factionList => CFactionList;
 
+        /// <summary>
+        /// Buttons by faction id, so the screen can show which one the character is already on.
+        /// </summary>
+        private readonly Dictionary<string, Button> _factionButtons = new();
+        private Button? _confirmButton;
+
         public void SetProfile(HumanoidCharacterProfile? profile, int? slot)
         {
             Profile = profile?.Clone();
             index = slot;
+            // The list is built from preferences data, which can arrive after this control was constructed.
+            // Rebuilding here also re-highlights whichever faction the character is currently on.
+            UpdateUI();
         }
 
         public FactionSelectorGui(IClientPreferencesManager preferencesManager, IPrototypeManager prototypeManager, CharacterSetupGui setupUI)
@@ -90,73 +99,123 @@ namespace Content.Client._Crescent
         {
             if (!_prefsMan.ServerDataLoaded)
                 return;
+            // Orphaned, not disposed: saving runs through here from inside the confirm button's own press
+            // handler, and disposing a control while it is handling input is asking for trouble.
             _factionList.RemoveAllChildren();
-            var factions = _prototypeManager.EnumeratePrototypes<FactionPrototype>().ToArray();
-            // sorts the factions by their weight
-            factions = factions.OrderByDescending(x => x.Weight).ToArray();
+            _factionButtons.Clear();
+            FactionInfo.RemoveAllChildren();
+            _confirmButton = null;
+
+            var factions = _prototypeManager.EnumeratePrototypes<FactionPrototype>()
+                .Where(x => x.Enabled)
+                .ToArray();
+            // Sorted by weight, then id: prototype enumeration order is not stable between launches, so
+            // equal-weight factions would otherwise shuffle around on the player.
+            Array.Sort(factions, FactionUIComparer.Instance);
+
             foreach (var faction in factions)
             {
-                if (!faction.Enabled)
-                    continue;
-
                 var factionButton = new Button();
                 // SHORTENED FOR UI's sake
                 factionButton.Text = faction.Name;
+                factionButton.ToggleMode = true;
 
                 factionButton.ModulateSelfOverride = faction.FactionButtonColor;
 
-                var factionName = new Label();
-                factionName.HorizontalAlignment = HAlignment.Center;
-                var factionPhoto = new TextureRect();
-                factionPhoto.Stretch = TextureRect.StretchMode.Scale;
-                var factionDescPrefix = new Label();
-                var factionDesc = new Label();
-                factionDescPrefix.FontColorOverride = Color.Red;
-                factionDescPrefix.HorizontalAlignment = HAlignment.Center;
-                factionDescPrefix.Align = Label.AlignMode.Center;
-                factionDesc.MaxWidth = 1012f;
-                factionDesc.HorizontalAlignment = HAlignment.Center;
                 factionButton.OnPressed += _ =>
                 {
-                    SetFaction(faction);
-                    FactionInfo.RemoveAllChildren();
-                    factionDescPrefix.Text = faction.DescriptionPrefix;
-                    factionDesc.Text = faction.Description;
-                    // Guard the icon lookup: a missing/typo'd faction icon path throws in Frame0() and would
-                    // otherwise break the whole character-setup UI from inside this click handler.
-                    if (faction.Icon != SpriteSpecifier.Invalid)
-                    {
-                        try
-                        {
-                            factionPhoto.Texture = faction.Icon.Frame0();
-                            factionPhoto.SetHeight = 189f;
-                            factionPhoto.SetWidth = 1012f;
-                            FactionInfo.AddChild(factionPhoto);
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.ErrorS("lobby", $"Failed to load icon for faction '{faction.ID}': {e}");
-                        }
-                    }
-                    FactionInfo.AddChild(factionDescPrefix);
-                    FactionInfo.AddChild(factionDesc);
+                    SelectFaction(faction);
                 };
                 _factionList.AddChild(factionButton);
-
+                _factionButtons[faction.ID] = factionButton;
             }
-            var confirmButton = new Button();
+
             var separator = new PanelContainer();
             separator.ModulateSelfOverride = Color.Black;
             separator.SetHeight = 10f;
-            confirmButton.Text = "Confirm";
-            confirmButton.SetHeight = 50f;
-            confirmButton.ModulateSelfOverride = Color.Red;
-            confirmButton.OnPressed += _ =>
+
+            _confirmButton = new Button();
+            _confirmButton.Text = "Confirm";
+            _confirmButton.SetHeight = 50f;
+            _confirmButton.ModulateSelfOverride = Color.Red;
+            _confirmButton.OnPressed += _ =>
             {
                 SaveCharacter();
             };
             _factionList.AddChild(separator);
-            _factionList.AddChild(confirmButton);
+            _factionList.AddChild(_confirmButton);
+
+            // Show what the character is already on, if anything. Confirming without a faction used to
+            // save an empty one, which just puts the player straight back on this screen.
+            var current = Profile?.Faction ?? string.Empty;
+            var hasSelection = false;
+
+            if (current != string.Empty
+                && _factionButtons.TryGetValue(current, out var currentButton)
+                && _prototypeManager.TryIndex<FactionPrototype>(current, out var currentProto))
+            {
+                currentButton.Pressed = true;
+                ShowFactionInfo(currentProto);
+                hasSelection = true;
+            }
+
+            _confirmButton.Disabled = Profile is null || !hasSelection;
+        }
+
+        private void SelectFaction(FactionPrototype faction)
+        {
+            SetFaction(faction);
+
+            foreach (var (id, button) in _factionButtons)
+            {
+                button.Pressed = id == faction.ID;
+            }
+
+            ShowFactionInfo(faction);
+
+            if (_confirmButton != null)
+                _confirmButton.Disabled = Profile is null;
+        }
+
+        private void ShowFactionInfo(FactionPrototype faction)
+        {
+            FactionInfo.RemoveAllChildren();
+
+            // Guard the icon lookup: a missing/typo'd faction icon path throws in Frame0() and would
+            // otherwise break the whole character-setup UI from inside this click handler.
+            if (faction.Icon != SpriteSpecifier.Invalid)
+            {
+                try
+                {
+                    var factionPhoto = new TextureRect
+                    {
+                        Stretch = TextureRect.StretchMode.Scale,
+                        Texture = faction.Icon.Frame0(),
+                        SetHeight = 189f,
+                        SetWidth = 1012f,
+                    };
+                    FactionInfo.AddChild(factionPhoto);
+                }
+                catch (Exception e)
+                {
+                    Logger.ErrorS("lobby", $"Failed to load icon for faction '{faction.ID}': {e}");
+                }
+            }
+
+            FactionInfo.AddChild(new Label
+            {
+                Text = faction.DescriptionPrefix,
+                FontColorOverride = Color.Red,
+                HorizontalAlignment = HAlignment.Center,
+                Align = Label.AlignMode.Center,
+            });
+
+            FactionInfo.AddChild(new Label
+            {
+                Text = faction.Description,
+                MaxWidth = 1012f,
+                HorizontalAlignment = HAlignment.Center,
+            });
         }
 
         public void SaveCharacter()
@@ -166,6 +225,9 @@ namespace Content.Client._Crescent
             if (!_prefsMan.ServerDataLoaded)
                 return;
             if (index is null)
+                return;
+            // Saving an empty faction leaves the character stuck on this screen forever, so refuse it.
+            if (string.IsNullOrEmpty(Profile.Faction))
                 return;
             Save?.Invoke(Profile, index.Value);
             gui.SwitchToCharacterEditor();

@@ -25,8 +25,13 @@
         </PanelContainer.PanelOverride>
 
         <BoxContainer Orientation="Vertical" Margin="6" VerticalExpand="True" HorizontalExpand="True">
-            <Label Text="{Loc 'payment-console-roster-title'}" StyleClasses="ConsoleSubHeading"
-                   HorizontalAlignment="Center"/>
+            <BoxContainer Orientation="Horizontal">
+                <Label Text="{Loc 'payment-console-roster-title'}" StyleClasses="ConsoleSubHeading"
+                       VerticalAlignment="Center"/>
+                <Control HorizontalExpand="True"/>
+                <LineEdit Name="FilterEdit" MinWidth="180"
+                          PlaceHolder="{Loc 'payment-console-filter-placeholder'}"/>
+            </BoxContainer>
 
             <PanelContainer StyleClasses="LowDivider" HorizontalExpand="True" SetHeight="2" Margin="0 4"/>
 
@@ -44,6 +49,9 @@
             <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
                 <BoxContainer Name="MembersContainer" Orientation="Vertical" SeparationOverride="2" HorizontalExpand="True"/>
             </ScrollContainer>
+
+            <Label Name="EmptyLabel" Text="{Loc 'payment-console-no-members'}"
+                   StyleClasses="LabelSecondaryColor" HorizontalAlignment="Center" Margin="0 6" Visible="False"/>
         </BoxContainer>
     </PanelContainer>
 

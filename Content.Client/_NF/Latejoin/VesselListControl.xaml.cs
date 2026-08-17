@@ -52,16 +52,37 @@ public sealed partial class VesselListControl : BoxContainer
         _gameTicker.LobbyJobsAvailableUpdated -= UpdateUi;
     }
 
+    private static readonly Dictionary<string, uint?> EmptyJobs = new();
+
+    /// <summary>
+    /// Open roles on a station, or an empty set if its job list has not arrived yet. Indexing straight
+    /// into <see cref="ClientGameTicker.JobsAvailable"/> throws while the two dictionaries are out of step.
+    /// </summary>
+    private IReadOnlyDictionary<string, uint?> JobsOn(NetEntity station)
+    {
+        return _gameTicker.JobsAvailable.TryGetValue(station, out var jobs)
+            ? jobs
+            : EmptyJobs;
+    }
+
+    private string NameOf(NetEntity station)
+    {
+        return _gameTicker.StationNames.TryGetValue(station, out var name) ? name : string.Empty;
+    }
+
     private int DefaultComparison(NetEntity x, NetEntity y)
     {
-        var xContainsSR = _gameTicker.JobsAvailable[x].ContainsKey("StationRepresentative");
-        var yContainsSR = _gameTicker.JobsAvailable[y].ContainsKey("StationRepresentative");
+        var xJobs = JobsOn(x);
+        var yJobs = JobsOn(y);
 
-        var xContainsSheriff = _gameTicker.JobsAvailable[x].ContainsKey("Sheriff");
-        var yContainsSheriff = _gameTicker.JobsAvailable[y].ContainsKey("Sheriff");
+        var xContainsSR = xJobs.ContainsKey("StationRepresentative");
+        var yContainsSR = yJobs.ContainsKey("StationRepresentative");
 
-        var xContainsPirateCaptain = _gameTicker.JobsAvailable[x].ContainsKey("PirateCaptain");
-        var yContainsPirateCaptain = _gameTicker.JobsAvailable[y].ContainsKey("PirateCaptain");
+        var xContainsSheriff = xJobs.ContainsKey("Sheriff");
+        var yContainsSheriff = yJobs.ContainsKey("Sheriff");
+
+        var xContainsPirateCaptain = xJobs.ContainsKey("PirateCaptain");
+        var yContainsPirateCaptain = yJobs.ContainsKey("PirateCaptain");
 
         // Prioritize "StationRepresentative"
         switch (xContainsSR)
@@ -91,9 +112,9 @@ public sealed partial class VesselListControl : BoxContainer
         }
 
         // If both or neither contain "StationRepresentative" and "Sheriff", sort by jobCountComparison
-        var jobCountComparison = -(int) (_gameTicker.JobsAvailable[x].Values.Sum(a => a ?? 0) -
-                                         _gameTicker.JobsAvailable[y].Values.Sum(b => b ?? 0));
-        var nameComparison = string.Compare(_gameTicker.StationNames[x], _gameTicker.StationNames[y], StringComparison.Ordinal);
+        var jobCountComparison = -(int) (xJobs.Values.Sum(a => a ?? 0) -
+                                         yJobs.Values.Sum(b => b ?? 0));
+        var nameComparison = string.Compare(NameOf(x), NameOf(y), StringComparison.Ordinal);
 
         // Combine the comparisons
         return jobCountComparison != 0 ? jobCountComparison : nameComparison;
@@ -107,34 +128,44 @@ public sealed partial class VesselListControl : BoxContainer
 
     private void UpdateUi(IReadOnlyDictionary<NetEntity, Dictionary<string, uint?>> obj)
     {
+        // Clearing the list drops the selection, and every slot change on any ship pushes an update here.
+        // Without this the player gets bounced back to the top of the list mid-browse.
+        var previous = Selected;
+
         VesselItemList.Clear();
+
+        var filter = FilterLineEdit.Text.Trim();
 
         foreach (var (key, name) in _gameTicker.StationNames)
         {
-            if (VesselItemList.Any(x => ((NetEntity) x.Metadata!) == key))
-                continue;
-
-            var jobsAvailable = _gameTicker.JobsAvailable[key].Values.Sum(a => a ?? 0);
-            var item = new ItemList.Item(VesselItemList)
-            {
-                Metadata = key,
-                Text = name + $" ({jobsAvailable})"
-            };
-            if (!string.IsNullOrEmpty(FilterLineEdit.Text) &&
-                !name.ToLowerInvariant().Contains(FilterLineEdit.Text.Trim().ToLowerInvariant()))
+            if (!string.IsNullOrEmpty(filter) &&
+                !name.Contains(filter, StringComparison.InvariantCultureIgnoreCase))
             {
                 continue;
             }
 
-            VesselItemList.Add(item);
+            // A station can be named before its job list arrives; show it as empty rather than throwing.
+            var jobsAvailable = _gameTicker.JobsAvailable.TryGetValue(key, out var stationJobs)
+                ? stationJobs.Values.Sum(a => a ?? 0)
+                : 0;
+
+            VesselItemList.Add(new ItemList.Item(VesselItemList)
+            {
+                Metadata = key,
+                Text = name + $" ({jobsAvailable})"
+            });
         }
 
         _lastJobState = obj;
         Sort();
 
-        if (Selected == null && VesselItemList.Count > 0)
-        {
-            VesselItemList.First().Selected = true;
-        }
+        if (VesselItemList.Count == 0)
+            return;
+
+        var restored = previous != null
+            ? VesselItemList.FirstOrDefault(x => (NetEntity) x.Metadata! == previous.Value)
+            : null;
+
+        (restored ?? VesselItemList.First()).Selected = true;
     }
 }

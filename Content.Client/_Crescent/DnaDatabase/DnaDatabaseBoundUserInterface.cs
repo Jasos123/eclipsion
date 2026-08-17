@@ -16,6 +16,7 @@ public sealed class DnaDatabaseBoundUserInterface : BoundUserInterface
         base.Open();
 
         _window = new DnaDatabaseWindow();
+        _window.OnClose += Close;
         _window.OnToggle += () => SendMessage(new DnaDatabaseToggleMessage());
         _window.OpenCentered();
     }

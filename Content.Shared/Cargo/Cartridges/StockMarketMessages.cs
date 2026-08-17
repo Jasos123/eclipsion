@@ -53,7 +53,14 @@ public record struct StockPriceData(
     double CurrentPrice,
     float Multiplier,
     float PriceChange = 0f,
-    List<float>? PriceHistory = null
+    List<float>? PriceHistory = null,
+    // Movement already committed to this company but not yet paid out, as a fraction of its value.
+    // Quoted to traders because it is not a forecast: it is going to land whatever anyone does.
+    float PendingShift = 0f,
+    // Ticks the longest-running committed pressure still has to run.
+    int PendingTicks = 0,
+    // Whether this company drifts on its own, as opposed to only moving on war events.
+    bool Neutral = false
 );
 
 /// <summary>One line of the market news feed, explaining why a price moved.</summary>
@@ -62,7 +69,9 @@ public record struct StockNewsRecord(
     string CompanyId,
     string Reason,
     bool Positive,
-    TimeSpan Time
+    TimeSpan Time,
+    // How big the move was, as a fraction of the company's value.
+    float Magnitude = 0f
 );
 
 [Serializable, NetSerializable]

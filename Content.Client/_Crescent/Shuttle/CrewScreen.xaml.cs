@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Client._KS14.UI; // KS14
 using System.Numerics;
 using Content.Client.Shuttles.Systems;
 using Content.Shared._NF.Shuttles.Components;
@@ -37,6 +38,9 @@ public sealed partial class CrewScreen : BoxContainer
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
         OnVisibilityChanged += OnVisChange;
+
+        // KS14: instrument look (cosmetic only - see KsInstrumentDressing).
+        KsInstrumentDressing.Apply(this, KsInstrumentPalette.Map);
     }
 
     public void UpdateState(CrewInterfaceState state)

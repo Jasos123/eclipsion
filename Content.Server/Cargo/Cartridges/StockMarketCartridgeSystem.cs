@@ -182,13 +182,18 @@ public sealed class StockMarketCartridgeSystem : EntitySystem
             if (!company.Active)
                 continue;
 
+            var (pendingShift, pendingTicks) = _stockCompanies.GetPendingPressure(company);
+
             priceData[company.Id] = new StockPriceData(
                 company.Id,
                 company.BasePrice,
                 company.CurrentPrice,
                 company.PriceMultiplier,
                 company.PriceChange,
-                new List<float>(company.PriceHistory)
+                new List<float>(company.PriceHistory),
+                pendingShift,
+                pendingTicks,
+                company.Neutral
             );
         }
 

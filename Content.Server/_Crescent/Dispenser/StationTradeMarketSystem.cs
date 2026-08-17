@@ -95,7 +95,7 @@ public sealed class StationTradeMarketSystem : EntitySystem
             ? over
             : market.DefaultTaxRate;
 
-        return Math.Clamp(rate, 0f, market.MaxTaxRate);
+        return SanitizeRate(rate, market);
     }
 
     public void SetDefaultTaxRate(EntityUid stationUid, float rate)
@@ -103,7 +103,7 @@ public sealed class StationTradeMarketSystem : EntitySystem
         if (!TryComp<StationTradeMarketComponent>(stationUid, out var market))
             return;
 
-        market.DefaultTaxRate = Math.Clamp(rate, 0f, market.MaxTaxRate);
+        market.DefaultTaxRate = SanitizeRate(rate, market);
     }
 
     public void SetTaxOverride(EntityUid stationUid, string tradeGoodId, float rate)
@@ -111,7 +111,25 @@ public sealed class StationTradeMarketSystem : EntitySystem
         if (!TryComp<StationTradeMarketComponent>(stationUid, out var market))
             return;
 
-        market.TaxOverrides[tradeGoodId] = Math.Clamp(rate, 0f, market.MaxTaxRate);
+        market.TaxOverrides[tradeGoodId] = SanitizeRate(rate, market);
+    }
+
+    /// <summary>
+    /// Brings a rate coming off the wire into 0..<see cref="StationTradeMarketComponent.MaxTaxRate"/>.
+    /// </summary>
+    /// <remarks>
+    /// Math.Clamp alone is not enough: NaN fails every comparison inside it and comes back out unchanged, so a
+    /// NaN rate would be stored live. From there the payout maths turns the station's whole cut into zero
+    /// without erroring, and the console just displays "NaN" - so it is rejected outright rather than clamped.
+    /// </remarks>
+    private static float SanitizeRate(float rate, StationTradeMarketComponent market)
+    {
+        if (!float.IsFinite(rate))
+            return 0f;
+
+        var max = float.IsFinite(market.MaxTaxRate) ? Math.Clamp(market.MaxTaxRate, 0f, 1f) : 1f;
+
+        return Math.Clamp(rate, 0f, max);
     }
 
     public void ClearTaxOverride(EntityUid stationUid, string tradeGoodId)

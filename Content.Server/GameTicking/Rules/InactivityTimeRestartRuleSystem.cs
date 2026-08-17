@@ -76,8 +76,10 @@ public sealed class InactivityTimeRestartRuleSystem : GameRuleSystem<InactivityR
         var query = EntityQueryEnumerator<InactivityRuleComponent, GameRuleComponent>();
         while (query.MoveNext(out var uid, out var inactivity, out var gameRule))
         {
+            // Crescent - continue, not return: one inactive rule used to abort the sweep and leave any active
+            // rule behind it in the query with its timer neither started nor stopped.
             if (!GameTicker.IsGameRuleActive(uid, gameRule))
-                return;
+                continue;
 
             switch (args.New)
             {
@@ -94,18 +96,23 @@ public sealed class InactivityTimeRestartRuleSystem : GameRuleSystem<InactivityR
 
     private void PlayerStatusChanged(object? sender, SessionStatusEventArgs e)
     {
+        // Crescent - hoisted: neither of these depends on which rule we are looking at, and leaving the run level
+        // check inside the loop made it read like it did.
+        if (GameTicker.RunLevel != GameRunLevel.InRound)
+            return;
+
+        var serverEmpty = _playerManager.PlayerCount == 0;
+
         var query = EntityQueryEnumerator<InactivityRuleComponent, GameRuleComponent>();
         while (query.MoveNext(out var uid, out var inactivity, out var gameRule))
         {
+            // Crescent - continue, not return, for the same reason as RunLevelChanged: an inactive rule sitting
+            // ahead of an active one in the query used to abort the sweep, so the active rule's timer was neither
+            // started when the last player left nor stopped when somebody joined.
             if (!GameTicker.IsGameRuleActive(uid, gameRule))
-                return;
+                continue;
 
-            if (GameTicker.RunLevel != GameRunLevel.InRound)
-            {
-                return;
-            }
-
-            if (_playerManager.PlayerCount == 0)
+            if (serverEmpty)
             {
                 RestartTimer(uid, inactivity);
             }

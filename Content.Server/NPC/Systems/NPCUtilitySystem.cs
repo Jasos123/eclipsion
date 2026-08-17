@@ -1,3 +1,4 @@
+using Content.Server._Crescent.Diplomacy; // Eclipsion
 using Content.Server._Mono.NPC.HTN;
 using Content.Server.Chemistry.Containers.EntitySystems;
 using Content.Server.Fluids.EntitySystems;
@@ -39,6 +40,7 @@ public sealed class NPCUtilitySystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly ContainerSystem _container = default!;
+    [Dependency] private readonly DiplomacySystem _diplomacy = default!; // Eclipsion
     [Dependency] private readonly DrinkSystem _drink = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly FoodSystem _food = default!;
@@ -474,11 +476,19 @@ public sealed class NPCUtilitySystem : EntitySystem
                 }
                 break;
             }
-            // Mono - TODO: consider factions
             case NearbyHostileShuttlesQuery shuttlesQuery:
             {
                 var xform = Transform(owner);
                 var ownGrid = xform.GridUid;
+
+                // Eclipsion - diplomacy filter. Auto keeps the old faction-blind behaviour for an NPC flying an
+                // unaligned hull (the derelict rammer/attacker cores that ship on maps are exactly that), and
+                // only starts checking relations once the hull actually belongs to a faction.
+                var ownFaction = ownGrid != null ? _diplomacy.GetGridFaction(ownGrid.Value) : null;
+                var targeting = shuttlesQuery.Targeting;
+                if (targeting == ShipNpcTargeting.Auto)
+                    targeting = ownFaction != null ? ShipNpcTargeting.War : ShipNpcTargeting.All;
+
                 foreach (var (target, targetComp) in _lookup.GetEntitiesInRange<ShipNpcTargetComponent>(_transform.GetMapCoordinates(xform), shuttlesQuery.Range))
                 {
                     var targetXform = Transform(target);
@@ -490,6 +500,20 @@ public sealed class NPCUtilitySystem : EntitySystem
                         targetGrid != null && _whitelistSystem.IsBlacklistPass(shuttlesQuery.Blacklist, targetGrid.Value))
                     {
                         continue;
+                    }
+
+                    // Eclipsion - a hull with no faction of its own, or a target with none, has no relation we
+                    // could measure, so it is never a valid target outside All. That covers derelicts,
+                    // asteroids and unaligned civilian traffic.
+                    if (targeting != ShipNpcTargeting.All)
+                    {
+                        if (ownFaction == null ||
+                            targetGrid == null ||
+                            _diplomacy.GetGridFaction(targetGrid.Value) is not { } targetFaction ||
+                            !_diplomacy.IsHostile(ownFaction, targetFaction, targeting == ShipNpcTargeting.War))
+                        {
+                            continue;
+                        }
                     }
 
                     entities.Add(target);

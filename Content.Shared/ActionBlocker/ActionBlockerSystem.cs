@@ -213,7 +213,7 @@ namespace Content.Shared.ActionBlocker
             if (target == null)
                 return true;
 
-            var tev = new GettingAttackedAttemptEvent();
+            var tev = new GettingAttackedAttemptEvent(uid); // Eclipsion - carries the attacker
             RaiseLocalEvent(target.Value, ref tev);
             return !tev.Cancelled;
         }

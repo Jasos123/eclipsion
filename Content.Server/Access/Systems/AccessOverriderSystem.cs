@@ -116,11 +116,9 @@ public sealed class AccessOverriderSystem : SharedAccessOverriderSystem
             targetLabel = Loc.GetString("access-overrider-window-target-label") + " " + EntityManager.GetComponent<MetaDataComponent>(component.TargetAccessReaderId).EntityName;
             targetLabelColor = Color.White;
 
-            if (!_accessReader.GetMainAccessReader(accessReader, out var accessReaderComponent))
-                return;
-
-            var currentAccessHashsets = accessReaderComponent.AccessLists;
-            currentAccess = ConvertAccessHashSetsToList(currentAccessHashsets).ToArray();
+            // Target lost its reader somehow: still push a state so the window stops showing stale access.
+            if (_accessReader.GetMainAccessReader(accessReader, out var accessReaderComponent))
+                currentAccess = ConvertAccessHashSetsToList(accessReaderComponent.AccessLists).ToArray();
         }
 
         if (component.PrivilegedIdSlot.Item is { Valid: true } idCard)
@@ -213,14 +211,22 @@ public sealed class AccessOverriderSystem : SharedAccessOverriderSystem
         if (!_accessReader.GetMainAccessReader(component.TargetAccessReaderId, out var accessReader))
             return;
 
-        var oldTags = ConvertAccessHashSetsToList(accessReader.AccessLists);
-        var privilegedId = component.PrivilegedIdSlot.Item;
-
-        if (oldTags.SequenceEqual(newAccessList))
+        if (component.PrivilegedIdSlot.Item is not { Valid: true } privilegedId)
             return;
 
-        var difference = newAccessList.Union(oldTags).Except(newAccessList.Intersect(oldTags)).ToHashSet();
-        var privilegedPerms = _accessReader.FindAccessTags(privilegedId!.Value).ToHashSet();
+        var oldTags = ConvertAccessHashSetsToList(accessReader.AccessLists);
+
+        // Access levels this overrider can't display never show up in the list the UI sends back.
+        // Carry them over, otherwise editing anything silently strips them from the target.
+        var finalAccessList = newAccessList
+            .Union(oldTags.Where(tag => !component.AccessLevels.Contains(tag)))
+            .ToList();
+
+        if (oldTags.ToHashSet().SetEquals(finalAccessList))
+            return;
+
+        var difference = finalAccessList.Union(oldTags).Except(finalAccessList.Intersect(oldTags)).ToHashSet();
+        var privilegedPerms = _accessReader.FindAccessTags(privilegedId).ToHashSet();
 
         if (!difference.IsSubsetOf(privilegedPerms))
         {
@@ -238,13 +244,13 @@ public sealed class AccessOverriderSystem : SharedAccessOverriderSystem
             return;
         }
 
-        var addedTags = newAccessList.Except(oldTags).Select(tag => "+" + tag).ToList();
-        var removedTags = oldTags.Except(newAccessList).Select(tag => "-" + tag).ToList();
+        var addedTags = finalAccessList.Except(oldTags).Select(tag => "+" + tag).ToList();
+        var removedTags = oldTags.Except(finalAccessList).Select(tag => "-" + tag).ToList();
 
         _adminLogger.Add(LogType.Action, LogImpact.Medium,
-            $"{ToPrettyString(player):player} has modified {ToPrettyString(component.TargetAccessReaderId):entity} with the following allowed access level holders: [{string.Join(", ", addedTags.Union(removedTags))}] [{string.Join(", ", newAccessList)}]");
+            $"{ToPrettyString(player):player} has modified {ToPrettyString(component.TargetAccessReaderId):entity} with the following allowed access level holders: [{string.Join(", ", addedTags.Union(removedTags))}] [{string.Join(", ", finalAccessList)}]");
 
-        accessReader.AccessLists = ConvertAccessListToHashSet(newAccessList);
+        accessReader.AccessLists = ConvertAccessListToHashSet(finalAccessList);
         Dirty(component.TargetAccessReaderId, accessReader);
     }
 
@@ -259,10 +265,14 @@ public sealed class AccessOverriderSystem : SharedAccessOverriderSystem
         if (!Resolve(uid, ref component))
             return true;
 
-        if (_accessReader.GetMainAccessReader(uid, out var accessReader))
+        // Keep this first: the write path relies on a false result meaning "no privileged ID".
+        if (component.PrivilegedIdSlot.Item is not { Valid: true } privilegedId)
+            return false;
+
+        // No reader on the overrider itself means any ID is good enough to operate it.
+        if (!_accessReader.GetMainAccessReader(uid, out var accessReader))
             return true;
 
-        var privilegedId = component.PrivilegedIdSlot.Item;
-        return privilegedId != null && _accessReader.IsAllowed(privilegedId.Value, uid, accessReader);
+        return _accessReader.IsAllowed(privilegedId, uid, accessReader);
     }
 }

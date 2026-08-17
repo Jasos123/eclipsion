@@ -237,7 +237,7 @@
   coefficients:
     Blunt: 1.1
     Slash: 0.8
-    Piercing: 0.6
+    Piercing: 1.0 # was 0.6 - bullets now hit a skeleton exactly as hard as a human
     Cold: 0.0
     Poison: 0.0
     Radiation: 0.0

@@ -1,9 +1,8 @@
+using System.Text;
 using Content.Server.Body.Components;
-using Content.Server.DeviceLinking.Systems;
+using Content.Server.Paper;
 using Content.Server.Power.EntitySystems;
-using Content.Shared._Crescent.PassportControl;
 using Content.Shared._EE.Contractors.Components;
-using Content.Shared._EE.Contractors.Systems;
 using Content.Shared._Crescent.Mind;
 using Content.Shared.Body.Part;
 using Content.Shared.Crescent.Dispenser;
@@ -12,7 +11,6 @@ using Content.Shared.Inventory.VirtualItem;
 using Content.Shared.Popups;
 using Content.Shared._Crescent.Dispenser;
 using Content.Shared.Cargo.Prototypes;
-using Content.Shared.DeviceLinking;
 using Content.Server.Cargo.Systems;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.GameObjects;
@@ -30,9 +28,11 @@ public sealed class DispenserSystem : SharedDispenserSystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly IComponentFactory _componentFactory = default!;
     [Dependency] private readonly DynamicPricingSystem _dynamicPricing = default!;
-    [Dependency] private readonly DeviceLinkSystem _deviceLink = default!;
     [Dependency] private readonly PowerReceiverSystem _power = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private readonly PaperSystem _paper = default!;
+
+    private const string RecordPrintoutPrototype = "PaperPassportRecord";
 
     /// <summary>
     /// Cheapest cargo purchase price per product entity-prototype id, built once from every
@@ -97,46 +97,13 @@ public sealed class DispenserSystem : SharedDispenserSystem
 
             if (!_power.IsPowered(uid))
             {
-                _popup.PopupEntity(Loc.GetString("passport-control-no-power"), uid, args.User,
+                _popup.PopupEntity(Loc.GetString("passport-checker-no-power"), uid, args.User,
                     PopupType.MediumCaution);
                 _audioSystem.PlayPvs(component.DenySound, uid);
                 return;
             }
 
-            if (TryComp<PassportReaderComponent>(uid, out var reader))
-            {
-                reader.LastPassport = used;
-                reader.LastUser = args.User;
-                _deviceLink.InvokePort(uid, PassportReaderComponent.DataPort);
-
-                var linked = TryComp<DeviceLinkSourceComponent>(uid, out var source)
-                    && source.LinkedPorts.Any(entry =>
-                        HasComp<PassportControlConsoleComponent>(entry.Key)
-                        && entry.Value.Any(link =>
-                            link.source.Id == PassportReaderComponent.DataPort
-                            && link.sink.Id == PassportControlConsoleComponent.PassportPort));
-                if (linked)
-                {
-                    _popup.PopupEntity(Loc.GetString("passport-control-passport-sent"), uid, args.User,
-                        PopupType.Medium);
-                    _audioSystem.PlayPvs(component.DispenseSound, uid);
-                    return;
-                }
-            }
-
-            var valid = SharedPassportSystem.IsPassportValid(passport);
-            var popup = passport.Tampered
-                ? Loc.GetString("passport-checker-tampered")
-                : valid
-                    ? Loc.GetString("passport-checker-valid",
-                    ("name", FormattedMessage.EscapeText(passport.FullName)),
-                    ("id", FormattedMessage.EscapeText(passport.PassportId)),
-                    ("year", passport.ExpirationYear))
-                    : Loc.GetString("passport-checker-invalid");
-
-            _popup.PopupEntity(popup, uid, args.User,
-                valid ? PopupType.Medium : PopupType.MediumCaution);
-            _audioSystem.PlayPvs(valid ? component.DispenseSound : component.DenySound, uid);
+            PrintPassportRecord(uid, component, passport, args.User);
             return;
         }
 
@@ -256,6 +223,65 @@ public sealed class DispenserSystem : SharedDispenserSystem
     }
 
     /// <summary>
+    /// Prints the issuing registry's copy of a document rather than ruling on it. The machine
+    /// reports only what the issuer recorded; whether the passport in the reader's other hand
+    /// still says the same thing is for the reader to work out.
+    /// </summary>
+    private void PrintPassportRecord(EntityUid uid, DispenserComponent component, PassportComponent passport,
+        EntityUid user)
+    {
+        var text = new StringBuilder();
+        text.AppendLine(Loc.GetString("passport-record-header"));
+        text.AppendLine(Loc.GetString("passport-record-query", ("pid", Printable(passport.PassportId))));
+        text.AppendLine();
+
+        if (passport.Record is not { } record)
+        {
+            // Nothing was ever filed for this document: a forgery, or a blank booklet that no
+            // issuer ever touched. Saying so is a statement about the registry, not a verdict.
+            text.AppendLine(Loc.GetString("passport-record-missing"));
+            text.AppendLine();
+            text.AppendLine(Loc.GetString("passport-record-missing-note"));
+        }
+        else
+        {
+            text.AppendLine(Loc.GetString("passport-record-found"));
+            text.AppendLine();
+            text.AppendLine(Loc.GetString("passport-record-name", ("name", Printable(record.FullName))));
+            text.AppendLine(Loc.GetString("passport-record-age", ("age", record.Age)));
+            text.AppendLine(Loc.GetString("passport-record-species", ("species", Printable(record.Species))));
+            text.AppendLine(Loc.GetString("passport-record-sex", ("sex", Printable(record.Sex))));
+            text.AppendLine(Loc.GetString("passport-record-height", ("height", record.HeightCm)));
+            text.AppendLine(Loc.GetString("passport-record-skin-color", ("color", Printable(record.SkinColor))));
+            text.AppendLine(Loc.GetString("passport-record-eye-color", ("color", Printable(record.EyeColor))));
+            text.AppendLine(Loc.GetString("passport-record-nationality",
+                ("nationality", Printable(record.Nationality))));
+            text.AppendLine(Loc.GetString("passport-record-pid", ("pid", Printable(record.PassportId))));
+            text.AppendLine(Loc.GetString("passport-record-issued", ("year", record.IssueYear)));
+            text.AppendLine(Loc.GetString("passport-record-expires", ("year", record.ExpirationYear)));
+            text.AppendLine();
+            text.AppendLine(Loc.GetString("passport-record-footer"));
+        }
+
+        component.PendingPrintout = text.ToString();
+        TryDispenseItem(uid, component, RecordPrintoutPrototype);
+
+        _popup.PopupEntity(Loc.GetString("passport-checker-printed"), uid, user, PopupType.Medium);
+    }
+
+    /// <summary>
+    /// Registry values are player-authored text, so they are escaped before reaching the paper's
+    /// markup parser. A blank field prints a visible placeholder instead of an empty line, so an
+    /// unrecorded value can never be misread as matching a blank field on the document.
+    /// </summary>
+    private string Printable(string value)
+    {
+        return string.IsNullOrWhiteSpace(value)
+            ? Loc.GetString("passport-unspecified")
+            : FormattedMessage.EscapeText(value);
+    }
+
+    /// <summary>
     /// Returns the cheapest cargo purchase price for the given product entity-prototype id, or
     /// <c>null</c> if the item is not sold by cargo. The lookup is built lazily on first use and
     /// cached, since cargo product prototypes are static for the lifetime of the process.
@@ -318,8 +344,16 @@ public sealed class DispenserSystem : SharedDispenserSystem
             return;
         }
 
-        if (!string.IsNullOrEmpty(itemId))
-            Spawn(itemId, Transform(uid).Coordinates);
+        if (string.IsNullOrEmpty(itemId))
+            return;
+
+        var spawned = Spawn(itemId, Transform(uid).Coordinates);
+
+        if (component.PendingPrintout is { } printout)
+        {
+            _paper.SetContent(spawned, printout);
+            component.PendingPrintout = null;
+        }
     }
 
     /// <summary>
