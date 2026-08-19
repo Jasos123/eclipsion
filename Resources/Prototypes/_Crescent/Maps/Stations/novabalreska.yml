@@ -39,7 +39,7 @@
             MVDOfficerNCWL: [ 1, 1 ]
             MVDGruntNCWL: [ 2, 2 ]
             FleetkapitanNCWL: [ 4, 4 ]
-            PartisanNCWL: [ -1, -1 ]
+            PartisanNCWL: [ 15, 15 ]
             IndustryTaskmasterNCWL: [ 4, 4 ]
             DoctorNCWL: [ 6, 6 ]
             ArtificerNCWL: [ 6, 6 ]

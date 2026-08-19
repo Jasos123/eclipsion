@@ -2326,7 +2326,7 @@ entities:
       pos: 2.5,1.5
       parent: 1
     - type: WarpPoint
-      location: Пояс Астероидов "Тайпан-2"
+      location: Taypan-2 asteroid belt
 - proto: WaterCooler
   entities:
   - uid: 76

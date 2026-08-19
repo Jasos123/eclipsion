@@ -4,11 +4,16 @@
   - type: WorldController
   - type: BiomeSelection
     biomes:
-    - RatStandard
+    - Failsafe
+    - RatAsteroidsStandardTaypanOne
+    - RatAsteroidsStandardTaypanTwo
+    - RatGraveyardWrecks
+    #- RatBalreskaWrecks
+    #- RatAncientBattlefieldWrecks
+    #- RatHeartlandsWrecks
     - RatCraster
-    - RatAsteroidsStandardTaypan
-    - RatGraveyardMax
-    - RatGraveyardMin
+    #- RatMarchbelt
+    #- RatDeepbelt
 
 # Hyperwar variant: keeps the central belt (RatCraster) but drops the
 # surrounding ring (RatAsteroidsStandardTaypan) for a cleaner central battlefield.
