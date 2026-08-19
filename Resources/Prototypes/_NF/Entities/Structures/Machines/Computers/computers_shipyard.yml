@@ -93,6 +93,8 @@
     - Termite
     - Manatee
     - Cockroach
+    - Hammerhead
+
 # Hardcoded consoles
 - type: entity
   id: ComputerShipyardSecurity

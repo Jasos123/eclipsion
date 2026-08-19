@@ -7,7 +7,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 14
+        Piercing: 20
   - type: StaticPrice
     price: 0
 

@@ -93,6 +93,8 @@
     - Termite
     - Manatee
     - Cockroach
+    - Hammerhead
+
 # Hardcoded consoles
 - type: entity
   id: RatComputerShipyardSecurity
@@ -236,6 +238,18 @@
     - Corvax
     - Ouroboros
     #- Cleaver - why the fuck is this designated upgrade available roundstart
+    # post new conception syndie shit
+    # CD section
+    - Taipan #jacked up the price
+    - Spriggan #mining ship
+    # IPM section
+    - Matabele #corpse recovery
+    # SAW section
+    - Hyena
+    - Shanty
+    - Rokh
+    - Scarab
+    - Amadeus
 
 - type: entity
   id: RatCountsmanMothershipComputer
