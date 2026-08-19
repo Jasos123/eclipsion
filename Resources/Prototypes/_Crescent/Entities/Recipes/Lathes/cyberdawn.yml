@@ -765,3 +765,18 @@
     Plasma: 3000
     HardlightGenerator: 500
     LaserLocus: 500
+
+- type: latheRecipe
+  id: ReinforcementFlatpackSyndicateCyborgAssault
+  category: Circuitry
+  result: ReinforcementFlatpackSyndicateCyborgAssault
+  completetime: 1.5
+  materials:
+    AdvancedElectronics: 1500
+    AdvancedMechatronics: 3000
+    Silver: 1500
+    Steel: 6000
+    Gold: 3000
+    Plasma: 3000
+    HardlightGenerator: 500
+    LaserLocus: 500

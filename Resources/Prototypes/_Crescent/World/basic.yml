@@ -608,7 +608,7 @@
 # ===== merged from _Rat (full-hullrot consolidation) =====
 - type: spaceBiome
   id: RatStandard
-  priority: 0 
+  priority: 0
   noiseRanges: {}
 
 - type: spaceBiome
@@ -790,23 +790,3 @@
     # Rare outer-belt chromite.
     - id: RatChromiteAsteroidLarge
       prob: 0.06
-
-- type: spaceBiome
-  id: RatCraster
-  parent: RatBiomeBase
-  priority: 9001
-  distanceRange: 0, 500
-  chunkComponents:
-  - type: DebrisFeaturePlacerController
-    densityNoiseChannel: RatDensityMin
-  - type: SimpleDebrisSelector
-    debrisTable:
-    - id: RatAsteroidRichLarge
-      prob: 1
-    # Common core-belt chromite.
-    - id: RatChromiteAsteroidLarge
-      prob: 0.3
-  - type: NoiseRangeCarver
-    ranges:
-    - 0.3, 0.51
-    noiseChannel: RatCarver
