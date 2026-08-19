@@ -71,50 +71,92 @@
     gameMapsByID:
       PortBalreska:
         gameMapID: PortBalreska
-        posX: -2000
-        posY: -5000
+        posX: -4000
+        posY: 0
         IFFColor: Orange
         IFFFaction: NCWL
       AuroraImperialis:
         gameMapID: AuroraImperialis
-        posX: 2000
-        posY: 5000
+        posX: 4000
+        posY: 4000
         IFFColor: "#C677A5"
         IFFFaction: DSM
-      Tatsumoto:
-        gameMapID: Tatsumoto
-        posX: -5000
-        posY: 1000
-        IFFColor: White
-        IFFFaction: SHI
-      # TFCF members retain their own leadership while sharing Federation infrastructure at the rebuilt Freeport.
-      Freeport:
-        gameMapID: Freeport
-        posX: 6000
-        posY: 0
-        IFFColor: IndianRed
-        IFFFaction: TFSC
       GliessSanto:
         gameMapID: GliessSanto
-        posX: -3500
-        posY: -2000
-        IFFColor: Blue
-      RatFakel:
-        gameMapID: RatFakel
         posX: 0
         posY: 0
-      RatBuran:
-        gameMapID: RatBuran
-        posX: -2500
-        posY: 3500
+        IFFColor: White
+      Tatsumoto:
+        gameMapID: Tatsumoto
+        posX: 0
+        posY: 2000
+        IFFColor: White
+        IFFFaction: SHI
+      Jackal:
+        gameMapID: Jackal
+        posX: -1000
+        posY: -1500
+        IFFColor: IndianRed
+        IFFFaction: TFSC
+      Taypan1AsteroidBelt:
+        gameMapID: Taypan1AsteroidBelt
+        posX: -2000
+        posY: 2000
+      Taypan2AsteroidBelt:
+        gameMapID: Taypan2AsteroidBelt
+        posX: 2000
+        posY: 2000
+      TribalHideout:
+        gameMapID: TribalHideout
+        posX: 1000
+        posY: 1000
+        randomOffsetX: 1000
+        randomOffsetY: 1000
+      ImperialHaulerWreck:
+        gameMapID: ImperialHaulerWreck
+        posX: 1000
+        posY: -2000
+        HideIFF: true
+      Fighter1:
+        gameMapID: Fighter1
+        posX: 500
+        posY: -1000
+        HideIFF: true
+      Fighter2:
+        gameMapID: Fighter2
+        posX: 1000
+        posY: 3000
+        HideIFF: true
+      SolarSailorDerelict:
+        gameMapID: SolarSailorDerelict
+        posX: 4000
+        posY: 1500
+        HideIFF: true
+      FogwreckedDerelict:
+        gameMapID: FogwreckedDerelict
+        posX: -1000
+        posY: 1000
+        HideIFF: true
+      IronRing:
+        gameMapID: IronRing
+        posX: 0
+        posY: 4000
       RatKovf:
         gameMapID: RatKovf
-        posX: 500
-        posY: -4300
-      RatResearchLabratory:
-        gameMapID: RatResearchLabratory
-        posX: 2500
-        posY: 2500
+        posX: 3000
+        posY: -500
+      DerelictWaystation:
+        gameMapID: DerelictWaystation
+        posX: 0
+        posY: -3000
+      Graveyard:
+        gameMapID: Graveyard
+        posX: -1000
+        posY: 4000
+      Craster:
+        gameMapID: Craster
+        posX: 2000
+        posY: -2000
 
 
 - type: gamePreset
@@ -169,37 +211,75 @@
     gameMapsByID:
       PortBalreska:
         gameMapID: PortBalreska
-        posX: -2000
-        posY: -5000
+        posX: -4000
+        posY: 0
         IFFColor: Orange
         IFFFaction: NCWL
       AuroraImperialis:
         gameMapID: AuroraImperialis
-        posX: 2000
-        posY: 5000
+        posX: 4000
+        posY: 4000
         IFFColor: "#C677A5"
         IFFFaction: DSM
-      GliessSanto:
-        gameMapID: GliessSanto
-        posX: -3500
-        posY: 0
-        IFFColor: Blue
-      RatFakel:
-        gameMapID: RatFakel
-        posX: 3000
+      Taypan1AsteroidBelt:
+        gameMapID: Taypan1AsteroidBelt
+        posX: -2000
+        posY: 2000
+      Taypan2AsteroidBelt:
+        gameMapID: Taypan2AsteroidBelt
+        posX: 2000
+        posY: 2000
+      TribalHideout:
+        gameMapID: TribalHideout
+        posX: 1000
+        posY: 1000
+        randomOffsetX: 1000
+        randomOffsetY: 1000
+      ImperialHaulerWreck:
+        gameMapID: ImperialHaulerWreck
+        posX: 1000
         posY: -2000
-      RatBuran:
-        gameMapID: RatBuran
-        posX: -2500
-        posY: 3500
+        HideIFF: true
+      Fighter1:
+        gameMapID: Fighter1
+        posX: 500
+        posY: -1000
+        HideIFF: true
+      Fighter2:
+        gameMapID: Fighter2
+        posX: 1000
+        posY: 3000
+        HideIFF: true
+      SolarSailorDerelict:
+        gameMapID: SolarSailorDerelict
+        posX: 4000
+        posY: 1500
+        HideIFF: true
+      FogwreckedDerelict:
+        gameMapID: FogwreckedDerelict
+        posX: -1000
+        posY: 1000
+        HideIFF: true
+      IronRing:
+        gameMapID: IronRing
+        posX: 0
+        posY: 4000
       RatKovf:
         gameMapID: RatKovf
-        posX: 500
-        posY: -4300
-      RatResearchLabratory:
-        gameMapID: RatResearchLabratory
-        posX: 2500
-        posY: 2500
+        posX: 3000
+        posY: -500
+      DerelictWaystation:
+        gameMapID: DerelictWaystation
+        posX: 0
+        posY: -3000
+      Graveyard:
+        gameMapID: Graveyard
+        posX: -1000
+        posY: 4000
+      Craster:
+        gameMapID: Craster
+        posX: 2000
+        posY: -2000
 
 - type: gamePreset
   id: FreeplayTFSCSHI
@@ -253,39 +333,319 @@
     gameMapsByID:
       Tatsumoto:
         gameMapID: Tatsumoto
-        posX: -5000
-        posY: 1000
+        posX: -4000
+        posY: 0
         IFFColor: White
         IFFFaction: SHI
-      # TFCF members retain their own leadership while sharing Federation infrastructure at the rebuilt Freeport.
       Freeport:
         gameMapID: Freeport
-        posX: 6000
-        posY: 0
+        posX: 4000
+        posY: 4000
         IFFColor: IndianRed
         IFFFaction: TFSC
-      GliessSanto:
-        gameMapID: GliessSanto
+      Taypan1AsteroidBelt:
+        gameMapID: Taypan1AsteroidBelt
+        posX: -2000
+        posY: 2000
+      Taypan2AsteroidBelt:
+        gameMapID: Taypan2AsteroidBelt
+        posX: 2000
+        posY: 2000
+      TribalHideout:
+        gameMapID: TribalHideout
+        posX: 1000
+        posY: 1000
+        randomOffsetX: 1000
+        randomOffsetY: 1000
+      ImperialHaulerWreck:
+        gameMapID: ImperialHaulerWreck
+        posX: 1000
+        posY: -2000
+        HideIFF: true
+      Fighter1:
+        gameMapID: Fighter1
         posX: 500
-        posY: 3500
-        IFFColor: Blue
-      RatFakel:
-        gameMapID: RatFakel
-        posX: 3000
+        posY: -1000
+        HideIFF: true
+      Fighter2:
+        gameMapID: Fighter2
+        posX: 1000
         posY: 3000
-      RatBuran:
-        gameMapID: RatBuran
-        posX: -2500
-        posY: 3500
+        HideIFF: true
+      SolarSailorDerelict:
+        gameMapID: SolarSailorDerelict
+        posX: 4000
+        posY: 1500
+        HideIFF: true
+      FogwreckedDerelict:
+        gameMapID: FogwreckedDerelict
+        posX: -1000
+        posY: 1000
+        HideIFF: true
+      IronRing:
+        gameMapID: IronRing
+        posX: 0
+        posY: 4000
       RatKovf:
         gameMapID: RatKovf
-        posX: 500
-        posY: -4300
-      RatResearchLabratory:
-        gameMapID: RatResearchLabratory
-        posX: 2500
-        posY: 2500
+        posX: 3000
+        posY: -500
+      DerelictWaystation:
+        gameMapID: DerelictWaystation
+        posX: 0
+        posY: -3000
+      Graveyard:
+        gameMapID: Graveyard
+        posX: -1000
+        posY: 4000
+      Craster:
+        gameMapID: Craster
+        posX: 2000
+        posY: -2000
 
+- type: gamePreset
+  id: FreeplayTAPGLIESSTFCF
+  alias:
+  - freeplaytapgliesstfcf
+  name: Freeplay | TAP/Gliess & TFCF
+  showInVote: true
+  description: A volatile stretch of the Taypan frontier contested by the TFCF and indigenous interests. Lasts 2-4 hours.
+  excludedJobs:
+  - UnionfallCadetDSM
+  - UnionfallRiflemanDSM
+  - UnionfallDoctorDSM
+  - UnionfallOfficerDSM
+  - UnionfallLeaderDSM
+  - UnionfallShipCaptainDSM
+  - UnionfallShipCrewDSM
+  - UnionfallCadetNCWL
+  - UnionfallRiflemanNCWL
+  - UnionfallDoctorNCWL
+  - UnionfallOfficerNCWL
+  - UnionfallLeaderNCWL
+  - UnionfallShipCaptainNCWL
+  - UnionfallShipCrewNCWL
+  - planetfall_worker
+  - planetfall_partisan
+  - planetfall_mvdofficer
+  - planetfall_mvdgrunt
+  - planetfall_kapitan
+  - planetfall_doctor
+  - planetfall_courtier
+  - planetfall_advocatus
+  - planetfall_governor
+  - planetfall_freeholder
+  - planetfall_oathbound
+  - planetfall_levyman
+  - planetfall_surgeon
+  rules:
+  - FreeplayTAPGLIESSTFCF
+  - HullrotEventScheduler
+  - HullrotRoundTimeLimit
+  - HullrotConquest
+
+- type: entity
+  id: FreeplayTAPGLIESSTFCF
+  parent: BaseGameRule
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GamemodeRespawnTime
+    respawnTimeMinutes: 10
+  - type: AdventureRule
+    gameMapsByID:
+      Jackal:
+        gameMapID: Jackal
+        posX: -4000
+        posY: 0
+        IFFColor: White
+        IFFFaction: SHI
+      GliessSanto:
+        gameMapID: GliessSanto
+        posX: 4000
+        posY: 4000
+        IFFColor: IndianRed
+        IFFFaction: TFSC
+      Taypan1AsteroidBelt:
+        gameMapID: Taypan1AsteroidBelt
+        posX: -2000
+        posY: 2000
+      Taypan2AsteroidBelt:
+        gameMapID: Taypan2AsteroidBelt
+        posX: 2000
+        posY: 2000
+      TribalHideout:
+        gameMapID: TribalHideout
+        posX: 4000
+        posY: 4000
+        randomOffsetX: 1000
+        randomOffsetY: 1000
+      ImperialHaulerWreck:
+        gameMapID: ImperialHaulerWreck
+        posX: 1000
+        posY: -2000
+        HideIFF: true
+      Fighter1:
+        gameMapID: Fighter1
+        posX: 500
+        posY: -1000
+        HideIFF: true
+      Fighter2:
+        gameMapID: Fighter2
+        posX: 1000
+        posY: 3000
+        HideIFF: true
+      SolarSailorDerelict:
+        gameMapID: SolarSailorDerelict
+        posX: 4000
+        posY: 1500
+        HideIFF: true
+      FogwreckedDerelict:
+        gameMapID: FogwreckedDerelict
+        posX: -1000
+        posY: 1000
+        HideIFF: true
+      IronRing:
+        gameMapID: IronRing
+        posX: 0
+        posY: 4000
+      RatKovf:
+        gameMapID: RatKovf
+        posX: 3000
+        posY: -500
+      DerelictWaystation:
+        gameMapID: DerelictWaystation
+        posX: 0
+        posY: -3000
+      Graveyard:
+        gameMapID: Graveyard
+        posX: -1000
+        posY: 4000
+      Craster:
+        gameMapID: Craster
+        posX: 2000
+        posY: -2000
+
+- type: gamePreset
+  id: FreeplayTFSCSHIAlt
+  alias:
+  - freeplaytfscshialt
+  name: Freeplay | TFCF & SHI (Alternative)
+  showInVote: true
+  description: A volatile stretch of the Taypan frontier contested by the TFCF and Shinohara interests. With the Jackal instead of the Freeport. Lasts 2-4 hours.
+  excludedJobs:
+  - UnionfallCadetDSM
+  - UnionfallRiflemanDSM
+  - UnionfallDoctorDSM
+  - UnionfallOfficerDSM
+  - UnionfallLeaderDSM
+  - UnionfallShipCaptainDSM
+  - UnionfallShipCrewDSM
+  - UnionfallCadetNCWL
+  - UnionfallRiflemanNCWL
+  - UnionfallDoctorNCWL
+  - UnionfallOfficerNCWL
+  - UnionfallLeaderNCWL
+  - UnionfallShipCaptainNCWL
+  - UnionfallShipCrewNCWL
+  - planetfall_worker
+  - planetfall_partisan
+  - planetfall_mvdofficer
+  - planetfall_mvdgrunt
+  - planetfall_kapitan
+  - planetfall_doctor
+  - planetfall_courtier
+  - planetfall_advocatus
+  - planetfall_governor
+  - planetfall_freeholder
+  - planetfall_oathbound
+  - planetfall_levyman
+  - planetfall_surgeon
+  rules:
+  - FreeplayTFSCSHIAlt
+  - HullrotEventScheduler
+  - HullrotRoundTimeLimit
+  - HullrotConquest
+
+- type: entity
+  id: FreeplayTFSCSHIAlt
+  parent: BaseGameRule
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GamemodeRespawnTime
+    respawnTimeMinutes: 10
+  - type: AdventureRule
+    gameMapsByID:
+      Tatsumoto:
+        gameMapID: Tatsumoto
+        posX: -4000
+        posY: 0
+        IFFColor: White
+        IFFFaction: SHI
+      Jackal:
+        gameMapID: Jackal
+        posX: 4000
+        posY: 4000
+        IFFColor: IndianRed
+        IFFFaction: TFSC
+      Taypan1AsteroidBelt:
+        gameMapID: Taypan1AsteroidBelt
+        posX: -2000
+        posY: 2000
+      Taypan2AsteroidBelt:
+        gameMapID: Taypan2AsteroidBelt
+        posX: 2000
+        posY: 2000
+      TribalHideout:
+        gameMapID: TribalHideout
+        posX: 1000
+        posY: 1000
+        randomOffsetX: 1000
+        randomOffsetY: 1000
+      ImperialHaulerWreck:
+        gameMapID: ImperialHaulerWreck
+        posX: 1000
+        posY: -2000
+        HideIFF: true
+      Fighter1:
+        gameMapID: Fighter1
+        posX: 500
+        posY: -1000
+        HideIFF: true
+      Fighter2:
+        gameMapID: Fighter2
+        posX: 1000
+        posY: 3000
+        HideIFF: true
+      SolarSailorDerelict:
+        gameMapID: SolarSailorDerelict
+        posX: 4000
+        posY: 1500
+        HideIFF: true
+      FogwreckedDerelict:
+        gameMapID: FogwreckedDerelict
+        posX: -1000
+        posY: 1000
+        HideIFF: true
+      IronRing:
+        gameMapID: IronRing
+        posX: 0
+        posY: 4000
+      RatKovf:
+        gameMapID: RatKovf
+        posX: 3000
+        posY: -500
+      DerelictWaystation:
+        gameMapID: DerelictWaystation
+        posX: 0
+        posY: -3000
+      Graveyard:
+        gameMapID: Graveyard
+        posX: -1000
+        posY: 4000
+      Craster:
+        gameMapID: Craster
+        posX: 2000
+        posY: -2000
 
 ### HYPERWAR ###
 # NCWL vs DSM clashing over the central asteroid belt.

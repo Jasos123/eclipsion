@@ -2326,7 +2326,7 @@ entities:
       pos: 2.5,1.5
       parent: 1
     - type: WarpPoint
-      location: Могила Крастерса
+      location: Craster's Grave
 - proto: WaterCooler
   entities:
   - uid: 76

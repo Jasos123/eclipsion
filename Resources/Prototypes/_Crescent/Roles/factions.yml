@@ -126,7 +126,7 @@
     caravans, hidden docks, workshops and pilgrim ships carry the same society wherever the routes lead.
   color: "#9FED58"
   weight: 4
-  enabled: false
+  enabled: true
   icon:
     sprite: /Textures/_Crescent/faction_icons.rsi
     state: fourfamilies

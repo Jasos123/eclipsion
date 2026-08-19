@@ -1,6 +1,6 @@
 - type: gameMap
   id: Jackal
-  mapName: 'GSC Jackal'
+  mapName: 'TFCF Jackal'
   mapPath: /Maps/_Crescent/Stations/jackal.yml
   minPlayers: 0
   stations:
@@ -10,13 +10,13 @@
         - type: FactionStation # conquest win condition
           faction: TFSC
           fallAnnouncement: faction-station-fall-jackal
-          stationName: GSC Jackal
+          stationName: TFCF Jackal
         - type: BlockShipWeaponProjectileGrid
         - type: MapIcon
           iconType: Station
       components:
         - type: StationNameSetup
-          mapNameTemplate: 'GSC Jackal'
+          mapNameTemplate: 'TFCF Jackal'
         - type: VesselDesignation
           designation: vessel-designation-headquarters
         - type: VesselMusic
@@ -26,8 +26,16 @@
             proper: true
         - type: StationJobs
           overflowJobs: []
-          availableJobs: #12 total
+          availableJobs: #19 total
             RingleaderTFSC: [ 1, 1 ]
-            LieutenantTFSC: [ 1, 1 ]
+            LieutenantTFSC: [ 2, 2 ]
             InfanteerTFSC: [ 4, 4 ]
-            TechnicianTFSC: [ 4, 4 ]
+            CoordinatorTFSC: [ 1, 1 ]
+            RipperdocTFSC: [2, 2]
+            TraumasecTFSC: [1, 1]
+            IntelligenceOfficerTFSC: [ 1, 1 ]
+            OperativeTFSC: [2, 2]
+            CyberdawnTechTFSC: [1, 1]
+            ForemanTFSC: [1, 1]
+            ShipbreakerTFSC: [3, 3]
+

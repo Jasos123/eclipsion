@@ -958,5 +958,5 @@ entities:
       pos: 0.5,0.5
       parent: 1
     - type: WarpPoint
-      location: Пояс Астероидов "Тайпан-1"
+      location: Taypan-1 asteroid belt
 ...
