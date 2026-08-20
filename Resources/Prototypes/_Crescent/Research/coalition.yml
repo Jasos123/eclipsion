@@ -476,3 +476,15 @@
   - ScramImplanter
   - SyndicateBombCyberdawn
   - StealthBoxCyberdawn
+
+- type: technology
+  id: CoalitionCDTAssaultCyborgs
+  name: research-technology-cyberdawn-CDTAssaultcyborgs
+  icon:
+    sprite: Mobs/Silicon/chassis.rsi
+    state: synd_sec
+  discipline: Coalition
+  tier: 3
+  cost: 15000
+  recipeUnlocks:
+  - ReinforcementFlatpackSyndicateCyborgAssault

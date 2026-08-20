@@ -89,4 +89,4 @@
     - type: Sprite
       color: "#3F6FB5" # minutemen blue
     - type: ConquestFlag
-      homeFaction: TSP
+      homeFaction: CMM
