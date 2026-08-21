@@ -16,7 +16,6 @@
         components:
         - PowerSupplier
         - FuelGenerator
-        - FuelExtractor
     # Ratgore End
     - type: BlobFloorPlanBuilder
       floorTileset:
@@ -73,9 +72,6 @@
             orGroup: rock
           - id: WallRockTungsten
             prob: 0.012
-            orGroup: rock
-          - id: FuelSeepBoriatic
-            prob: 0.01
             orGroup: rock
 
 - type: entity
@@ -139,9 +135,6 @@
           - id: WallRockCopper
             prob: 0.08
             orGroup: rock
-          - id: FuelSeepBoriatic
-            prob: 0.008
-            orGroup: rock
 
 # Chromite asteroids carry AME seeps.
 - type: entity
@@ -154,9 +147,6 @@
       floorTileset:
       - FloorChromite
     - type: SimpleFloorPlanPopulator
-      guaranteedSpawns:
-        FloorChromite:
-        - FuelSeepAme
       entries:
         FloorChromite:
           - id: WallRockChromite
@@ -176,9 +166,6 @@
             orGroup: rock
           - id: WallRockChromiteArtifactFragment
             prob: 0.005
-            orGroup: rock
-          - id: FuelSeepAme
-            prob: 0.004
             orGroup: rock
     - type: IFF
       flags: HideLabel

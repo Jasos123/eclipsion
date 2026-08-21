@@ -37,7 +37,7 @@ public sealed class MinedAsteroidDecayTest
             Assert.That(decay.ClaimWhitelist, Is.Not.Null,
                 "Without a claim whitelist nothing on the rock can protect it.");
             Assert.That(decay.ClaimWhitelist!.Components,
-                Does.Contain("FuelExtractor").And.Contains("FuelGenerator").And.Contains("PowerSupplier"));
+                Does.Contain("FuelGenerator").And.Contains("PowerSupplier"));
         });
 
         await pair.CleanReturnAsync();
@@ -117,8 +117,8 @@ public sealed class MinedAsteroidDecayTest
         {
             MineOut(entMan, roid, 0.6f);
 
-            // A seep drill parked on the rock is somebody's claim on it.
-            entMan.SpawnEntity("FuelExtractor", new EntityCoordinates(roid, Vector2.Zero));
+            // A generator parked on the rock is somebody's claim on it.
+            entMan.SpawnEntity("PortableGeneratorPacman", new EntityCoordinates(roid, Vector2.Zero));
 
             var comp = entMan.GetComponent<MinedAsteroidDecayComponent>(roid);
             comp.CheckInterval = TimeSpan.Zero;

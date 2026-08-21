@@ -4,12 +4,12 @@
   id: CrateFuelBoriatic
   parent: N14CrateAluminium
   name: boriatic fuel crate
-  description: A shipping crate holding three 200-unit canisters of boriatic fuel.
+  description: A shipping crate holding a single 200 unit canister of boriatic fuel.
   components:
   - type: StorageFill
     contents:
-      - id: JugBoriaticFuel
-        amount: 3
+      - id: FuelCanisterBoriaticT1Full
+        amount: 1
   - type: StaticPrice
     price: 1200
 

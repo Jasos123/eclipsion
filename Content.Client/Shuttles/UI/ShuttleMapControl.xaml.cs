@@ -1,4 +1,5 @@
 using System.Buffers;
+using Content.Client._KS14.UI; // KS14
 using System.Numerics;
 using Content.Client.Shuttles.Systems;
 using Content.Shared.Shuttles.Components;
@@ -18,6 +19,10 @@ using Robust.Shared.Physics.Components;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Content.Client._Crescent.SpaceEvents; // Rat
+using Content.Client.Parallax; // KS14
+using Content.Client.Parallax.Managers; // KS14
+using Content.Shared.Parallax; // KS14
+using Robust.Client.Player; // KS14
 
 namespace Content.Client.Shuttles.UI;
 
@@ -25,6 +30,8 @@ namespace Content.Client.Shuttles.UI;
 public sealed partial class ShuttleMapControl : BaseShuttleControl
 {
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly IParallaxManager _parallax = default!; // KS14
+    [Dependency] private readonly IPlayerManager _player = default!; // KS14
     [Dependency] private readonly IInputManager _inputs = default!;
     [Dependency] private readonly IEntityManager _entManagerCompat = default!;
     // SharedMapSystem is an entity system, not an IoC service.
@@ -159,6 +166,8 @@ public sealed partial class ShuttleMapControl : BaseShuttleControl
         DrawBacking(handle);
 
         const float step = 500f;
+        // KS14: no longer drawn - DrawBiomeBackdrop replaced this as the chart backdrop. Left
+        //   intact, at its original colours, in case the ruled grid is ever wanted back.
         var gridColor = new Color(0.2f, 0.2f, 0.2f, 0.8f);
         var axisColor = new Color(0.4f, 0.4f, 0.4f, 1f);
 
@@ -187,50 +196,9 @@ public sealed partial class ShuttleMapControl : BaseShuttleControl
     // Rat-end
 
     // Rat-start
-    private static void DrawFilledRing(DrawingHandleScreen handle, Vector2 center,
-        float innerRadius, float outerRadius, Color fillColor, Color outlineColor, int segments = 64)
-    {
-        var verts = new Vector2[segments * 6];
-        for (int i = 0; i < segments; i++)
-        {
-            float a0 = MathF.Tau * i / segments;
-            float a1 = MathF.Tau * (i + 1) / segments;
-            var d0 = new Vector2(MathF.Cos(a0), MathF.Sin(a0));
-            var d1 = new Vector2(MathF.Cos(a1), MathF.Sin(a1));
-            verts[i * 6 + 0] = center + d0 * innerRadius;
-            verts[i * 6 + 1] = center + d0 * outerRadius;
-            verts[i * 6 + 2] = center + d1 * outerRadius;
-            verts[i * 6 + 3] = center + d0 * innerRadius;
-            verts[i * 6 + 4] = center + d1 * outerRadius;
-            verts[i * 6 + 5] = center + d1 * innerRadius;
-        }
-        handle.DrawPrimitives(DrawPrimitiveTopology.TriangleList, verts, fillColor);
-
-        var outerVerts = new Vector2[segments];
-        var innerVerts = new Vector2[segments];
-        for (int i = 0; i < segments; i++)
-        {
-            float a = MathF.Tau * i / segments;
-            var dir = new Vector2(MathF.Cos(a), MathF.Sin(a));
-            outerVerts[i] = center + dir * outerRadius;
-            innerVerts[i] = center + dir * innerRadius;
-        }
-        handle.DrawPrimitives(DrawPrimitiveTopology.LineLoop, outerVerts, outlineColor);
-        handle.DrawPrimitives(DrawPrimitiveTopology.LineLoop, innerVerts, outlineColor);
-    }
-
     private void DrawRatZones(DrawingHandleScreen handle)
     {
         var matty = Matrix3Helpers.CreateInverseTransform(Offset, Angle.Zero);
-        var worldOrigin = Vector2.Transform(Vector2.Zero, matty);
-        worldOrigin = worldOrigin with { Y = -worldOrigin.Y };
-        var screenOrigin = ScalePosition(worldOrigin);
-
-        // Хадал
-        DrawFilledRing(handle, screenOrigin,
-            10000f * MinimapScale, 20000f * MinimapScale,
-            new Color(1f, 0f, 0f, 0.01f), new Color(1f, 0f, 0f, 0.1f));
-
 	    foreach (var (_, (center, radius)) in _empZone.ActiveZones)
         {
             var empRelPos = Vector2.Transform(center, matty);
@@ -297,7 +265,10 @@ public sealed partial class ShuttleMapControl : BaseShuttleControl
             return;
         }
 
-        DrawCoordinateGrid(handle); // Rat
+        // KS14: starfield backdrop, replacing the coordinate grid. The backing goes down first so
+        //   the chart is never left bare if the parallax is still loading.
+        DrawBacking(handle);
+        DrawBiomeBackdrop(handle);
 
         DrawRatZones(handle);
 
@@ -723,4 +694,101 @@ public sealed partial class ShuttleMapControl : BaseShuttleControl
             _mapObjects.AddRange(obbies);
         }
     }
+
+    /// <summary>
+    ///     KS14: draws the current space biome's image behind the chart, so the sector view sits
+    ///         on the sky the ship is actually flying through instead of a flat black field
+    ///         ruled into squares.
+    /// </summary>
+    /// <remarks>
+    ///     Pinned to the chart's own frame, not the control: the sky is anchored to the map origin
+    ///         and shifts by exactly the same amount as the contacts and their labels. So either
+    ///         the whole picture is still, or all of it slides together - nothing ever creeps
+    ///         against anything else, which is what made it tiring to read.
+    ///     Sector scale means <c>MinimapScale</c> is a small fraction of a pixel per unit, so that
+    ///         shift is slow and gentle even at full burn; it is tiled only to cover the gap that
+    ///         panning opens at the edges.
+    ///     Only the base layer is drawn. The upper parallax layers exist to slide against each
+    ///         other for depth in the world view; stacked on one plane they just muddy the image.
+    ///     The backing is still painted underneath, so a parallax that is missing or mid-load
+    ///         leaves the plain black chart rather than an empty control.
+    ///     Because the name is resolved fresh every frame, the backdrop swaps by itself the
+    ///         moment the ship crosses into another biome.
+    /// </remarks>
+    private void DrawBiomeBackdrop(DrawingHandleScreen handle)
+    {
+        var layers = _parallax.GetParallaxLayers(ResolveParallaxName());
+        if (layers.Length == 0)
+            return;
+
+        var tex = layers[0].Texture;
+        var texSize = (Vector2) tex.Size;
+        if (texSize.X < 1f || texSize.Y < 1f)
+            return;
+
+        // Cover, not stretch: the image keeps its aspect and overflows the short axis, so it
+        //   crops instead of distorting.
+        var bounds = (Vector2) PixelSize;
+        var size = texSize * MathF.Max(bounds.X / texSize.X, bounds.Y / texSize.Y);
+
+        // Centre the image on the map origin, in screen terms - the same transform every map
+        //   object goes through, which is what keeps the sky locked to the plot.
+        var matty = Matrix3Helpers.CreateInverseTransform(Offset, Angle.Zero);
+        var worldOrigin = Vector2.Transform(Vector2.Zero, matty);
+        worldOrigin = worldOrigin with { Y = -worldOrigin.Y };
+        var anchor = ScalePosition(worldOrigin) - size / 2f;
+
+        // Step back to the whole tile above the top-left so the loop starts off-screen and
+        //   leaves no seam at the edge.
+        var start = anchor - ((anchor / size).Ceiled() * size);
+
+        for (var x = start.X; x < bounds.X; x += size.X)
+        {
+            for (var y = start.Y; y < bounds.Y; y += size.Y)
+            {
+                handle.DrawTextureRect(tex, new UIBox2(x, y, x + size.X, y + size.Y), KsBackdropTint);
+            }
+        }
+    }
+
+    /// <summary>
+    ///     KS14: picks the parallax the player is actually flying through, in the same order
+    ///         ParallaxOverlay does it: the biome parallax swapped onto the player entity first,
+    ///         then the viewed map's own, then the always-loaded default.
+    /// </summary>
+    /// <remarks>
+    ///     The component lives on the player, not the map - SpaceBiomeSystem swaps it per-session -
+    ///         so a map-only lookup finds nothing on almost every map and the chart falls back to
+    ///         black. An unloaded parallax is queued for loading and the default is drawn meanwhile.
+    /// </remarks>
+    private string ResolveParallaxName()
+    {
+        var parallax = EntManager.GetComponentOrNull<ParallaxComponent>(_player.LocalEntity);
+
+        if (parallax == null && _mapManager.TryGetMap(ViewingMap, out var mapUid))
+            parallax = EntManager.GetComponentOrNull<ParallaxComponent>(mapUid);
+
+        var name = parallax?.Parallax;
+        if (string.IsNullOrEmpty(name))
+            return ParallaxSystem.Fallback;
+
+        if (_parallax.IsLoaded(name))
+            return name;
+
+        // Not prepared yet (textures are generated off-thread); ask for it and use the default
+        //   until it lands. Repeat calls are no-ops while a load is in flight.
+        _parallax.LoadParallaxByName(name);
+        return ParallaxSystem.Fallback;
+    }
+
+    /// <summary>
+    ///     KS14: how far the backdrop is knocked back so the plot stays readable over it.
+    /// </summary>
+    /// <remarks>
+    ///     The RGB darkens the image and the alpha fades it into the black backing beneath, so
+    ///         the sky lands at roughly a quarter of its world brightness - present as scenery,
+    ///         but never competing with contact labels and range rings drawn over it.
+    ///     Nudged cool so the dimmed image stays a night sky rather than going muddy brown.
+    /// </remarks>
+    private static readonly Color KsBackdropTint = new(0.72f, 0.76f, 0.85f, 0.32f);
 }

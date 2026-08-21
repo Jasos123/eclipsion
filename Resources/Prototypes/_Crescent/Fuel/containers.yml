@@ -1,20 +1,32 @@
 # AmeJar is the refillable antimatter container.
-# JugBoriaticFuel is the tier 1 canister.
 
 - type: entity
-  parent: JugBoriaticFuel
-  id: JugBoriaticFuelEmpty
-  suffix: Empty
+  parent: FuelCan
+  id: FuelCanisterBoriaticT1
+  name: boriatic fuel canister
+  description: A pressure canister of boriatic fuel. Standard issue, holds 200 units.
+  categories: [ ]
   components:
+  - type: Label
+    currentLabel: reagent-name-Boriatic-fuel
+  - type: Sprite
+    sprite: _Crescent/Objects/Misc/fuelcan.rsi
+    color: "#e0a33c"
+    layers:
+      - state: jug
+      - state: jug1
+        map: [ "enum.SolutionContainerLayers.Fill" ]
+        visible: false
   - type: SolutionContainerManager
     solutions:
       beaker:
         maxVol: 200
+  - type: SolutionTransferDirection
   - type: StaticPrice
     price: 60
 
 - type: entity
-  parent: JugBoriaticFuelEmpty
+  parent: FuelCanisterBoriaticT1
   id: FuelCanisterBoriaticT2
   name: reinforced boriatic fuel canister
   description: A reinforced pressure canister of boriatic fuel. Holds 500 units.
@@ -25,15 +37,9 @@
         maxVol: 500
   - type: StaticPrice
     price: 140
-  # Blast strength scales with capacity and current fill.
-  - type: Explosive
-    explosionType: Default
-    totalIntensity: 110
-    intensitySlope: 4
-    maxIntensity: 18
 
 - type: entity
-  parent: JugBoriaticFuelEmpty
+  parent: FuelCanisterBoriaticT1
   id: FuelCanisterBoriaticT3
   name: bulk boriatic fuel canister
   description: A compound-wound bulk canister of boriatic fuel. Holds 1000 units.
@@ -44,11 +50,19 @@
         maxVol: 1000
   - type: StaticPrice
     price: 280
-  - type: Explosive
-    explosionType: Default
-    totalIntensity: 220
-    intensitySlope: 5
-    maxIntensity: 30
+
+- type: entity
+  parent: FuelCanisterBoriaticT1
+  id: FuelCanisterBoriaticT1Full
+  suffix: Full
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      beaker:
+        maxVol: 200
+        reagents:
+        - ReagentId: BoriaticFuel
+          Quantity: 200
 
 - type: entity
   parent: FuelCanisterBoriaticT2
@@ -99,12 +113,6 @@
     solution: tank
   - type: StaticPrice
     price: 300
-  # Override the parent yield for a 2000-unit tank.
-  - type: Explosive
-    explosionType: Default
-    totalIntensity: 400
-    intensitySlope: 6
-    maxIntensity: 60
 
 - type: entity
   parent: BoriaticFuelTank

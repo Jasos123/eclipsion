@@ -87,6 +87,7 @@ research-technology-cyberdawn-CDTPhoronBlade = PhoronBlade
 research-technology-cyberdawn-CDTDualPhoronBlade = DualPhoronBlade
 research-technology-cyberdawn-CDTMedicalcyborgs = Medical cyborgs
 research-technology-cyberdawn-CDTSaboteurcyborgs = Saboteur cyborgs
+research-technology-cyberdawn-CDTAssaultcyborgs = Assault cyborgs
 research-technology-cyberdawn-CDTShipT1LPC = Basic stealth ship production
 
 

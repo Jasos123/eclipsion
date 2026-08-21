@@ -204,37 +204,45 @@ public sealed class DynamicCodeSystem : SharedDynamicCodeSystem
     }
     private void onAdd(EntityUid owner, DynamicCodeHolderComponent component, ref ComponentInit args)
     {
+        // Everything the holder is carrying by now - keys pushed in while it was still detached, keys it was
+        // serialised with on a map - is counted here, once. Keying this off the holder rather than off whether
+        // the dictionary has heard of the code is what makes two holders of the same key count as two: the old
+        // check skipped the second one, and then the first removal recycled a key the other still carried.
+        if (component.counted)
+            return;
+
+        component.counted = true;
         foreach (var key in component.codes)
         {
-            if (!instancesPerKey.ContainsKey(key))
-                instancesPerKey.Add(key, 0);
-            if (!existingKeys.Contains(key))
-                existingKeys.Add(key);
-            instancesPerKey[key]++;
+            IncrementKey(key);
         }
     }
 
     private void onRemove(EntityUid owner, DynamicCodeHolderComponent component, object? args)
     {
+        if (!component.counted)
+            return;
+
+        component.counted = false;
         foreach (var key in component.codes)
         {
-            instancesPerKey[key]--;
-            if (instancesPerKey[key] <= 0)
-            {
-                releaseKey(key);
-            }
+            DecrementKey(key);
         }
     }
 
     public void AddKeyToComponent(DynamicCodeHolderComponent component, int key, string? identifier)
     {
-        component.codes.Add(key);
+        // Most holders (doors, consoles, ID cards) are handed keys with a null identifier. Counting only the
+        // identified ones made the refcount far too low, so a grid being sold released keys its own doors
+        // still carried and every later removal threw on the missing dictionary entry.
+        // A holder that is not live yet is counted in full by ComponentInit instead, so it is skipped here.
+        if (component.codes.Add(key) && component.counted)
+            IncrementKey(key);
         if (identifier is null)
             return;
         if(!component.mappedCodes.ContainsKey(identifier))
             component.mappedCodes.Add(identifier, new HashSet<int>());
         component.mappedCodes[identifier].Add(key);
-        instancesPerKey[key]++;
     }
 
     public void AddKeyToComponent(DynamicCodeHolderComponent component, HashSet<int> keys, string? identifier)
@@ -259,12 +267,8 @@ public sealed class DynamicCodeSystem : SharedDynamicCodeSystem
 
     public void RemoveKeyFromComponent(DynamicCodeHolderComponent component, int key, string? identifier)
     {
-        component.codes.Remove(key);
-        instancesPerKey[key]--;
-        if (instancesPerKey[key] <= 0)
-        {
-            releaseKey(key);
-        }
+        if (component.codes.Remove(key) && component.counted)
+            DecrementKey(key);
         string? containedIn = null;
         if (identifier is not null && component.mappedCodes.ContainsKey(identifier) && component.mappedCodes[identifier].Contains(key))
             containedIn = identifier;
@@ -297,6 +301,35 @@ public sealed class DynamicCodeSystem : SharedDynamicCodeSystem
 
     }
 
+    /// <summary>
+    /// Registers one more holder for this key, resurrecting it if it had already been released.
+    /// </summary>
+    private void IncrementKey(int key)
+    {
+        existingKeys.Add(key);
+        freeKeys.Remove(key);
+        instancesPerKey[key] = instancesPerKey.GetValueOrDefault(key) + 1;
+    }
+
+    /// <summary>
+    /// Drops one holder of this key, releasing it once nothing holds it anymore. Untracked keys are ignored
+    /// instead of throwing, since component removal runs during entity deletion where an exception aborts it.
+    /// </summary>
+    private void DecrementKey(int key)
+    {
+        if (!instancesPerKey.TryGetValue(key, out var instances))
+            return;
+
+        instances--;
+        if (instances > 0)
+        {
+            instancesPerKey[key] = instances;
+            return;
+        }
+
+        releaseKey(key);
+    }
+
     public int retrieveKey()
     {
         var key = 0;
@@ -313,7 +346,7 @@ public sealed class DynamicCodeSystem : SharedDynamicCodeSystem
         }
 
         existingKeys.Add(key);
-        instancesPerKey.Add(key,0);
+        instancesPerKey[key] = 0;
         return key;
 
     }

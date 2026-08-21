@@ -1698,16 +1698,16 @@
     runningState: base_machine_processing
     staticRecipes:
     - JugBoriaticFuelCraft
-    # Capacity upgrades remain research-gated.
-    - JugBoriaticFuelEmptyCraft
+    # Always printable: the base canister and the bulk tanks. Only the capacity tiers are research-gated,
+    # and the tank recipes were left unlocked by no technology at all when the seep tree was removed.
+    - FuelCanisterBoriaticT1Craft
+    - BoriaticFuelTankCraft
+    - AmeFuelTankCraft
     dynamicRecipes:
     - FuelCanisterBoriaticT2Craft
     - FuelCanisterBoriaticT3Craft
     - AmeJarT2Craft
     - AmeJarT3Craft
-    - BoriaticFuelTankCraft
-    - AmeFuelTankCraft
-    - FuelExtractorFlatpackCraft
 
 #organs
 

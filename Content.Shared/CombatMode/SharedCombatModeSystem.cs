@@ -1,4 +1,5 @@
 using Content.Shared.Actions;
+using Content.Shared.Mind.Components;
 using Content.Shared.MouseRotator;
 using Content.Shared.Movement.Components;
 using Content.Shared.Popups;
@@ -81,8 +82,11 @@ public abstract class SharedCombatModeSystem : EntitySystem
         if (component.CombatToggleActionEntity != null)
             _actionsSystem.SetToggled(component.CombatToggleActionEntity, component.IsInCombatMode);
 
-        // Change mouse rotator comps if flag is set
-        if (!component.ToggleMouseRotator || IsNpc(entity))
+        // Change mouse rotator comps if flag is set.
+        // Only the server can see HTNComponent, so IsNpc is always false clientside. When a player takes over
+        // an HTN mob the two sides disagree: the client gives itself a rotator and then spams rotation
+        // requests that get rejected. Anything holding a mind is player driven, so treat it as a player.
+        if (!component.ToggleMouseRotator || (IsNpc(entity) && !IsPlayerControlled(entity)))
             return;
 
         SetMouseRotatorComponents(entity, value);
@@ -100,6 +104,11 @@ public abstract class SharedCombatModeSystem : EntitySystem
             RemComp<MouseRotatorComponent>(uid);
             RemComp<NoRotateOnMoveComponent>(uid);
         }
+    }
+
+    private bool IsPlayerControlled(EntityUid uid)
+    {
+        return TryComp<MindContainerComponent>(uid, out var container) && container.HasMind;
     }
 
     // todo: When we stop making fucking garbage abstract shared components, remove this shit too.

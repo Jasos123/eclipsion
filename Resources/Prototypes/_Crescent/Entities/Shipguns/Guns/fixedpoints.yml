@@ -8,15 +8,14 @@
   description: A fixedpoint self-defense tool based on recovered NT technology, subpar in terms of power use to firepower ratio - mostly seen on civilian models.
   components:
   - type: ApcPowerReceiver
-    powerLoad: 10000
+    powerLoad: 2000
   - type: WeaponPowerDraw
-    energyPerShot: 75000
+    energyPerShot: 16667
   - type: Battery
-    maxCharge: 450000
-    startingCharge: 450000
+    maxCharge: 83335
+    startingCharge: 83335
   - type: ApcPowerReceiverBattery
-    idleLoad: 10000
-    batteryRechargeRate: 90000
+    batteryRechargeRate: 80000
   - type: StaticPrice
     price: 3500
   - type: Sprite
@@ -39,15 +38,12 @@
       machine_board: !type:Container
       machine_parts: !type:Container
   - type: Gun
-    burstCooldown: 5.0
-    burstFireRate: 1.2
-    shotsPerBurst: 6
     fireOnDropChance: 0
     projectileSpeed: 95
     fireRate: 1.2
-    selectedMode: Burst
+    selectedMode: FullAuto
     availableModes:
-    - Burst
+      - FullAuto
     angleDecay: 45
     minAngle: 5
     maxAngle: 15
@@ -56,7 +52,7 @@
       params:
         variation: 0.12
   - type: RechargeBasicEntityAmmo
-    rechargeCooldown: 0.833
+    rechargeCooldown: 2
     rechargeSound:
       path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
       params:
@@ -64,8 +60,8 @@
         variation: 0.08
   - type: BasicEntityAmmoProvider
     proto: BulletMachineGunPlasmaShuttle
-    capacity: 6
-    count: 6
+    capacity: 30
+    count: 10
   - type: HardpointAnchorableOnly
     class: Energy
     size: Small
@@ -86,15 +82,14 @@
   description: An interceptor's bread and butter, the Bizmuth fires supercharged balls of electricty to pelt the powergrids of unsuspecting targets. Most often seen on interceptor vessels.
   components:
   - type: ApcPowerReceiver
-    powerLoad: 30000
+    powerLoad: 2000
   - type: WeaponPowerDraw
-    energyPerShot: 256000
+    energyPerShot: 14583
   - type: Battery
-    maxCharge: 2560000
-    startingCharge: 2560000
+    maxCharge: 72915
+    startingCharge: 72915
   - type: ApcPowerReceiverBattery
-    idleLoad: 30000
-    batteryRechargeRate: 320000
+    batteryRechargeRate: 140000
   - type: StaticPrice
     price: 6500
   - type: Sprite
@@ -117,24 +112,21 @@
       machine_board: !type:Container
       machine_parts: !type:Container
   - type: Gun
-    burstCooldown: 8.0
-    burstFireRate: 2.4
-    shotsPerBurst: 10
     fireOnDropChance: 0
     projectileSpeed: 95
     fireRate: 2.4
-    selectedMode: Burst
+    selectedMode: SemiAuto
     angleDecay: 45
     minAngle: 8
     maxAngle: 15
     availableModes:
-    - Burst
+    - SemiAuto
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/fire1.ogg
       params:
         variation: 0.12
   - type: RechargeBasicEntityAmmo
-    rechargeCooldown: 0.8
+    rechargeCooldown: 6
     rechargeSound:
       path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
       params:
@@ -142,8 +134,8 @@
         variation: 0.08
   - type: BasicEntityAmmoProvider
     proto: BulletMachineGunIon
-    capacity: 10
-    count: 10
+    capacity: 30
+    count: 25
   - type: HardpointAnchorableOnly
     class: Energy
     size: Medium
@@ -171,8 +163,7 @@
     maxCharge: 37500
     startingCharge: 37500
   - type: ApcPowerReceiverBattery
-    idleLoad: 1000
-    batteryRechargeRate: 6000
+    batteryRechargeRate: 12000
   - type: StaticPrice
     price: 3000
   - type: Sprite
@@ -264,8 +255,7 @@
     maxCharge: 15000
     startingCharge: 15000
   - type: ApcPowerReceiverBattery
-    idleLoad: 1000
-    batteryRechargeRate: 6000
+    batteryRechargeRate: 12000
   - type: StaticPrice
     price: 3000
   - type: Sprite
@@ -348,15 +338,14 @@
   description: A massive, ship-mounted missile rack with a unique feeding mechanism. Requires a rocket magazine to operate.
   components:
   - type: ApcPowerReceiver
-    powerLoad: 1500
+    powerLoad: 2000
   - type: WeaponPowerDraw
     energyPerShot: 16667
   - type: Battery
     maxCharge: 83335
     startingCharge: 83335
   - type: ApcPowerReceiverBattery
-    idleLoad: 1500
-    batteryRechargeRate: 10000
+    batteryRechargeRate: 20000
   - type: StaticPrice
     price: 4500
   - type: Sprite
@@ -449,15 +438,14 @@
   description: An outdated, gas-operated slugthrower. Usually found mounted on older civilian models. Ballistic-fed.
   components:
   - type: ApcPowerReceiver
-    powerLoad: 2000
+    powerLoad: 3000
   - type: WeaponPowerDraw
     energyPerShot: 5000
   - type: Battery
     maxCharge: 25000
     startingCharge: 25000
   - type: ApcPowerReceiverBattery
-    idleLoad: 2000
-    batteryRechargeRate: 20000
+    batteryRechargeRate: 40000
   - type: StaticPrice
     price: 8000
   - type: Sprite
@@ -550,15 +538,14 @@
   description: A ship-mounted, fixed-point energy artillery piece using military laser technology as a base - an outdated model from the now-defunct NanoTrasen, although tried and tested in many battles. Requires upkeep in the form of power cages.
   components:
   - type: ApcPowerReceiver
-    powerLoad: 80000
+    powerLoad: 1000
   - type: WeaponPowerDraw
-    energyPerShot: 3280000
+    energyPerShot: 78571
   - type: Battery
-    maxCharge: 9840000
-    startingCharge: 9840000
+    maxCharge: 392855
+    startingCharge: 392855
   - type: ApcPowerReceiverBattery
-    idleLoad: 80000
-    batteryRechargeRate: 820000
+    batteryRechargeRate: 220000
   - type: StaticPrice
     price: 10000
   - type: Sprite
@@ -579,9 +566,6 @@
     containers:
       gun_magazine: !type:ContainerSlot
   - type: Gun
-    burstCooldown: 12.0
-    burstFireRate: 0.7
-    shotsPerBurst: 3
     fireOnDropChance: 0
     fireRate: 0.7
     projectileSpeed: 70
@@ -592,6 +576,7 @@
       path: /Audio/Weapons/Guns/Gunshots/ship_perforator.ogg
     soundEmpty:
       path: /Audio/Items/beep.ogg
+    burstCooldown: 4
   - type: HardpointAnchorableOnly
     class: Energy
     size: Large
@@ -660,8 +645,7 @@
     maxCharge: 20000
     startingCharge: 20000
   - type: ApcPowerReceiverBattery
-    idleLoad: 3000
-    batteryRechargeRate: 32000
+    batteryRechargeRate: 64000
   - type: StaticPrice
     price: 7500
   - type: Sprite
@@ -741,12 +725,11 @@
   description: A product of the Imperial war machine. Produced as an experimental solution to various insurgencies in the Crescent Sector - and later stolen by the insurgents themselves. Still a rare sight aboard most vessels.
   components:
   - type: ApcPowerReceiver
-    powerLoad: 3000
+    powerLoad: 6000
   - type: WeaponPowerDraw
     energyPerShot: 50000
   - type: ApcPowerReceiverBattery
-    idleLoad: 3000
-    batteryRechargeRate: 32000
+    batteryRechargeRate: 64000
   - type: StaticPrice
     price: 20000
   - type: Sprite
@@ -835,15 +818,14 @@
   description: An antiquated NanoTrasen model, commonly fitted on mid-tech fighters.
   components:
   - type: ApcPowerReceiver
-    powerLoad: 1500
+    powerLoad: 3000
   - type: WeaponPowerDraw
     energyPerShot: 500
   - type: Battery
     maxCharge: 2500
     startingCharge: 2500
   - type: ApcPowerReceiverBattery
-    idleLoad: 1500
-    batteryRechargeRate: 12000
+    batteryRechargeRate: 24000
   - type: StaticPrice
     price: 2500
   - type: Sprite
@@ -939,18 +921,17 @@
   id: SAWCleanser
   name: SAW 20mm "Cleanser" gatlingun
   suffix: ShipGun
-  description: A retrofit of the 20mm Vulcan made by TFCF Shipbreaker engineers. Every safety consideration seems to be missing.
+  description: A retrofit of the 20mm vulcan made by TSFC SAW Engineers. All safety considerations seem to be missing on this..
   components:
   - type: ApcPowerReceiver
-    powerLoad: 2000
+    powerLoad: 3000
   - type: WeaponPowerDraw
     energyPerShot: 278
   - type: Battery
     maxCharge: 1390
     startingCharge: 1390
   - type: ApcPowerReceiverBattery
-    idleLoad: 2000
-    batteryRechargeRate: 20000
+    batteryRechargeRate: 40000
   - type: StaticPrice
     price: 8000
   - type: Sprite
@@ -1051,15 +1032,14 @@
   description: A light, stationary rocket platform intended to apply pressure to a target with its guided projectiles.
   components:
   - type: ApcPowerReceiver
-    powerLoad: 1000
+    powerLoad: 2000
   - type: WeaponPowerDraw
     energyPerShot: 882
   - type: Battery
     maxCharge: 4410
     startingCharge: 4410
   - type: ApcPowerReceiverBattery
-    idleLoad: 1000
-    batteryRechargeRate: 6000
+    batteryRechargeRate: 12000
   - type: StaticPrice
     price: 8000
   - type: Sprite

@@ -54,24 +54,14 @@
       onBump: false
       requirePower: true
       highVoltageNode: output
-    # Detonate only the fuel left in the tank.
     - type: Destructible
       thresholds:
         - trigger:
             !type:DamageTrigger
             damage: 200
           behaviors:
-            - !type:SolutionExplosionBehavior
-              solution: tank
             - !type:DoActsBehavior
               acts: [ "Destruction" ]
-        - trigger:
-            !type:DamageTypeTrigger
-            damageType: Heat
-            damage: 25
-          behaviors:
-            - !type:SolutionExplosionBehavior
-              solution: tank
         - trigger:
             !type:DamageTrigger
             damage: 100

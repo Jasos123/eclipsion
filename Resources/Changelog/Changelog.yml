@@ -713,6 +713,12 @@ Entries:
   changes:
     - message: Reskinned the shuttle console as a retro instrument panel - flat bezel, pixel-terminal typeface, green CRT readouts and a NAV // MAP // DOCK // CREW tab strip in place of the old window chrome and buttons.
       type: Tweak
+    - message: The nav plot's range rings, bearing scale and contact labels now use the console's own palette and typeface instead of near-invisible grey, and the sector chart's grid matches. Switching tabs and opening the console play a brief power-on flicker, which respects the reduced motion accessibility option.
+      type: Tweak
+    - message: The shuttle console now carries an always-on status strip under the tabs. It reads out shield strength, counts down the seconds until a downed shield comes back, and flashes a TAKING FIRE warning while the ship is being hit.
+      type: Add
+    - message: The sector chart is no longer a black field ruled into squares. It now sits on a still image of the space biome the ship is currently flying through, which changes as you cross into another one.
+      type: Tweak
   id: 6054
   time: '2026-08-16T00:00:00.0000000+00:00'
   url: null
@@ -739,4 +745,12 @@ Entries:
       type: Tweak
   id: 6057
   time: '2026-08-17T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Felinids are playable again, as a Shinohara Heavy Industries exclusive. They only appear in the species dropdown once you have picked SHI in character setup, no other faction can field one, and they are never handed out by the random species roll. Unlike the old felinids they can no longer be picked up and stuffed into a bag, and the Small trait stays closed to them.
+      type: Add
+  id: 6058
+  time: '2026-08-20T00:00:00.0000000+00:00'
   url: null

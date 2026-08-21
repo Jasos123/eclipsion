@@ -30,16 +30,7 @@
   meltingPoint: -210.0
   tileReactions:
   - !type:FlammableTileReaction
-    temperatureMultiplier: 4
-  # BasePyrotechnic is overridden here, so keep FlammableReaction explicit.
-  # Soaking someone in fuel must NOT light them: it only coats them in fire stacks,
-  # so they burn hard once something actually touches them off.
-  reactiveEffects:
-    Flammable:
-      methods: [ Touch ]
-      effects:
-      - !type:FlammableReaction
-        multiplier: 1
+    temperatureMultiplier: 1.3
   metabolisms:
     Poison:
       effects:

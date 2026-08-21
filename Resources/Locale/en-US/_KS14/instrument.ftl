@@ -8,3 +8,9 @@ ks-instrument-tab-nav = NAV
 ks-instrument-tab-map = MAP
 ks-instrument-tab-dock = DOCK
 ks-instrument-tab-crew = CREW
+
+# Always-on status strip under the tabs.
+ks-status-shield-up = SHIELD { $remaining }/{ $limit }
+ks-status-shield-down = SHIELD DOWN { $time }s
+ks-status-shield-none = SHIELD ---
+ks-status-alert-taking-fire = ! TAKING FIRE !

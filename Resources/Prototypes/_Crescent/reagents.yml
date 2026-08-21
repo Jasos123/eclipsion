@@ -12,17 +12,7 @@
   boilingPoint: -84.7 # Acetylene. Close enough.
   meltingPoint: -80.7
   tileReactions:
-  - !type:FlammableTileReaction
-    temperatureMultiplier: 2.5
-  # BasePyrotechnic is overridden here, so keep FlammableReaction explicit.
-  # Soaking someone in fuel must NOT light them: it only coats them in fire stacks,
-  # so they burn hard once something actually touches them off.
-  reactiveEffects:
-    Flammable:
-      methods: [ Touch ]
-      effects:
-      - !type:FlammableReaction
-        multiplier: 0.6
+  - !type:FlammableTileReaction {}
   metabolisms:
     Poison:
       effects:

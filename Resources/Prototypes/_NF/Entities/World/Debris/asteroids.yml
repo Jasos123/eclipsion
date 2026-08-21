@@ -1,4 +1,4 @@
-﻿# Baseline
+# Baseline
 - type: entity
   id: BaseAsteroidDebrisNF
   parent: BaseDebrisNF
@@ -63,7 +63,6 @@
         components:
         - PowerSupplier
         - FuelGenerator
-        - FuelExtractor
     # Ratgore End
 
 - type: entity
@@ -219,7 +218,6 @@
         components:
         - PowerSupplier
         - FuelGenerator
-        - FuelExtractor
     # Ratgore End
 
 - type: entity
@@ -384,7 +382,6 @@
         components:
         - PowerSupplier
         - FuelGenerator
-        - FuelExtractor
     # Ratgore End
 
 - type: entity
@@ -546,7 +543,6 @@
         components:
         - PowerSupplier
         - FuelGenerator
-        - FuelExtractor
     # Ratgore End
 
 - type: entity
@@ -711,7 +707,6 @@
         components:
         - PowerSupplier
         - FuelGenerator
-        - FuelExtractor
     # Ratgore End
 
 - type: entity
@@ -870,7 +865,6 @@
         components:
         - PowerSupplier
         - FuelGenerator
-        - FuelExtractor
     # Ratgore End
 
 - type: entity

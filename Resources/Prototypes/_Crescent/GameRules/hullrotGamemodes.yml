@@ -81,23 +81,23 @@
         posY: 4000
         IFFColor: "#C677A5"
         IFFFaction: DSM
+      Tatsumoto:
+        gameMapID: Tatsumoto
+        posX: -1500
+        posY: -4500
+        IFFColor: White
+        IFFFaction: SHI
+      Jackal:
+        gameMapID: Jackal
+        posX: 3800
+        posY: -3000
+        IFFColor: IndianRed
+        IFFFaction: TFSC
       GliessSanto:
         gameMapID: GliessSanto
         posX: 0
         posY: 0
         IFFColor: White
-      Tatsumoto:
-        gameMapID: Tatsumoto
-        posX: 0
-        posY: 2000
-        IFFColor: White
-        IFFFaction: SHI
-      Jackal:
-        gameMapID: Jackal
-        posX: -1000
-        posY: -1500
-        IFFColor: IndianRed
-        IFFFaction: TFSC
       Taypan1AsteroidBelt:
         gameMapID: Taypan1AsteroidBelt
         posX: -2000
@@ -106,12 +106,6 @@
         gameMapID: Taypan2AsteroidBelt
         posX: 2000
         posY: 2000
-      TribalHideout:
-        gameMapID: TribalHideout
-        posX: 1000
-        posY: 1000
-        randomOffsetX: 1000
-        randomOffsetY: 1000
       ImperialHaulerWreck:
         gameMapID: ImperialHaulerWreck
         posX: 1000
@@ -137,10 +131,6 @@
         posX: -1000
         posY: 1000
         HideIFF: true
-      IronRing:
-        gameMapID: IronRing
-        posX: 0
-        posY: 4000
       RatKovf:
         gameMapID: RatKovf
         posX: 3000
@@ -221,6 +211,11 @@
         posY: 4000
         IFFColor: "#C677A5"
         IFFFaction: DSM
+      GliessSanto:
+        gameMapID: GliessSanto
+        posX: 0
+        posY: 0
+        IFFColor: White
       Taypan1AsteroidBelt:
         gameMapID: Taypan1AsteroidBelt
         posX: -2000
@@ -229,12 +224,6 @@
         gameMapID: Taypan2AsteroidBelt
         posX: 2000
         posY: 2000
-      TribalHideout:
-        gameMapID: TribalHideout
-        posX: 1000
-        posY: 1000
-        randomOffsetX: 1000
-        randomOffsetY: 1000
       ImperialHaulerWreck:
         gameMapID: ImperialHaulerWreck
         posX: 1000
@@ -260,10 +249,6 @@
         posX: -1000
         posY: 1000
         HideIFF: true
-      IronRing:
-        gameMapID: IronRing
-        posX: 0
-        posY: 4000
       RatKovf:
         gameMapID: RatKovf
         posX: 3000
@@ -343,6 +328,11 @@
         posY: 4000
         IFFColor: IndianRed
         IFFFaction: TFSC
+      GliessSanto:
+        gameMapID: GliessSanto
+        posX: 0
+        posY: 0
+        IFFColor: White
       Taypan1AsteroidBelt:
         gameMapID: Taypan1AsteroidBelt
         posX: -2000
@@ -351,12 +341,6 @@
         gameMapID: Taypan2AsteroidBelt
         posX: 2000
         posY: 2000
-      TribalHideout:
-        gameMapID: TribalHideout
-        posX: 1000
-        posY: 1000
-        randomOffsetX: 1000
-        randomOffsetY: 1000
       ImperialHaulerWreck:
         gameMapID: ImperialHaulerWreck
         posX: 1000
@@ -382,10 +366,6 @@
         posX: -1000
         posY: 1000
         HideIFF: true
-      IronRing:
-        gameMapID: IronRing
-        posX: 0
-        posY: 4000
       RatKovf:
         gameMapID: RatKovf
         posX: 3000
@@ -457,14 +437,13 @@
         gameMapID: Jackal
         posX: -4000
         posY: 0
-        IFFColor: White
-        IFFFaction: SHI
-      GliessSanto:
-        gameMapID: GliessSanto
-        posX: 4000
-        posY: 4000
         IFFColor: IndianRed
         IFFFaction: TFSC
+      GliessSanto:
+        gameMapID: GliessSanto
+        posX: 0
+        posY: 0
+        IFFColor: White
       Taypan1AsteroidBelt:
         gameMapID: Taypan1AsteroidBelt
         posX: -2000
@@ -477,8 +456,8 @@
         gameMapID: TribalHideout
         posX: 4000
         posY: 4000
-        randomOffsetX: 1000
-        randomOffsetY: 1000
+        IFFColor: "#9FED58"
+        IFFFaction: TAP
       ImperialHaulerWreck:
         gameMapID: ImperialHaulerWreck
         posX: 1000
@@ -504,10 +483,6 @@
         posX: -1000
         posY: 1000
         HideIFF: true
-      IronRing:
-        gameMapID: IronRing
-        posX: 0
-        posY: 4000
       RatKovf:
         gameMapID: RatKovf
         posX: 3000
@@ -587,6 +562,11 @@
         posY: 4000
         IFFColor: IndianRed
         IFFFaction: TFSC
+      GliessSanto:
+        gameMapID: GliessSanto
+        posX: 0
+        posY: 0
+        IFFColor: White
       Taypan1AsteroidBelt:
         gameMapID: Taypan1AsteroidBelt
         posX: -2000
@@ -595,12 +575,6 @@
         gameMapID: Taypan2AsteroidBelt
         posX: 2000
         posY: 2000
-      TribalHideout:
-        gameMapID: TribalHideout
-        posX: 1000
-        posY: 1000
-        randomOffsetX: 1000
-        randomOffsetY: 1000
       ImperialHaulerWreck:
         gameMapID: ImperialHaulerWreck
         posX: 1000
@@ -626,10 +600,6 @@
         posX: -1000
         posY: 1000
         HideIFF: true
-      IronRing:
-        gameMapID: IronRing
-        posX: 0
-        posY: 4000
       RatKovf:
         gameMapID: RatKovf
         posX: 3000
