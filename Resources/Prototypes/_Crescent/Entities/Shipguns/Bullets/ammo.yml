@@ -329,7 +329,7 @@
 - type: entity
   id: SwarmrocketClip
   name: 70mm swarmer rocket drum
-  description: An autofeeder drum of 70mm Authoritat rockets.
+  description: An autofeeder drum of 70mm Crown expeditionary rockets.
   parent: BaseMagazineLens
   components:
   - type: Tag
@@ -393,6 +393,65 @@
     tags:
       - SwarmRocketBox
 
+#lancer ammo
+
+- type: entity
+  id: MagazineLancer
+  name: 100mm Lancer missile box
+  description: A fifteen-round loading box for Lancer medium missile systems.
+  parent: BaseItem
+  components:
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    whitelist:
+      tags:
+        - LanceRocket
+    proto: LanceRocketCartridge
+    capacity: 15
+  - type: Item
+    size: Large
+  - type: Sprite
+    sprite: _Crescent/Ammunition/coil.rsi
+    state: base
+  - type: Tag
+    tags:
+      - LanceRocketBox
+
+#magwell ammo
+
+- type: entity
+  id: MagazineIdna
+  name: 180mm Idna torpedo box
+  description: A six-round loading box for Magwell torpedo launchers.
+  parent: BaseItem
+  components:
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    whitelist:
+      tags:
+        - Torpedo
+    proto: IdnaTorpedo
+    capacity: 6
+  - type: Item
+    size: Large
+  - type: Sprite
+    sprite: _Crescent/Ammunition/coil.rsi
+    state: base
+  - type: Tag
+    tags:
+      - TorpedoBox
+
+#snapdragon ammo
+
+- type: entity
+  id: MagazineSnapdragon
+  name: Snapdragon guided rocket drum
+  description: A twenty-round drum for Snapdragon short-range missile systems.
+  parent: SwarmrocketClip
+  components:
+  - type: BallisticAmmoProvider
+    capacity: 20
+
 #48mm rockets - sumitomo & kurosawa
 
 - type: entity
@@ -405,6 +464,7 @@
   - type: Tag
     tags:
     - MagazineRocket48mm
+    - MagazineShortbow
   - type: BallisticAmmoProvider
     mayTransfer: true
     whitelist:

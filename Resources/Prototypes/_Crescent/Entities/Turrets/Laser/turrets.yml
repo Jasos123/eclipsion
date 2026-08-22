@@ -379,7 +379,10 @@
       fireOnDropChance: 0
       projectileSpeed: 95
       burstFireRate: 16
-      burstCooldown: 1.25
+      # 3-round bursts instead of the original 8, so the gap between them has to come down with it or the
+      # magazine regenerates faster than it drains and the gun never runs dry. 3 / (3/16 + 0.47) = 4.56
+      # rounds a second against a 1/0.22 = 4.55 refill, the same equilibrium the 8-round burst sat at.
+      burstCooldown: 0.47
       shotsPerBurst: 3
       selectedMode: Burst
       availableModes:

@@ -1,7 +1,7 @@
 - type: entity
   parent: ClothingNeckBase
   id: ClothingNeckCloakRingleader
-  name: TFCF ringleader's cloak
+  name: TFCF administrator's cloak
   description: An ornamental cape worn by the jointly selected leader of the Taypani Free Companies Federation.
   components:
   - type: Sprite

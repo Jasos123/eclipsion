@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Made by Taleryn for Eclipsion",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "shield",
+      "directions": 1,
+      "delays": [
+        [
+          0.12,
+          0.12,
+          0.12,
+          0.12,
+          0.12,
+          0.12,
+          0.12,
+          0.12
+        ]
+      ]
+    },
+    {
+      "name": "impact",
+      "directions": 1,
+      "delays": [
+        [
+          0.09,
+          0.09,
+          0.09,
+          0.09
+        ]
+      ]
+    }
+  ]
+}

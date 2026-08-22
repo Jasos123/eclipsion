@@ -1,4 +1,7 @@
+using Content.Shared._EE.Contractors.Prototypes;
+using Content.Shared.Stacks;
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._EE.Contractors.Components;
@@ -30,6 +33,13 @@ public sealed partial class PassportComponent : Component
     [DataField, AutoNetworkedField]
     public string PortraitSpecies = "human";
 
+    /// <summary>
+    /// The binding this document is printed in. Purely cosmetic and freely rebindable, so it can
+    /// disagree with <see cref="Nationality"/> and with the issuer's <see cref="Record"/>.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public ProtoId<PassportCoverPrototype> Cover = "PassportCoverBiesel";
+
     [DataField, AutoNetworkedField]
     public string Sex = string.Empty;
 
@@ -60,6 +70,16 @@ public sealed partial class PassportComponent : Component
 
     [DataField, AutoNetworkedField]
     public int ExpirationYear;
+
+    /// <summary>
+    /// Stack consumed to rebind the document in another polity's cover. Nothing else is required:
+    /// rebinding is meant to be cheap, and the risk sits with whoever carries the forgery.
+    /// </summary>
+    [DataField]
+    public ProtoId<StackPrototype> RebindMaterial = "Cloth";
+
+    [DataField]
+    public int RebindCost = 1;
 
     /// <summary>
     /// Issuer-side authenticity marker. It is intentionally not exposed by the editing UI. A
@@ -135,6 +155,7 @@ public enum PassportUiKey : byte
 
 [Serializable, NetSerializable]
 public sealed class PassportBoundUserInterfaceState(
+    string cover,
     string fullName,
     int age,
     string species,
@@ -148,6 +169,7 @@ public sealed class PassportBoundUserInterfaceState(
     int issueYear,
     int expirationYear) : BoundUserInterfaceState
 {
+    public string Cover { get; } = cover;
     public string FullName { get; } = fullName;
     public int Age { get; } = age;
     public string Species { get; } = species;
@@ -164,6 +186,7 @@ public sealed class PassportBoundUserInterfaceState(
 
 [Serializable, NetSerializable]
 public sealed class PassportSaveMessage(
+    string cover,
     string fullName,
     int age,
     string species,
@@ -177,6 +200,7 @@ public sealed class PassportSaveMessage(
     int issueYear,
     int expirationYear) : BoundUserInterfaceMessage
 {
+    public string Cover { get; } = cover;
     public string FullName { get; } = fullName;
     public int Age { get; } = age;
     public string Species { get; } = species;

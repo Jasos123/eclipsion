@@ -348,6 +348,13 @@ public sealed partial class NPCBlackboard : IEnumerable<KeyValuePair<string, obj
     /// </summary>
     public const string CurrentOrderedTarget = "CurrentOrderedTarget";
 
+    /// <summary>
+    /// Eclipsion - a spot an external source has told the NPC to go and hold. Kept apart from
+    /// FollowTarget: that one is where the NPC lives by default, this one is a standing order that
+    /// outranks it and stays put until it is replaced.
+    /// </summary>
+    public const string OrderedMoveTarget = "OrderedMoveTarget";
+
     public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
     {
         return _blackboard.GetEnumerator();

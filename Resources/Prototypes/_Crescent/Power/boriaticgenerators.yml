@@ -60,6 +60,8 @@
             !type:DamageTrigger
             damage: 200
           behaviors:
+            - !type:SolutionExplosionBehavior
+              solution: tank
             - !type:DoActsBehavior
               acts: [ "Destruction" ]
         - trigger:

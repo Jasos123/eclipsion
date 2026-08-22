@@ -135,9 +135,9 @@ telekinetic-pulse-power-initialization-feedback =
 telekinetic-pulse-power-metapsionic-feedback = {CAPITALIZE($entity)} has the essence of pure kinesis flowing through him.
 
 # Pyrokinetic Flare
-action-name-pyrokinetic-flare = Pyrokinetic Flare
+action-name-pyrokinetic-flare = Fireball
 action-description-pyrokinetic-flare =
-    Generate a flash of firelight from Gehenna to blind your adversaries.
+    Pull a mote of Gehenna into the world and throw it. It bursts into flame where it lands.
 pyrokinetic-flare-power-description = { action-description-pyrokinetic-flare }
 pyrokinetic-flare-power-initialization-feedback =
     My gaze is briefly filled with a flash of immense light and head, and for a single moment I can see a glimpse of a realm
@@ -179,6 +179,9 @@ ethereal-pickup-fail = My hand sizzles as it passes through...
 
 # Psionic Familiar System
 psionic-familiar-cant-attack-master = I am bound by my Master, I cannot harm them.
+psionic-familiar-order-move = Your familiar breaks off and goes to hold the spot.
+psionic-familiar-order-recall = Your familiar drops what it was doing and returns to your side.
+psionic-familiar-order-attack = Your familiar turns on {THE($target)}.
 psionic-familiar-despawn-text = {CAPITALIZE($entity)} returns from whence it came!
 ghost-role-information-familiar-name = Psionic Familiar
 ghost-role-information-familiar-description = An interdimensional creature bound to the will of a Psion.

@@ -1,13 +1,17 @@
 using Content.Shared._EE.Contractors.Components;
 using Content.Shared._EE.Contractors.Prototypes;
 using Content.Shared.Administration.Logs;
+using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Clothing.Loadouts.Systems;
 using Content.Shared.Database;
 using Content.Shared.Examine;
 using Content.Shared.Humanoid.Prototypes;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory;
 using Content.Shared.Item;
+using Content.Shared.PDA;
+using Content.Shared.Stacks;
 using Content.Shared.Preferences;
 using Content.Shared.Popups;
 using Content.Shared.Storage;
@@ -18,7 +22,6 @@ using Content.Shared.CCVar;
 using Content.Shared.Roles;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
 
@@ -31,7 +34,6 @@ public class SharedPassportSystem : EntitySystem
     private const int MaxTextFieldLength = 64;
     private const string PIDChars = "ABCDEFGHJKLMNPQRSTUVWXYZ0123456789";
 
-    [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IEntityManager _entityManager = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
@@ -41,6 +43,9 @@ public class SharedPassportSystem : EntitySystem
     [Dependency] private readonly ISharedAdminLogManager _adminLogManager = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private readonly SharedStackSystem _stack = default!;
+    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
 
     public override void Initialize()
     {
@@ -99,6 +104,11 @@ public class SharedPassportSystem : EntitySystem
 
         UpdatePassportProfile(new(passportEntity, passportComponent), profile);
 
+        // The document belongs in the PDA's passport pocket. Only when there is no PDA, or its
+        // pocket is already taken, does it fall back to the backpack and then to the floor.
+        if (TryInsertIntoPda(mob, passportEntity))
+            return;
+
         // Try to find back-mounted storage apparatus
         if (_inventory.TryGetSlotEntity(mob, "back", out var item) &&
                 EntityManager.TryGetComponent<StorageComponent>(item, out var inventory))
@@ -114,6 +124,27 @@ public class SharedPassportSystem : EntitySystem
                     $"Passport for {profile.Name} was spawned on the floor due to missing bag space");
             }
         }
+    }
+
+    /// <summary>
+    /// Slots a PDA is normally worn in. A loose PDA in a hand or a bag is deliberately not hunted
+    /// down: the passport just falls through to the backpack in that case.
+    /// </summary>
+    private static readonly string[] PdaSlots = { "id", "belt" };
+
+    private bool TryInsertIntoPda(EntityUid mob, EntityUid passport)
+    {
+        foreach (var slot in PdaSlots)
+        {
+            if (!_inventory.TryGetSlotEntity(mob, slot, out var worn)
+                || !HasComp<PdaComponent>(worn.Value))
+                continue;
+
+            if (_itemSlots.TryInsert(worn.Value, PdaComponent.PdaPassportSlotId, passport, null))
+                return true;
+        }
+
+        return false;
     }
 
     private bool ShouldSpawnPassports =>
@@ -194,7 +225,24 @@ public class SharedPassportSystem : EntitySystem
         var issueYear = Math.Clamp(args.IssueYear, 0, 9999);
         var expirationYear = Math.Clamp(args.ExpirationYear, 0, 9999);
 
-        var changed = passport.Comp.FullName != fullName
+        // The cover is the one field the editor cannot rewrite for free. Rebinding the document
+        // in another polity's binding costs a piece of cloth and nothing else, and it never
+        // touches the issuer's record, so the forgery stays findable by a checker printout.
+        var cover = passport.Comp.Cover;
+        var rebindDenied = false;
+
+        if (args.Cover != cover.Id
+            && _prototypeManager.TryIndex(args.Cover, out PassportCoverPrototype? requested)
+            && requested.Selectable)
+        {
+            if (TryConsumeRebindMaterial(passport, args.Actor))
+                cover = args.Cover;
+            else
+                rebindDenied = true;
+        }
+
+        var changed = passport.Comp.Cover != cover
+            || passport.Comp.FullName != fullName
             || passport.Comp.Age != age
             || passport.Comp.Species != species
             || passport.Comp.Sex != sex
@@ -209,6 +257,7 @@ public class SharedPassportSystem : EntitySystem
 
         if (changed)
         {
+            passport.Comp.Cover = cover;
             passport.Comp.FullName = fullName;
             passport.Comp.Age = age;
             passport.Comp.Species = species;
@@ -225,13 +274,40 @@ public class SharedPassportSystem : EntitySystem
         }
 
         UpdateUiState(passport);
-        _popup.PopupPredicted(Loc.GetString("passport-edit-saved"), passport, args.Actor);
+        _popup.PopupPredicted(
+            Loc.GetString(rebindDenied ? "passport-rebind-no-material" : "passport-edit-saved"),
+            passport,
+            args.Actor);
+    }
+
+    /// <summary>
+    /// Spends the rebinding cost out of a stack the actor is holding. Held only, so a rebind is
+    /// always a deliberate two-handed act rather than something a pocket pays for silently.
+    /// </summary>
+    private bool TryConsumeRebindMaterial(Entity<PassportComponent> passport, EntityUid actor)
+    {
+        if (passport.Comp.RebindCost <= 0)
+            return true;
+
+        foreach (var held in _hands.EnumerateHeld(actor))
+        {
+            if (held == passport.Owner
+                || !TryComp<StackComponent>(held, out var stack)
+                || stack.StackTypeId != passport.Comp.RebindMaterial.Id
+                || stack.Count < passport.Comp.RebindCost)
+                continue;
+
+            return _stack.Use(held, passport.Comp.RebindCost, stack);
+        }
+
+        return false;
     }
 
     private void UpdateUiState(Entity<PassportComponent> passport)
     {
         var component = passport.Comp;
         _ui.SetUiState(passport.Owner, PassportUiKey.Key, new PassportBoundUserInterfaceState(
+            component.Cover,
             component.FullName,
             component.Age,
             component.Species,
@@ -248,7 +324,10 @@ public class SharedPassportSystem : EntitySystem
 
     private void OnUseInHand(Entity<PassportComponent> passport, ref UseInHandEvent evt)
     {
-        if (evt.Handled || !_timing.IsFirstTimePredicted)
+        // Deliberately not gated on IsFirstTimePredicted. Every prediction replay re-runs this
+        // from the last server state, so skipping the replays let the client snap back to the
+        // old sprite for the rest of the round trip - the flicker seen when leafing through it.
+        if (evt.Handled)
             return;
 
         evt.Handled = true;

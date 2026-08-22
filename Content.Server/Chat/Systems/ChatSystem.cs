@@ -11,6 +11,7 @@ using Content.Server.Speech.Components;
 using Content.Server.Speech.EntitySystems;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
+using Content.Shared.Abilities.Psionics;
 using Content.Shared.ActionBlocker;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
@@ -259,6 +260,16 @@ public sealed partial class ChatSystem : SharedChatSystem
         // This is really terrible. I hate myself for doing this.
         if (language.SpeechOverride.ChatTypeOverride is { } chatTypeOverride)
             desiredType = chatTypeOverride;
+
+        // Eclipsion - a Veil Sight projection is a mind with no throat: it has no SpeechComponent, so
+        // anything it said out loud was dropped on the floor with no feedback at all. It does carry
+        // Telepathy, which is the one voice it actually has, so send it there instead of nowhere.
+        if (desiredType is InGameICChatType.Speak or InGameICChatType.Whisper
+            && HasComp<TelegnosticProjectionComponent>(source))
+        {
+            desiredType = InGameICChatType.Telepathic;
+            checkRadioPrefix = false;
+        }
 
         // This message may have a radio prefix, and should then be whispered to the resolved radio channel
         if (checkRadioPrefix)

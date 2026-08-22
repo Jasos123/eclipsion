@@ -30,9 +30,11 @@ psionic-skill-branch-kinetic-name = Kinetic
 psionic-skill-branch-kinetic-description = Manipulate matter, force and hostile supernatural effects.
 psionic-skill-branch-defense-name = Defense
 psionic-skill-branch-defense-description = Reinforce armor and project heat-resistant, blast-resistant energy shields.
+psionic-skill-branch-recurrence-name = Recurrence
+psionic-skill-branch-recurrence-description = An advanced discipline. Hold a piece of the world a moment behind the rest of it, wind worn plate back to what it was, and give the moment back all at once.
 
 psionic-skill-fireball-name = Fireball
-psionic-skill-fireball-description = Release a close-range pyrokinetic flare around yourself.
+psionic-skill-fireball-description = Throw a bolt of psionic flame at a chosen spot. It bursts on impact and sets what it touches alight.
 psionic-skill-pyrokinesis-name = Pyrokinesis
 psionic-skill-pyrokinesis-description = Ignite a flammable target at range.
 psionic-skill-flame-breath-name = Flame Breath
@@ -47,7 +49,7 @@ psionic-skill-invisibility-description = Become invisible to psychically suscept
 psionic-skill-shadeskip-name = Shadeskip
 psionic-skill-shadeskip-description = Tear open the local veil with a burst of shadow.
 psionic-skill-dark-swap-name = Dark Swap
-psionic-skill-dark-swap-description = Shift between the material world and a shadowed state. Walls stop mattering, but you never fully vanish - a careful eye still catches the shimmer.
+psionic-skill-dark-swap-description = Shift into a shadowed state for half a minute. Walls stop mattering, but you never vanish - the shimmer is plain to a careful eye, and anyone who spots it can still put a hand on you.
 
 psionic-skill-healing-word-name = Healing Word
 psionic-skill-healing-word-description = Restore another being with the Lesser Secret of Life.
@@ -82,11 +84,30 @@ psionic-skill-self-shield-name = Energy Aegis
 psionic-skill-self-shield-description = Surround yourself with a 15-second shield against heat and explosions.
 psionic-skill-armor-upgrade-name = Reinforced Aegis
 psionic-skill-armor-upgrade-description = Permanently improve your worn armor's effective protection by 10 percent.
-psionic-skill-ally-shield-name = Projected Aegis
-psionic-skill-ally-shield-description = Project your energy shield around yourself or another nearby character.
+psionic-skill-aegis-dome-name = Aegis Dome
+psionic-skill-aegis-dome-description = Raise a barrier that travels with you and shelters everyone under it, not just one person. Bullets and thrown objects from outside stop dead at its edge, it soaks part of every other hit anyone inside takes, and it shatters once it has taken enough. Lasts 20 seconds.
+
+psionic-skill-stasis-field-name = Stasis Field
+psionic-skill-stasis-field-description = Hang a colourless pocket of slowed time a few tiles away. Bullets, thrown objects and burning fuses crawl inside it, and anyone walking through wades. Lasts 8 seconds.
+psionic-skill-armor-reweave-name = Reweave
+psionic-skill-armor-reweave-description = Wind your worn armour back to the condition it was made in - no welder, no taking it off. One piece in a hundred does not survive the memory and comes apart into the plate it was pressed from.
+psionic-skill-recurrence-pulse-name = Recurrence Pulse
+psionic-skill-recurrence-pulse-description = Collapse your stasis fields and give back every moment they held at once. Anything caught is hurled back down the path it arrived on, and returned rounds answer to you.
 
 command-grant-psionic-level-description = Grants one or more psionic levels and development points.
-command-grant-psionic-level-help = Usage: grantpsioniclevel <entityUid> [amount]
-command-grant-psionic-level-invalid-entity = The first argument must be a valid entity UID.
+command-grant-psionic-level-help = Usage: grantpsioniclevel [entityUid] [amount]. With no arguments, grants one level to yourself.
 command-grant-psionic-level-invalid-amount = The amount must be a positive integer.
-command-grant-psionic-level-not-psionic = That entity is not psionic.
+command-grant-psionic-level-granted = Granted {$amount} level(s) to {$target}. They are now level {$level} with {$points} point(s).
+
+command-grant-psionic-points-description = Grants spendable psionic development points without raising the psionic level.
+command-grant-psionic-points-help = Usage: grantpsionicpoints [entityUid] [amount]. With no arguments, grants one point to yourself.
+command-grant-psionic-points-invalid-amount = The amount must be a positive integer.
+command-grant-psionic-points-granted = Granted {$amount} point(s) to {$target}. They now have {$points}.
+
+command-reset-psionic-cooldowns-description = Clears the use delay on every action granted by a psionic power.
+command-reset-psionic-cooldowns-help = Usage: resetpsioniccooldowns [entityUid]. With no arguments, resets your own psionic cooldowns.
+command-reset-psionic-cooldowns-cleared = Cleared {$count} psionic cooldown(s) on {$target}.
+
+command-psionic-no-self = You have no body to target. Pass an entity UID instead.
+command-psionic-invalid-entity = The first argument must be a valid entity UID.
+command-psionic-not-psionic = {$target} is not psionic.

@@ -1,39 +1,44 @@
 <Document>
-# Frontier Warfare
+[head=2][color=#e8b04b]Ship Combat[/color][/head]
 
-Warfare on the Taypani frontier is typically done via the means of [color=#ebb72a]ship gunnery[/color] systems and there are very little laws of engagement in place.
+Ship weapons can destroy vessels, stations, and other players with little warning. Confirm your target, chain of command, and the [textlink="Roleplay Rules" link="RoleplayRules"] before firing. In-world hostility never overrides server rules.
+
+[head=3][color=#e8b04b]Turrets and targeting consoles[/color][/head]
 
 <Box>
-<GuideEntityEmbed Entity="WeaponTurretPDTNCWL"/>
+<GuideEntityEmbed Entity="WeaponTurretPDT"/>
 <GuideEntityEmbed Entity="BaseWeaponTurretSolaris"/>
 </Box>
 
-Turret systems are operated using a [color=#ebb72a]targeting console[/color], where groups of turrets or individual turrets can be selected to fire by clicking on the starmap provided. Ammo counters of the selected turrets are always displayed near the top of the UI panel, and selected turrets blink orange when selected on your IFF.
+Turret weapons are mounted in hardpoints and controlled through a targeting console. Select the intended weapon or weapon group, verify its ammunition and readiness, then select a target on the tactical display. Selected weapons are highlighted on your ship's IFF display.
 
-#Fixedpoint Weaponry
+[bold]IFF[/bold] means Identification Friend or Foe. It helps identify contacts, but it is not permission to fire: ships can be unregistered, captured, disguised, or incorrectly identified. Confirm important contacts over radio when possible.
 
-While [color=#ebb72a]turret[/color] weapons use [color=#ebb72a]hardpoints[/color], [color=#ebb72a]fixedpoint[/color] weaponry that are operated using remote signallers or your ship's shuttle console require such no infrastructure, and can be wrenched on or off your vessel at any time with only its power draw requirements to be mindful of. Sacrificing mobility and agility, such weapons are often able to use higher calibers of munitions or fire faster to compensate, and are more commonly found on smaller class of ships - although larger vessels sport capital-class armaments like the [color=#ebb72a]320mm accelerator carronade[/color].
-
+[head=3][color=#e8b04b]Fixed weapons[/color][/head]
 
 <Box>
 <GuideEntityEmbed Entity="ShuttleGunPlasmaRepeater"/>
 <GuideEntityEmbed Entity="ShuttleGunMissileRack"/>
 </Box>
 
+Fixed weapons face with the hull and may be controlled by the shuttle console or linked controls. They trade turret coverage for direct forward fire. Before combat, confirm their power, ammunition, firing arc, and control method; never discover these details while approaching a friendly dock.
 
-#Hardpoints
+[head=3][color=#e8b04b]Hardpoints[/color][/head]
 
-Hardpoints are always built into the hull - and more cannot be built, moved in from other ships, or otherwise be tampered with. Hardpoints represent the mechanical interface used for interchangable weapons systems between the turrets themselves and your ship's electronics -- there are however, two exceptions to the rule, where factions that are advanced in a specific combat discipline can produce hardpoints up to medium-class for their respective weapon type, and recurrence-active wreck fields, where restored debris may yield advanced universal hardpoints.
-
+<Box>
 <GuideEntityEmbed Entity="AAAHardpointLargeMissile"/>
 <GuideEntityEmbed Entity="AAAHardpointMediumBallistic"/>
+</Box>
 
-## Shields
+Hardpoints connect compatible turret weapons to the ship. Their size and weapon type limit what can be installed. Most are part of the hull and cannot simply be moved between ships, so ask an experienced engineer before removing or replacing a turret.
+
+[head=3][color=#e8b04b]Shields and power[/color][/head]
 
 <Box>
 <GuideEntityEmbed Entity="ShieldEmitterMedium"/>
 </Box>
 
-Some ships may be outfitted with deflector emitters, capable of deflecting projectiles and blocking explosions. When damaged, deflector bubbles use the ship's power grid to repair themselves -- be wary of your shield, if it takes too much damage, it'll end up cannibalizing the entire powergrid in an attempt to turn itself back on, disabling every other module onboard!
+Deflector emitters use ship power to stop projectiles and explosions. A damaged shield consumes power while recovering; an overloaded or poorly supplied shield can starve thrusters, weapons, life support, or other systems. Watch the power grid and coordinate with engineering instead of repeatedly forcing a failing shield online.
 
+[color=#8fc98a]Before leaving dock, assign a pilot, gunner, engineer, and radio channel. A crew that communicates is more dangerous and much less likely to shoot the wrong target.[/color]
 </Document>

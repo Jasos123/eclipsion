@@ -836,7 +836,7 @@
       - id: ClothingOuterHardsuitSyndicateBulwar
         name: Bulwark hardsuit
       - id: ClothingOuterArmorCyberdawnPatriarch
-        name: Patriarch armor
+        name: Cyberdawn Supervisor armor
       - id: ClothingOuterArmorKendoBogu
         name: kendo bogu
       - id: ClothingOuterArmorSyndicateArmorvestInterdyne
@@ -846,7 +846,7 @@
       - id: ClothingOuterArmorSyndicateApron
         name: armored apron
       - id: ClothingHeadHatPatriarch
-        name: Patriarch hat
+        name: Cyberdawn Supervisor hat
       - id: ClothingEyesThermalVisionGoggles
         name: thermal vision goggles
     - name: Infiltration

@@ -3,6 +3,8 @@
   parent: BasePassport
   id: NCWLPassport
   components:
+    - type: Passport
+      cover: PassportCoverUnion
     - type: Sprite
       sprite: _EE/Contractors/Passport.rsi
       layers:
@@ -56,6 +58,8 @@
   parent: BasePassport
   id: ImperialPassport
   components:
+    - type: Passport
+      cover: PassportCoverImperial
     - type: Sprite
       sprite: _EE/Contractors/Passport.rsi
       layers:
@@ -109,6 +113,8 @@
   parent: BasePassport
   id: AmericanPassport
   components:
+    - type: Passport
+      cover: PassportCoverAmerican
     - type: Sprite
       sprite: _EE/Contractors/Passport.rsi
       layers:
@@ -162,6 +168,8 @@
   parent: BasePassport
   id: ClarizianPassport
   components:
+    - type: Passport
+      cover: PassportCoverClarizian
     - type: Sprite
       sprite: _EE/Contractors/Passport.rsi
       layers:
@@ -216,6 +224,8 @@
   parent: BasePassport
   id: CoalitionPassport
   components:
+    - type: Passport
+      cover: PassportCoverCoalition
     - type: Sprite
       sprite: _EE/Contractors/Passport.rsi
       layers:
@@ -269,6 +279,8 @@
   parent: BasePassport
   id: AuthorityPassport
   components:
+    - type: Passport
+      cover: PassportCoverAuthority
     - type: Sprite
       sprite: _EE/Contractors/Passport.rsi
       layers:

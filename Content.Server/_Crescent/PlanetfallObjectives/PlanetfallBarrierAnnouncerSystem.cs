@@ -15,6 +15,17 @@ public sealed class PlanetfallBarrierAnnouncerSystem : EntitySystem
     private const string AnnouncerId = "HullrotAnnouncer";
     private static readonly TimeSpan ReleaseAnnouncementDelay = TimeSpan.FromSeconds(8);
     private const string MarkerBlockerPrototypeId = "MarkerBlocker";
+    private const string MidwaySender = "Castle Garrison";
+    // Sent silently (no announcer audio) halfway through the barrier timer, as flavour before the release.
+    private const string MidwayAnnouncement = """
+        [GARRISON DISPATCH]
+
+        Labour trouble in the outer settlements. Quotas unmet, a work gang refusing to return to the fields, a checkpoint pelted with stones. Patrols have made arrests and the magistrate reports the matter settled.
+
+        Word of the disturbance has reached the ears of Olywier. The Charter Lord has heard it, and waved it away - peasant grumbling, nothing more. The festival will proceed as planned.
+
+        All personnel are to keep order and avoid alarming the celebrants.
+        """;
     private const string ReleaseAnnouncement = """
         [EMERGENCY BROADCAST]
 
@@ -60,8 +71,29 @@ public sealed class PlanetfallBarrierAnnouncerSystem : EntitySystem
         component.TimerCancel = new CancellationTokenSource();
 
         var releaseDelay = TimeSpan.FromSeconds(component.ReleaseDelay);
+        var midwayDelay = TimeSpan.FromSeconds(component.MidwayDelay ?? component.ReleaseDelay / 2f);
+
+        if (midwayDelay > TimeSpan.Zero && midwayDelay < releaseDelay)
+            Timer.Spawn(midwayDelay, () => SendMidwayReport(uid), component.TimerCancel.Token);
 
         Timer.Spawn(releaseDelay, () => TryRelease(uid), component.TimerCancel.Token);
+    }
+
+    /// <summary>
+    ///     Silent flavour announcement: chat only, no announcer audio.
+    /// </summary>
+    private void SendMidwayReport(EntityUid uid)
+    {
+        if (!TryComp<PlanetfallBarrierAnnouncerComponent>(uid, out var component) || component.MidwaySent ||
+            component.Released)
+            return;
+
+        component.MidwaySent = true;
+
+        _prototype.TryIndex<AnnouncerPrototype>(AnnouncerId, out var announcer);
+        var announcementId = _announcer.GetAnnouncementId(AnnouncementId);
+        _announcer.SendAnnouncementMessage(announcementId, MidwayAnnouncement, MidwaySender,
+            announcerOverride: announcer);
     }
 
     public bool TryReleaseOnMap(MapId mapId)

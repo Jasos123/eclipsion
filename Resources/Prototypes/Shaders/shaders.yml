@@ -143,3 +143,8 @@
   id: Hologram
   kind: source
   path: "/Textures/Shaders/hologram.swsl"
+
+- type: shader
+  id: RecurrenceField
+  kind: source
+  path: "/Textures/Shaders/recurrence_field.swsl"

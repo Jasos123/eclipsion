@@ -4,26 +4,82 @@ using Content.Shared.Abilities.Psionics;
 using Content.Shared.Actions.Events;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Timing;
 
 namespace Content.Server.Abilities.Psionics;
 
 /// <summary>
 /// Projects a four-tile, wall-bounded cone of persistent Crescent/RMC floor fire.
 /// </summary>
+/// <remarks>
+/// The cone does not appear all at once. Tiles are grouped into bands by how far down the cone they
+/// sit and lit one band at a time, so the fire visibly runs out from the caster's feet to the far
+/// edge over about half a second rather than the whole four tiles igniting on the same frame.
+/// </remarks>
 public sealed class PsionicFlameBreathPowerSystem : EntitySystem
 {
     private const float ConeLength = 4.5f;
     private const float ConeHalfAngleTangent = 0.5f;
 
+    /// <summary>
+    /// Gap between one band of the cone lighting and the next.
+    /// </summary>
+    private static readonly TimeSpan WaveInterval = TimeSpan.FromSeconds(0.15);
+
     [Dependency] private readonly CrescentTileFireSystem _tileFire = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly SharedPsionicAbilitiesSystem _psionics = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+
+    /// <summary>
+    /// Cones still travelling outwards. Held on the system rather than on an entity: the fire it
+    /// leaves behind is the lasting part, and a half-second of travel does not need a component.
+    /// </summary>
+    private readonly List<PendingBreath> _pending = new();
 
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<PsionicFlameBreathActionEvent>(OnFlameBreath);
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        if (_pending.Count == 0)
+            return;
+
+        var now = _timing.CurTime;
+
+        for (var i = _pending.Count - 1; i >= 0; i--)
+        {
+            var breath = _pending[i];
+
+            // A round restart rewinds CurTime, which would otherwise park the next band in the
+            // future and leave a half-lit cone sitting in the list forever.
+            if (breath.NextWave > now + WaveInterval)
+                breath.NextWave = now;
+
+            if (now < breath.NextWave)
+                continue;
+
+            if (!TryComp<MapGridComponent>(breath.Grid, out var grid))
+            {
+                _pending.RemoveAt(i);
+                continue;
+            }
+
+            foreach (var tile in breath.Bands[breath.Band])
+                _tileFire.TrySpawnTileFire(breath.Grid, grid, tile);
+
+            breath.Band++;
+            breath.NextWave = now + WaveInterval;
+
+            if (breath.Band >= breath.Bands.Count)
+                _pending.RemoveAt(i);
+        }
     }
 
     private void OnFlameBreath(PsionicFlameBreathActionEvent args)
@@ -49,6 +105,11 @@ public sealed class PsionicFlameBreathPowerSystem : EntitySystem
         var originTile = _map.TileIndicesFor(gridUid, grid, origin);
         var extent = (int) MathF.Ceiling(ConeLength);
 
+        // One band per whole metre of reach. Index zero is the tile at the caster's feet.
+        var bands = new List<List<Vector2i>>();
+        for (var band = 0; band <= extent; band++)
+            bands.Add(new List<Vector2i>());
+
         for (var x = -extent; x <= extent; x++)
             for (var y = -extent; y <= extent; y++)
             {
@@ -64,8 +125,28 @@ public sealed class PsionicFlameBreathPowerSystem : EntitySystem
                     || IsOccluded(gridUid, grid, originTile, candidate))
                     continue;
 
-                _tileFire.TrySpawnTileFire(gridUid, grid, candidate);
+                bands[Math.Clamp((int) forward, 0, bands.Count - 1)].Add(candidate);
             }
+
+        bands.RemoveAll(band => band.Count == 0);
+        if (bands.Count == 0)
+            return;
+
+        // The first band lights immediately, so the power always does something on the frame it is
+        // pressed even if the caster is shot the instant afterwards.
+        foreach (var tile in bands[0])
+            _tileFire.TrySpawnTileFire(gridUid, grid, tile);
+
+        if (bands.Count > 1)
+        {
+            _pending.Add(new PendingBreath
+            {
+                Grid = gridUid,
+                Bands = bands,
+                Band = 1,
+                NextWave = _timing.CurTime + WaveInterval,
+            });
+        }
 
         var visual = Spawn("EffectPsionicFlameBreath", Transform(args.Performer).Coordinates);
         _transform.SetParent(visual, args.Performer);
@@ -96,5 +177,16 @@ public sealed class PsionicFlameBreathPowerSystem : EntitySystem
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// One cone still working its way outwards, a band of tiles at a time.
+    /// </summary>
+    private sealed class PendingBreath
+    {
+        public EntityUid Grid;
+        public List<List<Vector2i>> Bands = new();
+        public int Band;
+        public TimeSpan NextWave;
     }
 }

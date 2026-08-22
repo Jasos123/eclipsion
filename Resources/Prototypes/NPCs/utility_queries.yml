@@ -159,6 +159,19 @@
     - !type:TargetInLOSOrCurrentCon
       curve: !type:BoolCurve
 
+# Eclipsion - what a commandable familiar shoots when its master has named a target. Deliberately
+# thin: an order is an order, so there is no faction check, no vision radius and no line of sight
+# gate - the move-to task in front of the gun is what closes the distance and clears the corner.
+- type: utilityQuery
+  id: CommandedTarget
+  query:
+    - !type:OrderedTargetQuery
+  considerations:
+    - !type:TargetIsAliveCon
+      curve: !type:BoolCurve
+    - !type:TargetAccessibleCon
+      curve: !type:BoolCurve
+
 - type: utilityQuery
   id: NearbyGunTargets
   query:

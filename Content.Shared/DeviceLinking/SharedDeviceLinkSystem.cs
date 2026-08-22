@@ -4,6 +4,7 @@ using Content.Shared.Database;
 using Content.Shared.DeviceLinking.Events;
 using Content.Shared.DeviceNetwork;
 using Content.Shared.Popups;
+using Robust.Shared.Map.Events;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
@@ -26,6 +27,7 @@ public abstract class SharedDeviceLinkSystem : EntitySystem
         SubscribeLocalEvent<DeviceLinkSinkComponent, ComponentStartup>(OnSinkStartup);
         SubscribeLocalEvent<DeviceLinkSourceComponent, ComponentRemove>(OnSourceRemoved);
         SubscribeLocalEvent<DeviceLinkSinkComponent, ComponentRemove>(OnSinkRemoved);
+        SubscribeLocalEvent<BeforeSerializationEvent>(OnBeforeSave);
     }
 
     #region Link Validation
@@ -123,10 +125,14 @@ public abstract class SharedDeviceLinkSystem : EntitySystem
     private void OnSourceRemoved(EntityUid uid, DeviceLinkSourceComponent component, ComponentRemove args)
     {
         var query = GetEntityQuery<DeviceLinkSinkComponent>();
-        foreach (var sinkUid in component.LinkedPorts.Keys)
+        // Eclipsion: iterate a copy, the removal below mutates LinkedPorts. Sinks that are already gone still need
+        // their entry dropped, otherwise the source keeps a dangling EntityUid that breaks map saving.
+        foreach (var sinkUid in component.LinkedPorts.Keys.ToArray())
         {
             if (query.TryGetComponent(sinkUid, out var sink))
                 RemoveSinkFromSourceInternal(uid, sinkUid, component, sink);
+            else
+                ClearDanglingLink(component, sinkUid);
         }
     }
 
@@ -136,10 +142,87 @@ public abstract class SharedDeviceLinkSystem : EntitySystem
     private void OnSinkRemoved(EntityUid sinkUid, DeviceLinkSinkComponent sinkComponent, ComponentRemove args)
     {
         var query = GetEntityQuery<DeviceLinkSourceComponent>();
-        foreach (var linkedSource in sinkComponent.LinkedSources)
+        // Eclipsion: this used to query sinkUid instead of linkedSource, so deleting a sink (shutter, conveyor, door)
+        // never unlinked it from its source (button, lever). The source kept a reference to the deleted entity and
+        // the map could no longer be saved. Iterate a copy, the removal below mutates LinkedSources.
+        foreach (var linkedSource in sinkComponent.LinkedSources.ToArray())
         {
-            if (query.TryGetComponent(sinkUid, out var source))
+            if (query.TryGetComponent(linkedSource, out var source))
                 RemoveSinkFromSourceInternal(linkedSource, sinkUid, source, sinkComponent);
+            else
+                sinkComponent.LinkedSources.Remove(linkedSource);
+        }
+    }
+
+    /// <summary>
+    /// Drops every trace of a link to <paramref name="sinkUid"/> from a source, without touching the sink.
+    /// Used when the sink no longer exists and can't be cleaned up the normal way.
+    /// </summary>
+    private static void ClearDanglingLink(DeviceLinkSourceComponent source, EntityUid sinkUid)
+    {
+        source.LinkedPorts.Remove(sinkUid);
+        foreach (var outputs in source.Outputs.Values)
+        {
+            outputs.Remove(sinkUid);
+        }
+    }
+
+    /// <summary>
+    /// Last line of defence for map saving: strips links that point at entities which aren't part of the save.
+    /// Serializing a reference to a deleted or off-map entity makes the whole save fail, so a mapper deleting one
+    /// half of a linked pair (a lever without its conveyor, a button without its shutter) would otherwise be stuck.
+    /// </summary>
+    private void OnBeforeSave(BeforeSerializationEvent ev)
+    {
+        var xformQuery = GetEntityQuery<TransformComponent>();
+        var toRemove = new List<EntityUid>();
+
+        var sources = AllEntityQuery<DeviceLinkSourceComponent, TransformComponent>();
+        while (sources.MoveNext(out var uid, out var source, out var xform))
+        {
+            if (!ev.MapIds.Contains(xform.MapID))
+                continue;
+
+            foreach (var sinkUid in source.LinkedPorts.Keys)
+            {
+                if (!xformQuery.TryGetComponent(sinkUid, out var sinkXform) || !ev.MapIds.Contains(sinkXform.MapID))
+                    toRemove.Add(sinkUid);
+            }
+
+            foreach (var sinkUid in toRemove)
+            {
+                Log.Warning($"Dropping link from {ToPrettyString(uid)} to {sinkUid}, it is not part of the save.");
+                ClearDanglingLink(source, sinkUid);
+
+                if (TryComp<DeviceLinkSinkComponent>(sinkUid, out var sink))
+                    sink.LinkedSources.Remove(uid);
+            }
+
+            toRemove.Clear();
+        }
+
+        var sinks = AllEntityQuery<DeviceLinkSinkComponent, TransformComponent>();
+        while (sinks.MoveNext(out var uid, out var sink, out var xform))
+        {
+            if (!ev.MapIds.Contains(xform.MapID))
+                continue;
+
+            foreach (var sourceUid in sink.LinkedSources)
+            {
+                if (!xformQuery.TryGetComponent(sourceUid, out var sourceXform) || !ev.MapIds.Contains(sourceXform.MapID))
+                    toRemove.Add(sourceUid);
+            }
+
+            foreach (var sourceUid in toRemove)
+            {
+                Log.Warning($"Dropping link from {sourceUid} to {ToPrettyString(uid)}, it is not part of the save.");
+                sink.LinkedSources.Remove(sourceUid);
+
+                if (TryComp<DeviceLinkSourceComponent>(sourceUid, out var source))
+                    ClearDanglingLink(source, uid);
+            }
+
+            toRemove.Clear();
         }
     }
 

@@ -45,13 +45,15 @@ namespace Content.Server.Construction.Commands
                     gridId = entityManager.GetComponent<TransformComponent>(playerEntity).GridUid;
                     break;
                 case 1:
-                    if (!EntityUid.TryParse(args[0], out var id))
+                    // Eclipsion - the id an admin reads off their client is a NetEntity, not a server EntityUid.
+                    if (!NetEntity.TryParse(args[0], out var netId)
+                        || !entityManager.TryGetEntity(netId, out var id))
                     {
                         shell.WriteLine($"{args[0]} is not a valid entity.");
                         return;
                     }
 
-                    gridId = id;
+                    gridId = id.Value;
                     break;
                 default:
                     shell.WriteLine(Help);

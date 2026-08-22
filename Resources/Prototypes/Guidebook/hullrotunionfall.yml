@@ -5,7 +5,6 @@
   priority: 20
   children:
   - MeleeCombat
-  - FormsOfAddress
 
 - type: guideEntry
   id: MeleeCombat
@@ -16,6 +15,7 @@
   id: FormsOfAddress
   name: Forms of Address
   text: "/ServerInfo/_Crescent/Guidebook/FormsOfAddress.xml"
+  priority: 50
 
 #- type: guideEntry
 #  id: UnionfallDSM

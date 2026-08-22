@@ -13,7 +13,7 @@ namespace Content.Shared.Abilities.Psionics
         // Eclipsion - psionic concealment is a stealth field rather than a hard visibility layer swap, so this
         // value is the only thing hiding a concealed psion: low enough to break their silhouette at a glance,
         // high enough that anyone looking carefully still picks the shimmer out.
-        public const float ConcealmentVisibility = 0.25f;
+        public const float ConcealmentVisibility = 0.5f;
 
         [Dependency] private readonly EntityLookupSystem _lookup = default!;
         [Dependency] private readonly SharedPopupSystem _popups = default!;

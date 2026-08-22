@@ -15,6 +15,8 @@
       inverted: true
       species:
         - Voidborn
+        - Skeleton
+        - Felinid
     - !type:CharacterOverallTimeRequirement
       min: 20000
   special:

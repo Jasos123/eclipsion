@@ -111,7 +111,7 @@ faction-mission-cmm-desc =
     Board her, sweep the wreck, and bring the key back. Assume you are not the only party reading that hull signature — anything with a scanner and an opinion will be moving on her too. Do not let it leave the sector in someone else's pocket.
     {""}
     Bring it to the terminal and we will handle the rest.
-faction-mission-cmm-announce = The Colonial Minutemen have recovered the Analliesse authentication key from the derelict and filed it under seal. Whatever that key opens, it now opens for the Minutemen — and every other party in this sector just lost a race they may not have known they were running.
+faction-mission-cmm-announce = The Colonial Minutemen have recovered the Analiesse authentication key from the derelict and filed it under seal. Whatever that key opens, it now opens for the Minutemen — and every other party in this sector just lost a race they may not have known they were running.
 faction-mission-cmm-sender = Minutemen Command
 
 
@@ -128,7 +128,7 @@ faction-finale-tfsc = The TFCF secured enough contracts, access, and common supp
 
 faction-finale-shi = It seems the corporate executives succeeded in convincing both major powers of Taypan. They actually got permission, and now your shuttle console is detecting a massive signal. It's fucking DAWNBREAKER! This will only serve their profits. Taypan is... profit.
 
-faction-finale-cmm = The Colonial Minutemen recovered enough of Analliesse's archive and command authentication to restore the dream it represented. Imperial forces destroyed the old mobile headquarters after the CMM refused to turn local law into Imperial obedience. Your shuttle console now detects ANALIESSE again. Taypan is not saved, but it may once more have a public patrol force beyond Gliess Santo.
+faction-finale-cmm = The Colonial Minutemen recovered enough of Analiesse's archive and command authentication to restore the dream it represented. Imperial forces destroyed the old mobile headquarters after the CMM refused to turn local law into Imperial obedience. Your shuttle console now detects ANALIESSE again. Taypan is not saved, but it may once more have a public patrol force beyond Gliess Santo.
 
 
 # ============================================================================
@@ -159,7 +159,7 @@ faction-victory-ncwl = NCWL VICTORY — THE FRONT ADVANCES. The winning party's 
 
 faction-victory-shi = SHI VICTORY — INFRASTRUCTURE BECOMES LEVERAGE. Credit, logistics, and Prometheus standards bind the frontier to Shinohara.
 
-faction-victory-tfsc = TFCF VICTORY — THE INDEPENDENT MARKET HOLDS. Four distinct member organizations act together where the Ringleader's Federation mandate applies.
+faction-victory-tfsc = TFCF VICTORY — THE INDEPENDENT MARKET HOLDS. Four distinct member organizations act together where the Administrator's Federation mandate applies.
 
 faction-victory-timeout = No one won. The wars ground on, the banners kept falling, and no flag secured Taypan. Another Turning renewed exposed fields, erased temporary gains, and made the frontier profitable enough to fight over again.
 

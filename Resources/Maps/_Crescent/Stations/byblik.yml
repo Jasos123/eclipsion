@@ -19928,7 +19928,7 @@ entities:
       pos: -14.5,10.5
       parent: 1
     - type: FaxMachine
-      name: CyberDawn - Patriarch
+      name: CyberDawn - Supervisor
 - proto: FaxMachineSyndie
   entities:
   - uid: 1209

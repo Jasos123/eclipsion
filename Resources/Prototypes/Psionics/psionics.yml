@@ -739,23 +739,6 @@
     - type: PsionicArmorUpgrade
 
 - type: psionicPower
-  id: PsionicAllyShieldPower
-  name: Projected Aegis
-  powerCategories:
-  - Anomalist
-  - Protective
-  initializeFunctions:
-  - !type:AddPsionicActions
-    actions:
-    - ActionPsionicAllyShield
-  - !type:PsionicFeedbackPopup
-  - !type:AddPsionicStatSources
-    dampeningModifier: 0.5
-  removalFunctions:
-  - !type:RemovePsionicActions
-  - !type:RemovePsionicStatSources
-
-- type: psionicPower
   id: KineticSlamPower
   name: Kinetic Slam
   powerCategories:
@@ -842,3 +825,69 @@
     assayFeedback: anoigo-power-metapsionic-feedback
   - !type:RemovePsionicPsychognomicDescriptors
     psychognomicDescriptor: kinetic
+
+# Recurrence: an advanced discipline that opens at psionic level 2 and stays expensive all the way up.
+- type: psionicPower
+  id: PsionicStasisFieldPower
+  name: Stasis Field
+  powerCategories:
+  - Anomalist
+  - Protective
+  initializeFunctions:
+  - !type:AddPsionicActions
+    actions:
+    - ActionPsionicStasisField
+  - !type:PsionicFeedbackPopup
+  - !type:AddPsionicStatSources
+    dampeningModifier: 0.5
+  removalFunctions:
+  - !type:RemovePsionicActions
+  - !type:RemovePsionicStatSources
+
+- type: psionicPower
+  id: PsionicArmorReweavePower
+  name: Reweave
+  powerCategories:
+  - Anomalist
+  - Protective
+  initializeFunctions:
+  - !type:AddPsionicActions
+    actions:
+    - ActionPsionicArmorReweave
+  - !type:PsionicFeedbackPopup
+  removalFunctions:
+  - !type:RemovePsionicActions
+
+- type: psionicPower
+  id: PsionicRecurrencePulsePower
+  name: Recurrence Pulse
+  powerCategories:
+  - Anomalist
+  - Kinetic
+  initializeFunctions:
+  - !type:AddPsionicActions
+    actions:
+    - ActionPsionicRecurrencePulse
+  - !type:PsionicFeedbackPopup
+  - !type:AddPsionicStatSources
+    dampeningModifier: 0.5
+  removalFunctions:
+  - !type:RemovePsionicActions
+  - !type:RemovePsionicStatSources
+
+- type: psionicPower
+  id: PsionicAegisDomePower
+  name: Aegis Dome
+  powerCategories:
+  - Anomalist
+  - Protective
+  initializeFunctions:
+  - !type:AddPsionicActions
+    actions:
+    - ActionPsionicAegisDome
+  - !type:PsionicFeedbackPopup
+  - !type:AddPsionicStatSources
+    dampeningModifier: 0.5
+  removalFunctions:
+  - !type:RemovePsionicActions
+  - !type:RemovePsionicStatSources

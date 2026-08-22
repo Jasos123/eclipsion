@@ -12,16 +12,6 @@
     - map: ["enum.DamageStateVisualLayers.Base"]
       state: bat
       sprite: Mobs/Animals/bat.rsi
-  - type: GhostRole
-    makeSentient: true
-    allowMovement: true
-    allowSpeech: true
-    name: ghost-role-information-familiar-name
-    description: ghost-role-information-familiar-description
-    rules: ghost-role-information-familiar-rules
-    raffle:
-      settings: default
-  - type: GhostTakeoverAvailable
   - type: Tag
     tags:
     - DoorBumpOpener
@@ -68,9 +58,28 @@
       types:
         Heat: 100
 
+# Familiars a ghost is allowed to claim. Kept separate from the base because a familiar that answers
+# to its summoner and a familiar that answers to whoever grabbed the ghost role are two different
+# things, and the commandable ones cannot be both.
+- type: entity
+  parent: BaseMobPsionicFamiliar
+  id: BaseMobPsionicFamiliarGhostRole
+  abstract: true
+  components:
+  - type: GhostRole
+    makeSentient: true
+    allowMovement: true
+    allowSpeech: true
+    name: ghost-role-information-familiar-name
+    description: ghost-role-information-familiar-description
+    rules: ghost-role-information-familiar-rules
+    raffle:
+      settings: default
+  - type: GhostTakeoverAvailable
+
 - type: entity
   name: Remilia
-  parent: BaseMobPsionicFamiliar
+  parent: BaseMobPsionicFamiliarGhostRole
   id: MobBatRemilia
   description: The chaplain's familiar. Likes fruit.
   components:
@@ -271,8 +280,11 @@
           !type:PhysShapeCircle
           radius: 0.35
         density: 13
+        # Opaque is the light-blocking layer, not a movement one. As a mask it left the imp's physics
+        # and the pathfinder disagreeing about what it could walk through, so it kept planning routes
+        # it then bounced off. It is a mote of fire: give it the flying mob mask.
         mask:
-        - Opaque
+        - FlyingMobMask
         layer:
         - MobLayer
   - type: RandomMetadata

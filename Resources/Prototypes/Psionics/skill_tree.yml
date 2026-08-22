@@ -32,6 +32,12 @@
   color: "#D2B84A"
 
 - type: psionicSkillBranch
+  id: PsionicRecurrenceBranch
+  name: psionic-skill-branch-recurrence-name
+  description: psionic-skill-branch-recurrence-description
+  color: "#9AA3B2"
+
+- type: psionicSkillBranch
   id: PsionicDefenseBranch
   name: psionic-skill-branch-defense-name
   description: psionic-skill-branch-defense-description
@@ -50,26 +56,26 @@
   exclusiveGroup: PsionicPrimaryDiscipline
 
 - type: psionicSkill
-  id: PsiSkillFlameBreath
-  name: psionic-skill-flame-breath-name
-  description: psionic-skill-flame-breath-description
-  icon: { sprite: Objects/Weapons/Guns/Projectiles/magic.rsi, state: fireball }
-  branch: PsionicFireBranch
-  power: FlameBreathPower
-  tier: 1
-  minimumLevel: 2
-  prerequisites: [ PsiSkillFireball ]
-
-- type: psionicSkill
   id: PsiSkillSummonImp
   name: psionic-skill-summon-imp-name
   description: psionic-skill-summon-imp-description
   icon: { sprite: Interface/Actions/psionics.rsi, state: summon_imp }
   branch: PsionicFireBranch
   power: SummonImpPower
+  tier: 1
+  minimumLevel: 2
+  prerequisites: [ PsiSkillFireball ]
+
+- type: psionicSkill
+  id: PsiSkillFlameBreath
+  name: psionic-skill-flame-breath-name
+  description: psionic-skill-flame-breath-description
+  icon: { sprite: Objects/Weapons/Guns/Projectiles/magic.rsi, state: fireball }
+  branch: PsionicFireBranch
+  power: FlameBreathPower
   tier: 2
   minimumLevel: 3
-  prerequisites: [ PsiSkillFlameBreath ]
+  prerequisites: [ PsiSkillSummonImp ]
 
 # Stealth class: remote vision and shadow mobility.
 - type: psionicSkill
@@ -186,33 +192,33 @@
   exclusiveGroup: PsionicPrimaryDiscipline
 
 - type: psionicSkill
-  id: PsiSkillTelekineticPulse
-  name: psionic-skill-telekinetic-pulse-name
-  description: psionic-skill-telekinetic-pulse-description
-  icon: { sprite: Interface/Actions/psionics.rsi, state: telekinetic_pulse }
-  branch: PsionicKineticBranch
-  power: TelekineticPulsePower
-  tier: 1
-  minimumLevel: 2
-  prerequisites: [ PsiSkillAnoigo ]
-
-- type: psionicSkill
   id: PsiSkillKineticSlam
   name: psionic-skill-kinetic-slam-name
   description: psionic-skill-kinetic-slam-description
   icon: { sprite: Objects/Magic/magicactions.rsi, state: knock }
   branch: PsionicKineticBranch
   power: KineticSlamPower
+  tier: 1
+  minimumLevel: 2
+  prerequisites: [ PsiSkillAnoigo ]
+
+- type: psionicSkill
+  id: PsiSkillTelekineticPulse
+  name: psionic-skill-telekinetic-pulse-name
+  description: psionic-skill-telekinetic-pulse-description
+  icon: { sprite: Interface/Actions/psionics.rsi, state: telekinetic_pulse }
+  branch: PsionicKineticBranch
+  power: TelekineticPulsePower
   tier: 2
   minimumLevel: 3
-  prerequisites: [ PsiSkillTelekineticPulse ]
+  prerequisites: [ PsiSkillKineticSlam ]
 
 # Defense class.
 - type: psionicSkill
   id: PsiSkillSelfShield
   name: psionic-skill-self-shield-name
   description: psionic-skill-self-shield-description
-  icon: { sprite: Objects/Magic/magicactions.rsi, state: shield }
+  icon: { sprite: Interface/Actions/psionic_defense.rsi, state: self_aegis }
   branch: PsionicDefenseBranch
   power: PsionicSelfShieldPower
   tier: 0
@@ -223,23 +229,61 @@
   id: PsiSkillArmorUpgrade
   name: psionic-skill-armor-upgrade-name
   description: psionic-skill-armor-upgrade-description
-  icon: { sprite: Objects/Magic/magicactions.rsi, state: shield }
+  icon: { sprite: Interface/Actions/psionic_defense.rsi, state: armor_weave }
   branch: PsionicDefenseBranch
   power: PsionicArmorUpgradePower
   tier: 1
   minimumLevel: 2
   prerequisites: [ PsiSkillSelfShield ]
 
+# The defense capstone: a standing barrier for everyone nearby, rather than one body at a time.
 - type: psionicSkill
-  id: PsiSkillAllyShield
-  name: psionic-skill-ally-shield-name
-  description: psionic-skill-ally-shield-description
-  icon: { sprite: Objects/Magic/magicactions.rsi, state: shield }
+  id: PsiSkillAegisDome
+  name: psionic-skill-aegis-dome-name
+  description: psionic-skill-aegis-dome-description
+  icon: { sprite: Interface/Actions/psionic_defense.rsi, state: aegis_dome }
   branch: PsionicDefenseBranch
-  power: PsionicAllyShieldPower
+  power: PsionicAegisDomePower
   tier: 2
-  minimumLevel: 3
+  cost: 2
+  minimumLevel: 4
   prerequisites: [ PsiSkillArmorUpgrade ]
+
+# Recurrence class. An advanced discipline: it does not open until psionic level 2, which is what
+# keeps it out of a fresh Psion's hands. Past that gate the nodes cost one point each, so the whole
+# branch fits inside the four points a Psion holds at level four even after taking a primary
+# discipline - roughly the back half of a normal round rather than all of a long one.
+- type: psionicSkill
+  id: PsiSkillStasisField
+  name: psionic-skill-stasis-field-name
+  description: psionic-skill-stasis-field-description
+  icon: { sprite: Interface/Actions/psionic_recurrence.rsi, state: stasis_field }
+  branch: PsionicRecurrenceBranch
+  power: PsionicStasisFieldPower
+  tier: 0
+  minimumLevel: 2
+
+- type: psionicSkill
+  id: PsiSkillArmorReweave
+  name: psionic-skill-armor-reweave-name
+  description: psionic-skill-armor-reweave-description
+  icon: { sprite: Interface/Actions/psionic_recurrence.rsi, state: reweave }
+  branch: PsionicRecurrenceBranch
+  power: PsionicArmorReweavePower
+  tier: 1
+  minimumLevel: 3
+  prerequisites: [ PsiSkillStasisField ]
+
+- type: psionicSkill
+  id: PsiSkillRecurrencePulse
+  name: psionic-skill-recurrence-pulse-name
+  description: psionic-skill-recurrence-pulse-description
+  icon: { sprite: Interface/Actions/psionic_recurrence.rsi, state: recurrence_pulse }
+  branch: PsionicRecurrenceBranch
+  power: PsionicRecurrencePulsePower
+  tier: 2
+  minimumLevel: 4
+  prerequisites: [ PsiSkillArmorReweave ]
 
 - type: psionicSkillTree
   id: PsionicGeneralTree
@@ -251,10 +295,11 @@
     - PsionicMindBranch
     - PsionicKineticBranch
     - PsionicDefenseBranch
+    - PsionicRecurrenceBranch
   skills:
     - PsiSkillFireball
-    - PsiSkillFlameBreath
     - PsiSkillSummonImp
+    - PsiSkillFlameBreath
     - PsiSkillVeilSight
     - PsiSkillShadeskip
     - PsiSkillDarkSwap
@@ -265,17 +310,20 @@
     - PsiSkillNoosphericZap
     - PsiSkillTelekineticManipulation
     - PsiSkillAnoigo
-    - PsiSkillTelekineticPulse
     - PsiSkillKineticSlam
+    - PsiSkillTelekineticPulse
     - PsiSkillSelfShield
     - PsiSkillArmorUpgrade
-    - PsiSkillAllyShield
+    - PsiSkillAegisDome
+    - PsiSkillStasisField
+    - PsiSkillArmorReweave
+    - PsiSkillRecurrencePulse
 
 - type: psionicSkillTree
   id: PsionicFireTree
   name: psionic-skill-tree-fire-name
   branches: [ PsionicFireBranch ]
-  skills: [ PsiSkillFireball, PsiSkillFlameBreath, PsiSkillSummonImp ]
+  skills: [ PsiSkillFireball, PsiSkillSummonImp, PsiSkillFlameBreath ]
 
 - type: psionicSkillTree
   id: PsionicLifeTree

@@ -28,8 +28,11 @@ public sealed class GenerateCannonSafetyRangesCommand : IConsoleCommand
             return;
         }
 
-        if (EntityUid.TryParse(args[0], out EntityUid gridUid))
+        // Eclipsion: the id an admin reads off their client is a NetEntity, not a server-side EntityUid.
+        if (NetEntity.TryParse(args[0], out var gridNet)
+            && IoCManager.Resolve<IEntityManager>().TryGetEntity(gridNet, out var gridUidNullable))
         {
+            var gridUid = gridUidNullable.Value;
             if (!int.TryParse(args[1], out int number))
                 return;
             int count = 0;

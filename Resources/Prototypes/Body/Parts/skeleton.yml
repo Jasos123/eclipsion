@@ -81,6 +81,7 @@
       context: "human"
     - type: Speech
       speechVerb: Skeleton
+      speechSounds: Skeleton
     - type: SkeletonAccent
     - type: Actions
     - type: Vocal

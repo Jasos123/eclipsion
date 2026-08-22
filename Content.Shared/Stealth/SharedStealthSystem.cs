@@ -104,7 +104,7 @@ public abstract class SharedStealthSystem : EntitySystem
 
     private void OnStealthGetState(EntityUid uid, StealthComponent component, ref ComponentGetState args)
     {
-        args.State = new StealthComponentState(component.LastVisibility, component.LastUpdated, component.Enabled, component.MaxVisibility); // Shitmed Change
+        args.State = new StealthComponentState(component.LastVisibility, component.LastUpdated, component.Enabled, component.MaxVisibility, component.ColorTint); // Shitmed Change // Eclipsion
     }
 
     private void OnStealthHandleState(EntityUid uid, StealthComponent component, ref ComponentHandleState args)
@@ -116,6 +116,7 @@ public abstract class SharedStealthSystem : EntitySystem
         component.LastVisibility = cast.Visibility;
         component.LastUpdated = cast.LastUpdated;
         component.MaxVisibility = cast.MaxVisibility; // Shitmed Change
+        component.ColorTint = cast.ColorTint; // Eclipsion
     }
 
     private void OnMove(EntityUid uid, StealthOnMoveComponent component, ref MoveEvent args)
@@ -168,6 +169,19 @@ public abstract class SharedStealthSystem : EntitySystem
         if (component.LastUpdated != null)
             component.LastUpdated = _timing.CurTime;
 
+        Dirty(uid, component);
+    }
+
+    /// <summary>
+    /// Eclipsion - sets whether the fading sprite is also tinted towards blue. Off for psionic
+    /// concealment, where the character is meant to be half-hidden rather than recoloured.
+    /// </summary>
+    public void SetColorTint(EntityUid uid, bool value, StealthComponent? component = null)
+    {
+        if (!Resolve(uid, ref component) || component.ColorTint == value)
+            return;
+
+        component.ColorTint = value;
         Dirty(uid, component);
     }
 

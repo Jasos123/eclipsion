@@ -204,8 +204,8 @@
 - type: entity
   parent: ClothingOuterHardsuitBase
   id: ClothingOuterHardsuitCoordinator
-  name: interdyne coordinator hardsuit
-  description: A modular hardsuit produced by Shinohara Heavy Industries, made for Interdyne coordinators.
+  name: interdyne supervisor hardsuit
+  description: A modular hardsuit produced by Shinohara Heavy Industries, made for Interdyne supervisors.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Syndicate/OuterClothing/coordinator_suit.rsi
@@ -330,7 +330,7 @@
 - type: entity
   parent: ClothingOuterBaseLarge
   id: ClothingOuterArmorSyndicateCoordinator
-  name: coordinator's jacket
+  name: interdyne supervisor's jacket
   description: A Kevlar-interwoven durathread jacket with an Interdyne logo on the back, so you know who your boss is.
   components:
   - type: Sprite
@@ -521,7 +521,7 @@
 - type: entity
   parent: [ClothingOuterStorageBase, ClothingOuterArmorBasic]
   id: ClothingOuterArmorSyndicateRingmaster
-  name: ringmaster's armored coat
+  name: administrator's armored coat
   description: A heavy synthetic fabric overcoat with structured shoulders. Sleek durathread panels line the vitals under the lining, offering meager padding.
   components:
   - type: Sprite
@@ -592,7 +592,7 @@
 - type: entity
   parent: [ClothingOuterStorageBase, ClothingOuterArmorBasic]
   id: ClothingOuterArmorCyberdawnPatriarch
-  name: patriarch's overcoat
+  name: cyberdawn supervisor's overcoat
   description: A tall durathread coat, regal and adorned with the Cyberdawn corporate insignia.
   components:
   - type: Sprite

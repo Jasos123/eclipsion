@@ -8,7 +8,6 @@
   - Cloning
   - Cryogenics
   - Surgery
-  - MedicalPatches # Fix for Medicine Patches
 
 - type: guideEntry
   id: MedicalDoctor

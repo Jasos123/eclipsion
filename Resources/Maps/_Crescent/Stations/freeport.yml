@@ -37002,7 +37002,7 @@ entities:
       pos: 44.5,31.5
       parent: 1
     - type: FaxMachine
-      name: Freeport - Patriarch
+      name: Freeport - Cyberdawn Supervisor
   - uid: 3465
     components:
     - type: Transform

@@ -47,7 +47,8 @@ public sealed class AddPsionicPowerCommand : IConsoleCommand
             return;
         }
 
-        if (!EntityUid.TryParse(args[0], out var uid))
+        if (!NetEntity.TryParse(args[0], out var netEntity)
+            || !entMan.TryGetEntity(netEntity, out var uid))
         {
             shell.WriteError(Loc.GetString("addpsionicpower-args-one-error"));
             return;
@@ -59,8 +60,8 @@ public sealed class AddPsionicPowerCommand : IConsoleCommand
             return;
         }
 
-        entMan.EnsureComponent<PsionicComponent>(uid, out var psionic);
-        psionicPowers.InitializePsionicPower(uid, powerProto, psionic);
+        entMan.EnsureComponent<PsionicComponent>(uid.Value, out var psionic);
+        psionicPowers.InitializePsionicPower(uid.Value, powerProto, psionic);
     }
 }
 
@@ -75,13 +76,20 @@ public sealed class AddRandomPsionicPowerCommand : IConsoleCommand
         var entMan = IoCManager.Resolve<IEntityManager>();
         var psionicPowers = entMan.System<PsionicAbilitiesSystem>();
 
-        if (!EntityUid.TryParse(args[0], out var uid))
+        if (args.Length != 1)
+        {
+            shell.WriteError(Loc.GetString("shell-need-exactly-one-argument"));
+            return;
+        }
+
+        if (!NetEntity.TryParse(args[0], out var netEntity)
+            || !entMan.TryGetEntity(netEntity, out var uid))
         {
             shell.WriteError(Loc.GetString("addrandompsionicpower-args-one-error"));
             return;
         }
 
-        psionicPowers.AddRandomPsionicPower(uid, true);
+        psionicPowers.AddRandomPsionicPower(uid.Value, true);
     }
 }
 
@@ -90,7 +98,7 @@ public sealed class RemovePsionicPowerCommand : IConsoleCommand
 {
     public string Command => "removepsionicpower";
     public string Description => Loc.GetString("command-removepsionicpower-description");
-    public string Help => Loc.GetString("command-addpsionicpower-help");
+    public string Help => Loc.GetString("command-removepsionicpower-help");
     public async void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         var entMan = IoCManager.Resolve<IEntityManager>();
@@ -103,7 +111,8 @@ public sealed class RemovePsionicPowerCommand : IConsoleCommand
             return;
         }
 
-        if (!EntityUid.TryParse(args[0], out var uid))
+        if (!NetEntity.TryParse(args[0], out var netEntity)
+            || !entMan.TryGetEntity(netEntity, out var uid))
         {
             shell.WriteError(Loc.GetString("removepsionicpower-args-one-error"));
             return;
@@ -127,7 +136,7 @@ public sealed class RemovePsionicPowerCommand : IConsoleCommand
             return;
         }
 
-        psionicPowers.RemovePsionicPower(uid, psionicComponent, powerProto, true);
+        psionicPowers.RemovePsionicPower(uid.Value, psionicComponent, powerProto, true);
     }
 }
 
@@ -142,7 +151,14 @@ public sealed class RemoveAllPsionicPowersCommand : IConsoleCommand
         var entMan = IoCManager.Resolve<IEntityManager>();
         var psionicPowers = entMan.System<PsionicAbilitiesSystem>();
 
-        if (!EntityUid.TryParse(args[0], out var uid))
+        if (args.Length != 1)
+        {
+            shell.WriteError(Loc.GetString("shell-need-exactly-one-argument"));
+            return;
+        }
+
+        if (!NetEntity.TryParse(args[0], out var netEntity)
+            || !entMan.TryGetEntity(netEntity, out var uid))
         {
             shell.WriteError(Loc.GetString("removeallpsionicpowers-args-one-error"));
             return;
@@ -154,6 +170,6 @@ public sealed class RemoveAllPsionicPowersCommand : IConsoleCommand
             return;
         }
 
-        psionicPowers.RemoveAllPsionicPowers(uid);
+        psionicPowers.RemoveAllPsionicPowers(uid.Value);
     }
 }

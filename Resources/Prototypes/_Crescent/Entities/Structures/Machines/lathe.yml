@@ -42,6 +42,7 @@
         #- Anvil120mmGyrostableRecipe #shellfab
         #- Anvil120mmPlasmaRecipe #shellfab
         #- Leviathan300mmRecipe #shellfab
+        - Pila30mmRegularRecipe
         - Shortbow48mmRegularRecipe
         # - Shortbow48mmGorlexRecipe
         - Azimuth60mmRegularRecipe

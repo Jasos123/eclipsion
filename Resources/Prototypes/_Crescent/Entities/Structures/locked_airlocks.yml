@@ -81,6 +81,89 @@
     containers:
       board: [ DoorElectronicsNCWLCommand ]
 
+- type: entity
+  parent: WindoorSecure
+  id: WindoorSecureNCWLKommissar
+  suffix: NCWL Kommissar, Windoor
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsNCWLKommissar ]
+
+- type: entity
+  parent: WindoorSecure
+  id: WindoorSecureNCWLAdministrator
+  suffix: NCWL Administrator, Windoor
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsNCWLAdministrator ]
+
+- type: entity
+  parent: WindoorSecure
+  id: WindoorSecureNCWLArmory
+  suffix: NCWL Armory, Windoor
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsNCWLArmory ]
+
+# ncwl plasma windoors
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaNCWL
+  suffix: NCWL, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsNCWL ]
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaNCWLCommand
+  suffix: NCWL Command, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsNCWLCommand ]
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaNCWLKommissar
+  suffix: NCWL Kommissar, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsNCWLKommissar ]
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaNCWLAdministrator
+  suffix: NCWL Administrator, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsNCWLAdministrator ]
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaNCWLArmory
+  suffix: NCWL Armory, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsNCWLArmory ]
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaNCWLJail
+  suffix: NCWL Jail, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsNCWLJail ]
+
 #ncwl horizontals
 
 - type: entity
@@ -160,7 +243,7 @@
 - type: entity
   parent: AirlockSyndicate
   id: AirlockSyndicateLockedTFSCRingleader
-  suffix: TFCF Ringleader, Locked
+  suffix: TFCF Administrator, Locked
   components:
   - type: ContainerFill
     containers:
@@ -203,6 +286,125 @@
       board: [ DoorElectronicsTFSCSaws ]
 
 - type: entity
+  parent: WindoorSecure
+  id: WindoorSecureTFSC
+  suffix: TFCF General, Windoor
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsTFSC ]
+
+- type: entity
+  parent: WindoorSecure
+  id: WindoorSecureTFSCCommand
+  suffix: TFCF Command, Windoor
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsTFSCCommand ]
+
+- type: entity
+  parent: WindoorSecure
+  id: WindoorSecureTFSCRingleader
+  suffix: TFCF Administrator, Windoor
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsTFSCRingleader ]
+
+- type: entity
+  parent: WindoorSecure
+  id: WindoorSecureTFSCGorlex
+  suffix: TFCF GSC, Windoor
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsTFSCGorlex ]
+
+- type: entity
+  parent: WindoorSecure
+  id: WindoorSecureTFSCInterdyne
+  suffix: TFCF Interdyne, Windoor
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsTFSCInterdyne ]
+
+- type: entity
+  parent: WindoorSecure
+  id: WindoorSecureTFSCRamzi
+  suffix: TFCF Cyberdawn, Windoor
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsTFSCRamzi ]
+
+# syndicate plasma windoors
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaTFSC
+  suffix: TFCF General, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsTFSC ]
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaTFSCCommand
+  suffix: TFCF Command, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsTFSCCommand ]
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaTFSCRingleader
+  suffix: TFCF Administrator, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsTFSCRingleader ]
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaTFSCGorlex
+  suffix: TFCF GSC, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsTFSCGorlex ]
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaTFSCInterdyne
+  suffix: TFCF Interdyne, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsTFSCInterdyne ]
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaTFSCSaws
+  suffix: TFCF SAW, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsTFSCSaws ]
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaTFSCRamzi
+  suffix: TFCF Cyberdawn, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsTFSCRamzi ]
+
+- type: entity
   parent: AirlockSyndicate
   id: AirlockSyndicateLockedTFSCRamzi
   suffix: TFCF Cyberdawn, Locked
@@ -234,7 +436,7 @@
 - type: entity
   parent: AirlockSyndicateHorizontal
   id: AirlockSyndicateHorizontalLockedTFSCRingleader
-  suffix: TFCF Ringleader, Horizontal
+  suffix: TFCF Administrator, Horizontal
   components:
   - type: ContainerFill
     containers:
@@ -322,6 +524,125 @@
   - type: ContainerFill
     containers:
       board: [ DoorElectronicsDSMEmpireScribe ]
+
+- type: entity
+  parent: WindoorSecure
+  id: WindoorSecureDSMAdvocatus
+  suffix: DSM Advocatus, Windoor
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsDSMAdvocatus ]
+
+- type: entity
+  parent: WindoorSecure
+  id: WindoorSecureDSMSoldier
+  suffix: DSM Soldier, Windoor
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsDSMEmpireSoldier ]
+
+- type: entity
+  parent: WindoorSecure
+  id: WindoorSecureDSMNoble
+  suffix: DSM Noble, Windoor
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsDSMEmpireNoble ]
+
+- type: entity
+  parent: WindoorSecure
+  id: WindoorSecureDSMAdjutant
+  suffix: DSM Adjutant, Windoor
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsDSMEmpireAdjutant ]
+
+- type: entity
+  parent: WindoorSecure
+  id: WindoorSecureDSMGovernor
+  suffix: DSM Lord Admiral, Windoor
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsDSMEmpireGovernor ]
+
+# empire plasma windoors
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaDSMCommand
+  suffix: DSM Magnate, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsDSMEmpireWealth ]
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaDSMArchmaester
+  suffix: DSM Archmaester, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsDSMArchmaester ]
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaDSMScribe
+  suffix: DSM Scribes, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsDSMEmpireScribe ]
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaDSMAdvocatus
+  suffix: DSM Advocatus, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsDSMAdvocatus ]
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaDSMSoldier
+  suffix: DSM Soldier, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsDSMEmpireSoldier ]
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaDSMNoble
+  suffix: DSM Noble, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsDSMEmpireNoble ]
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaDSMAdjutant
+  suffix: DSM Adjutant, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsDSMEmpireAdjutant ]
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaDSMGovernor
+  suffix: DSM Lord Admiral, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsDSMEmpireGovernor ]
 
 - type: entity
   parent: AirlockCommand
@@ -584,6 +905,82 @@
     containers:
       board: [ DoorElectronicsSHIExecutive ]
 
+# shi windoors
+
+- type: entity
+  parent: WindoorSecure
+  id: WindoorSecureShinohara
+  suffix: SHI, Windoor
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsSHI ]
+
+- type: entity
+  parent: WindoorSecure
+  id: WindoorSecureShinoharaOfficer
+  suffix: SHI Officer, Windoor
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsSHIOfficer ]
+
+- type: entity
+  parent: WindoorSecure
+  id: WindoorSecureShinoharaSecurity
+  suffix: SHI Security, Windoor
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsSHISecurity ]
+
+- type: entity
+  parent: WindoorSecure
+  id: WindoorSecureShinoharaExecutive
+  suffix: SHI Executive, Windoor
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsSHIExecutive ]
+
+# shi plasma windoors
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaShinohara
+  suffix: SHI, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsSHI ]
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaShinoharaOfficer
+  suffix: SHI Officer, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsSHIOfficer ]
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaShinoharaSecurity
+  suffix: SHI Security, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsSHISecurity ]
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaShinoharaExecutive
+  suffix: SHI Executive, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsSHIExecutive ]
+
 #shi horizontal
 
 - type: entity
@@ -790,6 +1187,89 @@
   - type: ContainerFill
     containers:
       board: [ DoorElectronicsAlseik ]
+
+- type: entity
+  parent: WindoorSecure
+  id: WindoorSecureArabet
+  suffix: Arabet, Windoor
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsArabet ]
+
+- type: entity
+  parent: WindoorSecure
+  id: WindoorSecureServile
+  suffix: Al'Seik Servile, Windoor
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsServile ]
+
+- type: entity
+  parent: WindoorSecure
+  id: WindoorSecureIzdari
+  suffix: Izdari, Windoor
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsIzdari ]
+
+# 4fam plasma windoors
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaFamilies
+  suffix: Families, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsFamilies ]
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaArabet
+  suffix: Arabet, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsArabet ]
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaAlseik
+  suffix: Al'Seik, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsAlseik ]
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaServile
+  suffix: Al'Seik Servile, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsServile ]
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaIzdari
+  suffix: Izdari, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsIzdari ]
+
+- type: entity
+  parent: WindoorSecurePlasma
+  id: WindoorSecurePlasmaThukker
+  suffix: Thukker, Windoor, Plasma
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsThukker ]
 
 - type: entity
   parent: AirlockCommandHorizontal

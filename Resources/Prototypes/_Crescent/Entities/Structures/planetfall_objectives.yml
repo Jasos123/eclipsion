@@ -5,4 +5,4 @@
   components:
   - type: Transform
   - type: PlanetfallBarrierAnnouncer
-    releaseDelay: 1800
+    releaseDelay: 900

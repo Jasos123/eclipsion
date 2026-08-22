@@ -24,6 +24,11 @@ public sealed partial class PsionicEnergyShieldComponent : Component
     public TimeSpan ExpiresAt;
 
     public EntityUid? Visual;
+
+    /// <summary>
+    /// Server-side throttle so a burst of hits only flares the barrier once.
+    /// </summary>
+    public TimeSpan NextImpact;
 }
 
 /// <summary>

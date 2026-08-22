@@ -112,13 +112,14 @@ public partial class DiplomacySystem
             return;
         }
 
-        if (!EntityUid.TryParse(args[0], out var uid))
+        // Eclipsion: the id an admin reads off their client is a NetEntity, not a server-side EntityUid.
+        if (!NetEntity.TryParse(args[0], out var netUid) || !TryGetEntity(netUid, out var uid))
         {
             shell.WriteError("Invalid UID.");
             return;
         }
 
-        _shuttleSystem.SetIFFFaction(uid, args[1]);
+        _shuttleSystem.SetIFFFaction(uid.Value, args[1]);
     }
 
     public CompletionResult ChangeIFFFactionCompletion(IConsoleShell shell, string[] args)

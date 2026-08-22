@@ -54,12 +54,12 @@
   id: CrateLancerAmmo
   parent: N14CrateAluminium
   name: lancer rocket crate
-  description: 30 individual rockets for the Lancer swarm missile launcher.
+  description: Two 15-round missile boxes for the Lancer swarm launcher.
   components:
   - type: StorageFill
     contents:
-      - id: LanceRocketCartridge
-        amount: 30
+      - id: MagazineLancer
+        amount: 2
 
 - type: entity
   id: CrateAssaultMortarAmmo
@@ -76,12 +76,12 @@
   id: CrateIdnaAmmo
   parent: N14CrateAluminium
   name: 180mm torpedo crate
-  description: A crate of ten 180mm heat-seeking torpedoes for the Idna and Magwell launchers.
+  description: Two six-round torpedo boxes for Magwell launchers. The torpedoes also fit low-capacity Idna pods.
   components:
   - type: StorageFill
     contents:
-      - id: IdnaTorpedo
-        amount: 10
+      - id: MagazineIdna
+        amount: 2
 
 - type: entity
   id: CrateBoriatic
@@ -91,7 +91,7 @@
   components:
   - type: StorageFill
     contents:
-      - id: FuelCanisterBoriaticT1Full
+      - id: JugBoriaticFuel
         amount: 8
   - type: StaticPrice
     price: 5984
@@ -189,7 +189,7 @@
   id: CrateSwarmerAmmo
   parent: N14CrateAluminium
   name: swarmer rocket crate
-  description: 5 bundles of ammunition for swarmer rocket artilleries.
+  description: Five preloaded ten-round minirocket boxes for Swarmer launchers.
   components:
   - type: StorageFill
     contents:
@@ -323,23 +323,23 @@
   id: Crate48mmAmmo
   parent: N14CrateAluminium
   name: 48mm HE 'Shortbow' Rocket Crate
-  description: 10 HE missile magazines for the 'Shortbow' weapon platform.
+  description: Three preloaded 20-round HE missile boxes for Shortbow launchers.
   components:
   - type: StorageFill
     contents:
       - id: Magazine48mmRocket
-        amount: 10
+        amount: 3
 
 - type: entity
   id: Crate48mmAmmoGorlex
   parent: N14CrateAluminium
   name: Gorlex 48mm HE 'Shortbow' Rocket Crate
-  description: 10 HE missile magazines for the 'Shortbow' weapon platform.
+  description: Three preloaded 20-round Gorlex HE missile boxes for Shortbow launchers.
   components:
   - type: StorageFill
     contents:
       - id: Magazine48mmRocketGorlex
-        amount: 10
+        amount: 3
 
 - type: entity
   id: Crate50mmAmmo
@@ -466,12 +466,23 @@
   id: Crate95mmAmmo
   parent: N14CrateAluminium
   name: 95mm HE 'Arbalest' Missile Crate
-  description: 10 HE missiles for the 'Arbalest' weapon platform.
+  description: Two six-round HE missile boxes for Arbalest launchers.
   components:
   - type: StorageFill
     contents:
-      - id: Cartridge95mmRocket
-        amount: 10
+      - id: Magazine95mmRocket
+        amount: 2
+
+- type: entity
+  id: CratePilaAmmo
+  parent: N14CrateAluminium
+  name: 30mm Pila micromissile crate
+  description: Five preloaded ten-round micromissile boxes for Pila saturation launchers.
+  components:
+  - type: StorageFill
+    contents:
+      - id: Magazine30mmPila
+        amount: 5
 
 - type: entity
   id: Crate120mmAmmo

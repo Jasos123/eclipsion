@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Content.Server.Abilities.Psionics;
 using Content.Server.Psionics;
 using Content.Server.Traits;
 using Content.Shared.Abilities.Psionics;
@@ -293,6 +294,172 @@ public sealed class PsionicSkillTreeTest
                 Assert.That(psionic.PsionicLevel, Is.EqualTo(1));
                 Assert.That(psionic.SkillPoints, Is.EqualTo(1));
                 Assert.That(psionic.ActivePowers, Does.Contain(overwhelming));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    /// <summary>
+    ///     Recurrence is the only chain that starts above level one, so a mistake in its gates or costs
+    ///     leaves the capstone out of reach for anyone who did not build around it. Walk the whole branch
+    ///     the way a normal Psion would: primary discipline first at level one, then the class on top.
+    /// </summary>
+    [Test]
+    public async Task RecurrenceBranchCanBeFullyUnlocked()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var skillTree = server.System<PsionicSkillTreeSystem>();
+            var entity = entMan.SpawnEntity(null, map.GridCoords);
+            var psionic = entMan.AddComponent<PsionicComponent>(entity);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(psionic.SkillTree.Id, Is.EqualTo("PsionicGeneralTree"));
+
+                // The branch root is deliberately shut at level one, unlike every other class root.
+                Assert.That(
+                    skillTree.BuildState(entity).Skills
+                        .Single(skill => skill.SkillId == "PsiSkillStasisField").Availability,
+                    Is.EqualTo(PsionicSkillAvailability.InsufficientLevel));
+            });
+
+            // A Psion who skipped their primary discipline would have a point spare at every step, which
+            // would hide a gate that is one level too high. Spend the level one point the way the tree
+            // expects instead, so the branch has to fit in what is actually left over.
+            Assert.That(skillTree.TryUnlock(entity, "PsiSkillTelepathy"), Is.True);
+            Assert.That(psionic.SkillPoints, Is.Zero);
+
+            // Node id, the level it opens at, and what it costs.
+            var chain = new[]
+            {
+                ("PsiSkillStasisField", 2, 1),
+                ("PsiSkillArmorReweave", 3, 1),
+                ("PsiSkillRecurrencePulse", 4, 1),
+            };
+
+            foreach (var (skillId, level, cost) in chain)
+            {
+                var skill = prototypes.Index<PsionicSkillPrototype>(skillId);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(skill.MinimumLevel, Is.EqualTo(level), $"{skillId} opens at an unexpected level.");
+                    Assert.That(skill.Cost, Is.EqualTo(cost), $"{skillId} costs an unexpected number of points.");
+                });
+
+                while (psionic.PsionicLevel < level)
+                    skillTree.GainLevel(entity, psionic, feedback: false);
+
+                Assert.That(
+                    skillTree.BuildState(entity).Skills.Single(node => node.SkillId == skillId).Availability,
+                    Is.EqualTo(PsionicSkillAvailability.Available),
+                    $"{skillId} is not purchasable at level {level}.");
+                Assert.That(skillTree.TryUnlock(entity, skillId), Is.True, $"{skillId} refused to unlock.");
+                Assert.That(
+                    entMan.GetComponent<PsionicComponent>(entity).ActivePowers,
+                    Does.Contain(prototypes.Index(skill.Power)),
+                    $"{skillId} unlocked without granting its power.");
+            }
+
+            // Four points earned by level four, four points spent: a primary discipline plus the whole
+            // branch, with nothing left over. Raising a gate or a cost here puts the capstone out of reach.
+            Assert.Multiple(() =>
+            {
+                Assert.That(psionic.PsionicLevel, Is.EqualTo(4));
+                Assert.That(psionic.SkillPoints, Is.Zero);
+            });
+            Assert.That(psionic.UnlockedSkills, Is.SupersetOf(chain.Select(node => node.Item1)));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    /// <summary>
+    ///     Bone holds no noosphere. Skeletons must not be able to buy their way into psionics at character
+    ///     creation, nor be handed it in-round by a glimmer event or the accept-psionics prompt.
+    /// </summary>
+    [Test]
+    public async Task SkeletonsCannotBecomePsionic()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+
+            foreach (var traitId in new[] { "LatentPsychic", "PsychoHistorian", "Biomancer", "Pyromancer" })
+            {
+                var excludesSkeletons = prototypes.Index<TraitPrototype>(traitId).Requirements
+                    .OfType<CharacterLogicRequirement>()
+                    .SelectMany(requirement => requirement.Requirements)
+                    .OfType<CharacterSpeciesRequirement>()
+                    .Any(requirement =>
+                        requirement.Inverted &&
+                        requirement.Species.Any(species => species.Id == "Skeleton"));
+
+                Assert.That(excludesSkeletons, Is.True, $"{traitId} should exclude Skeleton.");
+            }
+
+            var skeleton = entMan.SpawnEntity("MobSkeletonPerson", map.GridCoords);
+
+            Assert.That(entMan.HasComponent<MindbrokenComponent>(skeleton), Is.True);
+
+            server.System<PsionicAbilitiesSystem>().AddPsionics(skeleton);
+
+            Assert.That(entMan.HasComponent<PsionicComponent>(skeleton), Is.False);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    /// <summary>
+    ///     Atyrians are a shade quicker to the noosphere than everyone else. The bonus lives on the species
+    ///     prototype rather than on PsionicComponent, which a caster trait only adds later, so this checks
+    ///     that the progression system actually reads it.
+    /// </summary>
+    [Test]
+    public async Task AtyriansEarnPotentiaFasterThanBaseline()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+
+            float Cast(string protoId)
+            {
+                var caster = entMan.SpawnEntity(protoId, map.GridCoords);
+                var psionic = entMan.EnsureComponent<PsionicComponent>(caster);
+                psionic.Potentia = 0;
+
+                // Raised by hand rather than through LogPowerUsed, whose glimmer roll is random.
+                var castEv = new PsionicPowerCastEvent(caster, "test power", 10f);
+                entMan.EventBus.RaiseLocalEvent(caster, ref castEv);
+
+                return psionic.Potentia;
+            }
+
+            var human = Cast("MobHuman");
+            var atyrian = Cast("MobMoth");
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(human, Is.GreaterThan(0));
+                Assert.That(atyrian, Is.GreaterThan(human));
+                Assert.That(atyrian, Is.EqualTo(human * 1.2f).Within(0.01f));
             });
         });
 

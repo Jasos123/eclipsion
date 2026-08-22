@@ -21,11 +21,21 @@ public sealed partial class ShipRepairSystem
     [AdminCommand(AdminFlags.Admin)]
     public void RepairGridCmd(IConsoleShell shell, string argstr, string[] args)
     {
-        if (!EntityUid.TryParse(args[0], out var uid))
+        // Eclipsion: args was indexed without a length check (a bare "repairgrid" threw), and the id an
+        // admin reads off their client is a NetEntity, not a server-side EntityUid.
+        if (args.Length < 1)
+        {
+            shell.WriteError("Usage: repairgrid <uid>");
+            return;
+        }
+
+        if (!NetEntity.TryParse(args[0], out var netUid) || !TryGetEntity(netUid, out var entity))
         {
             shell.WriteError("Couldn't parse entity.");
             return;
         }
+
+        var uid = entity.Value;
 
         if (!TryComp<MapGridComponent>(uid, out var grid))
         {
@@ -88,12 +98,19 @@ public sealed partial class ShipRepairSystem
     [AdminCommand(AdminFlags.Admin)]
     public void SnapshotGridCmd(IConsoleShell shell, string argstr, string[] args)
     {
-        if (!EntityUid.TryParse(args[0], out var uid))
+        // Eclipsion: see RepairGridCmd - length guard plus NetEntity resolution.
+        if (args.Length < 1)
+        {
+            shell.WriteError("Usage: snapshotgrid <uid>");
+            return;
+        }
+
+        if (!NetEntity.TryParse(args[0], out var netUid) || !TryGetEntity(netUid, out var entity))
         {
             shell.WriteError("Couldn't parse entity.");
             return;
         }
 
-        GenerateRepairData(uid);
+        GenerateRepairData(entity.Value);
     }
 }

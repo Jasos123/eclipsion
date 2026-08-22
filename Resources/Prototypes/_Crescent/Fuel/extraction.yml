@@ -1,0 +1,199 @@
+# Asteroid fuel seeps and extraction equipment.
+
+- type: entity
+  id: BaseFuelSeep
+  abstract: true
+  name: fuel seep
+  description: A deep crack in the rock, with something pooled far below.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Appearance
+  # Depleted seeps lose their glow.
+  - type: GenericVisualizer
+    visuals:
+      enum.FuelSeepVisuals.Depleted:
+        enum.FuelSeepVisualLayers.Base:
+          True: { color: "#4a4a4a" }
+          False: { color: "#ffffff" }
+
+- type: entity
+  parent: BaseFuelSeep
+  id: FuelSeepBoriatic
+  name: boriatic seep
+  description: Sour orange vapour rises from a crack in the rock. There may be fuel below.
+  components:
+  - type: Sprite
+    sprite: Tiles/Planet/Chasms/desert_chasm.rsi
+    drawdepth: FloorObjects
+    layers:
+    - state: full
+      map: [ "enum.FuelSeepVisualLayers.Base" ]
+  - type: Icon
+    sprite: Tiles/Planet/Chasms/desert_chasm.rsi
+    state: full
+  - type: PointLight
+    radius: 1.8
+    energy: 1.2
+    color: "#e0a33c"
+  - type: FuelSeep
+    reagent: BoriaticFuel
+    reserve: 15000
+    yieldPerCycle: 25 # Roughly 30 minutes per pocket.
+
+- type: entity
+  parent: BaseFuelSeep
+  id: FuelSeepAme
+  name: antimatter seep
+  description: A violet shimmer leaks through a crack in the chromite. Something volatile is trapped below.
+  components:
+  - type: Sprite
+    sprite: Tiles/Planet/Chasms/chromite_chasm.rsi
+    drawdepth: FloorObjects
+    layers:
+    - state: full
+      map: [ "enum.FuelSeepVisualLayers.Base" ]
+  - type: Icon
+    sprite: Tiles/Planet/Chasms/chromite_chasm.rsi
+    state: full
+  - type: PointLight
+    radius: 1.8
+    energy: 1.4
+    color: "#6f2fd6"
+  - type: FuelSeep
+    reagent: AmeFuel
+    reserve: 10000
+    yieldPerCycle: 10 # Roughly 50 minutes per pocket.
+
+- type: entity
+  parent: BaseFlatpack
+  id: FuelExtractorFlatpack
+  name: seep drill flatpack
+  description: A packed NT-FX-1 seep drill. Use a multitool to deploy it, then wrench it down over a seep.
+  components:
+  - type: Flatpack
+    entity: FuelExtractor
+  - type: Sprite
+    layers:
+    - state: base
+    - state: overlay
+      color: "#e0a33c"
+      map: [ "enum.FlatpackVisualLayers.Overlay" ]
+    - state: ame-part
+  - type: StaticPrice
+    price: 700
+  - type: ReverseEngineering
+    recipes:
+    - FuelExtractorFlatpackCraft
+
+- type: entity
+  parent: [ BaseMachine, StructureWheeled ]
+  id: FuelExtractor
+  name: NT-FX-1 seep drill
+  description: A wheeled drill rig that pumps fuel from a seep into its tank or a container in its cradle.
+  components:
+  - type: Sprite
+    sprite: _Crescent/Structures/purifier.rsi
+    snapCardinals: true
+    layers:
+    - state: base_machine
+      map: [ "enum.FuelExtractorVisualLayers.Body" ]
+    - state: buttons_on
+      shader: unshaded
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.FuelExtractorVisuals.Running:
+        enum.FuelExtractorVisualLayers.Body:
+          True: { state: base_machine_processing }
+          False: { state: base_machine }
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.40,-0.40,0.40,0.40"
+        density: 155
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: Anchorable
+    delay: 2
+  - type: AmbientSound
+    range: 5
+    volume: -6
+    sound:
+      path: /Audio/Ambience/Objects/engine_hum.ogg
+    enabled: false
+  - type: FuelExtractor
+  - type: PowerConsumer
+    voltage: Medium
+    drawRate: 15000
+    showInMonitor: false
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      power:
+        !type:CableDeviceNode
+        nodeGroupID: MVPower
+  - type: SolutionContainerManager
+    solutions:
+      # Matches the capacity of one wheeled fuel tank.
+      buffer:
+        maxVol: 2000
+  - type: DrainableSolution
+    solution: buffer
+  - type: ExaminableSolution
+    solution: buffer
+  - type: ItemSlots
+    slots:
+      fuelContainer:
+        name: fuel-extractor-slot-name
+        whitelist:
+          components:
+          - RefillableSolution
+  - type: ContainerContainer
+    containers:
+      fuelContainer: !type:ContainerSlot
+  - type: StaticPrice
+    price: 900
+  # Blast strength scales with the fuel left in the buffer.
+  - type: Explosive
+    explosionType: Default
+    totalIntensity: 400
+    intensitySlope: 6
+    maxIntensity: 60
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Heat
+        damage: 15
+      behaviors:
+      - !type:SolutionExplosionBehavior
+        solution: buffer
+    - trigger:
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:SolutionExplosionBehavior
+        solution: buffer
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          SheetSteel1:
+            min: 4
+            max: 8
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]

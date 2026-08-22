@@ -10,6 +10,20 @@
   recipeUnlocks:
   - FuelCanisterBoriaticT2Craft
   - AmeJarT2Craft
+  - BoriaticFuelTankCraft
+  - AmeFuelTankCraft
+
+- type: technology
+  id: AstronauticsSeepExtraction
+  name: research-technology-astronautics-seep-extraction
+  icon:
+    sprite: _Crescent/Structures/purifier.rsi
+    state: base_machine
+  discipline: CivilianServices
+  tier: 1
+  cost: 2500
+  recipeUnlocks:
+  - FuelExtractorFlatpackCraft
 
 - type: technology
   id: AstronauticsBulkFuelStorage
@@ -19,7 +33,7 @@
     state: jug
   discipline: Astronautics
   tier: 2
-  cost: 7500
+  cost: 5000
   technologyPrerequisites:
   - AstronauticsFuelStorage
   recipeUnlocks:

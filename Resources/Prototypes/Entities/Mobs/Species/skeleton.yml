@@ -32,25 +32,21 @@
     thresholds:
       0: Alive
       100: Critical
-      150: Dead
+      190: Dead
   - type: TransferMindOnGib
   # Gibbing used to sit exactly on the 150 death threshold, so a skeleton
   # crumbled the instant it died and left nothing to revive. The gap between
-  # 150 and 250 is the window a medic has to heal the remains back under the
+  # 190 and 290 is the window a medic has to heal the remains back under the
   # death threshold (milk, brute packs, ointment) and then defib them. Overkill
-  # past 250 still shatters the body for good.
+  # past 290 still shatters the body for good.
   - type: Destructible
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 250
+        damage: 290
       behaviors:
       - !type:GibBehavior
         gibContents: Skip
-  - type: SlowOnDamage #modified speeds because they're so weak
-    speedModifierThresholds:
-      60: 0.9
-      80: 0.7
   # Skeletons deliberately get no ThermalRegulator, so bare bones simply settle
   # at whatever the room is instead of holding 310 K. Combined with the low
   # specific heat below, a skeleton chills to ambient far faster than a human
@@ -76,7 +72,13 @@
       250: 0.25
   - type: Speech
     speechVerb: Skeleton
+    speechSounds: Skeleton
   - type: ZombieImmune
+  # A skull holds no noosphere, so a skeleton can never awaken as a Psion. This is the same
+  # route Oni take to opt out of psionics; the caster traits also refuse the species outright,
+  # so this only has to catch the in-round grants (glimmer events, Lotophagoi Oil, the EUI).
+  - type: Mindbroken
+    mindbrokenExaminationText: examine-mindbroken-skeleton-message
   - type: Vocal
     sounds:
       Male: Skeleton

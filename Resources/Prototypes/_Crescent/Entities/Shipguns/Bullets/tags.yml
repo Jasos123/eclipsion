@@ -15,6 +15,12 @@
 
 - type: Tag
   id: LanceRocket
+
+- type: Tag
+  id: LanceRocketBox
+
+- type: Tag
+  id: TorpedoBox
   
 #hephaestus (230mm) tag
 

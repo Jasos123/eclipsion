@@ -1,0 +1,206 @@
+# Every effect entity a psionic power spawns lives here, together with the sound it plays.
+#
+# Kept in one file on purpose: these are the only sounds the psionic powers make, so retuning or
+# replacing the audio for a power means editing this file and nothing else. Powers that would
+# otherwise have no visual still spawn a short-lived, sound-only entity from here rather than
+# playing audio from C#, so the whole set stays in one place.
+
+- type: entity
+  id: EffectPsionicFlameBreath
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Effects/fire.rsi
+    state: fire
+    drawdepth: Effects
+    noRot: true
+  - type: PointLight
+    radius: 2
+    energy: 3
+    color: "#ff6500"
+  - type: TimedDespawn
+    lifetime: 0.8
+  - type: EmitSoundOnSpawn
+    sound:
+      path: /Audio/Magic/fireball.ogg
+      params:
+        volume: -3
+
+- type: entity
+  id: EffectPsionicEnergyShield
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Effects/psionic_shield.rsi
+    state: shield
+    drawdepth: Effects
+    noRot: true
+  - type: PointLight
+    radius: 1.8
+    energy: 1.2
+    color: "#66ccff"
+  - type: EmitSoundOnSpawn
+    sound:
+      path: /Audio/Magic/forcewall.ogg
+      params:
+        volume: -4
+
+- type: entity
+  id: EffectPsionicShieldImpact
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Effects/psionic_shield.rsi
+    state: impact
+    drawdepth: Effects
+    noRot: true
+  - type: PointLight
+    radius: 2.2
+    energy: 2.5
+    color: "#a6e8ff"
+  - type: TimedDespawn
+    lifetime: 0.4
+  - type: EmitSoundOnSpawn
+    sound:
+      path: /Audio/Weapons/egloves.ogg
+      params:
+        volume: -6
+
+- type: entity
+  id: PsionicRecurrenceField
+  name: recurrence field
+  description: A pocket of the world that is running a moment behind the rest of it.
+  categories: [ HideSpawnMenu ]
+  components:
+  # No fixtures on purpose: a physics volume would make bullets bounce off the bubble instead of
+  # entering it, and entering it is the entire point. Capture is a server-side range query, and with
+  # no physics the field simply stays where it was hung.
+  - type: Sprite
+    sprite: Effects/recurrence_field.rsi
+    state: field
+    drawdepth: Effects
+    noRot: true
+  - type: RecurrenceField
+  - type: PointLight
+    radius: 2.0
+    energy: 0.8
+    color: "#c8ccd6"
+  - type: EmitSoundOnSpawn
+    sound:
+      path: /Audio/Magic/forcewall.ogg
+      params:
+        volume: -6
+        pitch: 0.6
+
+- type: entity
+  id: EffectPsionicRecurrencePulse
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Effects/recurrence_field.rsi
+    state: pulse
+    drawdepth: Effects
+    noRot: true
+  - type: PointLight
+    radius: 4.0
+    energy: 3.0
+    color: "#e8ecf4"
+  - type: TimedDespawn
+    lifetime: 0.45
+  - type: EmitSoundOnSpawn
+    sound:
+      path: /Audio/Effects/Lightning/lightningshock.ogg
+      params:
+        volume: -3
+
+- type: entity
+  id: PsionicAegisDome
+  name: aegis dome
+  description: A standing wall of psionic force, held up by someone's concentration.
+  categories: [ HideSpawnMenu ]
+  components:
+  # No fixtures: a physics wall would need doors for the people it is sheltering, and would shove
+  # anyone standing on its edge the moment it went up. Coverage is a server-side range scan.
+  - type: Sprite
+    sprite: Effects/psionic_aegis_dome.rsi
+    state: dome
+    drawdepth: Effects
+    noRot: true
+  - type: AegisDome
+  - type: PointLight
+    radius: 3.5
+    energy: 1.2
+    color: "#66ccff"
+  - type: EmitSoundOnSpawn
+    sound:
+      path: /Audio/Magic/forcewall.ogg
+      params:
+        volume: -2
+
+- type: entity
+  id: EffectPsionicAegisImpact
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Effects/psionic_aegis_dome.rsi
+    state: impact
+    drawdepth: Effects
+    noRot: true
+  - type: PointLight
+    radius: 3.0
+    energy: 2.0
+    color: "#a6e8ff"
+  - type: TimedDespawn
+    lifetime: 0.35
+  - type: EmitSoundOnSpawn
+    sound:
+      path: /Audio/Weapons/egloves.ogg
+      params:
+        volume: -8
+
+- type: entity
+  id: EffectPsionicAegisShatter
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Effects/psionic_aegis_dome.rsi
+    state: shatter
+    drawdepth: Effects
+    noRot: true
+  - type: PointLight
+    radius: 4.5
+    energy: 3.5
+    color: "#d0f2ff"
+  - type: TimedDespawn
+    lifetime: 0.55
+  - type: EmitSoundOnSpawn
+    sound:
+      collection: GlassBreak
+      params:
+        volume: -1
+
+# Reweave has no visual of its own - these exist so its audio lives in this file with everything
+# else rather than in a constant in the system.
+- type: entity
+  id: EffectPsionicReweave
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 2.0
+  - type: EmitSoundOnSpawn
+    sound:
+      path: /Audio/Magic/staff_animation.ogg
+      params:
+        volume: -4
+
+- type: entity
+  id: EffectPsionicUnravel
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 2.0
+  - type: EmitSoundOnSpawn
+    sound:
+      path: /Audio/Effects/glass_break1.ogg
+      params:
+        volume: -2

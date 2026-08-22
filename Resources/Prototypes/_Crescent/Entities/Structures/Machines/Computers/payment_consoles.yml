@@ -110,7 +110,7 @@
     faction: TFSC
   # Unlike the other factions this is gated on the command tier rather than the base tag: the
   # The Federation pays from a shared treasury that ordinary privateers would happily raid.
-  # Access is limited to the Ringleader and recognized member-organization leaders.
+  # Access is limited to the Administrator and recognized member-organization leaders.
   - type: AccessReader
     access: [["SyndicateCommand"], ["SyndicateRingleader"], ["SyndicateFunds"]]
 
