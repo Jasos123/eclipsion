@@ -1034,3 +1034,37 @@ Entries:
   id: 6077
   time: '2026-08-23T00:00:00.0000000+00:00'
   url: null
+
+- author: Taleryn
+  changes:
+    - message: Rounds you fire yourself are now caught by a recurrence stasis field. With gun prediction on, the only bullet a shooter can see is one their own client drew, and the capture ran on the server alone, so the caster watched their own fire cross the bubble at full speed while everyone else watched it crawl. A recurrence pulse throws those rounds back for the shooter too.
+      type: Fix
+    - message: The Aegis Dome stops the shots of whoever is firing at it. The barrier was deleting rounds on the server while the shooter's own screen showed them sail through and hit, so the dome looked like it did nothing to the one person it was standing in front of.
+      type: Fix
+    - message: Reworked the psionic skill tree window. The whole tree now sits on one plane - a column per discipline, a row per tier, with the tier numbers running down the side and a legend for the card colours - and the mouse wheel pans it sideways instead of dragging you up and down. Buying a skill no longer throws the view back to the leftmost discipline.
+      type: Tweak
+  id: 6078
+  time: '2026-08-23T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: The payroll and taxation consoles stop rewriting a figure while you are typing it. A half-typed salary or tax rate is held as a pending edit until you send it, Enter now sends it as well as the button, and the box only goes back to following the console once the figure has taken. Clearing a salary or an override drops the pending edit with it.
+      type: Fix
+    - message: Rows in console lists no longer latch. Recycling a row used to knock it out of its selection group, so several entries could sit highlighted at once and none of them was the one the console thought you had picked.
+      type: Fix
+    - message: Ghosting out of a shuttle console, or losing the grid under it, no longer leaves the radar throwing an error every frame the cursor is over it. Clicks on a radar with nothing left to point at are ignored instead of being sent on.
+      type: Fix
+  id: 6079
+  time: '2026-08-23T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Structures you build on a ship come out facing the way the ghost did. Construction rotation was being read as a heading in world space, so on any grid that was not sitting perfectly square - which is every ship under way - the finished machine or wall ended up turned away from the outline you clicked on.
+      type: Fix
+    - message: Gliess and Tatsumoto no longer run Newport's cargo chute and trade good printer. Each station now has the machine that belongs to it, and the stray Newport printer has been taken off Gliess entirely.
+      type: Fix
+  id: 6080
+  time: '2026-08-23T00:00:00.0000000+00:00'
+  url: null

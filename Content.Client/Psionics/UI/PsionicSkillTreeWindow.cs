@@ -27,9 +27,13 @@ public sealed class PsionicSkillTreeWindow : DefaultWindow
     private static readonly Color ExcludedColor = Color.FromHex("#9F3344");
 
     private const float BranchWidth = 300f;
-    private const float BranchHeaderHeight = 56f;
+    private const float BranchHeaderHeight = 62f;
     private const float TierGutterWidth = 26f;
     private const float MaxCardHeight = 168f;
+    private const float TooltipWidth = 360f;
+
+    /// <summary>Half of the 64x64 the action icons are drawn at, so they scale down cleanly.</summary>
+    private const float IconSize = 32f;
 
     /// <summary>
     /// Column margin, border and content margin around the card stack inside a discipline column.
@@ -61,7 +65,8 @@ public sealed class PsionicSkillTreeWindow : DefaultWindow
     private readonly BoxContainer _branches;
     private readonly ScrollContainer _scroll;
 
-    private readonly List<SkillCard> _cards = new();
+    private readonly List<FittedText> _cards = new();
+    private readonly List<FittedText> _headers = new();
     private readonly List<(int Tier, BoxContainer Row)> _rows = new();
     private readonly Dictionary<int, int> _cardsPerTier = new();
     private List<int> _tiers = new();
@@ -210,6 +215,7 @@ public sealed class PsionicSkillTreeWindow : DefaultWindow
         _tierGutter.DisposeAllChildren();
         _branches.DisposeAllChildren();
         _cards.Clear();
+        _headers.Clear();
         _rows.Clear();
 
         if (!_prototypeManager.TryIndex<PsionicSkillTreePrototype>(state.TreeId, out var tree))
@@ -285,6 +291,15 @@ public sealed class PsionicSkillTreeWindow : DefaultWindow
     {
         var plane = _branches.Size.Y > 0f ? _branches.Size.Y : FallbackPlaneHeight;
         _fittedPlane = plane;
+
+        foreach (var header in _headers)
+        {
+            // Drop the pinned height first, or the header measures as exactly that and its text is
+            // never found to be too long.
+            header.Control.SetHeight = float.NaN;
+            header.Fit(BranchHeaderHeight);
+            header.Control.SetHeight = BranchHeaderHeight;
+        }
 
         var rowsBudget = MathF.Max(80f, plane - ColumnTopOffset * 2f - BranchHeaderHeight - 4f);
         var slots = Math.Max(1, _cardsPerTier.Values.Sum());
@@ -416,7 +431,7 @@ public sealed class PsionicSkillTreeWindow : DefaultWindow
 
             foreach (var skill in skills.Where(skill => skill.Tier == tier))
             {
-                var card = CreateSkillCard(skill, states[skill.ID], tier);
+                var card = CreateFittedText(skill, states[skill.ID], tier);
                 _cards.Add(card);
                 row.AddChild(card.Control);
             }
@@ -431,15 +446,16 @@ public sealed class PsionicSkillTreeWindow : DefaultWindow
         return columnPanel;
     }
 
-    private static Control CreateBranchHeader(PsionicSkillBranchPrototype branch)
+    private Control CreateBranchHeader(PsionicSkillBranchPrototype branch)
     {
         var description = Loc.GetString(branch.Description);
 
+        // No SetHeight yet: the header has to be measurable while its text is being fitted, and a
+        // fixed height would make it measure the same no matter what it holds.
         var header = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
             HorizontalExpand = true,
-            SetHeight = BranchHeaderHeight,
             RectClipContent = true,
         };
 
@@ -459,14 +475,24 @@ public sealed class PsionicSkillTreeWindow : DefaultWindow
         branchDescription.SetMessage(SubText(description));
         header.AddChild(branchDescription);
 
-        var tooltip = new Tooltip();
-        tooltip.SetMessage(FormattedMessage.FromUnformatted(description));
-        header.TooltipSupplier = _ => tooltip;
+        header.TooltipSupplier = _ => BuildTooltip(description);
 
+        _headers.Add(new FittedText(header, branchDescription, description, CardMeasureWidth));
         return header;
     }
 
-    private SkillCard CreateSkillCard(PsionicSkillPrototype skill, PsionicSkillNodeState state, int tier)
+    /// <summary>
+    /// Tooltips are a bare panel around a rich text label, so without a width they lay the whole
+    /// description out on one line and stretch across the screen.
+    /// </summary>
+    private static Control BuildTooltip(string text)
+    {
+        var tooltip = new Tooltip { MaxWidth = TooltipWidth };
+        tooltip.SetMessage(FormattedMessage.FromUnformatted(text));
+        return tooltip;
+    }
+
+    private FittedText CreateFittedText(PsionicSkillPrototype skill, PsionicSkillNodeState state, int tier)
     {
         var statusColor = state.Availability switch
         {
@@ -502,14 +528,16 @@ public sealed class PsionicSkillTreeWindow : DefaultWindow
             HorizontalExpand = true,
         };
 
+        // KeepAspectCentered, not KeepCentered: the action icons are 64x64 and KeepCentered draws
+        // them at that size no matter how small the box is, which puts the icon under the name.
         titleRow.AddChild(new TextureRect
         {
             Texture = _spriteSystem.Frame0(skill.Icon),
-            SetSize = new Vector2(36, 36),
-            MinSize = new Vector2(36, 36),
+            SetSize = new Vector2(IconSize, IconSize),
+            MinSize = new Vector2(IconSize, IconSize),
             VerticalAlignment = VAlignment.Center,
-            Margin = new Thickness(0, 0, 6, 0),
-            Stretch = TextureRect.StretchMode.KeepCentered,
+            Margin = new Thickness(0, 0, 8, 0),
+            Stretch = TextureRect.StretchMode.KeepAspectCentered,
         });
 
         // Labels are single-line controls, so longer localized power names were clipped by the
@@ -547,14 +575,12 @@ public sealed class PsionicSkillTreeWindow : DefaultWindow
         button.AddChild(content);
         button.OnPressed += _ => OnSkillSelected?.Invoke(skill.ID);
 
-        var tooltip = new Tooltip();
-        tooltip.SetMessage(FormattedMessage.FromUnformatted(
-            string.IsNullOrWhiteSpace(state.Reason)
-                ? description
-                : $"{description}\n\n{state.Reason}"));
-        button.TooltipSupplier = _ => tooltip;
+        var tooltipText = string.IsNullOrWhiteSpace(state.Reason)
+            ? description
+            : $"{description}\n\n{state.Reason}";
+        button.TooltipSupplier = _ => BuildTooltip(tooltipText);
 
-        return new SkillCard(button, descriptionLabel, description, tier);
+        return new FittedText(button, descriptionLabel, description, CardMeasureWidth, tier);
     }
 
     /// <summary>
@@ -581,22 +607,24 @@ public sealed class PsionicSkillTreeWindow : DefaultWindow
     }
 
     /// <summary>
-    /// One built card, kept around so its description can be measured and trimmed to the slot the
-    /// plane can spare for it.
+    /// A built card or branch header, kept around so the wrapping text inside it can be measured
+    /// and trimmed to the height the plane can spare for it.
     /// </summary>
-    private sealed class SkillCard
+    private sealed class FittedText
     {
         public readonly Control Control;
         public readonly int Tier;
 
         private readonly RichTextLabel _description;
         private readonly string _fullDescription;
+        private readonly float _width;
 
-        public SkillCard(Control control, RichTextLabel description, string fullDescription, int tier)
+        public FittedText(Control control, RichTextLabel description, string fullDescription, float width, int tier = 0)
         {
             Control = control;
             _description = description;
             _fullDescription = fullDescription;
+            _width = width;
             Tier = tier;
         }
 
@@ -628,9 +656,22 @@ public sealed class PsionicSkillTreeWindow : DefaultWindow
         {
             _description.SetMessage(SubText(text));
             _description.Visible = text.Length > 0;
-            Control.InvalidateMeasure();
-            Control.Measure(new Vector2(CardMeasureWidth, float.PositiveInfinity));
+
+            // InvalidateMeasure only marks the control it is called on - it neither walks up to the
+            // parents nor down to the children. Without invalidating the whole card by hand, the
+            // containers between the card and the label hand back their cached size and the card
+            // measures the same no matter how much text is dropped.
+            InvalidateTree(Control);
+            Control.Measure(new Vector2(_width, float.PositiveInfinity));
             return Control.DesiredSize.Y;
+        }
+
+        private static void InvalidateTree(Control control)
+        {
+            control.InvalidateMeasure();
+
+            foreach (var child in control.Children)
+                InvalidateTree(child);
         }
 
         private static string DropLastWord(string text)
