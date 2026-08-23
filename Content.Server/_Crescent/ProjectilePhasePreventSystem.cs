@@ -11,6 +11,7 @@ public sealed class ProjectilePhasePreventerSystem : EntitySystem
 {
     [Dependency] private readonly PhysicsSystem _phys = default!;
     [Dependency] private readonly TransformSystem _trans = default!;
+    [Dependency] private readonly SharedProjectileSystem _projectile = default!;
     [Dependency] private readonly ILogManager _logs = default!;
 
     private EntityQuery<PhysicsComponent> _physicsQuery;
@@ -141,6 +142,12 @@ public sealed class ProjectilePhasePreventerSystem : EntitySystem
                 {
                     continue;
                 }
+
+                // Rockets from the same shuttle pass through each other. A saturation launcher fires its whole
+                // salvo from one muzzle, and this raycast reaches further than the gap between two shots, so
+                // without this the burst detonates on itself. Keep scanning - a real target may be behind it.
+                if (_projectile.IsFriendlyShipProjectile(owner, projectile, hitEntity))
+                    continue;
 
                 if (!_physicsQuery.TryGetComponent(hitEntity, out _))
                     continue;

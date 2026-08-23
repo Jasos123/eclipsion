@@ -186,6 +186,7 @@ public sealed class AegisDomeSystem : EntitySystem
 
         // Integrity and expiry are set by map init; the power only has to say who raised it.
         comp.Caster = args.Performer;
+        Dirty(dome, comp);
 
         // The dome travels with the Psion holding it up. Parented rather than made a follower: the
         // follower system hangs OrbitVisuals on anything it moves, which would set the barrier
@@ -323,6 +324,8 @@ public sealed class AegisDomeSystem : EntitySystem
 
             var sheltered = AddComp<AegisShelteredComponent>(candidate);
             sheltered.Dome = dome.Owner;
+            Dirty(candidate, sheltered);
+
             dome.Comp.Covered.Add(candidate);
         }
     }

@@ -47,15 +47,24 @@
                     </BoxContainer>
                 </ksui:KsInstrumentPanel>
 
-                <!-- Ammo status -->
+                <!-- Ammo status: the bar list is fixed to whatever room is left on the column and
+                     scrolls inside it, so a ship with thirty-odd cannons no longer pushes the group
+                     buttons off the bottom of the window. -->
                 <ksui:KsInstrumentPanel Name="AmmoPanel"
-                                        MinHeight="300"
+                                        MinHeight="120"
+                                        VerticalExpand="True"
                                         Margin="0 0 0 4">
-                    <BoxContainer Name="AmmoStatusBox" Orientation="Vertical" HorizontalExpand="True"/>
+                    <ScrollContainer Name="AmmoScroll"
+                                     HScrollEnabled="False"
+                                     ReserveScrollbarSpace="True"
+                                     HorizontalExpand="True"
+                                     VerticalExpand="True">
+                        <BoxContainer Name="AmmoStatusBox" Orientation="Vertical" HorizontalExpand="True"/>
+                    </ScrollContainer>
                 </ksui:KsInstrumentPanel>
 
-                <!-- Cannon groups -->
-                <ksui:KsInstrumentPanel Name="GroupPanel" VerticalExpand="True">
+                <!-- Cannon groups: sized to its buttons, always parked under the ammo list. -->
+                <ksui:KsInstrumentPanel Name="GroupPanel">
                     <BoxContainer Name="CannonGroupSelectorBox" Orientation="Vertical" HorizontalExpand="True"/>
                 </ksui:KsInstrumentPanel>
             </BoxContainer>

@@ -1,0 +1,87 @@
+# The barrier runs on the same clothing shield stack as base_shielding.yml, but tuned the other way round:
+# where those exist to soak damage, this one exists to hold psionic insulation, and the damage it eats is
+# only enough to make shooting it flat a real option rather than a formality.
+- type: entity
+  parent: ClothingBeltBase
+  id: ClothingBeltShield
+  name: shield belt
+  description: A belt-mounted noospheric dampener. Raised, its barrier muffles psionic contact with the wearer entirely and takes a little of the sting out of anything else on the way through. Shot flat, it stays down until the emitter refills and someone raises it again.
+  components:
+  - type: Sprite
+    sprite: Clothing/Belt/generic_thick.rsi
+    state: icon
+  - type: Clothing
+    sprite: Clothing/Belt/generic_thick.rsi
+    renderLayer: innerBelt
+  - type: ShieldBelt
+  # The barrier only ever goes up because the wearer put it up. Nothing raises it on its own - not equipping it,
+  # and not finishing a recharge - so a collapse costs the wearer a hotbar press in the middle of whatever
+  # dropped it. Attempting to raise it while the emitter is still refilling is refused by RechargeableBlocking
+  # with the remaining time.
+  - type: ToggleClothing
+    action: ActionToggleShieldBelt
+  - type: ItemToggle
+    activated: false
+    onUse: false
+    onActivate: false
+    predictable: false
+    soundActivate:
+      path: /Audio/Weapons/ebladeon.ogg
+      params:
+        volume: -6
+    soundDeactivate:
+      path: /Audio/Weapons/ebladeoff.ogg
+      params:
+        volume: -3
+  - type: PointLight
+    enabled: false
+    radius: 1.2
+    energy: 1.2
+    color: "#7FD8FF"
+  - type: ItemTogglePointLight
+  # A quarter of the hit is diverted into the barrier: the wearer still takes three quarters of it, and that
+  # diverted quarter is exactly what drains the emitter. A 5.56x45mm round is 26 Piercing, so it costs the
+  # barrier 6.5 of its 12 charge - two rounds put it down.
+  - type: Blocking
+    isClothing: true
+    blockAction: false
+    passiveBlockFraction: 0.25
+    activeBlockFraction: 0.25
+    # Neutral: the diverted quarter drains the emitter one for one, whatever it was made of. There is no
+    # active block on this - it is clothing with no block action - so the active set only mirrors the passive.
+    passiveBlockModifier:
+      coefficients:
+        Blunt: 1.0
+        Slash: 1.0
+        Piercing: 1.0
+        Heat: 1.0
+    activeBlockModifier:
+      coefficients:
+        Blunt: 1.0
+        Slash: 1.0
+        Piercing: 1.0
+        Heat: 1.0
+  - type: Damageable
+    damageContainer: Shield
+  - type: Battery
+    maxCharge: 12
+    startingCharge: 12
+  # 12 charge at 0.15/s is eighty seconds flat on its back after a collapse.
+  - type: BatterySelfRecharger
+    autoRecharge: true
+    autoRechargeRate: 0.15
+  - type: RechargeableBlocking
+    dischargedRechargeRate: 0.15
+    chargedRechargeRate: 0.15
+  - type: StaticPrice
+    price: 400
+
+- type: entity
+  id: ActionToggleShieldBelt
+  name: Toggle Shield Belt
+  description: Raises the dampening barrier, or drops it. It will not come back up on its own.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: InstantAction
+    itemIconStyle: BigItem
+    event: !type:ToggleActionEvent

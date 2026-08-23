@@ -51,7 +51,12 @@ public sealed partial class AegisDomeComponent : Component
     /// <summary>
     /// The Psion who raised it, credited in logs and told when it fails.
     /// </summary>
-    [ViewVariables]
+    /// <remarks>
+    /// Networked because the barrier only faces outwards: a shooter's own client has to be able to
+    /// tell whether the round it is watching was fired from under the dome or at it, and the caster
+    /// is inside by definition.
+    /// </remarks>
+    [AutoNetworkedField]
     public EntityUid Caster;
 
     /// <summary>
@@ -72,9 +77,13 @@ public sealed partial class AegisDomeComponent : Component
 /// Marks a mob standing under an <see cref="AegisDomeComponent"/>. Purely a back-reference: all the
 /// damage handling lives on the dome.
 /// </summary>
-[RegisterComponent]
+/// <remarks>
+/// Networked for the same reason the dome's caster is: the shooter's client predicts its own rounds
+/// and has to know whether it is standing inside the barrier they are crossing.
+/// </remarks>
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class AegisShelteredComponent : Component
 {
-    [ViewVariables]
+    [AutoNetworkedField]
     public EntityUid Dome;
 }

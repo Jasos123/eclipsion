@@ -16,8 +16,8 @@
     ignoreWeaponGrid: true
     damage:
       types:
-        Structural: 70
-        Piercing: 60
+        Structural: 80
+        Piercing: 100
   - type: PointLight
     radius: 3.5
     color: orange
@@ -121,8 +121,8 @@
     ignoreWeaponGrid: true
     damage:
       types:
-        Structural: 220
-        Piercing: 120
+        Structural: 350
+        Piercing: 150
   - type: PointLight
     radius: 3.5
     color: orange
@@ -229,8 +229,8 @@
     ignoreWeaponGrid: true
     damage:
       types:
-        Structural: 360
-        Piercing: 180
+        Structural: 450
+        Piercing: 200
   - type: PointLight
     radius: 3.5
     color: orange
@@ -376,8 +376,8 @@
     ignoreWeaponGrid: true
     damage:
       types:
-        Structural: 1250
-        Piercing: 400
+        Structural: 1500
+        Piercing: 500
   - type: PointLight
     radius: 3.5
     color: orange
@@ -407,7 +407,7 @@
     ignoreWeaponGrid: true
     damage:
       types:
-        Structural: 900
+        Structural: 1300
         Piercing: 250
   - type: ExplodeOnTrigger
   - type: Explosive
@@ -520,8 +520,8 @@
     ignoreWeaponGrid: true
     damage:
       types:
-        Structural: 120
-        Piercing: 80
+        Structural: 250
+        Piercing: 250
   - type: TimedDespawn
     lifetime: 23.33 # 4200 m at 180 m/s
   - type: Sprite
@@ -531,9 +531,9 @@
   - type: ExplodeOnTrigger
   - type: Explosive
     explosionType: Default
-    maxIntensity: 70
-    intensitySlope: 10
-    totalIntensity: 700
+    maxIntensity: 100
+    intensitySlope: 5
+    totalIntensity: 2000
     maxTileBreak: 1
   - type: ProximityFuse
     maxRange: 5

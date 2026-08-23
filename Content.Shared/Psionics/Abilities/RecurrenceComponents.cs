@@ -40,8 +40,12 @@ public sealed partial class RecurrenceFieldComponent : Component
     /// keeps acting while their momentum does not; projectiles fly frictionless and are unaffected.
     /// The physics sleep threshold is 0.01 m/s, far below anything this produces, so nothing gets
     /// put to sleep and stranded mid-field.
+    ///
+    /// Networked because the shooter's own client slows its predicted copy of a round itself, and
+    /// the two sides have to crawl at the same rate or the bullet the shooter watches and the
+    /// bullet everyone else watches end up in different places.
     /// </remarks>
-    [DataField]
+    [DataField, AutoNetworkedField]
     public float TimeScale = 0.03f;
 
     /// <summary>

@@ -179,6 +179,48 @@ public abstract class SharedNanoChatSystem : EntitySystem
         Dirty(card);
     }
 
+    // Eclipsion Start - blocking
+    /// <summary>
+    ///     Whether this card refuses traffic from <paramref name="number"/>.
+    /// </summary>
+    public bool IsBlocked(Entity<NanoChatCardComponent?> card, uint number)
+    {
+        if (!Resolve(card, ref card.Comp))
+            return false;
+
+        return card.Comp.BlockedNumbers.Contains(number);
+    }
+
+    /// <summary>
+    ///     Blocks or unblocks a number on this card. Returns the state it ended up in.
+    /// </summary>
+    public bool SetBlocked(Entity<NanoChatCardComponent?> card, uint number, bool blocked)
+    {
+        if (!Resolve(card, ref card.Comp))
+            return false;
+
+        var changed = blocked
+            ? card.Comp.BlockedNumbers.Add(number)
+            : card.Comp.BlockedNumbers.Remove(number);
+
+        if (changed)
+            Dirty(card);
+
+        return blocked;
+    }
+
+    /// <summary>
+    ///     The numbers this card is refusing, for display.
+    /// </summary>
+    public IReadOnlySet<uint> GetBlockedNumbers(Entity<NanoChatCardComponent?> card)
+    {
+        if (!Resolve(card, ref card.Comp))
+            return new HashSet<uint>();
+
+        return card.Comp.BlockedNumbers;
+    }
+    // Eclipsion End
+
     /// <summary>
     ///     Gets whether NanoChat number is listed.
     /// </summary>

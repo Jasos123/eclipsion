@@ -48,3 +48,15 @@
     Gold: 100 
     BasicElectronics: 50
     Copper: 50
+
+- type: latheRecipe
+  id: ClothingBeltShieldElectronics
+  category: Armor
+  result: ClothingBeltShield
+  completetime: 4
+  materials:
+    Steel: 300
+    Silver: 200
+    Gold: 150
+    Plastic: 200
+    BasicElectronics: 300

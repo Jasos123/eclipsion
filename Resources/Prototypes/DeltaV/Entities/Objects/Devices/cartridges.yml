@@ -75,6 +75,7 @@
   - type: UIFragment
     ui: !type:StockTradingUi
   - type: StockTradingCartridge
+  - type: OwnerLockedProgram # Eclipsion - only the PDA's owner may trade from it
   - type: Cartridge
     programName: stock-trading-program-name
     icon:
@@ -96,6 +97,7 @@
   - type: UIFragment
     ui: !type:NanoChatUi
   - type: NanoChatCartridge
+  - type: OwnerLockedProgram # Eclipsion - a stolen PDA does not open someone's messages
   - type: Cartridge
     programName: nano-chat-program-name
     icon:

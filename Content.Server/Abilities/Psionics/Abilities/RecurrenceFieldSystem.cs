@@ -13,6 +13,7 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
+using Robust.Shared.Spawners;
 using Robust.Shared.Timing;
 
 namespace Content.Server.Abilities.Psionics;
@@ -55,13 +56,6 @@ public sealed class RecurrenceFieldSystem : SharedRecurrenceFieldSystem
     /// Leaving it out is why the field would slow a person standing in it and let a bullet through.
     /// </summary>
     private const LookupFlags CaptureFlags = LookupFlags.Dynamic | LookupFlags.Sundries | LookupFlags.Sensors;
-
-    /// <summary>
-    /// Objects are released a little outside the radius they were caught at. Without the margin an
-    /// object hovering on the boundary flips between captured and released every tick, stuttering
-    /// between crawling and full speed.
-    /// </summary>
-    private const float ReleaseMargin = 0.35f;
 
     /// <summary>
     /// How far a pulsed object is aimed. Throwing takes a displacement, not a direction: a unit
@@ -137,6 +131,13 @@ public sealed class RecurrenceFieldSystem : SharedRecurrenceFieldSystem
     /// </summary>
     private void HoldTimers(float frameTime)
     {
+        // Almost every round has no field standing in it, and the despawn sweep below walks a parent
+        // chain for every timed effect and casing on the map. One query answers whether any of that
+        // is worth doing at all.
+        var slowed = EntityQueryEnumerator<TemporallySlowedComponent>();
+        if (!slowed.MoveNext(out _, out _))
+            return;
+
         var query = EntityQueryEnumerator<ActiveTimerTriggerComponent>();
         while (query.MoveNext(out var uid, out var timer))
         {
@@ -149,6 +150,19 @@ public sealed class RecurrenceFieldSystem : SharedRecurrenceFieldSystem
             // The beeping is the only thing anyone can actually hear a fuse through, so it has to
             // slow with it or a held charge sounds exactly like one counting down normally.
             timer.TimeUntilBeep += held;
+        }
+
+        // A projectile's despawn timer counts in the same seconds a fuse does, and it is not slowed
+        // by anything else. Left alone, a round crawling across the bubble spends most of its life
+        // doing it and simply evaporates in mid-air instead of coming out the far side - a field
+        // that eats bullets rather than one that holds them.
+        var despawns = EntityQueryEnumerator<TimedDespawnComponent>();
+        while (despawns.MoveNext(out var uid, out var despawn))
+        {
+            if (!TryGetTimeScale(uid, out var scale))
+                continue;
+
+            despawn.Lifetime += frameTime * (1f - scale);
         }
     }
 
@@ -198,7 +212,7 @@ public sealed class RecurrenceFieldSystem : SharedRecurrenceFieldSystem
             if (slowed.AppliedScale is <= 0f or >= 1f)
                 continue;
 
-            var velocity = _physics.GetMapLinearVelocity(uid, body) - _physics.GetMapLinearVelocity(slowed.Field);
+            var velocity = _physics.GetMapLinearVelocity(uid, body) - GetFrameVelocity(slowed.Field);
             var speed = velocity.Length();
 
             // A ceiling, not an assignment. Something that slides to a halt inside the field is left
@@ -316,6 +330,15 @@ public sealed class RecurrenceFieldSystem : SharedRecurrenceFieldSystem
             launched++;
         }
 
+        // Every round but one has now been turned around where everyone can see it. The exception is
+        // whatever the local player fired: their client is watching its own copy of that round and
+        // has been shown nothing of the server's, so it has to be told to turn its copy around too.
+        RaiseNetworkEvent(new RecurrencePulseEvent(
+            GetNetEntity(field.Owner),
+            GetNetEntity(caster),
+            field.Comp.PulseSpeedMultiplier,
+            field.Comp.PulseMinimumSpeed));
+
         // The effect carries its own sound; see Prototypes/Entities/Effects/psionics.yml.
         Spawn(PulsePrototype, Transform(field.Owner).Coordinates);
         QueueDel(field.Owner);
@@ -396,7 +419,7 @@ public sealed class RecurrenceFieldSystem : SharedRecurrenceFieldSystem
     {
         var origin = _transform.GetMapCoordinates(field.Owner, xform);
         var radius = field.Comp.Radius;
-        var fieldVelocity = _physics.GetMapLinearVelocity(field.Owner);
+        var fieldVelocity = GetFrameVelocity(field.Owner);
 
         _released.Clear();
 
@@ -458,44 +481,6 @@ public sealed class RecurrenceFieldSystem : SharedRecurrenceFieldSystem
         }
     }
 
-    /// <summary>
-    /// How far along the segment from <paramref name="start"/> to <paramref name="end"/> the path
-    /// first crosses into the sphere, as a fraction of the segment, or -1 if it never does. Zero
-    /// means it started inside.
-    /// </summary>
-    private static float SegmentEntry(Vector2 start, Vector2 end, Vector2 centre, float radius)
-    {
-        var offset = start - centre;
-        var outside = Vector2.Dot(offset, offset) - radius * radius;
-        if (outside <= 0f)
-            return 0f;
-
-        var travel = end - start;
-        var a = Vector2.Dot(travel, travel);
-        if (a <= float.Epsilon)
-            return -1f;
-
-        var b = 2f * Vector2.Dot(offset, travel);
-        var discriminant = b * b - 4f * a * outside;
-        if (discriminant < 0f)
-            return -1f;
-
-        var hit = (-b - MathF.Sqrt(discriminant)) / (2f * a);
-        return hit is >= 0f and <= 1f ? hit : -1f;
-    }
-
-    /// <summary>
-    /// Sets an entity's velocity to <paramref name="velocity"/> as measured against the field. It
-    /// goes through the map frame because a body stores its velocity relative to whatever it is
-    /// parented to, which is not necessarily what the field is parented to.
-    /// </summary>
-    private void SetFieldRelativeVelocity(EntityUid uid, PhysicsComponent body, EntityUid field, Vector2 velocity)
-    {
-        var target = velocity + _physics.GetMapLinearVelocity(field);
-        var difference = target - _physics.GetMapLinearVelocity(uid, body);
-        _physics.SetLinearVelocity(uid, body.LinearVelocity + difference, body: body);
-    }
-
     private bool InRange(EntityUid uid, MapCoordinates origin, float radius)
     {
         var xform = Transform(uid);
@@ -545,7 +530,7 @@ public sealed class RecurrenceFieldSystem : SharedRecurrenceFieldSystem
         }
         else if (TryComp<PhysicsComponent>(uid, out var body))
         {
-            slowed.EntryVelocity = _physics.GetMapLinearVelocity(uid, body) - _physics.GetMapLinearVelocity(field.Owner);
+            slowed.EntryVelocity = _physics.GetMapLinearVelocity(uid, body) - GetFrameVelocity(field.Owner);
             slowed.EntryAngularVelocity = body.AngularVelocity;
             slowed.AppliedScale = field.Comp.TimeScale;
 
@@ -570,18 +555,26 @@ public sealed class RecurrenceFieldSystem : SharedRecurrenceFieldSystem
             && slowed.AppliedScale is > 0f and < 1f
             && TryComp<PhysicsComponent>(uid, out var body))
         {
+            // One of the ways in is the field's own shutdown, by which point its transform may
+            // already have been taken off it, so the frame this is measured against cannot be read
+            // off the field unconditionally. The round is riding on the grid the field was on, so
+            // falling back to that gives the same answer.
+            var frame = slowed.Field.IsValid() && HasComp<TransformComponent>(slowed.Field)
+                ? slowed.Field
+                : Transform(uid).ParentUid;
+
             // Give back the speed it was caught with rather than multiplying whatever it is doing
             // now by the inverse of the scale. Anything that rewrites its own velocity while held -
             // a heat seeker does it every single tick - would otherwise leave at eight times its own
             // top speed, with the field as a free accelerator.
-            var heading = _physics.GetMapLinearVelocity(uid, body) - _physics.GetMapLinearVelocity(slowed.Field);
+            var heading = _physics.GetMapLinearVelocity(uid, body) - GetFrameVelocity(frame);
             if (heading.LengthSquared() <= 0.0001f)
                 heading = slowed.EntryVelocity;
 
             if (heading.LengthSquared() > 0.0001f)
                 heading = Vector2.Normalize(heading);
 
-            SetFieldRelativeVelocity(uid, body, slowed.Field, heading * slowed.EntryVelocity.Length());
+            SetFieldRelativeVelocity(uid, body, frame, heading * slowed.EntryVelocity.Length());
             _physics.SetAngularVelocity(uid, slowed.EntryAngularVelocity, body: body);
         }
 

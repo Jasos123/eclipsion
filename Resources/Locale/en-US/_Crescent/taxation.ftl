@@ -50,3 +50,11 @@ treasury-console-alarm-announcement = Security alert: unauthorized hands are at 
 
 # Your own share of the vault, so "withdraw all" stops looking like it short-changed you.
 treasury-console-remaining = Your allowance: { $remaining } cr ({ $percent }% share)
+
+# Eclipsion - high-value ship purchase approval
+treasury-console-requests-header = Pending ship purchases
+treasury-console-requests-empty = Nothing awaiting approval.
+treasury-console-request-line = {$buyer} - {$vessel} - {$price} cr
+treasury-console-request-approved = Approved by {$approver}. Awaiting collection.
+treasury-console-request-approve = Approve
+treasury-console-request-deny = Deny

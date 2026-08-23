@@ -929,8 +929,14 @@ Entries:
       type: Tweak
     - message: Ammo bars on the targeting console are drawn in the console's own green rather than the stock health-bar blue, so the plot and the readouts beside it read as one instrument.
       type: Tweak
-    - message: Added an always-on status strip to the targeting console. It reads out the group you last selected, how many cannons are linked and the battery's total ammo, and flashes a NO AMMO warning once every linked gun is dry.
+    - message: Added an always-on status strip to the targeting console. It reads out which cannon groups are selected, how many cannons are linked and the battery's total ammo, and flashes a NO AMMO warning once every linked gun is dry.
       type: Add
+    - message: Buttons on the instrument consoles now acknowledge a click. Hovering, holding and releasing are three different looks instead of one, and a press flashes the button bright for a moment, so a quick click is no longer invisible.
+      type: Fix
+    - message: Cannon group buttons on the targeting console now light up while their group is selected, and the console shows the server's actual selection - including several groups at once. Previously nothing on screen changed when you picked a group.
+      type: Fix
+    - message: The targeting console no longer rebuilds its cannon group buttons on every update from the server, so a click can no longer land on a button that was destroyed mid-press.
+      type: Fix
   id: 6071
   time: '2026-08-22T00:00:00.0000000+00:00'
   url: null
@@ -961,4 +967,70 @@ Entries:
       type: Fix
   id: 6072
   time: '2026-08-22T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Ship purchases that would take a large bite out of a faction's treasury now need signing off. Anything above a quarter of the current balance files a request instead of buying, and the request appears on the treasury console that shipyard banks into, where anyone with vault access can approve or deny it. The buyer is told either way and returns to the shipyard to collect an approved hull. Civilian yards, where you spend your own money, are unaffected.
+      type: Add
+    - message: PDAs register themselves to the first person who opens them. Stock trading, transfers, the casino and NanoChat only answer to that player, so killing someone for their PDA no longer hands over their portfolio or their messages. The owner can hand a device on with the Clear device lock verb, and the flashlight and notepad still work for anyone.
+      type: Add
+    - message: You can block people from your PDA. Blocking a NanoChat contact bounces their messages back to them marked as blocked, and blocking someone in the Transfers app refuses their money before it leaves their account, so a single credit can no longer be used to push a message onto your screen. Blocked people are listed in a new tab and can be unblocked even after they log out.
+      type: Add
+    - message: Corpses are dead weight. A body slows to a stop instead of drifting off through the void or across the deck, and throwing one barely gets it airborne. Dragging a body is unaffected.
+      type: Tweak
+  id: 6073
+  time: '2026-08-22T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Ramming another ship no longer takes the server down with it. Impact damage used to be applied from inside the physics step, so gibbing a crewman or breaking hull plating could destroy the collision the engine was still reading. Impacts are now resolved a moment later, outside the step.
+      type: Fix
+    - message: Saturation launchers stop shooting themselves down. Rockets fired from the same ship pass through one another instead of detonating on the shot in front, which made the 48mm Shortbow and the 30mm Pila destroy most of their own salvo at the muzzle.
+      type: Fix
+    - message: Magboots and jetpacks now cut each other out. Turning the magnets on kills the thrusters and lighting the thrusters releases the magnets, so magboots no longer sit there doing nothing because a jetpack you forgot about is keeping you weightless.
+      type: Fix
+    - message: Shields no longer risk taking the server down when they stop a shot. Deflected rounds are cleaned up a moment after the impact rather than in the middle of the physics step, and the round still stops dead the instant it touches the shield.
+      type: Fix
+    - message: Ship-on-ship collisions were being resolved twice, so two ships ramming each other took double the damage, broke double the hull plating and braked twice as hard as a ship ramming an asteroid. Each impact is now applied once.
+      type: Tweak
+    - message: Collision damage is centred on the tile that was actually hit. The damage circle was half a tile off, so one side of an impact took more punishment than the other.
+      type: Fix
+  id: 6074
+  time: '2026-08-22T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Syndicate assault cyborgs move at normal cyborg speed again. Their walk and sprint had been cut as the counterweight to a much tankier chassis, and the health has been reduced twice since without the slowness ever being lifted, leaving them the only cyborg in the game that was both slower and squishier than a janitor unit.
+      type: Tweak
+    - message: Syndicate assault cyborgs can manoeuvre in space. The chassis now accelerates and turns while weightless instead of drifting helplessly.
+      type: Tweak
+    - message: The NCWL "HADES" juggernaut hardsuit has been trimmed. It was strictly better than the Shinohara "KAMADO" juggernaut on every axis at once, soaking half again as much fire while sprinting faster and printing for less steel. Its armour pool and sprint speed are down, and it now costs the same materials as the Shinohara suit.
+      type: Tweak
+  id: 6075
+  time: '2026-08-23T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Ship ballistic shells hit as hard as they used to. The 20mm, 35mm, 50mm and 90mm armour-piercing rounds had their structural and piercing damage cut in the ship power rework, which quietly took 36 to 45 percent off the sustained damage of every autocannon and assault battery in the game.
+      type: Tweak
+    - message: The 50mm 'Bastion' and 'Striker' autocannons and the 90mm 'Overlord' and 'Resolute' assault batteries fire at their old rate again. Their rate of fire had been cut on top of the shell damage cut, so the two nerfs stacked.
+      type: Tweak
+    - message: The 120mm 'Anvil' fires at its old rate again and its flak shell is back to full strength. The flak round had lost more than half its damage and two thirds of its burst, which left it unable to swat the missiles it exists to swat.
+      type: Tweak
+  id: 6076
+  time: '2026-08-23T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Added the shield belt - a researchable belt whose barrier makes psionic powers slide off the wearer until someone shoots it down. It also shaves a quarter off incoming damage. Raising the barrier is a hotbar action, and after a collapse the emitter needs eighty seconds before it can be raised again.
+      type: Add
+    - message: Removed the thick belt and its loadout; its sprite is now the shield belt.
+      type: Remove
+  id: 6077
+  time: '2026-08-23T00:00:00.0000000+00:00'
   url: null

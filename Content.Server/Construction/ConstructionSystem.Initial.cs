@@ -271,7 +271,19 @@ namespace Content.Server.Construction
             }
 
             var newEntityProto = graph.Nodes[edge.Target].Entity.GetId(null, user, new(EntityManager));
-            var newEntity = Spawn(newEntityProto, _transformSystem.ToMapCoordinates(coords), rotation: angle);
+
+            // Eclipsion Start - the angle is the construction ghost's rotation local to the grid it was placed on,
+            // but Spawn(MapCoordinates) treats its rotation argument as a world rotation and subtracts the grid's
+            // heading from it. On a rotated grid (i.e. every ship) the finished structure therefore came out rotated
+            // away from the ghost the player clicked. Attach to the coordinates instead so the angle stays local.
+            if (!coords.IsValid(EntityManager))
+            {
+                FailCleanup();
+                return null;
+            }
+
+            var newEntity = SpawnAttachedTo(newEntityProto, coords, rotation: angle);
+            // Eclipsion End
 
             if (!TryComp(newEntity, out ConstructionComponent? construction))
             {

@@ -56,6 +56,19 @@
                                  Stretch="KeepAspectCentered"
                                  MinSize="18 18" />
                 </Button>
+                <!-- Eclipsion - block the person you are talking to -->
+                <Button Name="BlockChatButton"
+                        MaxSize="32 32"
+                        Visible="False"
+                        ToggleMode="True"
+                        StyleClasses="OpenBoth"
+                        Margin="0 0 4 0"
+                        ToolTip="{Loc nano-chat-block}">
+                    <TextureRect StyleClasses="ButtonSquare"
+                                 TexturePath="/Textures/Interface/VerbIcons/lock.svg.192dpi.png"
+                                 Stretch="KeepAspectCentered"
+                                 MinSize="18 18" />
+                </Button>
                 <Button Name="MuteButton"
                         MaxSize="32 32"
                         StyleClasses="OpenBoth"

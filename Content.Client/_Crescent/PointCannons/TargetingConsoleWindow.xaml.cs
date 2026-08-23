@@ -34,8 +34,14 @@ public sealed partial class TargetingConsoleWindow : KsBaseWindow, IComputerWind
     /// <summary>KS14: when the shell was created; drives the power-on blink.</summary>
     private TimeSpan _bootStartedAt = TimeSpan.MinValue;
 
-    /// <summary>KS14: the group this console last asked for, for the status strip readout.</summary>
-    private string? _selectedGroup;
+    /// <summary>KS14: the groups the server has selected, for the status strip readout.</summary>
+    private List<string> _selectedGroups = new();
+
+    /// <summary>KS14: the group list the rows were last built from, so an unchanged list is left alone.</summary>
+    private List<string>? _groups;
+
+    /// <summary>KS14: the group rows by name, so the selection can be lit without rebuilding them.</summary>
+    private readonly Dictionary<string, Button> _groupButtons = new();
 
     /// <summary>KS14: linked cannon count and summed ammo, cached from the last ammo tick.</summary>
     private int _cannonCount;
@@ -64,26 +70,56 @@ public sealed partial class TargetingConsoleWindow : KsBaseWindow, IComputerWind
 
         if (state.CannonGroups != null)
             UpdateGroupSelector(state.CannonGroups);
+
+        UpdateActiveGroups(state.ActiveGroups); // KS14
     }
 
     public void UpdateGroupSelector(List<string> groups)
     {
+        // KS14: the server pushes this list on every state update, and rebuilding the rows each
+        // time threw away their pressed state - and could destroy a row out from under the click
+        // that was landing on it. The rows are only rebuilt when the list itself changes.
+        if (_groups != null && _groups.SequenceEqual(groups))
+            return;
+
+        _groups = new List<string>(groups);
+        _groupButtons.Clear();
         CannonGroupSelectorBox.DisposeAllChildren();
 
         foreach (string groupName in groups)
         {
             Button groupButton = new();
             groupButton.Text = string.Concat(char.ToUpper(groupName[0]), groupName.Substring(1)); //capitalized name
+            // KS14: latching, so a selected group stays lit instead of the click vanishing the
+            // instant the mouse comes up. Which groups are lit is the server's call - see
+            // UpdateActiveGroups - so this only ever shows what the guns are really set to.
+            groupButton.ToggleMode = true;
             groupButton.OnPressed += (_) =>
             {
-                _selectedGroup = groupButton.Text; // KS14: status strip readout
                 OnCannonGroupChange?.Invoke(groupName);
             };
             CannonGroupSelectorBox.AddChild(groupButton);
+            _groupButtons[groupName] = groupButton; // KS14
         }
 
         // KS14: the rows are built here rather than in XAML, so they get dressed on the way in.
         KsInstrumentDressing.Apply(CannonGroupSelectorBox, KsInstrumentPalette.Nav);
+    }
+
+    /// <summary>
+    ///     KS14: lights the groups the server says are selected. Setting <c>Pressed</c> raises no
+    ///         press event, so this cannot loop back into another group message - it only corrects
+    ///         the row the player just toggled, one state update later.
+    /// </summary>
+    private void UpdateActiveGroups(List<string> active)
+    {
+        foreach (var (groupName, button) in _groupButtons)
+        {
+            button.Pressed = active.Contains(groupName);
+        }
+
+        _selectedGroups = active;
+        KsRefreshStatusStrip();
     }
 
     public void UpdateAmmoStatus(List<(int, int)> values)
@@ -229,7 +265,9 @@ public sealed partial class TargetingConsoleWindow : KsBaseWindow, IComputerWind
     private void KsRefreshStatusStrip()
     {
         StatusLabel.Text = Loc.GetString("targeting-console-status",
-            ("group", _selectedGroup ?? Loc.GetString("targeting-console-status-no-group")),
+            ("group", _selectedGroups.Count > 0
+                ? string.Join('+', _selectedGroups.Select(g => g.ToUpperInvariant()))
+                : Loc.GetString("targeting-console-status-no-group")),
             ("cannons", _cannonCount),
             ("ammo", _ammoValue),
             ("capacity", _ammoMax));

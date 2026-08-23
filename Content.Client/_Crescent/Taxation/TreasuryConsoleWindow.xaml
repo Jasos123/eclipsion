@@ -1,7 +1,7 @@
 <controls:FancyWindow xmlns="https://spacestation14.io"
                       xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
-                      SetSize="440 300"
-                      MinSize="360 240">
+                      SetSize="460 460"
+                      MinSize="380 340">
     <BoxContainer Orientation="Vertical" Margin="12 8 12 12">
         <Label Name="AlarmLabel" HorizontalAlignment="Center" Margin="0 0 0 6" />
         <Label Name="BalanceLabel" StyleClasses="LabelBig" HorizontalAlignment="Center" Margin="0 0 0 4" />
@@ -15,5 +15,10 @@
             <Button Name="WithdrawButton" Text="{Loc 'treasury-console-withdraw'}" />
             <Button Name="WithdrawAllButton" Text="{Loc 'treasury-console-withdraw-all'}" Margin="6 0 0 0" />
         </BoxContainer>
+        <!-- Eclipsion - ship purchases waiting on this faction's sign-off -->
+        <Label Text="{Loc 'treasury-console-requests-header'}" StyleClasses="LabelHeading" Margin="0 12 0 4" />
+        <ScrollContainer VerticalExpand="True" HorizontalExpand="True" HScrollEnabled="False" MinHeight="120">
+            <BoxContainer Name="RequestsContainer" Orientation="Vertical" HorizontalExpand="True" />
+        </ScrollContainer>
     </BoxContainer>
 </controls:FancyWindow>

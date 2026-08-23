@@ -400,7 +400,7 @@
     - type: Gun
       fireOnDropChance: 0
       projectileSpeed: 105
-      fireRate: 3
+      fireRate: 4
       selectedMode: FullAuto
       availableModes:
         - FullAuto
@@ -475,7 +475,7 @@
     - type: Gun
       fireOnDropChance: 0
       projectileSpeed: 105
-      fireRate: 3.2
+      fireRate: 4
       selectedMode: FullAuto
       availableModes:
         - FullAuto
@@ -552,7 +552,7 @@
     - type: Gun
       fireOnDropChance: 0
       projectileSpeed: 180
-      fireRate: .25
+      fireRate: .3
       selectedMode: FullAuto
       availableModes:
         - FullAuto
@@ -615,8 +615,8 @@
     - type: Gun
       fireOnDropChance: 0
       projectileSpeed: 125
-      burstFireRate: 6
-      burstCooldown: 2.5
+      burstFireRate: 8
+      burstCooldown: 2
       shotsPerBurst: 3
       selectedMode: Burst
       availableModes:
@@ -693,7 +693,7 @@
     - type: Gun
       fireOnDropChance: 0
       projectileSpeed: 125
-      fireRate: 1.2
+      fireRate: 1.5
       angleDecay: 1.2
       minAngle: .5
       maxAngle: 2.5

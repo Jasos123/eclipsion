@@ -654,7 +654,8 @@ public sealed class PointCannonSystem : EntitySystem
             navState,
             iffState,
             groups,
-            GetNetEntityList(console.CurrentGroup));
+            GetNetEntityList(console.CurrentGroup),
+            console.ActiveGroups.ToList()); // KS14: lights the selected groups on the console
         console.RegenerateCannons = false;
         console.PrevState = consoleState;
         _uiSys.SetUiState(uid, TargetingConsoleUiKey.Key, consoleState);

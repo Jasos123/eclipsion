@@ -35,14 +35,26 @@ public sealed partial class TaxationConsoleWindow : FancyWindow
 
         _rows = new ConsoleRowList<string, GoodRow>(GoodsContainer, () => new GoodRow(this));
 
-        DefaultSetButton.OnPressed += _ =>
-        {
-            if (TryParsePercent(DefaultRateEdit.Text, out var rate))
-                OnSetDefault?.Invoke(rate);
-        };
+        DefaultSetButton.OnPressed += _ => ApplyDefaultRate();
+        // Enter applies it too; the box used to swallow the key and leave the typed rate unsent.
+        DefaultRateEdit.OnTextEntered += _ => ApplyDefaultRate();
 
         // Filtering is local, so it re-runs against the last state instead of waiting for the next push.
         FilterEdit.OnTextChanged += _ => RefreshRows();
+    }
+
+    /// <summary>
+    ///     Sends the station-wide default rate and puts the box back in step with what was sent. A rate
+    ///     that does not parse is left where it was typed, still tinted as pending, rather than being
+    ///     silently rewritten to the live one.
+    /// </summary>
+    private void ApplyDefaultRate()
+    {
+        if (!TryParsePercent(DefaultRateEdit.Text, out var rate))
+            return;
+
+        DefaultRateEdit.SetSubmitted(ToPercentString(rate));
+        OnSetDefault?.Invoke(rate);
     }
 
     public void UpdateState(TaxationConsoleState state)
@@ -57,7 +69,7 @@ public sealed partial class TaxationConsoleWindow : FancyWindow
             : "taxation-console-access-view"));
         AccessLabel.FontColorOverride = state.CanEdit ? ConsolePalette.Good : ConsolePalette.Muted;
 
-        DefaultRateEdit.SetTextIfIdle(ToPercentString(state.DefaultRate));
+        DefaultRateEdit.SetValue(ToPercentString(state.DefaultRate));
         DefaultRateEdit.Editable = state.CanEdit;
         DefaultSetButton.SetDisabled(!state.CanEdit, Loc.GetString("taxation-console-denied-tooltip"));
 
@@ -90,7 +102,7 @@ public sealed partial class TaxationConsoleWindow : FancyWindow
 
         private readonly Label _name;
         private readonly Label _price;
-        private readonly LineEdit _rate;
+        private readonly ConsoleValueEdit _rate;
         private readonly Button _set;
         private readonly Button _clear;
 
@@ -114,25 +126,28 @@ public sealed partial class TaxationConsoleWindow : FancyWindow
                 MinWidth = 110,
             };
 
-            _rate = new LineEdit
+            _rate = new ConsoleValueEdit
             {
                 MinWidth = 70,
                 Margin = new Thickness(4, 0, 2, 0),
             };
+            _rate.OnTextEntered += _ => ApplyRate();
 
             _set = new Button { Text = Loc.GetString("taxation-console-set") };
-            _set.OnPressed += _ =>
-            {
-                if (_owner.TryParsePercent(_rate.Text, out var rate))
-                    _owner.OnSetOverride?.Invoke((_protoId, rate));
-            };
+            _set.OnPressed += _ => ApplyRate();
 
             _clear = new Button
             {
                 Text = Loc.GetString("taxation-console-clear"),
                 Margin = new Thickness(2, 0, 0, 0),
             };
-            _clear.OnPressed += _ => _owner.OnClearOverride?.Invoke(_protoId);
+            _clear.OnPressed += _ =>
+            {
+                // The override is being dropped, so the box is handed back to the console: whatever was
+                // typed stops being pending and the next push shows the rate this good falls back to.
+                _rate.ClearEdited();
+                _owner.OnClearOverride?.Invoke(_protoId);
+            };
 
             var inner = new BoxContainer
             {
@@ -152,6 +167,16 @@ public sealed partial class TaxationConsoleWindow : FancyWindow
             AddChild(inner);
         }
 
+        /// <summary>Sends this good's override. Anything that is not a rate is left where it was typed.</summary>
+        private void ApplyRate()
+        {
+            if (!_owner.TryParsePercent(_rate.Text, out var rate))
+                return;
+
+            _rate.SetSubmitted(ToPercentString(rate));
+            _owner.OnSetOverride?.Invoke((_protoId, rate));
+        }
+
         public void Update(TaxableGoodEntry good, bool canEdit)
         {
             _protoId = good.ProtoId;
@@ -159,10 +184,10 @@ public sealed partial class TaxationConsoleWindow : FancyWindow
             _name.SetTextIfChanged(good.Name);
             _price.SetTextIfChanged(Loc.GetString("taxation-console-good-price", ("price", good.BasePrice)));
 
-            _rate.SetTextIfIdle(ToPercentString(good.EffectiveRate));
+            _rate.SetValue(ToPercentString(good.EffectiveRate));
             _rate.Editable = canEdit;
             // A rate the operator set themselves is worth telling apart from one inherited from the default.
-            _rate.ModulateSelfOverride = good.HasOverride ? ConsolePalette.Override : null;
+            _rate.IdleModulate = good.HasOverride ? ConsolePalette.Override : null;
 
             _set.SetDisabled(!canEdit, Loc.GetString("taxation-console-denied-tooltip"));
             _clear.SetDisabled(!canEdit || !good.HasOverride, Loc.GetString(canEdit

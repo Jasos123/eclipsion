@@ -1,5 +1,6 @@
 using Content.Server.Crescent.Dispenser;
 using Content.Server._Crescent.Overwatch;
+using Content.Server._Crescent.Shipyard; // Eclipsion - high-value purchase approval
 using Content.Server.Power.EntitySystems;
 using Content.Server.Stack;
 using Content.Shared._Crescent.Factions;
@@ -41,6 +42,7 @@ public sealed class FactionTreasuryConsoleSystem : EntitySystem
     [Dependency] private readonly OverwatchSystem _overwatch = default!;
     [Dependency] private readonly PowerReceiverSystem _power = default!;
     [Dependency] private readonly FactionMachineSystem _factionMachine = default!;
+    [Dependency] private readonly ShipPurchaseApprovalSystem _approvals = default!; // Eclipsion - high-value purchase approval
 
     /// <summary>How often an open vault console re-reads the balance and the viewer's remaining share.</summary>
     private const float RefreshInterval = 3f;
@@ -56,6 +58,7 @@ public sealed class FactionTreasuryConsoleSystem : EntitySystem
         SubscribeLocalEvent<FactionTreasuryConsoleComponent, BoundUIOpenedEvent>(OnOpened);
         SubscribeLocalEvent<FactionTreasuryConsoleComponent, TreasuryWithdrawMessage>(OnWithdraw);
         SubscribeLocalEvent<FactionTreasuryConsoleComponent, InteractUsingEvent>(OnInteractUsing);
+        SubscribeLocalEvent<FactionTreasuryConsoleComponent, TreasuryPurchaseDecisionMessage>(OnPurchaseDecision); // Eclipsion
     }
 
     /// <summary>
@@ -330,6 +333,37 @@ public sealed class FactionTreasuryConsoleSystem : EntitySystem
         UpdateUi(uid);
     }
 
+    // Eclipsion Start - high-value purchase approval
+    /// <summary>
+    /// Signs off (or refuses) a ship purchase somebody asked for at a faction shipyard. Gated by the same
+    /// access reader as withdrawing: committing a chunk of the vault to a hull is spending the faction's
+    /// money just as much as taking cash out of it is.
+    /// </summary>
+    private void OnPurchaseDecision(EntityUid uid, FactionTreasuryConsoleComponent comp, TreasuryPurchaseDecisionMessage args)
+    {
+        if (!_access.IsAllowed(args.Actor, uid))
+            return;
+
+        var approver = Name(args.Actor);
+
+        if (args.Approve)
+            _approvals.Approve(args.Id, approver);
+        else
+            _approvals.Deny(args.Id, approver);
+
+        UpdateUi(uid);
+    }
+
+    /// <summary>
+    /// The faction this console answers for. Falls back to the console's grid when the vault names no
+    /// faction of its own, matching how the intrusion alarm resolves it.
+    /// </summary>
+    private string GetConsoleFaction(EntityUid uid, FactionTreasuryConsoleComponent comp)
+    {
+        return string.IsNullOrEmpty(comp.Faction) ? _factionMachine.GetFaction(uid) : comp.Faction;
+    }
+    // Eclipsion End
+
     /// <summary>
     /// Pays out active robberies: each running heist spills its captured share as physical cash next
     /// to the console, spread evenly over <see cref="FactionTreasuryConsoleComponent.RobberyDuration"/>,
@@ -437,13 +471,36 @@ public sealed class FactionTreasuryConsoleSystem : EntitySystem
             remaining = _market.GetRemainingWithdrawal(s, viewerActor.PlayerSession.UserId, capFraction);
         }
 
+        // Eclipsion Start - purchase approval. Read per faction rather than per console: a faction has
+        // several vaults and any of them should be able to answer for a purchase asked of the treasury.
+        var requests = new List<TreasuryPurchaseRequestState>();
+        if (comp != null)
+        {
+            var factionId = GetConsoleFaction(uid, comp);
+            if (!string.IsNullOrEmpty(factionId))
+            {
+                foreach (var request in _approvals.GetPending(factionId))
+                {
+                    requests.Add(new TreasuryPurchaseRequestState(
+                        request.Id,
+                        request.BuyerName,
+                        request.VesselName,
+                        request.Price,
+                        request.Approved,
+                        request.Approver));
+                }
+            }
+        }
+        // Eclipsion End
+
         // Only authorized members can have the UI open, so authorized is always true here.
         _ui.SetUiState(uid, TreasuryConsoleUiKey.Key, new TreasuryConsoleState(
             balance,
             true,
             robbed,
             remaining,
-            (int) MathF.Round(capFraction * 100f)));
+            (int) MathF.Round(capFraction * 100f),
+            requests)); // Eclipsion - purchase approval
     }
 
     /// <summary>
