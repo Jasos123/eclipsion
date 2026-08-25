@@ -2281,8 +2281,8 @@ entities:
           - SpaceArtilleryFire
     - type: NamedModules
       buttonNames:
-      - Toggle 50mm 'Striker'
-      - Fire 50mm 'Striker'
+      - Toggle 90mm 'Resolute' Assault Battery
+      - Fire 90mm 'Resolute' Assault Battery
       - Module C
       - Module D
       - Module E

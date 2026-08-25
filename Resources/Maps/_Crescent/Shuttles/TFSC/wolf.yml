@@ -2638,7 +2638,7 @@ entities:
           - Toggle
     - type: NamedModules
       buttonNames:
-      - Авто-залп из 300cc
+      - Toggle 90mm 'Resolute' Assault Battery
       - Module B
       - Module C
       - Module D

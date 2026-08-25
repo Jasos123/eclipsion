@@ -2149,6 +2149,13 @@ entities:
           - Toggle
         - - Group3
           - SpaceArtilleryFire
+    - type: NamedModules
+      buttonNames:
+      - Toggle 20mm 'Screamer' Rotary Cannon
+      - Toggle 90mm 'Resolute' Assault Battery
+      - Fire 90mm 'Resolute' Assault Battery
+      - Module D
+      - Module E
     - type: ContainerContainer
       containers:
         board: !type:Container

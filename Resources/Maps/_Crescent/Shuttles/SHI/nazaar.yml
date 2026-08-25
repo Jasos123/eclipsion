@@ -1196,8 +1196,8 @@ entities:
           - Toggle
     - type: NamedModules
       buttonNames:
-      - Fire All
-      - Fire 200cc "Starburst"
+      - Toggle 200cc 'Starburst' Plasma Gatling
+      - Toggle blast doors
       - Fire 60mm "Azimuth"
       - Close Shutters
       - Empty Module

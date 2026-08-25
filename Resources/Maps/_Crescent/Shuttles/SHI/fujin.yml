@@ -3825,7 +3825,7 @@ entities:
       - Toggle blastdoors
       - Fire 95mm
       - Toggle 600cc
-      - Toggle 350cc
+      - Toggle 35mm 'Scout' Autocannon
       - Empty Module
 - proto: CableApcExtension
   entities:

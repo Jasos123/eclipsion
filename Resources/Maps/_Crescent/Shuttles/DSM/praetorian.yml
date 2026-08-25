@@ -3109,7 +3109,7 @@ entities:
           - Toggle
     - type: NamedModules
       buttonNames:
-      - Toggle 350cc 'Glare' Burst Laser
+      - Fire 120mm 'Anvil' Artillery
       - Toggle 48mm 'Shortbow' SRM
       - Toggle BlastDoors
       - Empty Module

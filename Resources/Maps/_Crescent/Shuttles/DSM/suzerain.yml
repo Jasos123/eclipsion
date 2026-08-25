@@ -7833,6 +7833,13 @@ entities:
         5:
         - - Group2
           - SpaceArtilleryFire
+    - type: NamedModules
+      buttonNames:
+      - Fire 300mm 'Leviathan' Siege Battery
+      - Fire 60mm 'Azimuth' Rocket Pod
+      - Module C
+      - Module D
+      - Module E
     - type: ContainerContainer
       containers:
         board: !type:Container

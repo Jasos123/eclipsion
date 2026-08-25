@@ -3722,8 +3722,8 @@ entities:
       - Reinforce bridge
       - Toggle 50mm blast doors
       - Toggle 50mm cannons
-      - Fire 60mm missiles
-      - Toggle 20mm cannons
+      - Fire 300w 'Curse' EMP Projector
+      - Toggle 200cc 'Starburst' Plasma Gatling
     - type: ContainerContainer
       containers:
         board: !type:Container

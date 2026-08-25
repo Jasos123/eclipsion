@@ -1943,9 +1943,9 @@ entities:
       pos: 4.5,13.5
     - type: NamedModules
       buttonNames:
-      - Toggle EMP gun
-      - Open EMP gun doors
-      - Close EMP gun doors
+      - Toggle 300cc 'Bolter' Plasma Caster
+      - Open plasma gun doors
+      - Close plasma gun doors
       - Bolt airlocks
       - Module E
     - type: DeviceLinkSource

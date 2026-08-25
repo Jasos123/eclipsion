@@ -4,7 +4,7 @@ meta:
   engineVersion: 288.1.0
   forkId: ""
   forkVersion: ""
-  time: 08/25/2026 14:43:17
+  time: 08/25/2026 15:51:20
   entityCount: 140
 maps: []
 grids:
@@ -144,6 +144,10 @@ entities:
             317: -4,-1
             320: -3,-3
             323: -1,-4
+            347: -5,0
+            359: -4,-1
+            362: -3,-3
+            365: -1,-4
         - node:
             zIndex: 1
             id: LatticeCornerNW
@@ -172,6 +176,10 @@ entities:
             326: 1,-4
             329: 3,-3
             332: 4,-1
+            344: 5,0
+            368: 1,-4
+            371: 3,-3
+            374: 4,-1
         - node:
             zIndex: 1
             id: LatticeCornerSE
@@ -194,6 +202,9 @@ entities:
             293: 2,4
             308: -4,3
             311: -3,4
+            335: 2,4
+            350: -4,3
+            353: -3,4
         - node:
             zIndex: 1
             id: LatticeCornerSW
@@ -216,6 +227,9 @@ entities:
             296: 3,4
             299: 4,3
             314: -2,4
+            338: 3,4
+            341: 4,3
+            356: -2,4
         - node:
             id: LatticeEdgeE
           decals:
@@ -261,6 +275,13 @@ entities:
             315: -4,-1
             318: -3,-3
             321: -1,-4
+            334: 2,4
+            345: -5,0
+            349: -4,3
+            352: -3,4
+            357: -4,-1
+            360: -3,-3
+            363: -1,-4
         - node:
             id: LatticeEdgeN
           decals:
@@ -312,6 +333,14 @@ entities:
             324: 1,-4
             327: 3,-3
             330: 4,-1
+            342: 5,0
+            346: -5,0
+            358: -4,-1
+            361: -3,-3
+            364: -1,-4
+            366: 1,-4
+            369: 3,-3
+            372: 4,-1
         - node:
             id: LatticeEdgeS
           decals:
@@ -351,6 +380,12 @@ entities:
             306: -4,3
             309: -3,4
             312: -2,4
+            333: 2,4
+            336: 3,4
+            339: 4,3
+            348: -4,3
+            351: -3,4
+            354: -2,4
         - node:
             id: LatticeEdgeW
           decals:
@@ -396,6 +431,13 @@ entities:
             325: 1,-4
             328: 3,-3
             331: 4,-1
+            337: 3,4
+            340: 4,3
+            343: 5,0
+            355: -2,4
+            367: 1,-4
+            370: 3,-3
+            373: 4,-1
         - node:
             id: TechE
             color: '#FFFFFFFF'
@@ -568,7 +610,7 @@ entities:
       chunkEntities: []
 - proto: AAAHardpointFixed
   entities:
-  - uid: 3
+  - uid: 2
     components:
     - type: Transform
       parent: 1
@@ -579,7 +621,7 @@ entities:
       - 16
     - type: Physics
       canCollide: False
-  - uid: 68
+  - uid: 3
     components:
     - type: Transform
       parent: 1
@@ -695,14 +737,30 @@ entities:
       pos: 0.5,2.5
     - type: DeviceLinkSource
       linkedPorts:
-        3:
+        2:
         - - Group1
           - Toggle
         - - Group2
           - SpaceArtilleryFire
-        68:
+        3:
         - - Group3
           - Toggle
+        90:
+        - - Group4
+          - Toggle
+        91:
+        - - Group4
+          - Toggle
+        92:
+        - - Group4
+          - Toggle
+    - type: NamedModules
+      buttonNames:
+      - Toggle 48mm 'Buzzsaw' SRM
+      - Fire 48mm 'Buzzsaw' SRM
+      - Toggle 150cc 'Retribution' Pulse Laser
+      - Toggle blast doors
+      - Module E
     - type: ContainerContainer
       containers:
         board: !type:Container
@@ -983,7 +1041,7 @@ entities:
       pos: 0.5,1.5
 - proto: ComputerTabletopIFF
   entities:
-  - uid: 2
+  - uid: 68
     components:
     - type: Transform
       parent: 1
@@ -1133,16 +1191,25 @@ entities:
     - type: Transform
       parent: 1
       pos: -0.5,3.5
+    - type: DeviceLinkSink
+      links:
+      - 16
   - uid: 91
     components:
     - type: Transform
       parent: 1
       pos: 0.5,3.5
+    - type: DeviceLinkSink
+      links:
+      - 16
   - uid: 92
     components:
     - type: Transform
       parent: 1
       pos: 1.5,3.5
+    - type: DeviceLinkSink
+      links:
+      - 16
 - proto: SubstationWallBasic
   entities:
   - uid: 93

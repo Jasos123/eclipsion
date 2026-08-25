@@ -778,6 +778,13 @@ entities:
         235:
         - - Group1
           - Toggle
+    - type: NamedModules
+      buttonNames:
+      - Toggle 35mm 'Scout' Autocannon
+      - Module B
+      - Module C
+      - Module D
+      - Module E
     - type: ContainerContainer
       containers:
         board: !type:Container

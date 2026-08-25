@@ -3125,6 +3125,13 @@ entities:
         3:
         - - Group1
           - SpaceArtilleryFire
+    - type: NamedModules
+      buttonNames:
+      - Fire 120mm 'Anvil' Artillery
+      - Module B
+      - Module C
+      - Module D
+      - Module E
     - type: ContainerContainer
       containers:
         board: !type:Container

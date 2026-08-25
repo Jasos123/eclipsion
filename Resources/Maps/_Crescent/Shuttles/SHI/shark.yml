@@ -3836,7 +3836,7 @@ entities:
           - Toggle
     - type: NamedModules
       buttonNames:
-      - Toggle 300cc 'Bolter' Plasma Casters
+      - Toggle 350cc 'Glare' Burst Laser
       - Empty Module
       - Empty Module
       - Empty Module

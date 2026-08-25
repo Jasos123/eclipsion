@@ -1119,7 +1119,7 @@ entities:
           - Toggle
     - type: NamedModules
       buttonNames:
-      - Toggle 'Bolter' Plasma Blaster
+      - Toggle 90mm 'Resolute' Assault Battery
       - Toggle 'Starlight' 150cc  Plasma Blasters
       - Bolt Bridge
       - Bolt Engineering

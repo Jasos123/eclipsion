@@ -1855,8 +1855,8 @@ entities:
       - Toggle 120mm blast doors
       - Toggle 120mm cannons
       - Fire 120mm cannons
-      - Toggle 95mm cannons
-      - Fire 95mm cannons
+      - Toggle 50mm 'Striker' Heavy Autocannon
+      - Fire 50mm 'Striker' Heavy Autocannon
     - type: ContainerContainer
       containers:
         board: !type:Container

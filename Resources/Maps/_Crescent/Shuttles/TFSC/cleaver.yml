@@ -2336,10 +2336,10 @@ entities:
           - Toggle
     - type: NamedModules
       buttonNames:
-      - Toggle 50mm cannons
+      - Toggle 200cc 'Starburst' Plasma Gatling
       - Toggle 60mm missiles
       - Fire 60mm missiles
-      - Module D
+      - Toggle 35mm 'Scout' Autocannon
       - Module E
     - type: ContainerContainer
       containers:

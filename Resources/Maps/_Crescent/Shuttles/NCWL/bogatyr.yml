@@ -2150,22 +2150,22 @@ entities:
         - - Group1
           - Toggle
         86:
-        - - Group2
+        - - Group3
           - Toggle
         89:
-        - - Group2
+        - - Group3
           - Toggle
         87:
-        - - Group2
+        - - Group3
           - Toggle
         88:
-        - - Group2
+        - - Group3
           - Toggle
     - type: NamedModules
       buttonNames:
       - Toggle 50mm cannons
+      - Fire 120mm 'Anvil' Artillery
       - Toggle weapon doors
-      - Module C
       - Module D
       - Module E
     - type: ContainerContainer

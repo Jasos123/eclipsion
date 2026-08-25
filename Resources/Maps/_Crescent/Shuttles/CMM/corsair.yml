@@ -1844,9 +1844,9 @@ entities:
     - type: NamedModules
       buttonNames:
       - Toggle all weapon doors
-      - Toggle 300cc projector
-      - Toggle 48mm missiles
-      - Fire 48mm missiles
+      - Toggle 300cc 'Bolter' Plasma Blaster
+      - Toggle 300w 'Curse' EMP Projectors
+      - Fire 300w 'Curse' EMP Projectors
       - Fire 120mm cannons
     - type: ContainerContainer
       containers:

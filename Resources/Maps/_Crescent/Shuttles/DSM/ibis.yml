@@ -2197,7 +2197,7 @@ entities:
       pos: 0.5,2.5
     - type: NamedModules
       buttonNames:
-      - Toggle "Starburst" 200cc Plasma Gatling
+      - Toggle 20mm 'Screamer' Rotary Cannon
       - Empty Module
       - Empty Module
       - Empty Module
