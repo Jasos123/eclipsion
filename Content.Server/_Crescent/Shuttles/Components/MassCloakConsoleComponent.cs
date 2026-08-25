@@ -14,6 +14,24 @@ public sealed partial class MassCloakConsoleComponent : Component
     [ViewVariables(VVAccess.ReadWrite), DataField("massCloakRange")]
     public float MassCloakRange = 20f;
 
+    /// <summary>
+    /// Whether asteroid grids should be excluded from this cloak field.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite), DataField]
+    public bool IgnoreAsteroids = true;
+
+    /// <summary>
+    /// Whether this field only operates while the grid carrying the console is IFF-cloaked.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite), DataField]
+    public bool RequiresMothershipCloak;
+
+    /// <summary>
+    /// Whether this field may cloak the grid carrying the console.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite), DataField]
+    public bool CloakMothership = true;
+
     [ViewVariables(VVAccess.ReadWrite)]
     public EntityUid? originalGrid = null;
 

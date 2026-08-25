@@ -165,3 +165,14 @@
     faction: SRM
   - type: AccessReader
     access: [["Hunter"]]
+
+- type: entity
+  parent: BaseMainframeConsole
+  id: GSMainframeConsole
+  name: Gliess Command Console
+  components:
+  - type: OverwatchConsole
+    faction: GS
+  - type: AccessReader
+    # Gliess has no shared base access tag; its sheriff, deputy, and dockmaster share these credentials.
+    access: [["GliessSheriff", "GliessDockmaster"]]

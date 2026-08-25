@@ -5,6 +5,7 @@
   description: Allows you to control mass cloaking fields around this vessel.
   components:
   - type: MassCloakConsole
+    ignoreAsteroids: true
   - type: Sprite
     layers:
     - map: ["computerLayerBody"]
@@ -28,3 +29,13 @@
           type: WiresBoundUserInterface
   - type: Computer
     board: ComputerTelevisionCircuitboard
+
+- type: entity
+  parent: ComputerMassCloak
+  id: ComputerMothershipMassCloak
+  name: mothership mass cloak console
+  description: Extends an active mothership cloak to nearby vessels without altering the mothership's own cloak.
+  components:
+  - type: MassCloakConsole
+    requiresMothershipCloak: true
+    cloakMothership: false

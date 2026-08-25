@@ -123,3 +123,41 @@
     - ShipbreakerTFSC
     - CyberdawnTechTFSC
     - RipperdocTFSC
+
+- type: entity
+  parent: BaseFactionRecruitmentConsole
+  id: FactionRecruitmentConsoleGS
+  name: Gliess recruitment terminal
+  suffix: GS
+  components:
+  - type: AccessReader
+    access: [["GliessSheriff", "GliessDockmaster"]]
+  - type: FactionRecruitmentConsole
+    faction: GS
+    # The sheriff, deputy and dockmaster share the command credentials used here. The two senior
+    # jobs are intentionally unavailable as assignments, leaving only the civilian and deputy roles.
+    roles:
+    - GliessianDockhand
+    - GliessianDeputy
+
+- type: entity
+  parent: BaseFactionRecruitmentConsole
+  id: FactionRecruitmentConsoleTAP
+  name: TAP recruitment terminal
+  suffix: TAP
+  components:
+  - type: AccessReader
+    # Only the Prophet carries all three family authority tags; individual family representatives
+    # cannot unilaterally enlist personnel for the Pact.
+    access: [["Arabet", "Alseik", "Thukker"]]
+  - type: FactionRecruitmentConsole
+    faction: TAP
+    # The Prophet is TAP's high command and is intentionally not assignable from the console.
+    roles:
+    - AcolyteTAP
+    - BeltrunnerTAP
+    - DraugrTAP
+    - HangarTechTAP
+    - ServileTAP
+    - TechminerTAP
+    - TinkererTAP

@@ -195,6 +195,16 @@
   #   - map: ["computerLayerScreen"]
   #     state: tap
 
+- type: entity
+  parent: BaseComputerOverwatch
+  id: GSOverwatchComputer
+  name: overwatch console GS
+  components:
+  - type: OverwatchConsole
+    faction: GS
+  - type: AccessReader
+    access: [["GliessSheriff", "GliessDockmaster"]]
+
 # One shared Federation console. Interdyne, Shipbreaker, GSC and Cyberdawn retain their own leadership,
 # but their jobs expose the shared TFCF gameplay faction; a console watching only "faction: CD" would show
 # an empty roster. The shared network represents joint Federation operations, not an internal merger.

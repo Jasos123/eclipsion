@@ -117,3 +117,24 @@
 # Interdyne, Shipbreaker, GSC and Cyberdawn retain separate leadership, but payroll resolves through the
 # Federation's shared gameplay faction. Their old consoles keyed off IPM/SAW/GSC/CD ids that no current job
 # grants and no treasury uses, so the shared ComputerPaymentTFSC console above serves the TFCF roster.
+
+- type: entity
+  parent: ComputerPaymentBase
+  id: ComputerPaymentGS
+  name: payroll console GS
+  components:
+  - type: PaymentConsole
+    faction: GS
+  - type: AccessReader
+    access: [["GliessSheriff", "GliessDockmaster"]]
+
+- type: entity
+  parent: ComputerPaymentBase
+  id: ComputerPaymentTAP
+  name: payroll console TAP
+  components:
+  - type: PaymentConsole
+    faction: TAP
+  - type: AccessReader
+    # The Prophet alone has authority across all three Pact family leadership tags.
+    access: [["Arabet", "Alseik", "Thukker"]]

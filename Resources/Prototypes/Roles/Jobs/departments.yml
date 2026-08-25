@@ -169,7 +169,7 @@
   roles:
   - ExecutiveSHI
   - BoardSHI
-  #- HighsecSHI
+  - HighsecSHI
   - CorpsecSHI
   - EmployeeSHI
   - MedtechSHI
@@ -207,7 +207,7 @@
   - BeltrunnerTAP
   - DraugrTAP
   - ServileTAP
-  editorHidden: true # unused faction, hidden from job selection
+  editorHidden: false # unused faction, hidden from job selection
 
 - type: department
   id: ATH
