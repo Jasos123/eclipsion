@@ -17,6 +17,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Robust.Server.Player;
 using Robust.Shared.Enums;
+using Robust.Shared.Network; // Eclipsion - blocking
 using Robust.Shared.GameObjects;
 using Robust.Shared.Player;
 
@@ -53,6 +54,14 @@ public sealed class MoneyTransferCartridgeSystem : EntitySystem
 
     private void OnUiMessage(EntityUid uid, MoneyTransferCartridgeComponent component, CartridgeMessageEvent args)
     {
+        // Eclipsion Start - blocking
+        if (args is MoneyTransferBlockUiMessageEvent blockMsg)
+        {
+            HandleBlock(uid, component, blockMsg);
+            return;
+        }
+        // Eclipsion End
+
         if (args is not MoneyTransferUiMessageEvent msg)
             return;
 
@@ -84,6 +93,10 @@ public sealed class MoneyTransferCartridgeSystem : EntitySystem
                 error = Loc.GetString("money-transfer-error-recipient-account");
             else if (_mobState.IsDead(recipient))
                 error = Loc.GetString("money-transfer-error-dead");
+            // Eclipsion - refused up front, before any money moves, so a block cannot be used to make
+            // someone's credits vanish and the sender knows exactly why it did not go through.
+            else if (IsBlockedBy(recipient, sender))
+                error = Loc.GetString("money-transfer-error-blocked");
             else if (amount <= 0)
                 error = Loc.GetString("money-transfer-error-amount");
             else if (amount > MaxTransferAmount)
@@ -142,6 +155,62 @@ public sealed class MoneyTransferCartridgeSystem : EntitySystem
 
         UpdateUiState(uid, loaderUid, component, sender, error, successToast);
     }
+
+    // Eclipsion Start - blocking
+    /// <summary>
+    /// Adds or removes a block. The target is named by entity because that is what the app can see, but
+    /// the block is stored against their account so swapping bodies or IDs does not shake it off.
+    /// </summary>
+    private void HandleBlock(EntityUid uid, MoneyTransferCartridgeComponent component, MoneyTransferBlockUiMessageEvent msg)
+    {
+        var owner = msg.Actor;
+        var loaderUid = GetEntity(msg.LoaderUid);
+
+        if (msg.Block)
+        {
+            var target = GetEntity(msg.Target);
+            if (!target.IsValid() || target == owner || GetUser(target) is not { } user)
+            {
+                UpdateUiState(uid, loaderUid, component, owner, Loc.GetString("money-transfer-error-block-failed"), null);
+                return;
+            }
+
+            var list = EnsureComp<TransferBlockListComponent>(owner);
+            list.Blocked[user] = GetTransferDisplayName(target);
+        }
+        else
+        {
+            // Unblocking works off the stored account id: the person may be dead, gibbed or logged out by
+            // now, and an entity reference would leave the entry stuck on the list forever.
+            if (!TryComp<TransferBlockListComponent>(owner, out var list))
+                return;
+
+            if (msg.User is { } user)
+                list.Blocked.Remove(user);
+            else if (GetEntity(msg.Target) is { Valid: true } target && GetUser(target) is { } targetUser)
+                list.Blocked.Remove(targetUser);
+        }
+
+        UpdateUiState(uid, loaderUid, component, owner, null, null);
+    }
+
+    /// <summary>Whether <paramref name="recipient"/> is refusing transfers from <paramref name="sender"/>.</summary>
+    private bool IsBlockedBy(EntityUid recipient, EntityUid sender)
+    {
+        return TryComp<TransferBlockListComponent>(recipient, out var list)
+               && GetUser(sender) is { } user
+               && list.Blocked.ContainsKey(user);
+    }
+
+    /// <summary>The account behind a body, or null for anything that isn't a player.</summary>
+    private NetUserId? GetUser(EntityUid uid)
+    {
+        if (_mind.TryGetMind(uid, out _, out var mind) && mind.UserId is { } userId)
+            return userId;
+
+        return CompOrNull<ActorComponent>(uid)?.PlayerSession.UserId;
+    }
+    // Eclipsion End
 
     private void NotifyTransferChatMessage(
         EntityUid sender,
@@ -265,6 +334,7 @@ public sealed class MoneyTransferCartridgeSystem : EntitySystem
         var recipients = new List<MoneyTransferRecipientState>();
         long balance = 0;
         var history = new List<MoneyTransferHistoryEntryState>();
+        var blocked = new List<MoneyTransferBlockedState>(); // Eclipsion - blocking
 
         if (senderMob != null && TryComp<BankAccountComponent>(senderMob.Value, out var bank))
             balance = bank.Balance;
@@ -296,7 +366,12 @@ public sealed class MoneyTransferCartridgeSystem : EntitySystem
                 if (_mind.TryGetMind(uid, out var mindId, out _) && _jobs.MindTryGetJobName(mindId, out var jobName))
                     job = jobName;
 
-                recipients.Add(new MoneyTransferRecipientState(GetNetEntity(uid), name, job));
+                // Eclipsion - the row is flagged so the app can offer Unblock instead of Block without a
+                // second lookup, and so a blocked person is visibly marked in the send list.
+                var isBlocked = GetUser(uid) is { } recipientUser
+                                && CompOrNull<TransferBlockListComponent>(senderMob.Value)?.Blocked.ContainsKey(recipientUser) == true;
+
+                recipients.Add(new MoneyTransferRecipientState(GetNetEntity(uid), name, job, isBlocked));
             }
 
             recipients.Sort((a, b) => string.Compare(a.Name, b.Name, StringComparison.OrdinalIgnoreCase));
@@ -316,8 +391,21 @@ public sealed class MoneyTransferCartridgeSystem : EntitySystem
             }
         }
 
+        // Eclipsion Start - blocking. Read straight off the block list rather than off the online player
+        // list, so somebody who logged out can still be seen and unblocked.
+        if (senderMob != null && TryComp<TransferBlockListComponent>(senderMob.Value, out var blockList))
+        {
+            foreach (var (user, blockedName) in blockList.Blocked)
+            {
+                blocked.Add(new MoneyTransferBlockedState(user, blockedName));
+            }
+
+            blocked.Sort((a, b) => string.Compare(a.Name, b.Name, StringComparison.OrdinalIgnoreCase));
+        }
+        // Eclipsion End
+
         var successToast = error != null ? null : success;
-        var state = new MoneyTransferUiState(balance, recipients, history, error, successToast);
+        var state = new MoneyTransferUiState(balance, recipients, history, error, successToast, blocked);
         _cartridgeLoader.UpdateCartridgeUiState(loaderUid, state);
     }
 

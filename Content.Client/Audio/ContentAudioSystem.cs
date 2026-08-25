@@ -1,6 +1,9 @@
+using Content.Client.Gameplay;
 using Content.Shared.Audio;
 using Content.Shared.GameTicking;
+using Robust.Shared.Player;
 using AudioComponent = Robust.Shared.Audio.Components.AudioComponent;
+using EngineAudioSystem = Robust.Client.Audio.AudioSystem;
 
 namespace Content.Client.Audio;
 
@@ -43,36 +46,27 @@ public sealed partial class ContentAudioSystem : SharedContentAudioSystem
         base.Initialize();
 
         UpdatesOutsidePrediction = true;
+        // Run lifecycle cleanup after the engine has processed audio for this frame. This also
+        // catches networked streams that arrive after the initial transition to the lobby.
+        UpdatesAfter.Add(typeof(EngineAudioSystem));
         InitializeAmbientMusic();
         InitializeLobbyMusic();
         InitializeDucking();
+        SubscribeLocalEvent<LocalPlayerDetachedEvent>(OnLocalPlayerDetached);
         SubscribeNetworkEvent<RoundRestartCleanupEvent>(OnRoundCleanup);
     }
 
     private void OnRoundCleanup(RoundRestartCleanupEvent ev)
     {
         _fadingOut.Clear();
+        _suppressedNetworkedLoops.Clear();
+        _worldAudioSuppressed = false;
 
-        // Preserve lobby music but everything else should get dumped.
+        // Preserve lobby/restart music but really stop every in-round source. Changing gain here
+        // only muted the current source and allowed a later component state to start it again.
         var lobbyMusic = _lobbySoundtrackInfo?.MusicStreamEntityUid;
-        TryComp(lobbyMusic, out AudioComponent? lobbyMusicComp);
-        var oldMusicGain = lobbyMusicComp?.Gain;
-
         var restartAudio = _lobbyRoundRestartAudioStream;
-        TryComp(restartAudio, out AudioComponent? restartComp);
-        var oldAudioGain = restartComp?.Gain;
-
-        SilenceAudio();
-
-        if (oldMusicGain != null)
-        {
-            Audio.SetGain(lobbyMusic, oldMusicGain.Value, lobbyMusicComp);
-        }
-
-        if (oldAudioGain != null)
-        {
-            Audio.SetGain(restartAudio, oldAudioGain.Value, restartComp);
-        }
+        StopAudioSources(lobbyMusic, restartAudio);
         PlayRestartSound(ev);
     }
 
@@ -81,6 +75,7 @@ public sealed partial class ContentAudioSystem : SharedContentAudioSystem
         base.Shutdown();
         ShutdownAmbientMusic();
         ShutdownLobbyMusic();
+        _suppressedNetworkedLoops.Clear();
     }
 
     public override void Update(float frameTime)
@@ -95,6 +90,116 @@ public sealed partial class ContentAudioSystem : SharedContentAudioSystem
         UpdateFades(frameTime);
         UpdateDucking(frameTime);
     }
+
+    public override void FrameUpdate(float frameTime)
+    {
+        base.FrameUpdate(frameTime);
+        UpdateWorldAudioLifecycle();
+    }
+
+    #region World audio lifecycle
+
+    /// <summary>
+    /// Server-owned loops that were present when the local player detached. They are restarted
+    /// once a new player entity is attached, since the server will not necessarily resend their
+    /// unchanged Playing state after a respawn.
+    /// </summary>
+    private readonly HashSet<EntityUid> _suppressedNetworkedLoops = new();
+
+    private bool _worldAudioSuppressed;
+
+    private void OnLocalPlayerDetached(LocalPlayerDetachedEvent args)
+    {
+        SuppressWorldAudio();
+    }
+
+    private void UpdateWorldAudioLifecycle()
+    {
+        // A positional listener is only meaningful during gameplay with an attached player entity.
+        // Lobby audio is client-owned and explicitly exempted below.
+        if (_state.CurrentState is not GameplayStateBase || _player.LocalEntity == null)
+        {
+            SuppressWorldAudio();
+            return;
+        }
+
+        if (!_worldAudioSuppressed)
+            return;
+
+        _worldAudioSuppressed = false;
+
+        foreach (var uid in _suppressedNetworkedLoops)
+        {
+            if (!TryComp(uid, out AudioComponent? component) ||
+                component.State != Robust.Shared.Audio.Components.AudioState.Playing ||
+                !component.Params.Loop)
+            {
+                continue;
+            }
+
+            // ProcessStream will restart the source on the next audio frame and update its position
+            // and gain for the newly attached player before it becomes audible.
+            component.Started = false;
+        }
+
+        _suppressedNetworkedLoops.Clear();
+    }
+
+    private void SuppressWorldAudio(bool stopClientAudio = false)
+    {
+        _worldAudioSuppressed = true;
+
+        var lobbyMusic = _lobbySoundtrackInfo?.MusicStreamEntityUid;
+        var restartAudio = _lobbyRoundRestartAudioStream;
+        var query = AllEntityQuery<AudioComponent>();
+
+        while (query.MoveNext(out var uid, out var component))
+        {
+            if (uid == lobbyMusic || uid == restartAudio)
+                continue;
+
+            var clientSide = IsClientSide(uid);
+
+            // Client-owned ambience and effects are recreated by their owning systems. Networked
+            // loops are persistent server state, so remember those for the next attached player.
+            if (!clientSide && component.Params.Loop)
+                _suppressedNetworkedLoops.Add(uid);
+
+            // Keep suppressing server/PVS audio for the whole lobby: component startup and state
+            // deltas can legitimately arrive after the transition. Client-owned gameplay audio is
+            // stopped by the explicit lobby transition, while fresh lobby UI sounds remain available.
+            if (!clientSide || stopClientAudio)
+            {
+                // A just-created source may not be playing yet. Marking it started prevents the
+                // engine's next ProcessStream pass from undoing this lifecycle cleanup.
+                component.Started = true;
+
+                if (component.Playing)
+                    component.StopPlaying();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Immediately stops client audio sources without rewriting their AudioComponent State or Params.
+    /// </summary>
+    private void StopAudioSources(EntityUid? preservedStream = null, EntityUid? secondPreservedStream = null)
+    {
+        var query = AllEntityQuery<AudioComponent>();
+
+        while (query.MoveNext(out var uid, out var component))
+        {
+            if (uid == preservedStream || uid == secondPreservedStream)
+                continue;
+
+            // Prevent the engine's next ProcessStream pass from auto-starting a source that had
+            // not reached its first audio frame yet.
+            component.Started = true;
+            component.StopPlaying();
+        }
+    }
+
+    #endregion
 
     #region Fades
 

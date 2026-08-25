@@ -135,7 +135,7 @@
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitSyndicateSuitCyberdawn
-  name: patriarch's undershirt
+  name: cyberdawn supervisor's undershirt
   description: A button-up and matching slacks in Cyberdawn colors.
   components:
   - type: Sprite

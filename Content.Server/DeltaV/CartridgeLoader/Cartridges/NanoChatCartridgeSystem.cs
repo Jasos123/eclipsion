@@ -119,6 +119,11 @@ public sealed class NanoChatCartridgeSystem : EntitySystem
             case NanoChatUiMessageType.ToggleListNumber:
                 HandleToggleListNumber(card);
                 break;
+            // Eclipsion Start - blocking
+            case NanoChatUiMessageType.ToggleBlock:
+                HandleToggleBlock(card, msg);
+                break;
+            // Eclipsion End
         }
 
         UpdateUI(ent, GetEntity(args.LoaderUid));
@@ -280,6 +285,27 @@ public sealed class NanoChatCartridgeSystem : EntitySystem
         UpdateUIForCard(card);
     }
 
+    // Eclipsion Start - blocking
+    /// <summary>
+    ///     Blocks or unblocks the other party in a conversation. Blocking only refuses what they send;
+    ///     it never touches the conversation already on the card, so evidence of harassment survives it.
+    /// </summary>
+    private void HandleToggleBlock(Entity<NanoChatCardComponent> card, NanoChatUiMessageEvent msg)
+    {
+        if (msg.RecipientNumber is not { } number || number == card.Comp.Number)
+            return;
+
+        var blocked = !_nanoChat.IsBlocked((card, card.Comp), number);
+        _nanoChat.SetBlocked((card, card.Comp), number, blocked);
+
+        _adminLogger.Add(LogType.Action,
+            LogImpact.Low,
+            $"{ToPrettyString(msg.Actor):user} {(blocked ? "blocked" : "unblocked")} NanoChat #{number:D4}");
+
+        UpdateUIForCard(card);
+    }
+    // Eclipsion End
+
     private void HandleToggleListNumber(Entity<NanoChatCardComponent> card)
     {
         _nanoChat.SetListNumber((card, card.Comp), !_nanoChat.GetListNumber((card, card.Comp)));
@@ -315,10 +341,12 @@ public sealed class NanoChatCartridgeSystem : EntitySystem
         );
 
         // Attempt delivery
-        var (deliveryFailed, recipients) = AttemptMessageDelivery(cartridge, msg.RecipientNumber.Value);
+        // Eclipsion - the sender's own number goes along so the recipient's block list can be checked.
+        var (deliveryFailed, blocked, recipients) =
+            AttemptMessageDelivery(cartridge, msg.RecipientNumber.Value, card.Comp.Number.Value);
 
         // Update delivery status
-        message = message with { DeliveryFailed = deliveryFailed };
+        message = message with { DeliveryFailed = deliveryFailed, Blocked = blocked };
 
         // Store message in sender's outbox under recipient's number
         _nanoChat.AddMessage((card, card.Comp), msg.RecipientNumber.Value, message);
@@ -361,16 +389,17 @@ public sealed class NanoChatCartridgeSystem : EntitySystem
     /// <param name="sender">The sending cartridge entity</param>
     /// <param name="recipientNumber">The recipient's number</param>
     /// <returns>Tuple containing delivery status and recipients if found.</returns>
-    private (bool failed, List<Entity<NanoChatCardComponent>> recipient) AttemptMessageDelivery(
+    private (bool failed, bool blocked, List<Entity<NanoChatCardComponent>> recipient) AttemptMessageDelivery(
         Entity<NanoChatCartridgeComponent> sender,
-        uint recipientNumber)
+        uint recipientNumber,
+        uint senderNumber)
     {
         // First verify we can send from this device
 //        var channel = _prototype.Index(sender.Comp.RadioChannel);
 //        var sendAttemptEvent = new RadioSendAttemptEvent(channel, sender);
 //        RaiseLocalEvent(ref sendAttemptEvent);
 //        if (sendAttemptEvent.Cancelled)
-//            return (true, new List<Entity<NanoChatCardComponent>>());
+//            return (true, false, new List<Entity<NanoChatCardComponent>>());
 
         var foundRecipients = new List<Entity<NanoChatCardComponent>>();
 
@@ -385,7 +414,16 @@ public sealed class NanoChatCartridgeSystem : EntitySystem
         }
 
         if (foundRecipients.Count == 0)
-            return (true, foundRecipients);
+            return (true, false, foundRecipients);
+
+        // Eclipsion Start - blocking. Drop the cards that refuse this sender. If that was all of them the
+        // send is reported back as blocked rather than as a comms failure, so the sender is told what
+        // happened instead of retrying into a wall.
+        foundRecipients.RemoveAll(recipient => _nanoChat.IsBlocked((recipient.Owner, recipient.Comp), senderNumber));
+
+        if (foundRecipients.Count == 0)
+            return (true, true, foundRecipients);
+        // Eclipsion End
 
         // Now check if any of these cards can receive
         var deliverableRecipients = new List<Entity<NanoChatCardComponent>>();
@@ -426,7 +464,7 @@ public sealed class NanoChatCartridgeSystem : EntitySystem
             }
         }
 
-        return (deliverableRecipients.Count == 0, deliverableRecipients);
+        return (deliverableRecipients.Count == 0, false, deliverableRecipients);
     }
 
 //    /// <summary>
@@ -620,6 +658,7 @@ public sealed class NanoChatCartridgeSystem : EntitySystem
         var maxRecipients = 50;
         var notificationsMuted = false;
         var listNumber = false;
+        var blockedNumbers = new HashSet<uint>(); // Eclipsion - blocking
 
         if (ent.Comp.Card != null && TryComp<NanoChatCardComponent>(ent.Comp.Card, out var card))
         {
@@ -630,6 +669,7 @@ public sealed class NanoChatCartridgeSystem : EntitySystem
             maxRecipients = card.MaxRecipients;
             notificationsMuted = card.NotificationsMuted;
             listNumber = card.ListNumber;
+            blockedNumbers = card.BlockedNumbers; // Eclipsion - blocking
         }
 
         var state = new NanoChatUiState(recipients,
@@ -639,7 +679,8 @@ public sealed class NanoChatCartridgeSystem : EntitySystem
             ownNumber,
             maxRecipients,
             notificationsMuted,
-            listNumber);
+            listNumber,
+            blockedNumbers); // Eclipsion - blocking
         _cartridge.UpdateCartridgeUiState(loader, state);
     }
 }

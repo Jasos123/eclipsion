@@ -40,12 +40,14 @@ public sealed class ChangeStocksPriceCommand : IConsoleCommand
         EntityUid? targetStation = null;
         if (args.Length > 2)
         {
-            if (!EntityUid.TryParse(args[2], out var station))
+            // Eclipsion: the id an admin reads off their client is a NetEntity, not a server-side EntityUid.
+            if (!NetEntity.TryParse(args[2], out var stationNet)
+                || !IoCManager.Resolve<IEntityManager>().TryGetEntity(stationNet, out var station))
             {
                 shell.WriteError(Loc.GetString("shell-entity-uid-must-be-number"));
                 return;
             }
-            targetStation = station;
+            targetStation = station.Value;
         }
 
         var stockMarket = _entitySystemManager.GetEntitySystem<StockMarketSystem>();
@@ -100,12 +102,14 @@ public sealed class AddStocksCompanyCommand : IConsoleCommand
         EntityUid? targetStation = null;
         if (args.Length > 2)
         {
-            if (!EntityUid.TryParse(args[2], out var station))
+            // Eclipsion: the id an admin reads off their client is a NetEntity, not a server-side EntityUid.
+            if (!NetEntity.TryParse(args[2], out var stationNet)
+                || !IoCManager.Resolve<IEntityManager>().TryGetEntity(stationNet, out var station))
             {
                 shell.WriteError(Loc.GetString("shell-entity-uid-must-be-number"));
                 return;
             }
-            targetStation = station;
+            targetStation = station.Value;
         }
 
         var displayName = args[0];

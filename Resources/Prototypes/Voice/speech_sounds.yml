@@ -35,6 +35,15 @@
     path: /Audio/Voice/Talk/speak_2_exclaim.ogg
 
 - type: speechSounds
+  id: Skeleton
+  saySound:
+    collection: SkeletonSay
+  askSound:
+    path: /Audio/Voice/Talk/Skeleton/skeleton_ask.ogg
+  exclaimSound:
+    collection: SkeletonExclaim
+
+- type: speechSounds
   id: Squeak
   saySound:
     path: /Audio/Animals/mouse_squeak.ogg

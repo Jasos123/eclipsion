@@ -49,15 +49,14 @@
           pitch: 1.2
           variation: 0.08
     - type: ApcPowerReceiver
-      powerLoad: 1500
+      powerLoad: 1000
     - type: WeaponPowerDraw
       energyPerShot: 1200
     - type: Battery
       maxCharge: 6000
       startingCharge: 6000
     - type: ApcPowerReceiverBattery
-      idleLoad: 1500
-      batteryRechargeRate: 12000
+      batteryRechargeRate: 24000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Small
@@ -139,15 +138,14 @@
             tags:
               - VulcanCartridgeBox
     - type: ApcPowerReceiver
-      powerLoad: 1500
+      powerLoad: 2500
     - type: WeaponPowerDraw
       energyPerShot: 500
     - type: Battery
       maxCharge: 2500
       startingCharge: 2500
     - type: ApcPowerReceiverBattery
-      idleLoad: 1500
-      batteryRechargeRate: 12000
+      batteryRechargeRate: 24000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Small
@@ -189,7 +187,7 @@
   parent: BaseTurretShipgun
   id: BaseWeaponTurretSwarmer
   suffix: ShipGun
-  name: TFCF 'Swarmer' self-replicating missile pod
+  name: TFSC 'Swarmer' self-replicating missile pod
   components:
     - type: Sprite
       sprite: _Crescent/Objects/Autoturrets/swarmermissile.rsi
@@ -217,38 +215,31 @@
     - type: Gun
       fireOnDropChance: 0
       projectileSpeed: 75
-      fireRate: 20
-      burstCooldown: 6
-      shotsPerBurst: 10
-      burstFireRate: 20
-      selectedMode: Burst
+      fireRate: 6 #balanced by long cooldown
+      selectedMode: FullAuto
       availableModes:
-        - Burst
+        - FullAuto
       soundGunshot: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
-    - type: ItemSlots
-      slots:
-        gun_magazine:
-          name: Magazine
-          insertSound: /Audio/Weapons/Guns/MagIn/ltrifle_magin.ogg
-          ejectSound: /Audio/Weapons/Guns/MagOut/ltrifle_magout.ogg
-          priority: 2
-          whitelist:
-            tags:
-              - SwarmRocketBox
-    - type: MagazineAmmoProvider
-      reloadDuration: 5
-    - type: FullSalvo
-      requiredShots: 10
+    - type: RechargeBasicEntityAmmo
+      rechargeCooldown: 10
+      rechargeSound:
+        path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
+        params:
+          pitch: 1.2
+          variation: 0.08
+    - type: BasicEntityAmmoProvider
+      proto: SwarmerMissile
+      capacity: 6
+      count: 6
     - type: ApcPowerReceiver
-      powerLoad: 1000
+      powerLoad: 3500
     - type: WeaponPowerDraw
       energyPerShot: 500
     - type: Battery
-      maxCharge: 6000
-      startingCharge: 6000
+      maxCharge: 2500
+      startingCharge: 2500
     - type: ApcPowerReceiverBattery
-      idleLoad: 1000
-      batteryRechargeRate: 6000
+      batteryRechargeRate: 12000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Small
@@ -276,6 +267,13 @@
           whitelist:
             tags:
               - SwarmRocketBox
+        gun_chamber:
+          name: Chamber
+          startingItem: SwarmerRocketCartridge
+          priority: 1
+          whitelist:
+            tags:
+              - SwarmRocket
 
 # DERECHO TURRET
 
@@ -324,15 +322,14 @@
       capacity: 10
       count: 10
     - type: ApcPowerReceiver
-      powerLoad: 2000
+      powerLoad: 3000
     - type: WeaponPowerDraw
       energyPerShot: 5000
     - type: Battery
       maxCharge: 25000
       startingCharge: 25000
     - type: ApcPowerReceiverBattery
-      idleLoad: 2000
-      batteryRechargeRate: 20000
+      batteryRechargeRate: 40000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Medium
@@ -408,8 +405,7 @@
       maxCharge: 83335
       startingCharge: 83335
     - type: ApcPowerReceiverBattery
-      idleLoad: 2000
-      batteryRechargeRate: 20000
+      batteryRechargeRate: 40000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Medium
@@ -476,18 +472,15 @@
       containers:
         ballistic-ammo: !type:Container
     - type: Gun
-      burstCooldown: 5.0
-      burstFireRate: 8.0
-      shotsPerBurst: 40
       fireOnDropChance: 0
       projectileSpeed: 95
       fireRate: 8
-      selectedMode: Burst
+      selectedMode: FullAuto
       availableModes:
-      - Burst
+        - FullAuto
       soundGunshot: /Audio/Weapons/Guns/Gunshots/lasergatling.ogg
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: 0.125
+      rechargeCooldown: 2
       rechargeSound:
         path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
         params:
@@ -496,17 +489,16 @@
     - type: BasicEntityAmmoProvider
       proto: BulletEnergyTurretLaser
       capacity: 40
-      count: 40
+      count: 15
     - type: ApcPowerReceiver
-      powerLoad: 10000
+      powerLoad: 3000
     - type: WeaponPowerDraw
-      energyPerShot: 11250
+      energyPerShot: 2500
     - type: Battery
-      maxCharge: 450000
-      startingCharge: 450000
+      maxCharge: 12500
+      startingCharge: 12500
     - type: ApcPowerReceiverBattery
-      idleLoad: 10000
-      batteryRechargeRate: 90000
+      batteryRechargeRate: 80000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Small
@@ -642,15 +634,14 @@
             tags:
               - NeedlerShell
     - type: ApcPowerReceiver
-      powerLoad: 2000
+      powerLoad: 3500
     - type: WeaponPowerDraw
       energyPerShot: 16667
     - type: Battery
       maxCharge: 83335
       startingCharge: 83335
     - type: ApcPowerReceiverBattery
-      idleLoad: 2000
-      batteryRechargeRate: 20000
+      batteryRechargeRate: 40000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Medium
@@ -787,15 +778,14 @@
         tags:
         - TorpedoGarg
     - type: ApcPowerReceiver
-      powerLoad: 2500
+      powerLoad: 6500
     - type: WeaponPowerDraw
       energyPerShot: 20000
     - type: Battery
       maxCharge: 100000
       startingCharge: 100000
     - type: ApcPowerReceiverBattery
-      idleLoad: 2500
-      batteryRechargeRate: 16000
+      batteryRechargeRate: 32000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Large
@@ -859,28 +849,22 @@
       availableModes:
         - FullAuto
       soundGunshot: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
-    - type: ItemSlots
-      slots:
-        gun_magazine:
-          name: Magazine
-          insertSound: /Audio/Weapons/Guns/MagIn/ltrifle_magin.ogg
-          ejectSound: /Audio/Weapons/Guns/MagOut/ltrifle_magout.ogg
-          priority: 2
-          whitelist:
-            tags:
-              - LanceRocketBox
-    - type: MagazineAmmoProvider
-      reloadDuration: 6
+    - type: BallisticAmmoProvider
+      cycleable: false
+      capacity: 15
+      #proto: LanceRocketCartridge - on being rebuilt from destruction this gives it free ammo
+      whitelist:
+        tags:
+        - LanceRocket
     - type: ApcPowerReceiver
-      powerLoad: 1500
+      powerLoad: 4000
     - type: WeaponPowerDraw
       energyPerShot: 5556
     - type: Battery
       maxCharge: 27780
       startingCharge: 27780
     - type: ApcPowerReceiverBattery
-      idleLoad: 1500
-      batteryRechargeRate: 10000
+      batteryRechargeRate: 20000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Medium
@@ -896,17 +880,13 @@
   id: BaseWeaponTurretLancerFilled
   suffix: ShipGun, Filled
   components:
-    - type: ItemSlots
-      slots:
-        gun_magazine:
-          name: Magazine
-          startingItem: MagazineLancer
-          insertSound: /Audio/Weapons/Guns/MagIn/ltrifle_magin.ogg
-          ejectSound: /Audio/Weapons/Guns/MagOut/ltrifle_magout.ogg
-          priority: 2
-          whitelist:
-            tags:
-              - LanceRocketBox
+    - type: BallisticAmmoProvider
+      cycleable: false
+      capacity: 15
+      proto: LanceRocketCartridge
+      whitelist:
+        tags:
+        - LanceRocket
 
 # HEPHAESTUS TURRET (230MM)
 
@@ -956,15 +936,14 @@
         tags:
         - HeavyMortarShell
     - type: ApcPowerReceiver
-      powerLoad: 3000
+      powerLoad: 4000
     - type: WeaponPowerDraw
       energyPerShot: 80000
     - type: Battery
       maxCharge: 400000
       startingCharge: 400000
     - type: ApcPowerReceiverBattery
-      idleLoad: 3000
-      batteryRechargeRate: 32000
+      batteryRechargeRate: 64000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Large
@@ -1048,15 +1027,14 @@
             tags:
               - FlakShell
     - type: ApcPowerReceiver
-      powerLoad: 3000
+      powerLoad: 6500
     - type: WeaponPowerDraw
       energyPerShot: 20000
     - type: Battery
       maxCharge: 100000
       startingCharge: 100000
     - type: ApcPowerReceiverBattery
-      idleLoad: 3000
-      batteryRechargeRate: 32000
+      batteryRechargeRate: 64000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Large
@@ -1138,15 +1116,14 @@
         tags:
         - TorpedoCatapult
     - type: ApcPowerReceiver
-      powerLoad: 2500
+      powerLoad: 6500
     - type: WeaponPowerDraw
       energyPerShot: 40000
     - type: Battery
       maxCharge: 200000
       startingCharge: 200000
     - type: ApcPowerReceiverBattery
-      idleLoad: 2500
-      batteryRechargeRate: 16000
+      batteryRechargeRate: 32000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Large
@@ -1202,18 +1179,15 @@
       containers:
         ballistic-ammo: !type:Container
     - type: Gun
-      burstCooldown: 8.0
-      burstFireRate: 1.7
-      shotsPerBurst: 7
       fireOnDropChance: 0
       projectileSpeed: 75
       fireRate: 1.7
-      selectedMode: Burst
+      selectedMode: FullAuto
       availableModes:
-      - Burst
+        - FullAuto
       soundGunshot: /Audio/Weapons/Guns/Gunshots/ship_friendship.ogg
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: 1.143
+      rechargeCooldown: 2
       rechargeSound:
         path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
         params:
@@ -1221,18 +1195,17 @@
           variation: 0.08
     - type: BasicEntityAmmoProvider
       proto: BulletPlasmaBlaster
-      capacity: 7
-      count: 7
+      capacity: 20
+      count: 20
     - type: ApcPowerReceiver
-      powerLoad: 30000
+      powerLoad: 3000
     - type: WeaponPowerDraw
-      energyPerShot: 365714
+      energyPerShot: 20588
     - type: Battery
-      maxCharge: 2560000
-      startingCharge: 2560000
+      maxCharge: 102940
+      startingCharge: 102940
     - type: ApcPowerReceiverBattery
-      idleLoad: 30000
-      batteryRechargeRate: 320000
+      batteryRechargeRate: 140000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Medium
@@ -1275,15 +1248,12 @@
       containers:
         ballistic-ammo: !type:Container
     - type: Gun
-      burstCooldown: 8.0
-      burstFireRate: 12.0
-      shotsPerBurst: 48
       fireOnDropChance: 0
       projectileSpeed: 95
       fireRate: 12
-      selectedMode: Burst
+      selectedMode: FullAuto
       availableModes:
-      - Burst
+        - FullAuto
       soundGunshot: /Audio/Weapons/Guns/Gunshots/lasergatling.ogg
     - type: MagazineAmmoProvider
     - type: ItemSlots
@@ -1298,15 +1268,14 @@
             tags:
               - CompaktLens
     - type: ApcPowerReceiver
-      powerLoad: 30000
+      powerLoad: 3000
     - type: WeaponPowerDraw
-      energyPerShot: 53333
+      energyPerShot: 2917
     - type: Battery
-      maxCharge: 2560000
-      startingCharge: 2560000
+      maxCharge: 14585
+      startingCharge: 14585
     - type: ApcPowerReceiverBattery
-      idleLoad: 30000
-      batteryRechargeRate: 320000
+      batteryRechargeRate: 140000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Medium
@@ -1366,15 +1335,12 @@
       containers:
         ballistic-ammo: !type:Container
     - type: Gun
-      burstCooldown: 8.0
-      burstFireRate: 3.5
-      shotsPerBurst: 14
       fireOnDropChance: 0
       projectileSpeed: 95
       fireRate: 3.5
-      selectedMode: Burst
+      selectedMode: FullAuto
       availableModes:
-      - Burst
+        - FullAuto
       soundGunshot: _Crescent/Objects/ShuttleWeapons/ioncannon.rsi
     - type: MagazineAmmoProvider
     - type: ItemSlots
@@ -1389,15 +1355,14 @@
             tags:
               - AntimatterCanister
     - type: ApcPowerReceiver
-      powerLoad: 30000
+      powerLoad: 4000
     - type: WeaponPowerDraw
-      energyPerShot: 182857
+      energyPerShot: 10000
     - type: Battery
-      maxCharge: 2560000
-      startingCharge: 2560000
+      maxCharge: 50000
+      startingCharge: 50000
     - type: ApcPowerReceiverBattery
-      idleLoad: 30000
-      batteryRechargeRate: 320000
+      batteryRechargeRate: 140000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Medium
@@ -1480,15 +1445,14 @@
             tags:
               - SwarmerRocketsClip
     - type: ApcPowerReceiver
-      powerLoad: 1500
+      powerLoad: 4000
     - type: WeaponPowerDraw
       energyPerShot: 1471
     - type: Battery
       maxCharge: 7355
       startingCharge: 7355
     - type: ApcPowerReceiverBattery
-      idleLoad: 1500
-      batteryRechargeRate: 10000
+      batteryRechargeRate: 20000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Medium
@@ -1558,28 +1522,23 @@
       availableModes:
         - FullAuto
       soundGunshot: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
-    - type: ItemSlots
-      slots:
-        gun_magazine:
-          name: Magazine
-          insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
-          ejectSound: /Audio/Weapons/Guns/MagOut/ltrifle_magout.ogg
-          priority: 2
-          whitelist:
-            tags:
-              - TorpedoBox
-    - type: MagazineAmmoProvider
-      reloadDuration: 6
+    - type: BallisticAmmoProvider
+      #proto: IdnaTorpedo - on being rebuilt from destruction this gives it free ammo
+      whitelist:
+        tags:
+          - Torpedo
+      capacity: 6
+      soundInsert:
+        path: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
     - type: ApcPowerReceiver
-      powerLoad: 1000
+      powerLoad: 4000
     - type: WeaponPowerDraw
       energyPerShot: 6000
     - type: Battery
       maxCharge: 30000
       startingCharge: 30000
     - type: ApcPowerReceiverBattery
-      idleLoad: 1000
-      batteryRechargeRate: 6000
+      batteryRechargeRate: 12000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Small
@@ -1600,17 +1559,14 @@
   id: BaseWeaponTurretMagwellFilled
   suffix: ShipGun, Filled
   components:
-    - type: ItemSlots
-      slots:
-        gun_magazine:
-          name: Magazine
-          startingItem: MagazineIdna
-          insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
-          ejectSound: /Audio/Weapons/Guns/MagOut/ltrifle_magout.ogg
-          priority: 2
-          whitelist:
-            tags:
-              - TorpedoBox
+    - type: BallisticAmmoProvider
+      proto: IdnaTorpedo
+      whitelist:
+        tags:
+          - Torpedo
+      capacity: 6
+      soundInsert:
+        path: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
 
 # SLUGSPITTER TURRET (SLUGTHROWER)
 
@@ -1668,15 +1624,14 @@
             tags:
               - SlugthrowerCartridgeBox
     - type: ApcPowerReceiver
-      powerLoad: 2000
+      powerLoad: 4000
     - type: WeaponPowerDraw
       energyPerShot: 5000
     - type: Battery
       maxCharge: 25000
       startingCharge: 25000
     - type: ApcPowerReceiverBattery
-      idleLoad: 2000
-      batteryRechargeRate: 20000
+      batteryRechargeRate: 40000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Medium
@@ -1711,7 +1666,7 @@
   id: FlakCannonRegent
   suffix: ShipGun
   name: NT 88mm 'Regent' flak-screen turret
-  description: A flak-screen turret recovered and fabricated with recurrence-active materials according to old NanoTrasen schematics. Fires a trio of explosive slugs and uses surrounding trace exotic matter to manufacture its own ammunition.
+  description: A flak-screen turret recovered and fabricated with Abyssal materials and designed according to old NanoTrasen schematics. Fires a trio of explosive slugs and uses surrounding trace exotic matter in space to manufacture it's own ammunition.
   components:
     - type: Sprite
       sprite: _Crescent/Objects/Autoturrets/regent.rsi
@@ -1753,15 +1708,14 @@
       capacity: 6
       count: 10
     - type: ApcPowerReceiver
-      powerLoad: 3000
+      powerLoad: 6500
     - type: WeaponPowerDraw
       energyPerShot: 26667
     - type: Battery
       maxCharge: 133335
       startingCharge: 133335
     - type: ApcPowerReceiverBattery
-      idleLoad: 3000
-      batteryRechargeRate: 32000
+      batteryRechargeRate: 64000
     - type: HardpointAnchorableOnly
       class: Ballistic
       size: Large
@@ -1779,7 +1733,7 @@
   id: MissilePodSnapdragon
   suffix: ShipGun
   name: NT 'Snapdragon' SRM missile system
-  description: A small short-range missile pod recovered and fabricated with recurrence-active materials according to old NanoTrasen schematics. Fires a blast of guided rockets and uses trace exotic matter in surrounding space to manufacture its own ammunition.
+  description: A small short-range missile pod recovered and fabricated with Abyssal materials and designed according to old NanoTrasen schematics. Fires a blast of guided rockets and uses trace exotic matter in surrounding space to manufacture it's own ammunition.
   components:
     - type: Sprite
       sprite: _Crescent/Objects/Autoturrets/regent.rsi
@@ -1809,29 +1763,26 @@
       availableModes:
         - FullAuto
       soundGunshot: /Audio/Weapons/Guns/Gunshots/needler.ogg
-    - type: ItemSlots
-      slots:
-        gun_magazine:
-          name: Magazine
-          startingItem: MagazineSnapdragon
-          insertSound: /Audio/Weapons/Guns/MagIn/ltrifle_magin.ogg
-          ejectSound: /Audio/Weapons/Guns/MagOut/ltrifle_magout.ogg
-          priority: 2
-          whitelist:
-            tags:
-              - SwarmerRocketsClip
-    - type: MagazineAmmoProvider
-      reloadDuration: 5
+    - type: RechargeBasicEntityAmmo
+      rechargeCooldown: 4
+      rechargeSound:
+        path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
+        params:
+          pitch: 1.2
+          variation: 0.08
+    - type: BasicEntityAmmoProvider
+      proto: SwarmerRocketsGuided
+      capacity: 20
+      count: 10
     - type: ApcPowerReceiver
-      powerLoad: 1000
+      powerLoad: 6500
     - type: WeaponPowerDraw
       energyPerShot: 600
     - type: Battery
       maxCharge: 3000
       startingCharge: 3000
     - type: ApcPowerReceiverBattery
-      idleLoad: 1000
-      batteryRechargeRate: 6000
+      batteryRechargeRate: 12000
     - type: HardpointAnchorableOnly
       class: Missile
       size: Small
@@ -1849,7 +1800,7 @@
   id: BaseWeaponTurretKomodo
   suffix: ShipGun
   name: NT 400c 'Komodo' chemical blaster
-  description: A small laser pulser of antiquated NanoTrasen design, commonly mounted on drone ships or recovered as scrap from recurrence fields. It uses ancient chemical mixes to create accelerated laser pulses. Luckily, this one seems to source its material from inert dark matter in the surrounding void.
+  description: A small laser pulser of antiquated NanoTrasen design, commonly found mounted on droneships or found as scrap in the Abyss. Uses ancient, outdated chemical mixes to create accelerated laser pulses, which are then flung as projectiles. Luckily for you, this one seems to be sourcing it's material from inert dark matter in the void around it.
   components:
     - type: Sprite
       sprite: _Crescent/Objects/Autoturrets/komodo.rsi
@@ -1874,18 +1825,15 @@
       containers:
         ballistic-ammo: !type:Container
     - type: Gun
-      burstCooldown: 5.0
-      burstFireRate: 3.0
-      shotsPerBurst: 15
       fireOnDropChance: 0
       projectileSpeed: 95
       fireRate: 3
-      selectedMode: Burst
+      selectedMode: FullAuto
       availableModes:
-      - Burst
+        - FullAuto
       soundGunshot: /Audio/Weapons/Guns/Gunshots/lasergatling.ogg
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: 0.333
+      rechargeCooldown: 2
       rechargeSound:
         path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
         params:
@@ -1893,18 +1841,17 @@
           variation: 0.08
     - type: BasicEntityAmmoProvider
       proto: BulletMachineGunPlasmaKomodo
-      capacity: 15
-      count: 15
+      capacity: 20
+      count: 10
     - type: ApcPowerReceiver
-      powerLoad: 10000
+      powerLoad: 3000
     - type: WeaponPowerDraw
-      energyPerShot: 30000
+      energyPerShot: 6667
     - type: Battery
-      maxCharge: 450000
-      startingCharge: 450000
+      maxCharge: 33335
+      startingCharge: 33335
     - type: ApcPowerReceiverBattery
-      idleLoad: 10000
-      batteryRechargeRate: 90000
+      batteryRechargeRate: 80000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Small

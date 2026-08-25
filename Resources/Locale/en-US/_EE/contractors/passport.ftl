@@ -59,3 +59,7 @@ solarian_view_biesel_passport = A member of a nation founded by rebels and insur
 
 bieselite_view_sol_passport = A member of a human-supremacist nation.
 solarian_view_sol_passport = A fellow Solarian.
+
+passport-ui-cover = Binding
+passport-ui-cover-hint = Rebinding the document in another polity's cover costs one piece of cloth, held in hand. It changes nothing the issuing registry has on file.
+passport-rebind-no-material = There is no cloth in hand to rebind the document with. The rest of the changes were saved.

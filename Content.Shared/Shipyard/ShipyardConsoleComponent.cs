@@ -46,6 +46,18 @@ public sealed partial class ShipyardConsoleComponent : Component
     [DataField]
     public bool UsesFactionTreasury = false;
 
+    // Eclipsion Start - high-value purchase approval
+    /// <summary>
+    /// Share of the owning faction's treasury above which a purchase has to be signed off at that
+    /// faction's treasury console before it will go through. Expressed as a fraction of the balance
+    /// rather than a flat price so the bar moves with how much the faction can actually afford.
+    /// Zero disables approval entirely, which is what civilian yards want since they spend the buyer's
+    /// own money; it only ever applies to consoles that bill the treasury.
+    /// </summary>
+    [DataField]
+    public float ApprovalTreasuryFraction = 0.25f;
+    // Eclipsion End
+
     /// Hullrot edit
     public static string TargetIdCardSlotId = "ShipyardConsole-targetId";
 

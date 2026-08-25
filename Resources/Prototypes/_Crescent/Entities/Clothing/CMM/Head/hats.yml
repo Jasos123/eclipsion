@@ -2,7 +2,7 @@
   parent: ClothingHeadBase
   id: ClothingHeadHatCMMDeputyMarshal
   name: militiaman's slouch hat
-  description: A simple slouch hat in the colors of the Colonial Minutemen. Its tarnished golden seal recalls their publicly funded patrol tradition and the loss of Analliesse.
+  description: A simple slouch hat in the colors of the Colonial Minutemen. Its tarnished golden seal recalls their publicly funded patrol tradition and the loss of Analiesse.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/CMM/Head/deputymarshal.rsi

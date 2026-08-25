@@ -14,6 +14,9 @@ public sealed class NanoChatUiState : BoundUserInterfaceState
     public readonly bool NotificationsMuted;
     public readonly bool ListNumber;
 
+    /// <summary>Numbers this card is refusing traffic from. Eclipsion - blocking.</summary>
+    public readonly HashSet<uint> BlockedNumbers;
+
     public NanoChatUiState(
         Dictionary<uint, NanoChatRecipient> recipients,
         Dictionary<uint, List<NanoChatMessage>> messages,
@@ -22,7 +25,8 @@ public sealed class NanoChatUiState : BoundUserInterfaceState
         uint ownNumber,
         int maxRecipients,
         bool notificationsMuted,
-        bool listNumber)
+        bool listNumber,
+        HashSet<uint>? blockedNumbers = null)
     {
         Recipients = recipients;
         Messages = messages;
@@ -32,5 +36,6 @@ public sealed class NanoChatUiState : BoundUserInterfaceState
         MaxRecipients = maxRecipients;
         NotificationsMuted = notificationsMuted;
         ListNumber = listNumber;
+        BlockedNumbers = blockedNumbers ?? new HashSet<uint>(); // Eclipsion - blocking
     }
 }

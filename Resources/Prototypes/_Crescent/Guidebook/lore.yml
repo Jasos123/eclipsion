@@ -2,7 +2,7 @@
   id: Lore
   name: Lore
   text: "/ServerInfo/_Crescent/Guidebook/Lore.xml"
-  priority: 30
+  priority: 70
   children:
   - LoreRecurrence
   - LoreTaypan
@@ -34,4 +34,4 @@
   id: Factions
   name: Factions
   text: "/ServerInfo/_Crescent/Guidebook/Factions.xml"
-  priority: 40
+  priority: 30

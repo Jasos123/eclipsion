@@ -50,6 +50,19 @@ public sealed partial class NanoChatCardComponent : Component
     [DataField]
     public bool NotificationsMuted;
 
+    // Eclipsion Start - blocking
+    /// <summary>
+    ///     NanoChat numbers this card refuses traffic from. A blocked sender's messages are rejected at
+    ///     delivery and reported back to them as blocked, rather than silently vanishing.
+    /// </summary>
+    /// <remarks>
+    ///     Blocks live on the card rather than the body because the card is the NanoChat identity: it is
+    ///     what carries the number, and a card moved to a new PDA should keep its owner's block list.
+    /// </remarks>
+    [DataField]
+    public HashSet<uint> BlockedNumbers = new();
+    // Eclipsion End
+
     /// <summary>
     ///     The PDA that this card is currently inserted to.
     /// </summary>

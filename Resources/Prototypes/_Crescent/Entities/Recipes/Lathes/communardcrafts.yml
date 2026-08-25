@@ -287,11 +287,14 @@
   result: ClothingOuterHardsuitNCWLJuggernaut
   completetime: 2
   materials:
-    Steel: 3000
+    # Eclipsion Start - matched to the SHI juggernaut's cost; this used to print
+    # for 2000 less steel than an equivalent-tier suit.
+    Steel: 5000
     HardsuitElectronics: 1000
     NanotrasenMechatronics: 1000
-    Tungsten: 2500
+    Tungsten: 2000
     Durathread: 1500
+    # Eclipsion End
 
 # MARK: Weapons
 

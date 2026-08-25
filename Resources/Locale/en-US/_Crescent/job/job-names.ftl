@@ -21,16 +21,16 @@ job-name-ncwl-newbie = Union Worker
 
 # syndicate
 
-job-name-ringleader = Ringleader
+job-name-ringleader = Administrator
 job-name-lieutenant = Lieutenant
 job-name-infanteer = Gorlex Infanteer
 job-name-technician = Newblood
-job-name-coordinator = Interdyne Coordinator
+job-name-coordinator = Interdyne Supervisor
 job-name-ripperdoc = Ripperdoc
 job-name-traumasec = TraumaSec Agent
 job-name-operative = Cyberdawn Asset Security
 job-name-cyberdawntech = Cyberdawn Researcher
-job-name-intelligenceofficer = Patriarch
+job-name-intelligenceofficer = Cyberdawn Supervisor
 job-name-shipbreaker = Shipbreaker
 job-name-foreman = SAW Foreman
 ghost-role-information-syndicate-cyborg-assault-name = CS 5401 Xigou assault cyborg

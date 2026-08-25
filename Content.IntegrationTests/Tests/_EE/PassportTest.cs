@@ -62,6 +62,7 @@ public sealed class PassportTest
             Assert.That(component.Record!.FullName, Is.EqualTo("Test Person"));
 
             var changedSave = new PassportSaveMessage(
+                component.Cover,
                 "Changed Person",
                 component.Age,
                 component.Species,
@@ -97,6 +98,7 @@ public sealed class PassportTest
     private static PassportSaveMessage CreateSaveMessage(PassportComponent component, EntityUid actor)
     {
         return new PassportSaveMessage(
+            component.Cover,
             component.FullName,
             component.Age,
             component.Species,

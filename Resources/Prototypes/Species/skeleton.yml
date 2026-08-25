@@ -10,8 +10,8 @@
   femaleFirstNames: skeletonNamesFirst
   dollPrototype: MobSkeletonPersonDummy
   skinColoration: TintedHues
-  # Skeletons are a TFSC-only species. Command-tier gating is handled separately,
-  # on the TFSC jobs themselves, since that is per-job rather than per-faction.
+  # Skeletons are a TFSC-only species. Additional role gating is handled separately
+  # on the TFSC jobs themselves, since those exceptions are per-job rather than per-faction.
   factions:
   - TFSC
   # Height/width are locked like the other round-start species on this fork.

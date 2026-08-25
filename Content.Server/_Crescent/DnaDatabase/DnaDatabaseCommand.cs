@@ -21,13 +21,16 @@ public sealed class DnaDatabaseCommand : IConsoleCommand
             return;
         }
 
-        if (!EntityUid.TryParse(args[0], out var stationUid))
+        var entManager = IoCManager.Resolve<IEntityManager>();
+
+        // Eclipsion: the id an admin reads off their client is a NetEntity, not a server-side EntityUid.
+        if (!NetEntity.TryParse(args[0], out var stationNet) || !entManager.TryGetEntity(stationNet, out var station))
         {
             shell.WriteError($"Invalid station entity ID: {args[0]}");
             return;
         }
 
-        var entManager = IoCManager.Resolve<IEntityManager>();
+        var stationUid = station.Value;
         var system = entManager.System<DnaDatabaseSystem>();
 
         Entity<DnaDatabaseComponent>? database = null;

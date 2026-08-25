@@ -21,6 +21,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text.RegularExpressions;
 using Content.Server._Crescent.Economy;
+using Content.Server._Crescent.Shipyard; // Eclipsion - high-value purchase approval
 using Content.Server._Crescent;
 using Content.Server.Crescent.Dispenser;
 using Content.Shared._Crescent;
@@ -93,6 +94,7 @@ public sealed partial class ShipyardSystem : SharedShipyardSystem
     [Dependency] private readonly EntityWhitelistSystem _whitelists = default!;
     [Dependency] private readonly EconomyPriceSystem _economyPrice = default!;
     [Dependency] private readonly StationTradeMarketSystem _market = default!;
+    [Dependency] private readonly ShipPurchaseApprovalSystem _approvals = default!; // Eclipsion - high-value purchase approval
 
     /// <summary>
     /// Per-round count of ships each player has purchased from a faction shipyard (paid from the faction
@@ -449,6 +451,44 @@ public sealed partial class ShipyardSystem : SharedShipyardSystem
                 PlayDenySound(uid, component);
                 return;
             }
+
+            // Eclipsion Start - a purchase big enough to matter to the whole faction is signed off at the
+            // treasury console that pays for it. Checked after the funds test so an unaffordable ship is
+            // still refused outright rather than queued for an approval that could never be honoured.
+            if (_approvals.RequiresApproval(station, vesselPrice, component))
+            {
+                // Approvals are recorded against an account, so a buyer with no session behind them (an
+                // NPC, an admin-spawned dummy) has nothing to sign off and nothing to sign off with.
+                if (buyer is not { } approvalBuyer)
+                {
+                    ConsolePopup(args.Actor, Loc.GetString("shipyard-console-approval-no-account"));
+                    PlayDenySound(uid, component);
+                    return;
+                }
+
+                if (!_approvals.TryConsumeApproval(faction!, approvalBuyer, vessel.ID))
+                {
+                    var result = _approvals.RequestApproval(
+                        station,
+                        faction!,
+                        uid,
+                        MetaData(player).EntityName,
+                        approvalBuyer,
+                        vessel.ID,
+                        name,
+                        vesselPrice);
+
+                    ConsolePopup(args.Actor, Loc.GetString(result == ShipPurchaseRequestResult.AlreadyPending
+                        ? "shipyard-console-approval-already-pending"
+                        : "shipyard-console-approval-requested", ("vessel", name)));
+                    PlayDenySound(uid, component);
+
+                    _adminLogger.Add(LogType.ShipYardUsage, LogImpact.Medium,
+                        $"{ToPrettyString(player):actor} requested approval for {name} ({vesselPrice} credits) from the {faction} treasury");
+                    return;
+                }
+            }
+            // Eclipsion End
         }
         else
         {

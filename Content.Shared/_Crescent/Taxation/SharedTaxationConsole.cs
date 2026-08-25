@@ -100,6 +100,49 @@ public enum TaxationConsoleUiKey : byte
 // Faction treasury console
 // ---------------------------------------------------------------------------
 
+// Eclipsion Start - high-value ship purchase approval
+/// <summary>
+/// One ship purchase waiting on this faction's sign-off, as shown on the treasury console.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class TreasuryPurchaseRequestState
+{
+    public uint Id;
+    public string Buyer;
+    public string Vessel;
+    public int Price;
+
+    /// <summary>Already signed off and waiting for the buyer to collect it at the shipyard.</summary>
+    public bool Approved;
+
+    public string? Approver;
+
+    public TreasuryPurchaseRequestState(uint id, string buyer, string vessel, int price, bool approved, string? approver)
+    {
+        Id = id;
+        Buyer = buyer;
+        Vessel = vessel;
+        Price = price;
+        Approved = approved;
+        Approver = approver;
+    }
+}
+
+/// <summary>Approves or refuses one pending ship purchase.</summary>
+[Serializable, NetSerializable]
+public sealed class TreasuryPurchaseDecisionMessage : BoundUserInterfaceMessage
+{
+    public uint Id;
+    public bool Approve;
+
+    public TreasuryPurchaseDecisionMessage(uint id, bool approve)
+    {
+        Id = id;
+        Approve = approve;
+    }
+}
+// Eclipsion End
+
 [Serializable, NetSerializable]
 public sealed class TreasuryConsoleState : BoundUserInterfaceState
 {
@@ -122,13 +165,23 @@ public sealed class TreasuryConsoleState : BoundUserInterfaceState
     /// <summary>The per-person share of the vault, as a percentage, for the cap explanation.</summary>
     public int CapPercent;
 
-    public TreasuryConsoleState(int balance, bool authorized, bool alarmActive, int remaining, int capPercent)
+    /// <summary>Ship purchases this faction still has to answer for. Eclipsion - purchase approval.</summary>
+    public List<TreasuryPurchaseRequestState> Requests;
+
+    public TreasuryConsoleState(
+        int balance,
+        bool authorized,
+        bool alarmActive,
+        int remaining,
+        int capPercent,
+        List<TreasuryPurchaseRequestState>? requests = null)
     {
         Balance = balance;
         Authorized = authorized;
         AlarmActive = alarmActive;
         Remaining = remaining;
         CapPercent = capPercent;
+        Requests = requests ?? new List<TreasuryPurchaseRequestState>(); // Eclipsion - purchase approval
     }
 }
 

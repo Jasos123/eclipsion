@@ -1,0 +1,36 @@
+// Drains the colour out of a handful of circular world regions and rings each one.
+// Positions arrive in fragment space and radii in world pixels, matching singularity.swsl.
+
+uniform sampler2D SCREEN_TEXTURE;
+uniform highp vec2 renderScale;
+uniform lowp int count;
+
+uniform highp float[5] radius;
+uniform highp vec2[5] position;
+// The `5`s cap how many fields can desaturate the screen at once. Changing it means changing every
+// one of them here and in RecurrenceFieldOverlay.
+
+void fragment() {
+    highp vec4 color = zTextureSpec(SCREEN_TEXTURE, FRAGCOORD.xy * SCREEN_PIXEL_SIZE);
+
+    highp float drain = 0.0;
+    highp float rim = 0.0;
+
+    for (int i = 0; i < 5 && i < count; i++) {
+        highp float dist = length((FRAGCOORD.xy - position[i]) / renderScale);
+        highp float edge = radius[i];
+
+        drain = max(drain, 1.0 - smoothstep(edge * 0.80, edge, dist));
+        rim = max(rim, smoothstep(edge * 0.90, edge * 0.97, dist) * (1.0 - smoothstep(edge * 0.97, edge * 1.02, dist)));
+    }
+
+    highp vec3 grey = vec3(zGrayscale(color.rgb));
+
+    // Pull a little contrast in with the colour so the inside reads as film stock, not just dull.
+    grey = clamp((grey - 0.5) * 1.25 + 0.48, 0.0, 1.0);
+
+    highp vec3 result = mix(color.rgb, grey, drain);
+    result = mix(result, vec3(0.92, 0.94, 0.98), rim * 0.55);
+
+    COLOR = vec4(result, color.a);
+}

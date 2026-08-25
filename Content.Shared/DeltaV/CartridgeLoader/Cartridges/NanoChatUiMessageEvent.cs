@@ -56,6 +56,7 @@ public enum NanoChatUiMessageType : byte
     DeleteChat,
     ToggleMute,
     ToggleListNumber,
+    ToggleBlock, // Eclipsion - block/unblock the selected chat
 }
 
 // putting this here because i can
@@ -124,6 +125,15 @@ public partial struct NanoChatMessage
     /// </summary>
     public bool DeliveryFailed;
 
+    // Eclipsion Start - blocking
+    /// <summary>
+    ///     Whether the recipient is refusing traffic from the sender. Distinct from
+    ///     <see cref="DeliveryFailed"/> so the sender is told they were blocked instead of being left to
+    ///     read it as a comms outage and keep retrying.
+    /// </summary>
+    public bool Blocked;
+    // Eclipsion End
+
     /// <summary>
     ///     Creates a new NanoChat message.
     /// </summary>
@@ -131,12 +141,13 @@ public partial struct NanoChatMessage
     /// <param name="content">The content of the message</param>
     /// <param name="senderId">The sender's NanoChat number</param>
     /// <param name="deliveryFailed">Whether delivery to the recipient failed</param>
-    public NanoChatMessage(TimeSpan timestamp, string content, uint senderId, bool deliveryFailed = false)
+    public NanoChatMessage(TimeSpan timestamp, string content, uint senderId, bool deliveryFailed = false, bool blocked = false)
     {
         Timestamp = timestamp;
         Content = content;
         SenderId = senderId;
         DeliveryFailed = deliveryFailed;
+        Blocked = blocked; // Eclipsion - blocking
     }
 }
 

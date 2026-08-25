@@ -1,0 +1,41 @@
+<Document>
+[head=2][color=#e8b04b]Start Here: Your First Round[/color][/head]
+
+Welcome to Hullrot: Eclipsion. You do not need to memorize the setting before joining, but you should read the [textlink="Roleplay Rules" link="RoleplayRules"] and follow this short checklist.
+
+[head=3][color=#e8b04b]1. Pick a first-round faction and job[/color][/head]
+
+The default mode is [bold]Freeplay | DSM & NCWL[/bold]. For a first round, choose a low-responsibility role such as [color=#684871]Freeholder[/color] in the DSM or [color=#bf4d00]Union Worker[/color] in the NCWL. Avoid command, specialist, or limited-slot roles until you understand the faction.
+
+Check [textlink="Gamemodes" link="Gamemodes"] to see which factions are active this round, then use [textlink="Factions" link="Factions"] to choose the play style that suits you.
+
+[head=3][color=#e8b04b]2. Get oriented after spawning[/color][/head]
+
+- Read your job title and examine your ID, headset, and nearby signs.
+- Use [color=#6ab7d6][keybind="SwapHands"/][/color] to swap hands, [color=#6ab7d6][keybind="ActivateItemInWorld"/][/color] to interact, and [color=#6ab7d6][keybind="ExamineEntity"/][/color] to examine unfamiliar objects.
+- Open your inventory with [color=#6ab7d6][keybind="OpenInventoryMenu"/][/color]. Do not leave your ID, headset, or survival equipment behind.
+- Ask over the radio where to report. Follow your immediate supervisor and tell them that you are new.
+
+For the standard SS14 interface and interaction details, see [textlink="Controls" link="Controls"].
+
+[head=3][color=#e8b04b]3. Talk before acting[/color][/head]
+
+Press [color=#6ab7d6][keybind="FocusRadioWindow"/][/color] to start a radio message. Put a channel prefix at the beginning when needed; for example, an NCWL player can type [color=#6ab7d6]:o Reporting in. Where am I needed?[/color]
+
+Use [textlink="Radio" link="Radio"] to find your faction's channel. Clear communication is more useful than silently wandering into a fight.
+
+[head=3][color=#e8b04b]4. Stay alive[/color][/head]
+
+- Space and depressurized rooms can kill you quickly. Do not cycle an exterior airlock without a pressure suit and a working air supply.
+- If you are injured, report your location and find a medic. Do not consume medicine you cannot identify.
+- Keep Combat Mode off during normal interaction. Turn it on from the action bar only when you intend to fight.
+- Before using a firearm, learn how to wield, load, and chamber it in [textlink="Custom Controls and Combat Basics" link="Tutorial"].
+
+The [textlink="Survival" link="Survival"] section covers damage, medicine, hazards, and emergencies in more detail.
+
+[head=3][color=#e8b04b]5. Ask for help[/color][/head]
+
+Ask nearby players in-character when your character could reasonably need help. For a control problem, rule question, bug, or situation that needs staff, open Admin Help with [color=#6ab7d6][keybind="OpenAHelp"/][/color]. Saying that you are new is useful context, not a problem.
+
+[color=#8fc98a]A successful first round is not one where you win every fight. Learn one job, meet your faction, communicate, and help the round's story move forward.[/color]
+</Document>

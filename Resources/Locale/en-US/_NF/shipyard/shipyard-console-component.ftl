@@ -18,3 +18,11 @@ shipyard-console-appraisal-label = Shuttle Estimated Value:{" "}
 
 shipyard-console-nearby = Your ship was unable to dock with {THE($station)}. It is parked nearby.
 shipyard-console-direction = Your ship is docked at the {$direction} o'clock of {THE($station)}.
+
+# Eclipsion - high-value ship purchase approval
+shipyard-console-approval-requested = This purchase is too large to authorise here. A request for {$vessel} has been sent to the treasury for approval.
+shipyard-console-approval-already-pending = A request for this vessel is already awaiting treasury approval.
+shipyard-console-approval-no-account = This terminal cannot file an approval request for you.
+shipyard-approval-announce-request = {$buyer} requests approval to purchase {$vessel} for {$price} cr. Approve at a treasury console.
+shipyard-approval-buyer-approved = Your purchase of {$vessel} was approved by {$approver}. Return to the shipyard console to collect it.
+shipyard-approval-buyer-denied = Your purchase of {$vessel} was denied by {$approver}.

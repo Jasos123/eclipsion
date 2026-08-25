@@ -21,7 +21,6 @@ public sealed class VolatileFuelSystem : EntitySystem
 {
     [Dependency] private readonly AtmosphereSystem _atmos = default!;
     [Dependency] private readonly CrescentTileFireSystem _tileFire = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solution = default!;
@@ -36,9 +35,6 @@ public sealed class VolatileFuelSystem : EntitySystem
         "Oil",
         "Napalm",
     };
-
-    /// <summary>The RMC-style floor fire spawned on top of burning puddles.</summary>
-    private const string TileFireProto = "CrescentTileFire";
 
     private static readonly TimeSpan BurnCooldown = TimeSpan.FromSeconds(1);
 
@@ -80,10 +76,15 @@ public sealed class VolatileFuelSystem : EntitySystem
         // Carry existing fire to adjacent tiles.
         foreach (var tile in _burningTiles)
         {
-            _ignitionTiles.Add(tile);
-
             if (!TryComp<MapGridComponent>(tile.Grid, out var grid))
                 continue;
+
+            // The map can change between burn cycles. A newly placed wall, window or closed airlock
+            // must stop this source immediately instead of allowing one final spread from underneath it.
+            if (_tileFire.IsFireBlocked(tile.Grid, grid, tile.Indices))
+                continue;
+
+            _ignitionTiles.Add(tile);
 
             foreach (var offset in Neighbours)
             {
@@ -143,6 +144,11 @@ public sealed class VolatileFuelSystem : EntitySystem
                 continue;
 
             var indices = _map.TileIndicesFor(gridUid, grid, xform.Coordinates);
+            // A wall, window or closed airlock may occupy the same tile as a puddle. Do not consume that
+            // puddle or retain it as a spread source: doing so lets fire jump from underneath the blocker.
+            if (_tileFire.IsFireBlocked(gridUid, grid, indices))
+                continue;
+
             if (!_ignitionTiles.Contains((gridUid, indices)) && !_atmos.IsHotspotActive(gridUid, indices))
                 continue;
 
@@ -157,7 +163,7 @@ public sealed class VolatileFuelSystem : EntitySystem
 
             _solution.UpdateChemicals(puddle.Solution.Value);
 
-            TrySpawnTileFire(gridUid, grid, indices);
+            _tileFire.TrySpawnTileFire(gridUid, grid, indices);
 
             // Keep this tile marked so the puddle relights itself next cycle while fuel remains,
             // and so the flames creep outwards along the rest of the spill.
@@ -168,18 +174,4 @@ public sealed class VolatileFuelSystem : EntitySystem
         }
     }
 
-    private void TrySpawnTileFire(EntityUid gridUid, MapGridComponent grid, Vector2i indices)
-    {
-        // Puddles can sit on a tile that is also occupied by a shut airlock, window or grille. Dropping
-        // a fire there would let its BurnNearby reach mobs standing on both sides of the barrier.
-        if (_tileFire.IsFireBlocked(gridUid, grid, indices))
-            return;
-
-        var coordinates = _map.GridTileToLocal(gridUid, grid, indices);
-
-        if (_lookup.GetEntitiesInRange<CrescentTileFireComponent>(coordinates, 0.4f).Count != 0)
-            return;
-
-        Spawn(TileFireProto, coordinates);
-    }
 }

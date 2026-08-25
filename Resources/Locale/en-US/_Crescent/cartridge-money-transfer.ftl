@@ -45,3 +45,12 @@ money-transfer-chat-transfer-wrapped = [font size=12][bold]Bank[/bold][/font] {$
 
 money-transfer-history-line-in = [{$time}] From {$from}: +{$amount} $ — {$comment}
 money-transfer-history-line-out = [{$time}] To {$to}: {$amount} $ — {$comment}
+
+# Eclipsion - blocking
+money-transfer-error-blocked = RECIPIENT UNAVAILABLE: this account has blocked you.
+money-transfer-error-block-failed = Could not block that person.
+money-transfer-ui-tab-blocked = Blocked
+money-transfer-ui-block = Block
+money-transfer-ui-unblock = Unblock
+money-transfer-ui-blocked-empty = Nobody is blocked.
+money-transfer-ui-recipient-blocked = {$line} [BLOCKED]

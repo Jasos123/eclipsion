@@ -1,28 +1,24 @@
 <Document>
-# NCWL New Frontiers Program
+[head=2][color=#e8b04b]Frontier Work and Cryosleep[/color][/head]
 
-Thank you for signing up for the New Frontiers Program!
+Frontier rounds are long and most useful work happens in crews. A new player will learn faster and survive longer by joining an established ship than by buying one alone.
 
-After countless hours of research and number crunching, the top NCWL insurance agents have found it more profitable to offload the logistics cost on to you! Our dedicated citizens!
+[head=3][color=#e8b04b]Finding work[/color][/head]
 
-## Profit Avenues
+- Report to your faction over its channel in the [textlink="Radio" link="Radio"] guide. State your role, location, and that you are looking for a crew.
+- Ask what the ship is doing before boarding. Mining, salvage, hauling, medical support, engineering, patrol, and combat require different equipment.
+- Agree on pay, ownership of recovered goods, and who gives orders before departure. Use a written and stamped contract when the stakes are high.
+- Learn one station and one ship role at a time. Do not take command merely because a slot is empty if you cannot operate the vessel safely.
+
+Use [textlink="Banking and Credits" link="Bank"] for personal funds and [textlink="Buying and Selling Ships" link="Shipyard"] before taking responsibility for a vessel.
+
+[head=3][color=#e8b04b]Leaving a round safely[/color][/head]
+
 <Box>
-<GuideEntityEmbed Entity="ComputerBankATM"/>
-<GuideEntityEmbed Entity="SpaceCash1000"/>
-<GuideEntityEmbed Entity="ComputerShipyard"/>
-</Box>
-You can access your personal bank account at any time to withdraw or deposit funds at any [color=#44cc00]Civil Bank ATM[/color]
-
-Join a ship's crew to help make as much money and deliver as much value to the Union as possible, or use the [color=#cccc00]Shipyard Console[/color] to purchase your own.
-
-## Provisions
-<Box>
-<GuideEntityEmbed Entity="VendingMachineAstroVend"/>
-<GuideEntityEmbed Entity="VendingMachineAmmo"/>
 <GuideEntityEmbed Entity="MachineCryoSleepPod"/>
 </Box>
-NCWL has opened up back stock of many machine boards taken from excess station construction projects, along with many other amenities to assist in taming the frontier.
 
-Frontier stations typically run longer shifts, so if you need to end early or take a break for a while, you can always return to a [color=##33bbff]Cryopod[/color] early.
+If you need to leave a long shift, return to a safe station and use a cryosleep pod. Tell your crew, hand over mission-critical items or command responsibilities, then activate the pod and follow its prompts.
 
+[color=#d9776c]Do not disconnect in a corridor, active ship, or combat area when you can reach cryosleep.[/color] An unattended character can block a job, strand equipment, or leave a crew without warning.
 </Document>

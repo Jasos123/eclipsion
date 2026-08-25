@@ -91,7 +91,7 @@ public sealed partial class RatDiplomacySystem : EntitySystem
 
         // The TFCF's strategic conflict is with Shinohara; its four member organizations remain commercial actors
         // that need customers elsewhere in the sector. Everyone else starts neutral and Federation-wide relations
-        // are settled at the diplomacy console under the Ringleader's joint mandate.
+        // are settled at the diplomacy console under the Administrator's joint mandate.
         _relations["TFSC"]["SHI"] = FactionRelation.War;
         _relations["SHI"]["TFSC"] = FactionRelation.War;
 

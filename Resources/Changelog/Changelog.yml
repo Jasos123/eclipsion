@@ -713,6 +713,12 @@ Entries:
   changes:
     - message: Reskinned the shuttle console as a retro instrument panel - flat bezel, pixel-terminal typeface, green CRT readouts and a NAV // MAP // DOCK // CREW tab strip in place of the old window chrome and buttons.
       type: Tweak
+    - message: The nav plot's range rings, bearing scale and contact labels now use the console's own palette and typeface instead of near-invisible grey, and the sector chart's grid matches. Switching tabs and opening the console play a brief power-on flicker, which respects the reduced motion accessibility option.
+      type: Tweak
+    - message: The shuttle console now carries an always-on status strip under the tabs. It reads out shield strength, counts down the seconds until a downed shield comes back, and flashes a TAKING FIRE warning while the ship is being hit.
+      type: Add
+    - message: The sector chart is no longer a black field ruled into squares. It now sits on a still image of the space biome the ship is currently flying through, which changes as you cross into another one.
+      type: Tweak
   id: 6054
   time: '2026-08-16T00:00:00.0000000+00:00'
   url: null
@@ -739,4 +745,326 @@ Entries:
       type: Tweak
   id: 6057
   time: '2026-08-17T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Felinids are playable again, as a Shinohara Heavy Industries exclusive. They only appear in the species dropdown once you have picked SHI in character setup, no other faction can field one, and they are never handed out by the random species roll. Unlike the old felinids they can no longer be picked up and stuffed into a bag, and the Small trait stays closed to them.
+      type: Add
+  id: 6058
+  time: '2026-08-20T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Anti-boarder point defence turrets can see people again. Your job now puts you into the NPC-facing faction as well, so an enemy turret reads you as a boarder and engages instead of sitting on its idle spin. Being recruited or dismissed at a faction recruitment console updates this immediately.
+      type: Fix
+  id: 6059
+  time: '2026-08-21T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: IPCs are no longer slower running than walking. Their sprint was set below their walk speed, so an IPC holding shift crawled along at 3 to a human's 7. They now walk 4.4 and sprint 6.8, a shade under a human but with the weight of the chassis still showing.
+      type: Fix
+    - message: Skeletons take longer to put down and longer to shatter. They now die at 190 damage instead of 150 and only gib past 290 instead of 250, which widens the window a medic has to heal the remains back under the threshold and defib them.
+      type: Tweak
+    - message: Skeletons, onis and felinids no longer carry their own damage slowdown curves. All three used to speed up or slow down at different damage thresholds than everyone else, so the same wound meant three different fights. They now slow down on the standard curve.
+      type: Tweak
+    - message: Felinids move slightly faster than a human on foot, 4.7 walking and 7.2 sprinting, and their stamina pool sits just under human at 95 with a slower regen. Onis carry a slightly larger pool at 105, also with a slower regen, in place of the old outsized stamina and slowdown bonuses.
+      type: Tweak
+  id: 6060
+  time: '2026-08-21T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Missile launchers are now magazine fed. Shortbow, Azimuth and Arbalest turrets take a loading box in a magazine slot instead of being hand fed one cartridge at a time, so reloading under fire is one swap rather than a string of do-afters.
+      type: Tweak
+    - message: The Shortbow now fires a full 20 round salvo off a 20 round box instead of dribbling two rockets at a time, with a longer cooldown and a 13 second reload to pay for it. Azimuth boxes hold eight, Arbalest boxes hold six.
+      type: Tweak
+    - message: Added the 30mm Pila micromissile, its ten round loading box, a lathe recipe and a cargo crate, for saturation launchers.
+      type: Add
+    - message: Added loading boxes for the Lancer, the Magwell torpedo launcher and the Snapdragon, so those systems reload from a box like the rest.
+      type: Add
+    - message: Missile ammunition crates now ship loading boxes rather than loose cartridges. Lancer, Idna, Shortbow, Arbalest and Swarmer crates all carry preloaded boxes, and their descriptions say what is actually inside.
+      type: Tweak
+    - message: Missile turrets draw less standby power. Their constant draw is roughly halved and their battery recharge is slower, so a hull that could power its launchers before still can, and the launchers no longer starve the rest of the ship between salvos.
+      type: Tweak
+  id: 6061
+  time: '2026-08-21T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Asteroids can now hold fuel seeps. Sand and mineral rich rocks sometimes crack open onto boriatic fuel, chromite rocks onto raw antimatter fuel, and a seep is a finite pocket that never refills.
+      type: Add
+    - message: Added the NT-FX-1 seep drill. Research Seep Extraction, print the flatpack at a boriatic composter, deploy it with a multitool, roll it over a seep and wrench it down on medium voltage power. It fills its own 2000 unit tank first, then any refillable container in its cradle, and warns you before it starts spilling the overflow on the floor.
+      type: Add
+    - message: A seep drill parked on an asteroid now counts as a claim on it, the same as a generator, so a rock you are working does not decay out from under you.
+      type: Tweak
+    - message: Fuel canisters, bulk tanks, boriatic generators and the seep drill now go up when they are cooked or broken open, with a blast that scales to how much fuel is actually left inside, and a ruptured canister leaves burning fuel behind rather than just a bang.
+      type: Add
+    - message: Spilled boriatic fuel, antimatter fuel, welding fuel, oil and napalm now burn. A puddle that meets an ignition source lights and the fire walks along the spill until the fuel is gone.
+      type: Add
+    - message: Being soaked in fuel no longer sets you alight on its own. It coats you instead, so you burn far harder once something does touch you off.
+      type: Tweak
+    - message: Boriatic fuel canisters are all one item again. The old canister and its separate full variant are gone, replaced by a single 200 unit canister with an empty variant for the lathe, and the boriatic crate now holds three of them.
+      type: Tweak
+    - message: Bulk fuel storage research is cheaper at 5000, and the bulk boriatic and antimatter tank recipes are gated behind it instead of being printable from the start.
+      type: Tweak
+    - message: Added a guidebook section on asteroid seeps and the seep drill under Fuel Production.
+      type: Add
+  id: 6062
+  time: '2026-08-21T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: The planetfall barrier now lifts after 15 minutes instead of 30.
+      type: Tweak
+    - message: Halfway through the barrier timer the Castle Garrison sends a quiet dispatch about unrest in the outer settlements. It is chat only, with no announcer chime, as flavour ahead of the release broadcast.
+      type: Add
+  id: 6063
+  time: '2026-08-21T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Fixed dynamic access keys being handed out twice. Two doors or IDs holding the same key only counted as one, so selling a grid released a code its own doors still carried and later removals threw on the missing entry. Keys are now counted once per holder and revived if something still holds them.
+      type: Fix
+    - message: Fixed taking over an NPC controlled mob leaving you unable to turn. The client could not see that the mob was an NPC, so the two sides disagreed over who owned the rotation and the client spammed rejected requests. Anything holding a mind is now treated as player driven.
+      type: Fix
+    - message: Being recruited or dismissed at a faction recruitment console now clears your old squad. A lateral transfer no longer carries another faction's squad membership across, and a dismissal drops the faction outright instead of leaving an empty one behind in overwatch rosters.
+      type: Fix
+    - message: Fixed several command doors and a windoor aboard the Aurora being locked to Scribe access, which nobody aboard carries. They run on DSM command access now.
+      type: Fix
+    - message: Removed a stray ship warp point left inside the Nemesis wreck.
+      type: Fix
+  id: 6064
+  time: '2026-08-21T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: The three psionic defense powers no longer share one generic shield icon. Energy Aegis, Reinforced Aegis and Projected Aegis each have their own artwork now, in the defense branch's colours.
+      type: Tweak
+    - message: An active psionic barrier is now visible. A faceted energy bubble surrounds whoever is shielded for as long as the aegis holds, and it flares brightly whenever it actually soaks a hit, so both the caster and everyone nearby can tell the protection is up.
+      type: Add
+  id: 6065
+  time: '2026-08-21T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Added Recurrence, an advanced psionic discipline. It does not open until psionic level 2 and the chain above it is deliberately slow, so only a Psion who spends most of a round on it will finish all three.
+      type: Add
+    - message: Stasis Field hangs a colourless pocket of slowed time a few tiles away for 14 seconds. Bullets, thrown objects and burning grenade fuses crawl once they are inside it, anyone walking through wades, and the world inside the bubble is drained of colour for everyone watching.
+      type: Add
+    - message: Reweave winds your worn armour back to the condition it was made in, with no welder and without taking it off. One piece in a hundred does not survive the memory and comes apart into the plate it was pressed from, dropped at your feet.
+      type: Add
+    - message: Recurrence Pulse collapses your stasis fields and gives back every moment they were holding at once. Everything caught is hurled back down the path it arrived on, and rounds returned this way answer to the Psion rather than to whoever fired them. People caught in a field are left alone.
+      type: Add
+  id: 6066
+  time: '2026-08-21T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Added Aegis Dome, a capstone for the psionic Defense branch. It raises a standing barrier around the Psion that shelters everyone under it rather than one person at a time, soaking part of every hit anyone inside takes. The barrier has its own integrity and shatters once it has soaked enough, and it fades and warms from blue to amber as it fails so the people under it can see it going.
+      type: Add
+    - message: The recurrence stasis field is smaller and no longer draws a spinning clock face over everything. It is a plain circle now, and the colour still drains out of the world inside it.
+      type: Tweak
+    - message: The stasis field slows much harder than it did. A rifle round now takes the better part of four seconds to cross it, and anyone wading through keeps a quarter of their speed rather than half.
+      type: Tweak
+    - message: Every effect a psionic power spawns now lives in one prototype file with the sound it plays, so the audio for a power is one line to change.
+      type: Tweak
+    - message: Removed Projected Aegis from the psionic Defense branch. Aegis Dome covers the same ground and covers everyone nearby instead of one person, so the branch runs Energy Aegis into Reinforced Aegis into Aegis Dome now.
+      type: Remove
+  id: 6067
+  time: '2026-08-21T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Passports now start inside your PDA instead of loose in your backpack. If you have no PDA, or its document pocket is already full, it still goes to the bag.
+      type: Tweak
+    - message: A passport can now be rebound in another polity's cover from the edit window. It costs one piece of cloth held in your other hand and nothing else. The binding is cosmetic only, so a checker machine still prints the identity the document was actually issued with.
+      type: Add
+    - message: Fixed the passport flickering between open and closed for a moment each time you leafed through it in hand.
+      type: Fix
+    - message: A passport belonging to a species with no portrait artwork now falls back to the human portrait instead of asking for a sprite that is not there.
+      type: Fix
+  id: 6068
+  time: '2026-08-22T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Anti-boarder point defence turrets now shoot anyone in a sealed suit who is not of their own faction. They no longer need the two sides to have declared anything, so an unaligned boarder, a mercenary or a privateer under no flag gets engaged the same as a uniformed one.
+      type: Tweak
+    - message: Those turrets now hold their fire on unarmoured people. Crew in shirtsleeves, visiting civilians and unsuited hired hands walk past them untouched regardless of faction, so a gun that can now see everybody does not open up on the deck crew.
+      type: Tweak
+    - message: Mechs, borgs and hostile fauna are still valid point defence targets. Nothing that could not have put a suit on in the first place gets the benefit of the doubt.
+      type: Tweak
+  id: 6069
+  time: '2026-08-22T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Skeletons can no longer be psionic. The psionic caster traits refuse the species at character creation, and nothing in a round - a glimmer event, Lotophagoi Oil, the awakening prompt - can turn a skeleton into a Psion. Bare bone casts no shadow on the noosphere.
+      type: Tweak
+    - message: Atyrians now earn Potentia around a fifth faster than other species, both from casting and from ambient glimmer, on top of the roll bonus they already had. Small enough to be an aptitude rather than a free level.
+      type: Tweak
+    - message: The Recurrence powers are far quicker to reach. Stasis Field and Recurrence Pulse now cost one development point instead of two, and the Pulse opens at psionic level four rather than five. The whole branch now fits alongside a primary discipline instead of demanding a Psion bank every point they ever earn.
+      type: Tweak
+  id: 6070
+  time: '2026-08-22T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: The targeting console now wears the same retro instrument look as the shuttle console - flat bezel, pixel-terminal typeface, titled panels around the ammo and cannon group lists, and a power-on flicker that respects the reduced motion accessibility option.
+      type: Tweak
+    - message: Ammo bars on the targeting console are drawn in the console's own green rather than the stock health-bar blue, so the plot and the readouts beside it read as one instrument.
+      type: Tweak
+    - message: Added an always-on status strip to the targeting console. It reads out which cannon groups are selected, how many cannons are linked and the battery's total ammo, and flashes a NO AMMO warning once every linked gun is dry.
+      type: Add
+    - message: Buttons on the instrument consoles now acknowledge a click. Hovering, holding and releasing are three different looks instead of one, and a press flashes the button bright for a moment, so a quick click is no longer invisible.
+      type: Fix
+    - message: Cannon group buttons on the targeting console now light up while their group is selected, and the console shows the server's actual selection - including several groups at once. Previously nothing on screen changed when you picked a group.
+      type: Fix
+    - message: The targeting console no longer rebuilds its cannon group buttons on every update from the server, so a click can no longer land on a button that was destroyed mid-press.
+      type: Fix
+  id: 6071
+  time: '2026-08-22T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Psionic ability names finally read as names. Every psionic action was showing its raw localization key in the action bar, because entity prototype names are not run through the localizer; the abilities now carry proper entity localization, along with the handful of non-psionic actions that had the same problem.
+      type: Fix
+    - message: Fireball is a fireball. The Fire tree's opening node used to scatter blinding flares around the caster and set nothing alight - it now throws a bolt of psionic flame at the spot you click, which bursts on impact and ignites what it touches. It cannot break tiles or open a room to space.
+      type: Tweak
+    - message: Flame Breath no longer lights its whole cone on one frame. The fire runs out from your feet to the far edge over about half a second, and it sounds like fire now instead of a choir.
+      type: Tweak
+    - message: The Aegis Dome travels with the Psion who raised it instead of standing where it was cast, and it is now a real barrier. Bullets and thrown objects coming from outside stop dead at its edge and cost it integrity; anyone sheltering under it can still shoot and throw out.
+      type: Tweak
+    - message: Kinetic Slam and Telekinetic Pulse have swapped places in the Kinetic branch. Slam is now the tier one node and Pulse the capstone.
+      type: Tweak
+    - message: Dark Swap is no longer somewhere to live. The shadow state lasts thirty seconds and then unwinds on its own, and the ability's cooldown was raised to match so it cannot simply be recast as it drops.
+      type: Tweak
+    - message: Psionic concealment - Dark Swap and Psionic Invisibility alike - hides half of you rather than three quarters, and no longer turns the character blue; the shimmer is the only tell. Anyone who picks that shimmer out can attack and interact with you normally.
+      type: Tweak
+    - message: Veil Sight projections can speak again. Anything a projection says out loud goes out over the telepathic channel instead of vanishing silently, and the wait before you can return to your body is down from twenty seconds to five.
+      type: Tweak
+    - message: The Stasis Field holds for eight seconds rather than fourteen.
+      type: Tweak
+    - message: Summoned imps take orders now. Command Imp - Move sends the imp to the spot you picked and it holds there instead of carrying on with whatever it was shooting, Command Imp - Attack points it at the target you named even if the imp's own factions have no quarrel with them, and pointing the move order at your own feet calls the imp back to your side. Left alone it escorts you and engages what threatens you, as before.
+      type: Fix
+    - message: Summoned imps are no longer offered up as a ghost role, so they stay under their summoner's command, and their collision was corrected so they stop planning routes they then bounce off.
+      type: Fix
+  id: 6072
+  time: '2026-08-22T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Ship purchases that would take a large bite out of a faction's treasury now need signing off. Anything above a quarter of the current balance files a request instead of buying, and the request appears on the treasury console that shipyard banks into, where anyone with vault access can approve or deny it. The buyer is told either way and returns to the shipyard to collect an approved hull. Civilian yards, where you spend your own money, are unaffected.
+      type: Add
+    - message: PDAs register themselves to the first person who opens them. Stock trading, transfers, the casino and NanoChat only answer to that player, so killing someone for their PDA no longer hands over their portfolio or their messages. The owner can hand a device on with the Clear device lock verb, and the flashlight and notepad still work for anyone.
+      type: Add
+    - message: You can block people from your PDA. Blocking a NanoChat contact bounces their messages back to them marked as blocked, and blocking someone in the Transfers app refuses their money before it leaves their account, so a single credit can no longer be used to push a message onto your screen. Blocked people are listed in a new tab and can be unblocked even after they log out.
+      type: Add
+    - message: Corpses are dead weight. A body slows to a stop instead of drifting off through the void or across the deck, and throwing one barely gets it airborne. Dragging a body is unaffected.
+      type: Tweak
+  id: 6073
+  time: '2026-08-22T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Ramming another ship no longer takes the server down with it. Impact damage used to be applied from inside the physics step, so gibbing a crewman or breaking hull plating could destroy the collision the engine was still reading. Impacts are now resolved a moment later, outside the step.
+      type: Fix
+    - message: Saturation launchers stop shooting themselves down. Rockets fired from the same ship pass through one another instead of detonating on the shot in front, which made the 48mm Shortbow and the 30mm Pila destroy most of their own salvo at the muzzle.
+      type: Fix
+    - message: Magboots and jetpacks now cut each other out. Turning the magnets on kills the thrusters and lighting the thrusters releases the magnets, so magboots no longer sit there doing nothing because a jetpack you forgot about is keeping you weightless.
+      type: Fix
+    - message: Shields no longer risk taking the server down when they stop a shot. Deflected rounds are cleaned up a moment after the impact rather than in the middle of the physics step, and the round still stops dead the instant it touches the shield.
+      type: Fix
+    - message: Ship-on-ship collisions were being resolved twice, so two ships ramming each other took double the damage, broke double the hull plating and braked twice as hard as a ship ramming an asteroid. Each impact is now applied once.
+      type: Tweak
+    - message: Collision damage is centred on the tile that was actually hit. The damage circle was half a tile off, so one side of an impact took more punishment than the other.
+      type: Fix
+  id: 6074
+  time: '2026-08-22T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Syndicate assault cyborgs move at normal cyborg speed again. Their walk and sprint had been cut as the counterweight to a much tankier chassis, and the health has been reduced twice since without the slowness ever being lifted, leaving them the only cyborg in the game that was both slower and squishier than a janitor unit.
+      type: Tweak
+    - message: Syndicate assault cyborgs can manoeuvre in space. The chassis now accelerates and turns while weightless instead of drifting helplessly.
+      type: Tweak
+    - message: The NCWL "HADES" juggernaut hardsuit has been trimmed. It was strictly better than the Shinohara "KAMADO" juggernaut on every axis at once, soaking half again as much fire while sprinting faster and printing for less steel. Its armour pool and sprint speed are down, and it now costs the same materials as the Shinohara suit.
+      type: Tweak
+  id: 6075
+  time: '2026-08-23T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Ship ballistic shells hit as hard as they used to. The 20mm, 35mm, 50mm and 90mm armour-piercing rounds had their structural and piercing damage cut in the ship power rework, which quietly took 36 to 45 percent off the sustained damage of every autocannon and assault battery in the game.
+      type: Tweak
+    - message: The 50mm 'Bastion' and 'Striker' autocannons and the 90mm 'Overlord' and 'Resolute' assault batteries fire at their old rate again. Their rate of fire had been cut on top of the shell damage cut, so the two nerfs stacked.
+      type: Tweak
+    - message: The 120mm 'Anvil' fires at its old rate again and its flak shell is back to full strength. The flak round had lost more than half its damage and two thirds of its burst, which left it unable to swat the missiles it exists to swat.
+      type: Tweak
+  id: 6076
+  time: '2026-08-23T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Added the shield belt - a researchable belt whose barrier makes psionic powers slide off the wearer until someone shoots it down. It also shaves a quarter off incoming damage. Raising the barrier is a hotbar action, and after a collapse the emitter needs eighty seconds before it can be raised again.
+      type: Add
+    - message: Removed the thick belt and its loadout; its sprite is now the shield belt.
+      type: Remove
+  id: 6077
+  time: '2026-08-23T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Rounds you fire yourself are now caught by a recurrence stasis field. With gun prediction on, the only bullet a shooter can see is one their own client drew, and the capture ran on the server alone, so the caster watched their own fire cross the bubble at full speed while everyone else watched it crawl. A recurrence pulse throws those rounds back for the shooter too.
+      type: Fix
+    - message: The Aegis Dome stops the shots of whoever is firing at it. The barrier was deleting rounds on the server while the shooter's own screen showed them sail through and hit, so the dome looked like it did nothing to the one person it was standing in front of.
+      type: Fix
+    - message: Reworked the psionic skill tree window. The whole tree now sits on one plane - a column per discipline, a row per tier, with the tier numbers running down the side and a legend for the card colours - and the mouse wheel pans it sideways instead of dragging you up and down. Buying a skill no longer throws the view back to the leftmost discipline.
+      type: Tweak
+  id: 6078
+  time: '2026-08-23T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: The payroll and taxation consoles stop rewriting a figure while you are typing it. A half-typed salary or tax rate is held as a pending edit until you send it, Enter now sends it as well as the button, and the box only goes back to following the console once the figure has taken. Clearing a salary or an override drops the pending edit with it.
+      type: Fix
+    - message: Rows in console lists no longer latch. Recycling a row used to knock it out of its selection group, so several entries could sit highlighted at once and none of them was the one the console thought you had picked.
+      type: Fix
+    - message: Ghosting out of a shuttle console, or losing the grid under it, no longer leaves the radar throwing an error every frame the cursor is over it. Clicks on a radar with nothing left to point at are ignored instead of being sent on.
+      type: Fix
+  id: 6079
+  time: '2026-08-23T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Structures you build on a ship come out facing the way the ghost did. Construction rotation was being read as a heading in world space, so on any grid that was not sitting perfectly square - which is every ship under way - the finished machine or wall ended up turned away from the outline you clicked on.
+      type: Fix
+    - message: Gliess and Tatsumoto no longer run Newport's cargo chute and trade good printer. Each station now has the machine that belongs to it, and the stray Newport printer has been taken off Gliess entirely.
+      type: Fix
+  id: 6080
+  time: '2026-08-23T00:00:00.0000000+00:00'
   url: null

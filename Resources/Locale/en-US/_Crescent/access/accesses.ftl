@@ -17,7 +17,7 @@ id-card-access-level-syndicateinterdyne = Interdyne
 id-card-access-level-syndicateinterdynearmory = Interdyne Armory
 id-card-access-level-syndicatesaws = Shipbreaker Union
 id-card-access-level-syndicateramzi = Cyberdawn
-id-card-access-level-syndicateringleader = Ringleader
+id-card-access-level-syndicateringleader = Administrator
 id-card-access-level-syndicatearmory = Federation Armory
 
 # empire

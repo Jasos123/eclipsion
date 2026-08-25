@@ -70,7 +70,11 @@ public sealed class PsionicAbilitiesSystem : EntitySystem
     /// </summary>
     public void AddPsionics(EntityUid uid)
     {
-        if (Deleted(uid))
+        // Mindbreaking is supposed to be permanent, and species that are born inert (Oni, skeletons)
+        // carry the same component from the start. Without this the glimmer events and the accept-
+        // psionics EUI would happily hand either of them a fresh PsionicComponent.
+        if (Deleted(uid)
+            || HasComp<MindbrokenComponent>(uid))
             return;
 
         EnsureComp<PsionicComponent>(uid);
@@ -118,7 +122,10 @@ public sealed class PsionicAbilitiesSystem : EntitySystem
     public void InitializePsionicPower(EntityUid uid, PsionicPowerPrototype proto, PsionicComponent psionic, bool playFeedback = true)
     {
         if (!_prototypeManager.HasIndex<PsionicPowerPrototype>(proto.ID)
-            || psionic.ActivePowers.Contains(proto))
+            || psionic.ActivePowers.Contains(proto)
+            // A Psion who kept their component through a mindbreak, or an inert species someone handed
+            // one to, must not be able to spend skill points on powers they could never cast.
+            || HasComp<MindbrokenComponent>(uid))
             return;
 
         psionic.ActivePowers.Add(proto);

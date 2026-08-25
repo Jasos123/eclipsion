@@ -6,6 +6,7 @@
   description: A passport denoting an individual's nationality and identity.
   components:
     - type: Passport
+      cover: PassportCoverBiesel
     - type: ActivatableUI
       key: enum.PassportUiKey.Key
       inHandsOnly: true
@@ -35,6 +36,8 @@
   id: BieselPassport
   abstract: true #hullrot
   components:
+    - type: Passport
+      cover: PassportCoverBiesel
     - type: Sprite
       sprite: _EE/Contractors/Passport.rsi
       layers:
@@ -65,6 +68,8 @@
   id: SolPassport
   abstract: true #hullrot
   components:
+    - type: Passport
+      cover: PassportCoverImperial
     - type: Sprite
       sprite: _EE/Contractors/Passport.rsi
       layers:
@@ -95,6 +100,8 @@
   id: ElyranPassport
   abstract: true #hullrot
   components:
+    - type: Passport
+      cover: PassportCoverClarizian
     - type: Sprite
       sprite: _EE/Contractors/Passport.rsi
       layers:
@@ -107,6 +114,8 @@
   id: ValyrianPassport
   abstract: true #hullrot
   components:
+    - type: Passport
+      cover: PassportCoverAuthority
     - type: Sprite
       sprite: _EE/Contractors/Passport.rsi
       layers:
@@ -119,6 +128,8 @@
   id: NederlandicPassport
   abstract: true #hullrot
   components:
+    - type: Passport
+      cover: PassportCoverAmerican
     - type: Sprite
       sprite: _EE/Contractors/Passport.rsi
       layers:
@@ -131,6 +142,8 @@
   id: IzweskiPassport
   abstract: true #hullrot
   components:
+    - type: Passport
+      cover: PassportCoverIzweski
     - type: Sprite
       sprite: _EE/Contractors/Passport.rsi
       layers:
@@ -143,6 +156,8 @@
   id: AdhomaiPassport
   abstract: true #hullrot
   components:
+    - type: Passport
+      cover: PassportCoverCoalition
     - type: Sprite
       sprite: _EE/Contractors/Passport.rsi
       layers:
@@ -156,6 +171,7 @@
   abstract: true #hullrot
   components:
     - type: Passport
+      cover: PassportCoverGoldenDeep
       portraitSpecies: ipc
     - type: Sprite
       sprite: _EE/Contractors/Passport.rsi
@@ -170,6 +186,7 @@
   abstract: true #hullrot
   components:
     - type: Passport
+      cover: PassportCoverUnion
       portraitSpecies: xelthia
     - type: Sprite
       sprite: _EE/Contractors/Passport.rsi

@@ -50,13 +50,15 @@ public sealed class LoadCharacter : IConsoleCommand
 
         if (args.Length >= 1)
         {
-            if (!EntityUid.TryParse(args.First(), out var uid))
+            // Eclipsion - the id an admin reads off their client is a NetEntity, not a server EntityUid.
+            if (!NetEntity.TryParse(args.First(), out var netUid)
+                || !_entityManager.TryGetEntity(netUid, out var uid))
             {
                 shell.WriteLine(Loc.GetString("shell-entity-uid-must-be-number"));
                 return;
             }
 
-            target = uid;
+            target = uid.Value;
         }
         else
         {

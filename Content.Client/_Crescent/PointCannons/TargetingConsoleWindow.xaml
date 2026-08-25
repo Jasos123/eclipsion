@@ -1,67 +1,89 @@
-<controls:FancyWindow xmlns="https://spacestation14.io"
-                    xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
-                    xmlns:ui="clr-namespace:Content.Client.Shuttles.UI"
-                    Title="targeting console"
-                    SetSize="1000 800"
-                    MinSize="1000 800">
-    <GridContainer Columns="2"
-                HorizontalAlignment="Stretch"
-                Margin="5 5 5 5">
-        <!-- Left side of the console -->
-        <BoxContainer HorizontalAlignment="Left"
-                    MinWidth="300"
-                    MaxWidth="300"
-                    Margin="5 5 5 5"
-                    Orientation="Vertical">
-
-            <!-- Cannons status -->
-            <BoxContainer HorizontalAlignment="Left"
-                        MinWidth="295"
-                        MaxWidth="295"
-                        MinHeight="75"
-                        MaxHeight="75"
-                        Orientation="Vertical">
-                <controls:StripeBack>
-                    <Label Text="Cannon status" HorizontalAlignment="Center" />
-                </controls:StripeBack>
-                <PanelContainer VerticalExpand="False" HorizontalExpand="True">
-                <Button Name="RefreshButton" Access="Public" Text="{Loc admin-logs-refresh}"
-                        StyleClasses="ButtonSquare" Margin="2 2 2 2"/>
-                </PanelContainer>
+<!--
+  KS14: instrument-styled shell, ported from Klovnstation14 (AGPL-3.0-or-later).
+  Visuals only: the stock FancyWindow chrome and StripeBack headers are replaced by the flat
+  bezel, VT323 title bar and titled instrument panels the shuttle console already wears, but
+  the radar, the group buttons and the ammo bars below are this fork's own and unchanged.
+-->
+<ksui:KsBaseWindow xmlns="https://spacestation14.io"
+                   xmlns:ksui="clr-namespace:Content.Client._KS14.UI"
+                   xmlns:ui="clr-namespace:Content.Client.Shuttles.UI"
+                   MouseFilter="Stop"
+                   SetSize="1000 800"
+                   MinSize="1000 800">
+    <!-- The instrument bezel: the whole window IS the instrument, no stock chrome. -->
+    <PanelContainer Name="Bezel"/>
+    <BoxContainer Orientation="Vertical" Margin="2">
+        <!-- Custom title bar: VT323 title + close button. -->
+        <PanelContainer Name="TitleBar">
+            <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="8 2 4 2">
+                <Label Name="TitleLabel"
+                       StyleClasses="KsInstrumentTitle"
+                       HorizontalExpand="True"
+                       VAlign="Center"
+                       Text="{Loc 'targeting-console-window-title'}"/>
+                <Button Name="CloseChromeButton"
+                        StyleClasses="KsInstrumentAction"
+                        VerticalAlignment="Center"
+                        Text="{Loc 'ks-instrument-window-close'}"/>
             </BoxContainer>
-            
-            <!-- Ammo status -->
+        </PanelContainer>
+        <GridContainer Name="Contents"
+                       Columns="2"
+                       HorizontalAlignment="Stretch"
+                       VerticalExpand="True"
+                       Margin="5 5 5 5">
+            <!-- Left side of the console -->
             <BoxContainer HorizontalAlignment="Left"
-                        MinWidth="295"
-                        MaxWidth="295"
-                        MinHeight="320"
-                        MaxHeight="320"
+                        MinWidth="300"
+                        MaxWidth="300"
+                        Margin="5 5 5 5"
                         Orientation="Vertical">
-                <controls:StripeBack>
-                    <Label Text="Ammo status" HorizontalAlignment="Center" />
-                </controls:StripeBack>
-                <BoxContainer Name="AmmoStatusBox" Orientation="Vertical"></BoxContainer>
+
+                <!-- Cannons status -->
+                <ksui:KsInstrumentPanel Name="FireControlPanel" Margin="0 0 0 4">
+                    <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+                        <Button Name="RefreshButton" Access="Public" Text="{Loc admin-logs-refresh}"
+                                StyleClasses="KsInstrumentAction" Margin="2 2 2 2"/>
+                    </BoxContainer>
+                </ksui:KsInstrumentPanel>
+
+                <!-- Ammo status: the bar list is fixed to whatever room is left on the column and
+                     scrolls inside it, so a ship with thirty-odd cannons no longer pushes the group
+                     buttons off the bottom of the window. -->
+                <ksui:KsInstrumentPanel Name="AmmoPanel"
+                                        MinHeight="120"
+                                        VerticalExpand="True"
+                                        Margin="0 0 0 4">
+                    <ScrollContainer Name="AmmoScroll"
+                                     HScrollEnabled="False"
+                                     ReserveScrollbarSpace="True"
+                                     HorizontalExpand="True"
+                                     VerticalExpand="True">
+                        <BoxContainer Name="AmmoStatusBox" Orientation="Vertical" HorizontalExpand="True"/>
+                    </ScrollContainer>
+                </ksui:KsInstrumentPanel>
+
+                <!-- Cannon groups: sized to its buttons, always parked under the ammo list. -->
+                <ksui:KsInstrumentPanel Name="GroupPanel">
+                    <BoxContainer Name="CannonGroupSelectorBox" Orientation="Vertical" HorizontalExpand="True"/>
+                </ksui:KsInstrumentPanel>
             </BoxContainer>
 
-            <!-- Cannon groups -->
-            <BoxContainer HorizontalAlignment="Left"
-                        MinWidth="295"
-                        MaxWidth="295"
-                        MinHeight="395"
-                        MaxHeight="395"
-                        Orientation="Vertical">
-                <controls:StripeBack>
-                    <Label Text="Cannon groups" HorizontalAlignment="Center" />
-                </controls:StripeBack>
-                <BoxContainer Name="CannonGroupSelectorBox" Orientation="Vertical"></BoxContainer>
+            <!-- Right side (radar) -->
+            <ui:ShuttleNavControl
+                Name="NavRadar"
+                Margin="4"
+                HorizontalExpand="True"
+                VerticalExpand="True" />
+        </GridContainer>
+        <!-- KS14 shell: the always-on status strip, mirroring the shuttle console's. Everything
+             on it is already in front of the gunner somewhere on this screen; the strip only
+             totals it so the state of the battery reads at a glance while the eye is on the plot. -->
+        <PanelContainer Name="StatusStrip" Margin="8 2 8 6">
+            <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="6 2 6 2">
+                <Label Name="StatusLabel" StyleClasses="KsInstrumentSmall" HorizontalExpand="True"/>
+                <Label Name="AlertLabel" StyleClasses="KsInstrumentSmall" Visible="False"/>
             </BoxContainer>
-        </BoxContainer>
-
-        <!-- Right side (radar) -->
-        <ui:ShuttleNavControl
-            Name="NavRadar"
-            Margin="4"
-            HorizontalExpand="True"
-            VerticalExpand="True" />
-    </GridContainer>
-</controls:FancyWindow>
+        </PanelContainer>
+    </BoxContainer>
+</ksui:KsBaseWindow>

@@ -1,7 +1,12 @@
+# Anti-boarder point defence. NearbyBoardersQuery replaces NearbyHostilesQuery here on purpose:
+# the hostile-set query could only ever see a mob that carried an npcFaction of its own, so every
+# unaligned boarder walked past these guns untouched. This one takes anyone not of the turret's own
+# faction, and leans on the sealed-suit requirement instead of a declared war to tell a boarder from
+# the crew. No diplomacy state is read - a point defence gun answers to its hull, not to the consoles.
 - type: utilityQuery
   id: NearbyPDTTargets
   query:
-    - !type:NearbyHostilesQuery
+    - !type:NearbyBoardersQuery
   considerations:
     - !type:TargetDistanceCon
       curve: !type:PresetCurve

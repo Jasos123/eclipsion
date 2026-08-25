@@ -31,6 +31,19 @@ public sealed partial class EtherealComponent : Component
     public bool CanBeStunned = true;
 
     /// <summary>
+    ///     How long the shadow state holds before it unwinds on its own. Phasing through walls with
+    ///     no clock on it made DarkSwap a place to live rather than a move to make.
+    /// </summary>
+    [DataField]
+    public TimeSpan Duration = TimeSpan.FromSeconds(30);
+
+    /// <summary>
+    ///     Filled in at map init from <see cref="Duration"/>.
+    /// </summary>
+    [DataField]
+    public TimeSpan ExpiresAt;
+
+    /// <summary>
     ///     How much stamina damage does the user take each second they are in the dark realm?
     /// </summary>
     [DataField]

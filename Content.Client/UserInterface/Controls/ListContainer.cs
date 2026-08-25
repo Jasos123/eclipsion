@@ -282,15 +282,20 @@ public class ListContainer : Control
                         button.OnPressed += OnItemPressed;
                         button.OnKeyBindDown += args => OnItemKeyBindDown(button, args);
                         button.ToggleMode = Toggle;
-                        button.Group = _buttonGroup;
 
                         GenerateItem?.Invoke(data, button);
                         _buttons.Add(data, button);
-
-                        if (Toggle && data == _selected)
-                            button.Pressed = true;
                     }
                     AddChild(button);
+
+                    // Every rebuild re-parents the recycled buttons, and BaseButton clears Group
+                    // when it leaves the tree. Re-apply it here, otherwise recycled buttons quietly
+                    // drop out of the radio group and several rows stay drawn as pressed at once.
+                    button.Group = _buttonGroup;
+
+                    if (Toggle)
+                        button.Pressed = data == _selected;
+
                     button.Measure(finalSize);
                 }
             }

@@ -466,8 +466,15 @@
       - Silicon
       - Biological
     - type: MovementSpeedModifier
-      baseWalkSpeed : 2
-      baseSprintSpeed : 4
+      # Eclipsion Start - the 2/4 speed was the counterweight to the old 350-crit
+      # tanky chassis; the health has since been cut to 120/250, so the slowness
+      # is a leftover. Back to the base borg chassis speed.
+      baseWalkSpeed : 3
+      baseSprintSpeed : 5
+      weightlessAcceleration: 5 # Assault chassis has thrusters - move around in space.
+      weightlessModifier: 1.1
+      weightlessFriction: 3 # makes you turn more sharply while weightless
+      # Eclipsion End
 
 - type: entity
   id: BorgChassisSyndicateMedical

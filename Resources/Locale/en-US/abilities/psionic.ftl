@@ -78,8 +78,6 @@ action-description-command-psionic-familiar-attack = Order your summoned imp to 
 
 action-name-psionic-self-shield = Energy Aegis
 action-description-psionic-self-shield = Protect yourself from heat and explosions for 15 seconds.
-action-name-psionic-ally-shield = Projected Aegis
-action-description-psionic-ally-shield = Protect yourself or another nearby character from heat and explosions for 15 seconds.
 psionic-energy-shield-applied = A field of psionic energy surrounds {THE($target)}!
 
 action-name-kinetic-slam = Kinetic Slam
@@ -93,3 +91,22 @@ action-desc-rf-sensitivity = Toggle your ability to interpret radio waves on and
 
 action-name-assay = Assay
 action-description-assay = Probe an entity at close range to glean metaphorical information about any powers they may have
+
+action-name-psionic-stasis-field = Stasis Field
+action-description-psionic-stasis-field = Hang a pocket of slowed time in front of you for eight seconds. Anything moving through it crawls, and burning fuses crawl with it.
+action-name-psionic-armor-reweave = Reweave
+action-description-psionic-armor-reweave = Wind your worn armour back to the condition it was made in. Rarely, a piece comes apart instead.
+action-name-psionic-recurrence-pulse = Recurrence Pulse
+action-description-psionic-recurrence-pulse = Collapse your stasis fields and hurl everything they were holding back the way it came.
+
+psionic-recurrence-pulse-no-field = There is nothing of yours left to collapse.
+psionic-recurrence-pulse-released = The moment comes due, and {$count} thing(s) are thrown back.
+psionic-armor-reweave-nothing = Nothing you are wearing remembers being damaged.
+psionic-armor-reweave-restored = You wind {$count} piece(s) of your armour back to what they were.
+psionic-armor-reweave-unravelled = {$armor} loses the thread entirely and comes apart in your hands!
+
+action-name-psionic-aegis-dome = Aegis Dome
+action-description-psionic-aegis-dome = Raise a barrier that moves with you and shelters everyone under it. Incoming bullets and thrown objects stop at its edge, and it absorbs part of every other hit until it runs out of integrity and shatters.
+
+psionic-aegis-dome-raised = A dome of psionic force settles over the ground around you.
+psionic-aegis-dome-shattered = Your aegis dome takes one hit too many and comes apart!

@@ -69,7 +69,7 @@
 - type: entity
   parent: DoorElectronics
   id: DoorElectronicsTFSCRingleader
-  suffix: TFCF Ringleader, Locked
+  suffix: TFCF Administrator, Locked
   components:
   - type: AccessReader
     access: [["SyndicateRingleader"]]

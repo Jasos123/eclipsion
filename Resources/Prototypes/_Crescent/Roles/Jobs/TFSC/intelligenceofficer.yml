@@ -25,7 +25,7 @@
     shoutBubbleScale: 1.32
     radioScale: 1.23
     radioBold: true
-  supervisors: You direct Cyberdawn intelligence and answer to its recognized leadership; follow the Ringleader on valid Federation-wide matters.
+  supervisors: You direct Cyberdawn intelligence and answer to its recognized leadership; follow the Administrator on valid Federation-wide matters.
   canBeAntag: false
   requirements:
     - !type:CharacterSpeciesRequirement

@@ -21,8 +21,8 @@ job-description-ncwl-newbie = Listen to union leaders. Work where you are needed
 
 # syndicate
 
-job-description-ringleader = Lead the TFCF in Federation-wide war, diplomacy, territorial claims, common infrastructure, and major joint contracts.
-job-description-lieutenant = Support the Ringleader and coordinate GSC operations without usurping the internal leadership of other Federation companies.
+job-description-ringleader = Administer the TFCF in Federation-wide war, diplomacy, territorial claims, common infrastructure, and major joint contracts.
+job-description-lieutenant = Support the Administrator and coordinate GSC operations without usurping the internal leadership of other Federation companies.
 job-description-infanteer = Enforce Gorlex contracts, escort clients, conduct boarding operations, and follow valid Federation decisions.
 job-description-technician = Maintain Gorlex vessels and artillery while keeping accepted contracts operational.
 job-description-coordinator = Lead Interdyne operations, protect policyholders, manage medical cover, and deliver the capabilities promised to the Federation.

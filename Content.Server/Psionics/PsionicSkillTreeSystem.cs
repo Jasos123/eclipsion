@@ -116,6 +116,23 @@ public sealed class PsionicSkillTreeSystem : EntitySystem
         }
     }
 
+    /// <summary>
+    /// Grants spendable points without touching the psionic level. Used by the debug command, where
+    /// levelling up would also raise every node's <c>minimumLevel</c> gate and hide what is being
+    /// tested.
+    /// </summary>
+    public void GrantSkillPoints(EntityUid uid, PsionicComponent component, int amount)
+    {
+        if (amount <= 0)
+            return;
+
+        component.SkillPoints += amount;
+        Dirty(uid, component);
+
+        // A tree left open would otherwise keep showing the old point count and greyed-out nodes.
+        RefreshEui(uid);
+    }
+
     public PsionicSkillTreeEuiState BuildState(EntityUid uid)
     {
         if (!TryComp<PsionicComponent>(uid, out var component) ||

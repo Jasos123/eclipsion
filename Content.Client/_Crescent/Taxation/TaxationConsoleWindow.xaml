@@ -1,6 +1,7 @@
 <controls:FancyWindow xmlns="https://spacestation14.io"
                       xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
                       xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+                      xmlns:cui="clr-namespace:Content.Client._Crescent.UI"
                       SetSize="680 720"
                       MinSize="520 400">
     <BoxContainer Orientation="Vertical" Margin="10 6 10 10">
@@ -22,7 +23,7 @@
         <!-- Default rate -->
         <BoxContainer Orientation="Horizontal" VerticalAlignment="Center" Margin="2 0 0 6">
             <Label Text="{Loc 'taxation-console-default-label'}" StyleClasses="ConsoleText" VerticalAlignment="Center" />
-            <LineEdit Name="DefaultRateEdit" MinWidth="90" PlaceHolder="0" VerticalAlignment="Center" Margin="6 0 2 0" />
+            <cui:ConsoleValueEdit Name="DefaultRateEdit" MinWidth="90" PlaceHolder="0" VerticalAlignment="Center" Margin="6 0 2 0" />
             <Label Text="%" StyleClasses="ConsoleText" VerticalAlignment="Center" Margin="0 0 6 0" />
             <Button Name="DefaultSetButton" Text="{Loc 'taxation-console-set'}" />
         </BoxContainer>

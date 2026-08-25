@@ -42,11 +42,19 @@
                                   PlaceHolder="{Loc 'money-transfer-ui-comment-placeholder'}"
                                   HorizontalExpand="True"/>
                     </BoxContainer>
-                    <Button Name="TransferButton"
-                            Access="Public"
-                            Text="{Loc 'money-transfer-ui-send'}"
-                            HorizontalExpand="True"
-                            Margin="0 6 0 0"/>
+                    <BoxContainer Orientation="Horizontal"
+                                  HorizontalExpand="True"
+                                  Margin="0 6 0 0"
+                                  SeparationOverride="6">
+                        <Button Name="TransferButton"
+                                Access="Public"
+                                Text="{Loc 'money-transfer-ui-send'}"
+                                HorizontalExpand="True"/>
+                        <!-- Eclipsion - refuse money (and the comment riding on it) from the selected person -->
+                        <Button Name="BlockButton"
+                                Access="Public"
+                                Text="{Loc 'money-transfer-ui-block'}"/>
+                    </BoxContainer>
                 </BoxContainer>
                 <Control Name="ToastOverlay"
                          Visible="False"
@@ -76,6 +84,16 @@
                 <BoxContainer Name="HistoryContainer"
                               Orientation="Vertical"
                               HorizontalExpand="False"
+                              Margin="6"/>
+            </ScrollContainer>
+            <!-- Eclipsion - block list, so somebody who has logged out can still be unblocked -->
+            <ScrollContainer HorizontalExpand="True"
+                             VerticalExpand="True"
+                             MinHeight="120"
+                             HScrollEnabled="False">
+                <BoxContainer Name="BlockedContainer"
+                              Orientation="Vertical"
+                              HorizontalExpand="True"
                               Margin="6"/>
             </ScrollContainer>
         </TabContainer>

@@ -42,6 +42,7 @@ public sealed class PsionicInvisibleContactsSystem : EntitySystem
         EnsureComp<PsionicallyInvisibleComponent>(ourEntity);
         var stealth = EnsureComp<StealthComponent>(ourEntity);
         _stealth.SetVisibility(ourEntity, SharedPsionicAbilitiesSystem.ConcealmentVisibility, stealth); // Eclipsion
+        _stealth.SetColorTint(ourEntity, false, stealth); // Eclipsion - concealment shimmers, it does not recolour.
     }
 
     private void OnEntityExit(EntityUid uid, PsionicInvisibleContactsComponent component, ref EndCollideEvent args)

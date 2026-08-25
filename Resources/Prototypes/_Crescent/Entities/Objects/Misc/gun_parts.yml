@@ -62,7 +62,7 @@
   id: C8XAutocannonPartBlueprint
   parent: BaseItem
   name: C-8X blueprints
-  description: Real blueprints on ancient blueprint paper, the kind you hardly see since everything went digital. The sheets map out the experimental CyberDawn C-8X autocannon in exhaustive detail, has a note attached saying "thanks asshole now the patriarch is threathening to wipe my cloning records if he finds out i stole the autocannon".
+  description: Real blueprints on ancient blueprint paper, the kind you hardly see since everything went digital. The sheets map out the experimental CyberDawn C-8X autocannon in exhaustive detail, has a note attached saying "thanks asshole now the Cyberdawn Supervisor is threathening to wipe my cloning records if he finds out i stole the autocannon".
   suffix: DO NOT MAP OR SPAWN
   components:
   - type: Item

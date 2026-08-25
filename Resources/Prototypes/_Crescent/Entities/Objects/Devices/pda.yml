@@ -146,7 +146,7 @@
 - type: entity
   parent: BasePDA
   id: RingleaderPDA
-  name: ringleader's PDA
+  name: administrator's PDA
   description: Red for the TFCF.
   components:
   - type: Pda
@@ -204,7 +204,7 @@
 - type: entity
   parent: BasePDA
   id: CoordinatorPDA
-  name: coordinator's PDA
+  name: interdyne supervisor's PDA
   description: TFCF red with the Interdyne Pharmaceuticals logo on the back and a thumbdrive health analyzer wired to one end.
   components:
   - type: Pda
@@ -292,7 +292,7 @@
 - type: entity
   parent: BasePDA
   id: IntelligenceOfficerPDA
-  name: patriarch's PDA
+  name: cyberdawn supervisor's PDA
   description: TFCF red with the name 'Cyberdawn' stamped on the back.
   components:
   - type: Pda

@@ -13,16 +13,27 @@ public sealed class TargetingConsoleBoundUserInterfaceState : BoundUserInterface
     public List<string>? CannonGroups;
     public List<NetEntity>? ControlledCannons;
 
+    /// <summary>
+    ///     KS14: which groups are currently selected on this console, so the UI can light them.
+    ///         Group selection is a toggle set with its own rules on the server ("all" clears the
+    ///         rest, pressing an active group drops it), and the console used to show none of it -
+    ///         a click had no visible effect at all. Sent rather than mirrored client-side so the
+    ///         highlight cannot drift from what the guns are actually doing.
+    /// </summary>
+    public List<string> ActiveGroups;
+
     public TargetingConsoleBoundUserInterfaceState(
         NavInterfaceState navState,
         IFFInterfaceState iffState,
         List<string>? groups,
-        List<NetEntity>? controlled)
+        List<NetEntity>? controlled,
+        List<string> activeGroups)
     {
         NavState = navState;
         IFFState = iffState;
         CannonGroups = groups;
         ControlledCannons = controlled;
+        ActiveGroups = activeGroups;
     }
 }
 

@@ -71,10 +71,19 @@ public static class KsInstrumentSheetlet
     ///         wearing both classes renders vanilla. Must be called on every button
     ///         that wears <see cref="StyleClassTab"/> or <see cref="StyleClassAction"/>.
     /// </summary>
+    /// <remarks>
+    ///     Also arms the click flash (<see cref="KsInstrumentPress"/>). It rides along here
+    ///         because this is the one call every instrument button already passes through -
+    ///         XAML ones through their screen's setup, runtime rows through
+    ///         <see cref="KsInstrumentDressing"/> - so no screen can add a button that silently
+    ///         goes without acknowledgement.
+    /// </remarks>
     public static void MakeInstrument(params ContainerButton[] buttons)
     {
         foreach (var button in buttons)
             button.RemoveStyleClass(ContainerButton.StyleClassButton);
+
+        KsInstrumentPress.Attach(buttons);
     }
 
     private static StyleBoxFlat ChromeBox(Color background, Color border, int marginH, int marginV)
@@ -112,10 +121,12 @@ public static class KsInstrumentSheetlet
         var tab = resCache.GetFont(FontPath, size: FontSizeTab);
 
         var tabBox = ChromeBox(KsInstrumentChrome.TabBackground, KsInstrumentChrome.TabBorder, 14, 4);
+        var tabBoxHover = ChromeBox(KsInstrumentChrome.TabHoverBackground, KsInstrumentChrome.TabHoverBorder, 14, 4);
         var tabBoxPressed = ChromeBox(KsInstrumentChrome.TabPressedBackground, KsInstrumentChrome.TabPressedBorder, 14, 4);
         var tabBoxDisabled = ChromeBox(KsInstrumentChrome.TabDisabledBackground, KsInstrumentChrome.TabDisabledBorder, 14, 4);
 
         var actionBox = ChromeBox(KsInstrumentChrome.ActionBackground, KsInstrumentChrome.ActionBorder, 8, 2);
+        var actionBoxHover = ChromeBox(KsInstrumentChrome.ActionHoverBackground, KsInstrumentChrome.ActionHoverBorder, 8, 2);
         var actionBoxPressed = ChromeBox(KsInstrumentChrome.ActionPressedBackground, KsInstrumentChrome.ActionPressedBorder, 8, 2);
         var actionBoxDisabled = ChromeBox(KsInstrumentChrome.ActionDisabledBackground, KsInstrumentChrome.ActionDisabledBorder, 8, 2);
 
@@ -126,20 +137,22 @@ public static class KsInstrumentSheetlet
             Element<Label>().Class(StyleClassSmall).Prop(Label.StylePropertyFont, small),
             Element<Label>().Class(StyleClassTitle).Prop(Label.StylePropertyFont, tab),
 
-            // Tab brightness tiers: pressed > unpressed > disabled.
-            // Hover borrows the pressed box so mousing reads as "this would light
-            // up"; a disabled tab never hovers because the disabled draw mode is
-            // exclusive in ContainerButton.
+            // Tab brightness tiers: pressed > hover > unpressed > disabled. The draw modes are
+            // exclusive in ContainerButton, so each of these is the button's whole appearance in
+            // that state - and hover has to stay dimmer than pressed, or holding the mouse down
+            // changes nothing and the tab never looks clicked.
             Element<ContainerButton>().Class(StyleClassTab)
                 .Prop(ContainerButton.StylePropertyStyleBox, tabBox),
             Element<ContainerButton>().Class(StyleClassTab).Pseudo(ContainerButton.StylePseudoClassPressed)
                 .Prop(ContainerButton.StylePropertyStyleBox, tabBoxPressed),
             Element<ContainerButton>().Class(StyleClassTab).Pseudo(ContainerButton.StylePseudoClassHover)
-                .Prop(ContainerButton.StylePropertyStyleBox, tabBoxPressed),
+                .Prop(ContainerButton.StylePropertyStyleBox, tabBoxHover),
             Element<ContainerButton>().Class(StyleClassTab).Pseudo(ContainerButton.StylePseudoClassDisabled)
                 .Prop(ContainerButton.StylePropertyStyleBox, tabBoxDisabled),
             ButtonLabel(StyleClassTab).Prop(Label.StylePropertyFont, tab),
             ButtonLabel(StyleClassTab).Prop(Label.StylePropertyFontColor, KsInstrumentChrome.TabText),
+            ButtonLabel(StyleClassTab, ContainerButton.StylePseudoClassHover)
+                .Prop(Label.StylePropertyFontColor, KsInstrumentChrome.TabHoverText),
             ButtonLabel(StyleClassTab, ContainerButton.StylePseudoClassPressed)
                 .Prop(Label.StylePropertyFontColor, KsInstrumentChrome.TabPressedText),
             ButtonLabel(StyleClassTab, ContainerButton.StylePseudoClassDisabled)
@@ -150,10 +163,13 @@ public static class KsInstrumentSheetlet
             Element<ContainerButton>().Class(StyleClassAction).Pseudo(ContainerButton.StylePseudoClassPressed)
                 .Prop(ContainerButton.StylePropertyStyleBox, actionBoxPressed),
             Element<ContainerButton>().Class(StyleClassAction).Pseudo(ContainerButton.StylePseudoClassHover)
-                .Prop(ContainerButton.StylePropertyStyleBox, actionBoxPressed),
+                .Prop(ContainerButton.StylePropertyStyleBox, actionBoxHover),
             Element<ContainerButton>().Class(StyleClassAction).Pseudo(ContainerButton.StylePseudoClassDisabled)
                 .Prop(ContainerButton.StylePropertyStyleBox, actionBoxDisabled),
             ButtonLabel(StyleClassAction).Prop(Label.StylePropertyFont, body),
+            ButtonLabel(StyleClassAction).Prop(Label.StylePropertyFontColor, KsInstrumentChrome.ActionText),
+            ButtonLabel(StyleClassAction, ContainerButton.StylePseudoClassPressed)
+                .Prop(Label.StylePropertyFontColor, KsInstrumentChrome.ActionPressedText),
             ButtonLabel(StyleClassAction, ContainerButton.StylePseudoClassDisabled)
                 .Prop(Label.StylePropertyFontColor, KsInstrumentChrome.ActionDisabledText),
         ];

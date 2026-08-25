@@ -3,7 +3,6 @@ using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Events;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
-using Robust.Shared.Map;
 
 namespace Content.Client.Shuttles.BUI;
 
@@ -22,8 +21,6 @@ public sealed partial class ShuttleConsoleBoundUserInterface : BoundUserInterfac
         base.Open();
         _window = this.CreateWindow<ShuttleConsoleWindow>();
 
-        _window.RequestFTL += OnFTLRequest;
-        _window.RequestBeaconFTL += OnFTLBeaconRequest;
         _window.DockRequest += OnDockRequest;
         _window.UndockRequest += OnUndockRequest;
         NfOpen(); // Frontier
@@ -44,24 +41,6 @@ public sealed partial class ShuttleConsoleBoundUserInterface : BoundUserInterfac
         {
             DockEntity = entity,
             TargetDockEntity = target,
-        });
-    }
-
-    private void OnFTLBeaconRequest(NetEntity ent, Angle angle)
-    {
-        SendMessage(new ShuttleConsoleFTLBeaconMessage()
-        {
-            Beacon = ent,
-            Angle = angle,
-        });
-    }
-
-    private void OnFTLRequest(MapCoordinates obj, Angle angle)
-    {
-        SendMessage(new ShuttleConsoleFTLPositionMessage()
-        {
-            Coordinates = obj,
-            Angle = angle,
         });
     }
 

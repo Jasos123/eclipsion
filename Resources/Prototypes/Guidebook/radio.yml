@@ -2,4 +2,4 @@
   id: Radio
   name: guide-entry-radio
   text: "/ServerInfo/_Crescent/Guidebook/Radio.xml"
-  priority: 90
+  priority: 50

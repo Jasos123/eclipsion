@@ -6,8 +6,6 @@
     - type: loadout
       id: LoadoutBeltGenericThin
     - type: loadout
-      id: LoadoutBeltGenericThick
-    - type: loadout
       id: LoadoutBeltWaist
     - type: loadout
       id: LoadoutBeltWaistThin

@@ -34,17 +34,25 @@ public sealed class MailToCommand : IConsoleCommand
             return;
         }
 
-        if (!EntityUid.TryParse(args[0], out var recipientUid))
+        // Eclipsion Start - the id an admin reads off their client is a NetEntity; parsing it straight
+        // into an EntityUid silently resolves to an unrelated entity on the server.
+        if (!NetEntity.TryParse(args[0], out var recipientNet)
+            || !_entityManager.TryGetEntity(recipientNet, out var recipientTarget))
         {
             shell.WriteError(Loc.GetString("shell-entity-uid-must-be-number"));
             return;
         }
 
-        if (!EntityUid.TryParse(args[1], out var containerUid))
+        if (!NetEntity.TryParse(args[1], out var containerNet)
+            || !_entityManager.TryGetEntity(containerNet, out var containerTarget))
         {
             shell.WriteError(Loc.GetString("shell-entity-uid-must-be-number"));
             return;
         }
+
+        var recipientUid = recipientTarget.Value;
+        var containerUid = containerTarget.Value;
+        // Eclipsion End
 
         if (!bool.TryParse(args[2], out var isFragile))
         {

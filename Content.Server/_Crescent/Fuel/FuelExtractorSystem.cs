@@ -53,7 +53,13 @@ public sealed class FuelExtractorSystem : EntitySystem
         ent.Comp.Seep = null;
 
         if (!args.Anchored || args.Detaching)
+        {
+            // Anchor events can occur between extraction cycles. Stop feedback immediately so a detached
+            // extractor cannot keep looking and sounding active until the next scheduled update.
+            _appearance.SetData(ent, FuelExtractorVisuals.Running, false);
+            _ambient.SetAmbience(ent, false);
             return;
+        }
 
         ent.Comp.Seep = FindSeep(ent);
         _popup.PopupEntity(
@@ -156,10 +162,13 @@ public sealed class FuelExtractorSystem : EntitySystem
         }
 
         var stored = FixedPoint2.Min(amount, buffer.AvailableVolume);
-        ent.Comp.BufferFull = buffer.AvailableVolume <= FixedPoint2.Zero;
 
         if (stored > FixedPoint2.Zero)
             _solution.TryAddReagent(soln.Value, seep.Reagent, stored, out stored);
+
+        // TryAddReagent mutates the buffer, so calculate this from the resulting state rather than the
+        // pre-insertion free volume. Otherwise examine text lags a full extraction cycle behind.
+        ent.Comp.BufferFull = buffer.AvailableVolume <= FixedPoint2.Zero;
 
         var overflow = amount - stored;
         if (overflow > FixedPoint2.Zero)
@@ -197,6 +206,7 @@ public sealed class FuelExtractorSystem : EntitySystem
             return;
 
         _solution.TryAddSolution(targetSoln.Value, _solution.SplitSolution(soln.Value, amount));
+        ent.Comp.BufferFull = buffer.AvailableVolume <= FixedPoint2.Zero;
     }
 
     private EntityUid? ResolveSeep(Entity<FuelExtractorComponent> ent)

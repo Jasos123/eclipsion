@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Made by Taleryn for Eclipsion",
+  "size": {
+    "x": 64,
+    "y": 64
+  },
+  "states": [
+    {
+      "name": "self_aegis"
+    },
+    {
+      "name": "armor_weave"
+    },
+    {
+      "name": "aegis_dome"
+    }
+  ]
+}

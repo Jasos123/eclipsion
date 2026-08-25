@@ -113,6 +113,10 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
+
+        // Crescent: grid impacts are resolved here rather than inside StartCollideEvent, see ShuttleSystem.Impact.
+        UpdateImpact();
+
         accumulator += frameTime;
         if (accumulator >= 1f)
         {

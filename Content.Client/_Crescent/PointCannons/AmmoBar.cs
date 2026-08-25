@@ -1,5 +1,7 @@
 using System.Numerics;
 using Content.Client.Stylesheets;
+using Content.Client._KS14.UI; // KS14
+using Robust.Client.Graphics; // KS14
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Label = Robust.Client.UserInterface.Controls.Label;
@@ -74,5 +76,33 @@ public sealed class AmmoBar : Control
                 new Control { MinSize = new Vector2(5, 0) },
             }
         });
+    }
+
+    /// <summary>
+    ///     KS14: repaints the bar in the instrument look - flat bordered trough, filled block,
+    ///         VT323 count. Cosmetic only: the values, their clamping and the control's layout
+    ///         are untouched, and a bar this is never called on stays vanilla.
+    /// </summary>
+    public void KsMakeInstrument(KsInstrumentPalette palette)
+    {
+        _bar.BackgroundStyleBoxOverride = new StyleBoxFlat
+        {
+            BackgroundColor = palette.Background,
+            BorderColor = palette.AccentDim,
+            BorderThickness = new Thickness(1),
+        };
+
+        _bar.ForegroundStyleBoxOverride = new StyleBoxFlat
+        {
+            BackgroundColor = palette.AccentDim,
+            BorderColor = palette.Accent,
+            BorderThickness = new Thickness(1),
+        };
+
+        // The count sits on top of the fill, so it takes the bright text weight to stay readable
+        // over both halves of the trough.
+        _label.RemoveStyleClass(StyleNano.StyleClassItemStatus);
+        _label.AddStyleClass(KsInstrumentSheetlet.StyleClassSmall);
+        _label.FontColorOverride = palette.Text;
     }
 }

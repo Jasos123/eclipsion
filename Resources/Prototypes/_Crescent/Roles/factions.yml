@@ -95,10 +95,10 @@
     Cyberdawn Technologies and the Shipbreaker Astronautics Workers Union. It is anti-Shinohara without being
     anti-capitalist: its members oppose monopoly because they intend to remain the people making the money.
 
-    The four jointly choose a Ringleader with final authority over Federation-wide war, diplomacy, territorial claims,
+    The four jointly choose an Administrator with final authority over Federation-wide war, diplomacy, territorial claims,
     common infrastructure and major joint contracts. Each organization retains its own leadership, property and culture.
     Members may compete, bargain hard and keep proprietary information. They may not betray accepted joint operations or
-    ignore a valid Ringleader order while claiming the benefits of the Federation charter.
+    ignore a valid Administrator order while claiming the benefits of the Federation charter.
   color: "#9FED58"
   weight: 5
   enabled: true
@@ -187,7 +187,7 @@
     making public accounts and resistance to bribery central to their professional culture.
 
     The CMM broke with the Mandate rather than enforce Imperial claims over the communities that funded it. Imperial
-    forces later destroyed Analliesse, its mobile headquarters and fleet base. Survivors carried Minutemen law to Gliess
+    forces later destroyed Analiesse, its mobile headquarters and fleet base. Survivors carried Minutemen law to Gliess
     Santo, where the modern Sheriff and Deputies inherit its local jurisdiction and civilian-protection ideals.
   color: "#9FED58"
   weight: 1

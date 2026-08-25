@@ -121,6 +121,18 @@
   - RadarConsoleCircuitboard
 
 - type: technology
+  id: NoosphericDampenerElectronics
+  name: research-technology-electronics-dampener
+  icon:
+    sprite: Clothing/Belt/generic_thick.rsi
+    state: icon
+  discipline: Electronics
+  tier: 2
+  cost: 12000
+  recipeUnlocks:
+  - ClothingBeltShieldElectronics
+
+- type: technology
   id: AdvancedPartsElectronics
   name: research-technology-advanced-parts
   icon:

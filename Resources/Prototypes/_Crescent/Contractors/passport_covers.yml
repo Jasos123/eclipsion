@@ -1,0 +1,62 @@
+# Bindings a passport can be printed in. The cover is cosmetic only - it never touches the
+# issuing registry's record - so rebinding one is a forgery the checker machine can still expose.
+
+- type: passportCover
+  id: PassportCoverImperial
+  nameKey: passport-cover-imperial
+  state: passport_sol
+  priority: 0
+
+- type: passportCover
+  id: PassportCoverUnion
+  nameKey: passport-cover-union
+  state: passport_qiimaeru
+  priority: 1
+
+- type: passportCover
+  id: PassportCoverAmerican
+  nameKey: passport-cover-american
+  state: passport_nederlandic
+  priority: 2
+
+- type: passportCover
+  id: PassportCoverClarizian
+  nameKey: passport-cover-clarizian
+  state: passport_elyran
+  priority: 3
+
+- type: passportCover
+  id: PassportCoverCoalition
+  nameKey: passport-cover-coalition
+  state: passport_adhomai
+  priority: 4
+
+- type: passportCover
+  id: PassportCoverAuthority
+  nameKey: passport-cover-authority
+  state: passport_valyrian
+  priority: 5
+
+# Legacy bindings belonging to no current polity. Kept so documents printed in them still render,
+# but never offered as a rebinding target.
+
+- type: passportCover
+  id: PassportCoverBiesel
+  nameKey: passport-cover-biesel
+  state: passport_biesel
+  selectable: false
+  priority: 100
+
+- type: passportCover
+  id: PassportCoverIzweski
+  nameKey: passport-cover-izweski
+  state: passport_izweski
+  selectable: false
+  priority: 101
+
+- type: passportCover
+  id: PassportCoverGoldenDeep
+  nameKey: passport-cover-goldendeep
+  state: passport_goldendeep
+  selectable: false
+  priority: 102

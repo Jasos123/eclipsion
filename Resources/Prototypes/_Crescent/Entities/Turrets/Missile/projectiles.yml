@@ -16,8 +16,8 @@
     ignoreWeaponGrid: true
     damage:
       types:
-        Structural: 220
-        Blunt: 30
+        Structural: 280
+        Blunt: 40
   - type: TimedDespawn
     lifetime: 12 # 900 m at 75 m/s
   - type: Sprite
@@ -27,10 +27,10 @@
   - type: ExplodeOnTrigger
   - type: Explosive
     explosionType: Default
-    maxIntensity: 100
-    intensitySlope: 50
-    totalIntensity: 450
-    maxTileBreak: 1
+    maxIntensity: 50
+    intensitySlope: 25
+    totalIntensity: 700
+    maxTileBreak: 2
   - type: PointLight
     radius: 3.5
     color: orange
@@ -40,16 +40,15 @@
     color: Red
   - type: ProximityFuseTarget
   - type: HeatSeeking
-    rotationSpeed: 16
-    acceleration: 45
-    topSpeed: 85
+    rotationSpeed: 18 # fighter killer for security ships
+    acceleration: 120
+    topSpeed: 75
     fieldOfView: 30
     defaultSeekingRange: 800
     guidanceAlgorithm: PredictiveGuidance
-    weaveAmplitude: 16
-    weaveFrequency: 0.5
-    weaveFadeDistance: 220
-    pincer: true
+    weaveAmplitude: 10
+    weaveFrequency: 0.55
+    weaveFadeDistance: 180
   - type: Fixtures
     fixtures:
       projectile:
@@ -127,7 +126,6 @@
     weaveAmplitude: 7
     weaveFrequency: 0.45
     weaveFadeDistance: 200
-    pincer: true
   - type: Fixtures
     fixtures:
       projectile:
@@ -231,7 +229,6 @@
     weaveAmplitude: 12
     weaveFrequency: 0.4
     weaveFadeDistance: 300
-    pincer: true
 
 - type: entity
   id: AzimuthRocketProjectileGorlex
@@ -273,7 +270,6 @@
     weaveAmplitude: 10
     weaveFrequency: 0.35
     weaveFadeDistance: 350
-    pincer: true
 
 - type: entity
   id: AzimuthRocketProjectileNCWL
@@ -315,7 +311,6 @@
     weaveAmplitude: 10
     weaveFrequency: 0.4
     weaveFadeDistance: 350
-    pincer: true
 
 - type: entity
   id: AzimuthRocketProjectileAdvanced # ratgore - removed from the game
@@ -407,7 +402,6 @@
     weaveAmplitude: 12
     weaveFrequency: 0.3
     weaveFadeDistance: 450
-    pincer: true
   - type: Fixtures
     fixtures:
       projectile:
@@ -484,7 +478,6 @@
     weaveAmplitude: 10
     weaveFrequency: 0.28
     weaveFadeDistance: 450
-    pincer: true
   - type: Fixtures
     fixtures:
       projectile:
@@ -561,7 +554,6 @@
     weaveAmplitude: 8
     weaveFrequency: 0.25
     weaveFadeDistance: 500
-    pincer: true
   - type: Fixtures
     fixtures:
       projectile:
@@ -639,7 +631,6 @@
     weaveAmplitude: 10
     weaveFrequency: 0.2
     weaveFadeDistance: 600
-    pincer: true
   - type: Fixtures
     fixtures:
       projectile:
@@ -716,7 +707,6 @@
     weaveAmplitude: 10
     weaveFrequency: 0.22
     weaveFadeDistance: 650
-    pincer: true
   - type: Fixtures
     fixtures:
       projectile:
@@ -796,7 +786,6 @@
     weaveAmplitude: 6
     weaveFrequency: 0.12
     weaveFadeDistance: 900
-    pincer: true
   - type: Fixtures
     fixtures:
       projectile:
@@ -842,7 +831,7 @@
   - type: Projectile
     damage:
       types:
-        Structural: 260
+        Structural: 125
         Blunt: 40
   - type: TimedDespawn
     lifetime: 25 #1250m + Lock on = 1650m
@@ -853,9 +842,9 @@
   - type: ExplodeOnTrigger
   - type: Explosive
     explosionType: Default
-    maxIntensity: 120
-    intensitySlope: 60
-    totalIntensity: 550
+    maxIntensity: 100
+    intensitySlope: 50
+    totalIntensity: 250
     maxTileBreak: 1
   - type: PointLight
     radius: 3.5
@@ -875,7 +864,6 @@
     weaveAmplitude: 16
     weaveFrequency: 0.75
     weaveFadeDistance: 150
-    pincer: true
   - type: Fixtures
     fixtures:
       projectile:

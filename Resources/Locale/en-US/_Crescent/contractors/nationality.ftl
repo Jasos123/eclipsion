@@ -12,7 +12,7 @@ nationality_name_clarizian = Aurevienne Diaspora
 nationality_description_clarizian = Communities descended from independent Vaucelles and its Aurevienne court and industrial culture. After the Workers' Rising transformed Vaucelles into Chengridz, refugees, families, archives, and expatriate settlements carried that identity under many new flags.
 
 nationality_name_coalition = Taypani Free Companies Federation
-nationality_description_coalition = GSC, Interdyne, Cyberdawn, and SAW joined under a Federation charter to resist Shinohara market absorption. Each member keeps its internal leadership while the jointly chosen Ringleader commands Federation-wide matters.
+nationality_description_coalition = GSC, Interdyne, Cyberdawn, and SAW joined under a Federation charter to resist Shinohara market absorption. Each member keeps its internal leadership while the jointly chosen Administrator commands Federation-wide matters.
 
 # The Authority prototype ID is retained for character compatibility; the obsolete Authoritat is no longer canon.
 nationality_name_authority = Crown Domain Service

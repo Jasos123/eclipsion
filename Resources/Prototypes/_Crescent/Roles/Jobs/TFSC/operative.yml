@@ -23,14 +23,14 @@
   requireAdminNotify: false
   icon: "JobIconSyndieOperative"
   chatNameColor: "#264180"
-  supervisors: You answer to Cyberdawn's Intelligence Officer and to valid Ringleader decisions on Federation-wide matters.
+  supervisors: You answer to the Cyberdawn Supervisor and to valid Administrator decisions on Federation-wide matters.
   canBeAntag: false
   requirements:
     - !type:CharacterSpeciesRequirement
       inverted: true
       species:
         - Voidborn
-        - Skeleton # TFSC command only
+        - Skeleton # Restricted to selected TFSC roles, including Gorlex Infanteer.
     - !type:CharacterOverallTimeRequirement
       min: 0
     - !type:FactionRequirement
