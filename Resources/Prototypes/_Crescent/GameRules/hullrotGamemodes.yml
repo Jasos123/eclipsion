@@ -456,6 +456,8 @@
         gameMapID: TribalHideout
         posX: 4000
         posY: 4000
+        randomOffsetX: 1500
+        randomOffsetY: 1500
         IFFColor: "#9FED58"
         IFFFaction: TAP
       ImperialHaulerWreck:
