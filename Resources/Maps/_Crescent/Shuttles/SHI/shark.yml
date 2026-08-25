@@ -4879,7 +4879,7 @@ entities:
     - type: Transform
       parent: 1
       pos: -2.5113854,0.497622
-- proto: PlushieSpaceLizard
+- proto: WarpPointShip
   entities:
   - uid: 544
     components:

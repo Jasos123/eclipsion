@@ -4,7 +4,7 @@ meta:
   engineVersion: 288.1.0
   forkId: ""
   forkVersion: ""
-  time: 08/25/2026 14:59:15
+  time: 08/25/2026 16:30:28
   entityCount: 438
 maps: []
 grids:
@@ -207,6 +207,9 @@ entities:
             335: 4,-8
             349: -2,1
             355: -7,-8
+            379: 4,-8
+            393: -2,1
+            399: -7,-8
         - node:
             zIndex: 1
             id: LatticeCornerNW
@@ -232,6 +235,9 @@ entities:
             330: 2,1
             341: 7,-8
             364: -4,-8
+            374: 2,1
+            385: 7,-8
+            408: -4,-8
         - node:
             zIndex: 1
             id: LatticeCornerSE
@@ -266,6 +272,10 @@ entities:
             352: -1,3
             358: -7,-4
             361: -6,-3
+            391: -2,1
+            396: -1,3
+            402: -7,-4
+            405: -6,-3
         - node:
             zIndex: 1
             id: LatticeCornerSW
@@ -300,6 +310,10 @@ entities:
             329: 2,1
             338: 6,-3
             344: 7,-4
+            369: 1,3
+            373: 2,1
+            382: 6,-3
+            388: 7,-4
         - node:
             id: LatticeEdgeE
           decals:
@@ -369,6 +383,14 @@ entities:
             357: -7,-4
             360: -6,-3
             365: -3,-2
+            375: 3,-2
+            377: 4,-8
+            390: -2,1
+            395: -1,3
+            397: -7,-8
+            401: -7,-4
+            404: -6,-3
+            409: -3,-2
         - node:
             id: LatticeEdgeN
           decals:
@@ -414,6 +436,12 @@ entities:
             348: -2,1
             354: -7,-8
             362: -4,-8
+            371: 2,1
+            378: 4,-8
+            383: 7,-8
+            392: -2,1
+            398: -7,-8
+            406: -4,-8
         - node:
             id: LatticeEdgeS
           decals:
@@ -477,6 +505,14 @@ entities:
             350: -1,3
             356: -7,-4
             359: -6,-3
+            367: 1,3
+            370: 2,1
+            380: 6,-3
+            386: 7,-4
+            389: -2,1
+            394: -1,3
+            400: -7,-4
+            403: -6,-3
         - node:
             id: LatticeEdgeW
           decals:
@@ -546,6 +582,14 @@ entities:
             343: 7,-4
             363: -4,-8
             366: -3,-2
+            368: 1,3
+            372: 2,1
+            376: 3,-2
+            381: 6,-3
+            384: 7,-8
+            387: 7,-4
+            407: -4,-8
+            410: -3,-2
         - node:
             id: WarnCornerGreyscaleNE
             color: '#52B4E9FF'
@@ -3334,7 +3378,7 @@ entities:
     - type: Transform
       parent: 1
       pos: -2.5,-4.5
-- proto: WarpPoint
+- proto: WarpPointShip
   entities:
   - uid: 434
     components:
