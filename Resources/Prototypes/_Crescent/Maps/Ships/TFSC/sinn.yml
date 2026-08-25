@@ -6,7 +6,9 @@
   name: GSC Sinn
   description: |
     An up-armed Syndicate destroyer.
-    LOADOUT: 4x 35mm 'Scout' Autocannon, 2x Gorlex 60mm 'Crossfire' Rocket Pod, 1x 300cc 'Bolter' Plasma Caster
+    LOADOUT: 2x Gorlex 60mm 'Crossfire' Rocket Pod, 1x 300cc 'Bolter' Plasma Caster, 4x 35mm 'Scout' Autocannon
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 73000
   category: Medium
   group: None

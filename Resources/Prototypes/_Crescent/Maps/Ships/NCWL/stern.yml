@@ -4,7 +4,11 @@
 - type: vessel
   id: Stern
   name: NCWL Stern
-  description: A communard heavy battleship.
+  description: |
+    A communard heavy battleship.
+    LOADOUT: 2x 95mm 'Arbalest' Medium Missile System, 2x 350cc 'Glare' Burst Laser, 2x 300cc 'Bolter' Plasma Caster, 1x 300mm 'Leviathan' Siege Battery, 2x 120mm 'Anvil' Artillery, 2x 150cc 'Retribution' Pulse Laser
+    SHIELD: Errant
+    SPEED: 20 m/s
   price: 350000
   category: Large
   group: None

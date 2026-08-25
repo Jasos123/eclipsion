@@ -6,8 +6,9 @@
   name: TS Sentinel
   description: |
     A relatively light corvette used to harass enemy with its short range plasma guns.
-    LOADOUT: 1x 300cc 'Bolter' plasma caster, 2x 200cc 'Starburst' plasma gatlings
-    MINIMUM CREW: 1x Pilot
+    LOADOUT: 1x 90mm 'Resolute' Assault Battery, 2x 200cc 'Starburst' Plasma Gatling
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 45000
   category: Small
   group: None

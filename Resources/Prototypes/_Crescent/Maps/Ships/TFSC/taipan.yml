@@ -6,7 +6,9 @@
   name: CD Taipan
   description: |
     A multipurpose, armed corvette.
-    LOADOUT: 2x 350cc 'Glare' Burst Laser, 1x 48mm 'Shortbow' SRM
+    LOADOUT: 1x 48mm 'Shortbow' SRM, 2x 350cc 'Glare' Burst Laser
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 39000
   category: Medium
   group: None

@@ -4,7 +4,11 @@
 - type: vessel
   id: Matabele
   name: IPM Matabele
-  description: A stealth-capable ambulance pod.
+  description: |
+    A stealth-capable ambulance pod.
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 35 m/s
   price: 21000
   category: Small
   group: None

@@ -1,7 +1,11 @@
 - type: vessel
   id: Caravan
   name: TAP Caravan
-  description: A miniscule culture trading pod.
+  description: |
+    A miniscule culture trading pod.
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 35 m/s
   price: 7500
   category: Small
   group: None

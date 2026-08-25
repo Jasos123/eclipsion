@@ -1,7 +1,11 @@
 - type: vessel
   id: Templar
   name: TS Templar
-  description: A frontliner assault corvette.
+  description: |
+    A frontliner assault corvette.
+    LOADOUT: 2x SHI 43mm "Dasher" ballistic slugthrower, 8x 20mm PTA "Operator" gatling turret
+    SHIELD: Absent
+    SPEED: 20 m/s
   price: 90000
   category: Small
   group: None

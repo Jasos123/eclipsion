@@ -1,7 +1,11 @@
 - type: vessel
   id: Baniu
   name: ICM Baniu
-  description: The ICM "Baniu" is an entry-level mining vessel equipped with a single drill for automated resource extraction.
+  description: |
+    The ICM "Baniu" is an entry-level mining vessel equipped with a single drill for automated resource extraction.
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 20 m/s
   price: 20000
   category: Small
   group: Civilian

@@ -1,7 +1,11 @@
 - type: vessel
   id: Nazaar
   name: SHI Nazaar
-  description: A CorpSec patrol gunboat.
+  description: |
+    A CorpSec patrol gunboat.
+    LOADOUT: 2x 200cc 'Starburst' Plasma Gatling
+    SHIELD: Absent
+    SPEED: 35 m/s
   price: 18000
   category: Small
   group: None

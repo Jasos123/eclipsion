@@ -1,7 +1,11 @@
-﻿- type: vessel
+- type: vessel
   id: Hornetsnest
   name: GSC Hornet's Nest
-  description: A Carrier fit for use by Para Military Corporations. A capable vessel for its class.
+  description: |
+    A Carrier fit for use by Para Military Corporations. A capable vessel for its class.
+    LOADOUT: 8x 20mm PTA "Operator" gatling turret
+    SHIELD: Absent
+    SPEED: 20 m/s
   price: 105000
   category: Medium
   group: None

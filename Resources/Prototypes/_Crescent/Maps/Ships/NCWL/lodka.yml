@@ -4,7 +4,11 @@
 - type: vessel
   id: Lodka
   name: NCWL Lodka
-  description: A light communard frigate.
+  description: |
+    A light communard frigate.
+    LOADOUT: 2x 150cc 'Retribution' Pulse Laser, 2x 20mm 'Screamer' Rotary Cannon
+    SHIELD: Absent
+    SPEED: 35 m/s
   price: 30000
   category: Medium
   group: None

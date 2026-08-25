@@ -3,7 +3,11 @@
 - type: vessel
   id: Autoscout
   name: NT Autoscout
-  description: An NT-era autonomous scout ship. Now it's yours.
+  description: |
+    An NT-era autonomous scout ship. Now it's yours.
+    LOADOUT: 2x ballistic turret
+    SHIELD: Absent
+    SPEED: 35 m/s
   price: 45000
   category: Small
   group: None

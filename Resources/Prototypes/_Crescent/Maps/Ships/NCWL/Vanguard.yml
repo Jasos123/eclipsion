@@ -4,7 +4,11 @@
 - type: vessel
   id: Vanguard
   name: NCWL Vanguard
-  description: A communard gunship, sees use primarily as an escort vessel.
+  description: |
+    A communard gunship, sees use primarily as an escort vessel.
+    LOADOUT: 2x 35mm 'Scout' Autocannon
+    SHIELD: Absent
+    SPEED: 35 m/s
   price: 25000
   category: Small
   group: None

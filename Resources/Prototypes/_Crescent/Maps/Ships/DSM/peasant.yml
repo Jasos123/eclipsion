@@ -3,8 +3,9 @@
   name: DSM Peasant
   description: |
     An imperial mining drone, usually seen manned by freeholders and workers in service of their house.
-    LOADOUT: 2x SHI 250c "Exhumer" kinetic Pulser
-    MINIMUM CREW: 1x Miner
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 20000
   category: Small
   group: None

@@ -6,8 +6,9 @@
   name: Pear MKII
   description: |
     The Pear MKII is a combat capable retrofit, made from a wreck of a pear. Its loadout is made out of scavenged ship guns salvaged from derelicts.
-    LOADOUT: 1x 88mm 'Stormreign' Flak Array, 1x 20mm 'Screamer' Rotary Cannon, 3x Fixed Universal Hardpoints
-    MINIMUM CREW: 1x Pilot, 1x Gunner/Loader
+    LOADOUT: 1x 88mm 'Stormreign' Flak Array, 1x 20mm 'Screamer' Rotary Cannon
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 30000
   category: Small
   group: Scrap

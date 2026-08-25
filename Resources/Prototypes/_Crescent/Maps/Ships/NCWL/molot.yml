@@ -4,7 +4,11 @@
 - type: vessel
   id: Molot
   name: NCWL Molot
-  description: A shielded communard bomber.
+  description: |
+    A shielded communard bomber.
+    LOADOUT: 1x 240mm 'Gargoyle' Torpedo Launcher, 2x 20mm 'Screamer' Rotary Cannon
+    SHIELD: Errant
+    SPEED: 30 m/s
   price: 40000
   category: Small
   group: None

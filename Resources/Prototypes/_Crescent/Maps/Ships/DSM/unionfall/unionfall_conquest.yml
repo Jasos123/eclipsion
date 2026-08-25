@@ -1,7 +1,11 @@
 - type: vessel
   id: UnionfallConquest
   name: DSM Conquest
-  description: An ultralight interceptor with an EMP gun and plasma repeater.
+  description: |
+    An ultralight interceptor with an EMP gun and plasma repeater.
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 40 m/s
   price: 18000
   category: Small
   group: None

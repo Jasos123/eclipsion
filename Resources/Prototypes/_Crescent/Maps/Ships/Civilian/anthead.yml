@@ -6,8 +6,9 @@
   name: Anthead
   description: |
     Recycled from the remains of a larger ship's cockpit. The Anthead now serves its second lease on life as an escort ship. It's lacking on-board gravity. But it'll do for any first-time merc. Comes with basic salvage tools.
-    LOADOUT: 2x 20mm 'Screamer' light autocannons
-    MINIMUM CREW: 1x Pilot
+    LOADOUT: 2x 150cc 'Retribution' Pulse Laser
+    SHIELD: Absent
+    SPEED: 25 m/s
   price: 17000
   category: Small
   group: Scrap

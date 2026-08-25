@@ -4,7 +4,11 @@
 - type: vessel
   id: Vachenka
   name: NCWL Vachenka
-  description: A light communard patrol cruiser with front-heavy armaments.
+  description: |
+    A light communard patrol cruiser with front-heavy armaments.
+    LOADOUT: 2x 95mm 'Arbalest' Medium Missile System, 2x 120mm 'Anvil' Artillery, 4x 35mm 'Scout' Autocannon, 2x 20mm 'Screamer' Rotary Cannon
+    SHIELD: Absent
+    SPEED: 20 m/s
   price: 85000
   category: Large
   group: None

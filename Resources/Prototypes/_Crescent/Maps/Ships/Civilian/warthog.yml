@@ -6,7 +6,9 @@
   name: Warthog
   description: |
     A scrap pod put together from welded rods and other bits of waste, cheapest option for when you must escape or get to a location, lacks EVA.
-    MINIMUM CREW: 1x Pilot
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 40 m/s
   price: 6000
   category: Small
   group: Scrap

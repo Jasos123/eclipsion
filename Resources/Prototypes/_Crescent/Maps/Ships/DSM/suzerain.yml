@@ -4,7 +4,11 @@
 - type: vessel
   id: Suzerain
   name: DSM Suzerain
-  description: A robust siege battlecruiser developed as a response to the Stern-class. Fares very well at long range.
+  description: |
+    A robust siege battlecruiser developed as a response to the Stern-class. Fares very well at long range.
+    LOADOUT: 4x 60mm 'Azimuth' Rocket Pod, 4x Navy 350cc 'Absolution' Burst Laser, 1x 300mm 'Leviathan' Siege Battery, 2x 90mm 'Resolute' Assault Battery
+    SHIELD: Bulwark
+    SPEED: 20 m/s
   price: 226750
   category: Large
   group: None

@@ -5,7 +5,9 @@
   name: SAW Lockjaw
   description: |
     An NT-era shuttle repurposed into an armed, personal blockade runner. Takes the 'runner' part literally.
-    LOADOUT: 4x SHI MG-213 Mk. II PDTs, 2x medium 'Lancer' MRM missile systems, 1x SHI 180mm 'Magwell' torpedo launcher, 2x SHI 400c plasma bolt repeaters
+    LOADOUT: 2x medium 'Lancer' MRM missile system, 1x SHI 180mm "Magwell" torpedo launcher, 1x ballistic turret, 4x SHI MG-213 light dual machinegun 20x135mm Mk. II
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 89000
   category: Small
   group: None

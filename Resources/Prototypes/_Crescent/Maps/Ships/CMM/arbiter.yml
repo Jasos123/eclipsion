@@ -6,8 +6,9 @@
   name: TS Arbiter
   description: |
     Minutemen destroyer. Designed to act as a small outpost during extended deployment.
-    LOADOUT: 2x 120mm 'Anvil' Artillery, 6x 35mm 'Scout' Autocannon
-    MINIMUM CREW: 1x Pilot, 1x Gunner, 1x Loader
+    LOADOUT: 2x 120mm 'Anvil' Artillery, 2x 35mm 'Scout' Autocannon, 4x 150cc 'Retribution' Pulse Laser, 2x 50mm 'Striker' Heavy Autocannon
+    SHIELD: Errant
+    SPEED: 20 m/s
   price: 100000
   category: Small
   group: None

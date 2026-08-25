@@ -6,8 +6,9 @@
   name: TS Adjudicator
   description: |
     A very light interceptor used in armed policing actions. No longer in mass production after the disbandment of the CMM, this hull is more expensive to field than the average fighter.
-    LOADOUT: 1x 35mm 'Scout' Autocannon, 1x 60mm 'Azimuth' Rocket Pod
-    MINIMUM CREW: 1x Pilot
+    LOADOUT: 1x 60mm 'Azimuth' Rocket Pod, 1x 35mm 'Scout' Autocannon
+    SHIELD: Absent
+    SPEED: 35 m/s
   price: 22000
   category: Small
   group: None

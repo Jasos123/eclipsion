@@ -4,7 +4,11 @@
 - type: vessel
   id: UnionfallKhopesh
   name: NCWL Khopesh
-  description: An ultralight communard fighter.
+  description: |
+    An ultralight communard fighter.
+    LOADOUT: 2x NT 20mm "Vulcan" machineturret
+    SHIELD: Absent
+    SPEED: 40 m/s
   price: 6000
   category: Small
   group: None

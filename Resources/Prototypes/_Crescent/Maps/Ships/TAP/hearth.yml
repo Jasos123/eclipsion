@@ -4,7 +4,11 @@
 - type: vessel
   id: Hearth
   name: Hearth
-  description: An ultralight interdictor shuttle armed with 2x medium 'Lancer' MRM missile systems and 4x 20mm PTA 'Operator' gatling turrets.
+  description: |
+    An ultralight interdictor shuttle armed with 2x medium 'Lancer' MRM missile systems and 4x 20mm PTA 'Operator' gatling turrets.
+    LOADOUT: 2x medium 'Lancer' MRM missile system, 4x 20mm PTA "Operator" gatling turret
+    SHIELD: Absent
+    SPEED: 6 m/s
   price: 90000
   category: Medium
   group: None

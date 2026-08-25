@@ -4,7 +4,11 @@
 - type: vessel
   id: HornetDrone
   name: NCWL Hornet
-  description: An ultralight fighter drone.
+  description: |
+    An ultralight fighter drone.
+    LOADOUT: 1x 35mm 'Scout' Autocannon
+    SHIELD: Absent
+    SPEED: 45 m/s
   price: 12500
   category: Small
   group: None

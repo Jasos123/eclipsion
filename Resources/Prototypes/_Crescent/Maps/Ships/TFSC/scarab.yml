@@ -6,8 +6,9 @@
   name: SAW Scarab
   description: |
    A big tin can built by a drunk scrapper.
-   LOADOUT: 1x 240mm 'Gargoyle' Torpedo Launcher, 3x 20mm 'Screamer' light carbine repeater cannons
-   MINIMUM CREW: 1x Pilot, 1x Gunner
+    LOADOUT: 1x 240mm 'Gargoyle' Torpedo Launcher, 3x 20mm 'Screamer' Rotary Cannon
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 65000
   category: Medium
   group: None

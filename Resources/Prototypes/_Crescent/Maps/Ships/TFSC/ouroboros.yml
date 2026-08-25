@@ -4,7 +4,11 @@
 - type: vessel
   id: Ouroboros
   name: GSC Ouroboros
-  description: A TFCF stealth carrier operated through Cyberdawn and Gorlex expertise.
+  description: |
+    A TFCF stealth carrier operated through Cyberdawn and Gorlex expertise.
+    LOADOUT: 2x Gorlex 48mm 'Buzzsaw' SRM, 6x 20mm 'Screamer' Rotary Cannon
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 80000 
   category: Medium
   group: None

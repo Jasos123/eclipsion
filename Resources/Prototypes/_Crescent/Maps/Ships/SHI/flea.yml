@@ -1,7 +1,11 @@
 - type: vessel
   id: Flea
   name: SHI Flea
-  description: A refitted Termite, the Flea acts as a stealth boarder pod.
+  description: |
+    A refitted Termite, the Flea acts as a stealth boarder pod.
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 22500
   category: Small
   group: None

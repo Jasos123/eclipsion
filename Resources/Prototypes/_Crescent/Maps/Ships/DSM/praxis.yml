@@ -3,8 +3,9 @@
   name: DSM Praxis
   description: |
     With a miniature MedSci wing, sophisticated artifact extraction tools and a service module fit for long expeditions, these vessels are commonly seen under the employ of journeymen Scribes, or occupied by smaller clades of independent Scribes, who often live in the vessel itself.
-    LOADOUT: 4x SHI 250c "Exhumer" kinetic pulser, 6x 150cc 'Retribution' pulse laser
-    MINIMUM CREW: 1x Captain, 1x Gunner, 1x Scribe Researcher
+    LOADOUT: 6x 150cc 'Retribution' Pulse Laser
+    SHIELD: Errant
+    SPEED: 30 m/s
   price: 125000
   category: Medium
   group: None

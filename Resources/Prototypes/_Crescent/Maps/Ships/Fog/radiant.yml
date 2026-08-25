@@ -4,7 +4,11 @@
 - type: vessel
   id: Radiant
   name: NT Radiant
-  description: The largest autonomous hull NanoTrasen fielded for recurrence-zone recovery and perimeter defense. It is yours now, if you can afford it.
+  description: |
+    The largest autonomous hull NanoTrasen fielded for recurrence-zone recovery and perimeter defense. It is yours now, if you can afford it.
+    LOADOUT: 3x 350c "Compakt" hybrid energy gatling, 2x 800c "Rimward" hybrid plasma blaster, 2x NT 88mm 'Regent' flak-screen turret, 10x ballistic turret
+    SHIELD: Bulwark
+    SPEED: 20 m/s
   price: 1000000 
   category: Large
   group: None

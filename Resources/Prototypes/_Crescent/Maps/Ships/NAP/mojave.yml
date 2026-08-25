@@ -6,9 +6,10 @@
   name: NAP Mojave
   description: |
     A retrofitted cargoship, the Mojave now serves the NAP as a combat freighter, delivering goods with an armament that'll make any pirate think twice.
-    LOADOUT: 4x 35mm 'Scout' Autocannons, 6x 20mm 'Screamer' Rotary Cannons
-    MINIMUM CREW: 1x Pilot, 1x Gunner, 2x Crew/Loaders
     EVENT ONLY, NOT MADE FOR FREEPLAY
+    LOADOUT: 4x 35mm 'Scout' Autocannon, 6x 20mm 'Screamer' Rotary Cannon
+    SHIELD: Errant
+    SPEED: 20 m/s
   price: 200000
   category: Large
   group: None

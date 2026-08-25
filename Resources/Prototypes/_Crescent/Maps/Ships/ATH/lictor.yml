@@ -4,7 +4,11 @@
 - type: vessel
   id: Lictor
   name: ATH Lictor
-  description: A trimmed down Archon, heavily refitted and upgraded by the 43rd for independent operations within Sector Crescent.
+  description: |
+    A trimmed down Archon, heavily refitted and upgraded by the 43rd for independent operations within Sector Crescent.
+    LOADOUT: 6x 90mm "Solaris" antimatter blaster
+    SHIELD: Bulwark
+    SPEED: 20 m/s
   price: 75000
   category: Medium
   group: None

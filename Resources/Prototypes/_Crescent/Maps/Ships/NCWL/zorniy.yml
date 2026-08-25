@@ -3,7 +3,11 @@
 - type: vessel
   id: Zorniy
   name: NCWL Zorniy
-  description: A light communard bomber.
+  description: |
+    A light communard bomber.
+    LOADOUT: 2x 48mm 'Shortbow' SRM
+    SHIELD: Absent
+    SPEED: 20 m/s
   price: 25000
   category: Small
   group: None

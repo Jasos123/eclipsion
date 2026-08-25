@@ -6,8 +6,9 @@
   name: SAW Geode
   description: |
     A lightly shielded, broadside destroyer.
-    LOADOUT: 4x 20mm 'Screamer' light carbine repeater cannons, 4x 35mm 'Scout' autocannons
-    MINIMUM CREW: 1x Pilot, 1x Gunner
+    LOADOUT: 4x 35mm 'Scout' Autocannon, 4x 200cc 'Starburst' Plasma Gatling
+    SHIELD: Errant
+    SPEED: 20 m/s
   price: 60000
   category: Medium
   group: None

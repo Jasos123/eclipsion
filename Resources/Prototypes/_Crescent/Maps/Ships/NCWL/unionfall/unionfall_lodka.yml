@@ -4,7 +4,11 @@
 - type: vessel
   id: UnionfallLodka
   name: NCWL Lodka
-  description: A communard armored transport ship.
+  description: |
+    A communard armored transport ship.
+    LOADOUT: 2x SHI MG-213 light dual machinegun 20x135mm, 2x 20mm PTA "Operator" gatling turret
+    SHIELD: Absent
+    SPEED: 32 m/s
   price: 25000
   category: Small
   group: None

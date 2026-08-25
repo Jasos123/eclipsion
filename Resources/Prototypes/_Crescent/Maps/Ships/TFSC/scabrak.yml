@@ -6,8 +6,9 @@
   name: SAW Scabrak
   description: |
     Medium-sized mining barge
-    LOADOUT: 4x 250c Exhumer mining guns, 4x 20mm 'Screamer' light carbine repeater cannons
-    MINIMUM CREW: 1x Pilot
+    LOADOUT: 4x 150cc 'Retribution' Pulse Laser
+    SHIELD: Absent
+    SPEED: 20 m/s
   price: 60000
   category: Medium
   group: None
