@@ -11,6 +11,7 @@ using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Slippery;
 using Robust.Shared.Containers;
+using Robust.Shared.Timing;
 
 namespace Content.Shared.Clothing;
 
@@ -23,12 +24,16 @@ public sealed class SharedMagbootsSystem : EntitySystem
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly SharedGravitySystem _gravity = default!;
     [Dependency] private readonly SharedItemSystem _item = default!;
+    [Dependency] private readonly SharedJetpackSystem _jetpack = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<MagbootsComponent, ItemToggledEvent>(OnToggled);
+        // Crescent: magboots and jetpacks are mutually exclusive, see OnJetpackUserStartup.
+        SubscribeLocalEvent<JetpackUserComponent, ComponentStartup>(OnJetpackUserStartup);
         SubscribeLocalEvent<MagbootsComponent, ClothingGotEquippedEvent>(OnGotEquipped);
         SubscribeLocalEvent<MagbootsComponent, ClothingGotUnequippedEvent>(OnGotUnequipped);
         SubscribeLocalEvent<MagbootsComponent, IsWeightlessEvent>(OnIsWeightless);
@@ -45,7 +50,15 @@ public sealed class SharedMagbootsSystem : EntitySystem
         if (_container.TryGetContainingContainer((uid, null, null), out var container) &&
             _inventory.TryGetSlotEntity(container.Owner, comp.Slot, out var worn)
             && uid == worn)
+        {
             UpdateMagbootEffects(container.Owner, ent, args.Activated);
+
+            // Crescent: turning the magnets on is how you ask to stand still, so cut the thrusters.
+            // Otherwise the jetpack keeps you weightless (see OnIsWeightless) and the boots do nothing at all,
+            // which reads as "my magboots are broken".
+            if (args.Activated)
+                DisableJetpack(container.Owner);
+        }
 
         if (comp.ChangeClothingVisuals)
         {
@@ -53,6 +66,39 @@ public sealed class SharedMagbootsSystem : EntitySystem
             _item.SetHeldPrefix(ent, prefix);
             _clothing.SetEquippedPrefix(ent, prefix);
         }
+    }
+
+    /// <summary>
+    /// Crescent: the other half of the magboot/jetpack interlock - lighting the thrusters releases the magnets.
+    /// Whichever the player toggled last wins.
+    /// </summary>
+    private void OnJetpackUserStartup(Entity<JetpackUserComponent> ent, ref ComponentStartup args)
+    {
+        // The component is networked, so this also fires on the client while it applies server state.
+        // Toggling items from inside state application would fight the very state being applied.
+        if (_timing.ApplyingState)
+            return;
+
+        var enumerator = _inventory.GetSlotEnumerator(ent.Owner);
+        while (enumerator.MoveNext(out var slot))
+        {
+            if (slot.ContainedEntity is not { } worn)
+                continue;
+
+            if (!TryComp<MagbootsComponent>(worn, out var boots) || !boots.Active)
+                continue;
+
+            _toggle.TryDeactivate(worn, ent.Owner);
+        }
+    }
+
+    private void DisableJetpack(EntityUid user)
+    {
+        if (!TryComp<JetpackUserComponent>(user, out var jetpackUser))
+            return;
+
+        if (TryComp<JetpackComponent>(jetpackUser.Jetpack, out var jetpack))
+            _jetpack.SetEnabled(jetpackUser.Jetpack, jetpack, false, user);
     }
 
     private void OnRefreshMoveSpeed(EntityUid uid, MagbootsComponent component, ref InventoryRelayedEvent<RefreshMovementSpeedModifiersEvent> args)

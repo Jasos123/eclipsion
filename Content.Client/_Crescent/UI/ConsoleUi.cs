@@ -30,22 +30,6 @@ public static class ConsolePalette
 public static class ConsoleUiExt
 {
     /// <summary>
-    ///     Sets a line edit's text unless the player is typing in it right now.
-    /// </summary>
-    /// <remarks>
-    ///     Row reuse alone does not save an editable field: a console that refreshes every three seconds would
-    ///     still overwrite a half-entered figure with the server's value. Skipping the write while the field
-    ///     holds focus is what actually makes these boxes usable.
-    /// </remarks>
-    public static void SetTextIfIdle(this LineEdit edit, string text)
-    {
-        if (edit.HasKeyboardFocus() || edit.Text == text)
-            return;
-
-        edit.Text = text;
-    }
-
-    /// <summary>
     ///     Sets a label's text only when it actually changed - assigning it invalidates layout, which on a
     ///     shared window costs every other panel a relayout for nothing.
     /// </summary>

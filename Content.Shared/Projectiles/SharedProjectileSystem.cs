@@ -403,6 +403,24 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         return null;
     }
 
+    /// <summary>
+    /// Whether a ship weapon projectile should pass straight through another one fired from the same shuttle.
+    /// A saturation launcher puts its whole salvo out of one muzzle, so without this the rockets detonate on each
+    /// other before they ever reach the target - the tighter the burst, the sooner they do it.
+    /// </summary>
+    public bool IsFriendlyShipProjectile(EntityUid uid, ProjectileComponent projectile, EntityUid other)
+    {
+        if (!HasComp<ShipWeaponProjectileComponent>(uid) || !HasComp<ShipWeaponProjectileComponent>(other))
+            return false;
+
+        if (!TryComp<ProjectileComponent>(other, out var otherProjectile))
+            return false;
+
+        var ourGrid = GetProjectileSourceGrid(projectile);
+
+        return ourGrid != null && ourGrid == GetProjectileSourceGrid(otherProjectile);
+    }
+
     public void SetShooter(EntityUid id, ProjectileComponent component, EntityUid? shooterId)
     {
         if (component.Shooter == shooterId)
@@ -440,6 +458,10 @@ public abstract partial class SharedProjectileSystem : EntitySystem
     {
         // This is so entities that shouldn't get a collision are ignored.
         if (!args.targetFixture.Hard || component.DamagedEntity || component is { Weapon: null, OnlyCollideWhenShot: true })
+            return;
+
+        // PreventCollideEvent never runs for phase-prevention hits, so the same-shuttle check has to be repeated here.
+        if (IsFriendlyShipProjectile(uid, component, args.hitEntity))
             return;
 
         ProjectileCollide((uid, component, args.selfPhys), args.hitEntity);

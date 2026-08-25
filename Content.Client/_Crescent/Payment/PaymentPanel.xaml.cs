@@ -127,7 +127,7 @@ public sealed partial class PaymentPanel : BoxContainer
         private readonly Label _name;
         private readonly Label _job;
         private readonly Label _status;
-        private readonly LineEdit _salary;
+        private readonly ConsoleValueEdit _salary;
         private readonly MonotoneButton _set;
         private readonly MonotoneButton _clear;
         private readonly MonotoneButton _bonus;
@@ -165,11 +165,15 @@ public sealed partial class PaymentPanel : BoxContainer
                 MinWidth = 90,
             };
 
-            _salary = new LineEdit
+            _salary = new ConsoleValueEdit
             {
                 MinWidth = 90,
                 PlaceHolder = Loc.GetString("payment-console-salary-placeholder"),
             };
+
+            // Enter applies the figure. Without it the box swallowed the key and the typed salary sat
+            // there unsent until the operator noticed it had never taken.
+            _salary.OnTextEntered += _ => ApplySalary();
 
             // Joined into one control strip so the three actions read as a single unit per member.
             _set = new MonotoneButton
@@ -178,18 +182,7 @@ public sealed partial class PaymentPanel : BoxContainer
                 Shape = MonotoneButtonShape.OpenRight,
                 MinWidth = 70,
             };
-            _set.OnPressed += _ =>
-            {
-                if (!int.TryParse(_salary.Text, out var salary) || salary < 0)
-                    return;
-
-                // Mirror the server-side cap here so an over-limit entry snaps back visibly instead of
-                // being silently trimmed after the round-trip.
-                salary = Math.Min(salary, PaymentConsole.MaxSalaryPerHour);
-                _salary.Text = salary.ToString();
-
-                _owner.OnSetSalary?.Invoke(_member.User, salary);
-            };
+            _set.OnPressed += _ => ApplySalary();
 
             _clear = new MonotoneButton
             {
@@ -197,7 +190,13 @@ public sealed partial class PaymentPanel : BoxContainer
                 Shape = MonotoneButtonShape.OpenBoth,
                 MinWidth = 70,
             };
-            _clear.OnPressed += _ => _owner.OnClearSalary?.Invoke(_member.User);
+            _clear.OnPressed += _ =>
+            {
+                // Drops whatever was typed as well: the operator asked for no salary, so a pending
+                // figure in the box is not something to keep holding onto.
+                _salary.SetSubmitted("0");
+                _owner.OnClearSalary?.Invoke(_member.User);
+            };
 
             _bonus = new MonotoneButton
             {
@@ -226,6 +225,27 @@ public sealed partial class PaymentPanel : BoxContainer
             AddChild(inner);
         }
 
+        /// <summary>
+        ///     Sends whatever is in the salary box and puts the box back in step with what was sent.
+        /// </summary>
+        /// <remarks>
+        ///     Something that is not a number is left exactly where the operator typed it, still tinted as
+        ///     pending. Overwriting it with the standing salary would land them right back in the bug this
+        ///     console was reported for - type a figure, watch it turn into 0 - only this time deserved.
+        /// </remarks>
+        private void ApplySalary()
+        {
+            if (!int.TryParse(_salary.Text, out var salary) || salary < 0)
+                return;
+
+            // Mirror the server-side cap here so an over-limit entry snaps back visibly instead of
+            // being silently trimmed after the round-trip.
+            salary = Math.Min(salary, PaymentConsole.MaxSalaryPerHour);
+            _salary.SetSubmitted(salary.ToString());
+
+            _owner.OnSetSalary?.Invoke(_member.User, salary);
+        }
+
         public void Update(PaymentMemberEntry member)
         {
             _member = member;
@@ -250,9 +270,12 @@ public sealed partial class PaymentPanel : BoxContainer
                     ? null
                     : Loc.GetString("payment-console-status-unpayable-tooltip");
 
-            _salary.SetTextIfIdle(member.SalaryPerHour.ToString());
+            _salary.SetValue(member.SalaryPerHour.ToString());
 
-            _clear.SetDisabled(member.SalaryPerHour <= 0, Loc.GetString("payment-console-no-salary-tooltip"));
+            // Also the way out of a pending edit: with no salary set there is nothing else on the row
+            // that drops a figure the operator has thought better of.
+            _clear.SetDisabled(member.SalaryPerHour <= 0 && !_salary.Edited,
+                Loc.GetString("payment-console-no-salary-tooltip"));
             _bonus.SetDisabled(!member.Payable, Loc.GetString("payment-console-not-payable-tooltip"));
         }
     }

@@ -64,7 +64,7 @@
   parent: ClothingNeckWearableCamera
   id: ClothingNeckWearableCameraInterdyne
   name: interdyne wearable surveying port
-  description: the coordinator's eyes on extraction operations.
+  description: The Interdyne supervisor's eyes on extraction operations.
   components:
     - type: DeviceNetwork
       receiveFrequencyId: SurveillanceCameraInterdyneIPM

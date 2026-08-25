@@ -4,6 +4,7 @@
   id: StockMarketCartridge
   components:
   - type: StockMarketCartridge
+  - type: OwnerLockedProgram # Eclipsion - only the PDA's owner may trade from it
   - type: Sprite
     sprite: Objects/Devices/cartridge.rsi
     state: cart-y

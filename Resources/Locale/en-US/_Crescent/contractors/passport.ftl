@@ -54,3 +54,17 @@ coalition_view_coalition_passport = Another participant in the TFCF market.
 authority_view_authority_passport = A fellow servant of Crown institutions in Domain.
 imperial_view_imperial_passport = A fellow subject of the Mandate.
 union_view_union_passport = A fellow worker in the Crescent revolutionary project.
+
+# Passport bindings offered by the rebinding field. Cosmetic only - the issuing registry's
+# record never follows the cover.
+passport-cover-imperial = Divine Sol Mandate
+passport-cover-union = Workers' Union — Chengridz
+passport-cover-american = New American Protectorate
+passport-cover-clarizian = Aurevienne Diaspora
+passport-cover-coalition = Taypani Free Companies Federation
+passport-cover-authority = Crown Domain Service
+
+# Legacy bindings. Never offered, only named when a document already wears one.
+passport-cover-biesel = Biesel Republic
+passport-cover-izweski = Izweski Hegemony
+passport-cover-goldendeep = Golden Deep

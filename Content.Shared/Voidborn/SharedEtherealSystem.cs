@@ -40,30 +40,10 @@ public abstract class SharedEtherealSystem : EntitySystem
         SubscribeLocalEvent<EtherealComponent, OnMindbreakEvent>(OnMindbreak);
         SubscribeLocalEvent<EtherealComponent, MobStateChangedEvent>(OnMobStateChanged);
 
-        // Eclipsion - the other half of the phase, stated on the target. The handlers above only stop the
-        // ethereal reaching out, and ShowEtherealSystem only stops someone wearing the goggles; everybody else
-        // was held off by PVS alone, because their client had never heard of the entity. Now that concealment is
-        // a stealth shader rather than a visibility layer the entity is sent to everyone, so the block has to be
-        // said out loud or anyone can punch the shimmer walking through a wall.
-        SubscribeLocalEvent<EtherealComponent, GettingAttackedAttemptEvent>(OnGettingAttackedAttempt);
-        SubscribeLocalEvent<EtherealComponent, GettingInteractedWithAttemptEvent>(OnGettingInteractedWithAttempt);
-    }
-
-    private void OnGettingAttackedAttempt(Entity<EtherealComponent> ent, ref GettingAttackedAttemptEvent args)
-    {
-        // Two phased psions still fight each other, exactly as OnAttackAttempt already allows from the other side.
-        if (HasComp<EtherealComponent>(args.User))
-            return;
-
-        args.Cancelled = true;
-    }
-
-    private void OnGettingInteractedWithAttempt(Entity<EtherealComponent> ent, ref GettingInteractedWithAttemptEvent args)
-    {
-        if (HasComp<EtherealComponent>(args.Uid))
-            return;
-
-        args.Cancelled = true;
+        // Eclipsion - a phased psion is concealed, not absent. Nothing here blocks being attacked or
+        // interacted with from the outside: the shimmer is half-visible on purpose, and anyone who
+        // picks it out of the background is allowed to swing at it. The handlers above are one
+        // directional, and stop the ethereal reaching out into the material world.
     }
 
     public virtual void OnStartup(EntityUid uid, EtherealComponent component, MapInitEvent args)

@@ -27,6 +27,7 @@ public sealed partial class NanoChatUiFragment : BoxContainer
     private bool _listNumber = true;
     private Dictionary<uint, NanoChatRecipient> _recipients = new();
     private Dictionary<uint, List<NanoChatMessage>> _messages = new();
+    private HashSet<uint> _blockedNumbers = new(); // Eclipsion - blocking
 
     public event Action<NanoChatUiMessageType, uint?, string?, string?>? ActionSendUiMessage;
 
@@ -106,6 +107,7 @@ public sealed partial class NanoChatUiFragment : BoxContainer
         SendButton.OnPressed += _ => SendMessage();
         EditChatButton.OnPressed += _ => BeginEditChat();
         DeleteChatButton.OnPressed += _ => DeleteCurrentChat();
+        BlockChatButton.OnPressed += _ => ToggleBlockCurrentChat(); // Eclipsion - blocking
     }
 
     private void ToggleView()
@@ -187,6 +189,34 @@ public sealed partial class NanoChatUiFragment : BoxContainer
         ActionSendUiMessage?.Invoke(NanoChatUiMessageType.DeleteChat, activeChat, null, null);
     }
 
+    // Eclipsion Start - blocking
+    /// <summary>
+    ///     Blocks or unblocks whoever the open conversation is with. The button is predicted so it does
+    ///     not flick back to its old state while the server answers.
+    /// </summary>
+    private void ToggleBlockCurrentChat()
+    {
+        var activeChat = _pendingChat ?? _currentChat;
+        if (activeChat is not { } number)
+            return;
+
+        if (!_blockedNumbers.Add(number))
+            _blockedNumbers.Remove(number);
+
+        UpdateBlockButton();
+        ActionSendUiMessage?.Invoke(NanoChatUiMessageType.ToggleBlock, number, null, null);
+    }
+
+    private void UpdateBlockButton()
+    {
+        var activeChat = _pendingChat ?? _currentChat;
+        var blocked = activeChat is { } number && _blockedNumbers.Contains(number);
+
+        BlockChatButton.Pressed = blocked;
+        BlockChatButton.ToolTip = Loc.GetString(blocked ? "nano-chat-unblock" : "nano-chat-block");
+    }
+    // Eclipsion End
+
     private void BeginEditChat()
     {
         if (_currentChat == null)
@@ -238,6 +268,8 @@ public sealed partial class NanoChatUiFragment : BoxContainer
         DeleteChatButton.Visible = hasActiveChat;
         EditChatButton.Visible = hasActiveChat;
         DeleteChatButton.Disabled = !hasActiveChat;
+        BlockChatButton.Visible = hasActiveChat; // Eclipsion - blocking
+        UpdateBlockButton(); // Eclipsion - blocking
 
         if (activeChat != null && _recipients.TryGetValue(activeChat.Value, out var recipient))
         {
@@ -297,6 +329,7 @@ public sealed partial class NanoChatUiFragment : BoxContainer
         _ownNumber = state.OwnNumber;
         _notificationsMuted = state.NotificationsMuted;
         _listNumber = state.ListNumber;
+        _blockedNumbers = state.BlockedNumbers; // Eclipsion - blocking
         OwnNumberLabel.Text = $"#{state.OwnNumber:D4}";
         UpdateMuteButton();
         UpdateListNumber();

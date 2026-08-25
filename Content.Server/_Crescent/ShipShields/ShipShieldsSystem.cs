@@ -36,9 +36,18 @@ public sealed partial class ShipShieldsSystem : EntitySystem
 
     private ISawmill _sawmill = default!;
 
+    // Crescent: deflections are queued by OnCollide and resolved from Update.
+    // OnCollide runs inside SharedPhysicsSystem.CollideContacts, and resolving a deflection deletes the projectile
+    // (which purges its contacts on the spot) and can detonate it. Doing that while the engine is still walking its
+    // pooled Contact[] hands a live contact back to the pool mid-iteration.
+    private readonly List<(EntityUid Emitter, EntityUid Deflected)> _pendingDeflections = new();
+    private readonly List<(EntityUid Emitter, EntityUid Deflected)> _processingDeflections = new();
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
+
+        UpdateDeflections();
 
         var query = EntityQueryEnumerator<ShipShieldEmitterComponent, ApcPowerReceiverComponent>();
         while (query.MoveNext(out var uid, out var emitter, out var power))
@@ -215,12 +224,39 @@ public sealed partial class ShipShieldsSystem : EntitySystem
         // instead of reflecting the projectile, just delete it. this works better for gameplay and intuiting what is going on in a fight.
         //_gun.ShootProjectile(args.OtherEntity, deflectionVector, _physicsSystem.GetMapLinearVelocity(uid), uid, null, velocity.Length());
 
-        if (component.Source != null)
+        if (component.Source == null)
+            return;
+
+        // Stop the round dead right now - it must not go on to damage the hull this tick - but leave deleting and
+        // detonating it to UpdateDeflections, once the physics step is over.
+        projectile.DamagedEntity = true;
+
+        _pendingDeflections.Add((component.Source.Value, args.OtherEntity));
+    }
+
+    /// <summary>
+    /// Resolves deflections queued by <see cref="OnCollide"/>, outside the physics step.
+    /// </summary>
+    private void UpdateDeflections()
+    {
+        if (_pendingDeflections.Count == 0)
+            return;
+
+        // Handling a deflection can detonate the round, which may deflect further rounds off the same shield.
+        _processingDeflections.Clear();
+        _processingDeflections.AddRange(_pendingDeflections);
+        _pendingDeflections.Clear();
+
+        foreach (var (emitter, deflected) in _processingDeflections)
         {
-            //_sawmill.Debug("shield deflected projectile");
-            var ev = new ShieldDeflectedEvent(args.OtherEntity);
-            RaiseLocalEvent(component.Source.Value, ref ev);
+            if (TerminatingOrDeleted(emitter) || TerminatingOrDeleted(deflected) || EntityManager.IsQueuedForDeletion(deflected))
+                continue;
+
+            var ev = new ShieldDeflectedEvent(deflected);
+            RaiseLocalEvent(emitter, ref ev);
         }
+
+        _processingDeflections.Clear();
     }
 
     /// <summary>

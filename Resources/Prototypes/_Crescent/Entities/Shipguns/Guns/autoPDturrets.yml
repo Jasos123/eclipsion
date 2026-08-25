@@ -73,7 +73,7 @@
       capacity: 300
       count: 300
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: 0.1
+      rechargeCooldown: 2
       rechargeSound:
         path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
         params:
@@ -92,15 +92,14 @@
         - On
         - Off
     - type: ApcPowerReceiver
-      powerLoad: 1500
+      powerLoad: 1000
     - type: WeaponPowerDraw
       energyPerShot: 600
     - type: Battery
       maxCharge: 3000
       startingCharge: 3000
     - type: ApcPowerReceiverBattery
-      idleLoad: 1500
-      batteryRechargeRate: 12000
+      batteryRechargeRate: 24000
     - type: ExtensionCableReceiver
     - type: LightningTarget
       priority: 1
@@ -162,9 +161,9 @@
 
 - type: entity
   parent: BaseWeaponTurretAutoPD
-  name: TFCF 7.62x51mm 'Vagrant' anti-boarder turret
+  name: TFSC 7.62x51mm 'Vagrant' anti-boarder turret
   id: WeaponTurretAutoPDTFSC
-  suffix: TFCF PDT
+  suffix: TFSC PDT
   components:
     - type: NpcFactionMember
       factions:

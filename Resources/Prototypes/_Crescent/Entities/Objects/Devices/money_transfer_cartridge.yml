@@ -15,3 +15,4 @@
       sprite: Objects/Economy/cash.rsi
       state: cash_1000
   - type: MoneyTransferCartridge
+  - type: OwnerLockedProgram # Eclipsion - only the PDA's owner may move their money

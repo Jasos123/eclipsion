@@ -149,7 +149,7 @@
 - type: entity
   id: SpawnPointRingleader
   parent: SpawnPointJobBase
-  name: ringleader
+  name: administrator
   components:
   - type: SpawnPoint
     job_id: RingleaderTFSC
@@ -245,7 +245,7 @@
 - type: entity
   id: SpawnPointIntelligenceOfficer
   parent: SpawnPointJobBase
-  name: patriarch
+  name: cyberdawn supervisor
   components:
   - type: SpawnPoint
     job_id: IntelligenceOfficerTFSC

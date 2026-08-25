@@ -105,6 +105,11 @@ public sealed class StealthSystem : SharedStealthSystem
         _shader.SetParameter("visibility", visibility);
 
         visibility = MathF.Max(0, visibility);
-        args.Sprite.Color = new Color(visibility, visibility, 1, 1);
+
+        // Eclipsion - psionic concealment leaves the body its own colours; only the distortion says
+        // someone is there. Without this a half-hidden psion reads as having turned blue.
+        args.Sprite.Color = component.ColorTint
+            ? new Color(visibility, visibility, 1, 1)
+            : Color.White;
     }
 }

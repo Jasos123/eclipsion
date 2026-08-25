@@ -16,8 +16,14 @@ namespace Content.Shared.Showers
         {
             base.Initialize();
             SubscribeLocalEvent<ShowerComponent, MapInitEvent>(OnMapInit);
+            SubscribeLocalEvent<ShowerComponent, ComponentShutdown>(OnShutdown);
             SubscribeLocalEvent<ShowerComponent, GetVerbsEvent<AlternativeVerb>>(OnToggleShowerVerb);
             SubscribeLocalEvent<ShowerComponent, ActivateInWorldEvent>(OnActivateInWorld);
+        }
+
+        private void OnShutdown(EntityUid uid, ShowerComponent component, ComponentShutdown args)
+        {
+            StopLoop(component);
         }
         private void OnMapInit(EntityUid uid, ShowerComponent component, MapInitEvent args)
         {
@@ -77,8 +83,11 @@ namespace Content.Shared.Showers
 
             if (component.ToggleShower)
             {
-                if (component.PlayingStream == null)
+                // The stream can disappear independently during map/PVS cleanup. Treat a stale UID
+                // as stopped so the shower can create a valid source the next time it is refreshed.
+                if (!Exists(component.PlayingStream))
                 {
+                    component.PlayingStream = null;
                     var audio = _audio.PlayPvs(component.LoopingSound, uid, AudioParams.Default.WithLoop(true).WithMaxDistance(5));
 
                     if (audio == null)
@@ -89,9 +98,13 @@ namespace Content.Shared.Showers
             }
             else
             {
-                component.PlayingStream = _audio.Stop(component.PlayingStream);
-                component.PlayingStream = null;
+                StopLoop(component);
             }
+        }
+
+        private void StopLoop(ShowerComponent component)
+        {
+            component.PlayingStream = _audio.Stop(component.PlayingStream);
         }
     }
 }

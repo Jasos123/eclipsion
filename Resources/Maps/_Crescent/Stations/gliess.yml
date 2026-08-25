@@ -105260,6 +105260,26 @@ entities:
     - type: Transform
       parent: 1
       pos: -19.5,-2.5
+  - uid: 7077
+    components:
+    - type: Transform
+      parent: 1
+      pos: 8.5,10.5
+  - uid: 7078
+    components:
+    - type: Transform
+      parent: 1
+      pos: -7.5,10.5
+  - uid: 7079
+    components:
+    - type: Transform
+      parent: 1
+      pos: -1.5,-35.5
+  - uid: 7080
+    components:
+    - type: Transform
+      parent: 1
+      pos: 2.5,-35.5
 - proto: GravityGenerator
   entities:
   - uid: 6528
@@ -108899,7 +108919,7 @@ entities:
     - type: Transform
       parent: 1
       pos: -20.5,-0.5
-- proto: NewportCargoChute
+- proto: GliessSantoCargoChute
   entities:
   - uid: 7073
     components:
@@ -108921,28 +108941,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 8.5,13.5
-- proto: NewportTradeGoodPrinter
-  entities:
-  - uid: 7077
-    components:
-    - type: Transform
-      parent: 1
-      pos: 8.5,10.5
-  - uid: 7078
-    components:
-    - type: Transform
-      parent: 1
-      pos: -7.5,10.5
-  - uid: 7079
-    components:
-    - type: Transform
-      parent: 1
-      pos: -1.5,-35.5
-  - uid: 7080
-    components:
-    - type: Transform
-      parent: 1
-      pos: 2.5,-35.5
 - proto: NFAshtray
   entities:
   - uid: 7081

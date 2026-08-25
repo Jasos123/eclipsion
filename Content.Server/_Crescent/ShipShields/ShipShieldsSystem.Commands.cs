@@ -20,12 +20,21 @@ public partial class ShipShieldsSystem
     [AdminCommand(AdminFlags.Debug)]
     public void ShieldEntityCmd(IConsoleShell shell, string argstr, string[] args)
     {
-        if (!EntityUid.TryParse(args[0], out var uid))
+        // Eclipsion: args was indexed without a length check (a bare "shieldentity" threw), and the id an
+        // admin reads off their client is a NetEntity, not a server-side EntityUid.
+        if (args.Length < 1)
+        {
+            shell.WriteError("Usage: shieldentity <uid>");
+            return;
+        }
+
+        if (!NetEntity.TryParse(args[0], out var netUid) || !TryGetEntity(netUid, out var entity))
         {
             shell.WriteError("Couldn't parse entity.");
             return;
         }
 
+        var uid = entity.Value;
         var shield = ShieldEntity(uid);
 
         shell.WriteLine("Created shield " + shield);
@@ -34,12 +43,20 @@ public partial class ShipShieldsSystem
     [AdminCommand(AdminFlags.Debug)]
     public void UnshieldEntityCmd(IConsoleShell shell, string argstr, string[] args)
     {
-        if (!EntityUid.TryParse(args[0], out var uid))
+        // Eclipsion: see ShieldEntityCmd - length guard plus NetEntity resolution.
+        if (args.Length < 1)
+        {
+            shell.WriteError("Usage: unshieldentity <uid>");
+            return;
+        }
+
+        if (!NetEntity.TryParse(args[0], out var netUid) || !TryGetEntity(netUid, out var entity))
         {
             shell.WriteError("Couldn't parse entity.");
             return;
         }
 
+        var uid = entity.Value;
         var unshielded = UnshieldEntity(uid);
 
         if (unshielded)

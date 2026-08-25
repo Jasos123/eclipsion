@@ -4,6 +4,7 @@ using Content.Server.Administration.Logs;
 using Content.Server.Crescent.Chat;
 using Content.Server.Jobs;
 using Content.Server.Popups;
+using Content.Server._Crescent.Squad;
 using Content.Shared.Access;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
@@ -44,6 +45,7 @@ public sealed class FactionRecruitmentConsoleSystem : EntitySystem
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly SharedJobSystem _jobs = default!;
     [Dependency] private readonly HullrotNpcFactionSyncSystem _hullrotNpcFaction = default!;
+    [Dependency] private readonly SquadSystem _squad = default!;
 
     public override void Initialize()
     {
@@ -310,6 +312,14 @@ public sealed class FactionRecruitmentConsoleSystem : EntitySystem
 
     private void ApplyRecruitment(EntityUid uid, FactionRecruitmentConsoleComponent comp, EntityUid actor, EntityUid target, JobPrototype job)
     {
+        // Squad IDs belong to a faction. Keep a same-faction reassignment in its existing squad, but never carry
+        // an old faction's squad membership through a lateral recruitment (or revive an already-stale one).
+        if (!TryComp<HullrotFactionComponent>(target, out var previousFaction) ||
+            previousFaction.Faction != comp.Faction)
+        {
+            _squad.RemoveFromSquad(target);
+        }
+
         // 1. Re-run the role's component grants (AddComponentSpecial) so the recruit matches a fresh spawn of the
         //    job: this is what refreshes ChatRankComponent — the source of the chat/radio name prefix ("rank") —
         //    along with faction languages. Only AddComponentSpecial is replayed; item/implant/trait specials would
@@ -389,9 +399,10 @@ public sealed class FactionRecruitmentConsoleSystem : EntitySystem
             return;
         }
 
-        factionComp.Faction = string.Empty;
-        Dirty(target, factionComp);
-        _hullrotNpcFaction.Sync(target, factionComp);
+        // Removing the membership component lets every lifecycle subscriber invalidate its state immediately:
+        // NPC factions are cleaned up and overwatch cannot retain this member in a stale roster cache.
+        _squad.RemoveFromSquad(target);
+        RemComp<HullrotFactionComponent>(target);
 
         var factionName = FactionDisplayName(comp.Faction);
 

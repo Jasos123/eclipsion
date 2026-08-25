@@ -90,8 +90,9 @@ public sealed partial class ContentAudioSystem
             case LobbyState:
                 // _Crescent: entering the lobby (via respawn or "return to lobby") does not trigger a
                 // round restart, so lingering in-round world audio (e.g. looping shower sounds) would
-                // otherwise keep playing forever. Silence it before the lobby music starts.
-                SilenceAudio();
+                // otherwise keep playing forever. Stop it before the lobby music starts, while
+                // preserving a soundtrack that may already be active during a repeated transition.
+                SuppressWorldAudio(stopClientAudio: true);
                 StartLobbyMusic();
                 break;
             default:
@@ -103,6 +104,9 @@ public sealed partial class ContentAudioSystem
     private void OnLeave(object? sender, PlayerEventArgs args)
     {
         EndLobbyMusic();
+        StopAudioSources();
+        _suppressedNetworkedLoops.Clear();
+        _worldAudioSuppressed = false;
     }
 
     private void LobbyMusicVolumeCVarChanged(float volume)

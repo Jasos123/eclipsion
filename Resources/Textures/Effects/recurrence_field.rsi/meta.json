@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Made by Taleryn for Eclipsion",
+  "size": {
+    "x": 128,
+    "y": 128
+  },
+  "states": [
+    {
+      "name": "field",
+      "directions": 1
+    },
+    {
+      "name": "pulse",
+      "directions": 1,
+      "delays": [
+        [
+          0.09,
+          0.09,
+          0.09,
+          0.09,
+          0.09
+        ]
+      ]
+    }
+  ]
+}

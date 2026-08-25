@@ -21,6 +21,13 @@ public sealed partial class PsionicFamiliarSystem : EntitySystem
     [Dependency] private readonly NPCSystem _npc = default!;
     [Dependency] private readonly HTNSystem _htn = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+
+    /// <summary>
+    /// How close to yourself you have to point the move order for it to mean "come back" rather than
+    /// "go and stand there".
+    /// </summary>
+    private const float RecallRange = 1.5f;
 
     public override void Initialize()
     {
@@ -134,6 +141,13 @@ public sealed partial class PsionicFamiliarSystem : EntitySystem
         if (args.Handled)
             return;
 
+        // Pointing at your own feet is how you call the familiar off a standing order and put it
+        // back on your heel. Without it a move order could only ever be replaced by another one.
+        var origin = _transform.GetMapCoordinates(ent.Owner);
+        var destination = _transform.ToMapCoordinates(args.Target);
+        var recall = destination.MapId == origin.MapId
+            && (destination.Position - origin.Position).Length() <= RecallRange;
+
         foreach (var familiar in ent.Comp.Familiars)
         {
             if (!TryComp<PsionicFamiliarComponent>(familiar, out var familiarComp)
@@ -142,9 +156,22 @@ public sealed partial class PsionicFamiliarSystem : EntitySystem
                 continue;
 
             htn.Blackboard.Remove<EntityUid>(NPCBlackboard.CurrentOrderedTarget);
-            _npc.SetBlackboard(familiar, NPCBlackboard.FollowTarget, args.Target, htn);
-            _htn.Replan(htn);
+
+            if (recall)
+                htn.Blackboard.Remove<EntityCoordinates>(NPCBlackboard.OrderedMoveTarget);
+            else
+                _npc.SetBlackboard(familiar, NPCBlackboard.OrderedMoveTarget, args.Target, htn);
+
+            ForceReplan(htn);
             args.Handled = true;
+        }
+
+        if (args.Handled)
+        {
+            _popup.PopupEntity(
+                Loc.GetString(recall ? "psionic-familiar-order-recall" : "psionic-familiar-order-move"),
+                ent.Owner,
+                ent.Owner);
         }
     }
 
@@ -163,10 +190,41 @@ public sealed partial class PsionicFamiliarSystem : EntitySystem
                 || !TryComp<HTNComponent>(familiar, out var htn))
                 continue;
 
+            // An attack order replaces a standing move order rather than fighting it for priority.
+            htn.Blackboard.Remove<EntityCoordinates>(NPCBlackboard.OrderedMoveTarget);
             _npc.SetBlackboard(familiar, NPCBlackboard.CurrentOrderedTarget, args.Target, htn);
-            _htn.Replan(htn);
+            ForceReplan(htn);
             args.Handled = true;
         }
+
+        if (args.Handled)
+        {
+            _popup.PopupEntity(
+                Loc.GetString("psionic-familiar-order-attack", ("target", args.Target)),
+                ent.Owner,
+                ent.Owner);
+        }
+    }
+
+    /// <summary>
+    /// Tears the running plan down before asking for a new one.
+    /// </summary>
+    /// <remarks>
+    /// <see cref="HTNSystem.Replan"/> on its own only schedules a fresh planning pass, and the result
+    /// is thrown away unless it comes from a lower-numbered branch than the plan already running. An
+    /// order that moves the familiar <em>down</em> the tree - calling it off a target so it can go
+    /// where it was pointed - would be silently discarded, which is exactly what "it does not listen"
+    /// looks like from the other end. Dropping the current plan first means the next one always wins.
+    /// </remarks>
+    private void ForceReplan(HTNComponent htn)
+    {
+        if (htn.Plan != null)
+        {
+            _htn.ShutdownTask(htn.Plan.CurrentOperator, htn.Blackboard, HTNOperatorStatus.Failed);
+            _htn.ShutdownPlan(htn);
+        }
+
+        _htn.Replan(htn);
     }
 
     public void DespawnFamiliar(EntityUid uid)

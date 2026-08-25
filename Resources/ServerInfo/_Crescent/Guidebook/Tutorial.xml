@@ -1,18 +1,19 @@
 <Document>
-[head=2][color=#e8b04b]Tutorial: Basic Controls[/color][/head]
+[head=2][color=#e8b04b]Custom Controls and Combat Basics[/color][/head]
 
-This server uses a more detailed combat and interaction system (Hullrot mechanics) than standard Space Station 14. The keys below cover what new players need most. You can rebind any of them here:
+This page covers controls that differ from, or are especially important to, standard Space Station 14. For movement, inventory, interaction, and interface basics, start with [textlink="Controls" link="Controls"]. You can rebind controls here:
 
 <Box Orientation="Vertical"><CommandButton Text="ui-options-tab-controls" Command="options 1"/></Box>
 
 [head=3][color=#e8b04b]Melee Combat[/color][/head]
 Melee uses a detailed system with slashing, parrying and executions.
 
-- [color=#6ab7d6][keybind="LeftClick"/][/color] performs a normal melee attack (slash).
-- [color=#6ab7d6][keybind="RightClick"/][/color] parries or blocks an incoming attack. Good timing gives you a major advantage.
-- [color=#6ab7d6][keybind="MiddleMouse"/][/color] performs a soft attack for interacting with fragile objects, such as breaking a window without a full swing.
+- Turn on [bold]Combat Mode[/bold] from your action bar before trying to attack or parry.
+- [color=#6ab7d6][keybind="Use"/][/color] performs a committed melee attack.
+- [color=#6ab7d6][keybind="UseSecondary"/][/color] parries or blocks an incoming attack. Good timing gives you a major advantage.
+- [color=#6ab7d6][keybind="MouseMiddle"/][/color] performs a faster, lighter attack.
 
-For the full breakdown of parry timing, stamina, and executions, see the [color=#e8b04b]Melee Combat[/color] page under this Tutorial.
+For parry timing, stamina, and executions, see [textlink="Melee Combat" link="MeleeCombat"].
 
 [head=3][color=#e8b04b]Looking Ahead / Peeking[/color][/head]
 Hold [color=#6ab7d6][keybind="LookUp"/][/color] and your camera slides toward the direction you are facing, letting you see [color=#e8b04b]further than normal[/color].
@@ -22,35 +23,35 @@ Use it to look around a corner or wall, spot a threat approaching from far away,
 [head=3][color=#e8b04b]Racking / Chambering Your Weapon[/color][/head]
 Most firearms here [color=#d9776c]do not chamber themselves automatically[/color]. Even with a magazine loaded, the gun will not fire if there is no round in the chamber.
 
-To rack your weapon, press [color=#6ab7d6][keybind="ActivateItemInHand"/][/color] while holding it. This feeds a round into the chamber.
+Most long guns must first be wielded with a free hand. Press [color=#6ab7d6][keybind="ActivateItemInHand"/][/color] to wield the weapon, then activate it again to rack it and feed a round into the chamber.
 
 Keep in mind:
 - Rack the weapon once when you first pick it up.
 - After a magazine runs dry, load a fresh one and rack again.
 - Pump-action and manual weapons may need to be cycled after every shot.
 
-You can also remove a chambered round by holding the weapon in one hand and clicking it with an empty hand while holding [color=#6ab7d6][keybind="Alt + Left Click"/][/color].
+To remove a chambered round, put the weapon in one hand, make the other hand active and empty, then use [color=#6ab7d6][keybind="AltActivateItemInWorld"/][/color] on the weapon.
 
 [head=3][color=#e8b04b]Wielding (Two Hands)[/color][/head]
-Many rifles, shotguns and heavy weapons [color=#d9776c]cannot be used properly one-handed[/color]. To wield a weapon, press [color=#6ab7d6][keybind="Z"/][/color] while holding it.
+Many rifles, shotguns and heavy weapons [color=#d9776c]cannot be used properly one-handed[/color]. To wield a weapon, press [color=#6ab7d6][keybind="ActivateItemInHand"/][/color] while holding it and keeping your other hand free.
 
-Pressing [color=#6ab7d6][keybind="Z"/][/color] again while wielded will rack and chamber the weapon.
+Pressing [color=#6ab7d6][keybind="ActivateItemInHand"/][/color] again while wielded will rack and chamber most firearms.
 
 Wielding improves accuracy a lot, and some weapons can only be fired while wielded. You need a free hand to wield.
 
 [head=3][color=#e8b04b]Lying Down and Taking Cover[/color][/head]
-[color=#6ab7d6][keybind="R"/][/color] makes you lie down or stand back up.
+[color=#6ab7d6][keybind="ToggleStanding"/][/color] makes you lie down or stand back up.
 
-While lying down, press [color=#6ab7d6][keybind="Shift + R"/][/color] to hide under or behind certain objects. This helps you take cover and stay out of sight.
+While lying down, press [color=#6ab7d6][keybind="ToggleCrawlingUnder"/][/color] to hide under or behind certain objects. This helps you take cover and stay out of sight.
 
 Lying down also makes you a smaller target and lets you use low cover more effectively.
 
-[head=3][color=#e8b04b]Action Slots (Numpad)[/color][/head]
-You can trigger the abilities on the action bar (left side of your screen) with the [color=#e8b04b]Numpad[/color] keys. [color=#6ab7d6][keybind="Hotbar1"/][/color] fires the first slot, and [color=#6ab7d6][keybind="Hotbar0"/][/color] (Numpad 0) fires the last slot.
+[head=3][color=#e8b04b]Action Slots[/color][/head]
+You can trigger abilities on the action bar with the number keys shown on their slots. By default, the top-row keys [color=#6ab7d6][keybind="Hotbar1"/][/color] through [color=#6ab7d6][keybind="Hotbar0"/][/color] activate the corresponding slots.
 
 This is much faster than clicking your actions.
 
-If your action slots seem to be missing, you may simply have too many actions and your hotbar has filled up, so the extras moved to another page. Use the [color=#e8b04b]1-9 keys along the top of your keyboard[/color] to switch action pages and find them. Drag and drop the slots to arrange them however you like.
+Drag and drop actions to arrange them. [color=#d9776c]Numpad 0 does not activate an action[/color]; it opens the Guidebook.
 
 [head=3][color=#e8b04b]Other Important Keys[/color][/head]
 - [color=#6ab7d6][keybind="SwapHands"/][/color] swaps your active hand, letting you quickly switch between your weapon and another item.

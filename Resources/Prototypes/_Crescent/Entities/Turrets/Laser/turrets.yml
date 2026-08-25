@@ -7,15 +7,14 @@
   description: A fixedpoint mining tool that accelerates sound waves to kinetically slice through rock - mostly seen on civilian miner models.
   components:
   - type: ApcPowerReceiver
-    powerLoad: 1500
+    powerLoad: 500
   - type: WeaponPowerDraw
     energyPerShot: 1500
   - type: Battery
     maxCharge: 7500
     startingCharge: 7500
   - type: ApcPowerReceiverBattery
-    idleLoad: 1500
-    batteryRechargeRate: 12000
+    batteryRechargeRate: 24000
   - type: StaticPrice
     price: 1500
   - type: Sprite
@@ -103,15 +102,12 @@
         ballistic-ammo: !type:Container
           ents: []
     - type: Gun
-      burstCooldown: 8.0
-      burstFireRate: 0.4
-      shotsPerBurst: 3
       fireOnDropChance: 0
       projectileSpeed: 95
       fireRate: .4
-      selectedMode: Burst
+      selectedMode: FullAuto
       availableModes:
-      - Burst
+        - FullAuto
       angleDecay: 3
       minAngle: 1
       maxAngle: 4
@@ -121,7 +117,7 @@
         params:
           variation: 0.12
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: 2.667
+      rechargeCooldown: 3
       energyPerCharge: 200
       rechargeSound:
         path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
@@ -130,18 +126,17 @@
           variation: 0.08
     - type: BasicEntityAmmoProvider
       proto: BulletCurse
-      capacity: 3
-      count: 3
+      capacity: 6
+      count: 6
     - type: ApcPowerReceiver
-      powerLoad: 30000
+      powerLoad: 2500
     - type: WeaponPowerDraw
-      energyPerShot: 853333
+      energyPerShot: 87500
     - type: Battery
-      maxCharge: 2560000
-      startingCharge: 2560000
+      maxCharge: 437500
+      startingCharge: 437500
     - type: ApcPowerReceiverBattery
-      idleLoad: 30000
-      batteryRechargeRate: 320000
+      batteryRechargeRate: 140000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Medium
@@ -175,15 +170,12 @@
         ballistic-ammo: !type:Container
           ents: []
     - type: Gun
-      burstCooldown: 8.0
-      burstFireRate: 0.5
-      shotsPerBurst: 3
       fireOnDropChance: 0
       projectileSpeed: 85
       fireRate: .5
-      selectedMode: Burst
+      selectedMode: FullAuto
       availableModes:
-      - Burst
+        - FullAuto
       angleDecay: 0
       minAngle: 5
       maxAngle: 5
@@ -192,7 +184,7 @@
         params:
           variation: 0.12
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: 2.667
+      rechargeCooldown: 3
       rechargeSound:
         path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
         params:
@@ -200,18 +192,17 @@
           variation: 0.08
     - type: BasicEntityAmmoProvider
       proto: BulletCurse
-      capacity: 3
-      count: 3
+      capacity: 10
+      count: 10
     - type: ApcPowerReceiver
-      powerLoad: 30000
+      powerLoad: 2500
     - type: WeaponPowerDraw
-      energyPerShot: 853333
+      energyPerShot: 70000
     - type: Battery
-      maxCharge: 2560000
-      startingCharge: 2560000
+      maxCharge: 350000
+      startingCharge: 350000
     - type: ApcPowerReceiverBattery
-      idleLoad: 30000
-      batteryRechargeRate: 320000
+      batteryRechargeRate: 140000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Medium
@@ -247,15 +238,12 @@
         ballistic-ammo: !type:Container
           ents: []
     - type: Gun
-      burstCooldown: 5.0
-      burstFireRate: 6.0
-      shotsPerBurst: 30
       fireOnDropChance: 0
       projectileSpeed: 100
       fireRate: 6
-      selectedMode: Burst
+      selectedMode: FullAuto
       availableModes:
-      - Burst
+        - FullAuto
       angleDecay: 4
       minAngle: .75
       maxAngle: 3
@@ -265,7 +253,7 @@
         params:
           variation: 0.12
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: 0.167
+      rechargeCooldown: .35
       energyPerCharge: 75
       rechargeSound:
         path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
@@ -274,18 +262,17 @@
           variation: 0.08
     - type: BasicEntityAmmoProvider
       proto: BulletRetribution
-      capacity: 30
-      count: 30
+      capacity: 36
+      count: 36
     - type: ApcPowerReceiver
-      powerLoad: 10000
+      powerLoad: 2500
     - type: WeaponPowerDraw
-      energyPerShot: 15000
+      energyPerShot: 3333
     - type: Battery
-      maxCharge: 450000
-      startingCharge: 450000
+      maxCharge: 16665
+      startingCharge: 16665
     - type: ApcPowerReceiverBattery
-      idleLoad: 10000
-      batteryRechargeRate: 90000
+      batteryRechargeRate: 80000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Small
@@ -319,15 +306,12 @@
         ballistic-ammo: !type:Container
           ents: []
     - type: Gun
-      burstCooldown: 5.0
-      burstFireRate: 8.0
-      shotsPerBurst: 40
       fireOnDropChance: 0
       projectileSpeed: 105
       fireRate: 8
-      selectedMode: Burst
+      selectedMode: FullAuto
       availableModes:
-      - Burst
+        - FullAuto
       angleDecay: 5
       minAngle: .5
       maxAngle: 2.5
@@ -337,7 +321,7 @@
         params:
           variation: 0.12
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: 0.125
+      rechargeCooldown: .3
       energyPerCharge: 90
       rechargeSound:
         path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
@@ -349,15 +333,14 @@
       capacity: 40
       count: 40
     - type: ApcPowerReceiver
-      powerLoad: 10000
+      powerLoad: 5000
     - type: WeaponPowerDraw
-      energyPerShot: 11250
+      energyPerShot: 2500
     - type: Battery
-      maxCharge: 450000
-      startingCharge: 450000
+      maxCharge: 12500
+      startingCharge: 12500
     - type: ApcPowerReceiverBattery
-      idleLoad: 10000
-      batteryRechargeRate: 90000
+      batteryRechargeRate: 80000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Small
@@ -395,12 +378,15 @@
     - type: Gun
       fireOnDropChance: 0
       projectileSpeed: 95
-      burstFireRate: 16.0
-      burstCooldown: 8.0
-      shotsPerBurst: 64
+      burstFireRate: 16
+      # 3-round bursts instead of the original 8, so the gap between them has to come down with it or the
+      # magazine regenerates faster than it drains and the gun never runs dry. 3 / (3/16 + 0.47) = 4.56
+      # rounds a second against a 1/0.22 = 4.55 refill, the same equilibrium the 8-round burst sat at.
+      burstCooldown: 0.47
+      shotsPerBurst: 3
       selectedMode: Burst
       availableModes:
-      - Burst
+        - Burst
       angleDecay: 6
       minAngle: .4
       maxAngle: 2
@@ -410,7 +396,7 @@
         params:
           variation: 0.12
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: 0.125
+      rechargeCooldown: .22
       energyPerCharge: 175
       rechargeSound:
         path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
@@ -419,18 +405,17 @@
           variation: 0.08
     - type: BasicEntityAmmoProvider
       proto: BulletAbsolution
-      capacity: 64
-      count: 64
+      capacity: 48
+      count: 48
     - type: ApcPowerReceiver
-      powerLoad: 30000
+      powerLoad: 4000
     - type: WeaponPowerDraw
-      energyPerShot: 40000
+      energyPerShot: 7656
     - type: Battery
-      maxCharge: 2560000
-      startingCharge: 2560000
+      maxCharge: 38280
+      startingCharge: 38280
     - type: ApcPowerReceiverBattery
-      idleLoad: 30000
-      batteryRechargeRate: 320000
+      batteryRechargeRate: 140000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Medium
@@ -466,12 +451,12 @@
     - type: Gun
       fireOnDropChance: 0
       projectileSpeed: 100
-      burstFireRate: 24.0
-      burstCooldown: 8.0
-      shotsPerBurst: 96
+      burstFireRate: 24
+      burstCooldown: 1.1
+      shotsPerBurst: 8
       selectedMode: Burst
       availableModes:
-      - Burst
+        - Burst
       angleDecay: 7
       minAngle: .3
       maxAngle: 1.7
@@ -481,7 +466,7 @@
         params:
           variation: 0.12
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: 0.083
+      rechargeCooldown: .18
       energyPerCharge: 200
       rechargeSound:
         path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
@@ -490,18 +475,17 @@
           variation: 0.08
     - type: BasicEntityAmmoProvider
       proto: BulletAbsolution
-      capacity: 96
-      count: 96
+      capacity: 56
+      count: 56
     - type: ApcPowerReceiver
-      powerLoad: 30000
+      powerLoad: 6000
     - type: WeaponPowerDraw
-      energyPerShot: 26667
+      energyPerShot: 6271
     - type: Battery
-      maxCharge: 2560000
-      startingCharge: 2560000
+      maxCharge: 31355
+      startingCharge: 31355
     - type: ApcPowerReceiverBattery
-      idleLoad: 30000
-      batteryRechargeRate: 320000
+      batteryRechargeRate: 140000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Medium
@@ -537,23 +521,20 @@
         ballistic-ammo: !type:Container
           ents: []
     - type: Gun
-      burstCooldown: 12.0
-      burstFireRate: 2.5
-      shotsPerBurst: 8
       fireOnDropChance: 0
       projectileSpeed: 70
       fireRate: 2.5
       minAngle: 0.1
       maxAngle: 0.1
-      selectedMode: Burst
+      selectedMode: FullAuto
       availableModes:
-      - Burst
+        - FullAuto
       soundGunshot:
         path: /Audio/Weapons/Guns/Gunshots/ship_perforator.ogg
         params:
           variation: 0.12
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: 1.5
+      rechargeCooldown: 0.75
       rechargeSound:
         path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
         params:
@@ -561,18 +542,17 @@
           variation: 0.08
     - type: BasicEntityAmmoProvider
       proto: BulletDamnation
-      capacity: 8
-      count: 8
+      capacity: 25
+      count: 25
     - type: ApcPowerReceiver
-      powerLoad: 80000
+      powerLoad: 8000
     - type: WeaponPowerDraw
-      energyPerShot: 1230000
+      energyPerShot: 22000
     - type: Battery
-      maxCharge: 9840000
-      startingCharge: 9840000
+      maxCharge: 110000
+      startingCharge: 110000
     - type: ApcPowerReceiverBattery
-      idleLoad: 80000
-      batteryRechargeRate: 820000
+      batteryRechargeRate: 220000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Large
@@ -606,23 +586,20 @@
         ballistic-ammo: !type:Container
           ents: []
     - type: Gun
-      burstCooldown: 12.0
-      burstFireRate: 3.0
-      shotsPerBurst: 9
       fireOnDropChance: 0
       projectileSpeed: 75
       minAngle: 0.1
       maxAngle: 0.1
       fireRate: 3
-      selectedMode: Burst
+      selectedMode: FullAuto
       availableModes:
-      - Burst
+        - FullAuto
       soundGunshot:
         path: /Audio/Weapons/Guns/Gunshots/ship_perforator.ogg
         params:
           variation: 0.12
     - type: RechargeBasicEntityAmmo
-      rechargeCooldown: 1.333
+      rechargeCooldown: 0.7
       rechargeSound:
         path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
         params:
@@ -630,18 +607,17 @@
           variation: 0.08
     - type: BasicEntityAmmoProvider
       proto: BulletDamnation
-      capacity: 9
-      count: 9
+      capacity: 30
+      count: 30
     - type: ApcPowerReceiver
-      powerLoad: 80000
+      powerLoad: 10000
     - type: WeaponPowerDraw
-      energyPerShot: 1093333
+      energyPerShot: 18333
     - type: Battery
-      maxCharge: 9840000
-      startingCharge: 9840000
+      maxCharge: 91665
+      startingCharge: 91665
     - type: ApcPowerReceiverBattery
-      idleLoad: 80000
-      batteryRechargeRate: 820000
+      batteryRechargeRate: 220000
     - type: HardpointAnchorableOnly
       class: Energy
       size: Large

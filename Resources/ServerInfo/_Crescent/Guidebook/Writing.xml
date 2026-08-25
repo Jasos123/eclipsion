@@ -7,17 +7,17 @@ Paper still runs the war. Orders, reports, passports and propaganda all move on 
 
 - Pick up a sheet of [color=#6ab7d6]paper[/color] and use it with a [color=#6ab7d6]pen[/color] in hand to write on it.
 - Use a [color=#6ab7d6]stamp[/color] to mark a document as official, since orders, warrants, and rulings carry weight when properly stamped.
-- Write your text, then close the window to save it. Others can read the page by examining or activating it.
+- Write your text, then press [bold]Save[/bold] or [color=#6ab7d6][keybind="MultilineTextSubmit"/][/color]. Closing the window does [color=#d9776c]not[/color] save unsaved changes. Activate a document to read it; examining it only tells you that it contains writing or stamps.
 
 [head=3][color=#e8b04b]Formatting[/color][/head]
 
 You can use the same markup shown throughout this guidebook to make documents clear and official-looking. Wrap text in tags written inside square brackets.
 
-- A [color=#6ab7d6]head[/color] tag makes a title.
-- A [color=#6ab7d6]bold[/color] tag emphasizes text.
-- A [color=#6ab7d6]color[/color] tag with a hex code colors text.
+- [color=#6ab7d6]\[head=2\]Field Report\[\/head\][/color] makes a heading.
+- [color=#6ab7d6]\[bold\]Important\[\/bold\][/color] emphasizes text.
+- [color=#6ab7d6]\[color=#e8b04b\]Warning\[\/color\][/color] colors text with a hex code.
 
-Each tag is opened and then closed again after the text it affects. If you have seen the formatting in this guidebook, you already know how it looks.
+Each tag is opened and then closed after the text it affects. Copy the examples above and replace only the visible words or color value.
 
 [head=3][color=#e8b04b]What to write[/color][/head]
 

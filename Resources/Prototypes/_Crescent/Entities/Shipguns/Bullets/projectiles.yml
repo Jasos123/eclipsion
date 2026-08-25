@@ -1270,22 +1270,17 @@
 
 - type: entity
   id: SwarmerMissile
-  name: 40mm guided minirocket
+  name: shell
   parent: BaseBulletTrigger
   categories: [ HideSpawnMenu ]
   components:
-  - type: ProjectilePhasePrevent
-    mask:
-    - Impassable
-    - BulletImpassable
   - type: ShipWeaponProjectile
-  - type: IgnoresHullrotShields
   - type: Projectile
     ignoreWeaponGrid: true
     damage:
       types:
-        Structural: 300
-        Blunt: 40
+        Structural: 400
+        Piercing: 100
   - type: TimedDespawn
     lifetime: 20
   - type: Sprite
@@ -1295,54 +1290,15 @@
   - type: ExplodeOnTrigger
   - type: Explosive
     explosionType: Default
-    maxIntensity: 125
-    intensitySlope: 60
-    totalIntensity: 650
+    maxIntensity: 400
+    intensitySlope: 350
+    totalIntensity: 1000
     maxTileBreak: 1
   - type: PointLight
     radius: 3.5
     color: orange
     energy: 0.5
   - type: ProjectileIFF
-    visualType: SquareReticle
-    color: Red
-  - type: ProximityFuseTarget
-  - type: HeatSeeking
-    rotationSpeed: 16
-    acceleration: 35
-    topSpeed: 85
-    fieldOfView: 30
-    defaultSeekingRange: 900
-    guidanceAlgorithm: PredictiveGuidance
-    weaveAmplitude: 14
-    weaveFrequency: 0.55
-    weaveFadeDistance: 220
-    pincer: true
-  - type: Fixtures
-    fixtures:
-      projectile:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.15,-0.45,0.15,0.15"
-        layer:
-        - BulletImpassable
-        mask:
-        - Impassable
-        - BulletImpassable
-        hard: true
-        density: 100
-  - type: Damageable
-    damageContainer: StructuralInorganic
-    damageModifierSet: StructuralMetallic
-  - type: Destructible
-    thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 75
-      behaviors:
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
-      - !type:ExplodeBehavior
 
 #pdt projectile
 

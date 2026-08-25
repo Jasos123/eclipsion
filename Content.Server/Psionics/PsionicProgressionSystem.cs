@@ -1,3 +1,4 @@
+using Content.Server.Traits.Assorted;
 using Content.Shared.Abilities.Psionics;
 using Content.Shared.Bed.Sleep;
 using Content.Shared.CCVar;
@@ -50,7 +51,7 @@ public sealed class PsionicProgressionSystem : EntitySystem
             return;
 
         var fatigue = DecayFatigue(ent.Comp);
-        var amount = args.Glimmer * perGlimmer * ent.Comp.PotentiaGainMultiplier / (1 + fatigue);
+        var amount = args.Glimmer * perGlimmer * GetGainMultiplier(ent.Owner, ent.Comp) / (1 + fatigue);
 
         ent.Comp.CastFatigue = Math.Min(fatigue + 1, _cfg.GetCVar(CCVars.PsionicCastFatigueMax));
 
@@ -79,6 +80,21 @@ public sealed class PsionicProgressionSystem : EntitySystem
         component.CastFatigueUpdated = now;
 
         return component.CastFatigue;
+    }
+
+    /// <summary>
+    ///     The Psion's own multiplier folded together with any species or trait aptitude sitting on the
+    ///     body. Read per gain rather than baked into the PsionicComponent, because a trait such as
+    ///     HighPotential replaces the PotentiaModifier after the caster trait has already run.
+    /// </summary>
+    private float GetGainMultiplier(EntityUid uid, PsionicComponent component)
+    {
+        var multiplier = component.PotentiaGainMultiplier;
+
+        if (TryComp<PotentiaModifierComponent>(uid, out var modifier))
+            multiplier *= modifier.PotentiaGainMultiplier;
+
+        return multiplier;
     }
 
     public override void Update(float frameTime)
@@ -114,7 +130,7 @@ public sealed class PsionicProgressionSystem : EntitySystem
             if (TryComp<PsionicInsulationComponent>(uid, out var insulation) && !insulation.Passthrough)
                 continue;
 
-            _psionics.AddPotentia(uid, psionic, drip * psionic.PotentiaGainMultiplier);
+            _psionics.AddPotentia(uid, psionic, drip * GetGainMultiplier(uid, psionic));
         }
     }
 }

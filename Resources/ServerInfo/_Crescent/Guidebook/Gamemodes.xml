@@ -1,51 +1,37 @@
 <Document>
 [head=2][color=#e8b04b]Gamemodes[/color][/head]
 
-At the end of every round the server votes on what to play next. The gamemode decides [bold]which factions are open, which stations and ships spawn, and what the round is about[/bold]. Some modes are the everyday sandbox of Taypan, others are tightly scripted battles with their own roles.
+The selected gamemode determines [bold]which factions and jobs are available, which stations and ships spawn, and what kind of round is being played[/bold]. Always check the lobby's selected preset before preparing a character.
 
-Below is what each option in the vote actually means.
+[head=3][color=#e8b04b]Freeplay variants[/color][/head]
 
-[head=3][color=#e8b04b]Freeplay[/color][/head]
+Freeplay is the open-ended 2-4 hour sandbox. Trade, patrol, exploration, diplomacy, raids, and war are driven by players and round events. The vote contains several different Freeplay maps:
 
-The default mode and the one you will play most. [bold]All four factions[/bold] are open, the full Taypan map spawns, and there is no forced objective.
+- [bold]Freeplay[/bold]: the broad multi-faction Adventure preset.
+- [bold]Freeplay | DSM & NCWL[/bold]: the current default, focused on the two major military powers.
+- [bold]Freeplay | TFCF & SHI[/bold]: the Federation and Shinohara contest the frontier.
+- [bold]Freeplay | TAP/Gliess & TFCF[/bold]: the Pact, Gliess interests, and the Federation are active.
+- [bold]Freeplay | TFCF & SHI (Alternative)[/bold]: the Jackal replaces the Freeport in the TFCF/SHI layout.
 
-The Mandate holds the Aurora Imperialis, the League holds Nova Balreska, Shinohara trades from Tatsumoto, and the Free Companies operate from the Freeport and their ships. What happens next is up to the players: trade, patrol, raid, negotiate, or start a war. Events fire throughout the round to stir things up.
-
-Rounds last [bold]2-4 hours[/bold]. Respawn time is 10 minutes.
-
-[color=#8fc98a]Best for new players. Pick the Freeholder (DSM) or Union Worker (NCWL) and learn the ropes.[/color]
+[color=#8fc98a]For a first round, use the default DSM/NCWL preset and choose Freeholder or Union Worker.[/color] Other variants may require faction playtime before their main jobs become available. Freeplay respawn time is 10 minutes.
 
 [head=3][color=#e8b04b]Hyperwar | NCWL vs DSM[/color][/head]
 
-The two major powers, and only them, fighting over the [bold]central asteroid belt[/bold]. The Aurora Imperialis and Nova Balreska spawn facing each other with the belt between them, and the surrounding ring of asteroids is stripped away so there is nowhere to hide and nothing to do but fight.
+DSM and NCWL fight over the central asteroid belt with the surrounding ring removed. SHI and TFCF are closed. Expect fleet actions, boarding, and ground pushes early in the round. Respawn time is 10 minutes.
 
-Shinohara and the TFCF are closed. This is a straight [color=#d9776c]war round[/color]: expect fleet actions, boarding, and ground pushes from the first minutes.
+[color=#d9776c]This is a war-focused preset, not an OOC deathmatch.[/color] Character roleplay and the [textlink="Roleplay Rules" link="RoleplayRules"] still apply.
 
-Rounds last [bold]2-4 hours[/bold]. Respawn time is 10 minutes.
+[head=3][color=#e8b04b]Unionfall | NCWL vs DSM[/color][/head]
 
-[head=3][color=#e8b04b]Unionfall | NCWL VS DSM[/color][/head]
+Unionfall is a scripted battle with its own roster. The NCWL Homeguard aboard the Clementine is intercepted by a DSM punishment regiment aboard the Nemesis.
 
-A scripted setpiece with its own roles. After the destruction of Nova Balreska, the NCWL Homeguard flees aboard the Clementine looking for a new home, and a DSM punishment regiment aboard the Nemesis intercepts them to regain their honor.
-
-You do [color=#d9776c]not[/color] pick your usual job here. Unionfall has a dedicated, [bold]combat-only roster[/bold] for both sides: Cadet, Rifleman, Doctor, Officer, Leader, Ship Captain, and Ship Crew. Everything else is closed.
-
-Two ships, no neutrals, no escape. Respawn time is 5 minutes.
+Standard station jobs are closed. Both sides use dedicated Cadet, Rifleman, Doctor, Officer, Leader, Ship Captain, and Ship Crew roles. Respawn time is 5 minutes.
 
 [head=3][color=#e8b04b]Planetfall[/color][/head]
 
-A [bold]ground round[/bold] set in Count Olywier Rabenau's charter, where unrest is spreading through an Imperial holding. Charter authority is meant to be upheld at all costs, and the garrison is not certain it can.
+Planetfall is a ground-focused scenario in Count Olywier Rabenau's charter. Standard station jobs are closed and the mode uses its own Imperial, MVD, worker, partisan, medical, court, Freeholder, Oathbound, and Levyman roles. Respawn time is 5 minutes.
 
-Like Unionfall, this mode has its [bold]own roster[/bold]. You play Count Olywier himself, or an Advocatus, Courtier, Kapitan, MVD Officer or Grunt, Freeholder, Levyman, Worker, Partisan, Doctor, or Surgeon. Standard station jobs are closed.
+[head=3][color=#e8b04b]Rules in every mode[/color][/head]
 
-Respawn time is 5 minutes.
-
-[head=3][color=#e8b04b]In testing[/color][/head]
-
-- [bold]Taypan; remapped.[/bold] A work-in-progress rework of the overworld layout. Expect rough edges.
-
-[head=3][color=#e8b04b]What carries across every mode[/color][/head]
-
-The rules do not change with the gamemode. Even in a war round you are [bold]still roleplaying a character[/bold], and the [color=#e8b04b]Roleplay Rules[/color] apply in full. A mode that opens with "destroy them or die trying" is not permission to drop character, and Escalation still governs how a fight starts.
-
-Respawn timers are set per mode. If you die early in Unionfall or Planetfall you wait 5 minutes; elsewhere it is 10.
+The gamemode changes the scenario, not the server rules. Even in an immediate war round, remain in character and follow the escalation and round-removal requirements in the [textlink="Roleplay Rules" link="RoleplayRules"].
 </Document>

@@ -725,19 +725,6 @@
 
 - type: entity
   parent: ClothingBeltBase
-  id: ClothingBeltGenericThick
-  name: thick belt
-  description: A bold fashion statement.
-  components:
-  - type: Sprite
-    sprite: Clothing/Belt/generic_thick.rsi
-    state: icon
-  - type: Clothing
-    sprite: Clothing/Belt/generic_thick.rsi
-    renderLayer: innerBelt
-
-- type: entity
-  parent: ClothingBeltBase
   id: ClothingBeltWaist
   name: waist belt
   description: A belt worn around the waist, giving outfits a more fitted silhouette.

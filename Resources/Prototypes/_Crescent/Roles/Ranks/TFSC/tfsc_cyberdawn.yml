@@ -1,20 +1,20 @@
-# Patriarch
+# Cyberdawn Supervisor
 - type: rank
   id: RatRankTFSCPatriarchSenior
-  name: Sector Patriarch
-  prefix: Sect. Pat.
+  name: Cyberdawn Sector Supervisor
+  prefix: Sect. Sup.
   paygrade: CD-P3
 
 - type: rank
   id: RatRankTFSCPatriarchMiddle
-  name: Patriarch
-  prefix: Patriarch
+  name: Cyberdawn Supervisor
+  prefix: Supervisor
   paygrade: CD-P2
 
 - type: rank
   id: RatRankTFSCPatriarchJunior
-  name: Junior Patriarch
-  prefix: Jr. Pat.
+  name: Junior Cyberdawn Supervisor
+  prefix: Jr. Sup.
   paygrade: CD-P1
 
 # Operative

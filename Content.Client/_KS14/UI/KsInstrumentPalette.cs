@@ -62,9 +62,15 @@ public static class KsInstrumentChrome
     public static readonly Color TitleBackground = Color.FromHex("#141008");
     public static readonly Color TitleText = Color.FromHex("#E8C860");
 
+    // Four tiers per button, each a step brighter than the last: idle, hover, held down, and the
+    // click flash. Hover used to borrow the held-down box, which left a click with nothing to
+    // show for itself - the button looked identical the whole way through.
     public static readonly Color TabBackground = Color.FromHex("#141008");
     public static readonly Color TabBorder = Color.FromHex("#6A5518");
     public static readonly Color TabText = Color.FromHex("#8A7430");
+    public static readonly Color TabHoverBackground = Color.FromHex("#1E1806");
+    public static readonly Color TabHoverBorder = Color.FromHex("#8A7430");
+    public static readonly Color TabHoverText = Color.FromHex("#C8A030");
     public static readonly Color TabPressedBackground = Color.FromHex("#2A2008");
     public static readonly Color TabPressedBorder = Color.FromHex("#C8A030");
     public static readonly Color TabPressedText = Color.FromHex("#FFD860");
@@ -74,9 +80,20 @@ public static class KsInstrumentChrome
 
     public static readonly Color ActionBackground = Color.FromHex("#100D06");
     public static readonly Color ActionBorder = Color.FromHex("#6A5518");
+    public static readonly Color ActionText = Color.FromHex("#C8A030");
+    public static readonly Color ActionHoverBackground = Color.FromHex("#191305");
+    public static readonly Color ActionHoverBorder = Color.FromHex("#8A7430");
     public static readonly Color ActionPressedBackground = Color.FromHex("#241C08");
     public static readonly Color ActionPressedBorder = Color.FromHex("#C8A030");
+    public static readonly Color ActionPressedText = Color.FromHex("#FFD860");
     public static readonly Color ActionDisabledBackground = Color.FromHex("#0B0904");
     public static readonly Color ActionDisabledBorder = Color.FromHex("#352A0C");
     public static readonly Color ActionDisabledText = Color.FromHex("#4A3A10");
+
+    /// <summary>
+    ///     The click flash: brighter than any held-down state, so a click reads even on a button
+    ///         that was already lit - a tab that is currently selected, or one being re-pressed.
+    /// </summary>
+    public static readonly Color FlashBackground = Color.FromHex("#5A4610");
+    public static readonly Color FlashBorder = Color.FromHex("#FFD860");
 }

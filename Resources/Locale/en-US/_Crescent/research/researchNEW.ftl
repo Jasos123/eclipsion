@@ -41,6 +41,7 @@ research-technology-electronics-translators = Translators
 research-technology-electronics-materials = Basic Components
 research-technology-electronics-defense = Civilian Defense Pistols
 research-technology-electronics-terminus = Ogre Shocktrooper Armaments
+research-technology-electronics-dampener = Noospheric Dampener Belt
 
 # MINUTEMEN
 research-technology-minutemen-hybrid-corvettes = minutemen hybrid corvettes
@@ -87,6 +88,7 @@ research-technology-cyberdawn-CDTPhoronBlade = PhoronBlade
 research-technology-cyberdawn-CDTDualPhoronBlade = DualPhoronBlade
 research-technology-cyberdawn-CDTMedicalcyborgs = Medical cyborgs
 research-technology-cyberdawn-CDTSaboteurcyborgs = Saboteur cyborgs
+research-technology-cyberdawn-CDTAssaultcyborgs = Assault cyborgs
 research-technology-cyberdawn-CDTShipT1LPC = Basic stealth ship production
 
 

@@ -6,7 +6,7 @@ job-supervisors-ncwl-unionized = To your Union Representative, the Kommissar and
 job-supervisors-ncwl-worker = To the Unions, then the Kommissar and Flagman.
 job-supervisors-ncwl-mvd = To the Workers' Union and the revolutionary settlement ratified by Chengridz, independently of local party command.
 job-supervisors-ncwl-ert = To your squad leader, and commanding officer.
-job-supervisors-tfsc = the TFCF Ringleader for Federation matters and your own company leadership for internal affairs
+job-supervisors-tfsc = the TFCF Administrator for Federation matters and your own company leadership for internal affairs
 job-supervisors-imperial = Count Olywier's charter and its active military command
 job-supervisors-imperial-adjutant = the Imperial Crown and your independent duty to report to Domain
 job-supervisors-shi = Shinohara Corporate Command
@@ -36,8 +36,8 @@ job-supervisors-cmm-officer = the Colonial Marshal and his Deputy
 job-supervisors-cmm-sergeant = the Colonial Officers and Colonial Command
 job-supervisors-cmm-minuteman = the Colonial Wardens, the Colonial Officers, and your militia superiors
 
-# GSC and Federation command. The Ringleader leads joint TFCF matters without replacing member leadership.
+# GSC and Federation command. The Administrator leads joint TFCF matters without replacing member leadership.
 job-supervisors-gsc-ringleader = the Federation charter. You lead the TFCF on common war, diplomacy, territorial claims, infrastructure, and major joint contracts
-job-supervisors-gsc-officer = the ringleader
-job-supervisors-gsc-infanteer = the Ringleader on Federation matters and Gorlex leadership on company operations
+job-supervisors-gsc-officer = the administrator
+job-supervisors-gsc-infanteer = the Administrator on Federation matters and Gorlex leadership on company operations
 job-supervisors-gsc-newbie = your company superiors and valid Federation commitments

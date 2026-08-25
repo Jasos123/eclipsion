@@ -72,6 +72,14 @@ public sealed partial class StealthComponent : Component
     /// </summary>
     [DataField("examinedDesc")]
     public string ExaminedDesc = "stealth-visual-effect";
+
+    /// <summary>
+    ///     Whether the sprite is tinted towards blue as it fades. The distortion shader alone reads
+    ///     as a shimmer; the tint reads as the character having changed colour, which is wrong for
+    ///     effects that are meant to be a person half-hidden rather than a cloaked object.
+    /// </summary>
+    [DataField]
+    public bool ColorTint = true;
 }
 
 [Serializable, NetSerializable]
@@ -81,11 +89,13 @@ public sealed class StealthComponentState : ComponentState
     public readonly TimeSpan? LastUpdated;
     public readonly bool Enabled;
     public readonly float MaxVisibility; // Shitmed Change
-    public StealthComponentState(float stealthLevel, TimeSpan? lastUpdated, bool enabled, float maxVisibility)
+    public readonly bool ColorTint; // Eclipsion
+    public StealthComponentState(float stealthLevel, TimeSpan? lastUpdated, bool enabled, float maxVisibility, bool colorTint)
     {
         Visibility = stealthLevel;
         LastUpdated = lastUpdated;
         Enabled = enabled;
         MaxVisibility = maxVisibility; // Shitmed Change
+        ColorTint = colorTint; // Eclipsion
     }
 }

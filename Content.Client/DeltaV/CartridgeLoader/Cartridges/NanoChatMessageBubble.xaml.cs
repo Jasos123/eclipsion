@@ -37,7 +37,13 @@ public sealed partial class NanoChatMessageBubble : BoxContainer
         // Show delivery failed text if needed (only for own messages)
         DeliveryFailedLabel.Visible = isOwnMessage && message.DeliveryFailed;
         if (DeliveryFailedLabel.Visible)
+        {
+            // Eclipsion - being blocked reads as a comms failure otherwise, and the sender keeps retrying.
+            DeliveryFailedLabel.Text = Loc.GetString(message.Blocked
+                ? "nano-chat-blocked-by-recipient"
+                : "nano-chat-delivery-failed");
             DeliveryFailedLabel.Modulate = ErrorColor;
+        }
 
         // For own messages: FlexSpace -> MessagePanel -> RightSpacer
         // For other messages: LeftSpacer -> MessagePanel -> FlexSpace

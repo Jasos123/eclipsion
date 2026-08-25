@@ -15,7 +15,7 @@
     shoutBubbleScale: 1.32
     radioScale: 1.23
     radioBold: true
-  supervisors: You lead SAW crews and answer to the collective's recognized leadership; follow the Ringleader on valid Federation-wide matters.
+  supervisors: You lead SAW crews and answer to the collective's recognized leadership; follow the Administrator on valid Federation-wide matters.
   canBeAntag: false
   requirements:
     - !type:CharacterSpeciesRequirement

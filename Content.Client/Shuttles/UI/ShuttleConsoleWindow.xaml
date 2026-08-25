@@ -63,5 +63,14 @@
             <ui:DockingScreen Name="DockContainer" Visible="False"/>
             <shuttle:CrewScreen Name="CrewContainer" Visible="False"/>
         </BoxContainer>
+        <!-- KS14 shell: the always-on status strip. Deliberately fine print - it sits under
+             every tab so the crew never has to go looking for it, without competing with
+             the plot for attention. -->
+        <PanelContainer Name="StatusStrip" Margin="8 2 8 6">
+            <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="6 2 6 2">
+                <Label Name="StatusLabel" StyleClasses="KsInstrumentSmall" HorizontalExpand="True"/>
+                <Label Name="AlertLabel" StyleClasses="KsInstrumentSmall" Visible="False"/>
+            </BoxContainer>
+        </PanelContainer>
     </BoxContainer>
 </ksui:KsBaseWindow>

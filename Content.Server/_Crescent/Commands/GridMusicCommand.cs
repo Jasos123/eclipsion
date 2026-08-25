@@ -30,17 +30,15 @@ public sealed class GridMusicCommand : IConsoleCommand
             return;
         }
 
-        if (!EntityUid.TryParse(args[0], out var gridUid))
+        // Eclipsion: the id an admin reads off their client is a NetEntity. Parsing it straight into an
+        // EntityUid silently resolves to an unrelated entity on the server.
+        if (!NetEntity.TryParse(args[0], out var gridNet) || !_entManager.TryGetEntity(gridNet, out var gridUidNullable))
         {
             shell.WriteError($"Invalid grid entity ID: {args[0]}");
             return;
         }
 
-        if (!_entManager.EntityExists(gridUid))
-        {
-            shell.WriteError($"Grid entity {gridUid} does not exist.");
-            return;
-        }
+        var gridUid = gridUidNullable.Value;
 
         var soundPath = args[1];
         var audio = AudioParams.Default;

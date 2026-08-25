@@ -1,4 +1,4 @@
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Numerics;
 using Content.Client.Crescent.Radar;
 using Content.Client.Station;
@@ -305,7 +305,12 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
             return;
 
         _hoveredRelativePosition = args.RelativePosition;
-        OnRadarClick?.Invoke(PureRelativePosition(args.RelativePosition));
+
+        // Same as MouseMove: the anchor can be gone even when _coordinates still holds it.
+        var clicked = PureRelativePosition(args.RelativePosition);
+        if (clicked.IsValid(EntManager))
+            OnRadarClick?.Invoke(clicked);
+
         foreach (var (shipkey, shipdata) in drawJob.gridData)
         {
             if ((shipdata.UIPosition - MouseUIPosition).Length() < 5)
@@ -320,14 +325,23 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
         base.MouseMove(args);
 
         _hoveredRelativePosition = args.RelativePosition;
-        var returned = PureRelativePosition(args.RelativePosition);
-
-        OnRadarMouseMove?.Invoke(returned);
-        OnRadarMouseMoveRelative?.Invoke(RelativeAngleFromFace(returned));
         // Pixels, not virtual units - the cannon lines are drawn against ScalePosition output.
         MouseUIPosition = args.RelativePixelPosition;
         MouseOverRadar = true;
-		MousePosition = _transform.ToMapCoordinates(returned).Position; // Rat
+
+        var returned = PureRelativePosition(args.RelativePosition);
+
+        // The radar only has a frame of reference while a nav state with a live anchor is applied to it.
+        // It has none before the first state arrives, and loses it again whenever that entity goes away -
+        // ghosting off the console, the grid being deleted. Handing an invalid coordinate to anything
+        // downstream logs "Attempted to convert coordinates with invalid entity" once per mouse-move
+        // event, which is once per frame the cursor is over the radar.
+        if (!returned.IsValid(EntManager))
+            return;
+
+        OnRadarMouseMove?.Invoke(returned);
+        OnRadarMouseMoveRelative?.Invoke(RelativeAngleFromFace(returned));
+        MousePosition = _transform.ToMapCoordinates(returned).Position; // Rat
     }
 
     protected override void MouseExited()

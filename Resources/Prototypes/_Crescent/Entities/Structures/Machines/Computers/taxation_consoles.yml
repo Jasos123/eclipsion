@@ -105,7 +105,7 @@
   suffix: Freeport / TFCF
   components:
   - type: AccessReader
-    # The Federation command tier: Ringleader plus the recognized leaders coordinating each member organization.
+    # The Federation command tier: Administrator plus the recognized leaders coordinating each member organization.
     access: [["SyndicateCommand"], ["SyndicateRingleader"], ["SyndicateFunds"]]
 
 # ---------------------------------------------------------------------------

@@ -17,17 +17,16 @@ public sealed class GrantPsionicLevelCommand : IConsoleCommand
 
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        if (args.Length is < 1 or > 2)
+        if (args.Length > 2)
         {
             shell.WriteError(Help);
             return;
         }
 
-        if (!EntityUid.TryParse(args[0], out var uid))
-        {
-            shell.WriteError(Loc.GetString("command-grant-psionic-level-invalid-entity"));
+        var entityManager = IoCManager.Resolve<IEntityManager>();
+
+        if (!PsionicCommandHelper.TryResolveTarget(shell, args, entityManager, out var uid, out var psionic))
             return;
-        }
 
         var amount = 1;
         if (args.Length == 2 && (!int.TryParse(args[1], out amount) || amount <= 0))
@@ -36,13 +35,13 @@ public sealed class GrantPsionicLevelCommand : IConsoleCommand
             return;
         }
 
-        var entityManager = IoCManager.Resolve<IEntityManager>();
-        if (!entityManager.HasComponent<PsionicComponent>(uid))
-        {
-            shell.WriteError(Loc.GetString("command-grant-psionic-level-not-psionic"));
-            return;
-        }
+        entityManager.System<PsionicsSystem>().GrantPsionicLevel(uid, psionic, amount);
 
-        entityManager.System<PsionicsSystem>().GrantPsionicLevel(uid, amount: amount);
+        shell.WriteLine(Loc.GetString(
+            "command-grant-psionic-level-granted",
+            ("amount", amount),
+            ("target", entityManager.ToPrettyString(uid)),
+            ("level", psionic.PsionicLevel),
+            ("points", psionic.SkillPoints)));
     }
 }

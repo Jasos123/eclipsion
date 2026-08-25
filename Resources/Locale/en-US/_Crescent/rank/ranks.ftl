@@ -73,9 +73,9 @@ crescent-rank-ncwl-conscript = Conscript
 
 # syn
 
-crescent-rank-synadmin = Ringleader
+crescent-rank-synadmin = Administrator
 crescent-rank-boss = Lieutenant
-crescent-rank-patriarch = Patriarch
+crescent-rank-patriarch = Cyberdawn Supervisor
 crescent-rank-operative = Operative
 crescent-rank-op = Cpl.
 crescent-rank-pfc = Pvt.

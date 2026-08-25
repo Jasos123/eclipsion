@@ -1,4 +1,5 @@
-﻿using Content.Shared.Interaction;
+using Content.Shared.Interaction;
+using Robust.Shared.Network;
 
 namespace Content.Shared.MouseRotator;
 
@@ -9,6 +10,7 @@ namespace Content.Shared.MouseRotator;
 public abstract class SharedMouseRotatorSystem : EntitySystem
 {
     [Dependency] private readonly RotateToFaceSystem _rotate = default!;
+    [Dependency] private readonly INetManager _net = default!;
 
     public override void Initialize()
     {
@@ -50,7 +52,10 @@ public abstract class SharedMouseRotatorSystem : EntitySystem
         if (args.SenderSession.AttachedEntity is not { } ent
             || !TryComp<MouseRotatorComponent>(ent, out var rotator))
         {
-            Log.Error($"User {args.SenderSession.Name} ({args.SenderSession.UserId}) tried setting local rotation directly without a valid mouse rotator component attached!");
+            // Clientside this replays every tick until the input is acked, and a state reset can drop the
+            // component in between, so only the server has anything meaningful to complain about here.
+            if (_net.IsServer)
+                Log.Error($"User {args.SenderSession.Name} ({args.SenderSession.UserId}) tried setting local rotation directly without a valid mouse rotator component attached!");
             return;
         }
 

@@ -21,17 +21,6 @@
       group: LoadoutBelt
 
 - type: loadout
-  id: LoadoutBeltGenericThick
-  category: Belt
-  cost: 0
-  customColorTint: true
-  items:
-    - ClothingBeltGenericThick
-  requirements:
-    - !type:CharacterItemGroupRequirement
-      group: LoadoutBelt
-
-- type: loadout
   id: LoadoutBeltWaist
   category: Belt
   cost: 0

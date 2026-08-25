@@ -6,6 +6,11 @@
   requirements:
     - !type:CharacterOverallTimeRequirement
       min: 108000
+    - !type:CharacterSpeciesRequirement
+      inverted: true
+      species:
+        - Skeleton
+        - Felinid
   startingGear: MercenaryGear
   canBeAntag: true
   icon: "JobIconPassenger"

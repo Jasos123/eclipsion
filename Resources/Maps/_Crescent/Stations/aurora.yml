@@ -88544,7 +88544,7 @@ entities:
     - type: Transform
       pos: -3.5,37.5
       parent: 1
-- proto: AirlockCommandLockedDSMHorizontalScribe
+- proto: AirlockCommandLockedDSMHorizontal
   entities:
   - uid: 288
     components:
@@ -88638,7 +88638,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 14.5,37.5
       parent: 1
-- proto: AirlockCommandLockedScribe
+- proto: AirlockCommandLockedDSM
   entities:
   - uid: 301
     components:
@@ -184053,7 +184053,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -6.5,29.5
       parent: 1
-- proto: WindoorSecureDSMScribe
+- proto: WindoorSecureDSM
   entities:
   - uid: 16147
     components:

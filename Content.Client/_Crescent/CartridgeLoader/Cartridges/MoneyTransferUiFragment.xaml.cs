@@ -6,6 +6,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Maths;
+using Robust.Shared.Network; // Eclipsion - blocking
 
 namespace Content.Client._Crescent.CartridgeLoader.Cartridges;
 
@@ -40,6 +41,9 @@ public sealed partial class MoneyTransferUiFragment : LayoutContainer
 
     public event Action<NetEntity, int, string>? OnTransfer;
 
+    /// <summary>Eclipsion - block/unblock a person: (target entity, account if known, block?).</summary>
+    public event Action<NetEntity, NetUserId?, bool>? OnBlock;
+
     private NetEntity? _selectedRecipient;
     private readonly List<MoneyTransferRecipientState> _allRecipients = new();
 
@@ -56,6 +60,7 @@ public sealed partial class MoneyTransferUiFragment : LayoutContainer
 
         Tabs.SetTabTitle(0, Loc.GetString("money-transfer-ui-tab-transfer"));
         Tabs.SetTabTitle(1, Loc.GetString("money-transfer-ui-tab-history"));
+        Tabs.SetTabTitle(2, Loc.GetString("money-transfer-ui-tab-blocked")); // Eclipsion - blocking
 
         SearchEdit.OnTextChanged += _ => ApplyRecipientFilter();
 
@@ -63,7 +68,22 @@ public sealed partial class MoneyTransferUiFragment : LayoutContainer
         {
             if (args.ItemList[args.ItemIndex].Metadata is NetEntity ne)
                 _selectedRecipient = ne;
+
+            UpdateBlockButton(); // Eclipsion - blocking
         };
+
+        // Eclipsion Start - blocking
+        BlockButton.OnPressed += _ =>
+        {
+            if (_selectedRecipient is not { } target)
+            {
+                ShowToast(Loc.GetString("money-transfer-error-no-selection"), toastError: true);
+                return;
+            }
+
+            OnBlock?.Invoke(target, null, !IsBlocked(target));
+        };
+        // Eclipsion End
 
         TransferButton.OnPressed += _ =>
         {
@@ -94,6 +114,7 @@ public sealed partial class MoneyTransferUiFragment : LayoutContainer
         _allRecipients.Clear();
         _allRecipients.AddRange(state.Recipients);
         ApplyRecipientFilter();
+        UpdateBlockedList(state.Blocked); // Eclipsion - blocking
 
         HistoryContainer.RemoveAllChildren();
         if (state.History.Count == 0)
@@ -130,6 +151,62 @@ public sealed partial class MoneyTransferUiFragment : LayoutContainer
         }
     }
 
+    // Eclipsion Start - blocking
+    /// <summary>Whether the person currently picked in the send list is on the block list.</summary>
+    private bool IsBlocked(NetEntity target)
+    {
+        return _allRecipients.Any(r => r.Entity == target && r.Blocked);
+    }
+
+    private void UpdateBlockButton()
+    {
+        var selected = _selectedRecipient;
+        BlockButton.Disabled = selected == null;
+        BlockButton.Text = Loc.GetString(selected is { } target && IsBlocked(target)
+            ? "money-transfer-ui-unblock"
+            : "money-transfer-ui-block");
+    }
+
+    /// <summary>
+    ///     Rebuilds the block list tab. Entries come from the block list itself rather than from the send
+    ///     list, so somebody who has logged out or died still has a row here to be unblocked from.
+    /// </summary>
+    private void UpdateBlockedList(List<MoneyTransferBlockedState> blocked)
+    {
+        BlockedContainer.RemoveAllChildren();
+
+        if (blocked.Count == 0)
+        {
+            BlockedContainer.AddChild(new Label { Text = Loc.GetString("money-transfer-ui-blocked-empty") });
+            return;
+        }
+
+        foreach (var entry in blocked)
+        {
+            var row = new BoxContainer
+            {
+                Orientation = BoxContainer.LayoutOrientation.Horizontal,
+                HorizontalExpand = true,
+                Margin = new Thickness(0, 0, 0, 4),
+            };
+
+            row.AddChild(new Label
+            {
+                Text = entry.Name,
+                HorizontalExpand = true,
+                ClipText = true,
+            });
+
+            var button = new Button { Text = Loc.GetString("money-transfer-ui-unblock") };
+            var user = entry.User;
+            button.OnPressed += _ => OnBlock?.Invoke(NetEntity.Invalid, user, false);
+            row.AddChild(button);
+
+            BlockedContainer.AddChild(row);
+        }
+    }
+    // Eclipsion End
+
     private void ShowToast(string message, bool toastError)
     {
         _toastGeneration++;
@@ -148,7 +225,17 @@ public sealed partial class MoneyTransferUiFragment : LayoutContainer
         });
     }
 
+    /// <summary>
+    ///     Eclipsion - the list is rebuilt from several places and every one of them can drop the
+    ///     selection, so the Block button is refreshed once here rather than at each early return.
+    /// </summary>
     private void ApplyRecipientFilter()
+    {
+        RebuildRecipientList();
+        UpdateBlockButton();
+    }
+
+    private void RebuildRecipientList()
     {
         var previousSelection = _selectedRecipient;
         RecipientList.Clear();
@@ -175,6 +262,12 @@ public sealed partial class MoneyTransferUiFragment : LayoutContainer
             var text = string.IsNullOrEmpty(r.Job)
                 ? r.Name
                 : Loc.GetString("money-transfer-ui-recipient-line", ("name", r.Name), ("job", r.Job));
+
+            // Eclipsion - a blocked person stays in the list (you can still pay them) but is marked, so
+            // nobody wonders why money from them never arrives.
+            if (r.Blocked)
+                text = Loc.GetString("money-transfer-ui-recipient-blocked", ("line", text));
+
             RecipientList.AddItem(text, metadata: r.Entity);
         }
 

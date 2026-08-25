@@ -1,4 +1,4 @@
-﻿# Baseline
+# Baseline
 - type: entity
   id: BaseAsteroidDebrisNF
   parent: BaseDebrisNF
@@ -53,6 +53,9 @@
             orGroup: rock
           - id: WallRockCopper
             prob: 0.04 # TODO: CHANGEME
+            orGroup: rock
+          - id: FuelSeepBoriatic
+            prob: 0.005
             orGroup: rock
     - type: IFF
       flags: HideLabel
@@ -820,6 +823,9 @@
       radius: 6
       floorPlacements: 16
     - type: SimpleFloorPlanPopulator
+      guaranteedSpawns:
+        FloorChromite:
+        - FuelSeepAme
       entries:
         FloorChromite:
           - id: RandomArtifactSpawner20
@@ -860,6 +866,9 @@
             orGroup: rock
           - id: WallRockChromiteCopper
             prob: 0.001 # TODO: CHANGEME
+            orGroup: rock
+          - id: FuelSeepAme
+            prob: 0.004
             orGroup: rock
     - type: IFF
       flags: HideLabel

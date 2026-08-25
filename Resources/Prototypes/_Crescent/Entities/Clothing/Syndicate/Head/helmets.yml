@@ -179,7 +179,7 @@
   parent: ClothingHeadHardsuitWithLightBase
   id: ClothingHeadHelmetHardsuitCoordinator
   categories: [ HideSpawnMenu ]
-  name: interdyne coordinator hardsuit helmet
+  name: interdyne supervisor hardsuit helmet
   description: Spaceworthy protection for your fragile skull.
   components:
   - type: BreathMask
@@ -277,8 +277,8 @@
 - type: entity
   parent: ClothingHeadBase
   id: ClothingHeadHatSyndicateInterdyneBeret
-  name: coordinator's beret
-  description: A red beret with a stamped Interdyne logo, given out to Interdyne coordinators.
+  name: interdyne supervisor's beret
+  description: A red beret with a stamped Interdyne logo, given out to Interdyne supervisors.
   components:
   - type: Sprite
     sprite: _Crescent/Clothing/Syndicate/Head/ipm_beret.rsi
@@ -359,7 +359,7 @@
 - type: entity
   parent: ClothingHeadBase
   id: ClothingHeadHatPatriarch
-  name: patriarch's peaked cap
+  name: cyberdawn supervisor's peaked cap
   description: An authorative cap in Cyberdawn white and red.
   components:
   - type: Sprite

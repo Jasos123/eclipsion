@@ -45,7 +45,13 @@ public sealed class HullrotNpcFactionSyncSystem : EntitySystem
 
     private void OnFactionRemove(Entity<HullrotFactionComponent> ent, ref ComponentRemove args)
     {
-        Apply(ent.Owner, null);
+        // Startup normally creates the bookkeeping component, but a component can also be removed before it
+        // ever starts (or while its entity is terminating). Never add a new component during either removal path.
+        if (!TryComp<HullrotNpcFactionComponent>(ent, out var applied) || applied.Applied is not { } old)
+            return;
+
+        _npcFaction.RemoveFaction(ent.Owner, old);
+        applied.Applied = null;
     }
 
     /// <summary>

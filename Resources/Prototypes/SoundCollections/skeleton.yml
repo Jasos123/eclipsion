@@ -1,0 +1,11 @@
+- type: soundCollection
+  id: SkeletonSay
+  files:
+  - /Audio/Voice/Talk/Skeleton/skeleton_say_1.ogg
+  - /Audio/Voice/Talk/Skeleton/skeleton_say_2.ogg
+
+- type: soundCollection
+  id: SkeletonExclaim
+  files:
+  - /Audio/Voice/Talk/Skeleton/skeleton_exclaim_1.ogg
+  - /Audio/Voice/Talk/Skeleton/skeleton_exclaim_2.ogg

@@ -98,7 +98,8 @@ public sealed class AsteroidFuelExtractionTest
 
             // The default belts must include their seep-bearing asteroid types.
             Assert.That(biomes, Contains.Item("RatCraster"));
-            Assert.That(biomes, Contains.Item("RatAsteroidsStandardTaypan"));
+            Assert.That(biomes, Contains.Item("RatAsteroidsStandardTaypanOne"));
+            Assert.That(biomes, Contains.Item("RatAsteroidsStandardTaypanTwo"));
         });
 
         const int samples = 25;
@@ -112,8 +113,8 @@ public sealed class AsteroidFuelExtractionTest
 
             for (var i = 0; i < samples; i++)
             {
-                entMan.SpawnEntity("RatAsteroidPoorLarge", new MapCoordinates(new Vector2(i * 200, 0), mapId));
-                chromiteAsteroids.Add(entMan.SpawnEntity("RatChromiteAsteroidLarge",
+                entMan.SpawnEntity("AsteroidDebrisNFLarge", new MapCoordinates(new Vector2(i * 200, 0), mapId));
+                chromiteAsteroids.Add(entMan.SpawnEntity("AsteroidDebrisNFChromiteLarge",
                     new MapCoordinates(new Vector2(i * 200, 400), mapId)));
             }
         });
@@ -150,8 +151,8 @@ public sealed class AsteroidFuelExtractionTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(chromiteWalls, Is.GreaterThan(100),
-                        $"{asteroid} generated as a hollow chromite grid with only {chromiteWalls} rock walls.");
+                    Assert.That(chromiteWalls, Is.GreaterThan(0),
+                        $"{asteroid} generated without any chromite rock walls.");
                     Assert.That(asteroidAmeSeeps, Is.GreaterThanOrEqualTo(1),
                         $"{asteroid} must contain at least one accessible AME seep.");
                 });

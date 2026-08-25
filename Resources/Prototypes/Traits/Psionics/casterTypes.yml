@@ -28,6 +28,7 @@
             - IPC
             - Oni
             - Voidborn
+            - Skeleton
 
 - type: trait
   id: PsionicInsulation
@@ -93,6 +94,7 @@
             - IPC
             - Oni
             - Voidborn
+            - Skeleton
 
 - type: trait
   id: Biomancer
@@ -125,6 +127,7 @@
             - IPC
             - Oni
             - Voidborn
+            - Skeleton
 
 - type: trait
   id: Pyromancer
@@ -157,3 +160,4 @@
             - IPC
             - Oni
             - Voidborn
+            - Skeleton

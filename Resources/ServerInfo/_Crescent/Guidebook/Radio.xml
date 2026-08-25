@@ -1,17 +1,28 @@
 <Document>
-[head=3][color=#e8b04b]Channel keys[/color][/head]
+[head=2][color=#e8b04b]Radio and Channel Keys[/color][/head]
 
-These are the prefixes for the main channels. You can only use the ones your headset is keyed for.
+Press [color=#6ab7d6][keybind="FocusRadioWindow"/][/color] to start a radio message. To use a specific channel, put its prefix at the beginning: [color=#6ab7d6]:o Reporting in at the dock.[/color]
 
-- [color=#684871]Imperial (DSM)[/color] command net uses [color=#6ab7d6]:i[/color], and the Imperial civilian net uses [color=#6ab7d6]:j[/color].
-- [color=#bf4d00]NCWL[/color] uses [color=#6ab7d6]:o[/color].
-- [color=#535961]Shinohara (SHI)[/color] uses [color=#6ab7d6]:w[/color].
-- [color=#ff7f7f]Gorlex / Federation (TFCF)[/color] uses [color=#6ab7d6]:p[/color]. Its member companies have their own nets, such as Cyberdawn on [color=#6ab7d6]:2[/color], Interdyne on [color=#6ab7d6]:3[/color], and SAW on [color=#6ab7d6]:x[/color].
-- [bold]Command[/bold] channels are restricted to officers and leaders. The NCWL command net uses [color=#6ab7d6]:h[/color], and it is keyed only into command headsets.
+You can only transmit on channels installed in your headset. If a prefix does not work, examine the headset and ask your supervisor which network your role uses.
+
+[head=3][color=#e8b04b]Common and civilian channels[/color][/head]
+
+- [bold]Common[/bold] uses [color=#6ab7d6];[/color]. It is useful for nearby civilian coordination but may be heard by many factions.
+- [bold]Traffic[/bold] uses [color=#6ab7d6]:d[/color] on headsets that carry the traffic channel.
+- Gliess Santo staff use [color=#6ab7d6]:s[/color] for their protected service channel; ordinary visitors should use Common unless directed otherwise.
+- The Taypani-Atyrian Pact / Families channel uses [color=#6ab7d6]:4[/color].
+
+[head=3][color=#e8b04b]Faction channels[/color][/head]
+
+- [color=#684871]DSM[/color]: Imperial command [color=#6ab7d6]:i[/color]; Imperial civilian [color=#6ab7d6]:j[/color].
+- [color=#bf4d00]NCWL[/color]: faction [color=#6ab7d6]:o[/color]; command [color=#6ab7d6]:h[/color].
+- [color=#535961]SHI[/color]: corporate [color=#6ab7d6]:w[/color].
+- [color=#ff7f7f]TFCF[/color]: Federation-wide [color=#6ab7d6]:t[/color]; command [color=#6ab7d6]:7[/color].
+- TFCF company channels: Gorlex [color=#6ab7d6]:p[/color], Cyberdawn [color=#6ab7d6]:2[/color], Interdyne [color=#6ab7d6]:3[/color], and SAW [color=#6ab7d6]:x[/color].
 
 [head=3][color=#e8b04b]Radio discipline[/color][/head]
 
-- [color=#d9776c]The enemy cannot hear your faction net[/color], but a captured or looted enemy headset can. Watch what you say if your gear falls into enemy hands.
-- Keep the net clear during a fight. Short, clear callouts about positions, targets, and casualties save lives, while idle chatter gets people killed.
-- Report enemy movement, request support, and confirm orders. A quiet radio in a warzone usually means something has gone wrong.
+- [color=#d9776c]A faction channel is not perfectly secure.[/color] Captured headsets and encryption keys can let an enemy listen.
+- In combat, give your location, the threat, direction of travel, and what help you need. Keep calls short enough for others to answer.
+- Confirm important orders. If you do not understand an instruction, ask instead of silently guessing.
 </Document>

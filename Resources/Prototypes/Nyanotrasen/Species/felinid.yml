@@ -1,13 +1,17 @@
 - type: species
   id: Felinid
   name: species-name-felinid
-  roundStart: false
+  roundStart: true
   prototype: MobFelinid
   sprites: MobHumanSprites
   defaultSkinTone: "#c0967f"
   markingLimits: MobFelinidMarkingLimits
   dollPrototype: MobFelinidDummy
   skinColoration: HumanToned
+  # Felinids are a Shinohara-only species: SHI's genetic-augmentation programme is the
+  # only thing in Taypan that produces them, so no other faction can field one.
+  factions:
+  - SHI
   minHeight: 0.9
   defaultHeight: 0.9
   maxHeight: 0.9

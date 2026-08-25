@@ -317,7 +317,9 @@
     - !type:CharacterSpeciesRequirement
       inverted: true
       species:
-        - Felinid # Felinids/Tajaran already have this feature by default.
+        # Tajaran already carry PseudoItem by default. Felinids deliberately do not:
+        # they are not a carryable species, so they cannot buy the component back here either.
+        - Felinid
         - Tajaran
     - !type:CharacterHeightRequirement
       max: 150

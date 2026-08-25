@@ -30,6 +30,31 @@
   - type: IgniteOnCollide
     fireStacks: 0.35
 
+# The Fire tree's opening node. Deliberately short of the wizard's fireball: no tile breaking and no
+# vacuum, because a level one Psion should not be able to open a room to space with their first power.
+- type: entity
+  id: ProjectilePsionicFireball
+  name: psionic fireball
+  description: A mote of someone else's will, burning.
+  parent: ProjectileFireball
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Heat: 8
+  - type: Explosive
+    explosionType: Default
+    maxIntensity: 4
+    intensitySlope: 2
+    totalIntensity: 10
+    maxTileBreak: 0
+    canCreateVacuum: false
+  - type: IgniteOnCollide
+    fireStacks: 3
+  - type: TimedDespawn
+    lifetime: 5
+
 - type: entity
   id: ProjectileImpFireball
   name: imp fireball

@@ -15,3 +15,4 @@
       sprite: Objects/Economy/cash.rsi
       state: cash_10
   - type: GamblingCartridge
+  - type: OwnerLockedProgram # Eclipsion - only the PDA's owner may bet their money

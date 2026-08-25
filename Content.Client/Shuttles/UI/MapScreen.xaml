@@ -17,21 +17,6 @@
                           Margin="5 0 5 5"
                           Orientation="Vertical"
                           VerticalExpand="True">
-                <controls1:StripeBack
-                    MinSize="48 48">
-                    <controls:Label Name="MapDisplayLabel" Text="{controls:Loc 'shuttle-console-ftl-label'}"
-                                    VerticalExpand="True"
-                                    HorizontalAlignment="Center"/>
-                </controls1:StripeBack>
-                <controls:Label Name="MapFTLState"
-                                Text="{controls:Loc 'shuttle-console-ftl-state-Available'}"
-                                VerticalAlignment="Stretch"
-                                HorizontalAlignment="Center"/>
-                <controls:ProgressBar Name="FTLBar" HorizontalExpand="True"
-                                      Margin="5"
-                                      MinValue="0.0"
-                                      MaxValue="1.0"
-                                      Value="1.0"/>
                 <controls:BoxContainer Orientation="Vertical">
                 <!-- Normal buttons -->
                 <controls1:StripeBack MinSize="48 48">
@@ -43,10 +28,6 @@
                                  TextAlign="Center"
                                  ToggleMode="True"
                                  Pressed="True"/>
-                <controls:Button Name="MapFTLButton"
-                                 ToggleMode="True"
-                                 Text="{controls:Loc 'shuttle-console-ftl-button'}"
-                                 TextAlign="Center"/>
                 <controls:Button Name="MapRebuildButton"
                         Text="{controls:Loc 'shuttle-console-map-rebuild'}"
                         TextAlign="Center"/>

@@ -632,7 +632,10 @@
   - type: ExplosionResistance
     damageCoefficient: 0.4
   - type: DegradeableArmor
-    armorMaxHealth: 3000
+    # Eclipsion Start - was 3000 HP / 0.7 sprint, which made this strictly better
+    # than its SHI counterpart (KAMADO, 2000 HP / 0.6 sprint) on every axis while
+    # costing less to print. Trimmed to close the gap.
+    armorMaxHealth: 2200
     armorType: Ceramic
     armorRepair: HomelandAlloy
     initialModifiers:
@@ -644,7 +647,8 @@
         Caustic: 25
   - type: ClothingSpeedModifier
     walkModifier: 0.7
-    sprintModifier: 0.7
+    sprintModifier: 0.65
+    # Eclipsion End
   - type: HeldSpeedModifier
   - type: Reflect
     spread: 270

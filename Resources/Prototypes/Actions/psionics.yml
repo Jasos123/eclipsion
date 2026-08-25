@@ -57,7 +57,9 @@
   components:
     - type: InstantAction
       icon: Interface/VerbIcons/mind_swap_return.png
-      useDelay: 20
+      # Veil Sight leans on this action to get back into your body. Twenty seconds of being stuck
+      # staring at yourself was the single loudest complaint about the power.
+      useDelay: 5
       checkCanInteract: false
       event: !type:MindSwapPowerReturnActionEvent
 
@@ -315,7 +317,9 @@
   components:
     - type: InstantAction
       icon: { sprite: Interface/Actions/voidborn_icons.rsi, state: darkswap }
-      useDelay: 10
+      # Matched to the thirty seconds the shadow state now lasts. At the old ten a Psion could step
+      # straight back into it as it timed out, which is the same as never leaving.
+      useDelay: 30
       checkCanInteract: false
       event: !type:DarkSwapActionEvent
 
@@ -325,26 +329,16 @@
   description: action-description-pyrokinetic-flare
   categories: [ HideSpawnMenu ]
   components:
-    - type: InstantAction
+    # This was an anomaly power that scattered flare effects around the caster - a flashbang wearing
+    # the name Fireball. It throws a bolt of flame at the cursor now.
+    - type: WorldTargetAction
       icon: { sprite: Interface/Actions/psionics.rsi, state: pyrokinetic_flare }
       useDelay: 25
+      range: 12
+      checkCanAccess: false
       checkCanInteract: false
-      event: !type:AnomalyPowerActionEvent
-        settings:
-          checkInsulation: true
-          powerName: "Pyrokinetic Flare"
-          minGlimmer: 3
-          maxGlimmer: 5
-          doSupercritical: false
-        entitySpawnEntries:
-          - settings:
-              spawnOnPulse: true
-              spawnOnSuperCritical: true
-              minAmount: 1
-              maxAmount: 3
-              maxRange: 1
-            spawns:
-              - EffectPyrokineticFlare
+      itemIconStyle: BigAction
+      event: !type:PsionicFireballActionEvent
 
 - type: entity
   id: ActionSummonImp
@@ -480,29 +474,10 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: InstantAction
-    icon: { sprite: Objects/Magic/magicactions.rsi, state: shield }
+    icon: { sprite: Interface/Actions/psionic_defense.rsi, state: self_aegis }
     useDelay: 45
     itemIconStyle: BigAction
     event: !type:PsionicSelfShieldActionEvent
-
-- type: entity
-  id: ActionPsionicAllyShield
-  name: action-name-psionic-ally-shield
-  description: action-description-psionic-ally-shield
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: EntityTargetAction
-    icon: { sprite: Objects/Magic/magicactions.rsi, state: shield }
-    useDelay: 60
-    range: 6
-    checkCanAccess: false
-    itemIconStyle: BigAction
-    canTargetSelf: true
-    blacklist:
-      components:
-      - PsionicInsulation
-      - Mindbroken
-    event: !type:PsionicAllyShieldActionEvent
 
 - type: entity
   id: ActionKineticSlam
@@ -522,3 +497,53 @@
       - PsionicInsulation
       - Mindbroken
     event: !type:KineticSlamActionEvent
+
+- type: entity
+  id: ActionPsionicStasisField
+  name: action-name-psionic-stasis-field
+  description: action-description-psionic-stasis-field
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: WorldTargetAction
+    icon: { sprite: Interface/Actions/psionic_recurrence.rsi, state: stasis_field }
+    useDelay: 90
+    range: 6
+    checkCanAccess: false
+    itemIconStyle: BigAction
+    event: !type:PsionicStasisFieldActionEvent
+
+- type: entity
+  id: ActionPsionicArmorReweave
+  name: action-name-psionic-armor-reweave
+  description: action-description-psionic-armor-reweave
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: InstantAction
+    icon: { sprite: Interface/Actions/psionic_recurrence.rsi, state: reweave }
+    useDelay: 180
+    itemIconStyle: BigAction
+    event: !type:PsionicArmorReweaveActionEvent
+
+- type: entity
+  id: ActionPsionicRecurrencePulse
+  name: action-name-psionic-recurrence-pulse
+  description: action-description-psionic-recurrence-pulse
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: InstantAction
+    icon: { sprite: Interface/Actions/psionic_recurrence.rsi, state: recurrence_pulse }
+    useDelay: 30
+    itemIconStyle: BigAction
+    event: !type:PsionicRecurrencePulseActionEvent
+
+- type: entity
+  id: ActionPsionicAegisDome
+  name: action-name-psionic-aegis-dome
+  description: action-description-psionic-aegis-dome
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: InstantAction
+    icon: { sprite: Interface/Actions/psionic_defense.rsi, state: aegis_dome }
+    useDelay: 120
+    itemIconStyle: BigAction
+    event: !type:PsionicAegisDomeActionEvent

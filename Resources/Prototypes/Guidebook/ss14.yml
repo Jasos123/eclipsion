@@ -7,12 +7,10 @@
   text: "/ServerInfo/Guidebook/SpaceStation14.xml"
   children:
   - Controls
-  - Writing
   - Jobs
   - Survival
   - Species
   - LoadoutInfo
-  - Psionics
 
 - type: guideEntry
   id: Writing
@@ -24,12 +22,13 @@
   id: Glossary
   name: guide-entry-glossary
   text: "/ServerInfo/_Crescent/Guidebook/Glossary.xml"
-  priority: 70
+  priority: 80
   children:
   - GlossaryDSM
   - GlossaryNCWL
   - GlossarySHI
   - GlossaryTFSC
+  - FormsOfAddress
 
 - type: guideEntry
   id: GlossaryDSM

@@ -2,6 +2,7 @@
 using System.Linq;
 using Content.Server.DeviceNetwork.Systems;
 using Content.Server.PDA;
+using Content.Server._Crescent.PDA; // Eclipsion - owner-locked PDA programs
 using Content.Shared.CartridgeLoader;
 using Content.Shared.Interaction;
 using Robust.Server.Containers;
@@ -17,6 +18,7 @@ public sealed class CartridgeLoaderSystem : SharedCartridgeLoaderSystem
     [Dependency] private readonly ContainerSystem _containerSystem = default!;
     [Dependency] private readonly UserInterfaceSystem _userInterfaceSystem = default!;
     [Dependency] private readonly PdaSystem _pda = default!;
+    [Dependency] private readonly PdaLockSystem _pdaLock = default!; // Eclipsion - owner-locked PDA programs
 
     public override void Initialize()
     {
@@ -384,6 +386,15 @@ public sealed class CartridgeLoaderSystem : SharedCartridgeLoaderSystem
     {
         var cartridge = GetEntity(message.CartridgeUid);
 
+        // Eclipsion Start - a PDA's money and messaging apps answer to the player it is bound to. Gated
+        // here rather than inside each app so every program is covered by one check, including any added later.
+        if (!_pdaLock.CanUseProgram(loaderUid, cartridge, message.Actor))
+        {
+            _pdaLock.PopupDenied(loaderUid, message.Actor);
+            return;
+        }
+        // Eclipsion End
+
         switch (message.Action)
         {
             case CartridgeUiMessageAction.Activate:
@@ -412,6 +423,13 @@ public sealed class CartridgeLoaderSystem : SharedCartridgeLoaderSystem
     /// </summary>
     private void OnUiMessage(EntityUid uid, CartridgeLoaderComponent component, CartridgeUiMessage args)
     {
+        // Eclipsion Start - the open-program gate above only covers the UI path. A client can post a
+        // cartridge message without ever asking to open the program, so the active program is re-checked
+        // against the device's owner before its app is allowed to act on anything.
+        if (component.ActiveProgram is { } active && !_pdaLock.CanUseProgram(uid, active, args.Actor))
+            return;
+        // Eclipsion End
+
         var cartridgeEvent = args.MessageEvent;
         cartridgeEvent.LoaderUid = GetNetEntity(uid);
         cartridgeEvent.Actor = args.Actor;

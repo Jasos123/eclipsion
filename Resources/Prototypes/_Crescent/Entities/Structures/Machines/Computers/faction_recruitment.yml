@@ -116,7 +116,7 @@
   - type: FactionRecruitmentConsole
     faction: TFSC
     # Roles sourced from shared Federation infrastructure at the Freeport (Stations/freeport.yml).
-    # Command (Ringleader, Lieutenant, Coordinator, Foreman, Intelligence Officer) is intentionally
+    # Command (Administrator, Lieutenant, Interdyne Supervisor, Foreman, Cyberdawn Supervisor) is intentionally
     # omitted: leadership roles must never be assignable from a console.
     roles:
     - InfanteerTFSC

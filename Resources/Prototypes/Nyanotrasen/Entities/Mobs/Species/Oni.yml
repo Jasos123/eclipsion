@@ -21,10 +21,6 @@
     prototype: Oni
   - type: Damageable
     damageModifierSet: Oni
-  - type: SlowOnDamage
-    speedModifierThresholds:
-      60: 1.2  # 0.7 is base speed.
-      80: 1.6  # 0.5 is base speed.
   - type: Fixtures
     fixtures: # TODO: This needs a second fixture just for mob collisions.
       fix1:
@@ -38,8 +34,8 @@
         layer:
         - MobLayer
   - type: Stamina
-    critThreshold: 115
-    decay: 3.45 # 3 base decay multiplied by 1.15 = 3.45
+    critThreshold: 105 # small surplus over human's 100
+    decay: 4.5 # paid for with slightly slower regen than human's 5/sec
   - type: TypingIndicator
     proto: oni
   - type: LanguageKnowledge

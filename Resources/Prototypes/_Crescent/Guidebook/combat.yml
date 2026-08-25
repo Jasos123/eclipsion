@@ -1,0 +1,35 @@
+- type: guideEntry
+  id: HullrotSystems
+  name: Economy, Ships, and Combat
+  text: "/ServerInfo/_Crescent/Guidebook/HullrotSystems.xml"
+  priority: 60
+  children:
+  - Bank
+  - Shipyard
+  - ShipCombat
+  - UnionFrontier
+  - Writing
+
+- type: guideEntry
+  id: Bank
+  name: Banking and Credits
+  text: "/ServerInfo/_Crescent/Guidebook/Bank.xml"
+  priority: 10
+
+- type: guideEntry
+  id: Shipyard
+  name: Buying and Selling Ships
+  text: "/ServerInfo/_Crescent/Guidebook/Shipyard.xml"
+  priority: 20
+
+- type: guideEntry
+  id: ShipCombat
+  name: Ship Combat
+  text: "/ServerInfo/_Crescent/Guidebook/Combat.xml"
+  priority: 30
+
+- type: guideEntry
+  id: UnionFrontier
+  name: Frontier Work and Cryosleep
+  text: "/ServerInfo/_Crescent/Guidebook/UnionFrontier.xml"
+  priority: 40

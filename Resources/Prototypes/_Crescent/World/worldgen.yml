@@ -15,18 +15,19 @@
     #- RatMarchbelt
     #- RatDeepbelt
 
-# Hyperwar variant: keeps the central belt (RatCraster) but drops the
-# surrounding ring (RatAsteroidsStandardTaypan) for a cleaner central battlefield.
+# Hyperwar variant: keeps the central belt (RatCraster) and the wreck field, but drops the
+# Taypan belts that flank them, for a cleaner central battlefield.
+# Uses the same fixed-region biomes as RatWorld; the old noise-driven RatGraveyardMin/Max
+# pair it used before was retired along with the RatDensity*/RatCarver noise channels.
 - type: worldgenConfig
   id: RatWorldHyperwar
   components:
   - type: WorldController
   - type: BiomeSelection
     biomes:
-    - RatStandard
+    - Failsafe
     - RatCraster
-    - RatGraveyardMax
-    - RatGraveyardMin
+    - RatGraveyardWrecks
 
 # Mapping preset: chunk loading only, no biomes at all, so nothing spawns around whatever the mapper is building.
 - type: worldgenConfig

@@ -3,10 +3,14 @@
                MinSize="480 590"
                SetSize="480 590">
     <BoxContainer Orientation="Vertical" Margin="8">
-        <Label Text="{Loc 'passport-ui-description'}" Margin="0 0 0 8" />
+        <Label Text="{Loc 'passport-ui-description'}" Margin="0 0 0 2" />
+        <Label Text="{Loc 'passport-ui-cover-hint'}" StyleClasses="LabelSubText" Margin="0 0 0 8" />
         <ScrollContainer VerticalExpand="True">
             <GridContainer Columns="2" HSeparationOverride="8" VSeparationOverride="5">
-                <Label Text="{Loc 'passport-ui-name'}" MinWidth="150" />
+                <Label Text="{Loc 'passport-ui-cover'}" MinWidth="150" />
+                <OptionButton Name="CoverOption" HorizontalExpand="True" />
+
+                <Label Text="{Loc 'passport-ui-name'}" />
                 <LineEdit Name="FullNameEdit" HorizontalExpand="True" />
 
                 <Label Text="{Loc 'passport-ui-age'}" />

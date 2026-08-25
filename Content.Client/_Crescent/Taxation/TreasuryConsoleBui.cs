@@ -18,6 +18,8 @@ public sealed class TreasuryConsoleBui : BoundUserInterface
         _window = new TreasuryConsoleWindow();
         _window.OnClose += Close;
         _window.OnWithdraw += amount => SendMessage(new TreasuryWithdrawMessage(amount));
+        // Eclipsion - purchase approval
+        _window.OnPurchaseDecision += (id, approve) => SendMessage(new TreasuryPurchaseDecisionMessage(id, approve));
         _window.OpenCentered();
     }
 
