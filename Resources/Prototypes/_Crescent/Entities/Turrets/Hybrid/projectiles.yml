@@ -16,8 +16,8 @@
     ignoreWeaponGrid: true
     damage:
       types:
-        Structural: 90
-        Radiation: 30
+        Structural: 250
+        Heat: 30
   - type: PointLight
     radius: 3.5
     color: purple
@@ -48,14 +48,14 @@
     ignoreWeaponGrid: true
     damage:
       types:
-        Structural: 420
-        Radiation: 80
+        Structural: 230
+        Heat: 80
   - type: ExplodeOnTrigger
   - type: Explosive
     explosionType: Default
-    maxIntensity: 250
-    intensitySlope: 60
-    totalIntensity: 1500
+    maxIntensity: 150
+    intensitySlope: 45
+    totalIntensity: 700
     maxTileBreak: 6
   - type: PointLight
     radius: 3.5
