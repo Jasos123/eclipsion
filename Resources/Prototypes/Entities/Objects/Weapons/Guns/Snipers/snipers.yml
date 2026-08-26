@@ -325,6 +325,8 @@
     difficulty: 2
     recipes:
       - WeaponSniperNCWLNovomosin
+  - type: StaticPrice # eclipsion
+    price: 1500
 
 - type: entity
   name: IRM Legax 5.56x45mm

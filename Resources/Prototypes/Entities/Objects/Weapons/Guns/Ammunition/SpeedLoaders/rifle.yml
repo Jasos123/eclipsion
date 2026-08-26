@@ -30,3 +30,5 @@
     containers:
       ballistic-ammo: !type:Container
         ents: []
+  - type: StaticPrice # eclipsion
+    price: 50
