@@ -5,7 +5,7 @@
   id: Hind
   name: NCWL Hind
   description: |
-    A light ore freighter converted into a missile destroyer.
+    A light ore freighter converted into a heavy fighter.
     LOADOUT: 1x 90mm 'Resolute' Assault Battery, 4x 20mm 'Screamer' Rotary Cannon
     SHIELD: Absent
     SPEED: 30 m/s
@@ -33,4 +33,4 @@
             !type:NanotrasenNameGenerator
             prefixCreator: '14'
         - type: VesselDesignation
-          designation: vessel-designation-missile
+          designation: vessel-designation-gunship
