@@ -5,7 +5,7 @@
     A fighter drone.
     LOADOUT: 1x 200cc 'Starburst' Plasma Gatling
     SHIELD: Absent
-    SPEED: 20 m/s
+    SPEED: 45 m/s
   price: 12500
   category: Small
   group: None
