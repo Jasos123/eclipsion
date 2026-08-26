@@ -8,7 +8,7 @@
     A communard energy cruiser.
     LOADOUT: 1x 330mm 'Catapult' Cruise Missile Platform, 4x 350cc 'Glare' Burst Laser, 2x 50mm 'Striker' Heavy Autocannon
     SHIELD: Bulwark
-    SPEED: 20 m/s
+    SPEED: 25 m/s
   price: 90000
   category: Large
   group: None
