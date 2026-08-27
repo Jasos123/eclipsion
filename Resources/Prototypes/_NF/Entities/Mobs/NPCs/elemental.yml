@@ -363,6 +363,13 @@
       - SimpleHostile
   - type: Damageable
     damageContainer: StructuralInorganic
+  # Keep the mob alive and collidable until its 150-damage destruction thresholds fire.
+  # If it enters Dead at MobElementalBase's 120 threshold, MobStateSystem disables its
+  # collisions and neither projectiles nor wide melee swings can deal the final damage.
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      150: Dead
   - type: MovementIgnoreGravity # Or they just can't do something
   - type: SalvageMobRestrictions
 

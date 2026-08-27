@@ -41,6 +41,12 @@ public partial class MapGridControl : LayoutContainer
     protected Vector2 StartDragPosition;
     protected bool Recentering;
 
+    /// <summary>
+    /// Local pixel position the in-progress zoom is anchored to, so scrolling keeps whatever sits under the
+    /// cursor in place instead of pivoting around the centre of the control.
+    /// </summary>
+    private Vector2? _zoomAnchor;
+
     protected const float ScrollSensitivity = 8f;
 
     protected float RecenterMinimum = 0.05f;
@@ -101,6 +107,7 @@ public partial class MapGridControl : LayoutContainer
     public void ForceRecenter()
     {
         Recentering = true;
+        _zoomAnchor = null;
     }
 
     protected override void KeyBindDown(GUIBoundKeyEventArgs args)
@@ -134,13 +141,31 @@ public partial class MapGridControl : LayoutContainer
             return;
 
         Recentering = false;
+        _zoomAnchor = null;
         Offset -= new Vector2(args.Relative.X, -args.Relative.Y) / MidPoint * WorldRange;
     }
 
     protected override void MouseWheel(GUIMouseWheelEventArgs args)
     {
         base.MouseWheel(args);
+
+        // Maps we can't pan have to stay locked on whatever they track, so those keep zooming around the centre.
+        if (Draggable && !Recentering)
+            _zoomAnchor = args.RelativePixelPosition;
+
         AddRadarRange(-args.Delta.Y * 1f / ScrollSensitivity * ActualRadarRange);
+    }
+
+    /// <summary>
+    /// World units the offset has to move per unit of range change to keep <paramref name="anchor"/> pinned.
+    /// </summary>
+    private Vector2 GetZoomAnchorScale(Vector2 anchor)
+    {
+        if (ScaledMinimapRadius == 0)
+            return Vector2.Zero;
+
+        var fromCenter = (anchor - MidPointVector) / ScaledMinimapRadius;
+        return new Vector2(fromCenter.X, -fromCenter.Y);
     }
 
     public void AddRadarRange(float value)
@@ -182,6 +207,7 @@ public partial class MapGridControl : LayoutContainer
         // Map re-centering
         if (Recentering)
         {
+            _zoomAnchor = null;
             var frameTime = Timing.FrameTime;
             var diff = (TargetOffset - Offset) * (float) frameTime.TotalSeconds;
 
@@ -236,8 +262,18 @@ public partial class MapGridControl : LayoutContainer
             var diff = ActualRadarRange - WorldRange;
             const float lerpRate = 10f;
 
+            var oldRange = WorldRange;
             WorldRange += (float) Math.Clamp(diff, -lerpRate * MathF.Abs(diff) * Timing.FrameTime.TotalSeconds, lerpRate * MathF.Abs(diff) * Timing.FrameTime.TotalSeconds);
+
+            // Follow the range lerp so the anchored point stays put for the whole zoom, not just the first frame.
+            if (_zoomAnchor is { } anchor)
+                Offset += GetZoomAnchorScale(anchor) * (oldRange - WorldRange);
+
             WorldRangeChanged?.Invoke(WorldRange);
+        }
+        else
+        {
+            _zoomAnchor = null;
         }
     }
 }

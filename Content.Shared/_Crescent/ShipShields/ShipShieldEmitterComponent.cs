@@ -42,6 +42,13 @@ public sealed partial class ShipShieldEmitterComponent : Component
 
     [AutoNetworkedField]
     public float OverloadAccumulator = 0f;
+
+    /// <summary>
+    /// Set by round mechanics that must keep this emitter down regardless of power or accumulated damage.
+    /// </summary>
+    [AutoNetworkedField]
+    public bool ForcedDisabled;
+
     /// <summary>
     /// On power up, players for all on vessel, pitched down.
     /// </summary>

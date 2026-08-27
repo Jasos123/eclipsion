@@ -52,7 +52,7 @@
         Radiation: 80
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 250
     intensitySlope: 60
     totalIntensity: 1500
@@ -90,7 +90,7 @@
         Radiation: 200
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 350 #2 hits breaks plastit wider range and more effective
     intensitySlope: 120
     totalIntensity: 5000

@@ -13,6 +13,7 @@
 # IFFFaction sets the faction of the object. to be honest i dont know if this does anything.
 # hideIFF is a boolean that controls if the object is visible from the map screen or not. by default it is set to false. use this for derelicts or secrets
 # worldgenConfig picks the asteroid/biome layout (see _Crescent/World/worldgen.yml). Defaults to RatWorld when unset.
+# Gliess anchors the Freeplay sector origin. Every other station must be at least 6000 m from it and from each other.
 
 
 ### FREEPLAY ###
@@ -71,26 +72,26 @@
     gameMapsByID:
       PortBalreska:
         gameMapID: PortBalreska
-        posX: -4000
-        posY: 0
+        posX: -7000
+        posY: 2000
         IFFColor: Orange
         IFFFaction: NCWL
       AuroraImperialis:
         gameMapID: AuroraImperialis
-        posX: 4000
-        posY: 4000
+        posX: 7000
+        posY: 2000
         IFFColor: "#C677A5"
         IFFFaction: DSM
       Tatsumoto:
         gameMapID: Tatsumoto
-        posX: -1500
-        posY: -4500
+        posX: -4000
+        posY: -6000
         IFFColor: White
         IFFFaction: SHI
-      Jackal:
-        gameMapID: Jackal
-        posX: 3800
-        posY: -3000
+      Freeport:
+        gameMapID: Freeport
+        posX: 4000
+        posY: -6000
         IFFColor: IndianRed
         IFFFaction: TFSC
       GliessSanto:
@@ -201,14 +202,14 @@
     gameMapsByID:
       PortBalreska:
         gameMapID: PortBalreska
-        posX: -4000
-        posY: 0
+        posX: -7000
+        posY: 2000
         IFFColor: Orange
         IFFFaction: NCWL
       AuroraImperialis:
         gameMapID: AuroraImperialis
-        posX: 4000
-        posY: 4000
+        posX: 7000
+        posY: 2000
         IFFColor: "#C677A5"
         IFFFaction: DSM
       GliessSanto:
@@ -319,13 +320,13 @@
       Tatsumoto:
         gameMapID: Tatsumoto
         posX: -4000
-        posY: 0
+        posY: -6000
         IFFColor: White
         IFFFaction: SHI
       Freeport:
         gameMapID: Freeport
         posX: 4000
-        posY: 4000
+        posY: -6000
         IFFColor: IndianRed
         IFFFaction: TFSC
       GliessSanto:
@@ -388,7 +389,7 @@
   alias:
   - freeplaytapgliesstfcf
   name: Freeplay | TAP/Gliess & TFCF
-  showInVote: true
+  showInVote: false
   description: A volatile stretch of the Taypan frontier contested by the TFCF and indigenous interests. Lasts 2-4 hours.
   excludedJobs:
   - UnionfallCadetDSM
@@ -433,10 +434,10 @@
     respawnTimeMinutes: 10
   - type: AdventureRule
     gameMapsByID:
-      Jackal:
-        gameMapID: Jackal
-        posX: -4000
-        posY: 0
+      Freeport:
+        gameMapID: Freeport
+        posX: 4000
+        posY: -6000
         IFFColor: IndianRed
         IFFFaction: TFSC
       GliessSanto:
@@ -454,127 +455,12 @@
         posY: 2000
       TribalHideout:
         gameMapID: TribalHideout
-        posX: 4000
-        posY: 4000
+        posX: -5000
+        posY: -7000
+        randomOffsetX: 1000
+        randomOffsetY: 1000
         IFFColor: "#9FED58"
         IFFFaction: TAP
-      ImperialHaulerWreck:
-        gameMapID: ImperialHaulerWreck
-        posX: 1000
-        posY: -2000
-        HideIFF: true
-      Fighter1:
-        gameMapID: Fighter1
-        posX: 500
-        posY: -1000
-        HideIFF: true
-      Fighter2:
-        gameMapID: Fighter2
-        posX: 1000
-        posY: 3000
-        HideIFF: true
-      SolarSailorDerelict:
-        gameMapID: SolarSailorDerelict
-        posX: 4000
-        posY: 1500
-        HideIFF: true
-      FogwreckedDerelict:
-        gameMapID: FogwreckedDerelict
-        posX: -1000
-        posY: 1000
-        HideIFF: true
-      RatKovf:
-        gameMapID: RatKovf
-        posX: 3000
-        posY: -500
-      DerelictWaystation:
-        gameMapID: DerelictWaystation
-        posX: 0
-        posY: -3000
-      Graveyard:
-        gameMapID: Graveyard
-        posX: -1000
-        posY: 4000
-      Craster:
-        gameMapID: Craster
-        posX: 2000
-        posY: -2000
-
-- type: gamePreset
-  id: FreeplayTFSCSHIAlt
-  alias:
-  - freeplaytfscshialt
-  name: Freeplay | TFCF & SHI (Alternative)
-  showInVote: true
-  description: A volatile stretch of the Taypan frontier contested by the TFCF and Shinohara interests. With the Jackal instead of the Freeport. Lasts 2-4 hours.
-  excludedJobs:
-  - UnionfallCadetDSM
-  - UnionfallRiflemanDSM
-  - UnionfallDoctorDSM
-  - UnionfallOfficerDSM
-  - UnionfallLeaderDSM
-  - UnionfallShipCaptainDSM
-  - UnionfallShipCrewDSM
-  - UnionfallCadetNCWL
-  - UnionfallRiflemanNCWL
-  - UnionfallDoctorNCWL
-  - UnionfallOfficerNCWL
-  - UnionfallLeaderNCWL
-  - UnionfallShipCaptainNCWL
-  - UnionfallShipCrewNCWL
-  - planetfall_worker
-  - planetfall_partisan
-  - planetfall_mvdofficer
-  - planetfall_mvdgrunt
-  - planetfall_kapitan
-  - planetfall_doctor
-  - planetfall_courtier
-  - planetfall_advocatus
-  - planetfall_governor
-  - planetfall_freeholder
-  - planetfall_oathbound
-  - planetfall_levyman
-  - planetfall_surgeon
-  rules:
-  - FreeplayTFSCSHIAlt
-  - HullrotEventScheduler
-  - HullrotRoundTimeLimit
-  - HullrotConquest
-
-- type: entity
-  id: FreeplayTFSCSHIAlt
-  parent: BaseGameRule
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: GamemodeRespawnTime
-    respawnTimeMinutes: 10
-  - type: AdventureRule
-    gameMapsByID:
-      Tatsumoto:
-        gameMapID: Tatsumoto
-        posX: -4000
-        posY: 0
-        IFFColor: White
-        IFFFaction: SHI
-      Jackal:
-        gameMapID: Jackal
-        posX: 4000
-        posY: 4000
-        IFFColor: IndianRed
-        IFFFaction: TFSC
-      GliessSanto:
-        gameMapID: GliessSanto
-        posX: 0
-        posY: 0
-        IFFColor: White
-      Taypan1AsteroidBelt:
-        gameMapID: Taypan1AsteroidBelt
-        posX: -2000
-        posY: 2000
-      Taypan2AsteroidBelt:
-        gameMapID: Taypan2AsteroidBelt
-        posX: 2000
-        posY: 2000
       ImperialHaulerWreck:
         gameMapID: ImperialHaulerWreck
         posX: 1000
@@ -626,7 +512,7 @@
   alias:
   - hyperwar
   name: Hyperwar | NCWL vs DSM
-  showInVote: true
+  showInVote: false
   description: NCWL and DSM wage a brutal hyperwar over the heart of Taypan. Last 2-4 hours.
   excludedJobs:
   - UnionfallCadetDSM
@@ -691,7 +577,7 @@
   id: Unionfall
   alias:
   - unionfall
-  name: Unionfall | NCWL VS DSM
+  name: Unionfall | NCWL vs DSM
   showInVote: true
   description: The NCWL Homeguard flees to a new home, after the destruction of Nova Belraska. A DSM punishment regimen intercepts them to regain their honor.
   roundStartMessage: "Imperial forces detected. Enemy vessels confirmed on intercept. There is no route forward but through them. We either destroy them, or we die trying. All personnel to battle stations. Prepare for immediate engagement."
@@ -763,7 +649,7 @@
   alias:
   - planetfall
   name: Planetfall
-  showInVote: true
+  showInVote: false
   description: Something isn't right in olywier's planet...
   roundStartMessage: "All personnel stationed on Olywier are to maintain heightened alert. Unrest has been reported across the outer settlements. Dominion authority must be upheld at all costs. Insurgent activity is suspected. Secure all critical infrastructure and await further orders."
   roundStartSender: "Castle Garrison"

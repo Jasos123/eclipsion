@@ -303,7 +303,6 @@
     sprite: _Crescent/Objects/Weapons/Guns/surplus_ncwl_rifle.rsi
   - type: Gun
     fireRate: 0.75
-    damageModifier: 2
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
@@ -329,7 +328,7 @@
     price: 1500
 
 - type: entity
-  name: IRM Legax 5.56x45mm
+  name: IRM Legax 7.62x51mm
   parent: [BaseWeaponSniper, BaseGunWieldable]
   id: WeaponSniperDSMLegax
   description: A mass-produced Imperial rifle made of stamped metal and bakelite. Standard issue for reservists and planetary police forces.
@@ -342,25 +341,23 @@
     sprite: _Crescent/Objects/Weapons/Guns/surplus_dsm_rifle.rsi
   - type: Gun
     fireRate: 0.75
-    damageModifier: 1.75
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
     soundGunshot:
-      path: /Audio/Weapons/Guns/UnionfallWeapons/lever_fire.ogg
+      path: /Audio/Weapons/Guns/UnionfallWeapons/bolt_fire.ogg
     fireOnDropChance: 1
   - type: EmbeddableProjectile
     removalTime: 3.5
   - type: EmbedPassiveDamage
   - type: BallisticAmmoProvider
-    soundInsert:
-      collection: LeverReload
-    capacity: 8
-    autoCycle: true
-    proto: CartridgeLightRifle
+    soundRack: /Audio/Weapons/Guns/UnionfallWeapons/bolt_cycle.ogg
+    capacity: 5
+    autoCycle: false
+    proto: CartridgeRifle
     whitelist:
       tags:
-      - CartridgeLightRifle
+      - CartridgeRifle
   - type: ReverseEngineering # SectorCrescent
     recipes:
       - WeaponSniperDSMLegax

@@ -41,6 +41,7 @@ research-technology-electronics-translators = Translators
 research-technology-electronics-materials = Basic Components
 research-technology-electronics-defense = Civilian Defense Pistols
 research-technology-electronics-terminus = Ogre Shocktrooper Armaments
+research-technology-electronics-pouches = Modular Pouch Rigging
 research-technology-electronics-dampener = Noospheric Dampener Belt
 
 # MINUTEMEN

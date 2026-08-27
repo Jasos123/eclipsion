@@ -4,7 +4,7 @@
     sprite: Objects/Weapons/Guns/Ammunition/Explosives/explosives.rsi
     state: baton
   product: CrateSumitomoAmmo
-  cost: 15000
+  cost: 10500
   category: cargoproduct-category-name-shuttle
   group: market
 
@@ -14,7 +14,7 @@
     sprite: _Crescent/Objects/ShuttleWeapons/torpedop.rsi
     state: base
   product: CrateIdnaAmmo
-  cost: 12000
+  cost: 8400
   category: cargoproduct-category-name-shuttle
   group: market
 
@@ -24,7 +24,7 @@
     sprite: _Crescent/Objects/ShuttleWeapons/torp.rsi
     state: base
   product: CrateGargoyleAmmo
-  cost: 50000
+  cost: 25000
   category: cargoproduct-category-name-shuttle
   group: market
 
@@ -34,7 +34,7 @@
     sprite: _Crescent/Objects/ShuttleWeapons/lance.rsi
     state: base
   product: CrateLancerAmmo
-  cost: 25000
+  cost: 17500
   category: cargoproduct-category-name-shuttle
   group: market
 
@@ -44,7 +44,7 @@
     sprite: _Crescent/Objects/ShuttleWeapons/battleshell.rsi
     state: base
   product: CrateAssaultMortarAmmo
-  cost: 35000
+  cost: 24500
   category: cargoproduct-category-name-shuttle
   group: market
 
@@ -54,7 +54,7 @@
     sprite: _Crescent/Ammunition/vulcan.rsi
     state: base
   product: CrateVulcanAmmo
-  cost: 15000
+  cost: 10500
   category: cargoproduct-category-name-shuttle
   group: market
 
@@ -64,7 +64,7 @@
     sprite: _NF/Objects/SpaceArtillery/50_armorpiercing_machinegun_casing.rsi
     state: base
   product: CrateSlugthrowerAmmo
-  cost: 10000
+  cost: 7000
   category: cargoproduct-category-name-shuttle
   group: market
 
@@ -84,7 +84,7 @@
     sprite: _NF/Objects/SpaceArtillery/630_armorpiercing_shell_casing.rsi 
     state: base
   product: CrateArtilleryAmmo
-  cost: 12500
+  cost: 8750
   category: cargoproduct-category-name-shuttle
   group: market
 
@@ -94,7 +94,7 @@
     sprite: _Crescent/Ammunition/needler.rsi
     state: base
   product: CrateAutogunAmmo
-  cost: 25000
+  cost: 17500
   category: cargoproduct-category-name-shuttle
   group: market
 
@@ -104,7 +104,7 @@
     sprite: _Crescent/Ammunition/mortar.rsi
     state: base
   product: CrateMortarAmmo
-  cost: 35000
+  cost: 24500
   category: cargoproduct-category-name-shuttle
   group: market
 
@@ -114,6 +114,6 @@
     sprite: _Crescent/Objects/ShuttleWeapons/swarmermissile.rsi
     state: base
   product: CrateSwarmerAmmo
-  cost: 22000
+  cost: 15400
   category: cargoproduct-category-name-shuttle
   group: market

@@ -3083,6 +3083,12 @@ entities:
       parent: 2038
     - type: InstantAction
       container: 2038
+  - uid: 1473
+    components:
+    - type: Transform
+      parent: 1472
+    - type: InstantAction
+      container: 1472
   - uid: 1565
     components:
     - type: Transform
@@ -3133,7 +3139,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 8.5,-32.5
       parent: 1
-- proto: AirlockCommandAlseik
+- proto: AirlockCommandFamilies
   entities:
   - uid: 1548
     components:
@@ -3145,14 +3151,14 @@ entities:
     - type: Transform
       pos: 5.5,-20.5
       parent: 1
-- proto: AirlockCommandAntiquarian
+- proto: AirlockCommandFamilies
   entities:
   - uid: 1023
     components:
     - type: Transform
       pos: -6.5,-14.5
       parent: 1
-- proto: AirlockCommandArabet
+- proto: AirlockCommandFamilies
   entities:
   - uid: 20
     components:
@@ -3191,14 +3197,14 @@ entities:
     - type: Transform
       pos: -3.5,-73.5
       parent: 1
-- proto: AirlockCommandIzdari
+- proto: AirlockCommandFamilies
   entities:
   - uid: 1040
     components:
     - type: Transform
       pos: -4.5,-20.5
       parent: 1
-- proto: AirlockCommandLockedFamiliesHorizontalAlseik
+- proto: AirlockCommandLockedFamiliesHorizontalFamilies
   entities:
   - uid: 1553
     components:
@@ -3218,7 +3224,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 6.5,-12.5
       parent: 1
-- proto: AirlockCommandLockedFamiliesHorizontalArabet
+- proto: AirlockCommandLockedFamiliesHorizontalFamilies
   entities:
   - uid: 1403
     components:
@@ -3239,7 +3245,7 @@ entities:
     - type: Transform
       pos: -8.5,-70.5
       parent: 1
-- proto: AirlockCommandLockedFamiliesHorizontalIzdari
+- proto: AirlockCommandLockedFamiliesHorizontalFamilies
   entities:
   - uid: 238
     components:
@@ -3259,7 +3265,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -5.5,-18.5
       parent: 1
-- proto: AirlockCommandLockedFamiliesHorizontalServile
+- proto: AirlockCommandLockedFamiliesHorizontalFamilies
   entities:
   - uid: 1233
     components:
@@ -3281,7 +3287,7 @@ entities:
     - type: Transform
       pos: 2.5,-28.5
       parent: 1
-- proto: AirlockCommandLockedFamiliesHorizontalThukker
+- proto: AirlockCommandLockedFamiliesHorizontalFamilies
   entities:
   - uid: 356
     components:
@@ -3315,14 +3321,14 @@ entities:
       rot: 3.141592653589793 rad
       pos: 13.5,-69.5
       parent: 1
-- proto: AirlockCommandServile
+- proto: AirlockCommandFamilies
   entities:
   - uid: 1550
     components:
     - type: Transform
       pos: 6.5,-25.5
       parent: 1
-- proto: AirlockCommandThukker
+- proto: AirlockCommandFamilies
   entities:
   - uid: 255
     components:
@@ -15407,6 +15413,13 @@ entities:
           ents: []
     - type: Physics
       canCollide: False
+- proto: ConquestFlagTAP
+  entities:
+  - uid: 4592
+    components:
+    - type: Transform
+      pos: -2.5,0.5
+      parent: 1
 - proto: ConveyorBelt
   entities:
   - uid: 438
@@ -30413,7 +30426,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 6.5,-74.5
       parent: 1
-- proto: WindoorSecureAlseik
+- proto: WindoorSecureFamilies
   entities:
   - uid: 1487
     components:
@@ -30433,7 +30446,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 7.5,-22.5
       parent: 1
-- proto: WindoorSecureAntiquarian
+- proto: WindoorSecureFamilies
   entities:
   - uid: 1024
     components:
@@ -30441,7 +30454,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -4.5,-12.5
       parent: 1
-- proto: WindoorSecureThukker
+- proto: WindoorSecureFamilies
   entities:
   - uid: 872
     components:

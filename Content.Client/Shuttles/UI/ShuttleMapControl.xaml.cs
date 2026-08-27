@@ -18,7 +18,6 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
-using Content.Client._Crescent.SpaceEvents; // Rat
 using Content.Client.Parallax; // KS14
 using Content.Client.Parallax.Managers; // KS14
 using Content.Shared.Parallax; // KS14
@@ -39,7 +38,6 @@ public sealed partial class ShuttleMapControl : BaseShuttleControl
     private readonly ShuttleSystem _shuttles;
     private readonly SharedTransformSystem _xformSystem;
 
-    private EmpZoneClientSystem _empZone = default!;
 
     protected override bool Draggable => true;
 
@@ -80,7 +78,7 @@ public sealed partial class ShuttleMapControl : BaseShuttleControl
     private readonly List<IMapObject> _mapObjects = new();
     private readonly Dictionary<Color, List<Vector2>> _verts = new();
     private readonly Dictionary<Color, List<Vector2>> _edges = new();
-    private readonly Dictionary<Color, List<(Vector2, string)>> _strings = new();
+    private readonly Dictionary<Color, List<(Vector2 Position, string Text, Vector2? Velocity)>> _strings = new();
     private readonly List<ShuttleExclusionObject> _viewportExclusions = new();
 
     //Changing from 256 512 512 to 256 2048 2048, this shows in testing to be about 4000 units ish. presume 1024>2048 units
@@ -89,7 +87,6 @@ public sealed partial class ShuttleMapControl : BaseShuttleControl
         RobustXamlLoader.Load(this);
         _shuttles = EntManager.System<ShuttleSystem>();
         _xformSystem = EntManager.System<SharedTransformSystem>();
-		_empZone = EntManager.System<EmpZoneClientSystem>();
         var cache = IoCManager.Resolve<IResourceCache>();
 
         _physicsQuery = EntManager.GetEntityQuery<PhysicsComponent>();
@@ -195,23 +192,6 @@ public sealed partial class ShuttleMapControl : BaseShuttleControl
     }
     // Rat-end
 
-    // Rat-start
-    private void DrawRatZones(DrawingHandleScreen handle)
-    {
-        var matty = Matrix3Helpers.CreateInverseTransform(Offset, Angle.Zero);
-	    foreach (var (_, (center, radius)) in _empZone.ActiveZones)
-        {
-            var empRelPos = Vector2.Transform(center, matty);
-            empRelPos = empRelPos with { Y = -empRelPos.Y };
-            var empScreenPos = ScalePosition(empRelPos);
-            var empScreenRadius = radius * MinimapScale;
-
-            handle.DrawCircle(empScreenPos, empScreenRadius, new Color(0f, 0.8f, 1f, 0.03f));
-            handle.DrawCircle(empScreenPos, empScreenRadius, new Color(0f, 0.8f, 1f, 0.2f), filled: false);
-        }
-    }
-    // Rat-end
-
     /// <summary>
     /// Gets the map objects that intersect the viewport.
     /// </summary>
@@ -270,7 +250,6 @@ public sealed partial class ShuttleMapControl : BaseShuttleControl
         DrawBacking(handle);
         DrawBiomeBackdrop(handle);
 
-        DrawRatZones(handle);
 
         var viewedMapUid = _mapManager.GetMap(ViewingMap);
         var matty = Matrix3Helpers.CreateInverseTransform(Offset, Angle.Zero);
@@ -354,7 +333,7 @@ public sealed partial class ShuttleMapControl : BaseShuttleControl
                 _beacons.Add(mapO);
 
                 var existingStrings = _strings.GetOrNew(beaconColor);
-                existingStrings.Add((beaconUiPos, beaconName));
+                existingStrings.Add((beaconUiPos, beaconName, null));
             }
         }
 
@@ -412,7 +391,8 @@ public sealed partial class ShuttleMapControl : BaseShuttleControl
                 continue;
 
             var existingStrings = _strings.GetOrNew(gridColor);
-            existingStrings.Add((gridUiPos, iffText));
+            Vector2? velocity = grid.Owner == _shuttleEntity ? null : gridPhysics.LinearVelocity;
+            existingStrings.Add((gridUiPos, iffText, velocity));
         }
 
         // Batch the colors whoopie
@@ -431,10 +411,14 @@ public sealed partial class ShuttleMapControl : BaseShuttleControl
         {
             var adjustedColor = Color.FromSrgb(color);
 
-            foreach (var (gridUiPos, iffText) in sendStrings)
+            foreach (var (gridUiPos, iffText, velocity) in sendStrings)
             {
                 var textWidth = handle.GetDimensions(_font, iffText, 1f);
-                handle.DrawString(_font, gridUiPos + textWidth with { X = -textWidth.X / 2f, Y = textWidth.Y * 0.5f }, iffText, adjustedColor);
+                var labelPosition = gridUiPos + textWidth with { X = -textWidth.X / 2f, Y = textWidth.Y * 0.5f };
+                handle.DrawString(_font, labelPosition, iffText, adjustedColor);
+
+                if (velocity is { } worldVelocity)
+                    DrawIFFMotion(handle, labelPosition, textWidth, worldVelocity, Angle.Zero, adjustedColor);
             }
         }
 

@@ -63,7 +63,7 @@
 - type: listing
   id: StoreListing120mmcannon
   name: 120mm 'Anvil' mono-barreled artillery cannon flatpack
-  description: A artillery for medium ballistic hardpoints
+  description: An artillery piece for medium ballistic hardpoints
   icon: { sprite: _Crescent/Objects/Turrets/Projectile/medium_auto.rsi, state: medium_auto}
   productEntity: WeaponTurretMediumArtilleryFlatpack
   cost:

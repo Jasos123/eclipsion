@@ -49,11 +49,17 @@ public struct FactionBalanceEntry
     /// </summary>
     public int Cap;
 
-    public FactionBalanceEntry(int count, int cap)
+    /// <summary>
+    /// This faction's conquest station has fallen, permanently closing its jobs for the rest of the round.
+    /// </summary>
+    public bool Defeated;
+
+    public FactionBalanceEntry(int count, int cap, bool defeated = false)
     {
         Count = count;
         Cap = cap;
+        Defeated = defeated;
     }
 
-    public readonly bool Full => Count >= Cap;
+    public readonly bool Full => Defeated || Count >= Cap;
 }

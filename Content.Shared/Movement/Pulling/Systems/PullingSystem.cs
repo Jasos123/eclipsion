@@ -424,6 +424,13 @@ public sealed class PullingSystem : EntitySystem
 
     private void OnRefreshMovespeed(EntityUid uid, PullerComponent component, RefreshMovementSpeedModifiersEvent args)
     {
+        if (component.Pulling is { } pulled)
+        {
+            var pullingSpeed = new GetPullingSpeedModifiersEvent();
+            RaiseLocalEvent(pulled, ref pullingSpeed);
+            args.ModifySpeed(pullingSpeed.WalkModifier, pullingSpeed.SprintModifier);
+        }
+
         if (TryComp<HeldSpeedModifierComponent>(component.Pulling, out var itemHeldSpeed) && component.Pulling.HasValue)
         {
             var (walkMod, sprintMod) =

@@ -83,6 +83,28 @@
   - WeaponCivilianDisabler
   - WeaponEnergyGunMini
 
+
+# Load-bearing gear. Electronics is the civilian discipline, so this is reachable from any faction's server
+# rather than living in one of the faction trees.
+- type: technology
+  id: ModularPouchesElectronics
+  name: research-technology-electronics-pouches
+  icon:
+    sprite: _Crescent/Objects/Misc/pouches.rsi
+    state: utility
+  discipline: Electronics
+  tier: 1
+  cost: 6000
+  recipeUnlocks:
+  - PouchUtilityElectronics
+  - PouchMagazineElectronics
+  - PouchMagazineLargeElectronics
+  - PouchMagazinePistolElectronics
+  - PouchMedicalElectronics
+  - PouchMedicalLargeElectronics
+  - PouchGrenadeElectronics
+  - PouchFlareElectronics
+
 - type: technology
   id: NightVisionTechElectronics
   name: research-technology-night-vision

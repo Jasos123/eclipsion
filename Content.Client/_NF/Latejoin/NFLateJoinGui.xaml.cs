@@ -246,7 +246,9 @@ public sealed partial class NFLateJoinGui : FancyWindow
             newButton.Locked = true;
             // A supplier set above wins over ToolTip, and the cap is the reason that will actually clear.
             newButton.TooltipSupplier = null;
-            newButton.ToolTip = Loc.GetString("faction-balance-job-locked",
+            newButton.ToolTip = Loc.GetString(balance.Defeated
+                    ? "faction-defeated-job-locked"
+                    : "faction-balance-job-locked",
                 ("faction", _prototypeManager.TryIndex<FactionPrototype>(fullFaction, out var factionProto)
                     ? factionProto.Name
                     : fullFaction),

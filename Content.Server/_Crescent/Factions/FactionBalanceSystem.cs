@@ -5,6 +5,7 @@ using Content.Server.GameTicking.Events;
 using Content.Shared._Crescent.CCVar;
 using Content.Shared._Crescent.Factions.FactionBalance;
 using Content.Shared._Crescent.HullrotFaction;
+using Content.Shared._Crescent.RoundEnd;
 using Content.Server.Station.Components;
 using Content.Server.Station.Events;
 using Content.Shared.GameTicking;
@@ -49,6 +50,9 @@ public sealed class FactionBalanceSystem : SharedFactionBalanceSystem
     /// </summary>
     private HashSet<string>? _factionsInPlay;
 
+    /// <summary>Factions whose conquest station has fallen. Their jobs stay closed until round cleanup.</summary>
+    private readonly HashSet<string> _defeatedFactions = new();
+
     public override void Initialize()
     {
         base.Initialize();
@@ -58,6 +62,7 @@ public sealed class FactionBalanceSystem : SharedFactionBalanceSystem
         SubscribeLocalEvent<PlayerJoinedLobbyEvent>(OnPlayerJoinedLobby);
         SubscribeLocalEvent<IsJobAllowedEvent>(OnIsJobAllowed);
         SubscribeLocalEvent<GetDisallowedJobsEvent>(OnGetDisallowedJobs);
+        SubscribeLocalEvent<FactionStationFellEvent>(OnFactionStationFell);
 
         Subs.CVar(_cfg, RatCCVars.FactionBalanceEnabled, OnStateConfigurationChanged, false);
         Subs.CVar(_cfg, RatCCVars.FactionBalanceAdminBypass, OnStateConfigurationChanged, false);
@@ -91,12 +96,12 @@ public sealed class FactionBalanceSystem : SharedFactionBalanceSystem
 
     private void OnGetDisallowedJobs(ref GetDisallowedJobsEvent ev)
     {
-        if (!_cfg.GetCVar(RatCCVars.FactionBalanceEnabled) || IsExempt(ev.Player))
-            return;
-
         foreach (var (faction, entry) in _state)
         {
-            if (!entry.Full)
+            // Defeat is a round-state restriction, not a population cap: disabling balance or using the admin
+            // cap bypass must not reopen a destroyed faction.
+            if (!entry.Defeated &&
+                (!_cfg.GetCVar(RatCCVars.FactionBalanceEnabled) || IsExempt(ev.Player) || !entry.Full))
                 continue;
 
             foreach (var jobId in GetFactionJobs(faction))
@@ -113,13 +118,20 @@ public sealed class FactionBalanceSystem : SharedFactionBalanceSystem
     {
         faction = string.Empty;
 
-        if (!_cfg.GetCVar(RatCCVars.FactionBalanceEnabled) || IsExempt(player))
-            return false;
-
         if (!TryGetJobFaction(jobId, out faction))
             return false;
 
-        return _state.TryGetValue(faction, out var entry) && entry.Full;
+        if (!_state.TryGetValue(faction, out var entry))
+            return false;
+
+        return entry.Defeated ||
+               (_cfg.GetCVar(RatCCVars.FactionBalanceEnabled) && !IsExempt(player) && entry.Full);
+    }
+
+    /// <summary>Whether conquest has permanently closed this faction for the current round.</summary>
+    public bool IsFactionDefeated(string faction)
+    {
+        return _defeatedFactions.Contains(faction);
     }
 
     private bool IsExempt(ICommonSession player)
@@ -131,6 +143,9 @@ public sealed class FactionBalanceSystem : SharedFactionBalanceSystem
     {
         var name = _prototype.TryIndex<FactionPrototype>(faction, out var proto) ? proto.Name : faction;
         var entry = _state.TryGetValue(faction, out var e) ? e : default;
+
+        if (entry.Defeated)
+            return Loc.GetString("faction-defeated-join-refused", ("faction", name));
 
         return Loc.GetString("faction-balance-join-refused",
             ("faction", name),
@@ -145,8 +160,20 @@ public sealed class FactionBalanceSystem : SharedFactionBalanceSystem
     private void OnRoundRestart(RoundRestartCleanupEvent ev)
     {
         _state.Clear();
+        _defeatedFactions.Clear();
         _factionsInPlay = null;
         _nextRecount = TimeSpan.Zero;
+    }
+
+    private void OnFactionStationFell(ref FactionStationFellEvent ev)
+    {
+        if (!_defeatedFactions.Add(ev.Faction))
+            return;
+
+        // Remove the faction from the population-balancing group and publish the hard lock immediately as its
+        // station transitions into a permanent Turning infestation.
+        _factionsInPlay = null;
+        Recount();
     }
 
     private void OnStationPostInit(ref StationPostInitEvent ev)
@@ -190,6 +217,9 @@ public sealed class FactionBalanceSystem : SharedFactionBalanceSystem
             _cfg.GetCVar(RatCCVars.FactionBalanceTolerance),
             _factionsInPlay);
 
+        foreach (var faction in _defeatedFactions)
+            updated[faction] = new FactionBalanceEntry(counts.GetValueOrDefault(faction), 0, defeated: true);
+
         if (Matches(updated, _state))
             return;
 
@@ -213,7 +243,12 @@ public sealed class FactionBalanceSystem : SharedFactionBalanceSystem
             foreach (var jobId in stationJobs.JobList.Keys)
             {
                 if (TryGetJobFaction(jobId, out var faction))
+                {
+                    if (_defeatedFactions.Contains(faction))
+                        continue;
+
                     inPlay.Add(faction);
+                }
             }
         }
 
@@ -236,7 +271,10 @@ public sealed class FactionBalanceSystem : SharedFactionBalanceSystem
 
         foreach (var (faction, entry) in a)
         {
-            if (!b.TryGetValue(faction, out var other) || other.Count != entry.Count || other.Cap != entry.Cap)
+            if (!b.TryGetValue(faction, out var other) ||
+                other.Count != entry.Count ||
+                other.Cap != entry.Cap ||
+                other.Defeated != entry.Defeated)
                 return false;
         }
 

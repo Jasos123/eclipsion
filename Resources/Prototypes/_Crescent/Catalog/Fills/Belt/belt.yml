@@ -362,7 +362,8 @@
     whitelist:
   - type: StorageFill
     contents:
-      - id: MagazineBoxLightRifleSurplus
+      - id: SpeedLoaderRifle
+        amount: 4
       - id: MagazinePistol
         amount: 2
       - id: Gauze
@@ -378,7 +379,8 @@
     whitelist:
   - type: StorageFill
     contents:
-      - id: MagazineBoxLightRifleSurplus
+      - id: SpeedLoaderRifle
+        amount: 4
       - id: MagazineMagnum
         amount: 2
       - id: Gauze

@@ -34,6 +34,7 @@ life-insurance-popup-no-spawn-machine-policy = Choose a clone outlet before issu
 life-insurance-popup-no-spawn-machine = No clone outlet available. Assign one from the insurance console.
 life-insurance-popup-spawn-unpowered-insured = Your clone outlet has no power. Insurance respawn is unavailable until it is powered.
 life-insurance-popup-clone-emerged = {$name} spills out of the clone outlet.
+life-insurance-popup-faction-defeated = Your faction's station has been claimed by the Turning. Insurance cloning for that faction is no longer available this round.
 life-insurance-pda-notification-header-insured = [color=#4CAF50][bold]!!! INSURANCE ACTIVE !!![/bold][/color]
 life-insurance-pda-notification-message-insured = Interdyne: Your policy is active. Upon death, you will be cloned.
 life-insurance-pda-notification-header-voided = [color=#F44336][bold]!!! INSURANCE VOIDED !!![/bold][/color]

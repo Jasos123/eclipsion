@@ -63,10 +63,10 @@ public sealed class FactionBalanceSystem : SharedFactionBalanceSystem
         faction = string.Empty;
         entry = default;
 
-        if (!_enabled || IsExempt() || !TryGetJobFaction(jobId, out faction))
+        if (!TryGetJobFaction(jobId, out faction) || !_factions.TryGetValue(faction, out entry))
             return false;
 
-        return _factions.TryGetValue(faction, out entry) && entry.Full;
+        return entry.Defeated || (_enabled && !IsExempt() && entry.Full);
     }
 
     /// <summary>

@@ -23,7 +23,7 @@ language-Clarizian-description = A language descended from the court and industr
 chat-language-Clarizian-name = Aurevienne Common
 
 language-Atyrian-name = Atyrian
-language-Atyrian-description = The lingua franca of Atyrians and other nonhumans, developed by butchering Moffic. Its sounds have been adapted over time to accomodate as many species of speakers as possible.
+language-Atyrian-description = The lingua franca of Atyrians and other nonhumans, developed by butchering Moffic. Its sounds have been adapted over time to accommodate as many species of speakers as possible.
 chat-language-Atyrian-name = Atyrian
 
 language-Kaishago-name = Kaishago

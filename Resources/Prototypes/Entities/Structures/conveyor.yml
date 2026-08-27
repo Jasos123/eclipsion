@@ -35,6 +35,7 @@
         - DoorPassable
         hard: False
   - type: Conveyor
+  - type: RequireProjectileTarget
   - type: DeviceLinkSink
     ports:
       - Reverse

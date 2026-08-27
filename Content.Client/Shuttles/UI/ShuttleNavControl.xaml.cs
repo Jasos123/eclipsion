@@ -22,7 +22,6 @@ using Robust.Shared.Physics.Collision.Shapes;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Threading;
-using Content.Client._Crescent.SpaceEvents; // Rat
 using Content.Shared.PointCannons; // Rat
 
 namespace Content.Client.Shuttles.UI;
@@ -42,7 +41,6 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
     private readonly ProjectileIFFSystem _projectileIFF;
     private readonly FixtureSystem _fixtures;
     private readonly SpriteSystem _sprites;
-	private readonly EmpZoneClientSystem _empZone;
 
     /// <summary>
     /// Used to transform all of the radar objects. Typically is a shuttle console parented to a grid.
@@ -235,6 +233,7 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
                     textUiPosition.X = Math.Clamp(textUiPosition.X, 0f, PixelWidth - labelDimensions.X);
                     textUiPosition.Y = Math.Clamp(textUiPosition.Y, 0f, PixelHeight - labelDimensions.Y);
                     handle.DrawString(Font, textUiPosition, labelText, color);
+                    control.DrawIFFMotion(handle, textUiPosition, labelDimensions, gridBody.LinearVelocity, rot, color);
                 }
                 if (icon is not null)
                     handle.DrawTexture(icon, targetPos + textureOffset, color);
@@ -256,7 +255,6 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
         _projectileIFF = EntManager.System<ProjectileIFFSystem>();
         _fixtures = EntManager.System<FixtureSystem>();
         _sprites = EntManager.System<SpriteSystem>();
-		_empZone = EntManager.System<EmpZoneClientSystem>();
         drawJob = new ShuttleCalculatePositionsJob()
         {
             EntManager = EntManager,
@@ -643,6 +641,7 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
                     Math.Clamp(uiPosition.X, drawJob.gridData[grid.Owner].HeightRequired, PixelWidth - labelDimensions.X),
                     Math.Clamp(uiPosition.Y, 0f, PixelHeight - labelDimensions.Y));
                 handle.DrawString(Font, uiPosition, labelText, color);
+                DrawIFFMotion(handle, uiPosition, labelDimensions, gridBody.LinearVelocity, rot, color);
             }
 
             DrawGrid(handle, matty, grid, color);

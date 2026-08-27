@@ -8,7 +8,7 @@
     HorizontalExpand="False"
 >
     <BoxContainer Orientation="Vertical">
-        <!-- Rows/MaxSize are driven by hud.action_bar_vertical, see ActionsBar.xaml.cs -->
+        <!-- The grid limit follows the remaining screen width/height; see ActionsBar.xaml.cs. -->
         <controls:ActionButtonContainer
             HorizontalAlignment="Center"
             VerticalAlignment="Center"

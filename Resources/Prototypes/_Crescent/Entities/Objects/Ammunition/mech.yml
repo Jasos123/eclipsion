@@ -146,7 +146,7 @@
     stoppingPower: 8
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 100
     intensitySlope: 50
     totalIntensity: 600 #Consistently 3-shots Bogatyrs

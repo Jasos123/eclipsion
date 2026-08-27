@@ -1,0 +1,75 @@
+# Pouch printing. These sit in PristineMicroforge's dynamicRecipes and unlock off ModularPouchesElectronics
+# (Research/electronics.yml) - Electronics is the civilian discipline, so every faction can reach them.
+# Recipe ids carry the discipline suffix the rest of the tree uses.
+
+- type: latheRecipe
+  id: PouchUtilityElectronics
+  category: Clothing
+  result: PouchUtility
+  completetime: 1
+  materials:
+    Cloth: 200
+    Plastic: 100
+
+- type: latheRecipe
+  id: PouchMagazineElectronics
+  category: Clothing
+  result: PouchMagazine
+  completetime: 1
+  materials:
+    Cloth: 200
+    Plastic: 150
+
+- type: latheRecipe
+  id: PouchMagazineLargeElectronics
+  category: Clothing
+  result: PouchMagazineLarge
+  completetime: 1.5
+  materials:
+    Cloth: 300
+    Plastic: 250
+
+- type: latheRecipe
+  id: PouchMagazinePistolElectronics
+  category: Clothing
+  result: PouchMagazinePistol
+  completetime: 1
+  materials:
+    Cloth: 200
+    Plastic: 100
+
+- type: latheRecipe
+  id: PouchMedicalElectronics
+  category: Clothing
+  result: PouchMedical
+  completetime: 1
+  materials:
+    Cloth: 250
+    Plastic: 100
+
+- type: latheRecipe
+  id: PouchMedicalLargeElectronics
+  category: Clothing
+  result: PouchMedicalLarge
+  completetime: 1.5
+  materials:
+    Cloth: 350
+    Plastic: 200
+
+- type: latheRecipe
+  id: PouchGrenadeElectronics
+  category: Clothing
+  result: PouchGrenade
+  completetime: 1.5
+  materials:
+    Cloth: 250
+    Plastic: 250
+
+- type: latheRecipe
+  id: PouchFlareElectronics
+  category: Clothing
+  result: PouchFlare
+  completetime: 1
+  materials:
+    Cloth: 200
+    Plastic: 100

@@ -89,7 +89,7 @@
       - state: base-projectile
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 94
     intensitySlope: 52
     totalIntensity: 122
@@ -180,7 +180,7 @@
       - state: base-projectile
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     totalIntensity: 20000 #Same as the grenade version
     intensitySlope: 5
     maxIntensity: 50

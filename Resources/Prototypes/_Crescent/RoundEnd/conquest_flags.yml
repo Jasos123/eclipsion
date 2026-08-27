@@ -90,3 +90,15 @@
       color: "#3F6FB5" # minutemen blue
     - type: ConquestFlag
       homeFaction: CMM
+
+- type: entity
+  parent: ConquestFlag
+  id: ConquestFlagTAP
+  suffix: TAP
+  name: TAP conquest banner
+  components:
+    - type: Sprite
+      sprite: _Crescent/Structures/medieval_pole_banners.rsi
+      state: green-gold
+    - type: ConquestFlag
+      homeFaction: TAP

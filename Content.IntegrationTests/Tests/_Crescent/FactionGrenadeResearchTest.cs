@@ -10,8 +10,20 @@ namespace Content.IntegrationTests.Tests._Crescent;
 [TestFixture]
 public sealed class FactionGrenadeResearchTest
 {
+    private const string TwistcapGrenade = "GrenadeDSMG4Twistcap";
     private const string IncendiaryGrenade = "M14IncendiaryHandgrenade";
     private const string SmokeGrenade = "M18SmokeHandgrenade";
+
+    private static readonly string[] Microforges =
+    [
+        "PristineMicroforge",
+        "StationMicroforgeDSM",
+        "StationMicroforgeNCWL",
+        "StationMicroforgeSHI",
+        "StationMicroforgeTFSC",
+        "MicroforgeDSM",
+        "MicroforgeNCWL",
+    ];
 
     private static readonly (string Lathe, string Technology)[] FactionTechnologies =
     [
@@ -67,6 +79,33 @@ public sealed class FactionGrenadeResearchTest
                     Assert.That(availableRecipes, Does.Contain(SmokeGrenade),
                         $"{technologyId} did not unlock the smoke grenade in {lathePrototype}.");
                 });
+
+                entMan.DeleteEntity(latheUid);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task TwistcapGrenadeIsAvailableInEveryMicroforgeWithoutResearch()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        var entMan = server.ResolveDependency<IEntityManager>();
+        var latheSystem = entMan.System<LatheSystem>();
+
+        await server.WaitAssertion(() =>
+        {
+            foreach (var lathePrototype in Microforges)
+            {
+                var latheUid = entMan.SpawnEntity(lathePrototype, map.GridCoords);
+                var lathe = entMan.GetComponent<LatheComponent>(latheUid);
+
+                Assert.That(latheSystem.GetAvailableRecipes(latheUid, lathe), Does.Contain(TwistcapGrenade),
+                    $"{lathePrototype} does not expose the twistcap grenade as a base recipe.");
 
                 entMan.DeleteEntity(latheUid);
             }

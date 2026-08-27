@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using Content.Server._Crescent.Factions;
 using Content.Server.GameTicking.Events;
+using Content.Server.Spawners.Components;
 using Content.Shared._Crescent.CCVar;
 using Content.Shared._Crescent.HullrotFaction;
+using Content.Shared._Crescent.RoundEnd;
 using Content.Shared.Roles;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
@@ -49,6 +51,68 @@ public sealed class FactionBalanceTest
                 Assert.That(ev.Cancelled, Is.True);
                 Assert.That(balance.IsJobBlocked(session, job, out var faction), Is.True);
                 Assert.That(faction, Is.EqualTo("DSM"));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task FallenFactionCannotSpawnWhenPopulationBalanceIsDisabled()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true,
+            Dirty = true,
+        });
+
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        server.CfgMan.SetCVar(RatCCVars.FactionBalanceEnabled, false);
+
+        await server.WaitAssertion(() =>
+        {
+            var session = server.PlayerMan.Sessions.Single();
+            var fell = new FactionStationFellEvent(map.Grid, "DSM", "Test Station");
+            server.EntMan.EventBus.RaiseEvent(EventSource.Local, ref fell);
+
+            var job = new ProtoId<JobPrototype>("UnionfallShipCrewDSM");
+            var allowed = new IsJobAllowedEvent(session, job);
+            server.EntMan.EventBus.RaiseEvent(EventSource.Local, ref allowed);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(allowed.Cancelled, Is.True);
+                Assert.That(server.System<FactionBalanceSystem>().IsJobBlocked(session, job, out var faction), Is.True);
+                Assert.That(faction, Is.EqualTo("DSM"));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task FallenFactionLateJoinPointsAreDisabled()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var spawn = server.EntMan.SpawnEntity(null, map.GridCoords);
+            var factionSpawn = server.EntMan.AddComponent<FactionLateJoinSpawnPointComponent>(spawn);
+            factionSpawn.Faction = new ProtoId<FactionPrototype>("DSM");
+
+            var fell = new FactionStationFellEvent(map.Grid, "DSM", "Test Station");
+            server.EntMan.EventBus.RaiseEvent(EventSource.Local, ref fell);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(factionSpawn.Enabled, Is.False);
+                Assert.That(server.EntMan.HasComponent<StationInfestationComponent>(map.Grid), Is.True);
+                Assert.That(server.EntMan.Deleted(map.Grid), Is.False);
             });
         });
 

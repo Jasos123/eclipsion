@@ -159,7 +159,7 @@
   - type: AnimationPlayer
   - type: Appearance
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     intensitySlope: 2
     maxIntensity: 200
     tileBreakScale: 0.2 # until MLG makes grid pieces not spam the map, then keep this
@@ -247,7 +247,7 @@
   - type: AnimationPlayer
   - type: Appearance
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     intensitySlope: 5
     maxIntensity: 50
     tileBreakScale: 0.2 # until MLG makes grid pieces not spam the map, then keep this 

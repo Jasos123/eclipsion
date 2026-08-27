@@ -54,7 +54,7 @@
   id: CratePangtaiChargeRifle
   parent: WeaponCaseRifle
   name: pang tai arms "XCR-6 Charge rifle" case
-  description: A experimental rifle developed by Pang Tai Arms. Extremly rare.
+  description: An experimental rifle developed by Pang Tai Arms. Extremely rare.
   components:
   - type: StorageFill
     contents:
@@ -402,7 +402,7 @@
   id: CrateShinoharaHristov
   parent: WeaponCaseSniper
   name: shinohara "PLCR-3M2 Hristov" case
-  description: A anti-materiel rifle packaged in a stamped weapon case.
+  description: An anti-materiel rifle packaged in a stamped weapon case.
   components:
   - type: StorageFill
     contents:
@@ -454,7 +454,7 @@
   id: CrateShinoharaM211s
   parent: WeaponCaseSmg
   name: shinohara "M221s Phantom" case
-  description: A supressed light submachinegun packaged in a stamped weapon case.
+  description: A suppressed light submachinegun packaged in a stamped weapon case.
   components:
   - type: StorageFill
     contents:

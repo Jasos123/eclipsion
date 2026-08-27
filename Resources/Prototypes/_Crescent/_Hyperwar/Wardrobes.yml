@@ -42,7 +42,7 @@
   id: DSMConscriptWarInventory
   startingInventory:
     WeaponSniperDSMLegax: 100
-    MagazineBoxLightRifleSurplus: 100
+    BoxSpeedLoaderRifle: 100
     WeaponSubMachineGunDSMArbiterHullrot: 4
     MagazinePistolSubMachineGun: 12
     WeaponAntimaterielDSMLeveller: 1
@@ -58,7 +58,6 @@
     TelescopicShield: 2
     RiotShield: 2
     CombatKnife: 100
-    BoxSpeedLoaderLightRifle: 20
     ClothingBeltSyndicateWebbingMedFilled: 4
     ClothingBeltAuthorityWebbing: 100
     ClothingBackpackDSM: 100
@@ -93,7 +92,7 @@
   id: DSMConscriptAmmoInventory
   startingInventory:
     WeaponSniperDSMLegax: 30
-    MagazineBoxLightRifleSurplus: 50
+    BoxSpeedLoaderRifle: 50
     WeaponPistolComplianceImperial: 20
     MagazinePistol: 50
     WeaponAntimaterielDSMLeveller: 2
