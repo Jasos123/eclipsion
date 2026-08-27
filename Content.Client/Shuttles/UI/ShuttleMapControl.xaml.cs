@@ -713,9 +713,14 @@ public sealed partial class ShuttleMapControl : BaseShuttleControl
             return;
 
         // Cover, not stretch: the image keeps its aspect and overflows the short axis, so it
-        //   crops instead of distorting.
+        //   crops instead of distorting. Treat that covered size as the texture's world-space
+        //   size at the furthest zoom, then scale it with the chart. Without this the contacts
+        //   zoom around the cursor while the backdrop only slides relative to the map origin,
+        //   which makes the two layers visibly drift apart.
         var bounds = (Vector2) PixelSize;
-        var size = texSize * MathF.Max(bounds.X / texSize.X, bounds.Y / texSize.Y);
+        var coveredSize = texSize * MathF.Max(bounds.X / texSize.X, bounds.Y / texSize.Y);
+        var zoomScale = WorldRange > 0f ? WorldMaxRange / WorldRange : 1f;
+        var size = coveredSize * zoomScale;
 
         // Centre the image on the map origin, in screen terms - the same transform every map
         //   object goes through, which is what keeps the sky locked to the plot.

@@ -125,7 +125,7 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
             var query = EntityQueryEnumerator<IFFConsoleComponent>();
             while (query.MoveNext(out var uid, out var comp))
             {
-                if (!comp.active)
+                if (!comp.active || comp.dissipateAlways)
                 {
                     comp.CurrentHeat = float.Clamp(comp.CurrentHeat - comp.HeatDissipation, 0f, comp.HeatCapacity);
                     UpdateIFFInterface(uid, comp);
@@ -141,9 +141,6 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
                 {
                     comp.CurrentHeat = float.Clamp(comp.CurrentHeat + comp.HeatGeneration, 0f, comp.HeatCapacity);
                 }
-
-                if (comp.dissipateAlways)
-                    comp.CurrentHeat = float.Clamp(comp.CurrentHeat - comp.HeatDissipation, 0f, comp.HeatCapacity);
 
                 UpdateIFFInterface(uid, comp);
                 if (comp.CurrentHeat != comp.HeatCapacity)

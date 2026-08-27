@@ -58,7 +58,7 @@ public sealed partial class ShuttleDockControl : BaseShuttleControl
     public event Action<NetEntity, NetEntity>? DockRequest;
     public event Action<NetEntity>? UndockRequest;
 
-    public ShuttleDockControl() : base(2f, 32f, 8f)
+    public ShuttleDockControl() : base(2f, 100f, 100f)
     {
         RobustXamlLoader.Load(this);
         _dockSystem = EntManager.System<DockingSystem>();

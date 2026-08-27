@@ -2,10 +2,8 @@
   parent: [BaseComputerAiAccess, BaseStructureDisableToolUse, BaseStructureUnanchorable]
   id: ComputerMassCloak
   name: mass cloak console
-  description: Allows you to control mass cloaking fields around this vessel.
+  description: A decommissioned mass cloak console.
   components:
-  - type: MassCloakConsole
-    ignoreAsteroids: true
   - type: Sprite
     layers:
     - map: ["computerLayerBody"]
@@ -19,14 +17,6 @@
       state: generic_keys
     - map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
       state: generic_panel_open
-  - type: ActivatableUI
-    key: enum.MassCloakConsoleUiKey.Key
-  - type: UserInterface
-    interfaces:
-        enum.MassCloakConsoleUiKey.Key:
-          type: MassCloakConsoleBoundUserInterface
-        enum.WiresUiKey.Key:
-          type: WiresBoundUserInterface
   - type: Computer
     board: ComputerTelevisionCircuitboard
 
@@ -34,8 +24,4 @@
   parent: ComputerMassCloak
   id: ComputerMothershipMassCloak
   name: mothership mass cloak console
-  description: Extends an active mothership cloak to nearby vessels without altering the mothership's own cloak.
-  components:
-  - type: MassCloakConsole
-    requiresMothershipCloak: true
-    cloakMothership: false
+  description: A decommissioned mothership mass cloak console.

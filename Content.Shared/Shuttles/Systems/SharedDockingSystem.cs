@@ -14,7 +14,7 @@ public abstract class SharedDockingSystem : EntitySystem
     /// This is deliberately shorter than normal radar range so the docking display cannot be
     /// used as a general-purpose cloak detector.
     /// </summary>
-    public const float CloakedDockDetectionRange = 8f;
+    public const float CloakedDockDetectionRange = 100f;
     public static readonly double AlignmentTolerance = Angle.FromDegrees(15).Theta;
 
     public bool CanShuttleDock(EntityUid? shuttle)

@@ -214,10 +214,15 @@ public sealed partial class MapScreen : BoxContainer
 
             var mapName = mapMetadata.EntityName;
 
-            if (string.IsNullOrEmpty(mapName))
-            {
-                mapName = Loc.GetString("shuttle-console-unknown");
-            }
+            // Runtime/helper maps have no useful sector name and used to clutter the list with
+            // identical "Unknown" headings.
+            if (string.IsNullOrWhiteSpace(mapName) ||
+                string.Equals(mapName, Loc.GetString("shuttle-console-unknown"), StringComparison.CurrentCultureIgnoreCase))
+                continue;
+
+            // "Empty" is the engine placeholder used by the shared sector map.
+            if (string.Equals(mapName, "Empty", StringComparison.OrdinalIgnoreCase))
+                mapName = Loc.GetString("shuttle-console-map-sector-crescent");
 
             var heading = new CollapsibleHeading(mapName);
 
