@@ -3,6 +3,7 @@ using Content.Shared.Construction.Components;
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Events;
+using Content.Shared._Crescent.Shuttles.Components;
 
 namespace Content.Server.Shuttles.Systems;
 
@@ -71,6 +72,10 @@ public sealed partial class ShuttleSystem
                 return;
             AddIFFFlag(xform.GridUid.Value, IFFFlags.Hide);
             component.active = true;
+
+            // If the grid was already inside a mass-cloak field, its own cloak now owns the hide flag.
+            if (TryComp(xform.GridUid.Value, out MassCloakedByComponent? cloakedBy))
+                cloakedBy.HideFlagSetByMassCloak = false;
         }
         else
         {

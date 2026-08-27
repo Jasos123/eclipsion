@@ -125,7 +125,7 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
             var query = EntityQueryEnumerator<IFFConsoleComponent>();
             while (query.MoveNext(out var uid, out var comp))
             {
-                if (!comp.active || comp.dissipateAlways == true)
+                if (!comp.active)
                 {
                     comp.CurrentHeat = float.Clamp(comp.CurrentHeat - comp.HeatDissipation, 0f, comp.HeatCapacity);
                     UpdateIFFInterface(uid, comp);
@@ -141,6 +141,10 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
                 {
                     comp.CurrentHeat = float.Clamp(comp.CurrentHeat + comp.HeatGeneration, 0f, comp.HeatCapacity);
                 }
+
+                if (comp.dissipateAlways)
+                    comp.CurrentHeat = float.Clamp(comp.CurrentHeat - comp.HeatDissipation, 0f, comp.HeatCapacity);
+
                 UpdateIFFInterface(uid, comp);
                 if (comp.CurrentHeat != comp.HeatCapacity)
                     continue;
@@ -174,6 +178,8 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
 
         while (consoleQuery.MoveNext(out var consoleUid, out var consoleComp, out var consoleXform))
         {
+            consoleComp.CloakedGrids.Clear();
+
             if (!consoleComp.MassCloakEnabled || consoleXform.GridUid is null)
                 continue;
 
@@ -184,12 +190,6 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
                 continue;
 
             activeFields.Add((consoleUid, consoleXform, consoleComp));
-        }
-
-        // Clear old cloak tracking
-        foreach (var activeField in activeFields)
-        {
-            activeField.Comp.CloakedGrids.Clear();
         }
 
         var toCloak = new Dictionary<EntityUid, EntityUid>(); // gridUid -> consoleUid
@@ -237,13 +237,14 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
         {
             if (!toCloak.ContainsKey(gridUid))
             {
+                var clearHideFlag = TryComp(gridUid, out MassCloakedByComponent? cloakedBy) &&
+                                    cloakedBy.HideFlagSetByMassCloak;
+
                 RemComp<MassCloakComponent>(gridUid);
                 RemComp<MassCloakedByComponent>(gridUid);
-                // Only clear the IFF hide flag if mass cloak set it (now that we're removing MassCloakedByComponent,
-                // no other mass cloak system is managing this grid, so it's safe to remove the flag)
-                if (TryComp(gridUid, out IFFComponent? iff))
+
+                if (clearHideFlag && TryComp(gridUid, out IFFComponent? iff))
                 {
-                    // Check if Hide flag is set before trying to remove it
                     if ((iff.Flags & IFFFlags.Hide) != 0)
                     {
                         iff.Flags &= ~IFFFlags.Hide;
@@ -302,6 +303,7 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
                 if ((iff.Flags & IFFFlags.Hide) == 0)
                 {
                     iff.Flags |= IFFFlags.Hide;
+                    cloakedBy.HideFlagSetByMassCloak = true;
                     Dirty(gridUid, iff);
                 }
             }

@@ -97,6 +97,14 @@ public partial class BaseShuttleControl : MapGridControl
     }
 
     /// <summary>
+    /// Motion data is only useful for grids that can actually be piloted.
+    /// </summary>
+    internal bool ShouldDrawIFFMotion(EntityUid gridUid)
+    {
+        return !EntManager.HasComponent<PreventPilotComponent>(gridUid);
+    }
+
+    /// <summary>
     /// Draws a compact speed and heading readout beside an IFF label.
     /// The numeric heading is world-relative (000 is north), while the arrow follows the radar's current rotation.
     /// </summary>

@@ -135,7 +135,9 @@ public sealed partial class ShuttleDockControl : BaseShuttleControl
         {
             EntManager.TryGetComponent(grid.Owner, out IFFComponent? iffComp);
 
-            if (grid.Owner != GridEntity && !_shuttles.CanDraw(grid.Owner, iffComp: iffComp, viewer: GridEntity))
+            if (grid.Owner != GridEntity &&
+                !_shuttles.CanDraw(grid.Owner, iffComp: iffComp, viewer: GridEntity) &&
+                !CanDetectCloakedDock(grid.Owner))
                 continue;
 
             var gridMatrix = _xformSystem.GetWorldMatrix(grid.Owner);
@@ -328,6 +330,58 @@ public sealed partial class ShuttleDockControl : BaseShuttleControl
         // Draw the dock itself
         handle.DrawRect(ourDock, dockColor.WithAlpha(0.2f));
         handle.DrawRect(ourDock, dockColor, filled: false);
+    }
+
+    /// <summary>
+    /// Allows a cloaked grid to be shown only on the docking display when one of its ports is
+    /// close to one of our ports. A grid already docked to us remains visible regardless of the
+    /// distance between the two grid origins, which is important for large ships.
+    /// </summary>
+    private bool CanDetectCloakedDock(EntityUid targetGrid)
+    {
+        if (GridEntity is not { } viewerGrid || DockState == null)
+            return false;
+
+        var viewerNet = EntManager.GetNetEntity(viewerGrid);
+        var targetNet = EntManager.GetNetEntity(targetGrid);
+
+        if (!DockState.Docks.TryGetValue(viewerNet, out var viewerDocks) ||
+            !DockState.Docks.TryGetValue(targetNet, out var targetDocks))
+        {
+            return false;
+        }
+
+        foreach (var dock in viewerDocks)
+        {
+            if (dock.GridDockedWith == targetNet)
+                return true;
+        }
+
+        foreach (var dock in targetDocks)
+        {
+            if (dock.GridDockedWith == viewerNet)
+                return true;
+        }
+
+        var detectionRangeSquared = SharedDockingSystem.CloakedDockDetectionRange *
+                                    SharedDockingSystem.CloakedDockDetectionRange;
+
+        foreach (var viewerDock in viewerDocks)
+        {
+            var viewerMap = _xformSystem.ToMapCoordinates(EntManager.GetCoordinates(viewerDock.Coordinates));
+
+            foreach (var targetDock in targetDocks)
+            {
+                var targetMap = _xformSystem.ToMapCoordinates(EntManager.GetCoordinates(targetDock.Coordinates));
+                if (viewerMap.MapId != targetMap.MapId)
+                    continue;
+
+                if ((viewerMap.Position - targetMap.Position).LengthSquared() <= detectionRangeSquared)
+                    return true;
+            }
+        }
+
+        return false;
     }
 
     private void HideDocks()

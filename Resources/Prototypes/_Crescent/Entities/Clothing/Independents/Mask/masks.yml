@@ -10,3 +10,5 @@
     sprite: Clothing/Mask/welding-gas.rsi
   - type: Clothing
     sprite: Clothing/Mask/welding-gas.rsi
+  - type: StaticPrice
+    price: 250

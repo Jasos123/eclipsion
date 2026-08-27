@@ -136,7 +136,7 @@ public sealed class ShipWeaponBalanceTest
     {
         var cargoAmmo = new Dictionary<string, (string Crate, string Box, int Boxes, int Rounds)>
         {
-            ["Shuttle48mmAmmoGeneric"] = ("Crate48mmAmmo", "Magazine48mmRocket", 10, 6),
+            ["Shuttle48mmAmmoGeneric"] = ("Crate48mmAmmo", "Magazine48mmRocket", 3, 20),
             ["ShuttleSwarmerAmmoCargoShuttle"] = ("CrateSwarmerAmmo", "MagazineSwarmer", 5, 10),
         };
 
@@ -315,7 +315,7 @@ public sealed class ShipWeaponBalanceTest
                 Assert.That(screamerGun.ProjectileSpeed, Is.EqualTo(110f));
                 Assert.That(screamerGun.FireRate, Is.EqualTo(10f));
                 Assert.That(screamerAmmo.Count / screamerGun.FireRate, Is.GreaterThanOrEqualTo(24f));
-                Assert.That((float) bullet.Damage.GetTotal(), Is.EqualTo(130f));
+                Assert.That((float) bullet.Damage.GetTotal(), Is.EqualTo(210f));
 
                 Assert.That(warthogGun.ProjectileSpeed, Is.EqualTo(110f));
                 Assert.That(warthogGun.FireRate, Is.EqualTo(8f));

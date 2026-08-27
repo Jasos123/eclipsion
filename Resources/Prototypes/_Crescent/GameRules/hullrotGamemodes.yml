@@ -13,7 +13,7 @@
 # IFFFaction sets the faction of the object. to be honest i dont know if this does anything.
 # hideIFF is a boolean that controls if the object is visible from the map screen or not. by default it is set to false. use this for derelicts or secrets
 # worldgenConfig picks the asteroid/biome layout (see _Crescent/World/worldgen.yml). Defaults to RatWorld when unset.
-# Gliess anchors the Freeplay sector origin. Every other station must be at least 6000 m from it and from each other.
+# Gliess anchors the Freeplay sector origin. The faction stations are kept in a compact ring around the central POIs.
 
 
 ### FREEPLAY ###
@@ -72,26 +72,26 @@
     gameMapsByID:
       PortBalreska:
         gameMapID: PortBalreska
-        posX: -7000
+        posX: -5000
         posY: 2000
         IFFColor: Orange
         IFFFaction: NCWL
       AuroraImperialis:
         gameMapID: AuroraImperialis
-        posX: 7000
+        posX: 5000
         posY: 2000
         IFFColor: "#C677A5"
         IFFFaction: DSM
       Tatsumoto:
         gameMapID: Tatsumoto
         posX: -4000
-        posY: -6000
+        posY: -4000
         IFFColor: White
         IFFFaction: SHI
       Freeport:
         gameMapID: Freeport
         posX: 4000
-        posY: -6000
+        posY: -4000
         IFFColor: IndianRed
         IFFFaction: TFSC
       GliessSanto:
@@ -202,13 +202,13 @@
     gameMapsByID:
       PortBalreska:
         gameMapID: PortBalreska
-        posX: -7000
+        posX: -5000
         posY: 2000
         IFFColor: Orange
         IFFFaction: NCWL
       AuroraImperialis:
         gameMapID: AuroraImperialis
-        posX: 7000
+        posX: 5000
         posY: 2000
         IFFColor: "#C677A5"
         IFFFaction: DSM
@@ -320,13 +320,13 @@
       Tatsumoto:
         gameMapID: Tatsumoto
         posX: -4000
-        posY: -6000
+        posY: -4000
         IFFColor: White
         IFFFaction: SHI
       Freeport:
         gameMapID: Freeport
         posX: 4000
-        posY: -6000
+        posY: -4000
         IFFColor: IndianRed
         IFFFaction: TFSC
       GliessSanto:
@@ -437,7 +437,7 @@
       Freeport:
         gameMapID: Freeport
         posX: 4000
-        posY: -6000
+        posY: -4000
         IFFColor: IndianRed
         IFFFaction: TFSC
       GliessSanto:

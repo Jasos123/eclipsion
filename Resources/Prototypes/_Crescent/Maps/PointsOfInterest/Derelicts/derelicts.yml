@@ -41,6 +41,7 @@
     Graveyard:
       stationProto: StandardCrescentPOI
       gridComponents:
+        - type: PreventPilot
         - type: VesselIcon
           iffIcon:
             sprite: _Crescent/ShipIcons/ifficons.rsi
@@ -143,6 +144,7 @@
     DerelictWaystation:
       stationProto: StandardCrescentPOI
       gridComponents:
+        - type: PreventPilot
         - type: VesselIcon
           iffIcon:
             sprite: _Crescent/ShipIcons/ifficons.rsi

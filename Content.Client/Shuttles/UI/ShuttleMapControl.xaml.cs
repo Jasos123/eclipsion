@@ -391,7 +391,9 @@ public sealed partial class ShuttleMapControl : BaseShuttleControl
                 continue;
 
             var existingStrings = _strings.GetOrNew(gridColor);
-            Vector2? velocity = grid.Owner == _shuttleEntity ? null : gridPhysics.LinearVelocity;
+            Vector2? velocity = grid.Owner == _shuttleEntity || !ShouldDrawIFFMotion(grid.Owner)
+                ? null
+                : gridPhysics.LinearVelocity;
             existingStrings.Add((gridUiPos, iffText, velocity));
         }
 

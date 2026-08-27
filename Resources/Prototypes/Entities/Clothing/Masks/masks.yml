@@ -46,8 +46,6 @@
     - PetWearable
     - WhitelistChameleon
     - SecurityBreathMask
-  - type: StaticPrice # eclipsion
-    price: 250
 
 - type: entity
   parent: ClothingMaskGas

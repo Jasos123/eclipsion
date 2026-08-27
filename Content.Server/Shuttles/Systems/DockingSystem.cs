@@ -357,6 +357,9 @@ namespace Content.Server.Shuttles.Systems
 
         private void OnRequestUndock(EntityUid uid, ShuttleConsoleComponent component, UndockRequestMessage args)
         {
+            var console = _console.GetDroneConsole(uid);
+            var shuttleUid = console == null ? null : Transform(console.Value).GridUid;
+
             if (!TryGetEntity(args.DockEntity, out var dockEnt) ||
                 !TryComp(dockEnt, out DockingComponent? dockComp))
             {
@@ -366,13 +369,25 @@ namespace Content.Server.Shuttles.Systems
 
             var dock = (dockEnt.Value, dockComp);
 
-            if (!CanUndock(dock))
+            if (shuttleUid is not { } shuttleGrid ||
+                !CanShuttleUndock(shuttleGrid) ||
+                !IsDockConnectedToGrid(dock, shuttleGrid) ||
+                !CanUndock(dock))
             {
                 _popup.PopupCursor(Loc.GetString("shuttle-console-undock-fail"));
                 return;
             }
 
             Undock(dock);
+        }
+
+        private bool IsDockConnectedToGrid(Entity<DockingComponent> dock, EntityUid gridUid)
+        {
+            if (_xformQuery.TryGetComponent(dock.Owner, out var dockXform) && dockXform.GridUid == gridUid)
+                return true;
+
+            return _xformQuery.TryGetComponent(dock.Comp.DockedWith, out var otherDockXform) &&
+                   otherDockXform.GridUid == gridUid;
         }
 
         private void OnRequestDock(EntityUid uid, ShuttleConsoleComponent component, DockRequestMessage args)

@@ -233,7 +233,8 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
                     textUiPosition.X = Math.Clamp(textUiPosition.X, 0f, PixelWidth - labelDimensions.X);
                     textUiPosition.Y = Math.Clamp(textUiPosition.Y, 0f, PixelHeight - labelDimensions.Y);
                     handle.DrawString(Font, textUiPosition, labelText, color);
-                    control.DrawIFFMotion(handle, textUiPosition, labelDimensions, gridBody.LinearVelocity, rot, color);
+                    if (control.ShouldDrawIFFMotion(gUid))
+                        control.DrawIFFMotion(handle, textUiPosition, labelDimensions, gridBody.LinearVelocity, rot, color);
                 }
                 if (icon is not null)
                     handle.DrawTexture(icon, targetPos + textureOffset, color);
@@ -641,7 +642,8 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
                     Math.Clamp(uiPosition.X, drawJob.gridData[grid.Owner].HeightRequired, PixelWidth - labelDimensions.X),
                     Math.Clamp(uiPosition.Y, 0f, PixelHeight - labelDimensions.Y));
                 handle.DrawString(Font, uiPosition, labelText, color);
-                DrawIFFMotion(handle, uiPosition, labelDimensions, gridBody.LinearVelocity, rot, color);
+                if (ShouldDrawIFFMotion(gUid))
+                    DrawIFFMotion(handle, uiPosition, labelDimensions, gridBody.LinearVelocity, rot, color);
             }
 
             DrawGrid(handle, matty, grid, color);

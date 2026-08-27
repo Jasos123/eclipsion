@@ -21,4 +21,11 @@ public sealed partial class MassCloakedByComponent : Component
     /// </summary>
     [ViewVariables, AutoNetworkedField]
     public float CloakingRange = 100f;
+
+    /// <summary>
+    /// Whether the mass-cloak system added the grid's IFF hide flag.
+    /// This prevents leaving a field from disabling a grid's independently activated cloak.
+    /// </summary>
+    [ViewVariables]
+    public bool HideFlagSetByMassCloak;
 }

@@ -507,6 +507,7 @@
   components:
   - type: VendingMachine
     pack: TaypaniSurplusVendorPack
+    globalPriceMod: 1.5
     offState: off
     brokenState: broken
     normalState: normal-unshaded
