@@ -124,12 +124,14 @@ public sealed partial class ShipShieldsSystem : EntitySystem
             {
                 emitter.Recharging = false; //stop boosting hp recharge now that it's up
                 var shield = ShieldEntity(parent.Value, source: uid);
-                if (shield != EntityUid.Invalid)
+                if (shield != EntityUid.Invalid
+                    && TryComp<ShipShieldComponent>(shield, out var shieldComp)
+                    && shieldComp.Source == uid)
                 {
                     emitter.Shield = shield;
                     emitter.Shielded = parent.Value;
+                    _audio.PlayGlobal(emitter.PowerUpSound, filter, true, emitter.PowerUpSound.Params);
                 }
-                _audio.PlayGlobal(emitter.PowerUpSound, filter, true, emitter.PowerUpSound.Params);
             }
             // if our emitter is Overloaded, AND the shield is active, shut down the shield.
             else if (emitter.OverloadAccumulator > 0 && emitter.Shield is not null)
