@@ -10,7 +10,8 @@
 # fought is the one between the great powers; if BOTH great powers fall the minors are not made to finish each
 # other off and every survivor shares the sector; two great powers still alive settles nothing. A settled war
 # then waits out victoryDelay before the round actually ends (announced sector-wide), so whoever is left gets one
-# last window to move — restoring a station's power calls the pending victory off entirely.
+# last window to move. The separate holdToFall warning is the defenders' chance to reclaim their banners; after
+# that expires and the Turning infestation begins, the fallen station cannot be restored.
 #
 # If the round instead hits the 4h cap, the surviving great power is credited; if none survives, nobody won.
 #
@@ -37,3 +38,4 @@
       SHI: faction-victory-shi
       TFSC: faction-victory-tfsc
       CMM: faction-victory-cmm
+      TAP: faction-victory-tap

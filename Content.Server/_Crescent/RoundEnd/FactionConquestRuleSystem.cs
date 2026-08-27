@@ -3,8 +3,11 @@ using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Server._Crescent.Diplomacy;
+using Content.Server._Crescent.ShipShields;
 using Content.Shared._Crescent.Diplomacy;
 using Content.Shared._Crescent.RoundEnd;
+using Content.Shared._Crescent.ShipShields;
+using Content.Shared._Crescent.SpaceArtillery;
 using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
 using Robust.Shared.Timing;
@@ -29,13 +32,15 @@ namespace Content.Server._Crescent.RoundEnd;
 ///  * both great powers still alive — nothing is settled, the war continues.
 ///
 /// A settled war does not end the round straight away: <see cref="FactionConquestRuleComponent.VictoryDelay"/>
-/// gives whoever is left one last window to move, and reclaiming a station's banners calls the whole thing off.
+/// gives whoever is left one last window to move. The ten-minute capture warning is the defenders' chance to
+/// reclaim their banners; once the Turning infestation begins, that station's fall is irreversible.
 /// If the round instead runs out of time, the surviving great power is credited; failing that, Taypan is swallowed.
 /// </summary>
 public sealed class FactionConquestRuleSystem : GameRuleSystem<FactionConquestRuleComponent>
 {
     [Dependency] private readonly IChatManager _chat = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly ShipShieldsSystem _shipShields = default!;
 
     protected override void Started(EntityUid uid, FactionConquestRuleComponent component, GameRuleComponent gameRule,
         GameRuleStartedEvent args)
@@ -144,7 +149,7 @@ public sealed class FactionConquestRuleSystem : GameRuleSystem<FactionConquestRu
 
         if (!TryResolveWinners(conquest, alive, out var winners))
         {
-            // The war reopened (power restored, alliance broken) — call off any pending victory.
+            // The surviving-station or alliance state changed before declaration — call off the pending victory.
             CancelPending(conquest);
             return;
         }
@@ -176,6 +181,98 @@ public sealed class FactionConquestRuleSystem : GameRuleSystem<FactionConquestRu
 
         conquest.PendingWinners = null;
         _chat.DispatchServerAnnouncement(Loc.GetString(conquest.PendingCancelledAnnouncement));
+    }
+
+    /// <summary>
+    /// Returns the faction identifiers accepted by the emergency admin victory command for the active conquest
+    /// rule. Multiple active rules are tolerated here so the command can still recover a misconfigured round.
+    /// </summary>
+    public List<string> GetForceableFactions()
+    {
+        var factions = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var query = EntityQueryEnumerator<FactionConquestRuleComponent, GameRuleComponent>();
+
+        while (query.MoveNext(out var uid, out var conquest, out var gameRule))
+        {
+            if (!GameTicker.IsGameRuleActive(uid, gameRule))
+                continue;
+
+            factions.UnionWith(conquest.VictoryAnnouncements.Keys);
+        }
+
+        return factions.OrderBy(faction => faction, StringComparer.OrdinalIgnoreCase).ToList();
+    }
+
+    /// <summary>
+    /// Immediately awards the active conquest round to one faction. This intentionally goes through the same
+    /// declaration path as an organic victory so round-end text, victory announcements and war-result listeners
+    /// all receive the same result.
+    /// </summary>
+    public bool TryForceVictory(string requestedFaction, out string winner, out string error)
+    {
+        winner = string.Empty;
+        error = string.Empty;
+
+        if (GameTicker.RunLevel != GameRunLevel.InRound)
+        {
+            error = "The round is not currently running.";
+            return false;
+        }
+
+        if (GameTicker.IsRoundEndBypassed())
+        {
+            error = "A RoundEndBypass rule is active. Remove it before forcing a faction victory.";
+            return false;
+        }
+
+        var activeRules = new List<FactionConquestRuleComponent>();
+        FactionConquestRuleComponent? announcingRule = null;
+        var query = EntityQueryEnumerator<FactionConquestRuleComponent, GameRuleComponent>();
+
+        while (query.MoveNext(out var uid, out var conquest, out var gameRule))
+        {
+            if (!GameTicker.IsGameRuleActive(uid, gameRule))
+                continue;
+
+            activeRules.Add(conquest);
+
+            var match = conquest.VictoryAnnouncements.Keys.FirstOrDefault(faction =>
+                faction.Equals(requestedFaction.Trim(), StringComparison.OrdinalIgnoreCase));
+
+            if (match == null || announcingRule != null)
+                continue;
+
+            winner = match;
+            announcingRule = conquest;
+        }
+
+        if (activeRules.Count == 0)
+        {
+            error = "No active faction conquest rule was found. Use 'endround' for a generic round end.";
+            return false;
+        }
+
+        if (announcingRule == null)
+        {
+            var valid = activeRules
+                .SelectMany(rule => rule.VictoryAnnouncements.Keys)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(faction => faction, StringComparer.OrdinalIgnoreCase);
+            error = $"Unknown faction '{requestedFaction}'. Valid factions: {string.Join(", ", valid)}.";
+            return false;
+        }
+
+        // Keep every active conquest component consistent if a preset bug started the rule more than once. Only
+        // the selected announcing rule goes through Declare, preventing duplicate events and restart timers.
+        foreach (var conquest in activeRules)
+        {
+            conquest.PendingWinners = null;
+            conquest.Decided = true;
+            conquest.Winners = new List<string> { winner };
+        }
+
+        Declare(announcingRule, new List<string> { winner });
+        return true;
     }
 
     private void Declare(FactionConquestRuleComponent conquest, List<string> winners)
@@ -214,6 +311,14 @@ public sealed class FactionConquestRuleSystem : GameRuleSystem<FactionConquestRu
             seen.Add(stationUid);
             conquest.KnownStations[stationUid] = station.FallAnnouncement ?? string.Empty;
 
+            // Once the Turning has entered the hull the station cannot be reclaimed by changing its banners.
+            // The grid deliberately remains so the infestation can keep consuming it.
+            if (conquest.AnnouncedFallen.Contains(stationUid))
+            {
+                DisableStationShield(conquest, stationUid);
+                continue;
+            }
+
             var underControl = IsUnderEnemyControl(flagsByGrid, stationUid, station.Faction, out var captor);
 
             if (!underControl)
@@ -222,10 +327,14 @@ public sealed class FactionConquestRuleSystem : GameRuleSystem<FactionConquestRu
                 // and any running capture clock is wiped so a fresh push has to hold the full window over again.
                 conquest.ControlledSince.Remove(stationUid);
                 conquest.AnnouncedControl.Remove(stationUid);
-                conquest.AnnouncedFallen.Remove(stationUid);
+                RestoreStationShield(conquest, stationUid, station);
                 alive.Add(station.Faction);
                 continue;
             }
+
+            // Repeat this cheap scan while the warning is active so an emitter built after the initial capture
+            // cannot silently bring the station's shields back online.
+            DisableStationShield(conquest, stationUid);
 
             if (!conquest.ControlledSince.TryGetValue(stationUid, out var since))
             {
@@ -329,13 +438,66 @@ public sealed class FactionConquestRuleSystem : GameRuleSystem<FactionConquestRu
 
     private void AnnounceFall(FactionConquestRuleComponent conquest, EntityUid stationUid, FactionStationComponent station)
     {
-        if (station.FallAnnouncement is not { } message || !conquest.AnnouncedFallen.Add(stationUid))
+        if (!conquest.AnnouncedFallen.Add(stationUid))
             return;
 
-        _chat.DispatchServerAnnouncement(Loc.GetString(message));
+        if (station.FallAnnouncement is { } message)
+            _chat.DispatchServerAnnouncement(Loc.GetString(message));
 
         var ev = new FactionStationFellEvent(stationUid, station.Faction, station.StationName);
         RaiseLocalEvent(ref ev);
+    }
+
+    private void DisableStationShield(FactionConquestRuleComponent conquest, EntityUid stationUid)
+    {
+        if (HasComp<BlockShipWeaponProjectileGridComponent>(stationUid))
+        {
+            RemComp<BlockShipWeaponProjectileGridComponent>(stationUid);
+            conquest.DisabledShields.Add(stationUid);
+        }
+
+        if (!conquest.DisabledShieldEmitters.TryGetValue(stationUid, out var disabledEmitters))
+            disabledEmitters = new HashSet<EntityUid>();
+
+        var query = EntityQueryEnumerator<ShipShieldEmitterComponent, TransformComponent>();
+        while (query.MoveNext(out var emitterUid, out var emitter, out var xform))
+        {
+            if (xform.GridUid == stationUid && _shipShields.SetForcedDisabled(emitterUid, true, emitter))
+                disabledEmitters.Add(emitterUid);
+        }
+
+        if (disabledEmitters.Count > 0)
+            conquest.DisabledShieldEmitters[stationUid] = disabledEmitters;
+    }
+
+    private void RestoreStationShield(FactionConquestRuleComponent conquest, EntityUid stationUid,
+        FactionStationComponent station)
+    {
+        if (TerminatingOrDeleted(stationUid))
+            return;
+
+        var restored = false;
+        if (conquest.DisabledShields.Remove(stationUid))
+        {
+            EnsureComp<BlockShipWeaponProjectileGridComponent>(stationUid);
+            restored = true;
+        }
+
+        if (conquest.DisabledShieldEmitters.Remove(stationUid, out var emitters))
+        {
+            foreach (var emitterUid in emitters)
+            {
+                if (!TerminatingOrDeleted(emitterUid) && _shipShields.SetForcedDisabled(emitterUid, false))
+                    restored = true;
+            }
+        }
+
+        if (!restored)
+            return;
+
+        _chat.DispatchServerAnnouncement(Loc.GetString(conquest.ControlCancelledAnnouncement,
+            ("station", station.StationName),
+            ("faction", station.Faction)));
     }
 
     /// <summary>

@@ -140,7 +140,7 @@
         Heat: 200
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 100
     intensitySlope: 50
     totalIntensity: 1000

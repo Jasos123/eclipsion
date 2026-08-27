@@ -16,6 +16,7 @@ using Content.Shared.Examine;
 using Content.Shared.Fluids.Components;
 using Content.Shared.Hands.Components;
 using Content.Shared.Inventory;
+using Content.Shared._Crescent.HullrotFaction; // Eclipsion
 using Content.Shared.Mech.Components; // Eclipsion
 using Content.Shared.Mobs.Components; // Eclipsion
 using Content.Shared.Mobs.Systems;
@@ -412,9 +413,18 @@ public sealed class NPCUtilitySystem : EntitySystem
         if (target == owner || !IsSealedBoarder(target))
             return;
 
-        // Note this asks whether the target is *friendly*, not whether it is hostile. Anything we have no
-        // positive relationship with counts, which is the entire point: an unaligned boarder belongs to no
-        // faction that could ever appear in a hostile set.
+        // HullrotFaction is the authoritative player allegiance. Check it directly as well as the mirrored
+        // NPC faction so a crew member cannot become a target while their job/recruitment faction is waiting
+        // to synchronize (or if that mirror was removed by another system).
+        if (TryComp<HullrotFactionComponent>(target, out var hullrotFaction)
+            && !string.IsNullOrWhiteSpace(hullrotFaction.Faction)
+            && _npcFaction.IsMember(owner, hullrotFaction.Faction.Trim()))
+        {
+            return;
+        }
+
+        // Anything we have no positive relationship with counts, which is the entire point: an unaligned
+        // boarder belongs to no faction that could ever appear in a hostile set.
         if (_npcFaction.IsEntityFriendly(owner, target))
             return;
 

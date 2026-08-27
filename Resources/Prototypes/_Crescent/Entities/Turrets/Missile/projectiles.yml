@@ -26,7 +26,7 @@
       - state: base-projectile
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 50
     intensitySlope: 25
     totalIntensity: 700
@@ -103,7 +103,7 @@
       - state: base-projectile
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 150
     intensitySlope: 100
     totalIntensity: 1000
@@ -181,7 +181,7 @@
       - state: azimuthfired
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 400
     intensitySlope: 100
     totalIntensity: 2000
@@ -254,7 +254,7 @@
     layers:
       - state: gscazimuthfired
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 500
     intensitySlope: 200
     totalIntensity: 3000
@@ -295,7 +295,7 @@
     layers:
       - state: ncwlazimuthfired
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 450
     intensitySlope: 20
     totalIntensity: 2400
@@ -336,7 +336,7 @@
     layers:
       - state: azimuthmk2fired
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 150
     intensitySlope: 50
     totalIntensity: 1500
@@ -379,7 +379,7 @@
       - state: arbalest
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 400
     intensitySlope: 100
     totalIntensity: 5500
@@ -455,7 +455,7 @@
       - state: arbalest
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 400
     intensitySlope: 100
     totalIntensity: 6500
@@ -531,7 +531,7 @@
       - state: arbalest
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 400
     intensitySlope: 100
     totalIntensity: 10000
@@ -608,7 +608,7 @@
       - state: gargoylefired
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 1000
     intensitySlope: 200
     totalIntensity: 12000
@@ -684,7 +684,7 @@
       - state: ncwlgargoylefired
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 750
     intensitySlope: 50
     totalIntensity: 19000
@@ -763,7 +763,7 @@
   - type: ExplodeOnTrigger
   - type: IgnoresHullrotShields
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 23000
     intensitySlope: 500
     totalIntensity: 28000
@@ -841,7 +841,7 @@
       - state: base-projectile
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 100
     intensitySlope: 50
     totalIntensity: 250

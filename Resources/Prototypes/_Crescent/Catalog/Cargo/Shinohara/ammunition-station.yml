@@ -6,7 +6,7 @@
     sprite: _Crescent/Objects/Turrets/Ammunition/Magazine/screamer.rsi
     state: base
   product: Crate20mmAmmo
-  cost: 2500
+  cost: 5000
   category: cargoproduct-category-name-shuttleammo
   group: shinoharastation
 
@@ -28,7 +28,7 @@
     sprite: _Crescent/Objects/Turrets/Ammunition/Magazine/striker.rsi
     state: base
   product: Crate35mmAmmo
-  cost: 1250
+  cost: 5000
   category: cargoproduct-category-name-shuttleammo
   group: shinoharastation
 
@@ -50,7 +50,7 @@
     sprite: _Crescent/Objects/Turrets/Ammunition/Cartridge/shortbow.rsi
     state: shortbow
   product: Crate48mmAmmo
-  cost: 10000
+  cost: 9050
   category: cargoproduct-category-name-shuttleammo
   group: shinoharastation
 
@@ -62,7 +62,7 @@
     sprite: _Crescent/Objects/Turrets/Ammunition/Magazine/striker.rsi
     state: base
   product: Crate50mmAmmo
-  cost: 1500
+  cost: 5000
   category: cargoproduct-category-name-shuttleammo
   group: shinoharastation
 
@@ -94,7 +94,7 @@
     sprite: _Crescent/Objects/Turrets/Ammunition/Cartridge/azimuth.rsi
     state: azimuthrocket
   product: Crate60mmAmmo
-  cost: 6000
+  cost: 5000
   category: cargoproduct-category-name-shuttleammo
   group: shinoharastation
 
@@ -116,7 +116,7 @@
     sprite: _Crescent/Objects/Turrets/Ammunition/Magazine/corpus.rsi
     state: base
   product: Crate88mmAmmo
-  cost: 4000
+  cost: 5000
   category: cargoproduct-category-name-shuttleammo
   group: shinoharastation
 
@@ -128,7 +128,7 @@
     sprite: _Crescent/Objects/Turrets/Ammunition/Magazine/resolute.rsi
     state: base
   product: Crate90mmAmmo
-  cost: 3000
+  cost: 5000
   category: cargoproduct-category-name-shuttleammo
   group: shinoharastation
 
@@ -160,7 +160,7 @@
     sprite: _Crescent/Objects/Turrets/Ammunition/Cartridge/arbalest.rsi
     state: arbalest
   product: Crate95mmAmmo
-  cost: 8000
+  cost: 5600
   category: cargoproduct-category-name-shuttleammo
   group: shinoharastation
 
@@ -172,7 +172,7 @@
     sprite: _Crescent/Objects/Turrets/Ammunition/Cartridge/anvil.rsi
     state: apds
   product: Crate120mmAmmo
-  cost: 3500
+  cost: 5000
   category: cargoproduct-category-name-shuttleammo
   group: shinoharastation
 
@@ -204,7 +204,7 @@
     sprite: _Crescent/Objects/Turrets/Ammunition/Cartridge/gargoyle.rsi
     state: gargoyle
   product: Crate240mmAmmo
-  cost: 10000
+  cost: 7000
   category: cargoproduct-category-name-shuttleammo
   group: shinoharastation
 
@@ -216,7 +216,7 @@
     sprite: _Crescent/Objects/Turrets/Ammunition/Cartridge/leviathan.rsi
     state: ap
   product: Crate300mmAmmo
-  cost: 8000
+  cost: 5600
   category: cargoproduct-category-name-shuttleammo
   group: shinoharastation
 
@@ -228,7 +228,7 @@
     sprite: _Crescent/Objects/Turrets/Ammunition/Cartridge/catapult.rsi
     state: catapult
   product: Crate330mmAmmo
-  cost: 16000
+  cost: 11200
   category: cargoproduct-category-name-shuttleammo
   group: shinoharastation
 

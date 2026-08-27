@@ -1,0 +1,233 @@
+# Modular load-bearing pouches. One pouch, one job: you buy capacity for a single kind of gear rather than a
+# second general-purpose bag, so a loadout is a set of choices instead of a single "bigger container" pick.
+#
+# The sprites are TGMC's, routed here through Battlefield14. The CC-BY-SA-3.0 attribution lives in the RSI's
+# meta.json - leave it there.
+#
+# These are adapted rather than ported verbatim, because BF14 tunes against a different inventory:
+#
+#   * BF14 gives every pouch `shape: 0,0,3,3` - a 4x4 item footprint, which is this fork's Huge. Here they are
+#     Normal and keep the stock 2x2 default shape, so a pouch roughly costs what it carries.
+#   * BF14's magazine whitelists key off a global `Magazine` tag. We have no such tag; our magazines carry 57
+#     per-calibre tags instead. Enumerating those would rot the moment someone adds a calibre, so the rifle
+#     pouches whitelist the BallisticAmmoProvider component and blacklist Gun. maxItemSize keeps ammo crates
+#     out. The pistol pouch is the one exception - "pistol-sized" is not a component, so it lists tags.
+#   * Thrown grenades in this fork carry no `Grenade` tag (that tag is on 40mm launcher rounds), so the grenade
+#     pouch whitelists OnUseTimerTrigger as well.
+#   * The flare pouch is a plain item. BF14 equips theirs to ARMBANDLEFT/ARMBANDRIGHT, slots no inventory
+#     template here defines.
+#   * BF14's BF_Magpouch_* storage sounds are dropped along with their audio; stock storage sounds apply.
+#
+# All of these are research-locked - see Research/electronics.yml and Recipes/Lathes/pouches.yml.
+
+- type: entity
+  id: BasePouch
+  parent: BaseStorageItem
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _Crescent/Objects/Misc/pouches.rsi
+    state: utility
+  - type: Item
+    size: Normal
+  - type: Storage
+    maxItemSize: Small
+    defaultStorageOrientation: Vertical
+    grid:
+    - 0,0,2,1
+  - type: PhysicalComposition
+    materialComposition:
+      Cloth: 100
+      Plastic: 100
+  - type: StaticPrice
+    price: 100
+
+- type: entity
+  parent: BasePouch
+  id: PouchUtility
+  name: utility pouch
+  description: A general-purpose belt pouch. Holds whatever fits, which is the point of it.
+  components:
+  - type: Sprite
+    sprite: _Crescent/Objects/Misc/pouches.rsi
+    state: utility
+
+- type: entity
+  parent: BasePouch
+  id: PouchMagazine
+  name: magazine pouch
+  description: A stiffened pouch cut to hold rifle magazines upright, so a reload comes out the way you put it in.
+  components:
+  - type: Sprite
+    sprite: _Crescent/Objects/Misc/pouches.rsi
+    state: medium_ammo_mag
+  - type: Storage
+    maxItemSize: Small
+    defaultStorageOrientation: Vertical
+    grid:
+    - 0,0,2,1
+    whitelist:
+      components:
+      - BallisticAmmoProvider
+    blacklist:
+      components:
+      - Gun
+
+- type: entity
+  parent: PouchMagazine
+  id: PouchMagazineLarge
+  name: large magazine pouch
+  description: A deeper magazine pouch. Rides heavier, reloads longer.
+  components:
+  - type: Sprite
+    sprite: _Crescent/Objects/Misc/pouches.rsi
+    state: large_ammo_mag
+  - type: Storage
+    maxItemSize: Small
+    defaultStorageOrientation: Vertical
+    grid:
+    - 0,0,3,1
+    whitelist:
+      components:
+      - BallisticAmmoProvider
+    blacklist:
+      components:
+      - Gun
+
+- type: entity
+  parent: BasePouch
+  id: PouchMagazinePistol
+  name: pistol magazine pouch
+  description: A shallow pouch of narrow loops, sized for sidearm magazines and speedloaders.
+  components:
+  - type: Sprite
+    sprite: _Crescent/Objects/Misc/pouches.rsi
+    state: pistol_mag
+  - type: Storage
+    maxItemSize: Small
+    defaultStorageOrientation: Vertical
+    grid:
+    - 0,0,3,1
+    whitelist:
+      tags:
+      - MagazinePistol
+      - MagazinePistol6mm
+      - MagazinePistolHighCapacity
+      - MagazinePistolSpecial
+      - MagazinePistolSubMachineGun
+      - MagazinePistolSubMachineGunTopMounted
+      - MagazinePistolCaselessRifle
+      - MagazinePistolSmartgun
+      - MagazineHeavyPistol
+      - MagazineMagnum
+      - MagazineUniversalMagnum
+      - SpeedLoaderPistol
+      - SpeedLoaderMagnum
+      - SpeedLoaderSpecial
+
+- type: entity
+  parent: BasePouch
+  id: PouchMedical
+  name: first aid pouch
+  description: A flat pouch of dressings and drugs, meant to patch one person once.
+  components:
+  - type: Sprite
+    sprite: _Crescent/Objects/Misc/pouches.rsi
+    state: firstaid
+  - type: Storage
+    maxItemSize: Small
+    defaultStorageOrientation: Vertical
+    grid:
+    - 0,0,2,1
+    whitelist:
+      tags:
+      - Brutepack
+      - Bloodpack
+      - Gauze
+      - Ointment
+      - PillCanister
+      - Packet
+      - Bottle
+      - Spray
+      - Tourniquet
+      - DiscreteHealthAnalyzer
+      components:
+      - Hypospray
+      - Injector
+      - Pill
+  - type: ExplosionResistance
+    damageCoefficient: 0.1
+    worn: false # protects the contents, not whoever is carrying the pouch
+
+- type: entity
+  parent: PouchMedical
+  id: PouchMedicalLarge
+  name: medkit pouch
+  description: The corpsman's pouch - deep enough to carry a second person's worth of treatment.
+  components:
+  - type: Sprite
+    sprite: _Crescent/Objects/Misc/pouches.rsi
+    state: medkit
+  - type: Storage
+    maxItemSize: Small
+    defaultStorageOrientation: Vertical
+    grid:
+    - 0,0,3,1
+    whitelist:
+      tags:
+      - Brutepack
+      - Bloodpack
+      - Gauze
+      - Ointment
+      - PillCanister
+      - Packet
+      - Bottle
+      - Spray
+      - Tourniquet
+      - DiscreteHealthAnalyzer
+      components:
+      - SurgeryTool
+      - Hypospray
+      - Injector
+      - Pill
+
+- type: entity
+  parent: BasePouch
+  id: PouchGrenade
+  name: grenade pouch
+  description: Padded loops for grenades. The padding is optimism, mostly.
+  components:
+  - type: Sprite
+    sprite: _Crescent/Objects/Misc/pouches.rsi
+    state: grenade
+  - type: Storage
+    maxItemSize: Small
+    defaultStorageOrientation: Vertical
+    grid:
+    - 0,0,2,1
+    whitelist:
+      tags:
+      - Grenade
+      components:
+      - OnUseTimerTrigger
+  - type: ExplosionResistance
+    damageCoefficient: 0.1
+    worn: false # protects the contents, not whoever is carrying the pouch
+
+- type: entity
+  parent: BasePouch
+  id: PouchFlare
+  name: flare pouch
+  description: A row of narrow sleeves for flares and glowsticks, for lighting a corridor you would rather not walk into dark.
+  components:
+  - type: Sprite
+    sprite: _Crescent/Objects/Misc/pouches.rsi
+    state: flare
+  - type: Storage
+    maxItemSize: Small
+    defaultStorageOrientation: Vertical
+    grid:
+    - 0,0,3,1
+    whitelist:
+      tags:
+      - Flare

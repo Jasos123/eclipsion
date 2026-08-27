@@ -22,6 +22,12 @@ namespace Content.Client.Shuttles.UI;
 [Virtual]
 public partial class BaseShuttleControl : MapGridControl
 {
+    private const float IffMotionFontScale = 0.65f;
+    private const float IffMotionPadding = 3f;
+    private const float IffMotionArrowWidth = 12f;
+    private const float IffMotionLabelGap = 4f;
+    private const float IffStationarySpeed = 0.05f;
+
     // Azimuth scale constants  
     private const int AzimuthMinorTickStepDegrees = 10;  
     private const int AzimuthMajorTickInterval = 3;  
@@ -88,6 +94,83 @@ public partial class BaseShuttleControl : MapGridControl
             new Vector2(coordsMargins, PixelHeight) - new Vector2(0f, coordsDimensions.Y + coordsMargins),
             text,
             Color.FromSrgb(IFFComponent.SelfColor));
+    }
+
+    /// <summary>
+    /// Draws a compact speed and heading readout beside an IFF label.
+    /// The numeric heading is world-relative (000 is north), while the arrow follows the radar's current rotation.
+    /// </summary>
+    protected void DrawIFFMotion(
+        DrawingHandleScreen handle,
+        Vector2 labelPosition,
+        Vector2 labelDimensions,
+        Vector2 worldVelocity,
+        Angle viewRotation,
+        Color color)
+    {
+        var speed = worldVelocity.Length();
+        var heading = "---";
+
+        if (speed >= IffStationarySpeed)
+        {
+            var headingDegrees = MathHelper.RadiansToDegrees(MathF.Atan2(worldVelocity.X, worldVelocity.Y));
+            if (headingDegrees < 0f)
+                headingDegrees += 360f;
+
+            var roundedHeading = (int) MathF.Round(headingDegrees) % 360;
+            heading = $"{roundedHeading:000}°";
+        }
+
+        var text = Loc.GetString(
+            "shuttle-console-iff-motion",
+            ("speed", $"{speed:0.0}"),
+            ("heading", heading));
+        var textDimensions = handle.GetDimensions(Font, text, IffMotionFontScale);
+        var boxSize = new Vector2(
+            IffMotionPadding * 3f + IffMotionArrowWidth + textDimensions.X,
+            MathF.Max(textDimensions.Y, IffMotionArrowWidth) + IffMotionPadding * 2f);
+
+        var boxPosition = new Vector2(
+            labelPosition.X + labelDimensions.X + IffMotionLabelGap,
+            labelPosition.Y + (labelDimensions.Y - boxSize.Y) / 2f);
+
+        if (boxPosition.X + boxSize.X > PixelWidth)
+            boxPosition.X = labelPosition.X - boxSize.X - IffMotionLabelGap;
+
+        boxPosition.X = Math.Clamp(boxPosition.X, 0f, MathF.Max(0f, PixelWidth - boxSize.X));
+        boxPosition.Y = Math.Clamp(boxPosition.Y, 0f, MathF.Max(0f, PixelHeight - boxSize.Y));
+
+        var bounds = UIBox2.FromDimensions(boxPosition, boxSize);
+        handle.DrawRect(bounds, BackingColor.WithAlpha(0.9f));
+        handle.DrawRect(bounds, color.WithAlpha(0.75f), filled: false);
+
+        var arrowCenter = boxPosition + new Vector2(
+            IffMotionPadding + IffMotionArrowWidth / 2f,
+            boxSize.Y / 2f);
+
+        if (speed < IffStationarySpeed)
+        {
+            handle.DrawCircle(arrowCenter, 1.5f, color);
+        }
+        else
+        {
+            var arrowDirection = (-viewRotation).RotateVec(worldVelocity / speed);
+            arrowDirection.Y *= -1f;
+
+            var arrowStart = arrowCenter - arrowDirection * 4f;
+            var arrowEnd = arrowCenter + arrowDirection * 4f;
+            var perpendicular = new Vector2(-arrowDirection.Y, arrowDirection.X);
+            var arrowBase = arrowEnd - arrowDirection * 3f;
+
+            handle.DrawLine(arrowStart, arrowEnd, color);
+            handle.DrawLine(arrowEnd, arrowBase + perpendicular * 2f, color);
+            handle.DrawLine(arrowEnd, arrowBase - perpendicular * 2f, color);
+        }
+
+        var textPosition = boxPosition + new Vector2(
+            IffMotionPadding * 2f + IffMotionArrowWidth,
+            (boxSize.Y - textDimensions.Y) / 2f);
+        handle.DrawString(Font, textPosition, text, IffMotionFontScale, color);
     }
 
     protected void DrawNorthLine(DrawingHandleScreen handle, Angle angle)

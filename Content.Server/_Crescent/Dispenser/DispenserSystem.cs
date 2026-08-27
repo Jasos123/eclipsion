@@ -33,6 +33,7 @@ public sealed class DispenserSystem : SharedDispenserSystem
     [Dependency] private readonly PaperSystem _paper = default!;
 
     private const string RecordPrintoutPrototype = "PaperPassportRecord";
+    internal const float MinimumTradePayoutMultiplier = 0.5f;
 
     /// <summary>
     /// Cheapest cargo purchase price per product entity-prototype id, built once from every
@@ -160,8 +161,9 @@ public sealed class DispenserSystem : SharedDispenserSystem
             // Apply dynamic pricing multiplier
             float dynamicMultiplier = _dynamicPricing.GetPriceMultiplier(prototype.ID);
 
-            // Combine both multipliers
-            float finalMultiplier = marketMultiplier * dynamicMultiplier;
+            // Both systems can move down at once, so floor their combined result as well as the
+            // station's local saturation. Otherwise two individually reasonable 50% floors become 25%.
+            float finalMultiplier = CalculateTradePayoutMultiplier(marketMultiplier, dynamicMultiplier);
 
             int finalAmount = (int) MathF.Round(baseAmount * finalMultiplier);
 
@@ -174,7 +176,7 @@ public sealed class DispenserSystem : SharedDispenserSystem
             if (stationUid.HasValue)
                 _marketSystem.RecordSale(stationUid.Value, prototype.ID);
 
-            // Record transaction in dynamic pricing system
+            // Keep the sector-wide supply/demand curve in sync with the local station market.
             _dynamicPricing.RecordTransaction(prototype.ID, 1, isBuy: false);
 
             // Apply the station/faction tax. The base sale value stays fixed; the faction
@@ -220,6 +222,14 @@ public sealed class DispenserSystem : SharedDispenserSystem
         {
             _audioSystem.PlayPvs(component.DenySound, uid);
         }
+    }
+
+    internal static float CalculateTradePayoutMultiplier(float marketMultiplier, float dynamicMultiplier)
+    {
+        var combined = marketMultiplier * dynamicMultiplier;
+        return float.IsFinite(combined)
+            ? MathF.Max(MinimumTradePayoutMultiplier, combined)
+            : MinimumTradePayoutMultiplier;
     }
 
     /// <summary>

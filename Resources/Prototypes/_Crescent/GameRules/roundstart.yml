@@ -14,10 +14,10 @@
   id: HullrotEventsTable
   table: !type:AllSelector
     children:
+    - id: PangTaiTrader
     - id: NanoTrasenProbe
     - id: InfestedStation
 
     # Rat-start
     - id: RatAnomalyStationEvent
-    - id: RatEmpZoneEvent
     # Rat-stop

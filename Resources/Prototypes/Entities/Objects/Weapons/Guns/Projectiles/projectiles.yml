@@ -743,7 +743,7 @@
       - state: grenade
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     totalIntensity: 320
     intensitySlope: 2
     maxIntensity: 320
@@ -788,7 +788,7 @@
   - type: ShipWeaponProjectile
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     totalIntensity: 650
     intensitySlope: 25
     maxIntensity: 650
@@ -880,7 +880,7 @@
       - state: grenade
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     totalIntensity: 125 # about a ~6 tile radius
     intensitySlope: 1
     maxIntensity: 10

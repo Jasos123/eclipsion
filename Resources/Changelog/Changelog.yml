@@ -1068,3 +1068,37 @@ Entries:
   id: 6080
   time: '2026-08-23T00:00:00.0000000+00:00'
   url: null
+
+- author: Taleryn
+  changes:
+    - message: Guidebook links that went nowhere now work. The two Trade Station links in the Logistics page pointed at a page that is not registered, so clicking them did nothing, and the Space Station 14 landing page told new players to read a Character Creation and a Roleplaying guide that do not exist. It now sends first-timers to Start Here instead.
+      type: Fix
+    - message: Guidebook job and channel names now match what you actually see in game. The DSM glossary calls the Advocatus by its job name, Shinohara's second executive is the Assistant Manager, Gliessian deputies are Militiamen, and the radio page lists Longwave 2.5km, Shortwave 500m and the Gliessian Sheriffs channel under the labels chat prints.
+      type: Fix
+    - message: Fixed wrong mechanics in the combat and psionics pages. Middle click is a single-target attack on a two second cooldown rather than a faster swing, the left click swing is a wide arc that hits allies, executions are taken from the target's verb menu, and the psionic tree has six primary disciplines plus Recurrence rather than five.
+      type: Fix
+    - message: First-round guidance now warns that Freeholder is human-only, that Oathbound is the non-human Mandate entry role, and that League roles are closed to Voidborn.
+      type: Tweak
+    - message: Fixed unclosed markup that left the rest of the Cyborgs page italic and broke a colour tag in the Defusal page, and the Controls page now shows your real smart-equip keybinds instead of hardcoded Shift+B and Shift+E.
+      type: Fix
+  id: 6081
+  time: '2026-08-23T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Added modular pouches, one pouch per job rather than a second general bag. There are utility, magazine, large magazine, pistol magazine, first aid, medkit, grenade and flare pouches, each holding only the gear it is cut for. All eight print at a microforge and unlock together off the new Modular Pouch Rigging node in the Electronics tree, which is the civilian discipline, so any faction's research server can reach them.
+      type: Add
+  id: 6082
+  time: '2026-08-23T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Retuned ore density across every asteroid type in the belts, and gave each type its own character. Sand asteroids go from 24% to 31% ore and their precious tail is no longer rounding error, so gold, silver, uranium and plasma actually turn up. Ice asteroids were by far the worst rock in the game at 10% ore against 88% bare snow despite being a third of the Taypan belts, and now sit at 25% and are the best place to find plasma and uranium. Solid rock asteroids stay the densest at 44% and are the best source of gold, silver and salt, with their elemental spawn rate trimmed from 8% to 6%.
+      type: Tweak
+    - message: Chromite asteroids, the purple rocks that make up the Crater belt, no longer mine out empty. They kept the old upstream tables while the sand asteroids were retuned, so only about 6% of their rock held ore and a golem or ore crab was almost twice as likely as an ore vein. Ore is now roughly a third of the rock, spread across tin, coal, quartz, copper, tungsten, plasma, uranium, gold and silver instead of being almost all tin, and the elemental spawn rate is down from 9% to under 3%. Chromite remains the only source of AME seeps and the best source of tungsten.
+      type: Tweak
+  id: 6083
+  time: '2026-08-23T00:00:00.0000000+00:00'
+  url: null

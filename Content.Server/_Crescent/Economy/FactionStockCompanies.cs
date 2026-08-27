@@ -27,4 +27,22 @@ public static class FactionStockCompanies
         companyId = string.Empty;
         return false;
     }
+
+    public static bool TryGetFaction(string companyId, out string faction)
+    {
+        if (!string.IsNullOrEmpty(companyId))
+        {
+            foreach (var (candidateFaction, candidateCompany) in ByFaction)
+            {
+                if (!string.Equals(candidateCompany, companyId, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                faction = candidateFaction;
+                return true;
+            }
+        }
+
+        faction = string.Empty;
+        return false;
+    }
 }

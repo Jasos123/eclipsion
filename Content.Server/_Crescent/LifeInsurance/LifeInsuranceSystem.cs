@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Content.Server._Crescent.LifeInsurance.Components;
+using Content.Server._Crescent.Factions;
 using Content.Server.Bank;
 using Content.Server.GameTicking;
 using Content.Server.Materials;
@@ -67,6 +68,7 @@ public sealed class LifeInsuranceSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly PowerReceiverSystem _powerReceiver = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private readonly FactionBalanceSystem _factionBalance = default!;
     private TimeSpan _nextGhostSync = TimeSpan.Zero;
 
     /// <summary>
@@ -580,6 +582,15 @@ public sealed class LifeInsuranceSystem : EntitySystem
             || life.PendingRespawnJob is not { } job
             || _timing.CurTime < respawnAt)
             return;
+
+        if (_factionBalance.TryGetJobFaction(job, out var faction) && _factionBalance.IsFactionDefeated(faction))
+        {
+            _popup.PopupEntity(Loc.GetString("life-insurance-popup-faction-defeated"),
+                ghostUid,
+                ghostUid,
+                PopupType.Medium);
+            return;
+        }
 
         var station = life.PendingRespawnStation;
         if (station == null || TerminatingOrDeleted(station))

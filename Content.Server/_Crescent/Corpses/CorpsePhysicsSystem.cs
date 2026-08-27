@@ -7,6 +7,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Events;
+using Content.Shared.Movement.Systems;
 using Content.Shared.Throwing;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
@@ -15,7 +16,7 @@ namespace Content.Server._Crescent.Corpses;
 
 /// <summary>
 /// Turns a dead body into dead weight. On death a corpse gets physics damping and extra tile friction
-/// so it coasts to a stop, and throwing one barely gets it off the ground.
+/// so it coasts to a stop, throwing one barely gets it off the ground, and dragging it slows the puller.
 /// </summary>
 /// <remarks>
 /// Corpses used to sail across the sector. Tile friction is skipped for weightless bodies and for
@@ -24,14 +25,15 @@ namespace Content.Server._Crescent.Corpses;
 /// by the physics solver and networked with the body, so it works in vacuum, in the air, and after any
 /// impulse from any source rather than only after the ones we thought to patch.
 ///
-/// Dragging is deliberately exempt: damping is lifted while someone is pulling the body, otherwise
-/// hauling a casualty to medbay fights the corpse the whole way.
+/// Damping is lifted while someone is pulling the body so the pull joint does not fight the corpse.
+/// <see cref="CorpseDraggingSystem"/> applies the weight as a predictable movement-speed penalty instead.
 /// </remarks>
-public sealed class CorpsePhysicsSystem : EntitySystem
+public sealed partial class CorpsePhysicsSystem : EntitySystem
 {
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly TileFrictionController _friction = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private TileFrictionController _friction = default!;
+    [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
 
     public override void Initialize()
     {
@@ -79,9 +81,10 @@ public sealed class CorpsePhysicsSystem : EntitySystem
         }
 
         comp.Applied = true;
+        Dirty(uid, comp);
 
-        // Someone already hauling the body when it died keeps hauling it unimpeded; the damping goes on
-        // as soon as they let go.
+        // Keep damping off while the body is already being hauled; the puller's movement penalty handles
+        // the weight until they let go.
         if (!IsBeingPulled(uid))
             ApplyDamping(uid, comp, physics);
 
@@ -91,6 +94,8 @@ public sealed class CorpsePhysicsSystem : EntitySystem
         _friction.SetModifier(uid, comp.HadFrictionModifier
             ? comp.OriginalFrictionModifier * comp.FrictionModifier
             : comp.FrictionModifier);
+
+        RefreshPullerMovement(uid);
     }
 
     /// <summary>Restores a revived mob's own physics and forgets it was ever a corpse.</summary>
@@ -114,6 +119,15 @@ public sealed class CorpsePhysicsSystem : EntitySystem
         // deleting it here would silently reset them to the defaults the next time the mob died.
         comp.Applied = false;
         comp.HadFrictionModifier = false;
+        Dirty(uid, comp);
+
+        RefreshPullerMovement(uid);
+    }
+
+    private void RefreshPullerMovement(EntityUid uid)
+    {
+        if (TryComp<PullableComponent>(uid, out var pullable) && pullable.Puller is { } puller)
+            _movementSpeed.RefreshMovementSpeedModifiers(puller);
     }
 
     private void ApplyDamping(EntityUid uid, CorpseWeightComponent comp, PhysicsComponent physics)
@@ -122,7 +136,9 @@ public sealed class CorpsePhysicsSystem : EntitySystem
         _physics.SetAngularDamping(uid, physics, comp.AngularDamping);
     }
 
-    /// <summary>Dragging a body is meant to stay possible, so the damping comes off for as long as it is pulled.</summary>
+    /// <summary>
+    /// The movement penalty handles dragging weight; damping comes off so the pull joint stays stable.
+    /// </summary>
     private void OnPullStarted(EntityUid uid, CorpseWeightComponent comp, PullStartedMessage args)
     {
         if (args.PulledUid != uid || !comp.Applied || !TryComp<PhysicsComponent>(uid, out var physics))

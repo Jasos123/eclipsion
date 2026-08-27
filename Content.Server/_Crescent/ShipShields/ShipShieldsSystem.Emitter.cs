@@ -125,6 +125,28 @@ public partial class ShipShieldsSystem
         emitterComp = emitterEnt.Comp;
         return true;
     }
+
+    /// <summary>
+    /// Keeps an emitter down independently of its power state. Disabling immediately removes an active shield;
+    /// enabling lets the normal update loop rebuild it on its next pass.
+    /// </summary>
+    public bool SetForcedDisabled(EntityUid uid, bool disabled, ShipShieldEmitterComponent? emitter = null)
+    {
+        if (!Resolve(uid, ref emitter, false) || emitter.ForcedDisabled == disabled)
+            return false;
+
+        emitter.ForcedDisabled = disabled;
+
+        if (disabled && emitter.Shielded is { } shielded)
+        {
+            UnshieldEntity(shielded);
+            emitter.Shield = null;
+            emitter.Shielded = null;
+        }
+
+        Dirty(uid, emitter);
+        return true;
+    }
     // Rat-end
 
     // .2 - 2025. commented out because shields draw a fixed amount of power now

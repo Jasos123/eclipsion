@@ -6,15 +6,18 @@ public sealed partial class StationTradeMarketComponent : Component
     [DataField]
     public Dictionary<string, float> SalesAccumulator = new();
 
+    /// <summary>Local price reduction added by one sale of the same good.</summary>
     [DataField]
-    public float PriceDropPerSale = 0.02f;
+    public float PriceDropPerSale = 0.01f;
 
+    /// <summary>Lowest local saturation multiplier. The final payout is also floored by the dispenser.</summary>
     [DataField]
-    public float MinMultiplier = 0.3f;
+    public float MinMultiplier = 0.5f;
 
 
+    /// <summary>Sales worth of saturation removed per second (one sale every 30 seconds by default).</summary>
     [DataField]
-    public float RecoveryRatePerSecond = 1f / 60f;
+    public float RecoveryRatePerSecond = 1f / 30f;
 
     // --- Taxation ---------------------------------------------------------
 

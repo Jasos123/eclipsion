@@ -7,9 +7,9 @@ Melee on Hullrot: Eclipsion is not a simple click-fest. Swings, parries, stamina
 
 [head=3][color=#e8b04b]The three attacks[/color][/head]
 
-- [color=#6ab7d6][keybind="Use"/][/color] is your [bold]wide, committed attack[/bold]. Aim it at an enemy or object and allow room for the swing.
+- [color=#6ab7d6][keybind="Use"/][/color] is your [bold]wide, committed attack[/bold]. It sweeps an arc and hits everything in it, allies included, so aim it at an enemy or object and allow room for the swing.
 - [color=#6ab7d6][keybind="UseSecondary"/][/color] is your [bold]parry or block[/bold]. It raises your guard to catch an incoming attack, and timing is everything.
-- [color=#6ab7d6][keybind="MouseMiddle"/][/color] is a [bold]light attack[/bold]. It is faster and more controlled than a committed swing.
+- [color=#6ab7d6][keybind="MouseMiddle"/][/color] is a [bold]light attack[/bold]. It strikes one target instead of sweeping an arc, so it will not catch an ally standing beside your enemy, but it can only be used about once every two seconds. Bare fists always swing light, so this is only for a weapon in hand.
 
 [head=3][color=#e8b04b]Parrying and timing[/color][/head]
 
@@ -38,7 +38,7 @@ Lighter weapons such as kukris, batons, and daggers can be used one-handed, lett
 
 You cannot instantly execute an active enemy. The target must first be incapacitated through normal combat.
 
-With a weapon in hand, use [color=#6ab7d6][keybind="UseSecondary"/][/color] on the incapacitated target and select [bold]Execute[/bold] from the verb menu.
+With the weapon in your hand, press [color=#6ab7d6][keybind="UIRightClick"/][/color] on the incapacitated target to open the context menu, right click the entry again to open its verb menu, and select [bold]Execute[/bold]. Executions run on a do-after, so anything that interrupts you cancels it.
 
 [color=#d9776c]Remember the rules.[/color] Executing a downed enemy is [color=#8fc98a]allowed[/color] during active combat between factions, but round-removing a member of your [bold]own faction[/bold] is forbidden. See the [textlink="Roleplay Rules" link="RoleplayRules"] for details.
 

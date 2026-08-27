@@ -1,6 +1,8 @@
 using Content.Server.GameTicking;
 using Content.Server.Spawners.Components;
 using Content.Server.Station.Systems;
+using Content.Shared._Crescent.RoundEnd;
+using Content.Shared.GameTicking;
 using Robust.Shared.Map;
 using Robust.Shared.Random;
 
@@ -13,9 +15,30 @@ public sealed class SpawnPointSystem : EntitySystem
     [Dependency] private readonly StationSystem _stationSystem = default!;
     [Dependency] private readonly StationSpawningSystem _stationSpawning = default!;
 
+    private readonly HashSet<string> _defeatedFactions = new();
+
     public override void Initialize()
     {
         SubscribeLocalEvent<PlayerSpawningEvent>(OnPlayerSpawning);
+        SubscribeLocalEvent<FactionStationFellEvent>(OnFactionStationFell);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
+    }
+
+    private void OnFactionStationFell(ref FactionStationFellEvent ev)
+    {
+        _defeatedFactions.Add(ev.Faction);
+
+        var query = EntityQueryEnumerator<FactionLateJoinSpawnPointComponent>();
+        while (query.MoveNext(out _, out var spawnPoint))
+        {
+            if (spawnPoint.Faction == ev.Faction)
+                spawnPoint.Enabled = false;
+        }
+    }
+
+    private void OnRoundRestart(RoundRestartCleanupEvent ev)
+    {
+        _defeatedFactions.Clear();
     }
 
     private void OnPlayerSpawning(PlayerSpawningEvent args)
@@ -103,7 +126,10 @@ public sealed class SpawnPointSystem : EntitySystem
 
         hasFactionLateJoinPositions = true;
 
-        if (!string.IsNullOrEmpty(factionId) && factionSpawn.Faction == factionId)
+        if (factionSpawn.Enabled &&
+            !string.IsNullOrEmpty(factionId) &&
+            factionSpawn.Faction == factionId &&
+            !_defeatedFactions.Contains(factionId))
             factionLateJoinPositions.Add(xform.Coordinates);
     }
 }

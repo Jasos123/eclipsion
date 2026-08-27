@@ -1,6 +1,7 @@
 - type: entity
   abstract: true
   id: MobElementalBase
+  parent: BaseMob
   components:
   - type: LagCompensation
   - type: Reactive

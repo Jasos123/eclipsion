@@ -52,7 +52,7 @@
         Piercing: 40
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 30
     intensitySlope: 20
     totalIntensity: 50
@@ -87,7 +87,7 @@
 #         Piercing: 20
 #   - type: ExplodeOnTrigger
 #   - type: Explosive
-#     explosionType: Default
+#     explosionType: Shipgun
 #     maxIntensity: 8
 #     intensitySlope: 50
 #     totalIntensity: 120
@@ -157,7 +157,7 @@
         Piercing: 50
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 30
     intensitySlope: 15
     totalIntensity: 600
@@ -192,7 +192,7 @@
 #         Piercing: 45
 #   - type: ExplodeOnTrigger
 #   - type: Explosive
-#     explosionType: Default
+#     explosionType: Shipgun
 #     maxIntensity: 25
 #     intensitySlope: 80
 #     totalIntensity: 200
@@ -264,7 +264,7 @@
         Piercing: 80
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 50
     intensitySlope: 20
     totalIntensity: 1000
@@ -302,7 +302,7 @@
         Piercing: 140
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 55
     intensitySlope: 45
     totalIntensity: 550
@@ -342,7 +342,7 @@
         Piercing: 150
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 225
     intensitySlope: 40
     totalIntensity: 2500
@@ -411,7 +411,7 @@
         Piercing: 250
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 125
     intensitySlope: 40
     totalIntensity: 900
@@ -456,7 +456,7 @@
       - state: base-projectile
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 600
     intensitySlope: 200
     totalIntensity: 7000
@@ -530,7 +530,7 @@
       - state: base-projectile
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 100
     intensitySlope: 5
     totalIntensity: 2000
@@ -566,7 +566,7 @@
       - state: base-projectile
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     maxIntensity: 850
     intensitySlope: 200
     totalIntensity: 15000
@@ -609,7 +609,7 @@
       - state: base-projectile
   - type: ExplodeOnTrigger
   - type: Explosive
-    explosionType: Default
+    explosionType: Shipgun
     totalIntensity: 700
     intensitySlope: 3
     maxIntensity: 20

@@ -161,7 +161,7 @@
       optimalBurnRate: 0.035
       fuelEfficiencyConstant: 0.75
     - type: Explosive
-      explosionType: Default
+      explosionType: Shipgun
       totalIntensity: 2000 # ~15 tile radius.
       intensitySlope: 5
       maxIntensity: 150
@@ -224,7 +224,7 @@
       optimalBurnRate: 0.045
       fuelEfficiencyConstant: 1.5
     - type: Explosive
-      explosionType: Default
+      explosionType: Shipgun
       totalIntensity: 4000 # ~15 tile radius.
       intensitySlope: 5
       maxIntensity: 350
@@ -289,7 +289,7 @@
       optimalBurnRate: 0.075
       fuelEfficiencyConstant: 1.8
     - type: Explosive
-      explosionType: Default
+      explosionType: Shipgun
       totalIntensity: 6000
       intensitySlope: 5
       maxIntensity: 450
