@@ -130,7 +130,7 @@
   - type: Clothing
     sprite: _Crescent/Objects/Weapons/Guns/nimrod.rsi
   - type: Gun
-    damageModifier: 1.5
+    damageModifier: 1.25
     fireRate: 3
     projectileSpeed: 45
     selectedMode: SemiAuto
