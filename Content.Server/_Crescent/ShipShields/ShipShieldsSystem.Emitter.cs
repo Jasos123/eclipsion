@@ -1,5 +1,6 @@
 using Content.Shared._Crescent.ShipShields;
 using Content.Shared._Crescent.CCvars;
+using Content.Server._Crescent.RoundEnd;
 using Content.Server.Power.Components;
 using Robust.Shared.Configuration;
 using Content.Shared.Projectiles;
@@ -39,6 +40,10 @@ public partial class ShipShieldsSystem
     private void OnEmitterStartup(EntityUid uid, ShipShieldEmitterComponent component, ComponentStartup args)
     {
         _pvsSys.AddGlobalOverride(uid);
+
+        var grid = Transform(uid).GridUid;
+        if (grid != null && HasComp<StationInfestationComponent>(grid.Value))
+            SetForcedDisabled(uid, true, component);
 
 		if (_powerDrawEnabled || !TryComp<ApcPowerReceiverComponent>(uid, out var receiver))
 			return;
