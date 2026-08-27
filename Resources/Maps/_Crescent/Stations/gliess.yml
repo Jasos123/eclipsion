@@ -93971,7 +93971,7 @@ entities:
           occludes: True
     - type: Physics
       canCollide: False
-- proto: ConquestFlagCMM
+- proto: ConquestFlagGS
   entities:
   - uid: 4959
     components:
