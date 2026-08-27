@@ -26,6 +26,7 @@ public enum CollisionGroup
     DoorPassable       = 1 << 8, // 256 Allows door to close over top, Like blast doors over conveyors for disposals rooms/cargo.
     BlobImpassable     = 1 << 9, // 512 Blob Tiles Goobstation - Blob
     FighterImpassable  = 1 << 10, // 1024 Objects that go over fighters
+    PhasePrevention    = 1 << 11, // Query-only fixtures used by high-speed projectile raycasts
 
     MapGrid = MapGridHelpers.CollisionGroup, // Map grids, like shuttles. This is the actual grid itself, not the walls or other entities connected to the grid.
 

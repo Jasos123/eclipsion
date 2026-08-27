@@ -1,5 +1,8 @@
 using System.Numerics;
 using Content.Shared._Crescent;
+using Content.Server._Crescent.ShipShields;
+using Content.Shared._Crescent.ShipShields;
+using Content.Shared.Physics;
 using Content.Shared.Projectiles;
 using Robust.Server.GameObjects;
 using Robust.Shared.Physics;
@@ -12,6 +15,7 @@ public sealed class ProjectilePhasePreventerSystem : EntitySystem
     [Dependency] private readonly PhysicsSystem _phys = default!;
     [Dependency] private readonly TransformSystem _trans = default!;
     [Dependency] private readonly SharedProjectileSystem _projectile = default!;
+    [Dependency] private readonly ShipShieldsSystem _shipShields = default!;
     [Dependency] private readonly ILogManager _logs = default!;
 
     private EntityQuery<PhysicsComponent> _physicsQuery;
@@ -113,7 +117,11 @@ public sealed class ProjectilePhasePreventerSystem : EntitySystem
                 ignoredGrid = weaponXform.GridUid.Value;
             }
 
-            var ray = new CollisionRay(previousPos, direction, phase.relevantBitmasks);
+            // PhasePrevention is a query-only layer used by soft shield bubbles. Normal collision masks do not
+            // include it, so adding it here cannot make shields physically solid.
+            var ray = new CollisionRay(previousPos,
+                direction,
+                phase.relevantBitmasks | (int) CollisionGroup.PhasePrevention);
 
             foreach (var hit in _phys.IntersectRay(
                          currentMap,
@@ -148,6 +156,15 @@ public sealed class ProjectilePhasePreventerSystem : EntitySystem
                 // without this the burst detonates on itself. Keep scanning - a real target may be behind it.
                 if (_projectile.IsFriendlyShipProjectile(owner, projectile, hitEntity))
                     continue;
+
+                if (TryComp<ShipShieldComponent>(hitEntity, out var shield))
+                {
+                    if (_shipShields.TryQueueDeflection((hitEntity, shield), owner))
+                        break;
+
+                    // Shield-ignoring and same-grid rounds must keep scanning for a real target behind the bubble.
+                    continue;
+                }
 
                 if (!_physicsQuery.TryGetComponent(hitEntity, out _))
                     continue;

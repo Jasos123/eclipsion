@@ -32,7 +32,7 @@ public partial class ShipShieldsSystem
 
         SubscribeLocalEvent<ShipShieldEmitterComponent, ShieldDeflectedEvent>(OnShieldDeflected);
         SubscribeLocalEvent<ShipShieldEmitterComponent, ExaminedEvent>(OnExamined);
-        SubscribeLocalEvent<ShipShieldEmitterComponent, ComponentRemove>(OnRemoved);
+        SubscribeLocalEvent<ShipShieldEmitterComponent, ComponentShutdown>(OnEmitterShutdown);
 		SubscribeLocalEvent<ShipShieldEmitterComponent, ComponentStartup>(OnEmitterStartup); // Rat
     }
 
@@ -56,13 +56,38 @@ public partial class ShipShieldsSystem
     }
     // Rat-end
 
-    private void OnRemoved(Entity<ShipShieldEmitterComponent> owner,ref ComponentRemove remove)
+    private void OnEmitterShutdown(Entity<ShipShieldEmitterComponent> owner, ref ComponentShutdown args)
     {
         _pvsSys.RemoveGlobalOverride(owner.Owner);
-		var parent = Transform(owner.Owner).GridUid;
-        if (parent is null)
+        RemoveEmitterShield(owner.Owner, owner.Comp);
+    }
+
+    /// <summary>
+    /// Removes only the shield owned by this emitter. Uses the stored relationship because an entity being deleted
+    /// may already have lost its grid parent by the time its component shuts down.
+    /// </summary>
+    private void RemoveEmitterShield(EntityUid uid, ShipShieldEmitterComponent emitter)
+    {
+        var shielded = emitter.Shielded;
+        var shield = emitter.Shield;
+        emitter.Shielded = null;
+        emitter.Shield = null;
+
+        if (shielded is { } grid
+            && TryComp<ShipShieldedComponent>(grid, out var shieldedComp)
+            && shieldedComp.Source == uid)
+        {
+            UnshieldEntity(grid, shieldedComp);
             return;
-        UnshieldEntity(parent.Value, null);
+        }
+
+        if (shield is { } shieldUid
+            && !TerminatingOrDeleted(shieldUid)
+            && TryComp<ShipShieldComponent>(shieldUid, out var shieldComp)
+            && shieldComp.Source == uid)
+        {
+            Del(shieldUid);
+        }
     }
 
     private void OnShieldDeflected(EntityUid uid, ShipShieldEmitterComponent component, ShieldDeflectedEvent args)
