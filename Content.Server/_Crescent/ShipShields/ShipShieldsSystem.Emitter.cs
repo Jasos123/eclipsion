@@ -43,7 +43,10 @@ public partial class ShipShieldsSystem
 
         var grid = Transform(uid).GridUid;
         if (grid != null && HasComp<StationInfestationComponent>(grid.Value))
+        {
             SetForcedDisabled(uid, true, component);
+            return;
+        }
 
 		if (_powerDrawEnabled || !TryComp<ApcPowerReceiverComponent>(uid, out var receiver))
 			return;
