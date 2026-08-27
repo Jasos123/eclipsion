@@ -4,7 +4,11 @@
 - type: vessel
   id: UnionfallBroadsword
   name: NCWL Broadsword
-  description: An ultralight communard bomber.
+  description: |
+    An ultralight communard bomber.
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 40 m/s
   price: 12500
   category: Small
   group: None

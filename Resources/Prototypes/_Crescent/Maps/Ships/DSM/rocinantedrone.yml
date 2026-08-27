@@ -1,7 +1,11 @@
 - type: vessel
   id: RocinanteDrone
   name: DSM Rocinante
-  description: A fighter drone.
+  description: |
+    A fighter drone.
+    LOADOUT: 1x 350cc 'Glare' Burst Laser, 1x 300cc 'Bolter' Plasma Caster
+    SHIELD: Errant
+    SPEED: 20 m/s
   price: 35000
   category: Small
   group: None

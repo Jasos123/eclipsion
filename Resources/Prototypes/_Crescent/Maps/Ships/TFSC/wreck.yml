@@ -5,6 +5,8 @@
   description: |
     An asteroid strapped with a gun.
     LOADOUT: 1x Cyberdawn 60mm 'Haruspex' Rocket Pod
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 21000
   category: Small
   group: None

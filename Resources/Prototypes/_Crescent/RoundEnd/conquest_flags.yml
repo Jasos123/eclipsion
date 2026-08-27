@@ -82,14 +82,14 @@
 
 - type: entity
   parent: ConquestFlag
-  id: ConquestFlagCMM
-  suffix: CMM
-  name: CMM conquest banner
+  id: ConquestFlagGS
+  suffix: GS
+  name: GS conquest banner
   components:
     - type: Sprite
       color: "#3F6FB5" # minutemen blue
     - type: ConquestFlag
-      homeFaction: CMM
+      homeFaction: GS
 
 - type: entity
   parent: ConquestFlag

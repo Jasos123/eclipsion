@@ -4,7 +4,11 @@
 - type: vessel
   id: Gargut
   name: NCWL Gargut
-  description: A lumbering battlecarrier platform, converted from a derelict fabstation.
+  description: |
+    A lumbering battlecarrier platform, converted from a derelict fabstation.
+    LOADOUT: 2x 60mm 'Azimuth' Rocket Pod, 1x 88mm 'Stormreign' Flak Array, 1x 350cc 'Glare' Burst Laser, 1x 35mm 'Scout' Autocannon, 7x 150cc 'Retribution' Pulse Laser
+    SHIELD: Bulwark
+    SPEED: 20 m/s
   price: 125000
   category: Large
   group: None

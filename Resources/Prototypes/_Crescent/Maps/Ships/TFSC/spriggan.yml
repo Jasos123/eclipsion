@@ -6,8 +6,9 @@
   name: CD Spriggan
   description: |
     The result of a SAW engineer's experiment with hotrodding, the Spriggan is a mobile smuggler/salvage ship, cheap and easily modified to be anything you want.
-    LOADOUT: 2x Exhumer mining guns
-    MINIMUM CREW: 1x Pilot
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 20 m/s
   price: 28000
   category: Small
   group: None

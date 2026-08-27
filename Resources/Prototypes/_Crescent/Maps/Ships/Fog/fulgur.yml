@@ -4,7 +4,11 @@
 - type: vessel
   id: Fulgur
   name: NT Fulgur
-  description: A long-range autonomous missile platform built for NanoTrasen operations in recurrence-active fields. Recovered, refitted, and sold; the original paperwork did not survive the salvage.
+  description: |
+    A long-range autonomous missile platform built for NanoTrasen operations in recurrence-active fields. Recovered, refitted, and sold; the original paperwork did not survive the salvage.
+    LOADOUT: 1x 350c "Compakt" hybrid energy gatling, 2x medium 'Lancer' MRM missile system, 2x TFCF 'Swarmer' self-replicating missile pod, 2x ballistic turret, 5x SHI 180c 'Torch' pressure gatling
+    SHIELD: Errant
+    SPEED: 30 m/s
   price: 400000
   category: Large
   group: None

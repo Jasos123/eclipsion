@@ -1,7 +1,11 @@
 - type: vessel
   id: WaspDrone
   name: NCWL Wasp
-  description: A fighter drone.
+  description: |
+    A fighter drone.
+    LOADOUT: 1x 200cc 'Starburst' Plasma Gatling
+    SHIELD: Absent
+    SPEED: 45 m/s
   price: 12500
   category: Small
   group: None

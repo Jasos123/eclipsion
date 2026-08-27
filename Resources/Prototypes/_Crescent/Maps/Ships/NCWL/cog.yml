@@ -6,7 +6,9 @@
   name: NCWL Cog
   description: |
     Made from materials recycled from derelicts, this is the cheapest mining vessel in the sector, fielded by communards.
-    LOADOUT: 2x SHI 250c "Exhumer" kinetic pulsers
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 20 m/s
   price: 20000
   category: Small
   group: None

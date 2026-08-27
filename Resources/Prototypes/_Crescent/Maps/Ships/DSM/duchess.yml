@@ -1,7 +1,11 @@
 - type: vessel
   id: Duchess
   name: DSM Duchess
-  description: The Duchess. A Laelaps converted into a broadside-heavy elite cruiser, with spaces refitted to fit a Throne for House Valkenrath-Zehring and materials to supply the members of court, at this time 4 people.
+  description: |
+    The Duchess. A Laelaps converted into a broadside-heavy elite cruiser, with spaces refitted to fit a Throne for House Valkenrath-Zehring and materials to supply the members of court, at this time 4 people.
+    LOADOUT: 8x 350cc 'Glare' Burst Laser, 2x 600cc 'Damnation' Carronade
+    SHIELD: Bulwark
+    SPEED: 20 m/s
   price: 125000
   category: Large
   group: None

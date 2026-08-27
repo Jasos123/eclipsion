@@ -40,5 +40,8 @@ public sealed partial class IFFConsoleComponent : Component
 
     public bool active = false;
 
+    [ViewVariables(VVAccess.ReadWrite), DataField("dissipateAlways")]
+    public bool dissipateAlways = false; //keep this off unless you know what youre doing, this is for moving cloaks
+
     // end
 }

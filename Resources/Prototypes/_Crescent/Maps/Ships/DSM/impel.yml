@@ -3,8 +3,9 @@
   name: DSM Impel
   description: |
     An Imperial hauler shuttle with a large cargohold, and one packed up cargo mech. Some enterprising freeholders have managed to acquire bonuses from detours spent salvaging, which usually is used to fund a better vessel.
-    LOADOUT: UNARMED
-    MINIMUM CREW: 1x Pilot
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 22000
   category: Small
   group: None

@@ -6,8 +6,9 @@
   name: ICM Paracelsus
   description: |
     A medium-sized expedition and rescue vessel equipped with medical rooms for long-term voyages. Comes with a crew monitoring console for finding patients.
-    LOADOUT: 2x Plasma Bolt Repeater
-    MINIMUM CREW: 1x Pilot
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 47000
   category: Small
   group: Civilian

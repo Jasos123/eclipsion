@@ -1,7 +1,11 @@
 - type: vessel
   id: Harrier
   name: IPM Harrier
-  description: Top of the line heavy fighter built for IPM by SAW.
+  description: |
+    Top of the line heavy fighter built for IPM by SAW.
+    LOADOUT: 1x 300cc 'Bolter' Plasma Caster, 1x 200cc 'Starburst' Plasma Gatling
+    SHIELD: Errant
+    SPEED: 30 m/s
   price: 30000
   category: Medium
   group: None

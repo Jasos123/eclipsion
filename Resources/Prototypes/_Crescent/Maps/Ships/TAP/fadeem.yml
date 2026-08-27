@@ -1,7 +1,11 @@
 - type: vessel
   id: Fadeem
   name: TAP Fadeem
-  description: Old Thukker 'SPINE' carrier platform refit into an Izdari configuration.
+  description: |
+    Old Thukker 'SPINE' carrier platform refit into an Izdari configuration.
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 20 m/s
   price: 60000
   category: Large
   group: None

@@ -169,7 +169,7 @@
   roles:
   - ExecutiveSHI
   - BoardSHI
-  #- HighsecSHI
+  - HighsecSHI
   - CorpsecSHI
   - EmployeeSHI
   - MedtechSHI

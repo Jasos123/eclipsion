@@ -3,6 +3,9 @@
   name: DSM Hussar
   description: |
     An imperial hunter-killer corvette designed for heavier escort duties against scores of enemy fighter-craft.
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 20 m/s
   price: 44000
   category: Small
   group: None

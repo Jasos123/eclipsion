@@ -1,7 +1,11 @@
 - type: vessel
   id: Wisp
   name: CD Wisp
-  description: A repurposed civilian hull, converted into a nimble smuggling shuttle.
+  description: |
+    A repurposed civilian hull, converted into a nimble smuggling shuttle.
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 20 m/s
   price: 35000
   category: Small
   group: None

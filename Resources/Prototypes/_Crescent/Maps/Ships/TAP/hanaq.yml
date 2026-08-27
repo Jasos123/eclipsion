@@ -1,7 +1,11 @@
 - type: vessel
   id: Hanaq
   name: TAP Hanaq
-  description: A disproportionately expensive Pact warship. Comes with the best the Thukkers can produce.
+  description: |
+    A disproportionately expensive Pact warship. Comes with the best the Thukkers can produce.
+    LOADOUT: 2x 350cc 'Glare' Burst Laser, 1x 120mm 'Anvil' Artillery, 2x 20mm 'Screamer' Rotary Cannon
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 30000
   category: Small
   group: None

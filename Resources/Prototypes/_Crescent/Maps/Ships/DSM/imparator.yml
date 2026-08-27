@@ -4,7 +4,8 @@
   description: |
     An imperial support ship, made to shoot from the backlines and provide firepower from a distance. It suffers in close-quarters combat, relying on its plasma gatling for point defense.
     LOADOUT: 1x 150cc 'Retribution' Pulse Laser, 1x 200cc 'Starburst' Plasma Gatling
-    MINIMUM CREW: 1x Pilot, 1x Gun Loader (optional)
+    SHIELD: Absent
+    SPEED: 20 m/s
   price: 37000
   category: Small
   group: None

@@ -1,7 +1,11 @@
 - type: vessel
   id: gazpachov
   name: SHI Gazpachov
-  description: The SHI Gazpachov is a cost-effective mining ship designed for two miners and one foreman.
+  description: |
+    The SHI Gazpachov is a cost-effective mining ship designed for two miners and one foreman.
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 25 m/s
   price: 45000
   category: Small
   group: Civilian

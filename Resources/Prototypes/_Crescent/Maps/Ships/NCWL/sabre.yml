@@ -4,7 +4,11 @@
 - type: vessel
   id: Sabre
   name: NCWL Sabre
-  description: An ultralight communard laser platform.
+  description: |
+    An ultralight communard laser platform.
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 40 m/s
   price: 10000
   category: Small
   group: None

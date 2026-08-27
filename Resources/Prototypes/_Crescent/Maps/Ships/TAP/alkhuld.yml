@@ -1,7 +1,11 @@
 - type: vessel
   id: Alkhuld
   name: TAP Alkhuld
-  description: A mining/scrapping vessel. Comes standard with an IFF cloak and an antiquated self defense gun.
+  description: |
+    A mining/scrapping vessel. Comes standard with an IFF cloak and an antiquated self defense gun.
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 35 m/s
   price: 40000
   category: Small
   group: None

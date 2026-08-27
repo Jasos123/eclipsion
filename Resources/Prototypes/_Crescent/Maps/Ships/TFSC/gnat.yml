@@ -4,10 +4,12 @@
 - type: vessel
   id: Gnat
   name: GSC Gnat
-  description: | 
+  description: |
     An ultralight Syndicate fighter, brandishing two 20mm Vulcans for quickly destroying opposing ULs or piercing vulnerable hull components.
-    LOADOUT: 2x NT 20mm Vulcans
     CREW: 1x Pilot
+    LOADOUT: 2x 35mm 'Scout' Autocannon
+    SHIELD: Absent
+    SPEED: 40 m/s
   price: 12500 #10000 appraisegrig
   category: Small
   group: None

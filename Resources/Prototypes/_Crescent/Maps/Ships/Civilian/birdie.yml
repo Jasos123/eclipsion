@@ -4,7 +4,11 @@
 - type: vessel
   id: Birdie
   name: ICM Birdie
-  description: A civilian ferry shuttle, refitted with medical supplies to act as a nimble medevac carrier.
+  description: |
+    A civilian ferry shuttle, refitted with medical supplies to act as a nimble medevac carrier.
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 35 m/s
   price: 26000
   category: Small
   group: Civilian

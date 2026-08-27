@@ -1,7 +1,11 @@
 - type: vessel
   id: Triumphant
   name: DSM Triumphant
-  description: An exploration cruiser turned frontliner vessel, equipped for long-distance missions.
+  description: |
+    An exploration cruiser turned frontliner vessel, equipped for long-distance missions.
+    LOADOUT: 2x 300cc 'Bolter' Plasma Caster, 2x 500cc 'Mauler' Plasma Howitzer, 4x 50mm 'Striker' Heavy Autocannon, 2x 200cc 'Starburst' Plasma Gatling
+    SHIELD: Bulwark
+    SPEED: 25 m/s
   price: 125000
   category: Large
   group: None

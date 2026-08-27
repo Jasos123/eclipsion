@@ -6,8 +6,9 @@
   name: Hornet
   description: |
     A variant of the Wasp, the Hornet is mounted with a 60mm 'Azimuth' rocket pod, able to provide a scary amount of firepower in a small package. Weak on their own, terrifying when in a group with their carrier.
-    LOADOUT: 1x 60mm 'Azimuth' rocket pod
-    MINIMUM CREW: 1x Pilot
+    LOADOUT: 1x 60mm 'Azimuth' Rocket Pod
+    SHIELD: Absent
+    SPEED: 40 m/s
   price: 12000
   category: Small
   group: Scrap

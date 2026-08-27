@@ -6,8 +6,9 @@
   name: Kite MKII
   description: |
     A combat capable retrofit of the kite. Its hull has been carved out to make way for its modifications, with the wings being exposed to vacuum as a consequence.
-    LOADOUT: 2x 48mm 'Shortbow' rocket pods, 4x Fixed Universal Hardpoints
-    MINIMUM CREW: 1x Pilot, 1x Gun Loader
+    LOADOUT: 2x 48mm 'Shortbow' SRM
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 37000
   category: Small
   group: Scrap

@@ -4,7 +4,11 @@
 - type: vessel
   id: Alpha
   name: NT Alpha
-  description: An autonomous NanoTrasen fighter recovered from a recurrence-active wreck field. Its IFF transponder still broadcasts; whether that is reassuring depends on who you ask.
+  description: |
+    An autonomous NanoTrasen fighter recovered from a recurrence-active wreck field. Its IFF transponder still broadcasts; whether that is reassuring depends on who you ask.
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 42000
   category: Small
   group: None

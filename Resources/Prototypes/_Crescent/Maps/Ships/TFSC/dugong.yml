@@ -5,9 +5,10 @@
   name: SAW Dugongmk2
   description: |
    Once a peaceful trading ship that died in the expanses of Taipan. It was resurrected to serve PC as a wandering merchant of their goods.
-
    ARMAMENT: 2x 20mm 'Screamer' rotary cannons.
-   MINIMUM CREW: 1 pilot
+    LOADOUT: 2x 20mm 'Screamer' Rotary Cannon
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 40000
   category: Medium
   group: Civilian

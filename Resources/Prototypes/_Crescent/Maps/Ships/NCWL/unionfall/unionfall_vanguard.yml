@@ -4,7 +4,11 @@
 - type: vessel
   id: UnionfallVanguard
   name: NCWL Vanguard
-  description: A communard gunship, sees use primarily as an escort vessel.
+  description: |
+    A communard gunship, sees use primarily as an escort vessel.
+    LOADOUT: 2x SHI 43mm "Dasher" ballistic slugthrower
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 35000
   category: Small
   group: None

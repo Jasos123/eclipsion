@@ -4,7 +4,11 @@
 - type: vessel
   id: Bodybag
   name: GSC Bodybag
-  description: A small stealth boarding pod.
+  description: |
+    A small stealth boarding pod.
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 20000 #16000 appraisegrid
   category: Small
   group: None

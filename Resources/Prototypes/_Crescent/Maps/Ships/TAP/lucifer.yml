@@ -1,7 +1,11 @@
 - type: vessel
   id: Lucifer
   name: TAP Lucifer
-  description: A smuggling and boarding pod.
+  description: |
+    A smuggling and boarding pod.
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 40000
   category: Small
   group: None

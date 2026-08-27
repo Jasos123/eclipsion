@@ -6,8 +6,9 @@
   name: SAW Amadeus
   description: |
     A shielded, lightly-armed defense corvette.
-    LOADOUT: 3x 48mm 'Shortbow' SRM Rocket Systems, 5x 20mm 'Screamer' light carbine repeater cannons, 1x 50mm 'Striker' heavy autocannon
-    MINIMUM CREW: 1x Pilot, 1x Gunner
+    LOADOUT: 1x 48mm 'Shortbow' SRM, 1x 90mm 'Resolute' Assault Battery, 3x 150cc 'Retribution' Pulse Laser, 5x 200cc 'Starburst' Plasma Gatling
+    SHIELD: Goliath
+    SPEED: 20 m/s
   price: 125000
   category: Medium
   group: None

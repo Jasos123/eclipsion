@@ -4,7 +4,11 @@
 - type: vessel
   id: Gamma
   name: NT Gamma
-  description: A heavier NanoTrasen autonomous fighter recovered from a recurrence-active wreck field. The extra cost buys you more gun and a slightly longer life expectancy.
+  description: |
+    A heavier NanoTrasen autonomous fighter recovered from a recurrence-active wreck field. The extra cost buys you more gun and a slightly longer life expectancy.
+    LOADOUT: 1x TFCF 'Swarmer' self-replicating missile pod, 1x ballistic turret
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 48000
   category: Small
   group: None

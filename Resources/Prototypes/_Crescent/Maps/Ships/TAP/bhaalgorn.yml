@@ -4,7 +4,11 @@
 - type: vessel
   id: Bhaalgorn
   name: Bhaalgorn
-  description: A heavy frontliner destroyer with a focus on explosive and missile armament.
+  description: |
+    A heavy frontliner destroyer with a focus on explosive and missile armament.
+    LOADOUT: 2x 350c "Compakt" hybrid energy gatling, 4x SHI MG-213 light dual machinegun 20x135mm
+    SHIELD: Absent
+    SPEED: 20 m/s
   price: 75000
   category: Medium
   group: None

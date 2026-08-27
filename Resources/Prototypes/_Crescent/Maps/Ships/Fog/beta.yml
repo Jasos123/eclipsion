@@ -4,7 +4,11 @@
 - type: vessel
   id: Beta
   name: NT Beta
-  description: One of NanoTrasen's autonomous frontline drones, salvaged from a recurrence-active wreck field. Lighter than the Alpha and cheaper to run, with just as much willingness to shoot at things.
+  description: |
+    One of NanoTrasen's autonomous frontline drones, salvaged from a recurrence-active wreck field. Lighter than the Alpha and cheaper to run, with just as much willingness to shoot at things.
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 36000
   category: Small
   group: None
