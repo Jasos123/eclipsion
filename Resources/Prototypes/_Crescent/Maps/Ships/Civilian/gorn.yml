@@ -5,9 +5,11 @@
   id: Gorn
   name: ICM Gorn
   description: |
-   A small industrial vessel. The “Gorn” differs from standard mining shuttles with its powerful drilling system, onboard ore processing system, and increased maneuverability.
+   A small industrial vessel. The Ä‚ËĂ˘â€šÂ¬Äąâ€şGornÄ‚ËĂ˘â€šÂ¬ÄąÄ„ differs from standard mining shuttles with its powerful drilling system, onboard ore processing system, and increased maneuverability.
    EQUIPMENT: 2x Exhumer
-   MINIMUM CREW: 1 pilot
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 20 m/s
   price: 31000
   category: Small
   group: Civilian

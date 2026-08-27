@@ -1,7 +1,11 @@
 - type: vessel
   id: Beelzebub
   name: TAP Beelzebub
-  description: A light fighter intended to escort hauling operations.
+  description: |
+    A light fighter intended to escort hauling operations.
+    LOADOUT: 2x 150cc 'Retribution' Pulse Laser
+    SHIELD: Absent
+    SPEED: 35 m/s
   price: 30000
   category: Small
   group: None

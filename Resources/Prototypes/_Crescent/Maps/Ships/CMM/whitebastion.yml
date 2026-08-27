@@ -4,7 +4,11 @@
 - type: vessel
   id: WhiteBastion
   name: TSP White Bastion
-  description: A repurposed battlecruiser, used as a mobile command center.
+  description: |
+    A repurposed battlecruiser, used as a mobile command center.
+    LOADOUT: 3x 88mm 'Prince' flak-screen turret, 2x SHI 43mm "Dasher" ballistic slugthrower, 8x SHI MG-213 light dual machinegun 20x135mm
+    SHIELD: Absent
+    SPEED: 20 m/s
   price: 325000
   category: Large
   group: None

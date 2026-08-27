@@ -1,7 +1,11 @@
 - type: vessel
   id: Tyche
   name: DSM Tyche
-  description: The Tyche, A stealth-based personal cruiser created for Ser Bosco Yore.
+  description: |
+    The Tyche, A stealth-based personal cruiser created for Ser Bosco Yore.
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 45000
   category: Small
   group: None

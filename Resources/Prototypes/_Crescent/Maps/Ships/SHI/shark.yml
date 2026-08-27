@@ -1,7 +1,11 @@
 - type: vessel
   id: Shark
   name: SHI Shark
-  description: A heavy corporate security destroyer, providing fire superiority.
+  description: |
+    A heavy corporate security destroyer, providing fire superiority.
+    LOADOUT: 3x 350cc 'Glare' Burst Laser, 2x 150cc 'Retribution' Pulse Laser, 2x 50mm 'Striker' Heavy Autocannon
+    SHIELD: Errant
+    SPEED: 20 m/s
   price: 90000
   category: Medium
   group: None

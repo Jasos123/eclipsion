@@ -4,7 +4,11 @@
 - type: vessel
   id: Hulk
   name: IPM Hulk
-  description: A mobile hospital on thrusters. Quite heavy, yet underarmed.
+  description: |
+    A mobile hospital on thrusters. Quite heavy, yet underarmed.
+    LOADOUT: 2x 95mm 'Arbalest' Medium Missile System, 6x 200cc 'Starburst' Plasma Gatling
+    SHIELD: Absent
+    SPEED: 25 m/s
   price: 140000
   category: Large
   group: None

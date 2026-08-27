@@ -1,7 +1,11 @@
-﻿- type: vessel
+- type: vessel
   id: Playerbuilt
   name: PBS Shuttle
-  description: Player built shuttle
+  description: |
+    Player built shuttle
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 20 m/s
   price: 1
   category: Small
   group: None

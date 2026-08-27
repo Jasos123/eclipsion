@@ -6,7 +6,9 @@
   name: GSC Cleaver
   description: |
     A heavy Syndicate Corvette equipped with heavy firepower.
-    LOADOUT: 2x 50mm 'Striker' heavy autocannons, 1x 60mm 'Crossfire' rapid fire LML system (Gorlex edition)
+    LOADOUT: 1x Gorlex 60mm 'Crossfire' Rocket Pod, 2x 35mm 'Scout' Autocannon, 2x 200cc 'Starburst' Plasma Gatling
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 40000
   category: Medium
   group: None

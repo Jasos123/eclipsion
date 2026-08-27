@@ -1,7 +1,11 @@
 - type: vessel
   id: Lunge
   name: TS Lunge
-  description: A small survey corvette turned into a modified missile boat. Fragile but heavy-handed.
+  description: |
+    A small survey corvette turned into a modified missile boat. Fragile but heavy-handed.
+    LOADOUT: 4x medium 'Lancer' MRM missile system, 4x SHI MG-213 light dual machinegun 20x135mm
+    SHIELD: Absent
+    SPEED: 20 m/s
   price: 55000
   category: Small
   group: None

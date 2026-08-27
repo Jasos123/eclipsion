@@ -6,8 +6,9 @@
   name: TS Judge
   description: |
     Minutemen destroyer. Designed to brawl.
-    LOADOUT: 2x 350cc 'Glare' Burst Laser, 2x 48mm 'Shortbow' SRM, 2x 35mm 'Scout' Autocannon, 2x 20mm 'Screamer' Rotary Cannon, 1x 300w 'Curse' EMP Projector
-    MINIMUM CREW: 1x Pilot
+    LOADOUT: 2x 48mm 'Shortbow' SRM, 2x 350cc 'Glare' Burst Laser, 1x 300cc 'Bolter' Plasma Caster, 2x 35mm 'Scout' Autocannon, 2x 150cc 'Retribution' Pulse Laser
+    SHIELD: Errant
+    SPEED: 30 m/s
   price: 15000
   category: Small
   group: None

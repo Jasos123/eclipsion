@@ -4,7 +4,11 @@
 - type: vessel
   id: Khorkoi
   name: ATH Khorkoi
-  description: A light Crown expeditionary fighter deployed in swarms.
+  description: |
+    A light Crown expeditionary fighter deployed in swarms.
+    LOADOUT: 1x NT 20mm "Vulcan" machineturret
+    SHIELD: Absent
+    SPEED: 35 m/s
   price: 17500
   category: Small
   group: None

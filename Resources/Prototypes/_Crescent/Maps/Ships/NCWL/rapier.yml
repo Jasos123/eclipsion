@@ -4,7 +4,11 @@
 - type: vessel
   id: Rapier
   name: NCWL Rapier
-  description: An ultralight communard converted bomber.
+  description: |
+    An ultralight communard converted bomber.
+    LOADOUT: 2x 48mm 'Shortbow' SRM
+    SHIELD: Absent
+    SPEED: 40 m/s
   price: 10000
   category: Small
   group: None

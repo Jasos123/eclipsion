@@ -205,3 +205,24 @@
   - type: AccessReader
     # The Federation command tier. Rank and file are turned away quietly; outsiders trip the alarm.
     access: [["SyndicateCommand"], ["SyndicateRingleader"], ["SyndicateFunds"]]
+
+- type: entity
+  parent: ComputerFactionTreasuryBase
+  id: ComputerFactionTreasuryGS
+  suffix: Gliess / GS
+  components:
+  - type: FactionTreasuryConsole
+    faction: GS
+  - type: AccessReader
+    access: [["GliessSheriff", "GliessDockmaster"]]
+
+- type: entity
+  parent: ComputerFactionTreasuryBase
+  id: ComputerFactionTreasuryTAP
+  suffix: TAP
+  components:
+  - type: FactionTreasuryConsole
+    faction: TAP
+  - type: AccessReader
+    # Only the Prophet carries authority across all three family leadership tags.
+    access: [["Arabet", "Alseik", "Thukker"]]

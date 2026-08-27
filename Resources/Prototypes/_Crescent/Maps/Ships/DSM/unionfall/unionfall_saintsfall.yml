@@ -1,7 +1,11 @@
 - type: vessel
   id: UnionfallSaintsfall
   name: DSM Saintsfall
-  description: A light vulcan fighter meant to eliminate ultralights.
+  description: |
+    A light vulcan fighter meant to eliminate ultralights.
+    LOADOUT: 2x NT 20mm "Vulcan" machineturret
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 30000
   category: Small
   group: None

@@ -6,8 +6,9 @@
   name: TS Corsair
   description: |
     A fast destroyer, its missiles won't do a lot against shields but they shred armor.
-    LOADOUT: 2x 120mm 'Anvil' Artillery, 2x 60mm 'Azimuth' Rocket Pod, 1x 300cc 'Bolter' Plasma Caster
-    MINIMUM CREW: 1x Pilot, 1-2x Loaders
+    LOADOUT: 1x 300cc 'Bolter' Plasma Caster, 2x 300w 'Curse' EMP Projector, 4x 120mm 'Anvil' Artillery
+    SHIELD: Bulwark
+    SPEED: 30 m/s
   price: 100000
   category: Small
   group: None

@@ -6,8 +6,9 @@
   name: IPM Fridge
   description: |
     The IPM Fridge is a converted cargo vessel, now serving its second life as an IPM utility vessel, capable of transfering cargo and bodies, preserving them with the on-board freezer atmosphere. It has multiple ballistic PDs in order to protect itself.
-    LOADOUT: 2x 48mm 'Shortbow' SRM systems, 2x 20mm 'Screamer' rotary cannons
-    MINIMUM CREW: 1x Pilot, 1x Gunner
+    LOADOUT: 2x 48mm 'Shortbow' SRM, 2x 20mm 'Screamer' Rotary Cannon
+    SHIELD: Absent
+    SPEED: 35 m/s
   price: 30000
   category: Small
   group: None

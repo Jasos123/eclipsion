@@ -4,7 +4,11 @@
 - type: vessel
   id: Sasha
   name: NCWL Sasha
-  description: An antiquated communard warship.
+  description: |
+    An antiquated communard warship.
+    LOADOUT: 4x Homeguard 60mm 'Compass' Rocket Pod, 2x Homeguard 90mm 'Overlord' Assault Battery, 6x Homeguard 35mm 'Talon' Autocannon, 8x Homeguard 50mm 'Bastion' Heavy Autocannon
+    SHIELD: Bulwark
+    SPEED: 20 m/s
   price: 125000
   category: Large
   group: None

@@ -1,7 +1,11 @@
 - type: vessel
   id: UnionfallAegis
   name: NCWL Aegis
-  description: An artillery ship equipped with point defense.
+  description: |
+    An artillery ship equipped with point defense.
+    LOADOUT: 1x 120mm 'Anvil' Artillery, 3x SHI MG-213 light dual machinegun 20x135mm
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 35000
   category: Small
   group: None

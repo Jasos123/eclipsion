@@ -20,6 +20,7 @@ using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
 using Content.Shared.Throwing;
 using Content.Shared._Crescent.Shuttles.Components;
+using Content.Shared._Crescent.World;
 using JetBrains.Annotations;
 using Robust.Server.GameObjects;
 using Robust.Server.GameStates;
@@ -124,7 +125,7 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
             var query = EntityQueryEnumerator<IFFConsoleComponent>();
             while (query.MoveNext(out var uid, out var comp))
             {
-                if (!comp.active)
+                if (!comp.active || comp.dissipateAlways == true)
                 {
                     comp.CurrentHeat = float.Clamp(comp.CurrentHeat - comp.HeatDissipation, 0f, comp.HeatCapacity);
                     UpdateIFFInterface(uid, comp);
@@ -175,6 +176,13 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
         {
             if (!consoleComp.MassCloakEnabled || consoleXform.GridUid is null)
                 continue;
+
+            // Mothership-bound fields are powered by, but do not control, the mothership's own IFF cloak.
+            if (consoleComp.RequiresMothershipCloak &&
+                (!TryComp(consoleXform.GridUid, out IFFComponent? mothershipIff) ||
+                 (mothershipIff.Flags & IFFFlags.Hide) == 0))
+                continue;
+
             activeFields.Add((consoleUid, consoleXform, consoleComp));
         }
 
@@ -193,6 +201,13 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
                 foreach (var (consoleUid, fieldXform, fieldComp) in activeFields)
                 {
                     if (gridXform.MapID != fieldXform.MapID)
+                        continue;
+
+                    // A mothership-bound field only cloaks surrounding grids; its host grid retains its own cloak state.
+                    if (!fieldComp.CloakMothership && gridUid == fieldXform.GridUid)
+                        continue;
+
+                    if (fieldComp.IgnoreAsteroids && HasComp<MinedAsteroidDecayComponent>(gridUid))
                         continue;
 
                     var dist = (gridXform.WorldPosition - fieldXform.WorldPosition).Length();

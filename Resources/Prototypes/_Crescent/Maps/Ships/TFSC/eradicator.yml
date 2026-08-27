@@ -6,7 +6,9 @@
   name: GSC Eradicator
   description: |
     A Syndicate stealth destroyer.
-    LOADOUT: 4x 20mm 'Screamer' rotary cannons, 3x 120mm 'Anvil' artillery pieces, 2x 95mm 'Ballista' medium missile systems (Gorlex edition)
+    LOADOUT: 3x 120mm 'Anvil' Artillery, 4x 150cc 'Retribution' Pulse Laser, 2x 50mm 'Striker' Heavy Autocannon
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 115000 #115000 appraisegrid
   category: Medium
   group: None

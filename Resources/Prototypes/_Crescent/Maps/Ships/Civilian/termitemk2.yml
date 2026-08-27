@@ -6,8 +6,9 @@
   name: Termite MKII
   description: |
     The Termite MKII has undergone some questionable combat retrofits, capable of fitting 3 guns in its meager hold. Guns sold separately.
-    LOADOUT: 3x Fixed Universal hardpoints
-    MINIMUM CREW: 1x Pilot
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 16000
   category: Small
   group: Civilian

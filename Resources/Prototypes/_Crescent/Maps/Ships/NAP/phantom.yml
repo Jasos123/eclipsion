@@ -3,8 +3,9 @@
   name: NAP Phantom
   description: |
     A sleek American ultra-light strike shuttle, built for fast hit-and-run operations. The Phantom is perfect for flanking attacks.
-    LOADOUT: 2x 20mm
-    MINIMUM CREW: 1x Pilot
+    LOADOUT: 2x Homeguard 20mm 'Warthog' Rotary Cannon
+    SHIELD: Absent
+    SPEED: 40 m/s
   price: 20000
   category: Small
   group: None

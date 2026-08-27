@@ -1,7 +1,11 @@
 - type: vessel
   id: Qasr
   name: TAP Qasr
-  description: A large shuttle hull designed for construction. Comes with the bare minimum to fly.
+  description: |
+    A large shuttle hull designed for construction. Comes with the bare minimum to fly.
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 20 m/s
   price: 30000
   category: Small
   group: None

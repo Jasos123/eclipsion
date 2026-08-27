@@ -6,8 +6,9 @@
   name: TS Respondant
   description: |
     A compact corvette built to brawl. Once a militia mainstay, the Respondant trades armor for a punchy mix of autocannons and rocket pods, letting a skilled pilot chip away at targets before closing in for the kill.
-    LOADOUT: 2x 50mm 'Striker' Heavy Autocannons, 2x 60mm 'Azimuth' Rocket Pods
-    MINIMUM CREW: 1x Pilot, 1x Loader Optional
+    LOADOUT: 2x 60mm 'Azimuth' Rocket Pod, 2x 50mm 'Striker' Heavy Autocannon
+    SHIELD: Absent
+    SPEED: 35 m/s
   price: 35000
   category: Small
   group: None

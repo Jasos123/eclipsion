@@ -4,7 +4,11 @@
 - type: vessel
   id: Straznik
   name: NCWL Straznik
-  description: A light communard corvette that leverages a largebore 120mm cannon and a thin, evasive profile to provide fire support for ships brawling to its front.
+  description: |
+    A light communard corvette that leverages a largebore 120mm cannon and a thin, evasive profile to provide fire support for ships brawling to its front.
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 20 m/s
   price: 40000
   category: Small
   group: None

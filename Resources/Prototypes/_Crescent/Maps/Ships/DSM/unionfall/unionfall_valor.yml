@@ -1,7 +1,11 @@
 - type: vessel
   id: UnionfallValor
   name: DSM Valor
-  description: An ultralight imperial bomber.
+  description: |
+    An ultralight imperial bomber.
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 40 m/s
   price: 12500
   category: Small
   group: None

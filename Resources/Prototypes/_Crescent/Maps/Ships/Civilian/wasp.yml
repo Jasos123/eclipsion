@@ -7,7 +7,8 @@
   description: |
     A fighter derived from the Warthog hull, barely functional, barely safe for use. Not used by the sane. Strangely holds atmosphere.
     LOADOUT: 1x 20mm 'Screamer' Rotary Cannon
-    MINIMUM CREW: 1x Unfortunate soul.
+    SHIELD: Absent
+    SPEED: 40 m/s
   price: 10000
   category: Small
   group: Scrap

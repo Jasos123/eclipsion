@@ -6,7 +6,9 @@
   name: NCWL Chelubey
   description: |
     The antiquated Flagship of the Union fleet in Taypan.
-    LOADOUT: 4x Homeguard 95mm 'Warden' Medium Missile Systems, 2x 330mm 'Catapult' Cruise Missile Platforms, 4x Homeguard 90mm 'Overlord' Assault Batteries, 4x Homeguard 50mm 'Bastion' Heavy Autocannons, 1x Homeguard "Rook" 300mm Siege Battery
+    LOADOUT: 4x Homeguard 95mm 'Warden' Medium Missile System, 2x 330mm 'Catapult' Cruise Missile Platform, 1x Homeguard "Rook" 300mm Siege Battery, 4x Homeguard 90mm 'Overlord' Assault Battery, 4x Homeguard 50mm 'Bastion' Heavy Autocannon
+    SHIELD: Errant
+    SPEED: 20 m/s
   price: 600000
   category: Large
   group: None

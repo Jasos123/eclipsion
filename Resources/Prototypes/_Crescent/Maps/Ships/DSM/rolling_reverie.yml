@@ -1,7 +1,11 @@
 - type: vessel
   id: RollingReverie
   name: DSM Rolling Reverie
-  description: A luxury iff-cloaked vessel, fielded exclusively by the House of Questions. The seal of House Valkenrath is emblazoned on the hull itself.
+  description: |
+    A luxury iff-cloaked vessel, fielded exclusively by the House of Questions. The seal of House Valkenrath is emblazoned on the hull itself.
+    LOADOUT: 2x 350c "Compakt" hybrid energy gatling, 4x 20mm PTA "Operator" gatling turret
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 8000
   category: Small
   group: None

@@ -1,7 +1,11 @@
 - type: vessel
   id: RatDragoon
   name: DSM Dragoon
-  description: An imperial patrol corvette.
+  description: |
+    An imperial patrol corvette.
+    LOADOUT: 1x 300w 'Curse' EMP Projector, 4x 150cc 'Retribution' Pulse Laser
+    SHIELD: Absent
+    SPEED: 20 m/s
   price: 60000
   category: Medium
   group: None

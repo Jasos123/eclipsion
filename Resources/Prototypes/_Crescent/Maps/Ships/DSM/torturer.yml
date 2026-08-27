@@ -2,9 +2,10 @@
   id: Torturer
   name: DSM Torturer
   description: |
-    A stealth bomber, made for imperial use. Comes with little crew accommodations, and a fragile hull, but in exchange - it sports an IFF cloak for stealth engagements, capable of ending battles before they start.
-    LOADOUT: 4x 350cc 'Glare' Burst Lasers, 2x 150cc 'Retribution' Pulse Lasers
-    MINIMUM CREW: 1x Pilot, 1x Loader
+    An imperial strike fighter, capable of unleashing a heavy payload in seconds.
+    LOADOUT: 2x 60mm 'Azimuth' Rocket Pod, 4x 150cc 'Retribution' Pulse Laser
+    SHIELD: Errant
+    SPEED: 30 m/s
   price: 58000
   category: Medium
   group: None
@@ -31,4 +32,4 @@
         - type: VesselDesignation
           designation: vessel-designation-destroyer
         - type: VesselDescription
-          description: Any smart ritter can turn this little ship into a terror weapon. 
+          description: Any smart ritter can turn this little ship into a terror weapon.

@@ -1,7 +1,11 @@
 - type: vessel
   id: UnionfallIbis
   name: DSM Ibis
-  description: A heavy imperial fighter armed with a torpedo pod and dual slugthrower cannons.
+  description: |
+    A heavy imperial fighter armed with a torpedo pod and dual slugthrower cannons.
+    LOADOUT: 2x SHI 43mm "Dasher" ballistic slugthrower
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 30000
   category: Small
   group: None

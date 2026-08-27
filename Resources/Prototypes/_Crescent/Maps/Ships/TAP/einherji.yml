@@ -6,7 +6,9 @@
   name: Einherji
   description: |
     A heavy frontliner fighter with energy-heavy weaponry.
-    LOADOUT: 2x 400c Plasmacasters, 1x 180mm Idna Torpedo Pod
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 31000
   category: Small
   group: None

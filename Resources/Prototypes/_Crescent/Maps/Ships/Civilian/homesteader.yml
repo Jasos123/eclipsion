@@ -6,7 +6,9 @@
   name: ICM Homesteader
   description: |
     An entry-level jack-of-all-trades corvette-sized hull, with a research lab, Medbay, Kitchen/Bar, and a Mining bay.
-    MINIMUM CREW: 1x Pilot
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 37000
   category: Small
   group: Civilian

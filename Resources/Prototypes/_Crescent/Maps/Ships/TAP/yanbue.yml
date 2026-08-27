@@ -1,7 +1,11 @@
 - type: vessel
   id: Yanbue
   name: TAP Yanbue
-  description: A small, cloaked shuttle hull. Comes with the bare minimum to fly, and nothing else.
+  description: |
+    A small, cloaked shuttle hull. Comes with the bare minimum to fly, and nothing else.
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 12000
   category: Small
   group: None

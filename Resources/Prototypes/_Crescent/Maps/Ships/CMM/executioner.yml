@@ -6,8 +6,9 @@
   name: TS Executioner
   description: |
     An experimental, high-tech NT design thought lost to time, now in the hands of the Gliessian Sheriffs.
-    LOADOUT: 2x 350cc 'Glare' Burst Laser, 2x 48mm 'Shortbow' SRM
-    MINIMUM CREW: 1x Pilot, 1x Loader
+    LOADOUT: 2x 48mm 'Shortbow' SRM, 2x 350cc 'Glare' Burst Laser
+    SHIELD: Errant
+    SPEED: 35 m/s
   price: 100000
   category: Small
   group: None

@@ -1,7 +1,11 @@
 - type: vessel
   id: Raider
   name: DSM Raider
-  description: A light Imperial transport shuttle. Sports an IFF cloak.
+  description: |
+    A light Imperial transport shuttle. Sports an IFF cloak.
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 44000
   category: Small
   group: None

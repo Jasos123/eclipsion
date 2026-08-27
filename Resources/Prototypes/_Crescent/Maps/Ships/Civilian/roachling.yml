@@ -6,8 +6,9 @@
   name: Roachling
   description: |
     The Roachling is made from a decommissioned mining drone for cheap, retrofitting it for organic use, with little thought for the person piloting it.
-    LOADOUT: 2x Exhumer Miner Guns
-    MINIMUM CREW: 1x Miner
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 11000
   category: Small
   group: Scrap

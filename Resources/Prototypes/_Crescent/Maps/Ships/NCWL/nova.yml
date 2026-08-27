@@ -4,7 +4,11 @@
 - type: vessel
   id: Nova
   name: NCWL Nova
-  description: An ultralight communard autocannon platform.
+  description: |
+    An ultralight communard autocannon platform.
+    LOADOUT: 2x Homeguard 20mm 'Warthog' Rotary Cannon
+    SHIELD: Absent
+    SPEED: 40 m/s
   price: 10000
   category: Small
   group: None

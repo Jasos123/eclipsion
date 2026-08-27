@@ -3,8 +3,9 @@
   name: DSM Perigale
   description: |
     An imperial ultralight fighter armed with two pulse lasers.
-    LOADOUT: 2x 150cc 'Retribution' Pulse Lasers
-    MINIMUM CREW: 1x Pilot
+    LOADOUT: 2x 150cc 'Retribution' Pulse Laser
+    SHIELD: Absent
+    SPEED: 40 m/s
   price: 10000
   category: Small
   group: None

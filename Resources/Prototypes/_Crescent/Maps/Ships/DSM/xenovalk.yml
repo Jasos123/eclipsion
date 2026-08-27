@@ -1,7 +1,11 @@
 - type: vessel
   id: Xenovalk
   name: DSM Xenovalk
-  description: An Imperial light medical shuttle.
+  description: |
+    An Imperial light medical shuttle.
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 75000
   category: Small
   group: None

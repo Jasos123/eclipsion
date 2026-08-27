@@ -4,7 +4,11 @@
 - type: vessel
   id: Carrum
   name: ATH Carrum
-  description: A light Crown expeditionary torpedo bomber often deployed against larger targets.
+  description: |
+    A light Crown expeditionary torpedo bomber often deployed against larger targets.
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 17500
   category: Small
   group: None

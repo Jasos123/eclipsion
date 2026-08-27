@@ -6,8 +6,9 @@
   name: Dungbeetle
   description: |
     A derelict mining drone, recycled to be a mobile salvage platform. Has a trash cart for handy storage of your scrap.
-    LOADOUT: N/A
-    MINIMUM CREW: 1x Salvager.
+    LOADOUT: Armless
+    SHIELD: Absent
+    SPEED: 30 m/s
   price: 9000
   category: Small
   group: Scrap
