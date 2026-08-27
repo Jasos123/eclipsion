@@ -9,9 +9,9 @@ This page covers controls that differ from, or are especially important to, stan
 Melee uses a detailed system with slashing, parrying and executions.
 
 - Turn on [bold]Combat Mode[/bold] from your action bar before trying to attack or parry.
-- [color=#6ab7d6][keybind="Use"/][/color] performs a committed melee attack.
+- [color=#6ab7d6][keybind="Use"/][/color] performs a committed melee attack that sweeps a wide arc and hits everyone in it.
 - [color=#6ab7d6][keybind="UseSecondary"/][/color] parries or blocks an incoming attack. Good timing gives you a major advantage.
-- [color=#6ab7d6][keybind="MouseMiddle"/][/color] performs a faster, lighter attack.
+- [color=#6ab7d6][keybind="MouseMiddle"/][/color] performs a lighter attack on a single target, on a longer cooldown than the wide swing. Use it when an ally is standing next to your target.
 
 For parry timing, stamina, and executions, see [textlink="Melee Combat" link="MeleeCombat"].
 

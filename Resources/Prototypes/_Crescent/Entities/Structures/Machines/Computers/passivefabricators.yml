@@ -11,7 +11,7 @@
   id: PassiveSpawnerDebugPrototype
   name: Excelsior Material Drop-In Uplink
   suffix: DEBUG, DO NOT MAP
-  description: A advanced machine used by the Excelsior revolutionary group to bring material support to violent revolutions at points of interest.
+  description: An advanced machine used by the Excelsior revolutionary group to bring material support to violent revolutions at points of interest.
   components:
   - type: Sprite
     sprite: _Shitmed/Structures/Machines/limbgrower.rsi

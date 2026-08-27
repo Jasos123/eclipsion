@@ -302,10 +302,8 @@
         name: 30-round magazine (5.56x45mm)
       - id: MagazineLightRifleBox
         name: Mandate box magazine (5.56x45mm)
-      - id: MagazineBoxLightRifleSurplus
-        name: surplus ammo box (5.56x45mm)
-      - id: BoxSpeedLoaderLightRifle
-        name: box of stripper clips (5.56x45mm)
+      - id: BoxSpeedLoaderRifle
+        name: box of stripper clips (7.62x51mm)
       - id: MagazineRifle
         name: 20-round magazine (7.62x51mm)
       - id: MagazineAntiMateriel

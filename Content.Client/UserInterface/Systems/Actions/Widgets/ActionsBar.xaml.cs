@@ -1,4 +1,3 @@
-using System.Numerics;
 using Content.Client.UserInterface.Systems.Actions.Controls;
 using Content.Shared.CCVar;
 using Content.Shared.Input;
@@ -18,32 +17,18 @@ public sealed partial class ActionsBar : UIWidget
     /// </summary>
     private const float SlotSize = 64f;
 
-    /// <summary>
-    /// GridContainer's default gap between slots. Needed to turn a row count into a height budget.
-    /// </summary>
-    private const float SlotSeparation = 4f;
-
-    /// <summary>
-    /// Floor for the vertical bar's height budget. The grid falls back to a single row once fewer than
-    /// two slots fit, so keep enough room that a cramped window still gets a column.
-    /// </summary>
-    private const float MinGridHeight = SlotSize * 3f;
+    private const float ScreenEdgeMargin = SlotSize;
 
     /// <summary>
     /// Screen space kept free below the vertical bar so it does not run into the bottom left inventory.
     /// </summary>
     private const float VerticalBottomMargin = 128f;
 
-    /// <summary>
-    /// Upstream clamp for the single row layout. Keeps the bar from widening the HUD corner it sits in.
-    /// </summary>
-    private static readonly Vector2 HorizontalMaxSize = new(SlotSize, 9999f);
-
     [Dependency] private readonly IEntityManager _entity = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
 
     private bool? _vertical;
-    private float _gridHeight;
+    private float _gridLimit;
 
     public ActionsBar()
     {
@@ -73,44 +58,31 @@ public sealed partial class ActionsBar : UIWidget
         if (_vertical != vertical)
         {
             _vertical = vertical;
-            _gridHeight = 0f;
-
-            if (vertical)
-            {
-                // A wrapped bar is wider than one slot, so the horizontal clamp has to come off.
-                ActionsContainer.MaxSize = new Vector2(float.PositiveInfinity, float.PositiveInfinity);
-            }
-            else
-            {
-                ActionsContainer.MaxSize = HorizontalMaxSize;
-                ActionsContainer.Rows = 1;
-            }
+            _gridLimit = 0f;
         }
 
-        if (vertical)
-            UpdateGridHeight();
+        UpdateGridLimit(vertical);
     }
 
     /// <summary>
-    /// Caps the grid at the height actually left below the bar, which makes the container lay the slots
-    /// out top to bottom and wrap the overflow into a new column instead of running off screen.
+    /// Fits the action grid into the remaining screen space. Horizontal mode fills rows and wraps down;
+    /// vertical mode fills columns and wraps right.
     /// </summary>
-    private void UpdateGridHeight()
+    private void UpdateGridLimit(bool vertical)
     {
-        var available = MathF.Max(
-            UserInterfaceManager.RootControl.Size.Y - GlobalPosition.Y - VerticalBottomMargin,
-            MinGridHeight);
+        var rootSize = UserInterfaceManager.RootControl.Size;
+        var available = vertical
+            ? rootSize.Y - GlobalPosition.Y - VerticalBottomMargin
+            : rootSize.X - GlobalPosition.X - ScreenEdgeMargin;
+        available = MathF.Max(available, SlotSize);
 
-        // A configured column length wins, as long as it still fits on screen.
-        var rows = _cfg.GetCVar(CCVars.HudActionBarRows);
-        if (rows > 0)
-            available = MathF.Min(available, rows * (SlotSize + SlotSeparation) - SlotSeparation);
-
-        // MaxGridHeight invalidates measure, so only touch it when the space actually changed.
-        if (MathF.Abs(available - _gridHeight) < 1f)
+        if (MathF.Abs(available - _gridLimit) < 1f)
             return;
 
-        _gridHeight = available;
-        ActionsContainer.MaxGridHeight = available;
+        _gridLimit = available;
+        if (vertical)
+            ActionsContainer.MaxGridHeight = available;
+        else
+            ActionsContainer.MaxGridWidth = available;
     }
 }

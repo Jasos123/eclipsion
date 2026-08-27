@@ -207,7 +207,9 @@
   - BeltrunnerTAP
   - DraugrTAP
   - ServileTAP
-  editorHidden: false # unused faction, hidden from job selection
+  # Live: FreeplayTAPGLIESSTFCF spawns TribalHideout with seven of these slots, so the department has to be
+  # visible in the character editor or nobody can round-start into the Pact.
+  editorHidden: false
 
 - type: department
   id: ATH

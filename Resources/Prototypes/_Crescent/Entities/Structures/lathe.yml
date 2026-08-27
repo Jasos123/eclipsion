@@ -266,8 +266,7 @@
       - SignalTrigger
       - TimerTrigger
       - EMPGrenadeElectronics
-      # GrenadeDSMG4Twistcap moved to the DSM dynamicRecipes block below: it's DSM gear (Imperial
-      # discipline, SurplusImperialRifling) and must not print for free on a non-faction forge.
+      - GrenadeDSMG4Twistcap
       - DrumMagazineShotgunSlug
       - DrumMagazineShotgunEmpty
       - DrumMagazineShotgunBuck
@@ -728,7 +727,6 @@
       - AlkhuldLPC
       # TAP end
       # DSM start
-      - GrenadeDSMG4Twistcap # Imperial: SurplusImperialRifling (was wrongly in staticRecipes)
       - RedemptorLPC # Imperial: ImperialFighter (unlocked alongside IbisLPC but was missing here)
       - ClothingNeckCloakImperialCapelet # Imperial: AdvancedImperialClothes (was missing here)
       - ClothingMaskImperialCombatGasmask
@@ -1660,6 +1658,15 @@
       - FlatpackComputerDroneControl
       - FlatpackDroneController
       - ThrusterHighImpulseTAP
+      # Modular pouches - ModularPouchesElectronics, civilian discipline so every faction can unlock them.
+      - PouchUtilityElectronics
+      - PouchMagazineElectronics
+      - PouchMagazineLargeElectronics
+      - PouchMagazinePistolElectronics
+      - PouchMedicalElectronics
+      - PouchMedicalLargeElectronics
+      - PouchGrenadeElectronics
+      - PouchFlareElectronics
     #  - ClothingOuterHardsuitCybersunDreadnoughtCyberdawn #Has to go since Egui is working now.
   - type: MaterialStorageMagnetPickup
     magnetEnabled: True

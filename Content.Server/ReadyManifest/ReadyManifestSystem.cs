@@ -1,4 +1,3 @@
-using System.Linq;
 using Content.Server.EUI;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
@@ -18,12 +17,14 @@ public sealed class ReadyManifestSystem : EntitySystem
 {
     [Dependency] private readonly EuiManager _euiManager = default!;
     [Dependency] private readonly IConfigurationManager _configManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly IServerPreferencesManager _prefsManager = default!;
 
+    private const float RefreshInterval = 1f;
+
     private readonly Dictionary<ICommonSession, ReadyManifestEui> _openEuis = new();
     private Dictionary<ProtoId<JobPrototype>, int> _jobCounts = new();
+    private float _timeSinceRefresh;
 
     public override void Initialize()
     {
@@ -40,6 +41,27 @@ public sealed class ReadyManifestSystem : EntitySystem
         }
 
         _openEuis.Clear();
+        _jobCounts.Clear();
+        _timeSinceRefresh = 0f;
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        if (_openEuis.Count == 0)
+        {
+            _timeSinceRefresh = 0f;
+            return;
+        }
+
+        _timeSinceRefresh += frameTime;
+        if (_timeSinceRefresh < RefreshInterval)
+            return;
+
+        _timeSinceRefresh = 0f;
+        if (BuildReadyManifest())
+            UpdateEuis();
     }
 
     private void OnRequestReadyManifest(RequestReadyManifestMessage message, EntitySessionEventArgs args)
@@ -55,88 +77,71 @@ public sealed class ReadyManifestSystem : EntitySystem
 
     private void OnPlayerToggleReady(PlayerToggleReadyEvent ev)
     {
-        var userId = ev.PlayerSession.Data.UserId;
-
-        if (!_prefsManager.TryGetCachedPreferences(userId, out var preferences))
-        {
-            return;
-        }
-
-        HumanoidCharacterProfile profile = (HumanoidCharacterProfile) preferences.SelectedCharacter;
-        var profileJobs = FilterPlayerJobs(profile);
-
-        if (_gameTicker.PlayerGameStatuses[userId] == PlayerGameStatus.ReadyToPlay)
-        {
-            foreach (var job in profileJobs)
-            {
-                if (_jobCounts.ContainsKey(job))
-                {
-                    _jobCounts[job]++;
-                }
-                else
-                {
-                    _jobCounts.Add(job, 1);
-                }
-            }
-        }
-        else
-        {
-            foreach (var job in profileJobs)
-            {
-                if (_jobCounts.ContainsKey(job))
-                {
-                    _jobCounts[job]--;
-                }
-            }
-        }
-
-        UpdateEuis();
+        // Rebuild from the authoritative ready-state snapshot. Incrementally changing the cache here can
+        // drift when a player switches or edits their selected character while ready, since the profile
+        // being removed is then no longer necessarily the profile that was originally counted.
+        if (BuildReadyManifest())
+            UpdateEuis();
     }
 
-    private void BuildReadyManifest()
+    private bool BuildReadyManifest()
     {
         var jobCounts = new Dictionary<ProtoId<JobPrototype>, int>();
 
         foreach (var (userId, status) in _gameTicker.PlayerGameStatuses)
         {
-            if (status == PlayerGameStatus.ReadyToPlay)
-            {
-                HumanoidCharacterProfile profile;
-                if (_prefsManager.TryGetCachedPreferences(userId, out var preferences))
-                {
-                    profile = (HumanoidCharacterProfile) preferences.SelectedCharacter;
-                    var profileJobs = FilterPlayerJobs(profile);
-                    foreach (var jobId in profileJobs)
-                    {
-                        if (jobCounts.ContainsKey(jobId))
-                        {
-                            jobCounts[jobId]++;
-                        }
-                        else
-                        {
-                            jobCounts.Add(jobId, 1);
-                        }
-                    }
-                }
-            }
+            if (status != PlayerGameStatus.ReadyToPlay ||
+                !_prefsManager.TryGetCachedPreferences(userId, out var preferences) ||
+                preferences.SelectedCharacter is not HumanoidCharacterProfile profile ||
+                !TryGetManifestJob(profile.JobPriorities, out var jobId))
+                continue;
+
+            jobCounts[jobId] = jobCounts.GetValueOrDefault(jobId) + 1;
         }
+
+        if (JobCountsMatch(jobCounts, _jobCounts))
+            return false;
+
         _jobCounts = jobCounts;
+        return true;
     }
 
-
-    private List<ProtoId<JobPrototype>> FilterPlayerJobs(HumanoidCharacterProfile profile)
+    /// <summary>
+    /// Gets the single job which represents this player in the manifest. A profile may have many low or
+    /// medium fallback choices (including jobs in other factions), but validation guarantees at most one
+    /// high-priority choice. Counting the fallback choices made one player appear several times.
+    /// </summary>
+    internal static bool TryGetManifestJob(
+        IReadOnlyDictionary<string, JobPriority> priorities,
+        out ProtoId<JobPrototype> jobId)
     {
-        var jobs = profile.JobPriorities.Keys.Select(k => new ProtoId<JobPrototype>(k)).ToList();
-        List<ProtoId<JobPrototype>> priorityJobs = new();
-        foreach (var job in jobs)
+        foreach (var (job, priority) in priorities)
         {
-            var priority = profile.JobPriorities[job];
-            if (priority == JobPriority.High || (_prototypeManager.Index(job).Weight >= 10 && priority > JobPriority.Never))
-            {
-                priorityJobs.Add(job);
-            }
+            if (priority != JobPriority.High)
+                continue;
+
+            jobId = new ProtoId<JobPrototype>(job);
+            return true;
         }
-        return priorityJobs;
+
+        jobId = default;
+        return false;
+    }
+
+    private static bool JobCountsMatch(
+        IReadOnlyDictionary<ProtoId<JobPrototype>, int> first,
+        IReadOnlyDictionary<ProtoId<JobPrototype>, int> second)
+    {
+        if (first.Count != second.Count)
+            return false;
+
+        foreach (var (job, count) in first)
+        {
+            if (!second.TryGetValue(job, out var other) || count != other)
+                return false;
+        }
+
+        return true;
     }
 
     public Dictionary<ProtoId<JobPrototype>, int> GetReadyManifest()

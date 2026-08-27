@@ -18,6 +18,7 @@
         - BulletImpassable
   - type: Anchorable
   - type: Pullable
+  - type: RequireProjectileTarget
   - type: Sprite
     sprite: Structures/Hydroponics/containers.rsi
     state: hydrotray2

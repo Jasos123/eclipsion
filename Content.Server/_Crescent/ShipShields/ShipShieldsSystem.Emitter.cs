@@ -1,5 +1,6 @@
 using Content.Shared._Crescent.ShipShields;
 using Content.Shared._Crescent.CCvars;
+using Content.Server._Crescent.RoundEnd;
 using Content.Server.Power.Components;
 using Robust.Shared.Configuration;
 using Content.Shared.Projectiles;
@@ -39,6 +40,10 @@ public partial class ShipShieldsSystem
     private void OnEmitterStartup(EntityUid uid, ShipShieldEmitterComponent component, ComponentStartup args)
     {
         _pvsSys.AddGlobalOverride(uid);
+
+        var grid = Transform(uid).GridUid;
+        if (grid != null && HasComp<StationInfestationComponent>(grid.Value))
+            SetForcedDisabled(uid, true, component);
 
 		if (_powerDrawEnabled || !TryComp<ApcPowerReceiverComponent>(uid, out var receiver))
 			return;
@@ -123,6 +128,28 @@ public partial class ShipShieldsSystem
         var emitterEnt = ents.First();
         emitter = emitterEnt;
         emitterComp = emitterEnt.Comp;
+        return true;
+    }
+
+    /// <summary>
+    /// Keeps an emitter down independently of its power state. Disabling immediately removes an active shield;
+    /// enabling lets the normal update loop rebuild it on its next pass.
+    /// </summary>
+    public bool SetForcedDisabled(EntityUid uid, bool disabled, ShipShieldEmitterComponent? emitter = null)
+    {
+        if (!Resolve(uid, ref emitter, false) || emitter.ForcedDisabled == disabled)
+            return false;
+
+        emitter.ForcedDisabled = disabled;
+
+        if (disabled && emitter.Shielded is { } shielded)
+        {
+            UnshieldEntity(shielded);
+            emitter.Shield = null;
+            emitter.Shielded = null;
+        }
+
+        Dirty(uid, emitter);
         return true;
     }
     // Rat-end

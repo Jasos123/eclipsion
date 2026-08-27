@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Content.Server._Crescent.Economy;
+using Content.Server.Cargo.Cartridges;
 using Content.Server.Cargo.Systems;
 using Content.Shared._Crescent.Diplomacy;
 using Content.Shared._Crescent.HullrotFaction;
@@ -19,7 +20,53 @@ namespace Content.IntegrationTests.Tests.Economy;
 public sealed class StockWarLiquidationTest
 {
     private const string ShiCompany = "stock-company-shi";
+    private const string NcwlCompany = "stock-company-ncwl";
     private const string NeutralCompany = "stock-company-tccc";
+
+    [Test]
+    public async Task WarBlocksBuyingAndSellingEnemyStock()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        var testMap = await pair.CreateTestMap();
+
+        var entManager = server.ResolveDependency<IEntityManager>();
+        var systems = server.ResolveDependency<IEntitySystemManager>();
+        var stocks = systems.GetEntitySystem<StockCompanySystem>();
+        var market = systems.GetEntitySystem<StockMarketCartridgeSystem>();
+
+        await server.WaitAssertion(() =>
+        {
+            // DSM and NCWL are permanent enemies, so this covers a war that is already active when the
+            // transaction arrives rather than only the instant a declaration event is raised.
+            stocks.SetActive(NcwlCompany, true);
+
+            var trader = entManager.SpawnEntity(null, testMap.MapCoords);
+            var faction = entManager.AddComponent<HullrotFactionComponent>(trader);
+            faction.Faction = "DSM";
+
+            var bank = entManager.AddComponent<BankAccountComponent>(trader);
+            bank.Balance = 1_000_000;
+
+            var portfolio = entManager.AddComponent<PlayerStockPortfolioComponent>(trader);
+            portfolio.OwnedShares[NcwlCompany] = 5;
+
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(market.TryBuyStock(trader, NcwlCompany, 1), Is.False,
+                    "Buying stock belonging to an enemy faction must be rejected while at war.");
+                Assert.That(market.TrySellStock(trader, NcwlCompany, 1), Is.False,
+                    "Selling stock belonging to an enemy faction must be rejected while at war.");
+                Assert.That(bank.Balance, Is.EqualTo(1_000_000),
+                    "Rejected enemy trades must not move money.");
+                Assert.That(portfolio.OwnedShares.GetValueOrDefault(NcwlCompany), Is.EqualTo(5),
+                    "Rejected enemy trades must not move shares.");
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
 
     [Test]
     public async Task WarSeizesEnemyHoldingsAtFloorPrice()
@@ -56,7 +103,7 @@ public sealed class StockWarLiquidationTest
             var ev = new FactionsWentToWarEvent("DSM", "SHI");
             entManager.EventBus.RaiseEvent(EventSource.Local, ref ev);
 
-            Assert.Multiple(() =>
+            using (Assert.EnterMultipleScope())
             {
                 Assert.That(portfolio.OwnedShares.ContainsKey(ShiCompany), Is.False,
                     "Enemy holdings should have been closed out entirely.");
@@ -66,7 +113,7 @@ public sealed class StockWarLiquidationTest
 
                 Assert.That(portfolio.OwnedShares.GetValueOrDefault(NeutralCompany), Is.EqualTo(7),
                     "A company nobody is at war with must be left alone.");
-            });
+            }
         });
 
         await pair.CleanReturnAsync();

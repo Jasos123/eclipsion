@@ -52,6 +52,9 @@ public sealed partial class ShipShieldsSystem : EntitySystem
         var query = EntityQueryEnumerator<ShipShieldEmitterComponent, ApcPowerReceiverComponent>();
         while (query.MoveNext(out var uid, out var emitter, out var power))
         {
+            if (emitter.ForcedDisabled)
+                continue;
+
             //.2 | 2025 here to untangle this mess
 
             // emitter only runs its code every EmitterUpdateRate. emitter.Accumulator just adds up to 1.5 each time and...

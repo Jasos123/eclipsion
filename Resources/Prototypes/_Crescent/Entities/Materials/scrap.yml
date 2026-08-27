@@ -338,8 +338,8 @@
 - type: entity
   parent: BaseItem
   id: GammaCore
-  name: gamma-class artifical intelligence core
-  description: A scuffed artifical sub-intelligence core ripped from a droneship's innards. This one is a Gamma class intelligence, possessing child-like emotional intelligence, but highly advanced in analytics. It seems to refuse to communicate with you.
+  name: gamma-class artificial intelligence core
+  description: A scuffed artificial sub-intelligence core ripped from a droneship's innards. This one is a Gamma class intelligence, possessing child-like emotional intelligence, but highly advanced in analytics. It seems to refuse to communicate with you.
   components:
   - type: Sprite
     sprite: _Crescent/Objects/Misc/ai_core.rsi

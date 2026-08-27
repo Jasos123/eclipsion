@@ -1,8 +1,12 @@
 #nullable enable
 using Content.Shared.Alert;
+using Content.Shared._Crescent.Corpses;
 using Content.Shared.Hands.Components;
 using Content.Shared.Input;
 using Content.Shared.Inventory.VirtualItem;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Pulling.Components;
 using Robust.Shared.Input;
 using Robust.Shared.Maths;
@@ -32,8 +36,12 @@ public sealed class PullingTest : MovementTest
             .Select(hand => hand.HeldEntity)
             .FirstOrDefault(held => CEntMan.HasComponent<VirtualItemComponent>(held));
 
-        Assert.That(virtualItem, Is.Not.Null);
-        Assert.That(CEntMan.GetComponent<VirtualItemComponent>(virtualItem!.Value).BlockingEntity, Is.EqualTo(CTarget));
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(virtualItem, Is.Not.Null);
+            Assert.That(CEntMan.GetComponent<VirtualItemComponent>(virtualItem!.Value).BlockingEntity,
+                Is.EqualTo(CTarget));
+        }
 
         await SetKey(ContentKeyFunctions.TryPullObject, BoundKeyState.Up);
         await RunTicks(5);
@@ -50,53 +58,164 @@ public sealed class PullingTest : MovementTest
         var pullable = Comp<PullableComponent>(Target);
 
         // Player is initially to the left of the target and not pulling anything
-        Assert.That(Delta(), Is.InRange(0.9f, 1.1f));
-        Assert.That(puller.Pulling, Is.Null);
-        Assert.That(pullable.Puller, Is.Null);
-        Assert.That(pullable.BeingPulled, Is.False);
-        Assert.That(cAlert.IsShowingAlert(CPlayer, puller.PullingAlert), Is.False);
-        Assert.That(sAlert.IsShowingAlert(SPlayer, puller.PullingAlert), Is.False);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Delta(), Is.InRange(0.9f, 1.1f));
+            Assert.That(puller.Pulling, Is.Null);
+            Assert.That(pullable.Puller, Is.Null);
+            Assert.That(pullable.BeingPulled, Is.False);
+            Assert.That(cAlert.IsShowingAlert(CPlayer, puller.PullingAlert), Is.False);
+            Assert.That(sAlert.IsShowingAlert(SPlayer, puller.PullingAlert), Is.False);
+        }
 
         // Start pulling
         await PressKey(ContentKeyFunctions.TryPullObject);
         await RunTicks(5);
-        Assert.That(puller.Pulling, Is.EqualTo(STarget));
-        Assert.That(pullable.Puller, Is.EqualTo(SPlayer));
-        Assert.That(pullable.BeingPulled, Is.True);
-        Assert.That(cAlert.IsShowingAlert(CPlayer, puller.PullingAlert), Is.True);
-        Assert.That(sAlert.IsShowingAlert(SPlayer, puller.PullingAlert), Is.True);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(puller.Pulling, Is.EqualTo(STarget));
+            Assert.That(pullable.Puller, Is.EqualTo(SPlayer));
+            Assert.That(pullable.BeingPulled, Is.True);
+            Assert.That(cAlert.IsShowingAlert(CPlayer, puller.PullingAlert), Is.True);
+            Assert.That(sAlert.IsShowingAlert(SPlayer, puller.PullingAlert), Is.True);
+        }
 
         // Move to the left and check that the target moves with the player and is still being pulled.
         await Move(DirectionFlag.West, 1);
-        Assert.That(Delta(), Is.InRange(0.9f, 1.3f));
-        Assert.That(puller.Pulling, Is.EqualTo(STarget));
-        Assert.That(pullable.Puller, Is.EqualTo(SPlayer));
-        Assert.That(pullable.BeingPulled, Is.True);
-        Assert.That(cAlert.IsShowingAlert(CPlayer, puller.PullingAlert), Is.True);
-        Assert.That(sAlert.IsShowingAlert(SPlayer, puller.PullingAlert), Is.True);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Delta(), Is.InRange(0.9f, 1.3f));
+            Assert.That(puller.Pulling, Is.EqualTo(STarget));
+            Assert.That(pullable.Puller, Is.EqualTo(SPlayer));
+            Assert.That(pullable.BeingPulled, Is.True);
+            Assert.That(cAlert.IsShowingAlert(CPlayer, puller.PullingAlert), Is.True);
+            Assert.That(sAlert.IsShowingAlert(SPlayer, puller.PullingAlert), Is.True);
+        }
 
         // Move in the other direction
         await Move(DirectionFlag.East, 2);
-        Assert.That(Delta(), Is.InRange(-1.3f, -0.9f));
-        Assert.That(puller.Pulling, Is.EqualTo(STarget));
-        Assert.That(pullable.Puller, Is.EqualTo(SPlayer));
-        Assert.That(pullable.BeingPulled, Is.True);
-        Assert.That(cAlert.IsShowingAlert(CPlayer, puller.PullingAlert), Is.True);
-        Assert.That(sAlert.IsShowingAlert(SPlayer, puller.PullingAlert), Is.True);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Delta(), Is.InRange(-1.3f, -0.9f));
+            Assert.That(puller.Pulling, Is.EqualTo(STarget));
+            Assert.That(pullable.Puller, Is.EqualTo(SPlayer));
+            Assert.That(pullable.BeingPulled, Is.True);
+            Assert.That(cAlert.IsShowingAlert(CPlayer, puller.PullingAlert), Is.True);
+            Assert.That(sAlert.IsShowingAlert(SPlayer, puller.PullingAlert), Is.True);
+        }
 
         // Stop pulling
         await PressKey(ContentKeyFunctions.ReleasePulledObject);
         await RunTicks(5);
-        Assert.That(Delta(), Is.InRange(-1.3f, -0.9f));
-        Assert.That(puller.Pulling, Is.Null);
-        Assert.That(pullable.Puller, Is.Null);
-        Assert.That(pullable.BeingPulled, Is.False);
-        Assert.That(cAlert.IsShowingAlert(CPlayer, puller.PullingAlert), Is.False);
-        Assert.That(sAlert.IsShowingAlert(SPlayer, puller.PullingAlert), Is.False);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(Delta(), Is.InRange(-1.3f, -0.9f));
+            Assert.That(puller.Pulling, Is.Null);
+            Assert.That(pullable.Puller, Is.Null);
+            Assert.That(pullable.BeingPulled, Is.False);
+            Assert.That(cAlert.IsShowingAlert(CPlayer, puller.PullingAlert), Is.False);
+            Assert.That(sAlert.IsShowingAlert(SPlayer, puller.PullingAlert), Is.False);
+        }
 
         // Move back to the left and ensure the target is no longer following us.
         await Move(DirectionFlag.West, 2);
         Assert.That(Delta(), Is.GreaterThan(2f));
+    }
+
+    [Test]
+    public async Task PullingCorpseSlowsPuller()
+    {
+        await SpawnTarget("MobHuman");
+
+        await Server.WaitPost(() =>
+            Server.System<MobStateSystem>().ChangeMobState(STarget!.Value, MobState.Dead));
+        await RunTicks(5);
+
+        var serverCorpse = SEntMan.GetComponent<CorpseWeightComponent>(STarget.Value);
+        var clientCorpse = CEntMan.GetComponent<CorpseWeightComponent>(CTarget!.Value);
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(serverCorpse.Applied, Is.True);
+            Assert.That(clientCorpse.Applied, Is.True);
+        }
+
+        await PressKey(ContentKeyFunctions.TryPullObject);
+        await RunTicks(5);
+
+        var expectedWalk = 0.95f * serverCorpse.DragWalkSpeedMultiplier;
+        var expectedSprint = 0.95f * serverCorpse.DragSprintSpeedMultiplier;
+        var serverSpeed = SEntMan.GetComponent<MovementSpeedModifierComponent>(SPlayer);
+        var clientSpeed = CEntMan.GetComponent<MovementSpeedModifierComponent>(CPlayer);
+
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(serverSpeed.WalkSpeedModifier, Is.EqualTo(expectedWalk).Within(0.001f));
+            Assert.That(serverSpeed.SprintSpeedModifier, Is.EqualTo(expectedSprint).Within(0.001f));
+            Assert.That(clientSpeed.WalkSpeedModifier, Is.EqualTo(expectedWalk).Within(0.001f));
+            Assert.That(clientSpeed.SprintSpeedModifier, Is.EqualTo(expectedSprint).Within(0.001f));
+        }
+
+        await PressKey(ContentKeyFunctions.ReleasePulledObject);
+        await RunTicks(5);
+
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(SEntMan.GetComponent<MovementSpeedModifierComponent>(SPlayer).WalkSpeedModifier,
+                Is.EqualTo(1f).Within(0.001f));
+            Assert.That(CEntMan.GetComponent<MovementSpeedModifierComponent>(CPlayer).WalkSpeedModifier,
+                Is.EqualTo(1f).Within(0.001f));
+        }
+    }
+
+    [Test]
+    public async Task PullingTargetDeathAndRevivalRefreshesPullerSpeed()
+    {
+        await SpawnTarget("MobHuman");
+
+        await PressKey(ContentKeyFunctions.TryPullObject);
+        await RunTicks(5);
+
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(SEntMan.GetComponent<MovementSpeedModifierComponent>(SPlayer).WalkSpeedModifier,
+                Is.EqualTo(0.95f).Within(0.001f));
+            Assert.That(CEntMan.GetComponent<MovementSpeedModifierComponent>(CPlayer).WalkSpeedModifier,
+                Is.EqualTo(0.95f).Within(0.001f));
+        }
+
+        await Server.WaitPost(() =>
+            Server.System<MobStateSystem>().ChangeMobState(STarget!.Value, MobState.Dead));
+        await RunTicks(5);
+
+        var serverCorpse = SEntMan.GetComponent<CorpseWeightComponent>(STarget.Value);
+        var expectedWalk = 0.95f * serverCorpse.DragWalkSpeedMultiplier;
+        var expectedSprint = 0.95f * serverCorpse.DragSprintSpeedMultiplier;
+
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(SEntMan.GetComponent<MovementSpeedModifierComponent>(SPlayer).WalkSpeedModifier,
+                Is.EqualTo(expectedWalk).Within(0.001f));
+            Assert.That(SEntMan.GetComponent<MovementSpeedModifierComponent>(SPlayer).SprintSpeedModifier,
+                Is.EqualTo(expectedSprint).Within(0.001f));
+            Assert.That(CEntMan.GetComponent<MovementSpeedModifierComponent>(CPlayer).WalkSpeedModifier,
+                Is.EqualTo(expectedWalk).Within(0.001f));
+            Assert.That(CEntMan.GetComponent<MovementSpeedModifierComponent>(CPlayer).SprintSpeedModifier,
+                Is.EqualTo(expectedSprint).Within(0.001f));
+        }
+
+        await Server.WaitPost(() =>
+            Server.System<MobStateSystem>().ChangeMobState(STarget.Value, MobState.Alive));
+        await RunTicks(5);
+
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(SEntMan.GetComponent<CorpseWeightComponent>(STarget.Value).Applied, Is.False);
+            Assert.That(CEntMan.GetComponent<CorpseWeightComponent>(CTarget!.Value).Applied, Is.False);
+            Assert.That(SEntMan.GetComponent<MovementSpeedModifierComponent>(SPlayer).WalkSpeedModifier,
+                Is.EqualTo(0.95f).Within(0.001f));
+            Assert.That(CEntMan.GetComponent<MovementSpeedModifierComponent>(CPlayer).WalkSpeedModifier,
+                Is.EqualTo(0.95f).Within(0.001f));
+        }
     }
 }
 

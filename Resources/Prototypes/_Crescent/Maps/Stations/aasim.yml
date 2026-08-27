@@ -7,6 +7,10 @@
     Aasim:
       stationProto: StandardCrescentStation
       gridComponents:
+        - type: FactionStation # conquest win condition
+          faction: TAP
+          fallAnnouncement: faction-station-fall-aasim
+          stationName: TAP Qiwa Aasim
         - type: BlockShipWeaponProjectileGrid
       components:
         - type: StationNameSetup

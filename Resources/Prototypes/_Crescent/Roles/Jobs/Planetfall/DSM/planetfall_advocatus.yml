@@ -1,6 +1,6 @@
 - type: job
   id: planetfall_advocatus
-  name: Chaplian Advocatus
+  name: Chaplain Advocatus
   description: job-description-advocatus
   playTimeTracker: JobAdvocatusDSM
   weight: 98

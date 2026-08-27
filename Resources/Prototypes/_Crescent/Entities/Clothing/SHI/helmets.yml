@@ -5,7 +5,7 @@
   id: ClothingHeadHelmetHardsuitMetrocop
   categories: [ HideSpawnMenu ]
   name: SHI-WTI OTA-1 "Metrocop" ballistic helmet
-  description: A underarmored combat hardsuit helmet with a built in gasmask.
+  description: An underarmored combat hardsuit helmet with a built in gasmask.
   components:
   - type: BreathMask
   - type: Sprite
@@ -33,7 +33,7 @@
   id: ClothingHeadHelmetHardsuitCombine
   categories: [ HideSpawnMenu ]
   name: SHI-WTI OTA-3 "Combine" ballistic helmet
-  description: A underarmored combat hardsuit helmet with a built in gasmask.
+  description: An underarmored combat hardsuit helmet with a built in gasmask.
   components:
   - type: BreathMask
   - type: Sprite

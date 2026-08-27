@@ -17,6 +17,7 @@ public sealed partial class ItemStatusPanel : Control
     [Dependency] private readonly IEntityManager _entityManager = default!;
 
     [ViewVariables] private EntityUid? _entity;
+    private int _componentCount;
 
     // Tracked so we can re-run SetSide() if the theme changes.
     private HandUILocation _side;
@@ -93,6 +94,19 @@ public sealed partial class ItemStatusPanel : Control
     {
         base.FrameUpdate(args);
         UpdateItemName();
+
+        if (_entity == null)
+            return;
+
+        // Item status controls are collected when an item is first put in a hand. Some items,
+        // such as PDAs with inserted cartridges, gain or lose status components while they are
+        // already held, so rebuild the controls when their component set changes.
+        var componentCount = _entityManager.ComponentCount(_entity.Value);
+        if (componentCount == _componentCount)
+            return;
+
+        _componentCount = componentCount;
+        BuildNewEntityStatus();
     }
 
     public void Update(EntityUid? entity)
@@ -105,12 +119,14 @@ public sealed partial class ItemStatusPanel : Control
             ItemNameLabel.Text = "";
             ClearOldStatus();
             _entity = null;
+            _componentCount = 0;
             return;
         }
 
         if (entity != _entity)
         {
             _entity = entity.Value;
+            _componentCount = _entityManager.ComponentCount(entity.Value);
             BuildNewEntityStatus();
 
             UpdateItemName();

@@ -17,7 +17,7 @@ Your Hardsuit is important, as it provides EVA protection. Meaning the lack of p
 <GuideEntityEmbed Entity="JetpackBlue"/>
 <GuideEntityEmbed Entity="JetpackMini"/>
 </Box>
-Jetpacks will be needed to move thoughout space, since without floors and gravity, you will not be able to move. Its fueled by gases like oxygen, nitrogen, water vapor, or other gases that can be found in canisters.
+Jetpacks will be needed to move throughout space, since without floors and gravity, you will not be able to move. Its fueled by gases like oxygen, nitrogen, water vapor, or other gases that can be found in canisters.
 
 <Box>
 <GuideEntityEmbed Entity="ClothingMaskGasExplorer"/>

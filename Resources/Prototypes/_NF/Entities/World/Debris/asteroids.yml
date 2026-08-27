@@ -13,50 +13,59 @@
       radius: 6
       floorPlacements: 16
     - type: SimpleFloorPlanPopulator
+      # Ratgore Start - the generalist belt rock. Bulk ore was already reasonable, but the
+      # precious tail was rounding error (gold/silver 0.18%, plasma 0.07%), so a sand
+      # asteroid was only ever coal, tin, quartz and copper. Ore 24% -> 31%, and the
+      # rare materials are now rare rather than absent. Salt is a trace find here; the
+      # solid rock asteroids stay the real salt source.
       entries:
         FloorAsteroidSand:
-          - id: RandomArtifactSpawner20
-            prob: 0.001
-            orGroup: rock
           - id: WallRock
             prob: 0.5
             orGroup: rock
           - id: WallRockCoal
-            prob: 0.04
+            prob: 0.048
             orGroup: rock
           - id: WallRockTin
-            prob: 0.04
+            prob: 0.048
             orGroup: rock
           - id: WallRockQuartz
-            prob: 0.04
+            prob: 0.048
+            orGroup: rock
+          - id: WallRockCopper
+            prob: 0.048
             orGroup: rock
           - id: WallRockGold
-            prob: 0.0012
+            prob: 0.01
             orGroup: rock
           - id: WallRockSilver
-            prob: 0.0012
+            prob: 0.01
             orGroup: rock
-          - id: WallRockPlasma
-            prob: 0.0005
+          - id: WallRockTungsten
+            prob: 0.008
             orGroup: rock
           - id: WallRockUranium
-            prob: 0.0008
+            prob: 0.005
+            orGroup: rock
+          - id: WallRockSalt
+            prob: 0.006
+            orGroup: rock
+          - id: WallRockPlasma
+            prob: 0.004
             orGroup: rock
           - id: WallRockArtifactFragment
-            prob: 0.0009
+            prob: 0.002
+            orGroup: rock
+          - id: RandomArtifactSpawner20
+            prob: 0.0015
             orGroup: rock
           - id: RockElementalSpawner
             prob: 0.009
             orGroup: rock
-          - id: WallRockTungsten
-            prob: 0.001 # TODO: CHANGEME
-            orGroup: rock
-          - id: WallRockCopper
-            prob: 0.04 # TODO: CHANGEME
-            orGroup: rock
           - id: FuelSeepBoriatic
-            prob: 0.005
+            prob: 0.006
             orGroup: rock
+      # Ratgore End
     - type: IFF
       flags: HideLabel
       color: "#d67e27"
@@ -175,44 +184,53 @@
       radius: 6
       floorPlacements: 16
     - type: SimpleFloorPlanPopulator
+      # Ratgore Start - ice was the worst rock in the game at 10% ore against 88% bare
+      # snow, and it is a third of the Taypan belts, so most of the standard belt was
+      # not worth the trip. Ore 10% -> 25%, still the leanest of the four families, but
+      # ice is now the best place to find plasma and uranium and the worst for bulk
+      # metal. No fuel seep on purpose - boriatic is sand, AME is chromite.
       entries:
         FloorIce:
+          - id: WallRockSnow
+            prob: 0.5
+            orGroup: rock
+          - id: WallRockSnowPlasma
+            prob: 0.027
+            orGroup: rock
+          - id: WallRockSnowCoal
+            prob: 0.026
+            orGroup: rock
+          - id: WallRockSnowTin
+            prob: 0.026
+            orGroup: rock
+          - id: WallRockSnowUranium
+            prob: 0.022
+            orGroup: rock
+          - id: WallRockSnowQuartz
+            prob: 0.019
+            orGroup: rock
+          - id: WallRockSnowCopper
+            prob: 0.019
+            orGroup: rock
+          - id: WallRockSnowGold
+            prob: 0.012
+            orGroup: rock
+          - id: WallRockSnowSilver
+            prob: 0.012
+            orGroup: rock
+          - id: WallRockSnowTungsten
+            prob: 0.01
+            orGroup: rock
+          - id: WallRockSnowArtifactFragment
+            prob: 0.002
+            orGroup: rock
           - id: RandomArtifactSpawner20
-            prob: 0.001
+            prob: 0.0015
             orGroup: rock
           - id: SnowElementalSpawner
             prob: 0.009
             orGroup: rock
-          - id: WallRockSnow
-            prob: 0.5
-            orGroup: rock
-          - id: WallRockSnowArtifactFragment
-            prob: 0.0009
-            orGroup: rock
-          - id: WallRockSnowCoal
-            prob: 0.01
-            orGroup: rock
-          - id: WallRockSnowPlasma
-            prob: 0.006
-            orGroup: rock
-          - id: WallRockSnowUranium
-            prob: 0.003
-            orGroup: rock
-          - id: WallRockSnowTin
-            prob: 0.01
-            orGroup: rock
-          - id: WallRockSnowGold
-            prob: 0.009
-            orGroup: rock
-          - id: WallRockSnowSilver
-            prob: 0.009
-            orGroup: rock
-          - id: WallRockSnowTungsten # TODO: MAKE SNOW WALL VERSION
-            prob: 0.01 # TODO: CHANGEME
-            orGroup: rock
-          - id: WallRockSnowCopper # TODO: MAKE SNOW WALL VERSION
-            prob: 0.001 # TODO: CHANGEME
-            orGroup: rock
+      # Ratgore End
     - type: IFF
       flags: HideLabel
       color: "#d6fffc"
@@ -826,50 +844,55 @@
       guaranteedSpawns:
         FloorChromite:
         - FuelSeepAme
+      # Ratgore Start - the crater belt runs on these; upstream shipped them at ~6% ore
+      # per tile with an 11% golem/crab roll on top, so a "rich" purple rock mined out
+      # barren. Ore is now ~34% of a tile roll and the elemental spawner is a hazard
+      # rather than the most common thing in the asteroid.
       entries:
         FloorChromite:
           - id: RandomArtifactSpawner20
-            prob: 0.009
+            prob: 0.006
             orGroup: rock
           - id: ChromiteElementalSpawner
-            prob: 0.09
+            prob: 0.028
             orGroup: rock
           - id: WallRockChromite
             prob: 0.65
             orGroup: rock
-          - id: WallRockChromiteUranium
-            prob: 0.00095
+          - id: WallRockChromiteTin
+            prob: 0.09
+            orGroup: rock
+          - id: WallRockChromiteCoal
+            prob: 0.075
+            orGroup: rock
+          - id: WallRockChromiteQuartz
+            prob: 0.065
+            orGroup: rock
+          - id: WallRockChromiteCopper
+            prob: 0.055
+            orGroup: rock
+          - id: WallRockChromiteTungsten
+            prob: 0.03
             orGroup: rock
           - id: WallRockChromitePlasma
-            prob: 0.00095
+            prob: 0.018
             orGroup: rock
-          - id: WallRockChromiteTin
-            prob: 0.034
+          - id: WallRockChromiteUranium
+            prob: 0.014
+            orGroup: rock
+          - id: WallRockChromiteGold
+            prob: 0.006
+            orGroup: rock
+          - id: WallRockChromiteSilver
+            prob: 0.006
             orGroup: rock
           - id: WallRockChromiteArtifactFragment
             prob: 0.005
             orGroup: rock
-          - id: WallRockChromiteGold
-            prob: 0.001
-            orGroup: rock
-          - id: WallRockChromiteQuartz
-            prob: 0.0034
-            orGroup: rock
-          - id: WallRockChromiteCoal
-            prob: 0.0034
-            orGroup: rock
-          - id: WallRockChromiteSilver
-            prob: 0.001
-            orGroup: rock
-          - id: WallRockChromiteTungsten
-            prob: 0.001 # TODO: CHANGEME
-            orGroup: rock
-          - id: WallRockChromiteCopper
-            prob: 0.001 # TODO: CHANGEME
-            orGroup: rock
           - id: FuelSeepAme
-            prob: 0.004
+            prob: 0.006
             orGroup: rock
+      # Ratgore End
     - type: IFF
       flags: HideLabel
       color: "#8178cc"
@@ -988,50 +1011,55 @@
       radius: 6
       floorPlacements: 16
     - type: SimpleFloorPlanPopulator
+      # Ratgore Start - solid rock was already the densest ore at 39%, so it only needed
+      # its dead precious tail fixed (gold/silver were 0.09%). Ore 39% -> 44%, best gold,
+      # silver and salt of the four, and the elemental rate is trimmed 8% -> 6% so it is
+      # still the most dangerous rock to mine without being a mob farm.
       entries:
         FloorAsteroidSand:
+          - id: AsteroidRock
+            prob: 0.57
+            orGroup: rock
+          - id: AsteroidRockCopper
+            prob: 0.1
+            orGroup: rock
+          - id: AsteroidRockCoal
+            prob: 0.095
+            orGroup: rock
+          - id: AsteroidRockTin
+            prob: 0.095
+            orGroup: rock
+          - id: AsteroidRockQuartz
+            prob: 0.095
+            orGroup: rock
+          - id: AsteroidRockElementalSpawner
+            prob: 0.06
+            orGroup: rock
+          - id: AsteroidRockSalt
+            prob: 0.028
+            orGroup: rock
+          - id: AsteroidRockGold
+            prob: 0.025
+            orGroup: rock
+          - id: AsteroidRockSilver
+            prob: 0.025
+            orGroup: rock
+          - id: AsteroidRockTungsten
+            prob: 0.016
+            orGroup: rock
+          - id: AsteroidRockPlasma
+            prob: 0.011
+            orGroup: rock
+          - id: AsteroidRockUranium
+            prob: 0.011
+            orGroup: rock
           - id: RandomArtifactSpawner20
             prob: 0.01
             orGroup: rock
-          - id: AsteroidRockElementalSpawner
-            prob: 0.08
-            orGroup: rock
-          - id: AsteroidRock
-            prob: 0.7
-            orGroup: rock
-          - id: AsteroidRockCoal
-            prob: 0.09
-            orGroup: rock
-          - id: AsteroidRockTin
-            prob: 0.09
-            orGroup: rock
-          - id: AsteroidRockQuartz
-            prob: 0.09
-            orGroup: rock
-          - id: AsteroidRockSalt
-            prob: 0.009
-            orGroup: rock
-          - id: AsteroidRockGold
-            prob: 0.001
-            orGroup: rock
-          - id: AsteroidRockSilver
-            prob: 0.001
-            orGroup: rock
-          - id: AsteroidRockPlasma
-            prob: 0.0009
-            orGroup: rock
-          - id: AsteroidRockUranium
-            prob: 0.0009
-            orGroup: rock
           - id: AsteroidRockArtifactFragment
-            prob: 0.0004
+            prob: 0.004
             orGroup: rock
-          - id: AsteroidRockTungsten # TODO: MAKE ASTEROID VARIANT
-            prob: 0.001 # TODO: CHANGEME
-            orGroup: rock
-          - id: AsteroidRockCopper # TODO: MAKE ASTEROID VARIANT
-            prob: 0.1 # TODO: CHANGEME
-            orGroup: rock
+      # Ratgore End
     - type: IFF
       flags: HideLabel
       color: "#BF8C5C"

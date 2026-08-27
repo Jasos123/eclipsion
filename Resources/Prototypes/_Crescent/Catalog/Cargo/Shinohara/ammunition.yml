@@ -234,7 +234,7 @@
     sprite: _Crescent/Objects/Weapons/Ammunition/Casings/hammerhead_rocket.rsi
     state: hammer
   product: Crate65mmHammerheadRocket
-  cost: 4500
+  cost: 5000
   category: cargoproduct-category-name-shuttle
   group: shinohara
 
@@ -244,7 +244,7 @@
     sprite: _Crescent/Objects/Weapons/Ammunition/Casings/40mm_grenade.rsi
     state: frag
   product: Crate40mmGrenadeAP
-  cost: 4000
+  cost: 5000
   category: cargoproduct-category-name-shuttle
   group: shinohara
 
@@ -254,7 +254,7 @@
     sprite: _Crescent/Objects/Weapons/Ammunition/Casings/40mm_grenade.rsi
     state: hedp
   product: Crate40mmGrenadeAT
-  cost: 6000
+  cost: 5000
   category: cargoproduct-category-name-shuttle
   group: shinohara
 
@@ -264,7 +264,7 @@
     sprite: _Crescent/Objects/Weapons/Ammunition/Casings/40mm_grenade.rsi
     state: smoke
   product: Crate40mmGrenadeSup
-  cost: 2000
+  cost: 5000
   category: cargoproduct-category-name-shuttle
   group: shinohara
 
@@ -274,6 +274,6 @@
     sprite: _Crescent/Objects/Weapons/Ammunition/Casings/40mm_grenade.rsi
     state: thermo
   product: Crate40mmGrenadeAS
-  cost: 4000
+  cost: 5000
   category: cargoproduct-category-name-shuttle
   group: shinohara

@@ -161,13 +161,15 @@ faction-victory-shi = SHI VICTORY — INFRASTRUCTURE BECOMES LEVERAGE. Credit, l
 
 faction-victory-tfsc = TFCF VICTORY — THE INDEPENDENT MARKET HOLDS. Four distinct member organizations act together where the Administrator's Federation mandate applies.
 
+faction-victory-tap = TAP VICTORY — THE OLD CLAIMS ENDURE. The tribes keep their sanctuary and the void beyond it answers to no foreign throne.
+
 faction-victory-timeout = No one won. The wars ground on, the banners kept falling, and no flag secured Taypan. Another Turning renewed exposed fields, erased temporary gains, and made the frontier profitable enough to fight over again.
 
 
 # ============================================================================
 # Conquest banners. The capture warning fires the moment a station's last banner
-# falls to the enemy; the obituary fires once the banners have been held long
-# enough to count the station as lost.
+# falls to the enemy and its shields collapse; the infestation announcement fires
+# once the ten-minute warning expires and the Turning enters the hull.
 # ============================================================================
 
 # Popups shown at the banner itself when it changes hands.
@@ -191,19 +193,25 @@ conquest-flag-examine-grace = [color=gray]The claim has not settled — { $secon
 conquest-flag-examine-hint = Use it and hold still for { $seconds } seconds to raise your own colours here.
 
 # Sector-wide warning the moment a station's LAST banner is taken and its clock starts.
-faction-station-captured = INCURSION ALERT — { $captor } forces have raised their banners over { $station } ({ $faction }). Every claim aboard her now flies enemy colours. If she is not retaken within { $minutes } minutes, the sector will write her off. Anyone who can reach her, reach her now.
+faction-station-captured = SHIELD FAILURE — { $captor } forces have raised their banners over { $station } ({ $faction }) and the station's outer protection has collapsed. Retake her within { $minutes } minutes. If the shields are not restored, the Turning will breach the hull and claim the station.
 
-faction-station-fall-aurora = DSM Aurora Imperialis is silent. No power, no signal, no answer on any band. Its IFF slowly fades from your shuttle console screen. The Imperials are defeated.
+faction-station-capture-cancelled = CONTAINMENT RESTORED — { $station } ({ $faction }) has been reclaimed before the Turning could enter the hull. Its outer protection is coming back online.
 
-faction-station-fall-balreska = NCWL Nova Balreska is silent. The foundries are cold and nothing answers the hail. Its IFF slowly fades from your shuttle console screen. The Communards are defeated.
+faction-station-fall-aurora = TURNING BREACH — DSM Aurora Imperialis has been overrun. Flesh is spreading through the hull and sections of the station are beginning to disappear. The station remains as an infested ruin. The Imperials are defeated.
 
-faction-station-fall-tatsumoto = SHI Tatsumoto is silent. The shipyard is dark and every account with it. Its IFF slowly fades from your shuttle console screen. Shinohara is defeated.
+faction-station-fall-balreska = TURNING BREACH — NCWL Nova Balreska has been overrun. Flesh is spreading through the foundries and sections of the station are beginning to disappear. The station remains as an infested ruin. The Communards are defeated.
 
-faction-station-fall-jackal = GSC Jackal is silent. Whatever the Federation was arguing about, it has stopped. Its IFF slowly fades from your shuttle console screen. The TFCF is defeated.
+faction-station-fall-tatsumoto = TURNING BREACH — SHI Tatsumoto has been overrun. Aberrant growth is spreading through the shipyard and sections of the station are beginning to disappear. The station remains as an infested ruin. Shinohara is defeated.
 
-faction-station-fall-freeport = The Freeport is silent. The docks are dark, the vault is open and the ledgers answer to nobody. Its IFF slowly fades from your shuttle console screen. The TFCF is defeated.
+faction-station-fall-jackal = TURNING BREACH — GSC Jackal has been overrun. Aberrant flesh is consuming the hull and sections of the station are beginning to disappear. The station remains as an infested ruin. The TFCF is defeated.
 
-faction-station-fall-gliess = Gliess is silent. The docks are dark, the spacers lay murdered, the minutemen are in tatters. Its IFF slowly fades from your shuttle console screen. The CMM is defeated.
+faction-station-fall-freeport = TURNING BREACH — The Freeport has been overrun. Flesh is spreading across the docks and sections of the station are beginning to disappear. The station remains as an infested ruin. The TFCF is defeated.
+
+faction-station-fall-gliess = TURNING BREACH — Gliess Santo has been overrun. Aberrant growth is spreading through its streets and sections of the station are beginning to disappear. The station remains as an infested ruin. The CMM is defeated.
+
+faction-station-fall-tribal-hideout = TURNING BREACH — The Tribal Hideout has been overrun. Its old paths are filling with aberrant flesh and parts of the sanctuary are beginning to disappear. The station remains as an infested ruin. The TAP tribes have lost their sanctuary.
+
+faction-station-fall-aasim = TURNING BREACH — Qiwa Aasim has been overrun. Its halls are filling with aberrant flesh and parts of the stronghold are beginning to disappear. The station remains as an infested ruin. The TAP tribes have lost their stronghold.
 
 # Both great powers have fallen. Deliberately names nobody — the remaining forces are still scrapping over it.
 faction-victory-minors = The great powers are gone. Their thrones are cold, their fleets are scrap, and there is nobody left to give orders to Taypan. Only the remaining forces are still out there, still fighting over what is left of the sector — and now there is nothing above them to answer to. The age of empires in Taypan is over. Whatever comes next belongs to whoever is still standing when the shooting stops.

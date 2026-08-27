@@ -47,7 +47,8 @@ public sealed partial class FactionConquestRuleComponent : Component
 
     /// <summary>
     /// Grace window between the war looking settled and the round actually ending, so the factions still standing
-    /// get one last chance to move — reclaim a fallen station's banners and the pending victory is called off.
+    /// get one last chance to move. This is separate from <see cref="HoldToFall"/>: after that capture warning
+    /// expires and infestation starts, the fallen station cannot be reclaimed.
     /// </summary>
     [DataField]
     public TimeSpan VictoryDelay = TimeSpan.FromMinutes(20);
@@ -71,13 +72,17 @@ public sealed partial class FactionConquestRuleComponent : Component
     [DataField]
     public string PendingAnnouncement = "faction-victory-pending";
 
-    /// <summary>Broadcast when a pending victory is called off (a station's banners were reclaimed).</summary>
+    /// <summary>Broadcast when a pending victory is called off because the surviving-station or alliance state changed.</summary>
     [DataField]
     public string PendingCancelledAnnouncement = "faction-victory-cancelled";
 
     /// <summary>Broadcast the moment a station's last banner falls to the enemy, opening its <see cref="HoldToFall"/> clock.</summary>
     [DataField]
     public string ControlAnnouncement = "faction-station-captured";
+
+    /// <summary>Broadcast when defenders retake a station during the Turning warning window.</summary>
+    [DataField]
+    public string ControlCancelledAnnouncement = "faction-station-capture-cancelled";
 
     /// <summary>When the next evaluation is due.</summary>
     [ViewVariables]
@@ -90,6 +95,17 @@ public sealed partial class FactionConquestRuleComponent : Component
     /// <summary>Stations whose capture warning has gone out. Cleared when reclaimed, so a second capture warns again.</summary>
     [ViewVariables]
     public HashSet<EntityUid> AnnouncedControl = new();
+
+    /// <summary>
+    /// Stations whose projectile shield marker was removed when their last banner fell. Only entries recorded here
+    /// are restored on a successful defence, so a station that never had protection does not gain it by accident.
+    /// </summary>
+    [ViewVariables]
+    public HashSet<EntityUid> DisabledShields = new();
+
+    /// <summary>Station grid -> the real shield emitters forced offline by that station's capture warning.</summary>
+    [ViewVariables]
+    public Dictionary<EntityUid, HashSet<EntityUid>> DisabledShieldEmitters = new();
 
     /// <summary>Stations whose fall has already been broadcast, so it is announced once.</summary>
     [ViewVariables]

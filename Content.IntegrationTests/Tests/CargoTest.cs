@@ -6,6 +6,7 @@ using Content.Server.Cargo.Systems;
 using Content.Server.Nutrition.Components;
 using Content.Server.Nutrition.EntitySystems;
 using Content.Shared.Cargo.Prototypes;
+using Content.Shared.Crescent.Dispenser;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Stacks;
 using Content.Shared.Tag;
@@ -26,6 +27,36 @@ public sealed class CargoTest
     ];
 
     [Test]
+    public async Task CargoTurnInChutesDoNotDispenseTradeDeeds()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        var prototypeManager = server.ResolveDependency<IPrototypeManager>();
+        var componentFactory = server.ResolveDependency<IComponentFactory>();
+
+        await server.WaitAssertion(() =>
+        {
+            foreach (var prototype in prototypeManager.EnumeratePrototypes<EntityPrototype>())
+            {
+                if (!prototype.TryGetComponent<DispenserComponent>(out var dispenser, componentFactory)
+                    || dispenser.DefaultItem != "TradeDeedStub")
+                {
+                    continue;
+                }
+
+                foreach (var (input, output) in dispenser.Inventory)
+                {
+                    Assert.That(output, Does.Not.StartWith("TradeDeed"),
+                        $"Cargo turn-in chute {prototype.ID} still exchanges {input} for legacy deed {output}.");
+                }
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task NoCargoOrderArbitrage()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -39,7 +70,7 @@ public sealed class CargoTest
 
         await server.WaitAssertion(() =>
         {
-            Assert.Multiple(() =>
+            using (Assert.EnterMultipleScope())
             {
                 foreach (var proto in protoManager.EnumeratePrototypes<CargoProductPrototype>())
                 {
@@ -52,7 +83,7 @@ public sealed class CargoTest
                     Assert.That(price, Is.AtMost(proto.Cost), $"Found arbitrage on {proto.ID} cargo product! Cost is {proto.Cost} but sell is {price}!");
                     entManager.DeleteEntity(ent);
                 }
-            });
+            }
         });
 
         await pair.CleanReturnAsync();
@@ -76,7 +107,7 @@ public sealed class CargoTest
         {
             var mapId = testMap.MapId;
 
-            Assert.Multiple(() =>
+            using (Assert.EnterMultipleScope())
             {
                 foreach (var proto in protoManager.EnumeratePrototypes<CargoProductPrototype>())
                 {
@@ -90,7 +121,7 @@ public sealed class CargoTest
 
                     entManager.DeleteEntity(ent);
                 }
-            });
+            }
 
             mapManager.DeleteMap(mapId);
         });
@@ -140,7 +171,7 @@ public sealed class CargoTest
                 {
                     if (entManager.TryGetComponent<StaticPriceComponent>(ent, out var staticpricecomp))
                     {
-                        Assert.That(staticpricecomp.Price, Is.EqualTo(0),
+                        Assert.That(staticpricecomp.Price, Is.Zero,
                             $"The prototype {proto} has a StackPriceComponent and StaticPriceComponent whose values are not compatible with each other.");
                     }
                 }
@@ -149,7 +180,7 @@ public sealed class CargoTest
                 {
                     if (entManager.TryGetComponent<StaticPriceComponent>(ent, out var staticpricecomp))
                     {
-                        Assert.That(staticpricecomp.Price, Is.EqualTo(0),
+                        Assert.That(staticpricecomp.Price, Is.Zero,
                             $"The prototype {proto} has a StackComponent and StaticPriceComponent whose values are not compatible with each other.");
                     }
                 }

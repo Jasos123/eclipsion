@@ -1,3 +1,5 @@
+using Robust.Shared.GameStates;
+
 namespace Content.Shared._Crescent.Corpses;
 
 /// <summary>
@@ -14,7 +16,7 @@ namespace Content.Shared._Crescent.Corpses;
 /// Authoring this component on a mob prototype is optional and only changes the numbers; the system
 /// applies its own defaults to every mob that dies without one.
 /// </remarks>
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CorpseWeightComponent : Component
 {
     /// <summary>
@@ -42,10 +44,20 @@ public sealed partial class CorpseWeightComponent : Component
     [DataField]
     public float ThrowSpeedMultiplier = 0.3f;
 
+    /// <summary>
+    /// Movement speed multipliers applied to somebody dragging this corpse. Sprinting is penalized more
+    /// heavily than walking so moving a body remains practical, but is no longer almost free.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float DragWalkSpeedMultiplier = 0.75f;
+
+    [DataField, AutoNetworkedField]
+    public float DragSprintSpeedMultiplier = 0.6f;
+
     // --- Runtime state (not authored in YAML) -----------------------------
 
     /// <summary>Whether the damping below is currently installed on the body.</summary>
-    [ViewVariables]
+    [ViewVariables, AutoNetworkedField]
     public bool Applied;
 
     /// <summary>The body's own linear damping, saved so a revived mob gets its physics back untouched.</summary>

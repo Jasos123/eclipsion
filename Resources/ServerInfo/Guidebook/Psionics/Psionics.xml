@@ -17,7 +17,9 @@ Using powers contributes to local Glimmer. Greater Amplification generally produ
 
 Characters with a caster trait possess a psionic skill tree. Most begin at psionic level 1 with one development point. Use the [bold]Psionic Development[/bold] action to inspect the tree and unlock a power. Unlocking an active power adds its own button to the action bar.
 
-Latent Psychics can inspect all five primary disciplines: Fire, Veil, Life, Mind, and Kinetic. The first root they unlock becomes their permanent primary discipline and locks the other four. Specialist traits expose only their associated discipline. Each later node requires the preceding node, the listed psionic level, and a development point.
+Latent Psychics can inspect all six primary disciplines: Fire, Veil, Life, Mind, Kinetic, and Defense. The first root they unlock becomes their permanent primary discipline and locks the other five. Specialist traits expose only their associated discipline. Each later node requires the preceding node, the listed psionic level, and a development point.
+
+[color=#a4885c]Recurrence[/color] is a separate advanced branch and is not a primary discipline, so choosing one does not lock it. Its first node needs psionic level 2, and the branch runs Stasis Field, Reweave, and Recurrence Pulse.
 
 Naturals are rare individuals with an innate telepathic voice. Not every psionic entity has telepathy, and an apparently human voice is no proof of identity.
 

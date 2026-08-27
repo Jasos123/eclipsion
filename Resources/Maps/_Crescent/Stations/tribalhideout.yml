@@ -17984,7 +17984,7 @@ entities:
       parent: 3
     - type: InstantAction
       container: 3
-- proto: AirlockCommandArabet
+- proto: AirlockCommandFamilies
   entities:
   - uid: 9
     components:
@@ -18030,7 +18030,7 @@ entities:
       parent: 1
       rot: -1.5707963267948966 rad
       pos: 6.5,-1.5
-- proto: AirlockCommandLockedFamiliesHorizontalArabet
+- proto: AirlockCommandLockedFamiliesHorizontalFamilies
   entities:
   - uid: 16
     components:
@@ -18079,7 +18079,7 @@ entities:
       parent: 1
       rot: -1.5707963267948966 rad
       pos: 1.5,-5.5
-- proto: AirlockCommandLockedFamiliesHorizontalIzdari
+- proto: AirlockCommandLockedFamiliesHorizontalFamilies
   entities:
   - uid: 24
     components:
@@ -18087,7 +18087,7 @@ entities:
       parent: 1
       rot: -1.5707963267948966 rad
       pos: 2.5,-10.5
-- proto: AirlockCommandLockedFamiliesHorizontalThukker
+- proto: AirlockCommandLockedFamiliesHorizontalFamilies
   entities:
   - uid: 25
     components:
@@ -18097,7 +18097,7 @@ entities:
     - type: DeviceLinkSource
       lastSignals:
         DoorStatus: True
-- proto: AirlockCommandServile
+- proto: AirlockCommandFamilies
   entities:
   - uid: 26
     components:
@@ -18105,7 +18105,7 @@ entities:
       parent: 1
       rot: -1.5707963267948966 rad
       pos: 7.5,-4.5
-- proto: AirlockCommandThukker
+- proto: AirlockCommandFamilies
   entities:
   - uid: 27
     components:
@@ -18325,8 +18325,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 10.5,1.5
-    - type: MaterialSiloUtilizer
-      silo: invalid
 - proto: BackgammonBoard
   entities:
   - uid: 65
@@ -22295,6 +22293,13 @@ entities:
           occludes: True
     - type: Physics
       canCollide: False
+- proto: ConquestFlagTAP
+  entities:
+  - uid: 1687
+    components:
+    - type: Transform
+      parent: 1
+      pos: -5.5,4.5
 - proto: ConveyorBelt
   entities:
   - uid: 817

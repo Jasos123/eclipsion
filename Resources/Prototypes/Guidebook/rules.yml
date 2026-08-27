@@ -5,7 +5,7 @@
 
 - type: guideEntry
   id: HullrotRuleset
-  name: Hullrot
+  name: "Hullrot: Eclipsion"
   text: "/ServerInfo/_Crescent/ServerRules/HullrotRuleset.xml"
   children:
   - GettingStarted
@@ -21,7 +21,7 @@
 
 - type: guideEntry
   id: GettingStarted
-  name: Start Here - Your First Round
+  name: "Start Here: Your First Round"
   text: "/ServerInfo/_Crescent/Guidebook/GettingStarted.xml"
   priority: 0
 

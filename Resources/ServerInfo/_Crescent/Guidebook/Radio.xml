@@ -7,18 +7,19 @@ You can only transmit on channels installed in your headset. If a prefix does no
 
 [head=3][color=#e8b04b]Common and civilian channels[/color][/head]
 
-- [bold]Common[/bold] uses [color=#6ab7d6];[/color]. It is useful for nearby civilian coordination but may be heard by many factions.
-- [bold]Traffic[/bold] uses [color=#6ab7d6]:d[/color] on headsets that carry the traffic channel.
-- Gliess Santo staff use [color=#6ab7d6]:s[/color] for their protected service channel; ordinary visitors should use Common unless directed otherwise.
-- The Taypani-Atyrian Pact / Families channel uses [color=#6ab7d6]:4[/color].
+- [bold]Common[/bold] uses [color=#6ab7d6];[/color] and appears in chat as [bold]Longwave 2.5km[/bold]. It is useful for nearby civilian coordination but may be heard by many factions.
+- [bold]Traffic[/bold] uses [color=#6ab7d6]:d[/color] and appears as [bold]Shortwave 500m[/bold]. It is short-ranged and carried by far fewer headsets.
+- Gliess Santo and Colonial Minutemen roles use [color=#6ab7d6]:s[/color], shown as [bold]Gliessian Sheriffs[/bold]. Their headset also carries Traffic. Visitors without that headset use Common unless directed otherwise.
+- The Taypani-Atyrian Pact channel, [bold]The Atyrian Pact[/bold], uses [color=#6ab7d6]:4[/color].
 
 [head=3][color=#e8b04b]Faction channels[/color][/head]
 
 - [color=#684871]DSM[/color]: Imperial command [color=#6ab7d6]:i[/color]; Imperial civilian [color=#6ab7d6]:j[/color].
 - [color=#bf4d00]NCWL[/color]: faction [color=#6ab7d6]:o[/color]; command [color=#6ab7d6]:h[/color].
 - [color=#535961]SHI[/color]: corporate [color=#6ab7d6]:w[/color].
-- [color=#ff7f7f]TFCF[/color]: Federation-wide [color=#6ab7d6]:t[/color]; command [color=#6ab7d6]:7[/color].
+- [color=#ff7f7f]TFCF[/color]: Federation-wide [color=#6ab7d6]:t[/color] (still labelled [bold]Syndicate[/bold] in chat); command [color=#6ab7d6]:7[/color] ([bold]TFCF Command[/bold]).
 - TFCF company channels: Gorlex [color=#6ab7d6]:p[/color], Cyberdawn [color=#6ab7d6]:2[/color], Interdyne [color=#6ab7d6]:3[/color], and SAW [color=#6ab7d6]:x[/color].
+- [color=#8b1a1a]Saint's Militia[/color]: the hunt channel [color=#6ab7d6]:a[/color], shown as [bold]Saint's Militia Hunt[/bold]. Only the Militia's midround spawns carry it.
 
 [head=3][color=#e8b04b]Radio discipline[/color][/head]
 

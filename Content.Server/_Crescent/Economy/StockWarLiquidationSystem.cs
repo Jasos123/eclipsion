@@ -97,6 +97,22 @@ public sealed class StockWarLiquidationSystem : EntitySystem
     }
 
     /// <summary>
+    /// Whether a trader may voluntarily buy or sell a company's shares. Neutral companies and traders
+    /// without a faction are unrestricted; members of a faction cannot trade a company whose faction is
+    /// currently at war with theirs.
+    /// </summary>
+    public bool CanTradeStock(EntityUid trader, string companyId)
+    {
+        if (!TryComp<HullrotFactionComponent>(trader, out var member) || string.IsNullOrEmpty(member.Faction))
+            return true;
+
+        if (!FactionStockCompanies.TryGetFaction(companyId, out var companyFaction))
+            return true;
+
+        return !AtWar(member.Faction, companyFaction);
+    }
+
+    /// <summary>
     /// War from either table counts. The console one is what players declare between themselves; the IFF
     /// one is what admins set and the only place some factions (TFSC) exist at all.
     /// </summary>
