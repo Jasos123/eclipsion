@@ -6,7 +6,6 @@ using Content.Shared.Rejuvenate;
 using Content.Shared.StatusIcon;
 using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Content.Shared.Mood;
@@ -20,7 +19,6 @@ public sealed class ThirstSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly AlertsSystem _alerts = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
     [Dependency] private readonly SharedJetpackSystem _jetpack = default!;
@@ -54,13 +52,10 @@ public sealed class ThirstSystem : EntitySystem
 
     private void OnMapInit(EntityUid uid, ThirstComponent component, MapInitEvent args)
     {
-        // Do not change behavior unless starting value is explicitly defined
+        // Preserve explicitly configured starting values.
         if (component.CurrentThirst < 0)
-        {
-            component.CurrentThirst = _random.Next(
-                (int) component.ThirstThresholds[ThirstThreshold.Thirsty] + 10,
-                (int) component.ThirstThresholds[ThirstThreshold.Okay] - 1);
-        }
+            component.CurrentThirst = component.ThirstThresholds[ThirstThreshold.Okay];
+
         component.NextUpdateTime = _timing.CurTime;
         component.CurrentThirstThreshold = GetThirstThreshold(component, component.CurrentThirst);
         component.LastThirstThreshold = ThirstThreshold.Okay; // TODO: Potentially change this -> Used Okay because no effects.

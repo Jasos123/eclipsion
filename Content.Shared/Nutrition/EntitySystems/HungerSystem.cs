@@ -9,7 +9,6 @@ using Content.Shared.StatusIcon;
 using Robust.Shared.Prototypes;
 using Content.Shared.Mood;
 using Robust.Shared.Network;
-using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Robust.Shared.Configuration;
@@ -21,7 +20,6 @@ public sealed class HungerSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly AlertsSystem _alerts = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
@@ -59,10 +57,10 @@ public sealed class HungerSystem : EntitySystem
 
     private void OnMapInit(EntityUid uid, HungerComponent component, MapInitEvent args)
     {
-        var amount = _random.Next(
-            (int) component.Thresholds[HungerThreshold.Peckish] + 10,
-            (int) component.Thresholds[HungerThreshold.Okay]);
-        SetHunger(uid, amount, component);
+        if (component.CurrentHunger < 0)
+            component.CurrentHunger = component.Thresholds[HungerThreshold.Okay];
+
+        SetHunger(uid, component.CurrentHunger, component);
     }
 
     private void OnShutdown(EntityUid uid, HungerComponent component, ComponentShutdown args)

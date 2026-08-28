@@ -189,6 +189,8 @@
     - MatterBinStockPart
     - CapacitorStockPart
     - ConveyorBeltAssembly
+    - AirlockShuttleFlatpack
+    - AirlockGlassShuttleFlatpack
     - IntercomElectronics
     - FirelockElectronics
     - DoorElectronics

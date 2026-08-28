@@ -989,7 +989,7 @@ Entries:
       type: Fix
     - message: Saturation launchers stop shooting themselves down. Rockets fired from the same ship pass through one another instead of detonating on the shot in front, which made the 48mm Shortbow and the 30mm Pila destroy most of their own salvo at the muzzle.
       type: Fix
-    - message: Magboots and jetpacks now cut each other out. Turning the magnets on kills the thrusters and lighting the thrusters releases the magnets, so magboots no longer sit there doing nothing because a jetpack you forgot about is keeping you weightless.
+    - message: Magboots and jetpacks can now stay enabled together. While the magnets are attached to a grid the jetpack waits without producing thrust or consuming fuel, then automatically resumes as soon as its wearer moves into open space. Active magboots also limit their wearer to walking speed, even under gravity.
       type: Fix
     - message: Shields no longer risk taking the server down when they stop a shot. Deflected rounds are cleaned up a moment after the impact rather than in the middle of the physics step, and the round still stops dead the instant it touches the shield.
       type: Fix

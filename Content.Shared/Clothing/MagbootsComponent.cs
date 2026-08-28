@@ -58,3 +58,9 @@ public sealed partial class MagbootsComponent : Component
     [DataField]
     public float InactiveSprintModifier = 1f;
 }
+
+/// <summary>
+/// Added to a wearer while correctly equipped magboots are active.
+/// </summary>
+[RegisterComponent, NetworkedComponent]
+public sealed partial class MagbootsUserComponent : Component;

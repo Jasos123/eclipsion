@@ -14,10 +14,10 @@ namespace Content.Shared.Nutrition.Components;
 public sealed partial class HungerComponent : Component
 {
     /// <summary>
-    /// The current hunger amount of the entity
+    /// The current hunger amount of the entity. Negative values use the full starting amount on map init.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public float CurrentHunger;
+    public float CurrentHunger = -1f;
 
     /// <summary>
     /// The base amount at which <see cref="CurrentHunger"/> decays.

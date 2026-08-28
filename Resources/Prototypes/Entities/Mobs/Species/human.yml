@@ -6,9 +6,9 @@
   abstract: true
   components:
   - type: Hunger
-    currentHunger: 150
+    currentHunger: 225
   - type: Thirst
-    startingThirst: 450
+    startingThirst: 675
   - type: Icon # It will not have an icon in the adminspawn menu without this. Body parts seem fine for whatever reason.
     sprite: Mobs/Species/Human/parts.rsi
     state: full

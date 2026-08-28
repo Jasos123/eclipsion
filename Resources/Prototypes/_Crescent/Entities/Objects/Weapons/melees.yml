@@ -2,7 +2,7 @@
   name: hunter's vibrokhopesh
   parent: [BaseItem, StreeCredRedeemableHigh]
   id: SRMKhopesh
-  description: A vibro-alloy khopesh issued to veteran Hunters of the SRM. The broad curved blade is built to catch and redirect incoming fire - and in the hands of a skilled wielder, each parried shot builds into the next. Requires both hands to wield. Deflect chance stacks per parry from 65% up to 100%. Decays out of combat.
+  description: A vibro-alloy khopesh issued to veteran Hunters of the SRM. The broad curved blade is built to catch and redirect incoming fire - and in the hands of a skilled wielder, each parried shot builds into the next. Requires both hands to wield. Deflect chance stacks per parry from 55% up to 80%. Decays out of combat.
   components:
   - type: Sharp
   - type: Sprite
@@ -31,9 +31,10 @@
     maxTargets: 4
     meleeStaminaDamage: 10
   - type: Reflect
-    reflectProb: .65
+    reflectProb: .55
     spread: 75
   - type: DeflectMastery
+    maxBonus: .25
   - type: Item
     size: Normal
     shape:
@@ -445,7 +446,7 @@
   name: chengridz jaeger's vibrokukri
   parent: [BaseItem, StreeCredRedeemableHigh]
   id: NCWLKukri
-  description: Taking the shape of a worker's tool, this vibro-alloy kukri was built by Chengridz from stolen Imperial blueprints. Like the khopesh it imitates, each parried shot sharpens the wielder's deflection. Can also be thrown and embeds itself in targets, dealing damage over time. Requires both hands to wield. Deflect chance stacks per parry from 55% up to 90%. Decays out of combat.
+  description: Taking the shape of a worker's tool, this vibro-alloy kukri was built by Chengridz from stolen Imperial blueprints. Like the khopesh it imitates, each parried shot sharpens the wielder's deflection. Can also be thrown and embeds itself in targets, dealing damage over time. Requires both hands to wield. Deflect chance stacks per parry from 55% up to 80%. Decays out of combat.
   components:
   - type: Sharp
   - type: Sprite
@@ -485,6 +486,7 @@
     reflectProb: .55
     spread: 75
   - type: DeflectMastery
+    maxBonus: .25
   - type: Item
     size: Normal
     shape:

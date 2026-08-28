@@ -63,6 +63,8 @@
       - EmergencyRollerBedSpawnFolded
       - CableStack
       - ConveyorBeltAssembly
+      - AirlockShuttleFlatpack
+      - AirlockGlassShuttleFlatpack
       - DoorElectronics
       - StationMapElectronics
       - CellRechargerCircuitboard

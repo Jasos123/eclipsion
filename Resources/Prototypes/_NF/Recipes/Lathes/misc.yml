@@ -1,5 +1,30 @@
 
-# Salvage Techfab
+# Autolathe / Salvage Techfab
+- type: latheRecipe
+  id: AirlockShuttleFlatpack
+  result: AirlockShuttleFlatpack
+  category: Parts
+  completetime: 10
+  materials:
+    Plasteel: 400
+    Silver: 200
+    Copper: 200
+    Steel: 150
+    Plastic: 300
+
+- type: latheRecipe
+  id: AirlockGlassShuttleFlatpack
+  result: AirlockGlassShuttleFlatpack
+  category: Parts
+  completetime: 10
+  materials:
+    Plasteel: 400
+    Silver: 200
+    Copper: 200
+    Steel: 150
+    Plastic: 300
+    ReinforcedGlass: 200
+
 - type: latheRecipe
   id: RadioHandheld
   result: RadioHandheld

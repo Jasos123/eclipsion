@@ -28,6 +28,9 @@ public sealed class JetpackSystem : SharedJetpackSystem
 
         while (query.MoveNext(out var uid, out var active, out var comp, out var gasTankComp))
         {
+            if (!IsProvidingThrust(uid))
+                continue;
+
             if (_timing.CurTime < active.TargetTime)
                 continue;
 

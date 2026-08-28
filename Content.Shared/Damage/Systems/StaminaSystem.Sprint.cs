@@ -1,4 +1,5 @@
 using Content.Shared.Damage.Components;
+using Content.Shared.Clothing;
 using Content.Shared.Gravity;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Events;
@@ -25,7 +26,10 @@ public sealed partial class StaminaSystem
         var sprinting = args.Entity.Comp.Sprinting && args.HasDirectionalMovement;
 
         // Sprinting without traction uses walk speed and should not drain stamina.
-        SetSprintDrain(entity, sprinting && _gravity.HasTraction(entity.Owner));
+        SetSprintDrain(entity,
+            sprinting &&
+            _gravity.HasTraction(entity.Owner) &&
+            !HasComp<MagbootsUserComponent>(entity.Owner));
     }
 
     /// <summary>
@@ -42,7 +46,10 @@ public sealed partial class StaminaSystem
             if (!sprinting && !stamina.SprintDraining)
                 continue;
 
-            SetSprintDrain((uid, stamina), sprinting && _gravity.HasTraction(uid));
+            SetSprintDrain((uid, stamina),
+                sprinting &&
+                _gravity.HasTraction(uid) &&
+                !HasComp<MagbootsUserComponent>(uid));
         }
     }
 

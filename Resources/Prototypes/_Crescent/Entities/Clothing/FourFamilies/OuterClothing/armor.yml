@@ -39,9 +39,6 @@
       - ClothingOuterHardsuitDraugr
       - ClothingOuterHardsuitIzdari
       - ClothingOuterHardsuitThukker
-  - type: FootstepModifier
-    footstepSoundCollection:
-      collection: FootstepSilent
 
 - type: entity
   parent: ClothingOuterHardsuitBase
@@ -76,9 +73,6 @@
     clothingPrototype: ClothingHeadHelmetHardsuitArabet
   - type: StaticPrice
     price: 1000
-  - type: FootstepModifier
-    footstepSoundCollection:
-      collection: FootstepSilent
 
 - type: entity
   parent: ClothingOuterHardsuitBase
@@ -119,9 +113,6 @@
       - ClothingOuterHardsuitIzdari
       - ClothingOuterHardsuitThukker
       - ClothingOuterHardsuitDraugr
-  - type: FootstepModifier
-    footstepSoundCollection:
-      collection: FootstepSilent
 
 - type: entity
   parent: ClothingOuterHardsuitBase
@@ -163,9 +154,6 @@
       - ClothingOuterHardsuitThukker
       - ClothingOuterHardsuitIzdari
       - ClothingOuterHardsuitDraugr
-  - type: FootstepModifier
-    footstepSoundCollection:
-      collection: FootstepSilent
 
 
 - type: entity

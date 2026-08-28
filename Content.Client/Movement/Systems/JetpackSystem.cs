@@ -53,6 +53,9 @@ public sealed class JetpackSystem : SharedJetpackSystem
 
         while (query.MoveNext(out var uid, out var comp))
         {
+            if (!IsProvidingThrust(uid))
+                continue;
+
             if (_timing.CurTime < comp.TargetTime)
                 continue;
 

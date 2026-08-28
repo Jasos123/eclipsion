@@ -302,7 +302,7 @@
   - type: Clothing
     sprite: _Crescent/Objects/Weapons/Guns/surplus_ncwl_rifle.rsi
   - type: Gun
-    fireRate: 0.75
+    fireRate: 1.4166667 # 85 RPM
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
@@ -340,7 +340,7 @@
   - type: Clothing
     sprite: _Crescent/Objects/Weapons/Guns/surplus_dsm_rifle.rsi
   - type: Gun
-    fireRate: 0.75
+    fireRate: 1.4166667 # 85 RPM
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto

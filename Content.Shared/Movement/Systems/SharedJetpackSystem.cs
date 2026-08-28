@@ -1,7 +1,9 @@
 using Content.Shared.Actions;
 using Content.Shared.CCVar;
+using Content.Shared.Clothing;
 using Content.Shared.Gravity;
 using Content.Shared.Interaction.Events;
+using Content.Shared.Inventory;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Events;
 using Content.Shared.Popups;
@@ -19,8 +21,10 @@ public abstract class SharedJetpackSystem : EntitySystem
     [Dependency] protected readonly SharedAppearanceSystem Appearance = default!;
     [Dependency] protected readonly SharedContainerSystem Container = default!;
     [Dependency] private readonly SharedMoverController _mover = default!;
+    [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private readonly SharedGravitySystem _gravity = default!;
     [Dependency] private readonly ActionContainerSystem _actionContainer = default!;
     [Dependency] private readonly IConfigurationManager _config = default!;
 
@@ -34,6 +38,7 @@ public abstract class SharedJetpackSystem : EntitySystem
 
         SubscribeLocalEvent<JetpackUserComponent, CanWeightlessMoveEvent>(OnJetpackUserCanWeightless);
         SubscribeLocalEvent<JetpackUserComponent, EntParentChangedMessage>(OnJetpackUserEntParentChanged);
+        SubscribeLocalEvent<JetpackUserComponent, MagbootsStateChangedEvent>(OnMagbootsStateChanged);
 
         SubscribeLocalEvent<GravityChangedEvent>(OnJetpackUserGravityChanged);
         SubscribeLocalEvent<JetpackComponent, MapInitEvent>(OnMapInit);
@@ -53,18 +58,14 @@ public abstract class SharedJetpackSystem : EntitySystem
     private void OnJetpackUserGravityChanged(ref GravityChangedEvent ev)
     {
         var gridUid = ev.ChangedGridIndex;
-        var jetpackQuery = GetEntityQuery<JetpackComponent>();
 
         var query = EntityQueryEnumerator<JetpackUserComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var user, out var transform))
         {
-            if (transform.GridUid == gridUid && ev.HasGravity &&
-                jetpackQuery.TryGetComponent(user.Jetpack, out var jetpack))
-            {
-                _popup.PopupClient(Loc.GetString("jetpack-to-grid"), uid, uid);
+            if (transform.GridUid != gridUid)
+                continue;
 
-                SetEnabled(user.Jetpack, jetpack, false, uid);
-            }
+            RefreshOrDisableUser(uid, user, transform);
         }
     }
 
@@ -80,24 +81,19 @@ public abstract class SharedJetpackSystem : EntitySystem
 
     private void OnJetpackUserEntParentChanged(EntityUid uid, JetpackUserComponent component, ref EntParentChangedMessage args)
     {
-        if (TryComp<JetpackComponent>(component.Jetpack, out var jetpack) &&
-            !CanEnableOnGrid(args.Transform.GridUid))
-        {
-            SetEnabled(component.Jetpack, jetpack, false, uid);
+        RefreshOrDisableUser(uid, component, args.Transform);
+    }
 
-            _popup.PopupClient(Loc.GetString("jetpack-to-grid"), uid, uid);
-        }
+    private void OnMagbootsStateChanged(Entity<JetpackUserComponent> ent, ref MagbootsStateChangedEvent args)
+    {
+        RefreshOrDisableUser(ent.Owner, ent.Comp);
     }
 
     private void SetupUser(EntityUid user, EntityUid jetpackUid)
     {
         var userComp = EnsureComp<JetpackUserComponent>(user);
-        _mover.SetRelay(user, jetpackUid);
-
-        if (TryComp<PhysicsComponent>(user, out var physics))
-            _physics.SetBodyStatus(user, physics, BodyStatus.InAir);
-
         userComp.Jetpack = jetpackUid;
+        RefreshUserMovement(user, userComp);
     }
 
     private void RemoveUser(EntityUid uid)
@@ -111,12 +107,84 @@ public abstract class SharedJetpackSystem : EntitySystem
         RemComp<RelayInputMoverComponent>(uid);
     }
 
+    private void RefreshUserMovement(
+        EntityUid user,
+        JetpackUserComponent? component = null,
+        TransformComponent? xform = null)
+    {
+        if (!Resolve(user, ref component, false))
+            return;
+
+        var suppressed = IsMagbootsGrounded(user, xform);
+        if (suppressed)
+        {
+            if (TryComp<RelayInputMoverComponent>(user, out var relay) &&
+                relay.RelayEntity == component.Jetpack)
+            {
+                RemComp(user, relay);
+            }
+        }
+        else
+        {
+            _mover.SetRelay(user, component.Jetpack);
+        }
+
+        if (TryComp<PhysicsComponent>(user, out var physics))
+        {
+            _physics.SetBodyStatus(user,
+                physics,
+                suppressed ? BodyStatus.OnGround : BodyStatus.InAir);
+        }
+    }
+
+    private void RefreshOrDisableUser(
+        EntityUid user,
+        JetpackUserComponent component,
+        TransformComponent? xform = null)
+    {
+        xform ??= Transform(user);
+        if (CanEnableOnGrid(xform.GridUid) || IsMagbootsGrounded(user, xform))
+        {
+            RefreshUserMovement(user, component, xform);
+            return;
+        }
+
+        if (!TryComp<JetpackComponent>(component.Jetpack, out var jetpack))
+            return;
+
+        _popup.PopupClient(Loc.GetString("jetpack-to-grid"), user, user);
+        SetEnabled(component.Jetpack, jetpack, false, user);
+    }
+
+    private bool IsMagbootsGrounded(EntityUid user, TransformComponent? xform = null)
+    {
+        var onSupportingGrid = _gravity.EntityOnGravitySupportingGridOrMap((user, xform));
+        var enumerator = _inventory.GetSlotEnumerator(user);
+
+        while (enumerator.NextItem(out var item, out var slot))
+        {
+            if (!TryComp<MagbootsComponent>(item, out var magboots) ||
+                !magboots.Active ||
+                magboots.Slot != slot.Name)
+            {
+                continue;
+            }
+
+            if (!magboots.RequiresGrid || onSupportingGrid)
+                return true;
+        }
+
+        return false;
+    }
+
     private void OnJetpackToggle(EntityUid uid, JetpackComponent component, ToggleJetpackEvent args)
     {
         if (args.Handled)
             return;
 
-        if (TryComp<TransformComponent>(uid, out var xform) && !CanEnableOnGrid(xform.GridUid))
+        if (TryComp<TransformComponent>(uid, out var xform) &&
+            !CanEnableOnGrid(xform.GridUid) &&
+            !IsMagbootsGrounded(args.Performer))
         {
             _popup.PopupClient(Loc.GetString("jetpack-no-station"), uid, args.Performer);
 
@@ -185,6 +253,23 @@ public abstract class SharedJetpackSystem : EntitySystem
     public bool IsUserFlying(EntityUid uid)
     {
         return HasComp<JetpackUserComponent>(uid);
+    }
+
+    /// <summary>
+    /// Returns whether an enabled jetpack is currently providing thrust rather than
+    /// waiting for its user's magboots to release from a grid.
+    /// </summary>
+    public bool IsProvidingThrust(EntityUid uid)
+    {
+        if (!Container.TryGetContainingContainer((uid, null, null), out var container) ||
+            !TryComp<JetpackUserComponent>(container.Owner, out var user) ||
+            user.Jetpack != uid ||
+            !TryComp<RelayInputMoverComponent>(container.Owner, out var relay))
+        {
+            return false;
+        }
+
+        return relay.RelayEntity == uid;
     }
 
     protected virtual bool CanEnable(EntityUid uid, JetpackComponent component)
