@@ -1,8 +1,10 @@
 using System.Numerics;
+using Content.Server.Mech.Systems;
 using Content.Server.NPC;
 using Content.Server.NPC.HTN;
 using Content.Server.NPC.Systems;
 using Content.Shared._Crescent.HullrotFaction;
+using Content.Shared.Mech.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.NPC.Systems;
 using Robust.Shared.GameObjects;
@@ -14,6 +16,60 @@ namespace Content.IntegrationTests.Tests._Crescent;
 [TestOf(typeof(NPCUtilitySystem))]
 public sealed class AutoPDTurretTargetingTest
 {
+    [Test]
+    public async Task OrdinaryMechTargetsPilot()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var turret = entMan.SpawnEntity("WeaponTurretAutoPDDSM", map.GridCoords);
+            var mech = entMan.SpawnEntity("MechRipley", new EntityCoordinates(map.Grid, new Vector2(1f, 0f)));
+            var pilot = entMan.SpawnEntity("MobHuman", new EntityCoordinates(map.Grid, new Vector2(1f, 0f)));
+            var mechComp = entMan.GetComponent<MechComponent>(mech);
+
+            Assert.That(server.System<MechSystem>().TryInsert(mech, pilot, mechComp), Is.True);
+
+            var htn = entMan.GetComponent<HTNComponent>(turret);
+            var result = server.System<NPCUtilitySystem>().GetEntities(htn.Blackboard, "NearbyPDTTargets");
+
+            Assert.That(result.GetHighest(), Is.EqualTo(pilot),
+                "The anti-boarder turret targeted an ordinary mech instead of its pilot.");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task FactionMechTargetsMech()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var turret = entMan.SpawnEntity("WeaponTurretAutoPDDSM", map.GridCoords);
+            var mech = entMan.SpawnEntity("MechNCWLBogatyr", new EntityCoordinates(map.Grid, new Vector2(1f, 0f)));
+            var pilot = entMan.SpawnEntity("MobHuman", new EntityCoordinates(map.Grid, new Vector2(1f, 0f)));
+            var mechComp = entMan.GetComponent<MechComponent>(mech);
+
+            Assert.That(server.System<MechSystem>().TryInsert(mech, pilot, mechComp), Is.True);
+
+            var htn = entMan.GetComponent<HTNComponent>(turret);
+            var result = server.System<NPCUtilitySystem>().GetEntities(htn.Blackboard, "NearbyPDTTargets");
+
+            Assert.That(result.GetHighest(), Is.EqualTo(mech),
+                "The anti-boarder turret targeted a faction mech's pilot instead of the mech.");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task DismantlingDoesNotTargetSameHullrotFaction()
     {

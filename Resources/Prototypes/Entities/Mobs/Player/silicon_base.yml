@@ -6,6 +6,9 @@
   components:
     - type: ContentEye
     - type: CameraRecoil
+    - type: Telescope
+      divisor: 0.1
+      lerpAmount: 0.1
     - type: Reactive
       groups:
         Flammable: [Touch]

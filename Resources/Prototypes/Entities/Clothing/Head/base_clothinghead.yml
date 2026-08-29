@@ -205,6 +205,7 @@
           - Item
         blacklist:
           components:
+          - Armor
           - PressureProtection
   - type: PressureProtection
     highPressureMultiplier: 0.3

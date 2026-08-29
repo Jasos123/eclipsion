@@ -20,6 +20,7 @@ using Content.Shared._Crescent.HullrotFaction; // Eclipsion
 using Content.Shared.Mech.Components; // Eclipsion
 using Content.Shared.Mobs.Components; // Eclipsion
 using Content.Shared.Mobs.Systems;
+using Content.Shared.NPC.Components; // Eclipsion
 using Content.Shared.NPC.Systems;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
@@ -407,10 +408,23 @@ public sealed class NPCUtilitySystem : EntitySystem
     /// </summary>
     private void TryAddBoarder(EntityUid owner, EntityUid target, HashSet<EntityUid> entities)
     {
+        // Ordinary mechs are just transports as far as an anti-boarder gun is concerned: identify the
+        // boarder driving one instead of wasting fire on the chassis. Faction mechs are purpose-built combat
+        // assets, however, and remain targets in their own right.
+        var inOrdinaryMech = false;
+        if (TryComp<MechPilotComponent>(target, out var mechPilot))
+        {
+            if (HasComp<NpcFactionMemberComponent>(mechPilot.Mech))
+                return;
+
+            inOrdinaryMech = true;
+        }
+
         // Suit check first: it is a container lookup, while the friendliness check walks and intersects two
         // faction sets. On a crewed hull most candidates are shirtsleeves, so this rejects the bulk of them
-        // before the expensive test runs.
-        if (target == owner || !IsSealedBoarder(target))
+        // before the expensive test runs. Being inside an ordinary mech counts as boarding protection by
+        // itself, so its pilot does not also need to be wearing a pressure suit.
+        if (target == owner || !inOrdinaryMech && !IsSealedBoarder(target))
             return;
 
         // HullrotFaction is the authoritative player allegiance. Check it directly as well as the mirrored
@@ -559,12 +573,15 @@ public sealed class NPCUtilitySystem : EntitySystem
                     TryAddBoarder(owner, ent, entities);
                 }
 
-                // Mechs carry no MobState, so they need a sweep of their own. The old hostile-set query found
-                // them through their npcFaction; without this an enemy walker would stroll past a gun that
-                // used to engage it.
-                foreach (var (ent, _) in _lookup.GetEntitiesInRange<MechComponent>(mapPos, vision))
+                // Mechs carry no MobState, so they need a sweep of their own. Faction mechs remain targets in
+                // their own right; for ordinary models such as the Ripley, target the pilot instead. Empty
+                // ordinary mechs are not boarders and are ignored.
+                foreach (var (ent, mech) in _lookup.GetEntitiesInRange<MechComponent>(mapPos, vision))
                 {
-                    TryAddBoarder(owner, ent, entities);
+                    if (HasComp<NpcFactionMemberComponent>(ent))
+                        TryAddBoarder(owner, ent, entities);
+                    else if (mech.PilotSlot.ContainedEntity is { } pilot)
+                        TryAddBoarder(owner, pilot, entities);
                 }
 
                 break;

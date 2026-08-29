@@ -250,6 +250,9 @@
     - DoorBumpOpener
   - type: Targeting
   - type: SurgeryTarget
+  - type: Telescope
+    divisor: 0.1
+    lerpAmount: 0.1
   - type: MovedByPressure
     cutoffTime: 1.0
 
@@ -347,9 +350,6 @@
     alternateState: Standing
   - type: OfferItem
   - type: LayingDown
-  - type: Telescope        # <-- buraya
-    divisor: 0.1
-    lerpAmount: 0.1
   - type: BloodstreamAffectedByMass
     power: 0.6 # A minimum size felinid will have 30% blood, a minimum size vulp will have 60%, a maximum size oni will have ~200%
   - type: EmitSoundOnInternalsActive

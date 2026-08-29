@@ -1487,6 +1487,9 @@
   components:
   - type: Absorbable
   - type: CombatMode
+  - type: Telescope
+    divisor: 0.1
+    lerpAmount: 0.1
   # Shitmed Change Start
   - type: SurgeryTarget
   - type: Targeting

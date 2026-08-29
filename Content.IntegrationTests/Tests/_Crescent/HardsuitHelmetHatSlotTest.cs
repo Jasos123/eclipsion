@@ -17,6 +17,7 @@ public sealed class HardsuitHelmetHatSlotTest
 
         EntityUid helmet = default;
         EntityUid hat = default;
+        EntityUid armoredHelmet = default;
         EntityUid evaHelmet = default;
         EntityUid wearer = default;
 
@@ -24,6 +25,7 @@ public sealed class HardsuitHelmetHatSlotTest
         {
             helmet = server.EntMan.SpawnEntity("ClothingHeadHelmetHardsuitBasic", map.GridCoords);
             hat = server.EntMan.SpawnEntity("ClothingHeadHatTophat", map.GridCoords);
+            armoredHelmet = server.EntMan.SpawnEntity("ClothingHeadHelmetBasic", map.GridCoords);
             evaHelmet = server.EntMan.SpawnEntity("ClothingHeadHelmetEVA", map.GridCoords);
             wearer = server.EntMan.SpawnEntity("MobHuman", map.GridCoords);
 
@@ -39,6 +41,11 @@ public sealed class HardsuitHelmetHatSlotTest
                 null,
                 out var ejected), Is.True);
             Assert.That(ejected, Is.EqualTo(hat));
+            Assert.That(slots.TryInsert(
+                helmet,
+                HardsuitHelmetHatSlotComponent.DefaultSlotId,
+                armoredHelmet,
+                null), Is.False);
             Assert.That(slots.TryInsert(
                 helmet,
                 HardsuitHelmetHatSlotComponent.DefaultSlotId,
