@@ -73,11 +73,13 @@ public class SharedPassportSystem : EntitySystem
         args.PushMarkup(Loc.GetString("passport-skin-color", ("color", DisplayOrUnspecified(component.SkinColor))), 55);
         args.PushMarkup(Loc.GetString("passport-eye-color", ("color", DisplayOrUnspecified(component.EyeColor))), 54);
         args.PushMarkup(Loc.GetString("passport-nationality", ("nationality", DisplayOrUnspecified(component.Nationality))), 53);
-        args.PushMarkup(Loc.GetString("passport-religion", ("religion", religion)), 52);
-        args.PushMarkup(Loc.GetString("passport-year-of-birth", ("year", CurrentYear - component.Age)), 51);
-        args.PushMarkup(Loc.GetString("passport-issued", ("year", component.IssueYear)), 50);
-        args.PushMarkup(Loc.GetString("passport-expires", ("year", component.ExpirationYear)), 49);
-        args.PushMarkup(Loc.GetString("passport-pid", ("pid", DisplayOrUnspecified(component.PassportId))), 48);
+        args.PushMarkup(Loc.GetString("passport-employer", ("employer", DisplayOrUnspecified(component.Employer))), 52);
+        args.PushMarkup(Loc.GetString("passport-lifepath", ("lifepath", DisplayOrUnspecified(component.Lifepath))), 51);
+        args.PushMarkup(Loc.GetString("passport-religion", ("religion", religion)), 50);
+        args.PushMarkup(Loc.GetString("passport-year-of-birth", ("year", CurrentYear - component.Age)), 49);
+        args.PushMarkup(Loc.GetString("passport-issued", ("year", component.IssueYear)), 48);
+        args.PushMarkup(Loc.GetString("passport-expires", ("year", component.ExpirationYear)), 47);
+        args.PushMarkup(Loc.GetString("passport-pid", ("pid", DisplayOrUnspecified(component.PassportId))), 46);
     }
 
     private void OnPlayerLoadoutApplied(PlayerLoadoutAppliedEvent ev) =>
@@ -157,6 +159,12 @@ public class SharedPassportSystem : EntitySystem
         var nationality = _prototypeManager.TryIndex(profile.Nationality, out NationalityPrototype? nationalityPrototype)
             ? Loc.GetString(nationalityPrototype.NameKey)
             : profile.Nationality;
+        var employer = _prototypeManager.TryIndex(profile.Employer, out EmployerPrototype? employerPrototype)
+            ? Loc.GetString(employerPrototype.NameKey)
+            : profile.Employer;
+        var lifepath = _prototypeManager.TryIndex(profile.Lifepath, out LifepathPrototype? lifepathPrototype)
+            ? Loc.GetString(lifepathPrototype.NameKey)
+            : profile.Lifepath;
 
         passport.Comp.FullName = profile.Name;
         passport.Comp.Age = profile.Age;
@@ -169,6 +177,8 @@ public class SharedPassportSystem : EntitySystem
         passport.Comp.SkinColor = profile.Appearance.SkinColor.ToHexNoAlpha();
         passport.Comp.EyeColor = profile.Appearance.EyeColor.ToHexNoAlpha();
         passport.Comp.Nationality = nationality;
+        passport.Comp.Employer = employer;
+        passport.Comp.Lifepath = lifepath;
         passport.Comp.Religion = string.Empty;
         passport.Comp.IssueYear = CurrentYear;
         passport.Comp.ExpirationYear = CurrentYear + PassportLifetimeYears;
@@ -195,6 +205,8 @@ public class SharedPassportSystem : EntitySystem
                 SkinColor = passport.Comp.SkinColor,
                 EyeColor = passport.Comp.EyeColor,
                 Nationality = passport.Comp.Nationality,
+                Employer = passport.Comp.Employer,
+                Lifepath = passport.Comp.Lifepath,
                 PassportId = passport.Comp.PassportId,
                 IssueYear = passport.Comp.IssueYear,
                 ExpirationYear = passport.Comp.ExpirationYear,
@@ -220,6 +232,8 @@ public class SharedPassportSystem : EntitySystem
         var skinColor = CleanColor(args.SkinColor);
         var eyeColor = CleanColor(args.EyeColor);
         var nationality = Clean(args.Nationality);
+        var employer = Clean(args.Employer);
+        var lifepath = Clean(args.Lifepath);
         var religion = Clean(args.Religion);
         var passportId = Clean(args.PassportId, 32).ToUpperInvariant();
         var issueYear = Math.Clamp(args.IssueYear, 0, 9999);
@@ -250,6 +264,8 @@ public class SharedPassportSystem : EntitySystem
             || passport.Comp.SkinColor != skinColor
             || passport.Comp.EyeColor != eyeColor
             || passport.Comp.Nationality != nationality
+            || passport.Comp.Employer != employer
+            || passport.Comp.Lifepath != lifepath
             || passport.Comp.Religion != religion
             || passport.Comp.PassportId != passportId
             || passport.Comp.IssueYear != issueYear
@@ -266,6 +282,8 @@ public class SharedPassportSystem : EntitySystem
             passport.Comp.SkinColor = skinColor;
             passport.Comp.EyeColor = eyeColor;
             passport.Comp.Nationality = nationality;
+            passport.Comp.Employer = employer;
+            passport.Comp.Lifepath = lifepath;
             passport.Comp.Religion = religion;
             passport.Comp.PassportId = passportId;
             passport.Comp.IssueYear = issueYear;
@@ -316,6 +334,8 @@ public class SharedPassportSystem : EntitySystem
             component.SkinColor,
             component.EyeColor,
             component.Nationality,
+            component.Employer,
+            component.Lifepath,
             component.Religion,
             component.PassportId,
             component.IssueYear,

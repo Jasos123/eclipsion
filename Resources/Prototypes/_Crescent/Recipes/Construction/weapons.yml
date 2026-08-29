@@ -1,0 +1,10 @@
+- type: construction
+  name: machete
+  id: IndependentMachete
+  graph: IndependentMachete
+  startNode: start
+  targetNode: machete
+  category: construction-category-weapons
+  description: Broad, heavy, and thoroughly unsubtle. The kind of blade that doesn't ask questions.
+  icon: { sprite: _Crescent/Objects/Weapons/Melee/machete.rsi, state: icon }
+  objectType: Item

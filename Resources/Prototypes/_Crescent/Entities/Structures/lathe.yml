@@ -259,6 +259,7 @@
       - MagazineBoxImperialRifleBig
       - MagazineHeavyRifleSmall
       - CombatKnife
+      - IndependentMachete
       - ExplosivePayload
       - FlashPayload
       - ChemicalPayload
@@ -2182,6 +2183,7 @@
       - MagazineBoxImperialRifleBig
       - MagazineHeavyRifleSmall
       - CombatKnife
+      - IndependentMachete
       - ExplosivePayload
       - FlashPayload
       - ChemicalPayload
@@ -2432,6 +2434,7 @@
       - MagazineBoxImperialRifleBig
       - MagazineHeavyRifleSmall
       - CombatKnife
+      - IndependentMachete
       - ExplosivePayload
       - FlashPayload
       - ChemicalPayload

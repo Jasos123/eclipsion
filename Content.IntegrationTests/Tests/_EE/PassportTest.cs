@@ -1,5 +1,6 @@
 using Content.Shared._EE.Contractors.Components;
 using Content.Shared._EE.Contractors.Systems;
+using Content.Shared.Preferences;
 using Robust.Shared.GameObjects;
 
 namespace Content.IntegrationTests.Tests._EE;
@@ -8,6 +9,41 @@ namespace Content.IntegrationTests.Tests._EE;
 [TestOf(typeof(PassportComponent))]
 public sealed class PassportTest
 {
+    [Test]
+    public async Task ProfileSelectionsArePrintedAndRecorded()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var passportSystem = entMan.System<SharedPassportSystem>();
+            var passport = entMan.SpawnEntity("NCWLPassport", map.GridCoords);
+            var component = entMan.GetComponent<PassportComponent>(passport);
+            var profile = new HumanoidCharacterProfile
+            {
+                Employer = "NanoTrasen",
+                Lifepath = "DeskWorker",
+            };
+
+            passportSystem.UpdatePassportProfile(new(passport, component), profile);
+
+            Assert.Multiple(() =>
+            {
+                // Prototype ids are converted to the same player-facing names used by the profile editor.
+                Assert.That(component.Employer, Is.EqualTo("Shinohara Heavy Industries"));
+                Assert.That(component.Lifepath, Is.EqualTo("Desk Worker"));
+                Assert.That(component.Record, Is.Not.Null);
+                Assert.That(component.Record!.Employer, Is.EqualTo(component.Employer));
+                Assert.That(component.Record.Lifepath, Is.EqualTo(component.Lifepath));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
     /// <summary>
     /// The forgery minigame rests on a single invariant: the editor rewrites what a passport
     /// reads but can never reach the issuer's record, so a checker printout still shows the
@@ -36,6 +72,8 @@ public sealed class PassportTest
             component.SkinColor = "#112233";
             component.EyeColor = "#445566";
             component.Nationality = "Test Nation";
+            component.Employer = "Test Employer";
+            component.Lifepath = "Test Lifepath";
             component.Religion = "None";
             component.PassportId = "ABCDE-FGHIJ-KLMNO";
             component.IssueYear = 2450;
@@ -50,6 +88,8 @@ public sealed class PassportTest
                 SkinColor = component.SkinColor,
                 EyeColor = component.EyeColor,
                 Nationality = component.Nationality,
+                Employer = component.Employer,
+                Lifepath = component.Lifepath,
                 PassportId = component.PassportId,
                 IssueYear = component.IssueYear,
                 ExpirationYear = component.ExpirationYear,
@@ -71,6 +111,8 @@ public sealed class PassportTest
                 component.SkinColor,
                 component.EyeColor,
                 component.Nationality,
+                "Changed Employer",
+                "Changed Lifepath",
                 component.Religion,
                 "ZZZZZ-YYYYY-XXXXX",
                 component.IssueYear,
@@ -84,10 +126,14 @@ public sealed class PassportTest
             {
                 // What the document reads follows the forger.
                 Assert.That(component.FullName, Is.EqualTo("Changed Person"));
+                Assert.That(component.Employer, Is.EqualTo("Changed Employer"));
+                Assert.That(component.Lifepath, Is.EqualTo("Changed Lifepath"));
                 Assert.That(component.PassportId, Is.EqualTo("ZZZZZ-YYYYY-XXXXX"));
 
                 // What the registry holds does not, which is what the printout exposes.
                 Assert.That(component.Record!.FullName, Is.EqualTo("Test Person"));
+                Assert.That(component.Record.Employer, Is.EqualTo("Test Employer"));
+                Assert.That(component.Record.Lifepath, Is.EqualTo("Test Lifepath"));
                 Assert.That(component.Record.PassportId, Is.EqualTo("ABCDE-FGHIJ-KLMNO"));
             });
         });
@@ -107,6 +153,8 @@ public sealed class PassportTest
             component.SkinColor,
             component.EyeColor,
             component.Nationality,
+            component.Employer,
+            component.Lifepath,
             component.Religion,
             component.PassportId,
             component.IssueYear,

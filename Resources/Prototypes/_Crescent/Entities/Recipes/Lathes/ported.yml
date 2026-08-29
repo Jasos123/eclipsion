@@ -17,6 +17,16 @@
     Uranium: 250
 
 - type: latheRecipe
+  id: IndependentMachete
+  result: IndependentMachete
+  category: Weapons
+  completetime: 2
+  materials:
+    Steel: 1500
+    Plastic: 500
+    Cloth: 100
+
+- type: latheRecipe
   id: SpeedLoaderRifleHeavyEmpty
   result: SpeedLoaderRifleHeavyEmpty
   category: Ammo

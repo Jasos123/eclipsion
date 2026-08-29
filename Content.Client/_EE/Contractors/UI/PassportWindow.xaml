@@ -34,6 +34,12 @@
                 <Label Text="{Loc 'passport-ui-nationality'}" />
                 <LineEdit Name="NationalityEdit" HorizontalExpand="True" />
 
+                <Label Text="{Loc 'passport-ui-employer'}" />
+                <LineEdit Name="EmployerEdit" HorizontalExpand="True" />
+
+                <Label Text="{Loc 'passport-ui-lifepath'}" />
+                <LineEdit Name="LifepathEdit" HorizontalExpand="True" />
+
                 <Label Text="{Loc 'passport-ui-religion'}" />
                 <LineEdit Name="ReligionEdit" PlaceHolder="{Loc 'passport-unspecified'}" HorizontalExpand="True" />
 
