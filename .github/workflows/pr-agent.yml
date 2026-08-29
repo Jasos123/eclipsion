@@ -8,14 +8,25 @@ on:
       - reopened
       - ready_for_review
       - synchronize
+  issue_comment:
+    types:
+      - created
 
 concurrency:
-  group: pr-agent-summary-${{ github.event.pull_request.number }}
+  group: pr-agent-summary-${{ github.event.pull_request.number || github.event.issue.number }}
   cancel-in-progress: true
 
 jobs:
   summarize:
-    if: github.event.sender.type != 'Bot' && github.event.pull_request.draft == false
+    if: >-
+      github.event.sender.type != 'Bot' &&
+      ((github.event_name == 'pull_request_target' && github.event.pull_request.draft == false) ||
+      (github.event_name == 'issue_comment' &&
+      github.event.issue.pull_request != null &&
+      startsWith(github.event.comment.body, '/describe') &&
+      (github.event.comment.author_association == 'OWNER' ||
+      github.event.comment.author_association == 'MEMBER' ||
+      github.event.comment.author_association == 'COLLABORATOR')))
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
