@@ -496,7 +496,8 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
             canCreateVacuum = true; // is already a vacuum.
 
         int tileBreakages = 0;
-        while (maxTileBreak > tileBreakages && _robustRandom.Prob(type.TileBreakChance(effectiveIntensity)))
+        while (maxTileBreak > tileBreakages &&
+               _robustRandom.Prob(type.TileBreakChance(effectiveIntensity * tileDef.ExplosionBreakMultiplier)))
         {
             tileBreakages++;
             effectiveIntensity -= type.TileBreakRerollReduction;
@@ -512,6 +513,11 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
                 break;
 
             tileDef = newDef;
+
+            // Floor coverings should reveal their protected subfloor instead of allowing the same explosion to
+            // immediately roll through every layer beneath them. An already exposed subfloor is still breakable.
+            if (tileDef.StopsExplosionBreakChain)
+                break;
         }
 
         if (tileDef.TileId == tileRef.Tile.TypeId)

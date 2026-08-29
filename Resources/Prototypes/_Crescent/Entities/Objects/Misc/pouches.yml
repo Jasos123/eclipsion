@@ -7,7 +7,7 @@
 # These are adapted rather than ported verbatim, because BF14 tunes against a different inventory:
 #
 #   * BF14 gives every pouch `shape: 0,0,3,3` - a 4x4 item footprint, which is this fork's Huge. Here they are
-#     Normal and keep the stock 2x2 default shape, so a pouch roughly costs what it carries.
+#     Small so they fit inventory pockets. PocketOnly keeps them out of grid storage such as backpacks.
 #   * BF14's magazine whitelists key off a global `Magazine` tag. We have no such tag; our magazines carry 57
 #     per-calibre tags instead. Enumerating those would rot the moment someone adds a calibre, so the rifle
 #     pouches whitelist the BallisticAmmoProvider component and blacklist Gun. maxItemSize keeps ammo crates
@@ -30,6 +30,7 @@
     state: utility
   - type: Item
     size: Small
+  - type: PocketOnly
   - type: Storage
     maxItemSize: Small
     defaultStorageOrientation: Vertical

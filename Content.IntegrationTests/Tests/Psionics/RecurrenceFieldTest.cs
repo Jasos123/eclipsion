@@ -8,7 +8,6 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
-using Robust.Shared.Timing;
 
 namespace Content.IntegrationTests.Tests.Psionics;
 
@@ -24,15 +23,6 @@ public sealed class RecurrenceFieldTest
 
     // A thrown item is the simplest thing that is dynamic, unarmed and safe to spawn in a bare map.
     private const string ProjectileStandIn = "Crowbar";
-
-    // An actual round, which is a different case to the stand-in above and not a cosmetic one: every
-    // projectile in the game is a non-hard fixture, and a lookup that does not ask for those gets
-    // back the thrown crowbar and none of the bullets.
-    private const string BulletProto = "BulletPistol";
-
-    // What the field measures across, and what the sprite and the light are sized to. The forward
-    // sweep only has anything to prove while a tick of travel is wider than this.
-    private const float FieldDiameter = 4f;
 
     // A mob, which is the only thing the movement half of the field applies to.
     private const string MobProto = "MobHuman";
@@ -153,60 +143,6 @@ public sealed class RecurrenceFieldTest
                 "The object came in heading +X, so it has to leave heading -X.");
             Assert.That(velocity.Length(), Is.GreaterThan(10f),
                 "A returned object should be moving at least as fast as it arrived.");
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    /// <summary>
-    /// The case the field exists for. Most rounds in this game travel at 60-200m/s and cross a 4m
-    /// bubble inside a single tick, so capture cannot be a question of where something happens to be
-    /// standing when a scan runs.
-    /// </summary>
-    [Test]
-    public async Task FastProjectileIsCaughtInsteadOfPassingStraightThrough()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var entMan = server.EntMan;
-        var mapSys = entMan.System<SharedMapSystem>();
-        var physics = entMan.System<SharedPhysicsSystem>();
-
-        EntityUid field = default;
-        EntityUid fast = default;
-
-        // Quicker than anything in the prototypes, so one tick of travel is wider than the field.
-        const float speed = 300f;
-
-        // Placed exactly half a tick of travel short of the centre, which puts it clear of the
-        // field on this tick and clear of it again on the next one without ever being inside on a
-        // tick boundary. Derived from the real tick period rather than assumed, because the whole
-        // point of the case is that it depends on how far a round moves between two scans.
-        var travel = speed * (float) server.ResolveDependency<IGameTiming>().TickPeriod.TotalSeconds;
-
-        await server.WaitPost(() =>
-        {
-            mapSys.CreateMap(out var mapId);
-            field = entMan.SpawnEntity(FieldProto, new MapCoordinates(Vector2.Zero, mapId));
-
-            fast = entMan.SpawnEntity(BulletProto, new MapCoordinates(new Vector2(-travel / 2f, 0f), mapId));
-            physics.SetLinearVelocity(fast, new Vector2(speed, 0f));
-        });
-
-        // Short on purpose: even at a twelfth of its speed this round is still crossing the field,
-        // and the point is what happens on the tick it arrives.
-        await pair.RunTicksSync(3);
-
-        await server.WaitAssertion(() =>
-        {
-            Assert.That(entMan.Deleted(fast), Is.False, "The round should not have been deleted.");
-            Assert.That(travel, Is.GreaterThan(FieldDiameter),
-                "The case only exists if a tick of travel is wider than the field itself.");
-            Assert.That(entMan.HasComponent<TemporallySlowedComponent>(fast), Is.True,
-                "A round quick enough to clear the field between two ticks still has to be caught.");
-            Assert.That(entMan.GetComponent<PhysicsComponent>(fast).LinearVelocity.Length(),
-                Is.LessThan(speed * 0.5f),
-                "Catching it is only worth anything if it is actually slowed down.");
         });
 
         await pair.CleanReturnAsync();

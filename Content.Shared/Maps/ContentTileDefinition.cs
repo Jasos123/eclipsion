@@ -58,6 +58,20 @@ namespace Content.Shared.Maps
 
         [DataField("isSubfloor")] public bool IsSubFloor { get; private set; }
 
+        /// <summary>
+        /// Multiplier applied to explosion intensity when rolling to break this tile.
+        /// Values below one make the tile more resistant to explosions.
+        /// </summary>
+        [DataField]
+        public float ExplosionBreakMultiplier { get; private set; } = 1f;
+
+        /// <summary>
+        /// Whether an explosion that uncovers this tile should stop breaking further tile layers on this square.
+        /// The tile can still be damaged normally by a later explosion while it is exposed.
+        /// </summary>
+        [DataField]
+        public bool StopsExplosionBreakChain { get; private set; }
+
         [DataField("baseTurf")]
         public string BaseTurf { get; private set; } = string.Empty;
 

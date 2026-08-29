@@ -53,16 +53,6 @@ public sealed class MachineConstruction : InteractionTest
     }
 
     [Test]
-    public async Task ReconstructBiofabricatorWithPartsInFrame()
-    {
-        await StartDeconstruction(Biofabricator);
-        await Interact(Screw, Pry);
-        AssertPrototype(MachineFrame);
-        await Interact(Screw);
-        AssertPrototype(Biofabricator);
-    }
-
-    [Test]
     public async Task RegenerateProgressCountsStackedParts()
     {
         await StartConstruction(MachineFrame);

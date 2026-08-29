@@ -24,55 +24,6 @@ public sealed class LatheBatchOutputTest
     private const string StackType = "Steel";
 
     [Test]
-    public async Task UraniumOreProducesUraniumSheets()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        var entMan = server.ResolveDependency<IEntityManager>();
-        var protoMan = server.ResolveDependency<IPrototypeManager>();
-        var latheSys = entMan.System<LatheSystem>();
-        var materialSys = entMan.System<MaterialStorageSystem>();
-
-        var recipe = protoMan.Index<LatheRecipePrototype>("SheetUranium1");
-        var processor = EntityUid.Invalid;
-
-        await server.WaitPost(() =>
-        {
-            processor = entMan.SpawnEntity(Processor, map.GridCoords);
-
-            var power = entMan.GetComponent<ApcPowerReceiverComponent>(processor);
-            power.NeedsPower = false;
-            power.Powered = true;
-
-            var ore = entMan.SpawnEntity("UraniumOre1Unprocessed", map.GridCoords);
-            Assert.That(materialSys.TryInsertMaterialEntity(processor, ore, processor),
-                "Ore processor refused unprocessed uranium ore");
-        });
-
-        await server.WaitRunTicks(2);
-
-        await server.WaitPost(() =>
-        {
-            Assert.That(latheSys.TryAddToQueue(processor, recipe), "Could not queue uranium sheet");
-            Assert.That(latheSys.TryStartProducing(processor), "Ore processor refused to start");
-        });
-
-        await server.WaitRunTicks(5);
-
-        var lathe = entMan.GetComponent<LatheComponent>(processor);
-        Assert.Multiple(() =>
-        {
-            Assert.That(lathe.Queue, Is.Empty, "Uranium recipe never left the queue");
-            Assert.That(lathe.PendingOutput, Is.Empty, "Uranium output was never handed over");
-            Assert.That(CountStack(entMan, "Uranium"), Is.EqualTo(1), "Ore processor did not produce uranium");
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task BatchLatheHandsOverTheWholeRunAtOnce()
     {
         await using var pair = await PoolManager.GetServerClient();

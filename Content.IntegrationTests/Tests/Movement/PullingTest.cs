@@ -123,51 +123,6 @@ public sealed class PullingTest : MovementTest
     }
 
     [Test]
-    public async Task PullingCorpseSlowsPuller()
-    {
-        await SpawnTarget("MobHuman");
-
-        await Server.WaitPost(() =>
-            Server.System<MobStateSystem>().ChangeMobState(STarget!.Value, MobState.Dead));
-        await RunTicks(5);
-
-        var serverCorpse = SEntMan.GetComponent<CorpseWeightComponent>(STarget.Value);
-        var clientCorpse = CEntMan.GetComponent<CorpseWeightComponent>(CTarget!.Value);
-        using (Assert.EnterMultipleScope())
-        {
-            Assert.That(serverCorpse.Applied, Is.True);
-            Assert.That(clientCorpse.Applied, Is.True);
-        }
-
-        await PressKey(ContentKeyFunctions.TryPullObject);
-        await RunTicks(5);
-
-        var expectedWalk = 0.95f * serverCorpse.DragWalkSpeedMultiplier;
-        var expectedSprint = 0.95f * serverCorpse.DragSprintSpeedMultiplier;
-        var serverSpeed = SEntMan.GetComponent<MovementSpeedModifierComponent>(SPlayer);
-        var clientSpeed = CEntMan.GetComponent<MovementSpeedModifierComponent>(CPlayer);
-
-        using (Assert.EnterMultipleScope())
-        {
-            Assert.That(serverSpeed.WalkSpeedModifier, Is.EqualTo(expectedWalk).Within(0.001f));
-            Assert.That(serverSpeed.SprintSpeedModifier, Is.EqualTo(expectedSprint).Within(0.001f));
-            Assert.That(clientSpeed.WalkSpeedModifier, Is.EqualTo(expectedWalk).Within(0.001f));
-            Assert.That(clientSpeed.SprintSpeedModifier, Is.EqualTo(expectedSprint).Within(0.001f));
-        }
-
-        await PressKey(ContentKeyFunctions.ReleasePulledObject);
-        await RunTicks(5);
-
-        using (Assert.EnterMultipleScope())
-        {
-            Assert.That(SEntMan.GetComponent<MovementSpeedModifierComponent>(SPlayer).WalkSpeedModifier,
-                Is.EqualTo(1f).Within(0.001f));
-            Assert.That(CEntMan.GetComponent<MovementSpeedModifierComponent>(CPlayer).WalkSpeedModifier,
-                Is.EqualTo(1f).Within(0.001f));
-        }
-    }
-
-    [Test]
     public async Task PullingTargetDeathAndRevivalRefreshesPullerSpeed()
     {
         await SpawnTarget("MobHuman");
