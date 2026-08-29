@@ -199,7 +199,6 @@
     Steel: 2500
     Tungsten: 500
     HardsuitElectronics: 500
-    NanotrasenMechatronics: 500
 
 - type: latheRecipe
   id: ClothingOuterHardsuitHighsecUA
@@ -212,7 +211,6 @@
     Silver: 500
     Tungsten: 500
     HardsuitElectronics: 500
-    NanotrasenMechatronics: 500
 
 - type: latheRecipe
   id: ClothingOuterHardsuitHEV

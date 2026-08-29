@@ -4,8 +4,8 @@ nationality_description_union = Citizenship or settled affiliation with secure W
 nationality_name_empire = Divine Sol Mandate
 nationality_description_empire = The Mandate is a loose elective imperial order of charters, noble territories, cities, guild jurisdictions, and religious estates. In Crescent, Count Olywier Rabenau's charter connects local law and military service to the wider Crown in Domain.
 
-nationality_name_american = New American Protectorate
-nationality_description_american = A polity beyond Crescent whose citizens and firms reach Taypan through trade, migration, and private contracts. It is outside the sector's principal conflict but not outside its markets.
+nationality_name_american = Taypani Citizen
+nationality_description_american = A citizen of old Taypan. This passport carries little practical value today, but remains a way for its holder to signal neutrality. Even so, some countries do not look kindly on that neutrality.
 
 # The Clarizian prototype ID is retained for character compatibility; the Clarize rebellion is no longer canon.
 nationality_name_clarizian = Aurevienne Diaspora

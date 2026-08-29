@@ -17,7 +17,9 @@
     HorizontalAlignment="Center">
     <controls:RecordedSplitContainer Name="ScreenContainer" HorizontalExpand="True" VerticalExpand="True" SplitWidth="0" StretchDirection="TopLeft">
         <LayoutContainer Name="ViewportContainer" HorizontalExpand="True" VerticalExpand="True">
-            <controls:MainViewport Name="MainViewport"/>
+            <!-- The chat panel reduces the space available to the viewport. Fit both axes so the configured
+                 world-view width remains fully visible instead of being cropped horizontally. -->
+            <controls:MainViewport Name="MainViewport" AllowHorizontalClipping="False"/>
             <widgets:GhostGui Name="Ghost" Access="Protected" />
             <inventory:InventoryGui Name="Inventory" Access="Protected"/>
             <hotbar:HotbarGui Name="Hotbar" Access="Protected"/>

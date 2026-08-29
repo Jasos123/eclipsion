@@ -284,7 +284,7 @@ public sealed partial class StaminaSystem : EntitySystem
     // goob edit - stunmeta
     public void TakeOvertimeStaminaDamage(EntityUid uid, float value)
     {
-         // do this only on server side because otherwise shit happens (Coderabbit do not bitch at me about the profanity I swear to God)
+         // Do this only on the server side.
          if (value == 0)
             return;
 

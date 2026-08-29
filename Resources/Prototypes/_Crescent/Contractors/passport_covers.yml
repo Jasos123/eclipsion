@@ -16,7 +16,7 @@
 - type: passportCover
   id: PassportCoverAmerican
   nameKey: passport-cover-american
-  state: passport_nederlandic
+  state: passport_qiimaeru
   priority: 2
 
 - type: passportCover
