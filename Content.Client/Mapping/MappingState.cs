@@ -614,7 +614,9 @@ public sealed class MappingState : GameplayStateBase
         if (button != Screen.MoveGrid && _gridDrag.Enabled)
             _consoleHost.ExecuteCommand("griddrag");
 
-        if (button != Screen.PipesColor)
+        // Only hide the subfloor when leaving the pipe-color tool. ShowAll can also be enabled from the
+        // visibility window, and selecting an unrelated tool must not override that independent setting.
+        if (button != Screen.PipesColor && Screen.PipesColor.Pressed)
             _entitySystemManager.GetEntitySystem<SubFloorHideSystem>().ShowAll = false;
 
         if (button != Screen.EraseEntityButton)
