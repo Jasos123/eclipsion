@@ -88,6 +88,8 @@
       state: adv_capacitor
     - type: MachinePart
       rating: 2
+    - type: Stack
+      stackType: AdvancedCapacitor
     - type: ReverseEngineering # Nyano
       difficulty: 2
       recipes:
@@ -104,6 +106,8 @@
       state: nano_mani
     - type: MachinePart
       rating: 2
+    - type: Stack
+      stackType: NanoManipulator
     - type: ReverseEngineering # Nyano
       difficulty: 2
       recipes:
@@ -120,6 +124,8 @@
       state: advanced_matter_bin
     - type: MachinePart
       rating: 2
+    - type: Stack
+      stackType: AdvancedMatterBin
     - type: ReverseEngineering # Nyano
       difficulty: 2
       recipes:
@@ -138,6 +144,8 @@
       state: super_capacitor
     - type: MachinePart
       rating: 3
+    - type: Stack
+      stackType: SuperCapacitor
     - type: ReverseEngineering # Nyano
       difficulty: 3
       recipes:
@@ -154,6 +162,8 @@
       state: pico_mani
     - type: MachinePart
       rating: 3
+    - type: Stack
+      stackType: PicoManipulator
     - type: ReverseEngineering # Nyano
       difficulty: 3
       recipes:
@@ -170,6 +180,8 @@
       state: super_matter_bin
     - type: MachinePart
       rating: 3
+    - type: Stack
+      stackType: SuperMatterBin
     - type: ReverseEngineering # Nyano
       difficulty: 3
       recipes:
@@ -188,6 +200,8 @@
       state: quadratic_capacitor
     - type: MachinePart
       rating: 4
+    - type: Stack
+      stackType: BluespaceCapacitor
     - type: ReverseEngineering # Nyano
       difficulty: 4
       recipes:
@@ -204,6 +218,8 @@
       state: femto_mani
     - type: MachinePart
       rating: 4
+    - type: Stack
+      stackType: BluespaceManipulator
     - type: ReverseEngineering # Nyano
       difficulty: 4
       recipes:
@@ -220,6 +236,8 @@
       state: bluespace_matter_bin
     - type: MachinePart
       rating: 4
+    - type: Stack
+      stackType: BluespaceMatterBin
     - type: ReverseEngineering # Nyano
       difficulty: 4
       recipes:

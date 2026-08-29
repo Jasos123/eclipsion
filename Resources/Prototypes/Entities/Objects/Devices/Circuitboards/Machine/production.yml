@@ -84,7 +84,8 @@
     - type: MachineBoard
       prototype: Biofabricator
       requirements:
-        MatterBin: 4
+        MatterBin: 3
+        Manipulator: 1
       materialRequirements:
         Glass: 1
     - type: ReverseEngineering # Delta

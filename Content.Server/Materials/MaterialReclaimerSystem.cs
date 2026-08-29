@@ -26,6 +26,7 @@ using Content.Shared.Database;
 using Content.Shared.Destructible;
 using Content.Shared.Emag.Components;
 using Content.Shared.Power;
+using Content.Shared.Stacks;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.Materials;
@@ -205,9 +206,11 @@ public sealed class MaterialReclaimerSystem : SharedMaterialReclaimerSystem
         if (!Resolve(item, ref composition, false))
             return;
 
+        var stackCount = CompOrNull<StackComponent>(item)?.Count ?? 1;
+
         foreach (var (material, amount) in composition.MaterialComposition)
         {
-            var outputAmount = (int) (amount * efficiency);
+            var outputAmount = (int) (amount * stackCount * efficiency);
             _materialStorage.TryChangeMaterialAmount(reclaimer, material, outputAmount, storage);
         }
 

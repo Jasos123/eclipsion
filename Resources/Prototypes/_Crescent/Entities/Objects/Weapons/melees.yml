@@ -14,7 +14,7 @@
     attackRate: 1
     damage:
       types:
-        Slash: 36
+        Slash: 38
     soundHit:
         collection: SwordHit
     soundHitFlesh:
@@ -480,7 +480,7 @@
   - type: DamageOtherOnHit
     damage:
       types:
-        Slash: 36
+        Slash: 38
   - type: EmbedPassiveDamage
   - type: Reflect
     reflectProb: .55

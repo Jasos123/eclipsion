@@ -3,6 +3,7 @@ using Content.Server.Construction.Components;
 using Content.Server.Examine;
 using Content.Shared.Construction.Components;
 using Content.Shared.Construction.Prototypes;
+using Content.Shared.Stacks;
 using Content.Shared.Verbs;
 using Robust.Shared.Containers;
 using Robust.Shared.Map.Components;
@@ -75,7 +76,13 @@ public sealed partial class ConstructionSystem
         foreach (var entity in component.PartContainer.ContainedEntities)
         {
             if (TryComp<MachinePartComponent>(entity, out var machinePart))
-                parts.Add(machinePart);
+            {
+                var count = TryComp<StackComponent>(entity, out var stack) ? stack.Count : 1;
+                for (var i = 0; i < count; i++)
+                {
+                    parts.Add(machinePart);
+                }
+            }
         }
 
         return parts;

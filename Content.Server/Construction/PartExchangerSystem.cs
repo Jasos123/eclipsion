@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server.Construction.Components;
+using Content.Server.Stack;
 using Content.Server.Storage.EntitySystems;
 using Content.Shared.DoAfter;
 using Content.Shared.Construction.Components;
@@ -7,6 +8,7 @@ using Content.Shared.Exchanger;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Storage;
+using Content.Shared.Stacks;
 using Robust.Shared.Containers;
 using Robust.Shared.Utility;
 using Content.Shared.Wires;
@@ -24,6 +26,7 @@ public sealed class PartExchangerSystem : EntitySystem
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly StorageSystem _storage = default!;
+    [Dependency] private readonly StackSystem _stack = default!;
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -86,13 +89,12 @@ public sealed class PartExchangerSystem : EntitySystem
         var updatedParts = new List<(EntityUid part, MachinePartComponent partComp)>();
         foreach (var (type, amount) in macBoardComp.Requirements)
         {
-            var target = machineParts.Where(p => p.partComp.PartType == type).Take(amount);
-            updatedParts.AddRange(target);
+            updatedParts.AddRange(TakeBestParts(machineParts, type, amount, uid));
         }
         foreach (var part in updatedParts)
         {
-            _container.Insert(part.part, machine.PartContainer);
-            machineParts.Remove(part);
+            if (!_container.Insert(part.part, machine.PartContainer))
+                machineParts.Add(part);
         }
 
         //put the unused parts back into rped. (this also does the "swapping")
@@ -120,8 +122,12 @@ public sealed class PartExchangerSystem : EntitySystem
             {
                 machineParts.Add((item, part));
                 _container.RemoveEntity(uid, item);
-                machine.Progress[part.PartType]--;
             }
+        }
+
+        foreach (var type in machine.Requirements.Keys)
+        {
+            machine.Progress[type] = 0;
         }
 
         machineParts.Sort((x, y) => y.partComp.Rating.CompareTo(x.partComp.Rating));
@@ -129,8 +135,7 @@ public sealed class PartExchangerSystem : EntitySystem
         var updatedParts = new List<(EntityUid part, MachinePartComponent partComp)>();
         foreach (var (type, amount) in macBoardComp.Requirements)
         {
-            var target = machineParts.Where(p => p.partComp.PartType == type).Take(amount);
-            updatedParts.AddRange(target);
+            updatedParts.AddRange(TakeBestParts(machineParts, type, amount, uid));
         }
         foreach (var pair in updatedParts)
         {
@@ -140,9 +145,13 @@ public sealed class PartExchangerSystem : EntitySystem
             if (!machine.Requirements.ContainsKey(part.PartType))
                 continue;
 
-            _container.Insert(partEnt, machine.PartContainer);
-            machine.Progress[part.PartType]++;
-            machineParts.Remove(pair);
+            if (!_container.Insert(partEnt, machine.PartContainer))
+            {
+                machineParts.Add(pair);
+                continue;
+            }
+
+            machine.Progress[part.PartType] += GetPartCount(partEnt);
         }
 
         //put the unused parts back into rped. (this also does the "swapping")
@@ -150,6 +159,56 @@ public sealed class PartExchangerSystem : EntitySystem
         {
             _storage.Insert(storageEnt, unused, out _, playSound: false);
         }
+    }
+
+    private int GetPartCount(EntityUid part)
+    {
+        return TryComp<StackComponent>(part, out var stack) ? stack.Count : 1;
+    }
+
+    /// <summary>
+    /// Removes the best matching logical parts from <paramref name="machineParts"/>.
+    /// A stack is split when only part of it is needed, so RPED exchanges never hide
+    /// excess parts inside a machine.
+    /// </summary>
+    private List<(EntityUid part, MachinePartComponent partComp)> TakeBestParts(
+        List<(EntityUid part, MachinePartComponent partComp)> machineParts,
+        string type,
+        int amount,
+        EntityUid target)
+    {
+        var selected = new List<(EntityUid part, MachinePartComponent partComp)>();
+
+        for (var i = 0; i < machineParts.Count && amount > 0;)
+        {
+            var candidate = machineParts[i];
+            if (candidate.partComp.PartType != type)
+            {
+                i++;
+                continue;
+            }
+
+            var count = GetPartCount(candidate.part);
+            if (count <= amount)
+            {
+                selected.Add(candidate);
+                machineParts.RemoveAt(i);
+                amount -= count;
+                continue;
+            }
+
+            if (!TryComp<StackComponent>(candidate.part, out var stack) ||
+                _stack.Split(candidate.part, amount, Transform(target).Coordinates, stack) is not { } split)
+            {
+                i++;
+                continue;
+            }
+
+            selected.Add((split, Comp<MachinePartComponent>(split)));
+            amount = 0;
+        }
+
+        return selected;
     }
 
     private void OnAfterInteract(EntityUid uid, PartExchangerComponent component, AfterInteractEvent args)
