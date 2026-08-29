@@ -69,5 +69,4 @@
     - !type:CharacterItemGroupRequirement
       group: LoadoutBelt
     - !type:CharacterJobRequirement
-      jobs:
-        - CommandantNCWL
+      jobs: []
