@@ -25,12 +25,6 @@
                 <Label Text="{Loc 'passport-ui-height'}" />
                 <LineEdit Name="HeightEdit" HorizontalExpand="True" />
 
-                <Label Text="{Loc 'passport-ui-skin-color'}" />
-                <LineEdit Name="SkinColorEdit" PlaceHolder="#RRGGBB" HorizontalExpand="True" />
-
-                <Label Text="{Loc 'passport-ui-eye-color'}" />
-                <LineEdit Name="EyeColorEdit" PlaceHolder="#RRGGBB" HorizontalExpand="True" />
-
                 <Label Text="{Loc 'passport-ui-nationality'}" />
                 <LineEdit Name="NationalityEdit" HorizontalExpand="True" />
 

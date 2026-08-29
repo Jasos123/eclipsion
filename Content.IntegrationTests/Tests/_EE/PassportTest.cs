@@ -38,6 +38,7 @@ public sealed class PassportTest
                 Assert.That(component.Record, Is.Not.Null);
                 Assert.That(component.Record!.Employer, Is.EqualTo(component.Employer));
                 Assert.That(component.Record.Lifepath, Is.EqualTo(component.Lifepath));
+                Assert.That(component.IsClosed, Is.True);
             });
         });
 
@@ -69,8 +70,6 @@ public sealed class PassportTest
             component.Species = "Human";
             component.Sex = "Female";
             component.HeightCm = 170;
-            component.SkinColor = "#112233";
-            component.EyeColor = "#445566";
             component.Nationality = "Test Nation";
             component.Employer = "Test Employer";
             component.Lifepath = "Test Lifepath";
@@ -85,8 +84,6 @@ public sealed class PassportTest
                 Species = component.Species,
                 Sex = component.Sex,
                 HeightCm = component.HeightCm,
-                SkinColor = component.SkinColor,
-                EyeColor = component.EyeColor,
                 Nationality = component.Nationality,
                 Employer = component.Employer,
                 Lifepath = component.Lifepath,
@@ -108,8 +105,6 @@ public sealed class PassportTest
                 component.Species,
                 component.Sex,
                 component.HeightCm,
-                component.SkinColor,
-                component.EyeColor,
                 component.Nationality,
                 "Changed Employer",
                 "Changed Lifepath",
@@ -150,8 +145,6 @@ public sealed class PassportTest
             component.Species,
             component.Sex,
             component.HeightCm,
-            component.SkinColor,
-            component.EyeColor,
             component.Nationality,
             component.Employer,
             component.Lifepath,

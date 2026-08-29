@@ -15,7 +15,7 @@ namespace Content.Shared._EE.Contractors.Components;
 public sealed partial class PassportComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public bool IsClosed;
+    public bool IsClosed = true;
 
     [DataField, AutoNetworkedField]
     public string FullName = string.Empty;
@@ -45,12 +45,6 @@ public sealed partial class PassportComponent : Component
 
     [DataField, AutoNetworkedField]
     public int HeightCm;
-
-    [DataField, AutoNetworkedField]
-    public string SkinColor = string.Empty;
-
-    [DataField, AutoNetworkedField]
-    public string EyeColor = string.Empty;
 
     [DataField, AutoNetworkedField]
     public string Nationality = string.Empty;
@@ -128,12 +122,6 @@ public sealed partial class PassportRecord
     public int HeightCm;
 
     [DataField]
-    public string SkinColor = string.Empty;
-
-    [DataField]
-    public string EyeColor = string.Empty;
-
-    [DataField]
     public string Nationality = string.Empty;
 
     [DataField]
@@ -173,8 +161,6 @@ public sealed class PassportBoundUserInterfaceState(
     string species,
     string sex,
     int heightCm,
-    string skinColor,
-    string eyeColor,
     string nationality,
     string employer,
     string lifepath,
@@ -189,8 +175,6 @@ public sealed class PassportBoundUserInterfaceState(
     public string Species { get; } = species;
     public string Sex { get; } = sex;
     public int HeightCm { get; } = heightCm;
-    public string SkinColor { get; } = skinColor;
-    public string EyeColor { get; } = eyeColor;
     public string Nationality { get; } = nationality;
     public string Employer { get; } = employer;
     public string Lifepath { get; } = lifepath;
@@ -208,8 +192,6 @@ public sealed class PassportSaveMessage(
     string species,
     string sex,
     int heightCm,
-    string skinColor,
-    string eyeColor,
     string nationality,
     string employer,
     string lifepath,
@@ -224,8 +206,6 @@ public sealed class PassportSaveMessage(
     public string Species { get; } = species;
     public string Sex { get; } = sex;
     public int HeightCm { get; } = heightCm;
-    public string SkinColor { get; } = skinColor;
-    public string EyeColor { get; } = eyeColor;
     public string Nationality { get; } = nationality;
     public string Employer { get; } = employer;
     public string Lifepath { get; } = lifepath;

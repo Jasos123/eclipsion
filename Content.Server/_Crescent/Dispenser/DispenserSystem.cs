@@ -262,8 +262,6 @@ public sealed class DispenserSystem : SharedDispenserSystem
             text.AppendLine(Loc.GetString("passport-record-species", ("species", Printable(record.Species))));
             text.AppendLine(Loc.GetString("passport-record-sex", ("sex", Printable(record.Sex))));
             text.AppendLine(Loc.GetString("passport-record-height", ("height", record.HeightCm)));
-            text.AppendLine(Loc.GetString("passport-record-skin-color", ("color", Printable(record.SkinColor))));
-            text.AppendLine(Loc.GetString("passport-record-eye-color", ("color", Printable(record.EyeColor))));
             text.AppendLine(Loc.GetString("passport-record-nationality",
                 ("nationality", Printable(record.Nationality))));
             text.AppendLine(Loc.GetString("passport-record-employer", ("employer", Printable(record.Employer))));

@@ -11,7 +11,9 @@
       key: enum.PassportUiKey.Key
       inHandsOnly: true
       singleUser: true
-      verbOnly: true
+      requiredItems:
+        tags:
+        - Write
       verbText: passport-verb-edit
     - type: UserInterface
       interfaces:

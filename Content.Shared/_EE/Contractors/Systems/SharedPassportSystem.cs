@@ -70,8 +70,6 @@ public class SharedPassportSystem : EntitySystem
         args.PushMarkup(Loc.GetString("passport-species", ("species", DisplayOrUnspecified(component.Species))), 58);
         args.PushMarkup(Loc.GetString("passport-gender", ("gender", DisplayOrUnspecified(component.Sex))), 57);
         args.PushMarkup(Loc.GetString("passport-height", ("height", component.HeightCm)), 56);
-        args.PushMarkup(Loc.GetString("passport-skin-color", ("color", DisplayOrUnspecified(component.SkinColor))), 55);
-        args.PushMarkup(Loc.GetString("passport-eye-color", ("color", DisplayOrUnspecified(component.EyeColor))), 54);
         args.PushMarkup(Loc.GetString("passport-nationality", ("nationality", DisplayOrUnspecified(component.Nationality))), 53);
         args.PushMarkup(Loc.GetString("passport-employer", ("employer", DisplayOrUnspecified(component.Employer))), 52);
         args.PushMarkup(Loc.GetString("passport-lifepath", ("lifepath", DisplayOrUnspecified(component.Lifepath))), 51);
@@ -174,14 +172,13 @@ public class SharedPassportSystem : EntitySystem
         passport.Comp.PortraitSpecies = profile.Species;
         passport.Comp.Sex = profile.Sex.ToString();
         passport.Comp.HeightCm = (int) MathF.Round(profile.Height * species.AverageHeight);
-        passport.Comp.SkinColor = profile.Appearance.SkinColor.ToHexNoAlpha();
-        passport.Comp.EyeColor = profile.Appearance.EyeColor.ToHexNoAlpha();
         passport.Comp.Nationality = nationality;
         passport.Comp.Employer = employer;
         passport.Comp.Lifepath = lifepath;
         passport.Comp.Religion = string.Empty;
         passport.Comp.IssueYear = CurrentYear;
         passport.Comp.ExpirationYear = CurrentYear + PassportLifetimeYears;
+        passport.Comp.IsClosed = true;
         passport.Comp.PassportId = GenerateIdentityString(profile.Name
             + profile.Species
             + profile.Height
@@ -202,8 +199,6 @@ public class SharedPassportSystem : EntitySystem
                 Species = passport.Comp.Species,
                 Sex = passport.Comp.Sex,
                 HeightCm = passport.Comp.HeightCm,
-                SkinColor = passport.Comp.SkinColor,
-                EyeColor = passport.Comp.EyeColor,
                 Nationality = passport.Comp.Nationality,
                 Employer = passport.Comp.Employer,
                 Lifepath = passport.Comp.Lifepath,
@@ -229,8 +224,6 @@ public class SharedPassportSystem : EntitySystem
         var species = Clean(args.Species);
         var sex = Clean(args.Sex, 32);
         var heightCm = Math.Clamp(args.HeightCm, 0, 1000);
-        var skinColor = CleanColor(args.SkinColor);
-        var eyeColor = CleanColor(args.EyeColor);
         var nationality = Clean(args.Nationality);
         var employer = Clean(args.Employer);
         var lifepath = Clean(args.Lifepath);
@@ -261,8 +254,6 @@ public class SharedPassportSystem : EntitySystem
             || passport.Comp.Species != species
             || passport.Comp.Sex != sex
             || passport.Comp.HeightCm != heightCm
-            || passport.Comp.SkinColor != skinColor
-            || passport.Comp.EyeColor != eyeColor
             || passport.Comp.Nationality != nationality
             || passport.Comp.Employer != employer
             || passport.Comp.Lifepath != lifepath
@@ -279,8 +270,6 @@ public class SharedPassportSystem : EntitySystem
             passport.Comp.Species = species;
             passport.Comp.Sex = sex;
             passport.Comp.HeightCm = heightCm;
-            passport.Comp.SkinColor = skinColor;
-            passport.Comp.EyeColor = eyeColor;
             passport.Comp.Nationality = nationality;
             passport.Comp.Employer = employer;
             passport.Comp.Lifepath = lifepath;
@@ -331,8 +320,6 @@ public class SharedPassportSystem : EntitySystem
             component.Species,
             component.Sex,
             component.HeightCm,
-            component.SkinColor,
-            component.EyeColor,
             component.Nationality,
             component.Employer,
             component.Lifepath,
@@ -382,14 +369,6 @@ public class SharedPassportSystem : EntitySystem
     {
         var cleaned = value.Trim();
         return cleaned.Length <= maxLength ? cleaned : cleaned[..maxLength];
-    }
-
-    private static string CleanColor(string value)
-    {
-        var cleaned = Clean(value, 16);
-        return Color.TryFromHex(cleaned, out var color)
-            ? color.ToHexNoAlpha()
-            : cleaned;
     }
 
     private string DisplayOrUnspecified(string value)
