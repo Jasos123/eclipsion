@@ -193,6 +193,19 @@
     unequipSound: /Audio/Mecha/mechmove03.ogg
     quickEquip: false
     slots: [ HEAD ]
+  - type: HardsuitHelmetHatSlot
+  - type: ItemSlots
+    slots:
+      hardsuit_helmet_hat:
+        name: hardsuit-helmet-hat-slot-name
+        whitelist:
+          requireAll: true
+          components:
+          - Clothing
+          - Item
+        blacklist:
+          components:
+          - PressureProtection
   - type: PressureProtection
     highPressureMultiplier: 0.3
     lowPressureMultiplier: 1000

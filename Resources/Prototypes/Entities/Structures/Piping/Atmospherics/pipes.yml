@@ -16,6 +16,9 @@
   - type: Damageable
     damageContainer: Inorganic
     damageModifierSet: Metallic
+  - type: ExplosionResistance
+    damageCoefficient: 0.7
+    worn: false
   - type: SubFloorHide
   - type: CollideOnAnchor
   - type: PipeAppearance
