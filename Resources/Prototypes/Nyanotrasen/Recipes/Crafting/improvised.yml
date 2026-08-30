@@ -1,4 +1,5 @@
 - type: construction
+  hide: true
   name: tinfoil hat
   id: tinfoilhat
   graph: TinfoilHat
@@ -12,6 +13,7 @@
   objectType: Item
 
 - type: construction
+  hide: true
   name: fish labeler
   id: fishlabeler
   graph: fishlabeler

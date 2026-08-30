@@ -1,0 +1,34 @@
+- type: gameMap
+  id: Amaterasu
+  mapName: 'SHI Amaterasu'
+  mapPath: /Maps/_Crescent/Stations/amaterasu.yml
+  minPlayers: 0
+  stations:
+    Amaterasu:
+      stationProto: FlagshipCrescentVessel
+      gridComponents:
+        - type: BlockShipWeaponProjectileGrid
+        - type: VesselIcon
+          iffIcon:
+            sprite: _Crescent/ShipIcons/ifficons.rsi
+            state: capital
+        - type: MapIcon
+          iconType: Station
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'SHI Amaterasu'
+        - type: VesselDesignation
+          designation: vessel-designation-headquarters
+        - type: VesselDescription
+          description: Shinohara Heavy Industries' endgame mobile base.
+        - type: VesselMusic
+          ambientMusicPrototype: TatsumotoMusic
+        - type: Grammar
+          attributes:
+            proper: true
+        - type: StationJobs
+          overflowJobs: []
+          availableJobs:
+            ExecutiveSHI: [ 1, 1 ]
+            BoardSHI: [ 1, 1 ]
+            EmployeeSHI: [ 3, 3 ]

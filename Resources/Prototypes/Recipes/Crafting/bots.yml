@@ -1,4 +1,5 @@
 - type: construction
+  hide: true
   name: cleanbot
   id: cleanbot
   graph: CleanBot
@@ -12,6 +13,7 @@
     state: cleanbot
 
 - type: construction
+  hide: true
   name: honkbot
   id: honkbot
   graph: HonkBot
@@ -25,6 +27,7 @@
     state: honkbot
 
 - type: construction
+  hide: true
   name: jonkbot
   id: jonkbot
   graph: JonkBot
@@ -38,6 +41,7 @@
     state: jonkbot
 
 - type: construction
+  hide: true
   name: medibot
   id: medibot
   graph: MediBot
@@ -51,6 +55,7 @@
     state: medibot
 
 - type: construction
+  hide: true
   name: mimebot
   id: mimebot
   graph: MimeBot
@@ -64,6 +69,7 @@
     state: mimebot
 
 - type: construction
+  hide: true
   name: supplybot
   id: supplybot
   graph: SupplyBot
@@ -77,6 +83,7 @@
     state: supplybot
 
 - type: construction
+  hide: true
   name: gladiabot
   id: gladiabot
   graph: GladiaBot
@@ -90,6 +97,7 @@
     state: GladiabotFFA
 
 - type: construction
+  hide: true
   name: batonbot
   id: batonbot
   graph: BatonBot
@@ -103,6 +111,7 @@
     state: batonbot
 
 - type: construction
+  hide: true
   name: minebot
   id: minebot
   graph: MineBot
@@ -116,6 +125,7 @@
     state: minebot
 
 - type: construction
+  hide: true
   name: disablerbot
   id: disablerbot
   graph: DisablerBot
@@ -129,6 +139,7 @@
     state: disablerbot
 
 - type: construction
+  hide: true
   name: weldbot
   id: weldbot
   graph: WeldBot
@@ -142,6 +153,7 @@
     state: weldbot
 
 - type: construction
+  hide: true
   name: plantbot
   id: plantbot
   graph: PlantBot
@@ -155,6 +167,7 @@
     state: plantbot
 
 - type: construction
+  hide: true
   name: fillbot
   id: fillbot
   graph: FillBot

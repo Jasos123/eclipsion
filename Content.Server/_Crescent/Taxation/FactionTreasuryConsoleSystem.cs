@@ -1,4 +1,5 @@
 using Content.Server.Crescent.Dispenser;
+using Content.Server._Crescent.Economy;
 using Content.Server._Crescent.Overwatch;
 using Content.Server._Crescent.Shipyard; // Eclipsion - high-value purchase approval
 using Content.Server.Power.EntitySystems;
@@ -43,6 +44,7 @@ public sealed class FactionTreasuryConsoleSystem : EntitySystem
     [Dependency] private readonly PowerReceiverSystem _power = default!;
     [Dependency] private readonly FactionMachineSystem _factionMachine = default!;
     [Dependency] private readonly ShipPurchaseApprovalSystem _approvals = default!; // Eclipsion - high-value purchase approval
+    [Dependency] private readonly OfflineFactionProtectionSystem _protection = default!;
 
     /// <summary>How often an open vault console re-reads the balance and the viewer's remaining share.</summary>
     private const float RefreshInterval = 3f;
@@ -97,6 +99,14 @@ public sealed class FactionTreasuryConsoleSystem : EntitySystem
         // anything reaching this point is an admin — same stance as FactionMachineSystem.
         if (HasComp<GhostComponent>(args.User))
             return;
+
+        // Do not reveal whether the faction is offline or understaffed. To an outsider a protected
+        // vault behaves like an ordinary credential rejection and never starts the robbery machinery.
+        if (_protection.IsProtected(GetConsoleFaction(uid, comp)))
+        {
+            _popup.PopupEntity(Loc.GetString("treasury-console-not-command"), uid, args.User, PopupType.Medium);
+            return;
+        }
 
         // Checked before the intrusion popup so a dead vault gives one honest message rather than
         // "alarm engaged" immediately followed by "there is no power".

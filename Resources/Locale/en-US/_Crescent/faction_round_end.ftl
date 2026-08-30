@@ -126,7 +126,7 @@ faction-finale-ncwl = It seems the League really did it. They convinced High Com
 
 faction-finale-tfsc = The TFCF secured enough contracts, access, and common support to bring the JACKAL into Taypan. The Federation now has a platform capable of defending its independent market on its own terms. The commercial war has entered a new phase.
 
-faction-finale-shi = It seems the corporate executives succeeded in convincing both major powers of Taypan. They actually got permission, and now your shuttle console is detecting a massive signal. It's fucking DAWNBREAKER! This will only serve their profits. Taypan is... profit.
+faction-finale-shi = It seems the corporate executives succeeded in convincing both major powers of Taypan. They actually got permission, and now your shuttle console is detecting a massive signal. It's fucking AMATERASU! Shinohara is moving its mobile base into the sector. This will only serve their profits. Taypan is... profit.
 
 faction-finale-cmm = The Colonial Minutemen recovered enough of Analiesse's archive and command authentication to restore the dream it represented. Imperial forces destroyed the old mobile headquarters after the CMM refused to turn local law into Imperial obedience. Your shuttle console now detects ANALIESSE again. Taypan is not saved, but it may once more have a public patrol force beyond Gliess Santo.
 

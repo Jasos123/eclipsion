@@ -424,10 +424,10 @@
   result: ClothingOuterHardsuitImperialNullweavePsion
   completetime: 2
   materials:
-    HardsuitElectronics: 500
-    Cloth: 500
-    Durathread: 500
-    Silver: 500
+    HardsuitElectronics: 200
+    Cloth: 1000
+    Durathread: 1000
+    Silver: 1000
 
 - type: latheRecipe
   id: ClothingOuterHardsuitHunterElite

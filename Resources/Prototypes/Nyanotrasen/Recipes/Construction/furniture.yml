@@ -1,4 +1,5 @@
 - type: construction
+  hide: true
   name: nanotrasen altar
   id: AltarNanotrasen
   graph: Altar
@@ -16,6 +17,7 @@
     - !type:TileNotBlocked
 
 - type: construction
+  hide: true
   name: chaos altar
   id: AltarChaos
   graph: Altar
@@ -33,6 +35,7 @@
     - !type:TileNotBlocked
 
 - type: construction
+  hide: true
   name: druid altar
   id: AltarDruid
   graph: Altar
@@ -50,6 +53,7 @@
     - !type:TileNotBlocked
 
 - type: construction
+  hide: true
   name: toolbox altar
   id: AltarToolbox
   graph: Altar
@@ -67,6 +71,7 @@
     - !type:TileNotBlocked
 
 - type: construction
+  hide: true
   name: space-christian altar
   id: AltarSpaceChristian
   graph: Altar
@@ -84,6 +89,7 @@
     - !type:TileNotBlocked
 
 - type: construction
+  hide: true
   name: satanic altar
   id: AltarSatana
   graph: Altar
@@ -101,6 +107,7 @@
     - !type:TileNotBlocked
 
 - type: construction
+  hide: true
   name: technology altar
   id: AltarTechnology
   graph: Altar
@@ -118,6 +125,7 @@
     - !type:TileNotBlocked
 
 - type: construction
+  hide: true
   name: festival altar
   id: AltarConvertFestival
   graph: Altar
@@ -135,6 +143,7 @@
     - !type:TileNotBlocked
 
 - type: construction
+  hide: true
   name: maint altar
   id: AltarConvertMaint
   graph: Altar
@@ -152,6 +161,7 @@
     - !type:TileNotBlocked
 
 - type: construction
+  hide: true
   name: blue altar
   id: AltarConvertBlue
   graph: Altar
@@ -169,6 +179,7 @@
     - !type:TileNotBlocked
 
 - type: construction
+  hide: true
   name: burden altar
   id: AltarConvertBurden
   graph: Altar
@@ -186,6 +197,7 @@
     - !type:TileNotBlocked
 
 - type: construction
+  hide: true
   name: convert altar
   id: AltarConvert
   graph: Altar
@@ -203,6 +215,7 @@
     - !type:TileNotBlocked
 
 - type: construction
+  hide: true
   name: orange altar
   id: AltarConvertOrange
   graph: Altar
@@ -220,6 +233,7 @@
     - !type:TileNotBlocked
 
 - type: construction
+  hide: true
   name: red altar
   id: AltarConvertRed
   graph: Altar
@@ -237,6 +251,7 @@
     - !type:TileNotBlocked
 
 - type: construction
+  hide: true
   name: white altar
   id: AltarConvertWhite
   graph: Altar
@@ -254,6 +269,7 @@
     - !type:TileNotBlocked
 
 - type: construction
+  hide: true
   name: yellow altar
   id: AltarConvertYellow
   graph: Altar
@@ -271,6 +287,7 @@
     - !type:TileNotBlocked
 
 - type: construction
+  hide: true
   name: heaven altar
   id: AltarHeaven
   graph: Altar
@@ -288,6 +305,7 @@
     - !type:TileNotBlocked
 
 - type: construction
+  hide: true
   name: fanged altar
   id: AltarFangs
   graph: Altar

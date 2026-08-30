@@ -1,4 +1,5 @@
 - type: construction
+  hide: true
   name: joint
   id: smokeableJoint
   graph: smokeableJoint
@@ -10,6 +11,7 @@
   objectType: Item
   
 - type: construction
+  hide: true
   name: rainbow joint
   id: smokeableJointRainbow
   graph: smokeableJointRainbow
@@ -21,6 +23,7 @@
   objectType: Item
 
 - type: construction
+  hide: true
   name: blunt
   id: smokeableBlunt
   graph: smokeableBlunt
@@ -32,6 +35,7 @@
   objectType: Item
 
 - type: construction
+  hide: true
   name: rainbow blunt
   id: smokeableBluntRainbow
   graph: smokeableBluntRainbow
@@ -43,6 +47,7 @@
   objectType: Item
 
 - type: construction
+  hide: true
   name: cigarette
   id: smokeableCigarette
   graph: smokeableCigarette
@@ -56,6 +61,7 @@
 # I wanted to put a hand-grinder here but we need construction graphs that use non-consumed catalysts first.
 
 - type: construction
+  hide: true
   name: ground cannabis
   id: smokeableGroundCannabis
   graph: smokeableGroundCannabis
@@ -68,6 +74,7 @@
   objectType: Item
 
 - type: construction
+  hide: true
   name: ground rainbow cannabis
   id: smokeableGroundCannabisRainbow
   graph: smokeableGroundCannabisRainbow
@@ -79,6 +86,7 @@
   objectType: Item
 
 - type: construction
+  hide: true
   name: ground tobacco
   id: smokeableGroundTobacco
   graph: smokeableGroundTobacco

@@ -197,6 +197,7 @@
     - !type:TileNotBlocked
 
 - type: construction
+  hide: true
   name: bananium wall
   id: ClownWall
   graph: Girder
@@ -841,6 +842,7 @@
   canBuildInImpassable: false
 
 - type: construction
+  hide: true
   name: bananium floor
   id: FloorBananium
   graph: FloorBananium
@@ -1589,6 +1591,7 @@
     - !type:TileNotBlocked
 
 - type: construction
+  hide: true
   name: bananium clown statue
   id: BananiumClownStatue
   graph: BananiumStatueClown
@@ -1606,6 +1609,7 @@
     - !type:TileNotBlocked
 
 - type: construction
+  hide: true
   name: bananium door
   id: BananiumDoor
   graph: DoorGraph
@@ -1623,6 +1627,7 @@
     - !type:TileNotBlocked
 
 - type: construction
+  hide: true
   name: bananium altar
   id: BananiumAltar
   graph: BananiumAltarGraph

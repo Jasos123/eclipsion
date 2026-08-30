@@ -1,4 +1,5 @@
 ﻿- type: construction
+  hide: true
   name: revenant plushie
   id: PlushieGhostRevenant
   graph: PlushieGhostRevenant
@@ -12,6 +13,7 @@
     state: icon
 
 - type: construction
+  hide: true
   name: ian suit
   id: ClothingOuterSuitIan
   graph: ClothingOuterSuitIan

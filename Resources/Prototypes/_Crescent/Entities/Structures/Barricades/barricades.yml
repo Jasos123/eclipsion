@@ -412,6 +412,10 @@
     state: brute_upgrade
   - type: BarricadeUpgradeKit
     upgrade: reinforced
+  - type: Construction
+    graph: CrescentBarricadeUpgradeReinforced
+    node: kit
+    deconstructionTarget: null
 
 - type: entity
   parent: BaseCrescentBarricadeUpgrade
@@ -422,6 +426,10 @@
     state: burn_upgrade
   - type: BarricadeUpgradeKit
     upgrade: biohazard
+  - type: Construction
+    graph: CrescentBarricadeUpgradeBiohazard
+    node: kit
+    deconstructionTarget: null
 
 - type: entity
   parent: BaseCrescentBarricadeUpgrade
@@ -432,3 +440,7 @@
     state: explosive_upgrade
   - type: BarricadeUpgradeKit
     upgrade: composite
+  - type: Construction
+    graph: CrescentBarricadeUpgradeComposite
+    node: kit
+    deconstructionTarget: null

@@ -33,6 +33,22 @@ public sealed class CraftingTests : InteractionTest
         await FindEntity("ModularGrenade");
     }
 
+    [Test]
+    public async Task CraftModularMine()
+    {
+        await PlaceInHands(Steel, 5);
+        await CraftItem("ModularMineRecipe");
+        await FindEntity("LandMineModular");
+    }
+
+    [Test]
+    public async Task CraftReinforcedBarricadeUpgrade()
+    {
+        await PlaceInHands("Plasteel", 3);
+        await CraftItem("CrescentBarricadeUpgradeReinforced");
+        await FindEntity("CrescentBarricadeUpgradeReinforced");
+    }
+
     /// <summary>
     /// Craft a complex recipe (more than one ingredient).
     /// </summary>

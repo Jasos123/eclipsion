@@ -276,6 +276,7 @@
       - WeaponSpecialKingpinCyberdawn
 
 - type: construction
+  hide: true
   name: C-8X 27mmR autocannon
   id: C8XAutocannonCraft
   graph: C8XAutocannonGraph

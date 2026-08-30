@@ -24,29 +24,18 @@ public sealed class CraftingUIController : UIController, IOnStateChanged<Gamepla
     {
         if (_presenter == null)
             return;
-        UnloadButton(_presenter);
+        UnloadButton();
         _presenter.Dispose();
         _presenter = null;
     }
 
-    internal void UnloadButton(ConstructionMenuPresenter? presenter = null)
+    internal void UnloadButton()
     {
         if (CraftingButton == null)
-        {
             return;
-        }
-
-        if (presenter == null)
-        {
-            presenter ??= _presenter;
-            if (presenter == null)
-            {
-                return;
-            }
-        }
 
         CraftingButton.Pressed = false;
-        CraftingButton.OnToggled -= presenter.OnHudCraftingButtonToggled;
+        CraftingButton.OnToggled -= ButtonToggled;
     }
 
     public void LoadButton()

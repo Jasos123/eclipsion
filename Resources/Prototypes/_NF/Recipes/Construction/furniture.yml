@@ -375,6 +375,7 @@
     - !type:TileNotBlocked
 
 - type: construction
+  hide: true
   id: BenchParkBambooMiddle
   name: bamboo park bench (middle)
   description: Multiple seats spanning a single object. Truly a marvel of science.
@@ -392,6 +393,7 @@
     - !type:TileNotBlocked
 
 - type: construction
+  hide: true
   id: BenchParkBambooRight
   name: bamboo park bench (right)
   description: Multiple seats spanning a single object. Truly a marvel of science.
@@ -409,6 +411,7 @@
     - !type:TileNotBlocked
 
 - type: construction
+  hide: true
   id: BenchParkBambooLeft
   name: bamboo park bench (left)
   description: Multiple seats spanning a single object. Truly a marvel of science.

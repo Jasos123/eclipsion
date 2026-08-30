@@ -397,7 +397,7 @@ public sealed class StockCompanySystem : EntitySystem
             return false;
 
         var company = _companies.Find(c => c.Id == companyId);
-        if (company == null)
+        if (company == null || !company.Active)
             return false;
 
         company.Pressures.Add(new StockPressure(magnitude / durationTicks, durationTicks));
@@ -418,7 +418,7 @@ public sealed class StockCompanySystem : EntitySystem
         EnsureInitialized();
 
         var index = _companies.FindIndex(c => c.Id == companyId);
-        if (index < 0 || !float.IsFinite(magnitude) || magnitude == 0f)
+        if (index < 0 || !_companies[index].Active || !float.IsFinite(magnitude) || magnitude == 0f)
             return false;
 
         var shifts = new float[_companies.Count];

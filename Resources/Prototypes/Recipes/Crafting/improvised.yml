@@ -216,6 +216,7 @@
     state: icon
 
 - type: construction
+  hide: true
   name: personal ai adapter
   id: AiAdapter
   graph: AiAdapter
