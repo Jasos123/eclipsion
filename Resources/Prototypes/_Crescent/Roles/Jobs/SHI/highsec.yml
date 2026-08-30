@@ -79,7 +79,6 @@
     eyes: ClothingEyesGlassesSunglasses
     ears: ClothingHeadsetShinohara
     pocket1: WeaponPistolLiquidator
-    pocket2: TradePassport
     back: ClothingBackpackSHISatchel
     belt: ClothingBeltSecurityFilled
   storage:
@@ -153,7 +152,6 @@
     eyes: ClothingEyesGlassesSunglasses
     ears: ClothingHeadsetShinohara
     pocket1: WeaponPistolLiquidator
-    pocket2: TradePassport
     back: ClothingBackpackSHISatchel
     head: ClothingHeadHatShinoharaBeretHOS
     mask: ClothingMaskSHIHOSMask

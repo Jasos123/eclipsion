@@ -76,7 +76,6 @@
     neck: ClothingNeckTieRed
     outerClothing: ClothingOuterShinoharaSuitJacket
     id: BoardPDA
-    pocket1: TradePassport
     ears: ClothingHeadsetShinohara
     back: ClothingBackpackSHISatchel
 
@@ -154,6 +153,5 @@
     shoes: ClothingShoesBootsLaceup
     neck: ClothingNeckTieRed
     id: BoardPDA
-    pocket1: TradePassport
     ears: ClothingHeadsetShinohara
     back: ClothingBackpackSHISatchel

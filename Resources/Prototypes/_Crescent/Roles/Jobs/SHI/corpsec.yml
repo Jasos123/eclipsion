@@ -76,7 +76,6 @@
     id: CorpsecPDA
     ears: ClothingHeadsetShinohara
     pocket1: WeaponPistolHimehabu
-    pocket2: TradePassport
     back: ClothingBackpackSHISatchel
     belt: ClothingBeltSecurityFilled
   storage:

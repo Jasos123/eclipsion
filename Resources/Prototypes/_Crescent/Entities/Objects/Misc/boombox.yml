@@ -19,10 +19,13 @@
     - Back
     - SuitStorage
   - type: Jukebox
-    # Quieter and much tighter than the anchored jukebox: this thing gets carried around the ship,
-    # so anyone standing more than a few tiles away should barely register it.
+    # Keep the portable speaker quieter than the anchored jukebox, but give its music enough
+    # attenuation range to remain intelligible around ten tiles away.
     volume: -13
-    range: 6
+    range: 15
+    # The engine's wall-occlusion low-pass badly degrades full music tracks. Distance attenuation
+    # still keeps this portable speaker local without making it sound like radio static.
+    occlusion: false
   - type: Appearance
   - type: ActivatableUI
     key: enum.JukeboxUiKey.Key

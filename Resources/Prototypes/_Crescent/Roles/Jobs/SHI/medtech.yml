@@ -75,7 +75,6 @@
     jumpsuit: ClothingUniformJumpsuitShinoharaDoctor
     shoes: ClothingShoesBootsJack
     id: MedtechPDA
-    pocket1: TradePassport
     eyes: ClothingEyesGlassesChemical
     ears: ClothingHeadsetShinohara
     gloves: ClothingHandsGlovesLatex

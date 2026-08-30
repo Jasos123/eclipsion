@@ -365,7 +365,7 @@ public sealed partial class RatDiplomacySystem : EntitySystem
         RefreshAll();
     }
 
-    private void SetRelation(string f1, string f2, FactionRelation rel)
+    internal void SetRelation(string f1, string f2, FactionRelation rel, bool persist = true)
     {
         // Permanent enemies stay at war no matter what tries to change them.
         if (IsPermanentEnemyPair(f1, f2))
@@ -380,7 +380,8 @@ public sealed partial class RatDiplomacySystem : EntitySystem
         _relations[f2][f1] = rel;
 
         // Written out immediately: a server that dies mid-round must not forget who was at war.
-        Save();
+        if (persist)
+            Save();
 
         // Only the crossing into war is announced, and never while replaying the save file — otherwise
         // every server start would re-declare last round's wars.

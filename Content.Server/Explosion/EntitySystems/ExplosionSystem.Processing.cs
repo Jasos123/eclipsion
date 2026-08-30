@@ -1,5 +1,8 @@
 using System.Numerics;
+using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
+using Content.Shared.Body.Components;
+using Content.Shared.Body.Part;
 using Content.Shared.CCVar;
 using Content.Shared.Damage;
 using Content.Shared.Explosion;
@@ -438,12 +441,58 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
     {
         if (originalDamage != null)
         {
+            var explosion = _prototypeManager.Index<ExplosionPrototype>(id);
             GetEntitiesToDamage(uid, originalDamage, id);
             foreach (var (entity, damage) in _toDamage)
             {
                 // TODO EXPLOSIONS turn explosions into entities, and pass the the entity in as the damage origin.
-                _damageableSystem.TryChangeDamage(entity, damage, ignoreResistances: true, partMultiplier: 0.3f); // Shitmed: Temp change, nerf explosion delimbing
+                if (!explosion.RandomizeLimbDamage)
+                {
+                    _damageableSystem.TryChangeDamage(
+                        entity,
+                        damage,
+                        ignoreResistances: true,
+                        partMultiplier: explosion.LimbDamageMultiplier);
+                    continue;
+                }
 
+                // Keep normal explosion damage for structures and other entities without a body.
+                if (!HasComp<BodyComponent>(entity))
+                {
+                    _damageableSystem.TryChangeDamage(entity, damage, ignoreResistances: true);
+                    continue;
+                }
+
+                var limbTargets = GetRandomExplosionLimbs(
+                    entity,
+                    explosion.MinLimbDamageTargets,
+                    explosion.MaxLimbDamageTargets);
+                var bodyDamage = damage * MathF.Max(0f, explosion.BodyDamageMultiplier);
+                var bodyDamageTotal = GetApplicableDamageTotal(entity, bodyDamage);
+                if (explosion.MaxBodyDamage is { } maxBodyDamage
+                    && bodyDamageTotal > maxBodyDamage
+                    && bodyDamageTotal > 0f)
+                {
+                    bodyDamage *= MathF.Max(0f, maxBodyDamage) / bodyDamageTotal;
+                }
+
+                _damageableSystem.TryChangeDamage(
+                    entity,
+                    bodyDamage,
+                    ignoreResistances: true,
+                    doPartDamage: false);
+
+                var limbDamageMultiplier = explosion.LimbDamageMultiplier;
+                if (IsWearingHardsuit(entity))
+                    limbDamageMultiplier *= explosion.HardsuitLimbDamageMultiplier;
+
+                foreach (var limb in limbTargets)
+                {
+                    _damageableSystem.TryChangeDamage(
+                        limb.Id,
+                        damage * limbDamageMultiplier,
+                        ignoreResistances: true);
+                }
             }
         }
 
@@ -474,6 +523,89 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
                 _projectileQuery,
                 throwForce);
         }
+    }
+
+    /// <summary>
+    ///     Picks attached arms, hands, legs, or feet from separate limb branches for concentrated blast trauma.
+    ///     A hand and its parent arm (or a foot and its parent leg) cannot both consume target slots.
+    /// </summary>
+    private List<(EntityUid Id, BodyPartComponent Component)> GetRandomExplosionLimbs(
+        EntityUid entity,
+        int minimumTargets,
+        int maximumTargets)
+    {
+        var selected = new List<(EntityUid Id, BodyPartComponent Component)>();
+        if (!TryComp<BodyComponent>(entity, out var body))
+            return selected;
+
+        var limbs = new List<(EntityUid Id, BodyPartComponent Component)>();
+        foreach (var part in _bodySystem.GetBodyChildren(entity, body))
+        {
+            if (!part.Component.CanSever || part.Component.PartType is not (
+                    BodyPartType.Arm or
+                    BodyPartType.Hand or
+                    BodyPartType.Leg or
+                    BodyPartType.Foot))
+            {
+                continue;
+            }
+
+            limbs.Add(part);
+        }
+
+        _robustRandom.Shuffle(limbs);
+        minimumTargets = Math.Max(0, minimumTargets);
+        maximumTargets = Math.Max(minimumTargets, maximumTargets);
+        maximumTargets = Math.Min(maximumTargets, limbs.Count);
+        minimumTargets = Math.Min(minimumTargets, maximumTargets);
+        if (maximumTargets == 0)
+            return selected;
+
+        var targetCount = _robustRandom.Next(minimumTargets, maximumTargets + 1);
+
+        foreach (var candidate in limbs)
+        {
+            var overlapsSelectedBranch = selected.Any(existing =>
+                _bodySystem.PartHasChild(candidate.Id, existing.Id, candidate.Component, existing.Component)
+                || _bodySystem.PartHasChild(existing.Id, candidate.Id, existing.Component, candidate.Component));
+            if (overlapsSelectedBranch)
+                continue;
+
+            selected.Add(candidate);
+            if (selected.Count >= targetCount)
+                break;
+        }
+
+        return selected;
+    }
+
+    /// <summary>
+    ///     Pressure protection is inherited by the hardsuit bases and is more reliable than the incomplete Hardsuit
+    ///     tag. It also gives sealed suits the same sensible protection against blast-driven limb separation.
+    /// </summary>
+    private bool IsWearingHardsuit(EntityUid entity)
+    {
+        return _inventorySystem.TryGetSlotEntity(entity, OuterClothingSlot, out var outerClothing)
+               && HasComp<PressureProtectionComponent>(outerClothing);
+    }
+
+    /// <summary>
+    ///     Gets the damage total supported by an entity's damage container. Structural damage, for example, should
+    ///     not consume a humanoid's body-damage cap.
+    /// </summary>
+    private float GetApplicableDamageTotal(EntityUid entity, DamageSpecifier damage)
+    {
+        if (!TryComp<DamageableComponent>(entity, out var damageable))
+            return 0f;
+
+        var total = 0f;
+        foreach (var (damageType, value) in damage.DamageDict)
+        {
+            if (damageable.Damage.DamageDict.ContainsKey(damageType))
+                total += value.Float();
+        }
+
+        return total;
     }
 
     /// <summary>

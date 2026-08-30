@@ -7,6 +7,12 @@
       Heat: 5
       Blunt: 5
       Piercing: 5
+  limbDamageMultiplier: 0.6
+  randomizeLimbDamage: true
+  bodyDamageMultiplier: 0.3
+  maxBodyDamage: 120
+  minLimbDamageTargets: 2
+  maxLimbDamageTargets: 3
   tileBreakChance: [0, 0.5, 1]
   tileBreakIntensity: [0, 10, 30]
   tileBreakRerollReduction: 20
@@ -50,6 +56,12 @@
       Heat: 3
       Blunt: 4
       Structural: 100
+  limbDamageMultiplier: 0.75
+  randomizeLimbDamage: true
+  bodyDamageMultiplier: 0.3
+  maxBodyDamage: 120
+  minLimbDamageTargets: 2
+  maxLimbDamageTargets: 3
   tileBreakChance: [ 0, 0.5, 1 ]
   tileBreakIntensity: [ 1, 10, 15 ]
   tileBreakRerollReduction: 30
@@ -64,6 +76,12 @@
       Heat: 2
       Blunt: 2.5
       Piercing: 5.5
+  limbDamageMultiplier: 0.75
+  randomizeLimbDamage: true
+  bodyDamageMultiplier: 0.3
+  maxBodyDamage: 120
+  minLimbDamageTargets: 2
+  maxLimbDamageTargets: 3
   lightColor: Orange
   texturePath: /Textures/Effects/fire.rsi
   fireStates: 3
@@ -76,6 +94,12 @@
       Blunt: 3
       Piercing: 3
       Structural: 50
+  limbDamageMultiplier: 0.6
+  randomizeLimbDamage: true
+  bodyDamageMultiplier: 0.3
+  maxBodyDamage: 120
+  minLimbDamageTargets: 2
+  maxLimbDamageTargets: 3
   tileBreakChance: [ 0, 0.5, 1 ]
   tileBreakIntensity: [ 0, 10, 30 ]
   tileBreakRerollReduction: 20
@@ -91,6 +115,12 @@
       Blunt: 6
       Piercing: 6
       Structural: 20
+  limbDamageMultiplier: 0.6
+  randomizeLimbDamage: true
+  bodyDamageMultiplier: 0.3
+  maxBodyDamage: 120
+  minLimbDamageTargets: 2
+  maxLimbDamageTargets: 3
   tileBreakChance: [ 0, 0.5, 1 ]
   tileBreakIntensity: [ 1, 10, 15 ]
   tileBreakRerollReduction: 30
@@ -133,6 +163,12 @@
       Heat: 4
       Blunt: 7
       Piercing: 4
+  limbDamageMultiplier: 0.6
+  randomizeLimbDamage: true
+  bodyDamageMultiplier: 0.3
+  maxBodyDamage: 120
+  minLimbDamageTargets: 2
+  maxLimbDamageTargets: 3
   tileBreakChance: [0, 0.5, 1]
   tileBreakIntensity: [0, 10, 30]
   tileBreakRerollReduction: 20
@@ -164,6 +200,12 @@
       Blunt: 15
       Piercing: 6
       Structural: 40
+  limbDamageMultiplier: 0.6
+  randomizeLimbDamage: true
+  bodyDamageMultiplier: 0.3
+  maxBodyDamage: 120
+  minLimbDamageTargets: 2
+  maxLimbDamageTargets: 3
   tileBreakChance: [ 0, 0.5, 1 ]
   tileBreakIntensity: [ 0, 10, 30 ]
   tileBreakRerollReduction: 10

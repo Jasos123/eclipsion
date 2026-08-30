@@ -28,7 +28,8 @@ namespace Content.Server._Crescent.Factions;
 /// by diplomacy, squads, payroll and the chat name prefix — and rewrites their held ID card to the chosen role's
 /// title, icon, department and access. It can also dismiss a member, clearing their faction membership.
 ///
-/// Membership lives on the body, not the ID card, so the console acts on nearby people rather than on an inserted
+/// Authoritative membership lives on the body, while the rewritten ID advertises the same faction to credential
+/// readers such as anti-boarder turrets. The console therefore acts on nearby people rather than on an inserted
 /// card. No character profile is touched, so death/respawn returns a recruit to their character's own faction.
 /// </summary>
 public sealed class FactionRecruitmentConsoleSystem : EntitySystem
@@ -45,6 +46,7 @@ public sealed class FactionRecruitmentConsoleSystem : EntitySystem
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly SharedJobSystem _jobs = default!;
     [Dependency] private readonly HullrotNpcFactionSyncSystem _hullrotNpcFaction = default!;
+    [Dependency] private readonly FactionIdCardSystem _factionIds = default!;
     [Dependency] private readonly SquadSystem _squad = default!;
 
     public override void Initialize()
@@ -343,6 +345,7 @@ public sealed class FactionRecruitmentConsoleSystem : EntitySystem
         // 3. ID card: title, icon, department, and (additively) the role's access.
         if (_idCard.TryFindIdCard(target, out var idCard))
         {
+            _factionIds.SetFaction(idCard, comp.Faction);
             _idCard.TryChangeJobTitle(idCard, job.LocalizedName, player: actor);
 
             if (_proto.TryIndex(job.Icon, out var icon))

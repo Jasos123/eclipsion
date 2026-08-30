@@ -2,6 +2,7 @@ using Content.Server.Access.Components;
 using Content.Server.GameTicking;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
+using Content.Server._Crescent.Factions;
 using Content.Shared.Access.Systems;
 using Content.Shared.Roles;
 using Content.Shared.StatusIcon;
@@ -15,6 +16,7 @@ public sealed class PresetIdCardSystem : EntitySystem
     [Dependency] private readonly IdCardSystem _cardSystem = default!;
     [Dependency] private readonly SharedAccessSystem _accessSystem = default!;
     [Dependency] private readonly StationSystem _stationSystem = default!;
+    [Dependency] private readonly FactionIdCardSystem _factionIds = default!;
 
     public override void Initialize()
     {
@@ -57,6 +59,9 @@ public sealed class PresetIdCardSystem : EntitySystem
 
         SetupIdAccess(uid, id, extended);
         SetupIdName(uid, id);
+
+        if (id.JobName is { } jobId && _prototypeManager.TryIndex(jobId, out JobPrototype? job))
+            _factionIds.SetFactionFromJob(uid, job);
     }
 
     private void SetupIdName(EntityUid uid, PresetIdCardComponent id)

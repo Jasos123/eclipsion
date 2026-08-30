@@ -3,9 +3,15 @@ using Content.Server.Mech.Systems;
 using Content.Server.NPC;
 using Content.Server.NPC.HTN;
 using Content.Server.NPC.Systems;
+using Content.Server._Crescent.Diplomacy;
+using Content.Server._Crescent.Factions;
+using Content.Shared._Crescent.Diplomacy;
 using Content.Shared._Crescent.HullrotFaction;
+using Content.Shared.Inventory;
 using Content.Shared.Mech.Components;
+using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.NPC.Systems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -16,6 +22,72 @@ namespace Content.IntegrationTests.Tests._Crescent;
 [TestOf(typeof(NPCUtilitySystem))]
 public sealed class AutoPDTurretTargetingTest
 {
+    [TestCase(MobState.Critical)]
+    [TestCase(MobState.SoftCritical)]
+    [TestCase(MobState.Dead)]
+    public async Task IncapacitatedPilotIsNotTargeted(MobState state)
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var turret = entMan.SpawnEntity("WeaponTurretAutoPDDSM", map.GridCoords);
+            var mech = entMan.SpawnEntity("MechRipley", new EntityCoordinates(map.Grid, new Vector2(1f, 0f)));
+            var pilot = entMan.SpawnEntity("MobHuman", new EntityCoordinates(map.Grid, new Vector2(1f, 0f)));
+
+            Assert.That(server.System<MechSystem>().TryInsert(mech, pilot, entMan.GetComponent<MechComponent>(mech)), Is.True);
+            server.System<MobStateSystem>().ChangeMobState(pilot, state);
+
+            var htn = entMan.GetComponent<HTNComponent>(turret);
+            var result = server.System<NPCUtilitySystem>().GetEntities(htn.Blackboard, "NearbyPDTTargets");
+
+            Assert.That(result.GetHighest(), Is.EqualTo(EntityUid.Invalid),
+                $"The anti-boarder turret targeted a pilot in the {state} state.");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task WornAlliedFactionIdPreventsTargeting()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var turret = entMan.SpawnEntity("WeaponTurretAutoPDDSM", map.GridCoords);
+            var mech = entMan.SpawnEntity("MechRipley", new EntityCoordinates(map.Grid, new Vector2(1f, 0f)));
+            var ally = entMan.SpawnEntity("MobHuman", new EntityCoordinates(map.Grid, new Vector2(1f, 0f)));
+            var id = entMan.SpawnEntity("SHIIDCardEmployee", MapCoordinates.Nullspace);
+
+            Assert.That(server.System<InventorySystem>().TryEquip(ally, id, "id", silent: true, force: true), Is.True);
+            Assert.That(server.System<MechSystem>().TryInsert(mech, ally, entMan.GetComponent<MechComponent>(mech)), Is.True);
+
+            var factionId = entMan.GetComponent<FactionIdCardComponent>(id);
+            Assert.That(factionId.Faction, Is.EqualTo("SHI"),
+                "The preset SHI ID did not learn its faction from its job.");
+
+            var diplomacy = server.System<RatDiplomacySystem>();
+            var previousRelation = diplomacy.GetRelation("DSM", "SHI");
+            diplomacy.SetRelation("DSM", "SHI", FactionRelation.Alliance, persist: false);
+
+            var htn = entMan.GetComponent<HTNComponent>(turret);
+            var result = server.System<NPCUtilitySystem>().GetEntities(htn.Blackboard, "NearbyPDTTargets");
+            diplomacy.SetRelation("DSM", "SHI", previousRelation, persist: false);
+
+            Assert.That(result.GetHighest(), Is.EqualTo(EntityUid.Invalid),
+                "The anti-boarder turret targeted someone wearing an allied faction ID.");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task OrdinaryMechTargetsPilot()
     {

@@ -33,6 +33,14 @@ public sealed partial class JukeboxComponent : Component
     public float Range = 10f;
 
     /// <summary>
+    /// Whether walls and other impassable fixtures apply the engine's low-pass occlusion filter
+    /// to this jukebox's music. This can be disabled for small speakers whose short audible range
+    /// already prevents them from carrying through a ship.
+    /// </summary>
+    [DataField]
+    public bool Occlusion = true;
+
+    /// <summary>
     /// Upcoming songs to play after the current one finishes, in order.
     /// The currently playing track is not included here.
     /// </summary>

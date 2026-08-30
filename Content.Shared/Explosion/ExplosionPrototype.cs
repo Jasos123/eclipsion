@@ -26,6 +26,50 @@ public sealed partial class ExplosionPrototype : IPrototype
     public DamageSpecifier DamagePerIntensity = default!;
 
     /// <summary>
+    ///     Multiplier applied to body-part damage caused by this explosion.
+    /// </summary>
+    [DataField]
+    public float LimbDamageMultiplier = 0.3f;
+
+    /// <summary>
+    ///     Additional limb-damage multiplier for characters wearing a pressure-protective hardsuit.
+    ///     This stacks with the suit's normal explosion resistance.
+    /// </summary>
+    [DataField]
+    public float HardsuitLimbDamageMultiplier = 0.5f;
+
+    /// <summary>
+    ///     Whether body-part damage should be concentrated on several random severable extremities instead of spread
+    ///     across the entire body. When enabled, limb damage is applied separately and does not increase body damage.
+    /// </summary>
+    [DataField]
+    public bool RandomizeLimbDamage;
+
+    /// <summary>
+    ///     Multiplier applied to the main body's damage when randomized limb damage is enabled.
+    /// </summary>
+    [DataField]
+    public float BodyDamageMultiplier = 1f;
+
+    /// <summary>
+    ///     Optional cap on damage dealt to the main body by one explosion. Limb damage is not affected by this cap.
+    /// </summary>
+    [DataField]
+    public float? MaxBodyDamage;
+
+    /// <summary>
+    ///     Minimum number of separate limb branches damaged by one explosion.
+    /// </summary>
+    [DataField]
+    public int MinLimbDamageTargets = 1;
+
+    /// <summary>
+    ///     Maximum number of separate limb branches damaged by one explosion.
+    /// </summary>
+    [DataField]
+    public int MaxLimbDamageTargets = 1;
+
+    /// <summary>
     ///     Amount of firestacks to apply in addition to igniting.
     /// </summary>
     [DataField]
