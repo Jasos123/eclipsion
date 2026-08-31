@@ -36,6 +36,12 @@ namespace Content.Server.Atmos.Piping.Unary.Components
         public bool UnderPressureLockout { get; set; } = false;
 
         /// <summary>
+        /// Allows deliberate fill mode to repressurize a repaired, evacuated room normally.
+        /// </summary>
+        [DataField]
+        public bool PressureLockoutOverride { get; set; } = false;
+
+        /// <summary>
         ///     In releasing mode, do not pump when environment pressure is below this limit.
         /// </summary>
         [ViewVariables(VVAccess.ReadWrite)]
@@ -146,7 +152,8 @@ namespace Content.Server.Atmos.Piping.Unary.Components
                 PumpDirection = PumpDirection,
                 PressureChecks = PressureChecks,
                 ExternalPressureBound = ExternalPressureBound,
-                InternalPressureBound = InternalPressureBound
+                InternalPressureBound = InternalPressureBound,
+                PressureLockoutOverride = PressureLockoutOverride
             };
         }
 
@@ -158,6 +165,7 @@ namespace Content.Server.Atmos.Piping.Unary.Components
             PressureChecks = data.PressureChecks;
             ExternalPressureBound = data.ExternalPressureBound;
             InternalPressureBound = data.InternalPressureBound;
+            PressureLockoutOverride = data.PressureLockoutOverride;
         }
     }
 }

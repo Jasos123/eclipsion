@@ -9,8 +9,14 @@ namespace Content.Server.Damage.Components;
 [RegisterComponent]
 public sealed partial class ExaminableDamageComponent : Component
 {
-    [DataField("messages", required: true, customTypeSerializer:typeof(PrototypeIdSerializer<ExaminableDamagePrototype>))]
+    [DataField("messages", customTypeSerializer:typeof(PrototypeIdSerializer<ExaminableDamagePrototype>))]
     public string? MessagesProtoId;
 
     public ExaminableDamagePrototype? MessagesProto;
+
+    /// <summary>
+    ///     Shows the entity's remaining health and destruction threshold when examined.
+    /// </summary>
+    [DataField]
+    public bool ShowHealth;
 }

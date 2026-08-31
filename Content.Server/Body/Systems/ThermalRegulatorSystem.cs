@@ -72,9 +72,8 @@ public sealed class ThermalRegulatorSystem : EntitySystem
         tempDiff = Math.Abs(ent.Comp2.CurrentTemperature - ent.Comp1.NormalBodyTemperature);
         targetHeat = tempDiff * heatCapacity;
 
-        // if body temperature is not within comfortable, thermal regulation
-        // processes starts
-        if (tempDiff > ent.Comp1.ThermalRegulationTemperatureThreshold)
+        // Active regulation starts once the body temperature leaves the comfortable range.
+        if (tempDiff < ent.Comp1.ThermalRegulationTemperatureThreshold)
             return;
 
         if (ent.Comp2.CurrentTemperature > ent.Comp1.NormalBodyTemperature)

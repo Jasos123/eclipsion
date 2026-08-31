@@ -126,13 +126,11 @@ public sealed class AmeNodeGroup : BaseNodeGroup
         if (fuel <= 0 || CoreCount <= 0)
             return 0;
 
-        var safeFuelLimit = CoreCount * 2 + CoreCount / 2;
-
         var powerOutput = CalculatePower(fuel, CoreCount);
-        if (fuel <= safeFuelLimit)
+        if (!IsOverloading(fuel))
             return powerOutput;
         // bigger reactors harder to blow
-        var instability = (fuel - safeFuelLimit) / CoreCount + 5;
+        var instability = (fuel - GetSafeFuelLimit()) / CoreCount + 5;
 
         overloading = true;
         var integrityCheck = 100;
@@ -155,6 +153,19 @@ public sealed class AmeNodeGroup : BaseNodeGroup
             _chat.SendAdminAlert($"AME overloading: {_entMan.ToPrettyString(_masterController.Value)}");
 
         return powerOutput;
+    }
+
+    /// <summary>
+    /// Returns whether injecting this much fuel would damage this reactor's cores.
+    /// </summary>
+    public bool IsOverloading(int fuel)
+    {
+        return CoreCount > 0 && fuel > GetSafeFuelLimit();
+    }
+
+    private int GetSafeFuelLimit()
+    {
+        return CoreCount * 2 + CoreCount / 2;
     }
 
     /// <summary>

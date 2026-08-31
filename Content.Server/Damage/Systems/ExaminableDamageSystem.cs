@@ -5,6 +5,7 @@ using Content.Server.Destructible.Thresholds.Triggers;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Examine;
+using Content.Shared.FixedPoint;
 using Content.Shared.Rounding;
 using Robust.Shared.Prototypes;
 
@@ -13,6 +14,7 @@ namespace Content.Server.Damage.Systems;
 public sealed class ExaminableDamageSystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private readonly DestructibleSystem _destructible = default!;
 
     public override void Initialize()
     {
@@ -30,16 +32,38 @@ public sealed class ExaminableDamageSystem : EntitySystem
 
     private void OnExamine(EntityUid uid, ExaminableDamageComponent component, ExaminedEvent args)
     {
-        if (component.MessagesProto == null)
+        if (component.MessagesProto != null)
+        {
+            var messages = component.MessagesProto.Messages;
+            if (messages.Length > 0)
+            {
+                var level = GetDamageLevel(uid, component);
+                var msg = Loc.GetString(messages[level]);
+                args.PushMarkup(msg);
+            }
+        }
+
+        if (!component.ShowHealth || !TryComp<DamageableComponent>(uid, out var damageable))
             return;
 
-        var messages = component.MessagesProto.Messages;
-        if (messages.Length == 0)
+        var maximum = _destructible.DestroyedAt(uid);
+        if (maximum == FixedPoint2.MaxValue || maximum <= 0)
             return;
 
-        var level = GetDamageLevel(uid, component);
-        var msg = Loc.GetString(messages[level]);
-        args.PushMarkup(msg);
+        var current = FixedPoint2.Max(FixedPoint2.Zero, maximum - damageable.TotalDamage);
+        var percentage = Math.Clamp((int) MathF.Round(current.Float() / maximum.Float() * 100f), 0, 100);
+        var color = percentage switch
+        {
+            > 66 => "green",
+            > 33 => "orange",
+            _ => "red"
+        };
+
+        args.PushMarkup(Loc.GetString("examinable-damage-health",
+            ("current", current.Float()),
+            ("maximum", maximum.Float()),
+            ("percentage", percentage),
+            ("color", color)));
     }
 
     private int GetDamageLevel(EntityUid uid, ExaminableDamageComponent? component = null,

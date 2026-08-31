@@ -9,6 +9,7 @@ namespace Content.Shared.Atmos.Piping.Unary.Components
         public bool Enabled { get; set; }
         public bool Dirty { get; set; }
         public bool IgnoreAlarms { get; set; } = false;
+        public bool PressureLockoutOverride { get; set; } = false;
         public VentPumpDirection PumpDirection { get; set; } = VentPumpDirection.Releasing;
         public VentPressureBound PressureChecks { get; set; } = VentPressureBound.ExternalBound;
         public float ExternalPressureBound { get; set; } = Atmospherics.OneAtmosphere;
@@ -32,7 +33,8 @@ namespace Content.Shared.Atmos.Piping.Unary.Components
             PumpDirection = VentPumpDirection.Releasing,
             PressureChecks = VentPressureBound.ExternalBound,
             ExternalPressureBound = Atmospherics.OneAtmosphere * 50,
-            InternalPressureBound = 0f
+            InternalPressureBound = 0f,
+            PressureLockoutOverride = true
         };
 
         public static GasVentPumpData PanicModePreset = new GasVentPumpData

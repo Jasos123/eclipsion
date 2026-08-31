@@ -39,5 +39,12 @@ namespace Content.Shared.Doors.Components
         /// </summary>
         [DataField("alarmAutoClose"), ViewVariables(VVAccess.ReadWrite)]
         public bool AlarmAutoClose = true;
+
+        /// <summary>
+        /// Set while the firelock has been opened by a player. Alarm and timer based closing stay suppressed until
+        /// somebody closes the door manually.
+        /// </summary>
+        [ViewVariables(VVAccess.ReadOnly)]
+        public bool PlayerHeldOpen;
     }
 }

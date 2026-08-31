@@ -13,5 +13,5 @@ public sealed partial class GamemodeRespawnTimeComponent : Component
     /// How many minutes after death until a player can respawn. Overrides ghost.respawn_time CVar.
     /// </summary>
     [DataField]
-    public float RespawnTimeMinutes = 10f;
+    public float RespawnTimeMinutes = 5f;
 }

@@ -36,6 +36,8 @@
       toggleMouseRotator: false
     - type: Damageable
       damageContainer: Inorganic
+    - type: ExaminableDamage
+      showHealth: true
     - type: Destructible
       thresholds:
         - trigger:

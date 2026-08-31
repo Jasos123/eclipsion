@@ -67,7 +67,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: GamemodeRespawnTime
-    respawnTimeMinutes: 10
+    respawnTimeMinutes: 5
   - type: AdventureRule
     gameMapsByID:
       PortBalreska:
@@ -197,7 +197,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: GamemodeRespawnTime
-    respawnTimeMinutes: 10
+    respawnTimeMinutes: 5
   - type: AdventureRule
     gameMapsByID:
       PortBalreska:
@@ -314,7 +314,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: GamemodeRespawnTime
-    respawnTimeMinutes: 10
+    respawnTimeMinutes: 5
   - type: AdventureRule
     gameMapsByID:
       Tatsumoto:
@@ -431,7 +431,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: GamemodeRespawnTime
-    respawnTimeMinutes: 10
+    respawnTimeMinutes: 5
   - type: AdventureRule
     gameMapsByID:
       Freeport:
@@ -554,7 +554,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: GamemodeRespawnTime
-    respawnTimeMinutes: 10
+    respawnTimeMinutes: 5
   - type: AdventureRule
     worldgenConfig: RatWorldHyperwar
     gameMapsByID:

@@ -10,6 +10,7 @@ using Content.Server.NodeContainer;
 using Content.Server.NodeContainer.EntitySystems;
 using Content.Server.NodeContainer.Nodes;
 using Content.Server.Power.Components;
+using Content.Server.Power.EntitySystems;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Piping.Unary.Visuals;
 using Content.Shared.Atmos.Monitor;
@@ -50,6 +51,9 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems
         private void OnVentScrubberUpdated(EntityUid uid, GasVentScrubberComponent scrubber, ref AtmosDeviceUpdateEvent args)
         {
             if (_weldable.IsWelded(uid))
+                return;
+
+            if (!this.IsPowered(uid, EntityManager))
                 return;
 
             var timeDelta = args.dt;
@@ -137,7 +141,6 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems
 
         private void OnPowerChanged(EntityUid uid, GasVentScrubberComponent component, ref PowerChangedEvent args)
         {
-            component.Enabled = args.Powered;
             UpdateState(uid, component);
         }
 
@@ -184,7 +187,7 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems
                 _ambientSoundSystem.SetAmbience(uid, false);
                 _appearance.SetData(uid, ScrubberVisuals.State, ScrubberState.Welded, appearance);
             }
-            else if (!scrubber.Enabled)
+            else if (!this.IsPowered(uid, EntityManager) || !scrubber.Enabled)
             {
                 _ambientSoundSystem.SetAmbience(uid, false);
                 _appearance.SetData(uid, ScrubberVisuals.State, ScrubberState.Off, appearance);

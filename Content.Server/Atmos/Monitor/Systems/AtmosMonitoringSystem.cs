@@ -11,6 +11,7 @@ using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Monitor;
+using Content.Shared.Atmos.Piping.Components;
 using Content.Shared.DeviceNetwork;
 using Content.Shared.Power;
 using Content.Shared.Tag;
@@ -51,6 +52,13 @@ public sealed class AtmosMonitorSystem : EntitySystem
         SubscribeLocalEvent<AtmosMonitorComponent, DeviceNetworkPacketEvent>(OnPacketRecv);
         SubscribeLocalEvent<AtmosMonitorComponent, AtmosDeviceDisabledEvent>(OnAtmosDeviceLeaveAtmosphere);
         SubscribeLocalEvent<AtmosMonitorComponent, AtmosDeviceEnabledEvent>(OnAtmosDeviceEnterAtmosphere);
+        SubscribeLocalEvent<AtmosMonitorComponent, AtmosDeviceTileChangedEvent>(OnAtmosDeviceTileChanged);
+    }
+
+    private void OnAtmosDeviceTileChanged(Entity<AtmosMonitorComponent> ent, ref AtmosDeviceTileChangedEvent args)
+    {
+        if (!ent.Comp.MonitorsPipeNet)
+            ent.Comp.TileGas = _atmosphereSystem.GetContainingMixture(ent.Owner, true);
     }
 
     private void OnAtmosDeviceLeaveAtmosphere(EntityUid uid, AtmosMonitorComponent atmosMonitor, ref AtmosDeviceDisabledEvent args)

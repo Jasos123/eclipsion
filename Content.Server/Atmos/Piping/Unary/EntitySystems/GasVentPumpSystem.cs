@@ -11,6 +11,7 @@ using Content.Server.NodeContainer;
 using Content.Server.NodeContainer.EntitySystems;
 using Content.Server.NodeContainer.Nodes;
 using Content.Server.Power.Components;
+using Content.Server.Power.EntitySystems;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Monitor;
 using Content.Shared.Atmos.Piping.Unary.Components;
@@ -61,6 +62,9 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems
                 return;
             }
 
+            if (!this.IsPowered(uid, EntityManager))
+                return;
+
             var nodeName = vent.PumpDirection switch
             {
                 VentPumpDirection.Releasing => vent.Inlet,
@@ -109,7 +113,7 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems
                 // (ignoring temperature differences because I am lazy)
                 var transferMoles = pressureDelta * environment.Volume / (pipe.Air.Temperature * Atmospherics.R);
 
-                if (vent.UnderPressureLockout)
+                if (vent.UnderPressureLockout && !vent.PressureLockoutOverride)
                 {
                     // Leak only a small amount of gas as a proportion of supply pipe pressure.
                     var pipeDelta = pipe.Air.Pressure - environment.Pressure;
@@ -190,7 +194,6 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems
 
         private void OnPowerChanged(EntityUid uid, GasVentPumpComponent component, ref PowerChangedEvent args)
         {
-            component.Enabled = args.Powered;
             UpdateState(uid, component);
         }
 
@@ -260,7 +263,7 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems
                 _ambientSoundSystem.SetAmbience(uid, false);
                 _appearance.SetData(uid, VentPumpVisuals.State, VentPumpState.Welded, appearance);
             }
-            else if (!vent.Enabled)
+            else if (!this.IsPowered(uid, EntityManager) || !vent.Enabled)
             {
                 _ambientSoundSystem.SetAmbience(uid, false);
                 _appearance.SetData(uid, VentPumpVisuals.State, VentPumpState.Off, appearance);

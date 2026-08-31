@@ -20,10 +20,17 @@ public sealed partial class AtmosphereSystem
     private readonly HashSet<Entity<MovedByPressureComponent>> _activePressures = new();
     private void UpdateHighPressure(float frameTime)
     {
+        List<Entity<MovedByPressureComponent>>? finished = null;
         foreach (var ent in _activePressures)
         {
-            if (!ent.Comp.Throwing || _gameTiming.CurTime < ent.Comp.ThrowingCutoffTarget
-                || !TryComp(ent.Owner, out PhysicsComponent? physics))
+            if (!ent.Comp.Throwing || !TryComp(ent.Owner, out PhysicsComponent? physics))
+            {
+                finished ??= new();
+                finished.Add(ent);
+                continue;
+            }
+
+            if (_gameTiming.CurTime < ent.Comp.ThrowingCutoffTarget)
                 continue;
 
             if (TryComp(ent.Owner, out ThrownItemComponent? thrown))
@@ -36,6 +43,15 @@ public sealed partial class AtmosphereSystem
             _physics.SetSleepingAllowed(ent.Owner, physics, true);
 
             ent.Comp.Throwing = false;
+            finished ??= new();
+            finished.Add(ent);
+        }
+
+        if (finished == null)
+            return;
+
+        foreach (var ent in finished)
+        {
             _activePressures.Remove(ent);
         }
     }

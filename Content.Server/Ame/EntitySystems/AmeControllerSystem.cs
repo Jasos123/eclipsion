@@ -58,16 +58,22 @@ public sealed class AmeControllerSystem : EntitySystem
         var query = EntityQueryEnumerator<AmeControllerComponent, NodeContainerComponent>();
         while (query.MoveNext(out var uid, out var controller, out var nodes))
         {
-            // A reactor that has passed the point of no return detonates once the final countdown elapses.
+            // Give operators a chance to stop the active overload during the final countdown.
             if (controller.ExplosionTime != null)
             {
-                if (curTime >= controller.ExplosionTime.Value)
+                if (!TryGetAMENodeGroup(uid, out var group, nodes) || !IsActivelyOverloading(controller, group))
                 {
                     controller.ExplosionTime = null;
-                    if (TryGetAMENodeGroup(uid, out var group, nodes))
-                        group.ExplodeCores();
                 }
-                continue;
+                else
+                {
+                    if (curTime >= controller.ExplosionTime.Value)
+                    {
+                        controller.ExplosionTime = null;
+                        group.ExplodeCores();
+                    }
+                    continue;
+                }
             }
 
             if (controller.NextUpdate <= curTime)
@@ -109,6 +115,7 @@ public sealed class AmeControllerSystem : EntitySystem
         if (!TryGetAMENodeGroup(uid, out var group, nodes))
             return;
 
+        var overloading = false;
         if (TryComp<AmeFuelContainerComponent>(controller.FuelSlot.Item, out var fuelContainer))
         {
             // if the jar is empty shut down the AME
@@ -119,7 +126,7 @@ public sealed class AmeControllerSystem : EntitySystem
             else
             {
                 var availableInject = Math.Min(controller.InjectionAmount, fuelContainer.FuelAmount);
-                var powerOutput = group.InjectFuel(availableInject, out var overloading);
+                var powerOutput = group.InjectFuel(availableInject, out overloading);
                 if (TryComp<PowerSupplierComponent>(uid, out var powerOutlet))
                     powerOutlet.MaxSupply = powerOutput;
                 fuelContainer.FuelAmount -= availableInject;
@@ -139,13 +146,28 @@ public sealed class AmeControllerSystem : EntitySystem
 
         // Once the reactor becomes critically unstable, arm a short countdown and warn the sector,
         // rather than detonating instantly, so there is always a heads-up before the blast.
-        if (controller.Stability <= 0 && controller.ExplosionTime == null)
+        if (controller.Stability <= 0 && overloading && controller.ExplosionTime == null)
             ArmExplosion(uid, curTime, controller);
     }
 
     /// <summary>
-    /// Locks in the detonation: schedules the explosion <see cref="AmeControllerComponent.FinalWarningTime"/>
-    /// from now and broadcasts the final "imminent detonation" warning once.
+    /// Whether the controller can still perform an unsafe injection with its current settings and fuel.
+    /// </summary>
+    private bool IsActivelyOverloading(AmeControllerComponent controller, AmeNodeGroup group)
+    {
+        if (!controller.Injecting ||
+            !TryComp<AmeFuelContainerComponent>(controller.FuelSlot.Item, out var fuelContainer))
+        {
+            return false;
+        }
+
+        var availableInject = Math.Min(controller.InjectionAmount, fuelContainer.FuelAmount);
+        return group.IsOverloading(availableInject);
+    }
+
+    /// <summary>
+    /// Schedules the explosion <see cref="AmeControllerComponent.FinalWarningTime"/> from now and broadcasts
+    /// the final "imminent detonation" warning once. Stopping the overload cancels the countdown.
     /// </summary>
     private void ArmExplosion(EntityUid uid, TimeSpan curTime, AmeControllerComponent controller)
     {
@@ -295,6 +317,9 @@ public sealed class AmeControllerSystem : EntitySystem
         UpdateDisplay(uid, controller.Stability, controller);
         if (!value)
         {
+            // Shutting the reactor down during the final warning makes it safe immediately.
+            controller.ExplosionTime = null;
+
             // Overload event is over; let a future overload warn again.
             controller.OverloadAnnouncementsSent = 0;
             controller.NextOverloadAnnouncement = TimeSpan.Zero;

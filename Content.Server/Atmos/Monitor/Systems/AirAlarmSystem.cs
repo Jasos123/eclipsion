@@ -435,7 +435,7 @@ public sealed class AirAlarmSystem : EntitySystem
     /// <param name="uiOnly">Whether this change is for the UI only, or if it changes the air alarm's operating mode. Defaults to true.</param>
     public void SetMode(EntityUid uid, string origin, AirAlarmMode mode, bool uiOnly = true, AirAlarmComponent? controller = null)
     {
-        if (!Resolve(uid, ref controller) || controller.CurrentMode == mode)
+        if (!Resolve(uid, ref controller))
         {
             return;
         }
