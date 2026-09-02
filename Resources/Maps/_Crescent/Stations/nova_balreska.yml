@@ -280968,8 +280968,6 @@ entities:
       pos: 15.5,-8.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
-      - invalid
   - uid: 4948
     components:
     - type: Transform
@@ -281036,8 +281034,6 @@ entities:
       pos: 14.5,-8.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
-      - invalid
   - uid: 4961
     components:
     - type: Transform
@@ -292907,8 +292903,6 @@ entities:
       pos: 33.5,31.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 46
     - type: AtmosPipeColor

@@ -418,7 +418,6 @@ entities:
     - type: DeviceList
       devices:
       - 17
-      - 342
       - 771
       - 396
 - proto: AirCanister

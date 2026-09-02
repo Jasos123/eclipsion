@@ -33849,8 +33849,6 @@ entities:
         storagebase: !type:Container
           showEnts: False
           occludes: True
-          ents:
-          - invalid
   - uid: 3651
     components:
     - type: Transform
@@ -33866,8 +33864,6 @@ entities:
         storagebase: !type:Container
           showEnts: False
           occludes: True
-          ents:
-          - invalid
   - uid: 3652
     components:
     - type: Transform
@@ -33883,8 +33879,6 @@ entities:
         storagebase: !type:Container
           showEnts: False
           occludes: True
-          ents:
-          - invalid
   - uid: 3653
     components:
     - type: Transform
@@ -33900,8 +33894,6 @@ entities:
         storagebase: !type:Container
           showEnts: False
           occludes: True
-          ents:
-          - invalid
   - uid: 3654
     components:
     - type: Transform
@@ -33917,8 +33909,6 @@ entities:
         storagebase: !type:Container
           showEnts: False
           occludes: True
-          ents:
-          - invalid
 - proto: TowercapSeeds
   entities:
   - uid: 3655

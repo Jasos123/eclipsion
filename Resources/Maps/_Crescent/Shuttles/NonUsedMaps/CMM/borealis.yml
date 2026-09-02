@@ -1784,7 +1784,6 @@ entities:
       parent: 1
     - type: DeviceLinkSink
       links:
-      - invalid
       - 580
   - uid: 578
     components:

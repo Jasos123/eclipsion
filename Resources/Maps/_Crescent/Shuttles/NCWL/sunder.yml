@@ -7046,8 +7046,6 @@ entities:
       parent: 1
       pos: 2.5,4.5
     - type: DeviceNetwork
-      configurators:
-      - invalid
     - type: AtmosPipeColor
       color: '#990000FF'
   - uid: 746

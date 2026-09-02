@@ -2068,8 +2068,6 @@ entities:
       pos: -0.5,-4.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 3
     - type: AtmosPipeColor
@@ -2083,8 +2081,6 @@ entities:
       pos: 1.5,-4.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 3
     - type: AtmosPipeColor

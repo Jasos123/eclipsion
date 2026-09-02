@@ -10230,22 +10230,12 @@ entities:
     - type: TargetingConsole
       cannonGroups:
         all:
-        - invalid
-        - invalid
-        - invalid
-        - invalid
         - 2072
         - 2217
         - 2218
         - 2220
         - 2240
         - 2245
-        missiles:
-        - invalid
-        - invalid
-        flak:
-        - invalid
-        - invalid
         heavy 'Gargoyle' LRM cruise missile launcher:
         - 2072
         - 2217
@@ -13371,8 +13361,6 @@ entities:
       pos: -11.5,-12.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
-      - invalid
   - uid: 2804
     components:
     - type: Transform
@@ -13380,8 +13368,6 @@ entities:
       pos: -1.5,-13.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
-      - invalid
   - uid: 2805
     components:
     - type: Transform
@@ -13389,8 +13375,6 @@ entities:
       pos: -2.5,0.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
-      - invalid
   - uid: 2806
     components:
     - type: Transform
@@ -13404,8 +13388,6 @@ entities:
       pos: -7.5,21.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
-      - invalid
   - uid: 2808
     components:
     - type: Transform
@@ -13413,24 +13395,18 @@ entities:
       pos: -13.5,12.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
-      - invalid
   - uid: 2867
     components:
     - type: Transform
       pos: 6.5,3.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
-      - invalid
   - uid: 2914
     components:
     - type: Transform
       pos: 4.5,-14.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
-      - invalid
 - proto: GasVentScrubber
   entities:
   - uid: 2868
@@ -13440,8 +13416,6 @@ entities:
       pos: 7.5,0.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
-      - invalid
   - uid: 2881
     components:
     - type: Transform
@@ -13455,16 +13429,12 @@ entities:
       pos: -9.5,-12.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
-      - invalid
   - uid: 2929
     components:
     - type: Transform
       pos: 0.5,-13.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
-      - invalid
   - uid: 2930
     components:
     - type: Transform
@@ -13472,8 +13442,6 @@ entities:
       pos: 4.5,-16.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
-      - invalid
   - uid: 2931
     components:
     - type: Transform
@@ -13481,24 +13449,18 @@ entities:
       pos: -2.5,2.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
-      - invalid
   - uid: 2933
     components:
     - type: Transform
       pos: -7.5,19.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
-      - invalid
   - uid: 2934
     components:
     - type: Transform
       pos: -12.5,12.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
-      - invalid
 - proto: GeneratorRTG
   entities:
   - uid: 1701

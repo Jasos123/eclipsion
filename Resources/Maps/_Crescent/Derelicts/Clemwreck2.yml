@@ -4699,8 +4699,6 @@ entities:
       pos: 1.5,7.5
       parent: 1
     - type: DeviceNetwork
-      deviceLists:
-      - invalid
 - proto: GasVentScrubber
   entities:
   - uid: 706
@@ -4710,8 +4708,6 @@ entities:
       pos: -0.5,7.5
       parent: 1
     - type: DeviceNetwork
-      deviceLists:
-      - invalid
 - proto: Grille
   entities:
   - uid: 707

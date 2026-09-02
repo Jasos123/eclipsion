@@ -11375,8 +11375,6 @@ entities:
         entity_storage: !type:Container
           showEnts: False
           occludes: True
-          ents:
-          - invalid
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
@@ -11391,8 +11389,6 @@ entities:
         entity_storage: !type:Container
           showEnts: False
           occludes: True
-          ents:
-          - invalid
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
@@ -11407,8 +11403,6 @@ entities:
         entity_storage: !type:Container
           showEnts: False
           occludes: True
-          ents:
-          - invalid
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
@@ -11425,8 +11419,6 @@ entities:
         entity_storage: !type:Container
           showEnts: False
           occludes: True
-          ents:
-          - invalid
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True

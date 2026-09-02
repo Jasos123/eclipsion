@@ -3161,8 +3161,6 @@ entities:
       pos: 2.5,24.5
       parent: 1
     - type: DeviceNetwork
-      deviceLists:
-      - invalid
 - proto: GasVentScrubber
   entities:
   - uid: 492
@@ -3171,8 +3169,6 @@ entities:
       pos: -1.5,24.5
       parent: 1
     - type: DeviceNetwork
-      deviceLists:
-      - invalid
 - proto: Gyroscope
   entities:
   - uid: 493

@@ -10843,8 +10843,6 @@ entities:
       pos: 4.5,7.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
-      - invalid
     - type: AtmosPipeColor
       color: '#0055CCFF'
   - uid: 1449
@@ -10949,8 +10947,6 @@ entities:
       pos: 2.5,7.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
-      - invalid
     - type: AtmosPipeColor
       color: '#990000FF'
   - uid: 1462

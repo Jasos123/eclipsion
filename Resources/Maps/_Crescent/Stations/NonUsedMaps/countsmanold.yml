@@ -16253,7 +16253,6 @@ entities:
           - 2271
           - 2272
           - 2273
-          - invalid
   - uid: 2216
     components:
     - type: Transform

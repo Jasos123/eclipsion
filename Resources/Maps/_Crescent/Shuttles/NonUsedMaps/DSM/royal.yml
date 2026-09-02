@@ -8342,8 +8342,6 @@ entities:
         actions: !type:Container
           showEnts: False
           occludes: True
-          ents:
-          - 1334
     - type: ActionsContainer
     - type: InsideEntityStorage
 - proto: ColoredLightTubeRed

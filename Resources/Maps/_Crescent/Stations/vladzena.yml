@@ -26316,7 +26316,6 @@ entities:
           - 1475
           - 1476
           - 1478
-          - 1610
           - 1609
           - 1470
         paper_label: !type:ContainerSlot

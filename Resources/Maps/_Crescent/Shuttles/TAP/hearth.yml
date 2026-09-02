@@ -2479,8 +2479,6 @@ entities:
       pos: 2.5,-5.5
       parent: 1
     - type: DeviceList
-      configurators:
-      - invalid
       devices:
       - 139
       - 137

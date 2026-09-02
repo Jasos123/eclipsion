@@ -7583,8 +7583,6 @@ entities:
       pos: 4.5,13.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
-      - invalid
   - uid: 612
     components:
     - type: Transform

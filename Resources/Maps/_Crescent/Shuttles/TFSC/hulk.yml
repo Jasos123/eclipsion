@@ -5878,19 +5878,6 @@ entities:
       pos: 0.5,11.5
       parent: 1
     - type: TargetingConsole
-      cannonGroups:
-        all:
-        - invalid
-        - invalid
-        - invalid
-        - invalid
-        - invalid
-        ballistic:
-        - invalid
-        - invalid
-        - invalid
-        - invalid
-        - invalid
 - proto: ComputerWallmountBankATM
   entities:
   - uid: 681
@@ -6013,8 +6000,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - invalid
-          - invalid
           - 690
           - 689
         paper_label: !type:ContainerSlot

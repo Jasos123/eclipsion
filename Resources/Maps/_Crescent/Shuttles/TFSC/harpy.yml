@@ -2495,8 +2495,6 @@ entities:
       pos: 1.5,7.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 4
 - proto: GasVentScrubber
@@ -2508,8 +2506,6 @@ entities:
       pos: -0.5,7.5
       parent: 1
     - type: DeviceNetwork
-      configurators:
-      - invalid
       deviceLists:
       - 4
 - proto: GravityGeneratorMini

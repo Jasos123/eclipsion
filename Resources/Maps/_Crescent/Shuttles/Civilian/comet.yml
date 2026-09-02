@@ -5540,17 +5540,6 @@ entities:
       pos: 1.5,23.5
       parent: 1
     - type: TargetingConsole
-      cannonGroups:
-        all:
-        - invalid
-        - invalid
-        - invalid
-        - invalid
-        SHI 180c 'Torch' pressure gatling:
-        - invalid
-        - invalid
-        - invalid
-        - invalid
 - proto: ConveyorBelt
   entities:
   - uid: 480

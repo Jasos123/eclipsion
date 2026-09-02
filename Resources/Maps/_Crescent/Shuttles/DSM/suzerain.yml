@@ -12044,8 +12044,6 @@ entities:
       parent: 1
       pos: 11.5,-13.5
     - type: DeviceNetwork
-      configurators:
-      - invalid
   - uid: 1055
     components:
     - type: Transform

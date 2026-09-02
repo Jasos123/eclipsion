@@ -4563,8 +4563,6 @@ entities:
     - type: DeviceNetwork
       deviceLists:
       - 7
-      configurators:
-      - invalid
 - proto: GasVentScrubber
   entities:
   - uid: 249
@@ -4575,8 +4573,6 @@ entities:
     - type: DeviceNetwork
       deviceLists:
       - 7
-      configurators:
-      - invalid
 - proto: GravityGeneratorMini
   entities:
   - uid: 250

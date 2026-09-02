@@ -907,13 +907,6 @@ entities:
       pos: -1.5,-1.5
       parent: 1
     - type: TargetingConsole
-      cannonGroups:
-        all:
-        - invalid
-        - invalid
-        missiles:
-        - invalid
-        - invalid
 - proto: CrateGenericSteel
   entities:
   - uid: 89

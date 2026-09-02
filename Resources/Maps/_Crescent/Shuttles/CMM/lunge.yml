@@ -1792,17 +1792,6 @@ entities:
       pos: 3.5,2.5
       parent: 1
     - type: TargetingConsole
-      cannonGroups:
-        all:
-        - invalid
-        - invalid
-        - invalid
-        - invalid
-        machinegun:
-        - invalid
-        - invalid
-        - invalid
-        - invalid
 - proto: ConveyorBelt
   entities:
   - uid: 83

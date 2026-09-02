@@ -6526,8 +6526,6 @@ entities:
       rot: 3.141592653589793 rad
       pos: 3.5,-17.5
     - type: DeviceNetwork
-      configurators:
-      - invalid
     - type: AtmosPipeColor
       color: '#0055CCFF'
 - proto: GasVentPump
@@ -6563,8 +6561,6 @@ entities:
     - type: DeviceNetwork
       deviceLists:
       - 13
-      configurators:
-      - invalid
     - type: AtmosPipeColor
       color: '#0055CCFF'
   - uid: 701
@@ -6697,8 +6693,6 @@ entities:
     - type: DeviceNetwork
       deviceLists:
       - 20
-      configurators:
-      - invalid
     - type: AtmosPipeColor
       color: '#990000FF'
   - uid: 713
