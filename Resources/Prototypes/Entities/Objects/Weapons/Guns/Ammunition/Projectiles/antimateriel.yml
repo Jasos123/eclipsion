@@ -7,7 +7,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 100 # crits anybody in T1 armor and leaves anybody wearing T2 armor 1 sneze away from crit
+        Piercing: 90
         Structural: 400
   - type: StaminaDamageOnCollide
     damage: 40
@@ -21,7 +21,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 100 # crits anybody in T1 armor and leaves anybody wearing T2 armor 1 sneze away from crit
+        Piercing: 90
         Structural: 1250
   - type: StaminaDamageOnCollide
     damage: 40
@@ -35,8 +35,8 @@
   - type: Projectile
     damage:
       types:
-        Blunt: 15
-        Heat: 25
+        Blunt: 13.5
+        Heat: 22.5
         Structural: 200
     harmorPenetration: 25
   - type: IgniteOnCollide
@@ -53,7 +53,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 3
+        Piercing: 2.7
     harmorPenetration: 25
   - type: Sprite
     scale: 0.5, 0.5

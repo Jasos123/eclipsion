@@ -11,8 +11,25 @@ research-discipline-communard = Communard
 research-discipline-imperial = Imperial
 research-discipline-corporate = Shinohara
 research-discipline-minutemen = Minutemen
+research-discipline-pang-tai = Pang Tai Arms
 
 # Node Names
+
+# PANG TAI ARMS
+research-technology-pang-tai-sidearms = PTA Civilian Sidearms
+research-technology-pang-tai-light-smgs = PTA Light Submachine Guns
+research-technology-pang-tai-corvid = CORVID-X1 Armor
+research-technology-pang-tai-combat-shotguns = PTA Combat Shotguns
+research-technology-pang-tai-silent-weapons = PTA Integrally Suppressed Weapons
+research-technology-pang-tai-service-rifles = PTA Service Rifles
+research-technology-pang-tai-cheshyre = CHESHYRE Submachine Gun
+research-technology-pang-tai-karabin = MOD-23 KARABIN
+research-technology-pang-tai-korund = KORUND-X2 Armor
+research-technology-pang-tai-grenades = PTA Tactical Grenades
+research-technology-pang-tai-precision-weapons = PTA Precision Heavy Weapons
+research-technology-pang-tai-experimental-weapons = PTA Experimental Energy Weapons
+research-technology-pang-tai-launchers = PTA Launcher Systems
+research-technology-pang-tai-zhanshi = ZHANSHI-X3 Combat Hardsuit
 
 # ASTRONAUTICS
 research-technology-astronautics-basic-flight = Basic Avionics

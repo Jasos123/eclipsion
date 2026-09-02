@@ -7,7 +7,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 30
+        Piercing: 27
     harmorPenetration: 25
     stoppingPower: 8
 
@@ -42,8 +42,8 @@
   - type: Projectile
     damage:
       types:
-        Blunt: 2
-        Heat: 15
+        Blunt: 1.8
+        Heat: 13.5
 
 - type: entity
   id: BulletRifleUranium
@@ -54,7 +54,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 25
+        Piercing: 22.5
     harmorPenetration: 35
     stoppingPower: 6
 
@@ -67,7 +67,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 6.325
+        Piercing: 5.6925
   - type: Sprite
     scale: 0.5, 0.5
 

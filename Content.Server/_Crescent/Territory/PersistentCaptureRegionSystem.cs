@@ -285,7 +285,9 @@ public sealed class PersistentCaptureRegionSystem : EntitySystem
 
             if (device.UpdateNpcFaction && TryComp<NpcFactionMemberComponent>(deviceUid, out var npcFaction))
             {
-                _npcFactions.ClearFactions((deviceUid, npcFaction), false);
+                // Refresh immediately even for the neutral state. When there is no new owner there is no following
+                // AddFaction call to rebuild the cached friendly/hostile sets for us.
+                _npcFactions.ClearFactions((deviceUid, npcFaction));
                 if (owner != null)
                     _npcFactions.AddFaction((deviceUid, npcFaction), owner);
             }

@@ -8,7 +8,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 35
+        Piercing: 31.5
         Structural: 130 # if you were a wall would you like having a .50 cal anti materiel round go through you? (this breaks a normal wall in 3 shots, one mag goes through four normal walls, 10 rounds to take down a reinforced wall)
 
 
@@ -21,8 +21,8 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 10
-        Heat: 5
+        Piercing: 9
+        Heat: 4.5
         Structural: 20
   - type: ExplodeOnTrigger
   - type: Explosive

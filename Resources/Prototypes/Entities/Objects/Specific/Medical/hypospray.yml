@@ -116,6 +116,7 @@
     transferAmount: 15
     onlyAffectsMobs: false
     injectOnly: true
+  - type: HardsuitInjectable
   - type: Appearance
   - type: SolutionContainerVisuals
     maxFillLevels: 1

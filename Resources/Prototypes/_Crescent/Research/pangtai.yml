@@ -1,0 +1,205 @@
+# Tier 1: civilian-market equipment
+
+- type: technology
+  id: PangTaiSidearms
+  name: research-technology-pang-tai-sidearms
+  icon:
+    sprite: _Crescent/Objects/Weapons/Guns/rongyu.rsi
+    state: icon
+  discipline: PangTai
+  tier: 1
+  cost: 7500
+  recipeUnlocks:
+  - WeaponPistolRongyu
+  - WeaponPistolViper
+  - WeaponPistolCobra
+
+- type: technology
+  id: PangTaiLightSMGs
+  name: research-technology-pang-tai-light-smgs
+  icon:
+    sprite: _Crescent/Objects/Weapons/Guns/vektor.rsi
+    state: icon
+  discipline: PangTai
+  tier: 1
+  cost: 7500
+  recipeUnlocks:
+  - WeaponSubMachineGunPTAVektor
+  - WeaponSubMachineGunDroz
+
+- type: technology
+  id: PangTaiCorvid
+  name: research-technology-pang-tai-corvid
+  icon:
+    sprite: _Crescent/Clothing/Corpo/OuterClothing/pangtaivest.rsi
+    state: icon
+  discipline: PangTai
+  tier: 1
+  cost: 7500
+  recipeUnlocks:
+  - ClothingHeadHatPangtaiCorvidHelmet
+  - ClothingOuterArmorPangTaiVest
+
+- type: technology
+  id: PangTaiCombatShotguns
+  name: research-technology-pang-tai-combat-shotguns
+  icon:
+    sprite: _Crescent/Objects/Weapons/Guns/twinshot.rsi
+    state: icon
+  discipline: PangTai
+  tier: 1
+  cost: 12500
+  recipeUnlocks:
+  - WeaponShotgunBulldog
+  - WeaponShotgunPTATwinshot
+
+# Tier 2: professional military equipment
+
+- type: technology
+  id: PangTaiSilentWeapons
+  name: research-technology-pang-tai-silent-weapons
+  icon:
+    sprite: _Crescent/Objects/Weapons/Guns/vintorez.rsi
+    state: icon
+  discipline: PangTai
+  tier: 2
+  cost: 15000
+  recipeUnlocks:
+  - WeaponRifleVintorez
+  - WeaponSubMachineGunPTAAsVal
+  - WeaponSubMachineGunGhost
+
+- type: technology
+  id: PangTaiServiceRifles
+  name: research-technology-pang-tai-service-rifles
+  icon:
+    sprite: _Crescent/Objects/Weapons/Guns/takemura.rsi
+    state: icon
+  discipline: PangTai
+  tier: 2
+  cost: 12500
+  recipeUnlocks:
+  - WeaponRifleTakemura
+  - WeaponRifleHalyadMarksman
+
+- type: technology
+  id: PangTaiCheshyre
+  name: research-technology-pang-tai-cheshyre
+  icon:
+    sprite: _Crescent/Objects/Weapons/Guns/cheshyre.rsi
+    state: icon
+  discipline: PangTai
+  tier: 2
+  cost: 7500
+  recipeUnlocks:
+  - WeaponSubMachineGunCheshyre
+
+- type: technology
+  id: PangTaiKarabin
+  name: research-technology-pang-tai-karabin
+  icon:
+    sprite: _Crescent/Objects/Weapons/Guns/karabin.rsi
+    state: icon
+  discipline: PangTai
+  tier: 2
+  cost: 7500
+  recipeUnlocks:
+  - WeaponShotgunKS23
+
+- type: technology
+  id: PangTaiKorund
+  name: research-technology-pang-tai-korund
+  icon:
+    sprite: _Crescent/Clothing/Corpo/OuterClothing/carapace.rsi
+    state: icon
+  discipline: PangTai
+  tier: 2
+  cost: 10000
+  recipeUnlocks:
+  - ClothingHeadHatPangtaiKorundHelmet
+  - ClothingOuterArmorPangTaiKorund
+
+- type: technology
+  id: PangTaiGrenades
+  name: research-technology-pang-tai-grenades
+  icon:
+    sprite: _Crescent/Objects/Weapons/Grenades/pta_impact.rsi
+    state: base
+  discipline: PangTai
+  tier: 2
+  cost: 7500
+  recipeUnlocks:
+  - PTAImpactHandgrenade
+  - PTAWarcrimeHandgrenade
+
+# Tier 3: restricted and experimental equipment
+
+- type: technology
+  id: PangTaiPrecisionWeapons
+  name: research-technology-pang-tai-precision-weapons
+  icon:
+    sprite: _Crescent/Objects/Weapons/Guns/spear.rsi
+    state: icon
+  discipline: PangTai
+  tier: 3
+  cost: 15000
+  recipeUnlocks:
+  - WeaponSpecialRailgun
+  - WeaponSniperSpear
+
+- type: technology
+  id: PangTaiExperimentalWeapons
+  name: research-technology-pang-tai-experimental-weapons
+  icon:
+    sprite: _Crescent/Objects/Weapons/Guns/charge_rifle.rsi
+    state: icon
+  discipline: PangTai
+  tier: 3
+  cost: 15000
+  recipeUnlocks:
+  - WeaponSpecialMako
+  - WeaponSpecialChargeRifle
+  - Magazine6x24mmCharge
+  - Magazine6x24mmConcentrated
+  - Magazine6x24mmIon
+  - Magazine6x24mmIncendiary
+  - Magazine6x24mmShock
+
+- type: technology
+  id: PangTaiLaunchers
+  name: research-technology-pang-tai-launchers
+  icon:
+    sprite: _Crescent/Objects/Weapons/Guns/gustav.rsi
+    state: icon
+  discipline: PangTai
+  tier: 3
+  cost: 15000
+  recipeUnlocks:
+  - WeaponLauncherChinaLake
+  - WeaponLauncherCommando
+  - WeaponLauncherGustav
+  - Cartridge40mmFrag
+  - Cartridge40mmCan
+  - Cartridge40mmHEDP
+  - Cartridge40mmSmoke
+  - Cartridge40mmThermobaric
+  - Cartridge40mmEMP
+  - Cartridge44mmCommando
+  - Cartridge84mmRecoillessFrag
+  - Cartridge84mmRecoillessCan
+  - Cartridge84mmRecoillessHEAT
+  - Cartridge84mmRecoillessTandem
+  - Cartridge84mmRecoillessEMP
+  - Cartridge84mmRecoillessSmoke
+
+- type: technology
+  id: PangTaiZhanshi
+  name: research-technology-pang-tai-zhanshi
+  icon:
+    sprite: _Crescent/Clothing/Corpo/OuterClothing/zhanshi.rsi
+    state: icon
+  discipline: PangTai
+  tier: 3
+  cost: 10000
+  recipeUnlocks:
+  - ClothingOuterHardsuitPangTai

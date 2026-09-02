@@ -34,7 +34,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 40
+        Piercing: 36
   - type: Sprite
     noRot: false
     sprite: _Crescent/Objects/Weapons/Projectiles/ballistic.rsi

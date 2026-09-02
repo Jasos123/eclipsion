@@ -501,6 +501,17 @@
     guides:
     - Science
 
+# Gu Tian's server carries only Pang Tai's proprietary equipment catalogue.
+- type: entity
+  id: ResearchAndDevelopmentServerPangTai
+  parent: ResearchAndDevelopmentServerGliessian
+  name: PTA Gu Tian research server
+  description: Stores Gu Tian's restricted Pang Tai Arms manufacturing catalogue.
+  components:
+  - type: TechnologyDatabase
+    supportedDisciplines:
+    - PangTai
+
 - type: entity
   id: ResearchAndDevelopmentServerFamilies
   parent: [ BaseMachinePowered, ConstructibleMachine ]

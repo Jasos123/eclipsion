@@ -1019,13 +1019,54 @@
       - TermiteLPC
       - ParacelsusLPC
       - ExhumerLPC
+      # Pang Tai start
+      - WeaponPistolRongyu
+      - WeaponPistolViper
+      - WeaponPistolCobra
+      - WeaponSubMachineGunPTAVektor
+      - WeaponSubMachineGunDroz
+      - WeaponShotgunBulldog
+      - WeaponShotgunPTATwinshot
+      - WeaponRifleVintorez
+      - WeaponSubMachineGunPTAAsVal
+      - WeaponSubMachineGunGhost
+      - WeaponRifleTakemura
+      - WeaponRifleHalyadMarksman
+      - WeaponSubMachineGunCheshyre
+      - WeaponShotgunKS23
+      - WeaponSpecialRailgun
+      - WeaponSniperSpear
+      - WeaponSpecialMako
+      - WeaponSpecialChargeRifle
+      - WeaponLauncherChinaLake
+      - WeaponLauncherCommando
+      - WeaponLauncherGustav
       - ClothingHeadHatPangtaiKorundHelmet
       - ClothingOuterArmorPangTaiKorund
       - ClothingHeadHatPangtaiCorvidHelmet
       - ClothingOuterArmorPangTaiVest
-      - WeaponSpecialMako
-      - WeaponSubMachineGunCheshyre
-      - WeaponPistolRongyu
+      - ClothingOuterHardsuitPangTai
+      - PTAImpactHandgrenade
+      - PTAWarcrimeHandgrenade
+      - Magazine6x24mmCharge
+      - Magazine6x24mmConcentrated
+      - Magazine6x24mmIon
+      - Magazine6x24mmIncendiary
+      - Magazine6x24mmShock
+      - Cartridge40mmFrag
+      - Cartridge40mmCan
+      - Cartridge40mmHEDP
+      - Cartridge40mmSmoke
+      - Cartridge40mmThermobaric
+      - Cartridge40mmEMP
+      - Cartridge44mmCommando
+      - Cartridge84mmRecoillessFrag
+      - Cartridge84mmRecoillessCan
+      - Cartridge84mmRecoillessHEAT
+      - Cartridge84mmRecoillessTandem
+      - Cartridge84mmRecoillessEMP
+      - Cartridge84mmRecoillessSmoke
+      # Pang Tai end
       #protolathe, exosuit fab, etc. recipies for the techdisk printer stuff. So we can go gambling with our points!
       - PowerDrill
       - MiningDrill

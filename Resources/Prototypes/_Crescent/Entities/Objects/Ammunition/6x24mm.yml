@@ -44,8 +44,8 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 22
-        Shock: 4
+        Piercing: 19.8
+        Shock: 3.6
     harmorPenetration: 29
     stoppingPower: 5
 #---------- The uranium ammo of 6x24mm ----------
@@ -72,8 +72,8 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 18
-        Shock: 8
+        Piercing: 16.2
+        Shock: 7.2
     harmorPenetration: 39
     stoppingPower: 3
 #---------- Anti-mech/cyborg ammo ----------
@@ -129,8 +129,8 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 10
-        Heat: 15
+        Piercing: 9
+        Heat: 13.5
     harmorPenetration: 29
     stoppingPower: 5
   - type: PointLight

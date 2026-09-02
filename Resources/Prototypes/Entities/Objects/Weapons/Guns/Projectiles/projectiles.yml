@@ -81,7 +81,7 @@
     impactEffect: BulletImpactEffect
     damage:
       types:
-        Piercing: 14
+        Piercing: 12.6
     soundHit:
       path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
   - type: TimedDespawn
@@ -103,7 +103,7 @@
   - type: Projectile
     damage:
       types:
-        Blunt: 7 # more damage than a punch.
+        Blunt: 6.3 # more damage than a punch.
   - type: Fixtures
     fixtures:
       projectile:
@@ -161,7 +161,7 @@
   - type: Projectile
     damage:
       types:
-        Blunt: 14
+        Blunt: 12.6
   - type: IgniteOnCollide
     fireStacks: 0.25
 
@@ -178,7 +178,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 11 # 20% decrease
+        Piercing: 9.9 # 20% decrease
     ignoreResistances: true
 
 - type: entity
@@ -194,7 +194,7 @@
   - type: Projectile
     damage:
       types:
-        Radiation: 11
+        Radiation: 9.9
 
 # Energy projectiles
 - type: entity
@@ -475,7 +475,7 @@
     impactEffect: BulletImpactEffectKinetic
     damage:
       types:
-        Blunt: 40 # Hullrot change, same as the default PKA damage
+        Blunt: 36 # Hullrot change
         Structural: 30 # Lavaland/Eris change: Yes easy break ins
   # Short lifespan
   - type: TimedDespawn

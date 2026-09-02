@@ -161,6 +161,27 @@
   - type: ContainerContainer
     containers:
       toggleable-clothing: !type:Container {}
+      hardsuit-injector-slot-1: !type:ContainerSlot {}
+      hardsuit-injector-slot-2: !type:ContainerSlot {}
+  - type: ItemSlots
+    slots:
+      hardsuit-injector-slot-1:
+        name: hardsuit-injector-slot-one
+        whitelist:
+          components:
+          - HardsuitInjectable
+        whitelistFailPopup: hardsuit-injector-not-a-pen
+        swap: false
+        priority: 2
+      hardsuit-injector-slot-2:
+        name: hardsuit-injector-slot-two
+        whitelist:
+          components:
+          - HardsuitInjectable
+        whitelistFailPopup: hardsuit-injector-not-a-pen
+        swap: false
+        priority: 1
+  - type: HardsuitInjector
   - type: GroupExamine
   - type: Tag
     tags:
