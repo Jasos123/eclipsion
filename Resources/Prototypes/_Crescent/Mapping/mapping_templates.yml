@@ -262,6 +262,12 @@
         - !type:MappingTemplatePrototype
           id: WeaponTurretPDT
         - !type:MappingTemplatePrototype
+          id: WeaponTurretAutoPDCapturable
+        - !type:MappingTemplatePrototype
+          id: ComputerTargetingCapturable
+        - !type:MappingTemplatePrototype
+          id: PersistentCaptureRegionFlag
+        - !type:MappingTemplatePrototype
           id: WarpPointShip
         - !type:MappingTemplatePrototype
           id: StationMap

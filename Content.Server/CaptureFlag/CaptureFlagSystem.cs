@@ -3,6 +3,7 @@ using Content.Server.GameTicking;
 using Content.Server.Popups;
 using Content.Shared.CaptureFlag;
 using Content.Shared._Crescent.HullrotFaction;
+using Content.Shared._Crescent.Territory;
 using Content.Shared.GameTicking;
 using Robust.Shared.Localization;
 using Robust.Shared.Map;
@@ -61,6 +62,7 @@ public sealed class CaptureFlagSystem : EntitySystem
     private void UpdateFlag(EntityUid uid, CaptureFlagComponent flag, TransformComponent xform, float frameTime)
     {
         var mapPos = _xform.ToMapCoordinates(xform.Coordinates);
+        var persistentRegion = CompOrNull<PersistentCaptureRegionComponent>(uid);
         _nearby.Clear();
         _lookup.GetEntitiesInRange(mapPos.MapId, mapPos.Position, flag.Radius, _nearby, LookupFlags.Dynamic | LookupFlags.Sundries);
 
@@ -71,6 +73,11 @@ public sealed class CaptureFlagSystem : EntitySystem
         {
             var team = TryGetTeam(ent);
             if (team is null)
+                continue;
+
+            // Persistent territory is intentionally limited to the four major powers. Ordinary capture flags retain
+            // their existing open-ended team handling.
+            if (persistentRegion != null && !PersistentTerritoryFactions.IsSupported(team))
                 continue;
 
             if (singleTeam is null)

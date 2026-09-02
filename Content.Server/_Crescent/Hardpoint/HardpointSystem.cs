@@ -35,6 +35,9 @@ public sealed class HardpointSystem : SharedHardpointSystem
             return;
         if (!TryComp<GunComponent>(hard.anchoring.Value, out var gun))
             return;
+        if (!TryComp<HardpointAnchorableOnlyComponent>(hard.anchoring.Value, out var anchor) ||
+            !IsMounted((hard.anchoring.Value, anchor)))
+            return;
 
         var gridUid = Transform(uid).GridUid;
         if (gridUid != null && HasComp<PacifistShipHullmodComponent>(gridUid))
@@ -54,10 +57,34 @@ public sealed class HardpointSystem : SharedHardpointSystem
 
     public void OnCannonDeanchor(EntityUid uid, HardpointComponent comp, ref HardpointCannonDeanchoredEvent args)
     {
-        // This is just for turret-cannons!
-        if (!TryComp<PointCannonComponent>(args.CannonUid, out var compx))
+        StopContinuousFire(args.CannonUid);
+
+        if (!HasComp<PointCannonComponent>(args.CannonUid))
             return;
+
         _cannonSystem.UnlinkCannon(args.CannonUid);
+    }
+
+    private void StopContinuousFire(EntityUid cannonUid)
+    {
+        if (TryComp<AutoShootGunComponent>(cannonUid, out var autoShoot) && autoShoot.Enabled)
+        {
+            _gun.SetEnabled(cannonUid, autoShoot, false);
+            Dirty(cannonUid, autoShoot);
+        }
+
+        if (!TryComp<GunComponent>(cannonUid, out var gun) ||
+            !gun.BurstActivated && gun.BurstShotsCount == 0 && gun.ShotCounter == 0)
+        {
+            return;
+        }
+
+        gun.BurstActivated = false;
+        gun.BurstShotsCount = 0;
+        gun.ShotCounter = 0;
+        gun.ShootCoordinates = null;
+        gun.Target = null;
+        Dirty(cannonUid, gun);
     }
 
 }

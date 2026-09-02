@@ -38,8 +38,8 @@ namespace Content.Server.Doors.Systems
             base.Initialize();
 
             SubscribeLocalEvent<FirelockComponent, BeforeDoorOpenedEvent>(OnBeforeDoorOpened);
+            SubscribeLocalEvent<FirelockComponent, DoorOpeningEvent>(OnDoorOpening);
             SubscribeLocalEvent<FirelockComponent, GetPryTimeModifierEvent>(OnDoorGetPryTimeModifier);
-            SubscribeLocalEvent<FirelockComponent, PriedEvent>(OnPried);
             SubscribeLocalEvent<FirelockComponent, DoorStateChangedEvent>(OnUpdateState);
 
             SubscribeLocalEvent<FirelockComponent, BeforeDoorAutoCloseEvent>(OnBeforeDoorAutoclose);
@@ -156,7 +156,10 @@ namespace Content.Server.Doors.Systems
                 args.Cancel();
                 return;
             }
+        }
 
+        private void OnDoorOpening(EntityUid uid, FirelockComponent component, DoorOpeningEvent args)
+        {
             if (args.User != null)
                 component.PlayerHeldOpen = true;
         }
@@ -178,15 +181,6 @@ namespace Content.Server.Doors.Systems
 
             if (state.Fire || state.Pressure)
                 args.PryTimeModifier *= component.LockedPryTimeModifier;
-        }
-
-        private void OnPried(EntityUid uid, FirelockComponent component, ref PriedEvent args)
-        {
-            if (!TryComp<DoorComponent>(uid, out var door))
-                return;
-
-            // This works regardless of whether DoorSystem handles PriedEvent before or after this system.
-            component.PlayerHeldOpen = door.State is DoorState.Closed or DoorState.Opening;
         }
 
         private void OnUpdateState(EntityUid uid, FirelockComponent component, DoorStateChangedEvent args)

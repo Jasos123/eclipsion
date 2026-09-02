@@ -1,6 +1,7 @@
 using Content.Server.Cargo.Systems;
 using Content.Server.GameTicking.Events;
 using Content.Server._Crescent.Taxation;
+using Content.Server._Crescent.Territory;
 using Content.Shared._Crescent.HullrotFaction;
 using Content.Shared._Crescent.RoundEnd;
 using Content.Shared.Mobs;
@@ -94,6 +95,7 @@ public sealed class StockMarketSignalSystem : EntitySystem
         SubscribeLocalEvent<FactionStationFellEvent>(OnStationFell);
         SubscribeLocalEvent<FactionWarDecidedEvent>(OnWarDecided);
         SubscribeLocalEvent<FactionMissionCompletedEvent>(OnMissionCompleted);
+        SubscribeLocalEvent<PersistentTerritoryStockRewardEvent>(OnTerritoryStockReward);
         // Deliberately NOT on RoundRestartCleanupEvent. StockCompanySystem applies its between-round
         // recovery on that same event and needs the finishing round's listing flags to still be intact;
         // system ordering within one event is not guaranteed, so delisting waits for the new round.
@@ -296,5 +298,20 @@ public sealed class StockMarketSignalSystem : EntitySystem
             MissionImpact,
             MissionDuration,
             Loc.GetString("stock-news-contract", ("faction", args.Faction)));
+    }
+
+    private void OnTerritoryStockReward(ref PersistentTerritoryStockRewardEvent args)
+    {
+        if (_protection.IsProtected(args.Faction) ||
+            !FactionCompanies.TryGetValue(args.Faction, out var companyId))
+        {
+            return;
+        }
+
+        _stocks.AddPressure(
+            companyId,
+            args.Magnitude,
+            args.DurationTicks,
+            Loc.GetString("stock-news-territory-income", ("region", args.RegionName)));
     }
 }

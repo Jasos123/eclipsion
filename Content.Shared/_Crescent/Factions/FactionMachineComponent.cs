@@ -41,6 +41,13 @@ public sealed partial class FactionMachineComponent : Component
     public bool RestrictAccess;
 
     /// <summary>
+    /// Whether umbrella/legacy faction aliases should be folded to their parent faction. Persistent territory
+    /// consoles disable this so the four major powers retain their exact ownership IDs.
+    /// </summary>
+    [DataField, ViewVariables(VVAccess.ReadWrite), AutoNetworkedField]
+    public bool NormalizeFaction = true;
+
+    /// <summary>
     /// Popup shown when someone outside the faction tries to use a restricted machine.
     /// </summary>
     [DataField]

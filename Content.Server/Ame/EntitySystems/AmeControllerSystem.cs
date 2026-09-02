@@ -369,7 +369,7 @@ public sealed class AmeControllerSystem : EntitySystem
         // Admin alert
         var safeLimit = 0;
         if (TryGetAMENodeGroup(uid, out var group))
-            safeLimit = group.CoreCount * 2;
+            safeLimit = group.GetSafeFuelLimit();
 
         if (oldValue <= safeLimit && value > safeLimit)
         {

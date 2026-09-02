@@ -50,6 +50,26 @@
       sprite: Structures/Machines/computers.rsi
       state: generic_keys
 
+# The mapped-in fire-control console for a persistent capture region. FactionMachine blocks the UI for anyone
+# outside the current owning faction; PersistentCaptureRegionSystem stamps that faction on map load and capture.
+- type: entity
+  parent: [ComputerTargeting, BaseStructureDisableToolUse, BaseStructureUnanchorable]
+  id: ComputerTargetingCapturable
+  name: territorial point-defence console
+  suffix: Capturable territory
+  components:
+  - type: FactionMachine
+    faction: ""
+    explicit: true
+    restrictAccess: true
+    normalizeFaction: false
+  - type: CaptureRegionDevice
+  - type: TerritoryAutoDefense
+    range: 2000
+    neutralEngagementRange: 1500
+    scanInterval: 1
+    warOnly: true
+
 - type: entity
   parent: BaseComputerCircuitboard
   id: TargetingConsoleCircuitboard

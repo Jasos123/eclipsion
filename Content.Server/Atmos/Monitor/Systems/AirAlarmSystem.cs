@@ -433,7 +433,14 @@ public sealed class AirAlarmSystem : EntitySystem
     /// <param name="origin">The origin address of this mode set. Used for network sync.</param>
     /// <param name="mode">The mode to set the alarm to.</param>
     /// <param name="uiOnly">Whether this change is for the UI only, or if it changes the air alarm's operating mode. Defaults to true.</param>
-    public void SetMode(EntityUid uid, string origin, AirAlarmMode mode, bool uiOnly = true, AirAlarmComponent? controller = null)
+    /// <param name="sync">Whether to broadcast the applied mode to the rest of the device network.</param>
+    public void SetMode(
+        EntityUid uid,
+        string origin,
+        AirAlarmMode mode,
+        bool uiOnly = true,
+        AirAlarmComponent? controller = null,
+        bool sync = true)
     {
         if (!Resolve(uid, ref controller))
         {
@@ -476,7 +483,8 @@ public sealed class AirAlarmSystem : EntitySystem
         // setting sync deals with the issue of air alarms
         // in the same network needing to have the same mode
         // as other alarms
-        SyncMode(uid, mode);
+        if (sync)
+            SyncMode(uid, mode);
     }
 
     /// <summary>
@@ -534,7 +542,10 @@ public sealed class AirAlarmSystem : EntitySystem
                 if (!args.Data.TryGetValue(AirAlarmSetMode, out AirAlarmMode alarmMode))
                     break;
 
-                SetMode(uid, args.SenderAddress, alarmMode, uiOnly: false);
+                // This packet is already the result of another alarm synchronizing its mode. Applying it locally is
+                // necessary even when the mode is unchanged, but broadcasting it again would make alarms bounce the
+                // same packet between each other forever.
+                SetMode(uid, args.SenderAddress, alarmMode, uiOnly: false, sync: false);
 
                 return;
         }

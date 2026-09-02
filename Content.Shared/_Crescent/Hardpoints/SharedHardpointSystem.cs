@@ -4,6 +4,7 @@ using Content.Shared.Construction.Components;
 using Content.Shared.Construction.EntitySystems;
 using Content.Shared.Destructible;
 using Content.Shared.Popups;
+using Content.Shared.Weapons.Ranged.Events;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
@@ -30,8 +31,37 @@ public class SharedHardpointSystem : EntitySystem
         SubscribeLocalEvent<HardpointAnchorableOnlyComponent, MapInitEvent>(OnMapLoad);
         SubscribeLocalEvent<HardpointComponent, AnchorStateChangedEvent>(OnHardpointAnchor);
         SubscribeLocalEvent<HardpointAnchorableOnlyComponent, ComponentRemove>(OnShipgunRemove);
+        SubscribeLocalEvent<HardpointAnchorableOnlyComponent, ShotAttemptedEvent>(OnShotAttempted);
         // TODO: ACCOUNT FOR REMOVING IT IN ADMIN MODE
         _sawmill = IoCManager.Resolve<ILogManager>().GetSawmill("crescent.hardpoints");
+    }
+
+    private void OnShotAttempted(Entity<HardpointAnchorableOnlyComponent> ent, ref ShotAttemptedEvent args)
+    {
+        if (!IsMounted(ent))
+            args.Cancel();
+    }
+
+    /// <summary>
+    /// Returns whether a hardpoint-only weapon is still physically mounted to the hardpoint that claims it.
+    /// Checking both sides prevents stale component state from allowing a detached weapon to fire.
+    /// </summary>
+    public bool IsMounted(Entity<HardpointAnchorableOnlyComponent> weapon)
+    {
+        var weaponXform = Transform(weapon);
+
+        if (!weaponXform.Anchored ||
+            weapon.Comp.anchoredTo is not { } hardpointUid ||
+            !TryComp<HardpointComponent>(hardpointUid, out var hardpoint) ||
+            hardpoint.anchoring != weapon.Owner ||
+            !TryComp<TransformComponent>(hardpointUid, out var hardpointXform) ||
+            !hardpointXform.Anchored ||
+            hardpointXform.GridUid != weaponXform.GridUid)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     public void OnMapLoad(EntityUid uid, HardpointAnchorableOnlyComponent comp, ref MapInitEvent args)

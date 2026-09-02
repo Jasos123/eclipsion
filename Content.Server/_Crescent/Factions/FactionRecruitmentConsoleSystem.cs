@@ -342,10 +342,23 @@ public sealed class FactionRecruitmentConsoleSystem : EntitySystem
         // recruit still reads as their old side to every turret in the sector.
         _hullrotNpcFaction.Sync(target, factionComp);
 
-        // 3. ID card: title, icon, department, and (additively) the role's access.
-        if (_idCard.TryFindIdCard(target, out var idCard))
+        // 3. ID card: title, icon, department, and (additively) the role's access. Only the equipped ID slot counts;
+        // TryFindIdCard prefers an active-hand card and would let a recruit stamp an arbitrary spare credential.
+        var previousCredential = CompOrNull<FactionCredentialTrackerComponent>(target);
+        if (_factionIds.TryGetWornIdCard(target, out var idCard))
         {
+            if (previousCredential != null && previousCredential.Faction != comp.Faction)
+            {
+                foreach (var oldCard in previousCredential.Cards)
+                    _factionIds.ClearFaction(oldCard, previousCredential.Faction);
+
+                previousCredential.Cards.Clear();
+            }
+
             _factionIds.SetFaction(idCard, comp.Faction);
+            var credential = EnsureComp<FactionCredentialTrackerComponent>(target);
+            credential.Cards.Add(idCard);
+            credential.Faction = comp.Faction;
             _idCard.TryChangeJobTitle(idCard, job.LocalizedName, player: actor);
 
             if (_proto.TryIndex(job.Icon, out var icon))
@@ -359,6 +372,14 @@ public sealed class FactionRecruitmentConsoleSystem : EntitySystem
             tags.UnionWith(job.Access);
             _access.TrySetTags(idCard, tags);
             _access.TryAddGroups(idCard, job.AccessGroups);
+        }
+        else if (previousCredential != null && previousCredential.Faction != comp.Faction)
+        {
+            // Lateral recruitment without an equipped replacement ID must still revoke the old faction's card.
+            foreach (var oldCard in previousCredential.Cards)
+                _factionIds.ClearFaction(oldCard, previousCredential.Faction);
+
+            RemComp<FactionCredentialTrackerComponent>(target);
         }
 
         var factionName = FactionDisplayName(comp.Faction);
@@ -406,6 +427,20 @@ public sealed class FactionRecruitmentConsoleSystem : EntitySystem
         // NPC factions are cleaned up and overwatch cannot retain this member in a stale roster cache.
         _squad.RemoveFromSquad(target);
         RemComp<HullrotFactionComponent>(target);
+
+        // Revoke the exact card stamped during recruitment, even if the member hid or swapped it. Round-start members
+        // have no tracker, so their currently equipped card is the safe fallback. Active-hand cards never qualify.
+        var revokedTrackedCard = false;
+        if (TryComp<FactionCredentialTrackerComponent>(target, out var trackedCredential))
+        {
+            foreach (var trackedCard in trackedCredential.Cards)
+                revokedTrackedCard |= _factionIds.ClearFaction(trackedCard, comp.Faction);
+
+            RemComp<FactionCredentialTrackerComponent>(target);
+        }
+
+        if (!revokedTrackedCard && _factionIds.TryGetWornIdCard(target, out var idCard))
+            _factionIds.ClearFaction(idCard, comp.Faction);
 
         var factionName = FactionDisplayName(comp.Faction);
 

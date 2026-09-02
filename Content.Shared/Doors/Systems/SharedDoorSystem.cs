@@ -392,6 +392,8 @@ public abstract partial class SharedDoorSystem : EntitySystem
         if (!SetState(uid, DoorState.Opening, door))
             return;
 
+        RaiseLocalEvent(uid, new DoorOpeningEvent(user));
+
         if (predicted)
             Audio.PlayPredicted(door.OpenSound, uid, user, AudioParams.Default.WithVolume(-5));
         else if (_net.IsServer)

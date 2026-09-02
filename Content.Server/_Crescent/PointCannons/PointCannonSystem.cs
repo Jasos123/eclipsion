@@ -825,7 +825,9 @@ public sealed class PointCannonSystem : EntitySystem
     {
         hardpoint = default;
 
-        if (!_anchorQuery.TryGetComponent(cannonUid, out var anchorComp) || anchorComp.anchoredTo is not { } mount)
+        if (!_anchorQuery.TryGetComponent(cannonUid, out var anchorComp) ||
+            anchorComp.anchoredTo is not { } mount ||
+            !_hardpoint.IsMounted((cannonUid, anchorComp)))
             return false;
 
         // The hardpoint must not reintroduce a power requirement while ship-weapon power is opted out.

@@ -163,7 +163,7 @@ public sealed class AmeNodeGroup : BaseNodeGroup
         return CoreCount > 0 && fuel > GetSafeFuelLimit();
     }
 
-    private int GetSafeFuelLimit()
+    public int GetSafeFuelLimit()
     {
         return CoreCount * 2 + CoreCount / 2;
     }

@@ -137,6 +137,7 @@ stock-news-victory = Won the war
 stock-news-contract = Contract fulfilled
 stock-news-treasury-up = Treasury growing
 stock-news-treasury-down = Treasury draining
+stock-news-territory-income = Holding {$region}
 stock-news-admin = Unexplained market movement
 
 stock-war-liquidation = {$company} has gone to war with your faction and closed your position. Your {$shares} shares were sold at the floor price of {$price}cr and {$total}cr has been transferred to your account.

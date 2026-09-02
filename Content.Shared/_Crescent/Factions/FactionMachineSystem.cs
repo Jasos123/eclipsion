@@ -19,6 +19,7 @@ public sealed class FactionMachineSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<FactionMachineComponent, ActivatableUIOpenAttemptEvent>(OnUiOpenAttempt);
+        SubscribeLocalEvent<FactionMachineComponent, BoundUserInterfaceMessageAttempt>(OnUiMessageAttempt);
     }
 
     private void OnUiOpenAttempt(Entity<FactionMachineComponent> ent, ref ActivatableUIOpenAttemptEvent args)
@@ -28,17 +29,34 @@ public sealed class FactionMachineSystem : EntitySystem
 
         // Anything that gets this far as a ghost is an admin ghost — ordinary ghosts can't interact at all.
         // Admins have to be able to open a faction's machinery to see what it holds.
-        if (HasComp<GhostComponent>(args.User))
-            return;
-
-        // Faction membership lives on the body, not the ID card, so read it off the user directly.
-        var userFaction = CompOrNull<HullrotFactionComponent>(args.User)?.Faction ?? string.Empty;
-        if (userFaction == GetFaction(ent))
+        if (CanUse(ent, args.User))
             return;
 
         args.Cancel();
         if (ent.Comp.DeniedPopup != null)
             _popup.PopupClient(Loc.GetString(ent.Comp.DeniedPopup), ent, args.User);
+    }
+
+    private void OnUiMessageAttempt(Entity<FactionMachineComponent> ent, ref BoundUserInterfaceMessageAttempt args)
+    {
+        // Revalidate every action, not just opening the window. This matters when a persistent territory changes
+        // hands while a member of the old owner still has its console open.
+        if (!args.Cancelled && ent.Comp.RestrictAccess && !CanUse(ent, args.Actor))
+            args.Cancel();
+    }
+
+    private bool CanUse(Entity<FactionMachineComponent> ent, EntityUid user)
+    {
+        // Anything that reaches a machine as a ghost is an admin ghost; ordinary ghosts cannot interact.
+        if (HasComp<GhostComponent>(user))
+            return true;
+
+        // Faction membership lives on the body, not the ID card, so read it off the user directly.
+        var userFaction = CompOrNull<HullrotFactionComponent>(user)?.Faction ?? string.Empty;
+        var machineFaction = GetFaction(ent);
+
+        // A restricted but currently unowned machine is locked, not public equipment for every unaligned character.
+        return machineFaction.Length != 0 && userFaction == machineFaction;
     }
 
     /// <summary>
@@ -47,11 +65,11 @@ public sealed class FactionMachineSystem : EntitySystem
     public string GetFaction(EntityUid uid)
     {
         if (TryComp<FactionMachineComponent>(uid, out var machine) && (machine.Explicit || machine.Faction != ""))
-            return Normalize(machine.Faction);
+            return Normalize(machine.Faction, machine.NormalizeFaction);
 
         // Not stamped, so fall back to the grid it's mounted on. This is the mapped-in station equipment case.
         if (Transform(uid).GridUid is { } grid && TryComp<IFFComponent>(grid, out var iff))
-            return Normalize(iff.Faction);
+            return Normalize(iff.Faction, machine?.NormalizeFaction ?? true);
 
         return string.Empty;
     }
@@ -89,12 +107,12 @@ public sealed class FactionMachineSystem : EntitySystem
         ["CD"] = "TFSC", // Cyberdawn
     };
 
-    private static string Normalize(string faction)
+    private static string Normalize(string faction, bool normalizeParent)
     {
         // "Neutral" is the IFF default for unaligned grids, so it means the same thing as no faction at all.
         if (faction == "Neutral")
             return string.Empty;
 
-        return ParentFactions.TryGetValue(faction, out var parent) ? parent : faction;
+        return normalizeParent && ParentFactions.TryGetValue(faction, out var parent) ? parent : faction;
     }
 }

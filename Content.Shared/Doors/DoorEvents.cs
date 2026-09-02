@@ -25,6 +25,19 @@ namespace Content.Shared.Doors
     }
 
     /// <summary>
+    /// Raised after a door has successfully started opening.
+    /// </summary>
+    public sealed class DoorOpeningEvent : EntityEventArgs
+    {
+        public readonly EntityUid? User;
+
+        public DoorOpeningEvent(EntityUid? user)
+        {
+            User = user;
+        }
+    }
+
+    /// <summary>
     /// Raised when the door is determining whether it is able to close. If the event is canceled, the door will not
     /// close. Additionally this event also has a bool that determines whether or not the door should perform a
     /// safety/collision check before closing. This check has to be proactively disabled by things like hacked airlocks.

@@ -1,4 +1,5 @@
 using Content.Shared.CaptureFlag;
+using Content.Shared._Crescent.Territory;
 using Robust.Client.GameObjects;
 
 namespace Content.Client.CaptureFlag;
@@ -24,6 +25,11 @@ public sealed class CaptureFlagVisualsSystem : EntitySystem
 
     private void UpdateVisuals(Entity<CaptureFlagComponent> ent)
     {
+        // Persistent territory flags have their own visuals system and must never be overwritten by the ordinary
+        // two-team capture flag presentation.
+        if (HasComp<PersistentCaptureRegionComponent>(ent))
+            return;
+
         if (!TryComp<SpriteComponent>(ent, out var sprite))
             return;
 
