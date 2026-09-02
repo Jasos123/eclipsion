@@ -131,8 +131,10 @@ public sealed class HardsuitInjectorSystem : EntitySystem
         }
 
         var ent = new Entity<HardsuitInjectorComponent>(suit.Value, injector);
-        TryInjectSlot(ent, HardsuitInjectorComponent.SlotOneId, args.Target, true);
-        TryInjectSlot(ent, HardsuitInjectorComponent.SlotTwoId, args.Target, true);
+        // Only use one pen per critical transition. Two emergency pens at once would exceed
+        // epinephrine's safe threshold; the second slot acts as a backup once the first is spent.
+        if (!TryInjectSlot(ent, HardsuitInjectorComponent.SlotOneId, args.Target, true))
+            TryInjectSlot(ent, HardsuitInjectorComponent.SlotTwoId, args.Target, true);
     }
 
     private bool TryInjectSlot(Entity<HardsuitInjectorComponent> suit, string slotId, EntityUid wearer, bool automatic)
