@@ -8,9 +8,28 @@ namespace Content.Shared._Crescent.Territory;
 /// </summary>
 public static class PersistentTerritoryFactions
 {
+    private static readonly string[] Ids = ["DSM", "NCWL", "TFSC", "SHI"];
+
+    /// <summary>
+    /// Every faction that may hold territory, in a fixed order suitable for admin console hints and help text.
+    /// </summary>
+    public static IReadOnlyList<string> Supported => Ids;
+
     public static bool IsSupported(string? faction)
     {
         return faction is "DSM" or "NCWL" or "TFSC" or "SHI";
+    }
+
+    public static string StripOwnerPrefix(string name)
+    {
+        foreach (var faction in Ids)
+        {
+            var prefix = $"{faction} ";
+            if (name.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                return name[prefix.Length..];
+        }
+
+        return name;
     }
 }
 
@@ -109,6 +128,24 @@ public sealed partial class CaptureRegionDeviceComponent : Component
     /// <summary>Replace an NpcFactionMember component's factions when control changes.</summary>
     [DataField]
     public bool UpdateNpcFaction = true;
+
+    /// <summary>
+    /// Prefix the device's name with the owning faction, so a boarder can tell whose guns they have walked into
+    /// without a console in front of them.
+    /// </summary>
+    /// <remarks>
+    /// Opt-in rather than on by default: a targeting console groups its cannons by entity name, so renaming a
+    /// hardpoint-mounted gun mid-round would silently split its group away from the one the console already
+    /// holds. It is safe on the capturable console and anti-boarder turret, neither of which is grouped that way.
+    /// </remarks>
+    [DataField]
+    public bool UpdateName;
+
+    /// <summary>
+    /// The device's name with no owner prefix, captured the first time ownership is applied. Runtime-only.
+    /// </summary>
+    [ViewVariables]
+    public string? BaseName;
 }
 
 /// <summary>
@@ -117,22 +154,32 @@ public sealed partial class CaptureRegionDeviceComponent : Component
 [RegisterComponent]
 public sealed partial class TerritoryAutoDefenseComponent : Component
 {
-    /// <summary>Maximum hostile-grid acquisition distance in world tiles.</summary>
-    [DataField]
-    public float Range = 2000f;
-
     /// <summary>
-    /// Non-allied factions that are not in a declared war are warned inside <see cref="Range"/>, but are only
-    /// engaged after crossing this distance.
+    /// Maximum hostile-grid acquisition distance in world tiles. It defaults to the 512-tile radar range of the
+    /// console this sits on, so the automatic mode can never engage anything an operator at the same console
+    /// could not see and order a shot at by hand. Raising it past what the mounted guns can actually reach only
+    /// buys a wider lookup and rounds that despawn short of the target.
     /// </summary>
     [DataField]
-    public float NeutralEngagementRange = 1500f;
+    public float Range = 512f;
+
+    /// <summary>
+    /// The exclusion zone held against non-allied traffic that is not in a declared war. Only used when
+    /// <see cref="WarOnly"/> is off: hulls inside it are engaged, hulls between it and <see cref="Range"/> get a
+    /// radio warning quoting this distance.
+    /// </summary>
+    [DataField]
+    public float NeutralEngagementRange = 384f;
 
     /// <summary>Seconds between target searches and console-to-cannon link refreshes.</summary>
     [DataField]
     public float ScanInterval = 1f;
 
-    /// <summary>If true, only factions in a declared war are engaged rather than every non-ally.</summary>
+    /// <summary>
+    /// If true, only factions in a declared war are engaged, and everything else is ignored outright - no
+    /// exclusion zone and no radio warnings, because the battery would never make good on them. Turning it off
+    /// engages every non-ally that crosses <see cref="NeutralEngagementRange"/>.
+    /// </summary>
     [DataField]
     public bool WarOnly = true;
 

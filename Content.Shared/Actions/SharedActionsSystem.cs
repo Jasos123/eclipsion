@@ -1,4 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions.Events;
@@ -1137,7 +1137,10 @@ public abstract class SharedActionsSystem : EntitySystem
 
     public void SetEntityIcon(EntityUid uid, EntityUid? icon, BaseActionComponent? action = null)
     {
-        if (!Resolve(uid, ref action))
+        // BaseActionComponent is abstract and has no registration of its own, so the generic Resolve asserts in
+        // debug and null-refs in release instead of finding the concrete action component. Action data is only
+        // reachable through GetActionDataEvent.
+        if (!ResolveActionData(uid, ref action))
             return;
 
         action.EntityIcon = icon;

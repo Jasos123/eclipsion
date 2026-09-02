@@ -52,7 +52,7 @@ public sealed class ShipWeaponArcSystem : EntitySystem
     ///     parallel and the solver has to split the difference between them: each axis is offered as a bearing in
     ///     its own right below, so a bank of parallel guns is aimed exactly rather than to the nearest sample.
     /// </summary>
-    private static readonly double FixedMountTolerance = Angle.FromDegrees(2).Theta;
+    private static readonly double FixedMountTolerance = PointCannonSystem.FixedMountAimTolerance.Theta;
 
     /// <summary>
     ///     Slack for comparing two candidates' aiming error, which is a sum of doubles and so never lands on an

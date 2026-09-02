@@ -54,6 +54,9 @@
   name: territorial 7.62x51mm anti-boarder turret
   suffix: Capturable territory PDT
   components:
+    # Empty on purpose. The turret shoots nobody until a faction takes the region, and
+    # PersistentCaptureRegionSystem stamps the owner in on capture and on every map load.
     - type: NpcFactionMember
     - type: CaptureRegionDevice
+      updateName: true
 

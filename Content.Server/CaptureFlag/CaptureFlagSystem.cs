@@ -5,6 +5,8 @@ using Content.Shared.CaptureFlag;
 using Content.Shared._Crescent.HullrotFaction;
 using Content.Shared._Crescent.Territory;
 using Content.Shared.GameTicking;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Robust.Shared.Localization;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
@@ -80,6 +82,14 @@ public sealed class CaptureFlagSystem : EntitySystem
             if (persistentRegion != null && !PersistentTerritoryFactions.IsSupported(team))
                 continue;
 
+            // A corpse or incapacitated body must not capture or contest persistent territory. Ordinary capture
+            // flags retain their existing generic CaptureTeam behavior for modes that use non-mob capture actors.
+            if (persistentRegion != null &&
+                (!TryComp<MobStateComponent>(ent, out var mobState) || mobState.CurrentState != MobState.Alive))
+            {
+                continue;
+            }
+
             if (singleTeam is null)
             {
                 singleTeam = team;
@@ -110,6 +120,9 @@ public sealed class CaptureFlagSystem : EntitySystem
                     flag.ProgressSeconds = 0f;
             }
 
+            if (flag.ProgressSeconds <= 0f)
+                flag.ProgressTeam = null;
+
             if (oldActiveTeam != flag.ActiveTeam || oldStage != flag.Stage || oldProgress != flag.ProgressSeconds)
                 Dirty(uid, flag);
 
@@ -117,6 +130,17 @@ public sealed class CaptureFlagSystem : EntitySystem
         }
 
         flag.ActiveTeam = singleTeam;
+
+        // Partial progress belongs to the faction that earned it. Without this reset, another faction can walk in
+        // after the first leaves and finish its capture or neutralization progress.
+        if (flag.ProgressSeconds > 0f &&
+            flag.ProgressTeam != null &&
+            !string.Equals(flag.ProgressTeam, singleTeam, StringComparison.Ordinal))
+        {
+            flag.ProgressSeconds = 0f;
+        }
+
+        flag.ProgressTeam = singleTeam;
 
         var needNeutralize = flag.OwnerTeam != null &&
                              !string.Equals(flag.OwnerTeam, singleTeam, StringComparison.Ordinal);
@@ -130,6 +154,7 @@ public sealed class CaptureFlagSystem : EntitySystem
             {
                 flag.OwnerTeam = null;
                 flag.ProgressSeconds = 0f;
+                flag.ProgressTeam = singleTeam;
                 flag.Stage = CaptureFlagStage.Capturing;
                 Dirty(uid, flag);
                 return;
@@ -144,6 +169,7 @@ public sealed class CaptureFlagSystem : EntitySystem
             if (flag.ProgressSeconds != 0f || flag.Stage != CaptureFlagStage.Idle)
             {
                 flag.ProgressSeconds = 0f;
+                flag.ProgressTeam = null;
                 flag.Stage = CaptureFlagStage.Idle;
                 Dirty(uid, flag);
             }
@@ -157,10 +183,14 @@ public sealed class CaptureFlagSystem : EntitySystem
         {
             flag.OwnerTeam = singleTeam;
             flag.ProgressSeconds = 0f;
+            flag.ProgressTeam = null;
             flag.Stage = CaptureFlagStage.Idle;
             RaiseLocalEvent(new CaptureFlagWonEvent(singleTeam));
 
-            _popup.PopupEntity(Loc.GetString("capture-flag-captured", ("team", singleTeam)), uid, Filter.Broadcast(), true);
+            // A persistent territory announces itself by name through PersistentCaptureRegionSystem. A second,
+            // world-wide floating popup that only says which faction won would be both redundant and less use.
+            if (persistentRegion == null)
+                _popup.PopupEntity(Loc.GetString("capture-flag-captured", ("team", singleTeam)), uid, Filter.Broadcast(), true);
         }
 
         Dirty(uid, flag);

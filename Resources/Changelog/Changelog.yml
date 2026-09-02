@@ -1102,3 +1102,19 @@ Entries:
   id: 6083
   time: '2026-08-23T00:00:00.0000000+00:00'
   url: null
+
+- author: Taleryn
+  changes:
+    - message: Added persistent freeplay territory. A territorial claim standard mapped onto an installation makes it capturable by DSM, NCWL, TFCF or Shinohara, and the owner survives round restarts and server restarts. Taking one renames the installation on radar with the holder's prefix, recolours its contact, hands its point-defence console to that faction alone, and flips its anti-boarder turrets to shoot for the new owner. Losing the ground gives all of it back. Examine the standard to see who holds it and how far along a capture is.
+      type: Add
+    - message: A territory's point-defence console now guards itself when nobody is at it, firing on hulls its faction has declared war on and standing down the moment an operator opens the console. Its reach is the console's own radar range, so unattended it shoots at exactly what a crewman sitting at it could have seen and clicked.
+      type: Add
+    - message: Added the territory admin command for listing persistent regions and overriding who holds them, so a region stuck under a faction nobody is playing no longer needs the save file edited by hand.
+      type: Add
+    - message: Fixed automatic territory batteries judging every welded gun a quarter turn off its real axis, so fixed mounts held fire on targets they were pointed straight at and shot at ones they could never hit.
+      type: Fix
+    - message: Automatic territory batteries no longer radio a perimeter warning at every non-allied ship in range while configured to never fire on them.
+      type: Fix
+  id: 6084
+  time: '2026-09-02T00:00:00.0000000+00:00'
+  url: null
