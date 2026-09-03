@@ -275,8 +275,8 @@
     sprite: _Crescent/Objects/Weapons/Guns/spear.rsi
   - type: GunRequiresWield
   - type: HeldSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
+    walkModifier: 0.8
+    sprintModifier: 0.8
   - type: UseDelay
     delay: 0.75 #No Quickscoping
   - type: UseDelayBlockShoot

@@ -6,7 +6,7 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared._Crescent.HardsuitInjection;
 
 /// <summary>
-/// Gives a hardsuit two medipen slots that can inject the wearer manually or when they enter critical condition.
+/// Gives a hardsuit two injector slots that can inject the wearer manually or when they enter critical condition.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class HardsuitInjectorComponent : Component
@@ -43,7 +43,8 @@ public sealed partial class HardsuitInjectorComponent : Component
 }
 
 /// <summary>
-/// Marker used by hardsuit injector slot whitelists. It is inherited by every ChemicalMedipen child.
+/// Marker used by hardsuit injector slot whitelists. It is inherited by compatible containers such as
+/// ChemicalMedipen children and chemistry bottles.
 /// </summary>
 [RegisterComponent]
 public sealed partial class HardsuitInjectableComponent : Component;

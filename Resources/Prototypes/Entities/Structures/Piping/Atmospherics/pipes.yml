@@ -254,6 +254,8 @@
   name: broken pipe
   description: It used to hold gas.
   components:
+  # Eclipsion - lets the automated repair slip clear this off a tile it is rebuilding.
+  - type: ShipRepairRemnant
   - type: Sprite
     sprite: Structures/Piping/Atmospherics/pipe.rsi
     drawdepth: ThinPipe

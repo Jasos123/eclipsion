@@ -1118,3 +1118,75 @@ Entries:
   id: 6084
   time: '2026-09-02T00:00:00.0000000+00:00'
   url: null
+
+- author: Taleryn
+  changes:
+    - message: Added the automated repair slip console. It surveys whatever is docked to its own station against that ship's structural blueprint, quotes the missing plating and framing at fifteen percent over what the parts are worth, and on authorisation welds the hull back together part by part with RCD flashes rather than snapping it whole. The console shows the percentage done, an estimated finish time and a running count of parts reinstated, and refunds the unspent share of the fee if the ship undocks or the job is aborted.
+      type: Add
+    - message: The repair slip now also beats the damage out of structures that survived, clears the girder a broken wall leaves behind before welding the new one so the tile no longer ends up holding both, mops up spilled blood and chemicals, and refills ship guns and generators that are running low. Each of those is quoted as its own line on the console.
+      type: Add
+    - message: The repair slip rebuilds the whole hull rather than only its walls. Windows, grilles, airlocks, thrusters, gyroscopes, guns, shield emitters, consoles, lights, cables and pipes are all quoted and reinstated. Lockers, vending machines, loose cargo and bodies are deliberately left out, since rebuilding those would hand out their contents for free. The hand-held repair device keeps the narrow scope it always had.
+      type: Add
+    - message: Removed the faction treasury variant of the repair slip console. Repairs are paid from the authorising crewman's own account.
+      type: Remove
+  id: 6085
+  time: '2026-09-03T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: The repair slip now lays decking back down instead of leaving the bare plating under it. A dark tile blown off its plating read as intact because something was still standing there, so a ship came out of the slip whole but grey underfoot wherever its floor had been. Tiles a crewman swapped for a different one himself are still left alone.
+      type: Fix
+    - message: The repair slip now sweeps up the wreckage a battered hull sheds - steel and plasteel sheets, metal rods, loose floor tiles, glass shards, cut cable coils and blasted scrap - so a rebuilt ship is no longer handed back knee deep in the remains of the old one. Anything in a crate, a locker or a pocket is untouched, and the sweep is quoted as its own line on the console.
+      type: Add
+    - message: A destroyed machine frame, a broken pipe stub and a smashed wall map are now cleared off the tile before the slip rebuilds what stood there, the same way a broken wall's girder already was.
+      type: Fix
+  id: 6086
+  time: '2026-09-03T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: The repair slip now repaints the deck markings a wrecked compartment lost, so a rebuilt hull comes back with its stripes, hazard blocks and department colours rather than as bare plating. Blood and soot are left for the crew to mop, and paint over a hole the blueprint leaves open is not quoted for.
+      type: Add
+    - message: A shuttle console built or rebuilt after its ship was keyed now accepts the ship's ID. The keys are handed out once when a hull is created, and a console welded back on in place of one that was shot out never received them, so it refused every ID swiped at it and sat locked forever.
+      type: Fix
+    - message: The repair slip's ship picker is labelled ship rather than berth, and the spills and wreckage lines are quoted together as one cleaning line.
+      type: Tweak
+  id: 6087
+  time: '2026-09-03T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: The repair slip now sweeps up the bulbs, boards, stock parts and cells that a smashed fixture or machine drops on the deck, alongside the sheets and shards it already binned.
+      type: Add
+    - message: A hull comes out of the slip with its air made good again. Once the welding is finished, every compartment the yard sealed back up is filled to a room's worth of atmosphere, and a mapper's cold room or vox berth is refilled with what belongs in it rather than with ordinary air. Filling spreads out of each welded breach and stops at the first wall or shut door, so a fire the crew is fighting, a hold vented on purpose or a leak sealed off behind a door on the other side of the ship is left exactly as they have it.
+      type: Add
+    - message: The slip now quotes a structure's fitted contents rather than only its shell. An airlock is a frame around an electronics board, and pricing ignores what is inside a thing, so rebuilding one used to hand the board over for nothing.
+      type: Fix
+    - message: Gas pipes are repaired again. They count as items as well as structures, and the rule keeping loose cargo off the slip's books was catching them too.
+      type: Fix
+    - message: An airlock the slip rebuilds is cut the ship's own keys again instead of falling back to the access its prototype ships with, which had it opening for the wrong people.
+      type: Fix
+    - message: Guns and generators running on ammunition or fuel that carries no market price are refilled again. The slip judged whether a thing needed topping up by what the top-up cost, so anything free to fill was quoted and then left empty. Unpriced rounds and fuel are now charged at a flat rate.
+      type: Fix
+    - message: A gun or generator unbolted and carried off between the survey and the work is no longer repaired or refilled from across the ship.
+      type: Fix
+  id: 6088
+  time: '2026-09-03T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: A repair slip that loses power stops welding. The job holds where it was, with its bar and its estimate standing still, and picks up again when the bus comes back rather than tearing through the backlog it missed.
+      type: Fix
+    - message: Aborting a repair now refunds what is left undone rather than a share of the number of jobs left in the list. The yard works the expensive framing first and the mopping last, so a customer who stopped the job once his guns and plating were back used to get most of his money back with them.
+      type: Fix
+    - message: A room the slip closes back up by putting its wall, window or airlock back gets its air made good, the same as one sealed by relaying the deck. A compartment that is still holding a breathable pressure is passed over, so an internal wall going back in does not blow the air away either side of it.
+      type: Fix
+    - message: The slip no longer paves over a hole the crew patched themselves while the job was running, nor a different tile they laid there on purpose.
+      type: Fix
+  id: 6089
+  time: '2026-09-03T00:00:00.0000000+00:00'
+  url: null

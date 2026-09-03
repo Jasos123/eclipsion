@@ -431,11 +431,29 @@ public sealed class NPCUtilitySystem : EntitySystem
             inOrdinaryMech = true;
         }
 
-        // Suit check first: it is a container lookup, while the friendliness check walks and intersects two
-        // faction sets. On a crewed hull most candidates are shirtsleeves, so this rejects the bulk of them
-        // before the expensive test runs. Being inside an ordinary mech counts as boarding protection by
-        // itself, so its pilot does not also need to be wearing a pressure suit.
-        if (target == owner || !inOrdinaryMech && !IsSealedBoarder(target))
+        if (target == owner)
+            return;
+
+        // Anti-boarder guns trust the faction credential in the wearer's ID slot. An allied card grants safe
+        // passage, while a card belonging to a faction at war identifies its wearer as a boarder even without
+        // a pressure suit. Cards held in a hand are not accepted.
+        var hasHostileCredential = false;
+        if (_factionIds.TryGetWornFaction(target, out var idFaction) &&
+            TryComp<NpcFactionMemberComponent>(owner, out var ownerFactions))
+        {
+            foreach (var ownerFaction in ownerFactions.Factions)
+            {
+                var relation = _factionDiplomacy.GetRelation(ownerFaction, idFaction);
+                if (relation == FactionRelation.Alliance)
+                    return;
+
+                hasHostileCredential |= relation == FactionRelation.War;
+            }
+        }
+
+        // Hardsuitless people normally get the benefit of the doubt as crew. A hostile credential overrides
+        // that assumption, and being inside an ordinary mech still counts as boarding protection by itself.
+        if (!inOrdinaryMech && !hasHostileCredential && !IsSealedBoarder(target))
             return;
 
         // Restore the old accessibility guard without hiding ordinary-mech pilots. Those pilots are inside
@@ -443,19 +461,6 @@ public sealed class NPCUtilitySystem : EntitySystem
         // the old behaviour (non-storage containers are rejected, welded closed storage is rejected).
         if (!inOrdinaryMech && !IsTargetAccessible(target))
             return;
-
-        // Anti-boarder guns trust the faction credential in the wearer's ID slot. The live player-diplomacy
-        // matrix is authoritative here: a card from our own faction or a current ally grants safe passage,
-        // while peace, trade and neutral relations do not. Cards held in a hand are not accepted.
-        if (_factionIds.TryGetWornFaction(target, out var idFaction) &&
-            TryComp<NpcFactionMemberComponent>(owner, out var ownerFactions))
-        {
-            foreach (var ownerFaction in ownerFactions.Factions)
-            {
-                if (_factionDiplomacy.GetRelation(ownerFaction, idFaction) == FactionRelation.Alliance)
-                    return;
-            }
-        }
 
         // HullrotFaction is the authoritative player allegiance. Check it directly as well as the mirrored
         // NPC faction so a crew member cannot become a target while their job/recruitment faction is waiting

@@ -127,18 +127,19 @@
     sprite: _Crescent/Objects/Weapons/Guns/twinshot.rsi
   - type: GunRequiresWield
   - type: Gun
+    damageModifier: 0.75
     selectedMode: Burst
     shotsPerBurst: 2
     availableModes:
     - Burst
     burstFireRate: 24
-    burstCooldown: 1
+    burstCooldown: 1.25
     fireOnDropChance: 0.5
     soundGunshot:
       path: /Audio/_Crescent/Weapons/Guns/shotgun_2/shotgun_gunshot_2.ogg
   - type: Wieldable
   - type: BallisticAmmoProvider
-    capacity: 8 #Better make those 4 shots count.
+    capacity: 6 # Three double-shot bursts before reloading.
 
 - type: entity
   name: PTA MOD-23 Karabin 4g

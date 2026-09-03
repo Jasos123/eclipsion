@@ -33,6 +33,7 @@
     solution: drink
   - type: RefillableSolution
     solution: drink
+  - type: HardsuitInjectable
   - type: DrainableSolution
     solution: drink
   - type: ExaminableSolution

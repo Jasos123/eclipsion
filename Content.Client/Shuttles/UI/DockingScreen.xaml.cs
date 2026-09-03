@@ -1,4 +1,3 @@
-using System.Linq;
 using Content.Client._KS14.UI; // KS14
 using System.Numerics;
 using System.Text;
@@ -71,7 +70,6 @@ public sealed partial class DockingScreen : BoxContainer
     {
         DockingControl.BuildDocks(shuttle);
         var currentDock = DockingControl.ViewedDock;
-        // DockedWith.DisposeAllChildren();
         DockPorts.DisposeAllChildren();
         _ourDockButtons.Clear();
 
@@ -88,15 +86,18 @@ public sealed partial class DockingScreen : BoxContainer
 
         var dockText = new StringBuilder();
         var buttonGroup = new ButtonGroup();
-        var idx = 0;
+        var dockIndex = 0;
         var selected = false;
 
-        // Build the dock buttons for our docks.
+        // Build a status row for each of our docks. The main button still selects the
+        // port for map-based docking, while a docked port can be undocked directly.
         foreach (var dock in shuttleDocks)
         {
-            idx++;
+            dockIndex++;
             dockText.Clear();
-            dockText.Append(dock.Name);
+            dockText.Append(Loc.GetString("shuttle-console-dock-entry", ("index", dockIndex)));
+            dockText.AppendLine();
+            dockText.Append(GetDockStatus(dock));
 
             var button = new Button()
             {
@@ -104,6 +105,8 @@ public sealed partial class DockingScreen : BoxContainer
                 ToggleMode = true,
                 Group = buttonGroup,
                 Margin = new Thickness(0f, 3f),
+                HorizontalExpand = true,
+                ToolTip = dock.Name,
             };
 
             button.OnMouseEntered += args =>
@@ -129,8 +132,33 @@ public sealed partial class DockingScreen : BoxContainer
                 OnDockPress(dock);
             };
 
+            var row = new BoxContainer
+            {
+                Orientation = BoxContainer.LayoutOrientation.Horizontal,
+                HorizontalExpand = true,
+            };
+
             _ourDockButtons[dock.Entity] = button;
-            DockPorts.AddChild(button);
+            row.AddChild(button);
+
+            if (dock.Connected)
+            {
+                var undockButton = new Button
+                {
+                    Text = Loc.GetString("shuttle-console-undock"),
+                    Margin = new Thickness(4f, 3f, 0f, 3f),
+                    VerticalAlignment = VAlignment.Stretch,
+                };
+
+                undockButton.OnPressed += _ =>
+                {
+                    UndockRequest?.Invoke(dock.Entity);
+                };
+
+                row.AddChild(undockButton);
+            }
+
+            DockPorts.AddChild(row);
         }
 
         // Button group needs one selected so just show the first one.
@@ -139,45 +167,20 @@ public sealed partial class DockingScreen : BoxContainer
             var buttonOne = shuttleDocks[0];
             OnDockPress(buttonOne);
         }
+    }
 
-        var shuttleContainers = new Dictionary<NetEntity, DockObject>();
+    private string GetDockStatus(DockingPortState dock)
+    {
+        if (dock.GridDockedWith == null)
+            return Loc.GetString("shuttle-console-dock-status-undocked");
 
-        foreach (var dock in shuttleDocks.OrderBy(x => x.GridDockedWith))
-        {
-            if (dock.GridDockedWith == null)
-                continue;
+        var grid = _entManager.GetEntity(dock.GridDockedWith);
+        var name = _entManager.EntityExists(grid)
+            ? _shuttles.GetIFFLabel(grid.Value)
+            : null;
 
-            DockObject? dockContainer;
-
-            if (!shuttleContainers.TryGetValue(dock.GridDockedWith.Value, out dockContainer))
-            {
-                dockContainer = new DockObject();
-                shuttleContainers[dock.GridDockedWith.Value] = dockContainer;
-                var dockGrid = _entManager.GetEntity(dock.GridDockedWith);
-                string? iffLabel = null;
-
-                if (_entManager.EntityExists(dockGrid))
-                {
-                    iffLabel = _shuttles.GetIFFLabel(dockGrid.Value);
-                }
-
-                iffLabel ??= Loc.GetString("shuttle-console-unknown");
-                dockContainer.SetName(iffLabel);
-                // DockedWith.AddChild(dockContainer);
-            }
-
-            dockContainer.AddDock(dock, DockingControl);
-
-            dockContainer.ViewPressed += () =>
-            {
-                OnDockPress(dock);
-            };
-
-            dockContainer.UndockPressed += () =>
-            {
-                UndockRequest?.Invoke(dock.Entity);
-            };
-        }
+        return Loc.GetString("shuttle-console-dock-status-docked",
+            ("name", name ?? Loc.GetString("shuttle-console-unknown")));
     }
 
     private void OnDockPress(DockingPortState state)

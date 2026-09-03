@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Content.Server.Administration;
 using Content.Shared._Crescent.HardsuitInjection;
 using Content.Shared.Actions;
@@ -17,12 +18,15 @@ using Content.Shared.Mobs;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
 using Robust.Server.Audio;
+using Robust.Shared.Audio;
 using Robust.Shared.Player;
 
 namespace Content.Server._Crescent.HardsuitInjection;
 
 public sealed class HardsuitInjectorSystem : EntitySystem
 {
+    private static readonly SoundSpecifier SuitInjectSound = new SoundPathSpecifier("/Audio/Items/hypospray.ogg");
+
     [Dependency] private readonly ActionContainerSystem _actionContainer = default!;
     [Dependency] private readonly SharedActionsSystem _actions = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
@@ -67,10 +71,10 @@ public sealed class HardsuitInjectorSystem : EntitySystem
         if (args.SlotFlags == null || (args.SlotFlags.Value & SlotFlags.OUTERCLOTHING) == 0)
             return;
 
-        if (TryGetPen(ent.Owner, HardsuitInjectorComponent.SlotOneId, out _))
+        if (TryGetInjectorSource(ent.Owner, HardsuitInjectorComponent.SlotOneId, out _))
             args.AddAction(ref ent.Comp.SlotOneActionEntity, ent.Comp.SlotOneAction);
 
-        if (TryGetPen(ent.Owner, HardsuitInjectorComponent.SlotTwoId, out _))
+        if (TryGetInjectorSource(ent.Owner, HardsuitInjectorComponent.SlotTwoId, out _))
             args.AddAction(ref ent.Comp.SlotTwoActionEntity, ent.Comp.SlotTwoAction);
     }
 
@@ -139,10 +143,9 @@ public sealed class HardsuitInjectorSystem : EntitySystem
 
     private bool TryInjectSlot(Entity<HardsuitInjectorComponent> suit, string slotId, EntityUid wearer, bool automatic)
     {
-        if (!TryGetPen(suit.Owner, slotId, out var pen) ||
-            !TryComp<HyposprayComponent>(pen, out var hypospray) ||
-            !_solution.TryGetSolution(pen, hypospray.SolutionName, out var penSolutionEntity, out var penSolution) ||
-            penSolution.Volume <= 0)
+        if (!TryGetInjectorSource(suit.Owner, slotId, out var source) ||
+            !TryGetSourceSolution(source, out var sourceSolutionEntity, out var sourceSolution, out var injectSound) ||
+            sourceSolution.Volume <= 0)
         {
             if (!automatic)
                 _popup.PopupEntity(Loc.GetString("hardsuit-injector-empty"), suit.Owner, wearer, PopupType.SmallCaution);
@@ -157,7 +160,7 @@ public sealed class HardsuitInjectorSystem : EntitySystem
         }
 
         var configuredAmount = GetTransferAmount(suit.Comp, slotId);
-        var transferAmount = FixedPoint2.Min(configuredAmount, penSolution.Volume, targetSolution.AvailableVolume);
+        var transferAmount = FixedPoint2.Min(configuredAmount, sourceSolution.Volume, targetSolution.AvailableVolume);
         if (transferAmount <= 0)
         {
             if (!automatic)
@@ -165,22 +168,25 @@ public sealed class HardsuitInjectorSystem : EntitySystem
             return false;
         }
 
-        var removedSolution = _solution.SplitSolution(penSolutionEntity.Value, transferAmount);
+        var removedSolution = _solution.SplitSolution(sourceSolutionEntity.Value, transferAmount);
         _reactive.DoEntityReaction(wearer, removedSolution, ReactionMethod.Injection);
         if (!_solution.TryAddSolution(targetSolutionEntity.Value, removedSolution))
             return false;
 
-        _audio.PlayPvs(hypospray.InjectSound, wearer);
+        _audio.PlayPvs(injectSound, wearer);
 
-        var dna = new TransferDnaEvent { Donor = wearer, Recipient = pen };
+        var dna = new TransferDnaEvent { Donor = wearer, Recipient = source };
         RaiseLocalEvent(wearer, ref dna);
 
-        var afterInject = new AfterHyposprayInjectsEvent { User = wearer, Target = wearer };
-        RaiseLocalEvent(pen, ref afterInject);
+        if (HasComp<HyposprayComponent>(source))
+        {
+            var afterInject = new AfterHyposprayInjectsEvent { User = wearer, Target = wearer };
+            RaiseLocalEvent(source, ref afterInject);
+        }
 
         _popup.PopupEntity(
             Loc.GetString(automatic ? "hardsuit-injector-auto-injected" : "hardsuit-injector-injected",
-                ("pen", pen),
+                ("source", source),
                 ("amount", transferAmount)),
             wearer,
             wearer,
@@ -189,7 +195,7 @@ public sealed class HardsuitInjectorSystem : EntitySystem
         _adminLogger.Add(
             LogType.ForceFeed,
             $"{ToPrettyString(suit.Owner):suit} injected {ToPrettyString(wearer):target} with " +
-            $"{SharedSolutionContainerSystem.ToPrettyString(removedSolution):removedSolution} using {ToPrettyString(pen):pen}");
+            $"{SharedSolutionContainerSystem.ToPrettyString(removedSolution):removedSolution} using {ToPrettyString(source):source}");
 
         return true;
     }
@@ -209,7 +215,7 @@ public sealed class HardsuitInjectorSystem : EntitySystem
         GetVerbsEvent<AlternativeVerb> args,
         ActorComponent actor)
     {
-        if (!TryGetPen(ent.Owner, slotId, out var pen))
+        if (!TryGetInjectorSource(ent.Owner, slotId, out var source))
             return;
 
         var currentAmount = GetTransferAmount(ent.Comp, slotId);
@@ -220,7 +226,7 @@ public sealed class HardsuitInjectorSystem : EntitySystem
                 ("slot", slotNumber),
                 ("amount", currentAmount)),
             Category = VerbCategory.SetTransferAmount,
-            IconEntity = GetNetEntity(pen),
+            IconEntity = GetNetEntity(source),
             Act = () => OpenDoseDialog(ent, slotId, slotNumber, actor)
         });
     }
@@ -243,7 +249,7 @@ public sealed class HardsuitInjectorSystem : EntitySystem
                     !TryComp<HardsuitInjectorComponent>(ent.Owner, out var injector) ||
                     amount < minimum ||
                     amount > maximum ||
-                    !TryGetPen(ent.Owner, slotId, out _))
+                    !TryGetInjectorSource(ent.Owner, slotId, out _))
                 {
                     _popup.PopupEntity(
                         Loc.GetString("hardsuit-injector-invalid-dose", ("min", minimum), ("max", maximum)),
@@ -278,11 +284,11 @@ public sealed class HardsuitInjectorSystem : EntitySystem
     private void AddSlotExamine(Entity<HardsuitInjectorComponent> ent, string slotId, int slotNumber, ExaminedEvent args)
     {
         var amount = GetTransferAmount(ent.Comp, slotId);
-        if (TryGetPen(ent.Owner, slotId, out var pen))
+        if (TryGetInjectorSource(ent.Owner, slotId, out var source))
         {
             args.PushMarkup(Loc.GetString("hardsuit-injector-examine-loaded",
                 ("slot", slotNumber),
-                ("pen", pen),
+                ("source", source),
                 ("amount", amount)));
             return;
         }
@@ -296,21 +302,37 @@ public sealed class HardsuitInjectorSystem : EntitySystem
         if (action == null)
             return;
 
-        _actions.SetEntityIcon(action.Value, TryGetPen(ent.Owner, slotId, out var pen) ? pen : null);
+        _actions.SetEntityIcon(action.Value, TryGetInjectorSource(ent.Owner, slotId, out var source) ? source : null);
     }
 
-    private bool TryGetPen(EntityUid suit, string slotId, out EntityUid pen)
+    private bool TryGetInjectorSource(EntityUid suit, string slotId, out EntityUid source)
     {
-        pen = EntityUid.Invalid;
+        source = EntityUid.Invalid;
         if (!_itemSlots.TryGetSlot(suit, slotId, out var slot) ||
             slot.Item is not { } item ||
-            !HasComp<HardsuitInjectableComponent>(item))
+            (!HasComp<HardsuitInjectableComponent>(item) && !HasComp<HyposprayComponent>(item)))
         {
             return false;
         }
 
-        pen = item;
+        source = item;
         return true;
+    }
+
+    private bool TryGetSourceSolution(
+        EntityUid source,
+        [NotNullWhen(true)] out Entity<SolutionComponent>? solutionEntity,
+        [NotNullWhen(true)] out Solution? solution,
+        out SoundSpecifier injectSound)
+    {
+        if (TryComp<HyposprayComponent>(source, out var hypospray))
+        {
+            injectSound = hypospray.InjectSound;
+            return _solution.TryGetSolution(source, hypospray.SolutionName, out solutionEntity, out solution);
+        }
+
+        injectSound = SuitInjectSound;
+        return _solution.TryGetRefillableSolution(source, out solutionEntity, out solution);
     }
 
     private bool TryGetWearer(EntityUid suit, out EntityUid wearer)

@@ -623,7 +623,7 @@
     maxAngle: 45
     angleIncrease: 4
     angleDecay: 16
-    fireRate: 20
+    fireRate: 16
     soundGunshot:
       path: /Audio/_Crescent/Weapons/Guns/smg_1/smg_gunshot_1.ogg
   - type: MagazineVisuals
@@ -647,7 +647,7 @@
     - state: mag-0
       map: ["enum.GunVisualLayers.Mag"]
   -  type: Gun
-     fireRate: 14
+     fireRate: 10
      soundGunshot:
       path: /Audio/_Crescent/Weapons/Guns/supressed_2/supressed_gunshot_2.ogg
       params:
@@ -696,13 +696,16 @@
     soundGunshot:
       path: /Audio/_Crescent/Weapons/Guns/smg_3/smg_gunshot_2.ogg
   - type: Gun
-    fireRate: 20
+    fireRate: 7
+    burstFireRate: 14
+    burstCooldown: 0.5
+    shotsPerBurst: 3
     selectedMode: Burst
     soundGunshot:
       path: /Audio/_Crescent/Weapons/Guns/smg_3/smg_gunshot_2.ogg
     availableModes:
     - SemiAuto
-    - Burst #Pretty obvious sideffect of being a newly designed gun.
+    - Burst
   - type: ItemSlots
     slots:
       gun_magazine:

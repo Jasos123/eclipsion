@@ -211,8 +211,8 @@
       map: ["enum.GunVisualLayers.Mag"]
   - type: ChamberMagazineAmmoProvider
   - type: Gun
-    damageModifier: 1.35 # "Extra Robust" despite having an underpowered cartridge.
-    fireRate: 5
+    damageModifier: 1.15
+    fireRate: 4
     soundGunshot:
       path: /Audio/_Crescent/Weapons/Guns/supressed_1/supressed_gunshot_2.ogg
       params:

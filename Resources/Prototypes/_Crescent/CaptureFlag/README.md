@@ -15,9 +15,9 @@ Everything below is in the mapping template list under Crescent hardpoints and c
 1. **Put the grid together first and name it.** The grid's name is the territory's name with nobody holding it.
    Ownership is displayed by prefixing it, so name it `Fenwick Extraction`, not `DSM Fenwick Extraction`.
 
-2. **Place one `PersistentCaptureRegionFlag`** on that grid, somewhere a boarding party can physically stand for
-   the better part of a minute. Give it a `regionId` that is unique across every map on the server and that you
-   will never change:
+2. **Place one `PersistentCaptureRegionFlag`** on that grid, somewhere a boarding party can reach and manually
+   operate without moving or taking damage. Give it a `regionId` that is unique across every map on the server and
+   that you will never change:
 
    ```yaml
    - type: PersistentCaptureRegion
@@ -59,11 +59,12 @@ captured console. Adding a fifth power means adding its `npcFaction` prototype, 
 batteries to know who to shoot it also needs a `diplomacy` prototype and a place on `RatDiplomacySystem`'s
 roster, and for the territory to move its stock price, a row in `FactionStockCompanies`.
 
-Capture needs a living body. Corpses and crit do not hold ground. Two factions standing on it at once contest it
-and neither makes progress. Partial progress belongs to the faction that earned it, so a faction that walks in
-after another leaves starts from nothing rather than finishing someone else's work.
+Capture needs a living body and an explicit interaction with the standard; proximity alone does nothing. Corpses,
+crit characters and unsupported factions cannot start an attempt. Moving away or taking damage interrupts the
+do-after and discards all progress, and only one person can work a standard at a time.
 
-Taking held ground is two stages, neutralise then capture, at the times on the flag's `CaptureFlag` component.
+Taking held ground remains two manual stages at the times on the flag's `CaptureFlag` component: interact once and
+hold still to neutralise it, then interact again and hold still to raise your own colours.
 
 ## The point-defence console
 

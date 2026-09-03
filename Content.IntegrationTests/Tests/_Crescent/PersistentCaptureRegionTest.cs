@@ -5,6 +5,7 @@ using Content.Shared._Crescent.Factions;
 using Content.Shared._Crescent.HullrotFaction;
 using Content.Shared._Crescent.Territory;
 using Content.Shared.CaptureFlag;
+using Content.Shared.Interaction;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -21,7 +22,7 @@ namespace Content.IntegrationTests.Tests._Crescent;
 public sealed class PersistentCaptureRegionTest
 {
     [Test]
-    public async Task DsmAndNcwlCanCaptureAndReassignAntiBoarderTurret()
+    public async Task ManualCaptureReassignsAntiBoarderTurret()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -51,15 +52,26 @@ public sealed class PersistentCaptureRegionTest
             faction.Faction = "DSM";
             server.System<HullrotNpcFactionSyncSystem>().Sync(playerUid, faction);
             server.System<MobStateSystem>().ChangeMobState(playerUid, MobState.Dead);
+            entMan.EventBus.RaiseLocalEvent(flagUid, new InteractHandEvent(playerUid, flagUid));
         });
 
         await server.WaitRunTicks(10);
         await server.WaitAssertion(() =>
         {
             Assert.That(entMan.GetComponent<CaptureFlagComponent>(flagUid).OwnerTeam, Is.Null,
-                "A dead faction member captured persistent territory.");
+                "A dead faction member captured persistent territory by interacting with it.");
+            Assert.That(entMan.GetComponent<PersistentCaptureRegionComponent>(flagUid).Capturer, Is.Null,
+                "A dead faction member started a manual capture attempt.");
             Assert.That(entMan.GetComponent<NpcFactionMemberComponent>(turretUid).Factions, Is.Empty);
             server.System<MobStateSystem>().ChangeMobState(playerUid, MobState.Alive);
+        });
+
+        await server.WaitRunTicks(10);
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(entMan.GetComponent<CaptureFlagComponent>(flagUid).OwnerTeam, Is.Null,
+                "A living faction member captured persistent territory by proximity alone.");
+            entMan.EventBus.RaiseLocalEvent(flagUid, new InteractHandEvent(playerUid, flagUid));
         });
 
         await server.WaitRunTicks(10);
@@ -76,7 +88,23 @@ public sealed class PersistentCaptureRegionTest
             server.System<HullrotNpcFactionSyncSystem>().Sync(playerUid, faction);
         });
 
-        await server.WaitRunTicks(20);
+        await server.WaitRunTicks(10);
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(entMan.GetComponent<CaptureFlagComponent>(flagUid).OwnerTeam, Is.EqualTo("DSM"),
+                "Changing faction while standing near the flag changed its owner without an interaction.");
+            entMan.EventBus.RaiseLocalEvent(flagUid, new InteractHandEvent(playerUid, flagUid));
+        });
+
+        await server.WaitRunTicks(10);
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(entMan.GetComponent<CaptureFlagComponent>(flagUid).OwnerTeam, Is.Null,
+                "The first interaction with held territory must neutralize it.");
+            entMan.EventBus.RaiseLocalEvent(flagUid, new InteractHandEvent(playerUid, flagUid));
+        });
+
+        await server.WaitRunTicks(10);
         await server.WaitAssertion(() =>
         {
             Assert.That(entMan.GetComponent<CaptureFlagComponent>(flagUid).OwnerTeam, Is.EqualTo("NCWL"));
@@ -111,7 +139,7 @@ public sealed class PersistentCaptureRegionTest
     }
 
     [Test]
-    public async Task PartialProgressCannotBeInheritedByAnotherFaction()
+    public async Task ChangingFactionInvalidatesManualCaptureAttempt()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -120,8 +148,6 @@ public sealed class PersistentCaptureRegionTest
 
         EntityUid flagUid = default;
         EntityUid playerUid = default;
-        var dsmProgress = 0f;
-
         await server.WaitAssertion(() =>
         {
             flagUid = entMan.CreateEntityUninitialized("PersistentCaptureRegionFlag", map.GridCoords);
@@ -139,25 +165,34 @@ public sealed class PersistentCaptureRegionTest
             server.System<HullrotNpcFactionSyncSystem>().Sync(playerUid, faction);
         });
 
+        // A region settles its saved state on the tick after it initialises, and a neutral one wipes any
+        // attempt standing on it when it does. Nobody can reach a flag inside its own map init, so the
+        // interaction waits for that pass rather than being undone by it.
+        await server.WaitRunTicks(1);
+        await server.WaitAssertion(() =>
+        {
+            entMan.EventBus.RaiseLocalEvent(flagUid, new InteractHandEvent(playerUid, flagUid));
+        });
+
         await server.WaitRunTicks(5);
         await server.WaitAssertion(() =>
         {
             var flag = entMan.GetComponent<CaptureFlagComponent>(flagUid);
-            dsmProgress = flag.ProgressSeconds;
-            Assert.That(dsmProgress, Is.GreaterThan(0f).And.LessThan(flag.CaptureTime));
+            Assert.That(flag.Stage, Is.EqualTo(CaptureFlagStage.Capturing));
+            Assert.That(flag.ProgressTeam, Is.EqualTo("DSM"));
 
             var faction = entMan.GetComponent<HullrotFactionComponent>(playerUid);
             faction.Faction = "NCWL";
             server.System<HullrotNpcFactionSyncSystem>().Sync(playerUid, faction);
         });
 
-        await server.WaitRunTicks(1);
+        await server.WaitRunTicks(70);
         await server.WaitAssertion(() =>
         {
             var flag = entMan.GetComponent<CaptureFlagComponent>(flagUid);
-            Assert.That(flag.ProgressTeam, Is.EqualTo("NCWL"));
-            Assert.That(flag.ProgressSeconds, Is.LessThan(dsmProgress),
-                "NCWL inherited DSM's partial capture progress.");
+            Assert.That(flag.OwnerTeam, Is.Null, "A faction change inherited another faction's active claim.");
+            Assert.That(flag.Stage, Is.EqualTo(CaptureFlagStage.Idle));
+            Assert.That(flag.ProgressTeam, Is.Null);
         });
 
         await pair.CleanReturnAsync();
