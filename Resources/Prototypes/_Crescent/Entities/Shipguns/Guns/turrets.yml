@@ -99,7 +99,7 @@
       thresholds:
         - trigger:
             !type:DamageTrigger
-            damage: 800
+            damage: 650
           # TODO: Construction graph
           behaviors:
             - !type:ChangeConstructionNodeBehavior
@@ -113,7 +113,7 @@
           ents: []
     - type: Gun
       fireOnDropChance: 0
-      fireRate: 12
+      fireRate: 10
       projectileSpeed: 135
       selectedMode: FullAuto
       availableModes:

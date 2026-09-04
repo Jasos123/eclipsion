@@ -144,6 +144,19 @@ public sealed class PointCannonSystem : EntitySystem
         InvalidateGridCache(uid);
     }
 
+    /// <summary>
+    /// Marks a grid's cannon list stale and re-derives every active console's links from it. The
+    /// automated repair slip calls this once a hull is back together: a gun it reinstated announced
+    /// itself while it was still sitting unmounted, so the links drawn then missed it.
+    /// </summary>
+    public void InvalidateGridCannons(EntityUid gridUid)
+    {
+        if (_gridCacheQuery.TryGetComponent(gridUid, out var cache))
+            cache.Dirty = true;
+
+        QueueGridConsoleRelink(gridUid);
+    }
+
     private void InvalidateGridCache(EntityUid cannonUid)
     {
         if (!_xformQuery.TryGetComponent(cannonUid, out var xform))

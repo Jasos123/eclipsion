@@ -286,10 +286,20 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         if (!TryComp<IdCardComponent>(args.Used, out var _))
             return;
         var dynIdComp = EnsureComp<DynamicCodeHolderComponent>(args.Used);
+        // Crescent - a console that was not standing here when the ship was keyed has no key names of
+        // its own yet; the grid keeps them so it can take them now rather than refuse every ID forever.
+        AdoptGridKeyNames(component, dynamicAccesComponent);
         if (component.captainIdentifier is null || component.pilotIdentifier is null)
             return;
 
-        if (_codes.hasKey(dynamicAccesComponent.mappedCodes[component.captainIdentifier],dynIdComp))
+        // Crescent - a ship keyed off a mapping that files neither name would otherwise throw here.
+        if (!dynamicAccesComponent.mappedCodes.TryGetValue(component.captainIdentifier, out var captainCodes)
+            || !dynamicAccesComponent.mappedCodes.TryGetValue(component.pilotIdentifier, out var pilotCodes))
+        {
+            return;
+        }
+
+        if (_codes.hasKey(captainCodes, dynIdComp))
         {
             if (component.accesState != ShuttleConsoleAccesState.NoAcces)
             {
@@ -306,7 +316,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
             return;
         }
 
-        if (_codes.hasKey(dynamicAccesComponent.mappedCodes[component.pilotIdentifier], dynIdComp))
+        if (_codes.hasKey(pilotCodes, dynIdComp))
         {
             if (component.accesState != ShuttleConsoleAccesState.NoAcces)
             {
@@ -332,15 +342,31 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         var grid = Transform(uid).GridUid;
         if (grid is  null)
             return;
-        if (HasComp<DynamicCodeHolderComponent>(grid.Value))
+        if (TryComp<DynamicCodeHolderComponent>(grid.Value, out var gridCodes))
         {
             component.accesState = ShuttleConsoleAccesState.NoAcces;
+            AdoptGridKeyNames(component, gridCodes);
         }
         else
         {
             component.accesState = ShuttleConsoleAccesState.NotDynamic;
         }
         RefreshShuttleConsoles(grid.Value);
+    }
+
+    /// <summary>
+    ///     Crescent - takes the ship's captain and pilot key names off the grid.
+    /// </summary>
+    /// <remarks>
+    ///     A ship hands those names out once, as its map initialises, to the consoles standing on it at that
+    ///     moment. A console stood up later - built by a crewman, or welded back on by the drydock after the
+    ///     original was shot out - misses that pass, and a console with no key names matches no swiped ID at
+    ///     all: it sits on "swipe ID to authorize yourself" forever, whatever is presented to it.
+    /// </remarks>
+    private void AdoptGridKeyNames(ShuttleConsoleComponent component, DynamicCodeHolderComponent gridCodes)
+    {
+        component.captainIdentifier ??= gridCodes.captainIdentifier;
+        component.pilotIdentifier ??= gridCodes.pilotIdentifier;
     }
 
     private void OnComponentRemove(EntityUid uid, ShuttleConsoleComponent component, ComponentRemove args)
@@ -377,6 +403,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         if (TryComp<DynamicCodeHolderComponent>(args.Grid, out var accesComp))
         {
             comp.accesState = ShuttleConsoleAccesState.NoAcces;
+            AdoptGridKeyNames(comp, accesComp);
             _itemSlotsSystem.TryEject(uid, comp.targetIdSlot, null, out var item);
             _itemSlotsSystem.SetLock(uid, comp.targetIdSlot, true);
         }
@@ -541,9 +568,10 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
         {
 
 
-            if (HasComp<DynamicCodeHolderComponent>(args.Transform.GridUid))
+            if (TryComp<DynamicCodeHolderComponent>(args.Transform.GridUid, out var gridCodes))
             {
                 component.accesState = ShuttleConsoleAccesState.NoAcces;
+                AdoptGridKeyNames(component, gridCodes);
                 _itemSlotsSystem.TryEject(uid, component.targetIdSlot, null, out var item);
                 _itemSlotsSystem.SetLock(uid, component.targetIdSlot, true);
             }

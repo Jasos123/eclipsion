@@ -1,11 +1,18 @@
 using System.Linq;
 using System.Text.Json;
 using Content.Server.Chat.Systems;
+using Content.Server.DoAfter;
 using Content.Server.PointCannons;
+using Content.Server.Popups;
 using Content.Shared._Crescent.Factions;
+using Content.Shared._Crescent.HullrotFaction;
 using Content.Shared._Crescent.Territory;
 using Content.Shared.CaptureFlag;
+using Content.Shared.DoAfter;
 using Content.Shared.Examine;
+using Content.Shared.Interaction;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Systems;
 using Content.Shared.PointCannons;
@@ -24,11 +31,13 @@ namespace Content.Server._Crescent.Territory;
 public sealed class PersistentCaptureRegionSystem : EntitySystem
 {
     [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private readonly DoAfterSystem _doAfter = default!;
     [Dependency] private readonly FactionMachineSystem _factionMachines = default!;
     [Dependency] private readonly IResourceManager _resources = default!;
     [Dependency] private readonly MetaDataSystem _metadata = default!;
     [Dependency] private readonly NpcFactionSystem _npcFactions = default!;
     [Dependency] private readonly IPrototypeManager _prototypes = default!;
+    [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly SharedShuttleSystem _shuttles = default!;
     [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -48,6 +57,9 @@ public sealed class PersistentCaptureRegionSystem : EntitySystem
         SubscribeLocalEvent<PersistentCaptureRegionComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<PersistentCaptureRegionComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<PersistentCaptureRegionComponent, ExaminedEvent>(OnExamined);
+        SubscribeLocalEvent<PersistentCaptureRegionComponent, ActivateInWorldEvent>(OnActivate);
+        SubscribeLocalEvent<PersistentCaptureRegionComponent, InteractHandEvent>(OnInteractHand);
+        SubscribeLocalEvent<PersistentCaptureRegionComponent, PersistentCaptureRegionCaptureDoAfterEvent>(OnCaptureDoAfter);
         SubscribeLocalEvent<CaptureRegionDeviceComponent, ComponentStartup>(OnDeviceStartup);
         SubscribeLocalEvent<CaptureRegionDeviceComponent, EntParentChangedMessage>(OnDeviceParentChanged);
     }
@@ -191,6 +203,152 @@ public sealed class PersistentCaptureRegionSystem : EntitySystem
             _liveRegions.Remove(ent.Comp.RegionId);
     }
 
+    private void OnInteractHand(Entity<PersistentCaptureRegionComponent> ent, ref InteractHandEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        args.Handled = TryStartCapture(ent, args.User);
+    }
+
+    private void OnActivate(Entity<PersistentCaptureRegionComponent> ent, ref ActivateInWorldEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        args.Handled = TryStartCapture(ent, args.User);
+    }
+
+    /// <summary>
+    /// Starts one explicit capture stage. Held territory is first neutralized; the now-neutral standard must then be
+    /// used again to raise the attacker's colours. This preserves the territory's two-stage timing while removing
+    /// all capture-by-proximity behavior.
+    /// </summary>
+    private bool TryStartCapture(Entity<PersistentCaptureRegionComponent> ent, EntityUid user)
+    {
+        if (!ent.Comp.ValidRegion || !TryComp<CaptureFlagComponent>(ent, out var flag))
+        {
+            _popup.PopupEntity(Loc.GetString("territory-capture-misconfigured"), ent, user);
+            return true;
+        }
+
+        var team = TryGetCaptureTeam(user);
+        if (!PersistentTerritoryFactions.IsSupported(team) ||
+            !TryComp<MobStateComponent>(user, out var mobState) ||
+            mobState.CurrentState != MobState.Alive)
+        {
+            _popup.PopupEntity(Loc.GetString("territory-capture-no-faction"), ent, user);
+            return true;
+        }
+
+        if (string.Equals(flag.OwnerTeam, team, StringComparison.Ordinal))
+        {
+            _popup.PopupEntity(Loc.GetString("territory-capture-already-yours"), ent, user);
+            return true;
+        }
+
+        if (ent.Comp.Capturer != null)
+        {
+            _popup.PopupEntity(Loc.GetString("territory-capture-already-working"), ent, user);
+            return true;
+        }
+
+        var expectedOwner = flag.OwnerTeam;
+        var neutralizing = expectedOwner != null;
+        var duration = neutralizing ? flag.NeutralizeTime : flag.CaptureTime;
+        var doAfter = new DoAfterArgs(EntityManager, user, TimeSpan.FromSeconds(duration),
+            new PersistentCaptureRegionCaptureDoAfterEvent(team!, expectedOwner), ent, ent)
+        {
+            BreakOnDamage = true,
+            BreakOnMove = true,
+            DistanceThreshold = flag.Radius,
+            NeedHand = false,
+            BlockDuplicate = true,
+            CancelDuplicate = false,
+        };
+
+        if (!_doAfter.TryStartDoAfter(doAfter))
+        {
+            _popup.PopupEntity(Loc.GetString("territory-capture-already-working"), ent, user);
+            return true;
+        }
+
+        ent.Comp.Capturer = user;
+        ent.Comp.CaptureStartedAt = _timing.CurTime;
+        ent.Comp.CaptureEndsAt = _timing.CurTime + TimeSpan.FromSeconds(duration);
+        flag.ActiveTeam = team;
+        flag.ProgressTeam = team;
+        flag.ProgressSeconds = 0f;
+        flag.Stage = neutralizing ? CaptureFlagStage.Neutralizing : CaptureFlagStage.Capturing;
+        Dirty(ent, flag);
+
+        _popup.PopupEntity(Loc.GetString(neutralizing
+            ? "territory-neutralize-begin"
+            : "territory-capture-begin"), ent, user);
+        return true;
+    }
+
+    private void OnCaptureDoAfter(
+        Entity<PersistentCaptureRegionComponent> ent,
+        ref PersistentCaptureRegionCaptureDoAfterEvent args)
+    {
+        if (ent.Comp.Capturer != args.User || !TryComp<CaptureFlagComponent>(ent, out var flag))
+            return;
+
+        ResetCaptureAttempt(ent, flag);
+
+        if (args.Handled || args.Cancelled || !ent.Comp.ValidRegion)
+            return;
+
+        var team = TryGetCaptureTeam(args.User);
+        if (!string.Equals(team, args.Team, StringComparison.Ordinal) ||
+            !PersistentTerritoryFactions.IsSupported(team) ||
+            !TryComp<MobStateComponent>(args.User, out var mobState) ||
+            mobState.CurrentState != MobState.Alive ||
+            !string.Equals(flag.OwnerTeam, args.ExpectedOwner, StringComparison.Ordinal))
+        {
+            return;
+        }
+
+        args.Handled = true;
+        if (args.ExpectedOwner != null)
+        {
+            PersistNeutralOwner(ent);
+            return;
+        }
+
+        flag.OwnerTeam = args.Team;
+        Dirty(ent, flag);
+        RaiseLocalEvent(new CaptureFlagWonEvent(args.Team));
+        PersistCapturedOwner(ent, args.Team);
+    }
+
+    private void ResetCaptureAttempt(Entity<PersistentCaptureRegionComponent> ent, CaptureFlagComponent flag)
+    {
+        ent.Comp.Capturer = null;
+        ent.Comp.CaptureStartedAt = TimeSpan.Zero;
+        ent.Comp.CaptureEndsAt = TimeSpan.Zero;
+        flag.ActiveTeam = null;
+        flag.ProgressTeam = null;
+        flag.ProgressSeconds = 0f;
+        flag.Stage = CaptureFlagStage.Idle;
+        Dirty(ent, flag);
+    }
+
+    private string? TryGetCaptureTeam(EntityUid user)
+    {
+        if (TryComp<CaptureTeamComponent>(user, out var captureTeam) &&
+            !string.IsNullOrWhiteSpace(captureTeam.Team))
+        {
+            return captureTeam.Team;
+        }
+
+        if (TryComp<HullrotFactionComponent>(user, out var faction) && !string.IsNullOrWhiteSpace(faction.Faction))
+            return faction.Faction;
+
+        return null;
+    }
+
     private void OnDeviceStartup(Entity<CaptureRegionDeviceComponent> ent, ref ComponentStartup args)
     {
         // Map entity order is not stable. Resolve on the next tick so a flag serialized after this device has had
@@ -215,10 +373,9 @@ public sealed class PersistentCaptureRegionSystem : EntitySystem
         Save();
         ApplyOwner(ent, owner);
 
-        // Only reached from Update, which fires on a change the players made. A mapped or saved starting owner is
-        // applied straight through ApplyOwner at map load and is not news. Taking held ground always passes
-        // through the neutral state first - CaptureFlagSystem clears OwnerTeam the moment neutralisation
-        // completes - so the sector hears the holder lose it here and hears the attacker claim it a stage later.
+        // A mapped or saved starting owner is applied straight through ApplyOwner at map load and is not news.
+        // Taking held ground always passes through the manual neutralization stage first, so the sector hears the
+        // holder lose it and hears the attacker claim it only after the second interaction completes.
         _chat.DispatchGlobalAnnouncement(
             Loc.GetString("territory-captured-announcement", ("faction", owner), ("region", RegionName(ent))),
             Loc.GetString("territory-announcer-name"),
@@ -242,9 +399,8 @@ public sealed class PersistentCaptureRegionSystem : EntitySystem
     }
 
     /// <summary>
-    /// Standing at the flag is the one place the whole picture is legible: who holds the ground, who is taking
-    /// it, and how far along they are. The radar name only carries the first of those, and only to someone with
-    /// a console in front of them.
+    /// The flag is the one place the whole picture is legible: who holds the ground, who is manually working the
+    /// standard, and how far along they are. The radar name only carries the first of those.
     /// </summary>
     private void OnExamined(Entity<PersistentCaptureRegionComponent> ent, ref ExaminedEvent args)
     {
@@ -263,29 +419,30 @@ public sealed class PersistentCaptureRegionSystem : EntitySystem
 
         switch (flag.Stage)
         {
-            case CaptureFlagStage.Contested:
-                args.PushMarkup(Loc.GetString("territory-examine-contested"));
-                break;
-
             case CaptureFlagStage.Neutralizing when flag.ProgressTeam is { } neutralizer:
                 args.PushMarkup(Loc.GetString(
                     "territory-examine-progress",
                     ("faction", neutralizer),
-                    ("percent", Percent(flag.ProgressSeconds, flag.NeutralizeTime))));
+                    ("percent", CapturePercent(ent.Comp))));
                 break;
 
             case CaptureFlagStage.Capturing when flag.ProgressTeam is { } capturer:
                 args.PushMarkup(Loc.GetString(
                     "territory-examine-progress",
                     ("faction", capturer),
-                    ("percent", Percent(flag.ProgressSeconds, flag.CaptureTime))));
+                    ("percent", CapturePercent(ent.Comp))));
                 break;
         }
     }
 
-    private static int Percent(float progress, float total)
+    private int CapturePercent(PersistentCaptureRegionComponent region)
     {
-        return total <= 0f ? 0 : (int) MathF.Round(Math.Clamp(progress / total, 0f, 1f) * 100f);
+        var total = region.CaptureEndsAt - region.CaptureStartedAt;
+        if (total <= TimeSpan.Zero)
+            return 0;
+
+        var elapsed = _timing.CurTime - region.CaptureStartedAt;
+        return (int) Math.Round(Math.Clamp(elapsed / total, 0d, 1d) * 100d);
     }
 
     private void TryRewardStock(Entity<PersistentCaptureRegionComponent> ent, string owner)
@@ -316,14 +473,11 @@ public sealed class PersistentCaptureRegionSystem : EntitySystem
         ent.Comp.AppliedOwner = owner;
         ent.Comp.NextStockReward = _timing.CurTime + TimeSpan.FromSeconds(ent.Comp.StockRewardInterval);
 
-        if (TryComp<CaptureFlagComponent>(ent, out var flag) && flag.OwnerTeam != owner)
+        if (TryComp<CaptureFlagComponent>(ent, out var flag) &&
+            (flag.OwnerTeam != owner || ent.Comp.Capturer != null))
         {
             flag.OwnerTeam = owner;
-            flag.ActiveTeam = null;
-            flag.ProgressSeconds = 0f;
-            flag.ProgressTeam = null;
-            flag.Stage = CaptureFlagStage.Idle;
-            Dirty(ent, flag);
+            ResetCaptureAttempt(ent, flag);
         }
 
         var regionGrid = Transform(ent).GridUid;
@@ -344,14 +498,11 @@ public sealed class PersistentCaptureRegionSystem : EntitySystem
         ent.Comp.AppliedOwner = null;
         ent.Comp.NextStockReward = TimeSpan.Zero;
 
-        if (TryComp<CaptureFlagComponent>(ent, out var flag) && flag.OwnerTeam != null)
+        if (TryComp<CaptureFlagComponent>(ent, out var flag) &&
+            (flag.OwnerTeam != null || ent.Comp.Capturer != null))
         {
             flag.OwnerTeam = null;
-            flag.ActiveTeam = null;
-            flag.ProgressSeconds = 0f;
-            flag.ProgressTeam = null;
-            flag.Stage = CaptureFlagStage.Idle;
-            Dirty(ent, flag);
+            ResetCaptureAttempt(ent, flag);
         }
 
         var regionGrid = Transform(ent).GridUid;

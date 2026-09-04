@@ -106,7 +106,7 @@
   - type: GunRequiresWield
   - type: Appearance
   - type: Gun
-    fireRate: 2
+    fireRate: 1.25
     projectileSpeed: 75
     selectedMode: SemiAuto
     availableModes:
@@ -122,7 +122,7 @@
   name: PTA LAS-98 Mako laser cutter 200c
   parent: [BaseWeaponBattery, StreeCredRedeemable]
   id: WeaponSpecialMako
-  description: A Pang Tai Arms knockoff of the NanoTrasen laser emitter. Originaly built for cutting ships apart during salvage ops, but reporpoused due to its capability of causing extreme burns to biological targets. Has a self charing battery.
+  description: A Pang Tai Arms knockoff of the NanoTrasen laser emitter. Originally built for cutting ships apart during salvage ops, but repurposed due to its capability of causing extreme burns to biological targets. Has a self-charging battery.
   components:
   - type: Sprite
     sprite: _Crescent/Objects/Weapons/Guns/mako.rsi
@@ -145,7 +145,7 @@
     steps: 19
     zeroVisible: true
   - type: Gun
-    fireRate: 20
+    fireRate: 12
     selectedMode: FullAuto
     availableModes:
     - FullAuto
@@ -159,14 +159,14 @@
     autoRechargeRate: 20
   - type: HitscanBatteryAmmoProvider
     proto: MakoLaser
-    fireCost: 10
+    fireCost: 20
 
 - type: hitscan
   id: MakoLaser
   damage:
     types:
-      Heat: 8
-      Structural: 180
+      Heat: 6
+      Structural: 80
   muzzleFlash:
     sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
     state: muzzle_omni

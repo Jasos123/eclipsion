@@ -26,10 +26,11 @@
   parent: CaptureFlag
   id: PersistentCaptureRegionFlag
   name: territorial claim standard
-  description: Hold the surrounding ground to claim this installation for your faction across future shifts.
+  description: Work the standard by hand to claim this installation for your faction across future shifts.
   components:
     - type: CaptureFlag
-      radius: 3
+      # Maximum distance from the standard during the manual capture do-after.
+      radius: 2
       captureTime: 22.5
       neutralizeTime: 22.5
       dominationEnabled: false
@@ -59,4 +60,3 @@
     - type: NpcFactionMember
     - type: CaptureRegionDevice
       updateName: true
-

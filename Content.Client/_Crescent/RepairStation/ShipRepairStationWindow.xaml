@@ -1,0 +1,82 @@
+<controls:FancyWindow xmlns="https://spacestation14.io"
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      Title="{Loc 'ship-repair-station-title'}"
+                      MinSize="460 460"
+                      SetSize="460 500">
+    <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="4">
+
+        <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+            <Label Text="{Loc 'ship-repair-station-ship'}" />
+            <OptionButton Name="ShipOption" HorizontalExpand="True" />
+        </BoxContainer>
+
+        <controls:StripeBack Margin="0 4 0 0">
+            <Label Name="StatusLabel" Align="Center" Margin="0 2" />
+        </controls:StripeBack>
+
+        <PanelContainer Name="SurveyPanel" StyleClasses="AngleRect" Margin="0 4 0 0">
+            <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="2">
+                <BoxContainer Orientation="Horizontal">
+                    <Label Text="{Loc 'ship-repair-station-hull-breaches'}" />
+                    <Label Name="TilesLabel" HorizontalExpand="True" Align="Right" />
+                </BoxContainer>
+                <BoxContainer Orientation="Horizontal">
+                    <Label Text="{Loc 'ship-repair-station-stripped-tiles'}" />
+                    <Label Name="StrippedLabel" HorizontalExpand="True" Align="Right" />
+                </BoxContainer>
+                <BoxContainer Orientation="Horizontal">
+                    <Label Text="{Loc 'ship-repair-station-missing-parts'}" />
+                    <Label Name="PartsLabel" HorizontalExpand="True" Align="Right" />
+                </BoxContainer>
+                <BoxContainer Orientation="Horizontal">
+                    <Label Text="{Loc 'ship-repair-station-damaged-parts'}" />
+                    <Label Name="DamagedLabel" HorizontalExpand="True" Align="Right" />
+                </BoxContainer>
+                <BoxContainer Orientation="Horizontal">
+                    <Label Text="{Loc 'ship-repair-station-decals'}" />
+                    <Label Name="DecalsLabel" HorizontalExpand="True" Align="Right" />
+                </BoxContainer>
+                <BoxContainer Orientation="Horizontal">
+                    <Label Text="{Loc 'ship-repair-station-cleaning'}" />
+                    <Label Name="CleaningLabel" HorizontalExpand="True" Align="Right" />
+                </BoxContainer>
+                <BoxContainer Orientation="Horizontal">
+                    <Label Text="{Loc 'ship-repair-station-restock'}" />
+                    <Label Name="RestockLabel" HorizontalExpand="True" Align="Right" />
+                </BoxContainer>
+                <BoxContainer Orientation="Horizontal" Margin="0 4 0 0">
+                    <Label Text="{Loc 'ship-repair-station-quote'}" StyleClasses="LabelHeading" />
+                    <Label Name="QuoteLabel" HorizontalExpand="True" Align="Right" StyleClasses="LabelHeading" />
+                </BoxContainer>
+                <BoxContainer Orientation="Horizontal">
+                    <Label Text="{Loc 'ship-repair-station-balance'}" />
+                    <Label Name="BalanceLabel" HorizontalExpand="True" Align="Right" />
+                </BoxContainer>
+            </BoxContainer>
+        </PanelContainer>
+
+        <PanelContainer Name="ProgressPanel" StyleClasses="AngleRect" Margin="0 4 0 0" Visible="False">
+            <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="3">
+                <Label Name="ProgressTitleLabel" />
+                <ProgressBar Name="ProgressBar" MinValue="0" MaxValue="1" Value="0" MaxHeight="14" />
+                <BoxContainer Orientation="Horizontal">
+                    <Label Name="PercentLabel" />
+                    <Label Name="EtaLabel" HorizontalExpand="True" Align="Right" />
+                </BoxContainer>
+                <Label Name="PartsProgressLabel" StyleClasses="LabelSubText" />
+            </BoxContainer>
+        </PanelContainer>
+
+        <Control VerticalExpand="True" />
+
+        <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+            <Button Name="CancelButton"
+                    Text="{Loc 'ship-repair-station-cancel'}"
+                    StyleClasses="ButtonCaution"
+                    HorizontalExpand="True" />
+            <Button Name="StartButton"
+                    Text="{Loc 'ship-repair-station-start'}"
+                    HorizontalExpand="True" />
+        </BoxContainer>
+    </BoxContainer>
+</controls:FancyWindow>

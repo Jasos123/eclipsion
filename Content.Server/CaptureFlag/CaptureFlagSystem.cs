@@ -1,12 +1,10 @@
 using System.Linq;
 using Content.Server.GameTicking;
 using Content.Server.Popups;
-using Content.Shared.CaptureFlag;
 using Content.Shared._Crescent.HullrotFaction;
+using Content.Shared.CaptureFlag;
 using Content.Shared._Crescent.Territory;
 using Content.Shared.GameTicking;
-using Content.Shared.Mobs;
-using Content.Shared.Mobs.Components;
 using Robust.Shared.Localization;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
@@ -63,8 +61,12 @@ public sealed class CaptureFlagSystem : EntitySystem
 
     private void UpdateFlag(EntityUid uid, CaptureFlagComponent flag, TransformComponent xform, float frameTime)
     {
+        // Persistent territory is captured by explicitly interacting with its standard. It must not accumulate
+        // progress merely because faction members happen to stand nearby.
+        if (HasComp<PersistentCaptureRegionComponent>(uid))
+            return;
+
         var mapPos = _xform.ToMapCoordinates(xform.Coordinates);
-        var persistentRegion = CompOrNull<PersistentCaptureRegionComponent>(uid);
         _nearby.Clear();
         _lookup.GetEntitiesInRange(mapPos.MapId, mapPos.Position, flag.Radius, _nearby, LookupFlags.Dynamic | LookupFlags.Sundries);
 
@@ -76,19 +78,6 @@ public sealed class CaptureFlagSystem : EntitySystem
             var team = TryGetTeam(ent);
             if (team is null)
                 continue;
-
-            // Persistent territory is intentionally limited to the four major powers. Ordinary capture flags retain
-            // their existing open-ended team handling.
-            if (persistentRegion != null && !PersistentTerritoryFactions.IsSupported(team))
-                continue;
-
-            // A corpse or incapacitated body must not capture or contest persistent territory. Ordinary capture
-            // flags retain their existing generic CaptureTeam behavior for modes that use non-mob capture actors.
-            if (persistentRegion != null &&
-                (!TryComp<MobStateComponent>(ent, out var mobState) || mobState.CurrentState != MobState.Alive))
-            {
-                continue;
-            }
 
             if (singleTeam is null)
             {
@@ -187,10 +176,7 @@ public sealed class CaptureFlagSystem : EntitySystem
             flag.Stage = CaptureFlagStage.Idle;
             RaiseLocalEvent(new CaptureFlagWonEvent(singleTeam));
 
-            // A persistent territory announces itself by name through PersistentCaptureRegionSystem. A second,
-            // world-wide floating popup that only says which faction won would be both redundant and less use.
-            if (persistentRegion == null)
-                _popup.PopupEntity(Loc.GetString("capture-flag-captured", ("team", singleTeam)), uid, Filter.Broadcast(), true);
+            _popup.PopupEntity(Loc.GetString("capture-flag-captured", ("team", singleTeam)), uid, Filter.Broadcast(), true);
         }
 
         Dirty(uid, flag);
@@ -268,4 +254,3 @@ public sealed class CaptureFlagSystem : EntitySystem
         Timer.Spawn(TimeSpan.FromMinutes(1), _ticker.RestartRound);
     }
 }
-

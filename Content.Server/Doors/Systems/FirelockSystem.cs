@@ -136,6 +136,11 @@ namespace Content.Server.Doors.Systems
             if (!Resolve(uid, ref firelock, ref door))
                 return false;
 
+            // A player deliberately opening a firelock overrides every automatic closing path, including the
+            // pressure checks performed directly by AtmosphereSystem. It stays open until somebody closes it.
+            if (firelock.PlayerHeldOpen)
+                return false;
+
             if (door.State == DoorState.Open)
             {
                 if (_doorSystem.TryClose(uid, door))

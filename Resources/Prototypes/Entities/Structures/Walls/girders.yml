@@ -4,6 +4,8 @@
   name: girder
   description: A large structural assembly made out of metal; It requires a layer of metal before it can be considered a wall.
   components:
+  # Eclipsion - lets the automated repair slip clear this off a tile it is rebuilding.
+  - type: ShipRepairRemnant
   - type: Transform
     anchored: true
     noRot: false

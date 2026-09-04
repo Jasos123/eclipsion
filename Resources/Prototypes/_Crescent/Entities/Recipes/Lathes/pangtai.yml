@@ -182,9 +182,9 @@
   result: PTAWarcrimeHandgrenade
   completetime: 3
   materials:
-    Steel: 200
-    Plasma: 200
-    Plastic: 100
+    Steel: 300
+    Plasma: 400
+    Plastic: 200
 
 # XCR-6 charge-rifle magazines
 

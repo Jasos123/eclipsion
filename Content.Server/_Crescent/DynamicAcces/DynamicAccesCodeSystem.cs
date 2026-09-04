@@ -186,6 +186,12 @@ public sealed class DynamicCodeSystem : SharedDynamicCodeSystem
             var key = retrieveKey();
             AddKeyToComponent(codeHolder, key, prototype.pilotKey);
         }
+        // Kept on the grid so a console built or rebuilt later can adopt them; the pass below only ever
+        // reaches the consoles standing here right now.
+        codeHolder.captainIdentifier = prototype.captainKey;
+        codeHolder.pilotIdentifier = prototype.pilotKey;
+        codeHolder.accesMapping = component.accesMapping;
+
         AddComp(grid, codeHolder);
 
         foreach (var console in consoles)
@@ -202,6 +208,63 @@ public sealed class DynamicCodeSystem : SharedDynamicCodeSystem
         RemComp<DynamicAccesGridInitializerComponent>(grid);
         Dirty(grid, codeHolder);
     }
+    /// <summary>
+    /// Cuts a newly built entity the keys its ship's mapping entitles it to.
+    /// </summary>
+    /// <remarks>
+    /// A hull is keyed once, as it initialises, and the pass only reaches what is standing on it at that
+    /// moment. Anything raised afterwards - a door a crewman builds, an airlock the drydock welds back on
+    /// after the old one was blown in - never went through it, so it answers to its prototype's static
+    /// access instead of the ship's, and opens for the wrong people. This puts a late arrival on the same
+    /// footing as the doors either side of it.
+    /// </remarks>
+    public void ApplyGridKeys(EntityUid grid, EntityUid target)
+    {
+        if (TerminatingOrDeleted(target)
+            || !TryComp<DynamicCodeHolderComponent>(grid, out var gridCodes)
+            || gridCodes.accesMapping is not { } mappingId
+            || !_prototypes.TryIndex<ShipDynamicAccesMappingPrototype>(mappingId, out var prototype))
+        {
+            return;
+        }
+
+        var identifiers = new HashSet<string>();
+        var protoId = MetaData(target).EntityPrototype?.ID;
+
+        if (protoId is not null)
+        {
+            foreach (var (identifier, protos) in prototype.accesIdentifierToEntity)
+            {
+                if (protos.Contains(protoId))
+                    identifiers.Add(identifier);
+            }
+        }
+
+        foreach (var (identifier, components) in prototype.accesIdentifierToComponent)
+        {
+            foreach (var entry in components.Values)
+            {
+                if (!HasComp(target, entry.Component.GetType()))
+                    continue;
+
+                identifiers.Add(identifier);
+                break;
+            }
+        }
+
+        if (identifiers.Count == 0)
+            return;
+
+        var holder = EnsureComp<DynamicCodeHolderComponent>(target);
+        foreach (var identifier in identifiers)
+        {
+            if (gridCodes.mappedCodes.TryGetValue(identifier, out var codes))
+                AddKeyToComponent(holder, codes, null);
+        }
+
+        Dirty(target, holder);
+    }
+
     private void onAdd(EntityUid owner, DynamicCodeHolderComponent component, ref ComponentInit args)
     {
         // Everything the holder is carrying by now - keys pushed in while it was still detached, keys it was

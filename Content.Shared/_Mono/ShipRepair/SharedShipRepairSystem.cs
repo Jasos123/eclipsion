@@ -1,3 +1,4 @@
+using Content.Shared._Crescent.RepairStation; // Eclipsion - repair slip snapshot hook
 using Content.Shared._Mono.ForceParent;
 using Content.Shared._Mono.ShipRepair.Components;
 using Content.Shared.Charges.Systems;
@@ -114,6 +115,12 @@ public abstract partial class SharedShipRepairSystem : EntitySystem
         }
 
         Dirty(gridUid, repairData);
+
+        // Eclipsion Start - the automated repair slip keeps its own, wider file of the same hull and
+        // has to be re-surveyed whenever this one is, or the two disagree about what is missing.
+        var generated = new ShipSnapshotGeneratedEvent();
+        RaiseLocalEvent(gridUid, ref generated);
+        // Eclipsion End
     }
 
     public bool TryRepairTileTile(Entity<ShipRepairDataComponent> grid, Vector2i indices)
@@ -130,7 +137,9 @@ public abstract partial class SharedShipRepairSystem : EntitySystem
         return true;
     }
 
-    protected Vector2i GetRepairChunkIndices(Vector2i gridIndices, int chunkSize)
+    // Eclipsion Start - chunk lookup made public so the automated repair station can survey a hull
+    // without duplicating this indexing maths.
+    public Vector2i GetRepairChunkIndices(Vector2i gridIndices, int chunkSize)
     {
         var xCoord = gridIndices.X < 0 ? 1 - chunkSize + gridIndices.X : gridIndices.X;
         var yCoord = gridIndices.Y < 0 ? 1 - chunkSize + gridIndices.Y : gridIndices.Y;
@@ -139,12 +148,13 @@ public abstract partial class SharedShipRepairSystem : EntitySystem
         return new Vector2i(x, y);
     }
 
-    protected Vector2i GetRelativeIndices(Vector2i gridIndices, int chunkSize)
+    public Vector2i GetRelativeIndices(Vector2i gridIndices, int chunkSize)
     {
         var x = MathHelper.Mod(gridIndices.X, chunkSize);
         var y = MathHelper.Mod(gridIndices.Y, chunkSize);
         return new Vector2i(x, y);
     }
+    // Eclipsion End
 
     protected ShipRepairChunk GetCreateChunk(ShipRepairDataComponent data, Vector2i gridIndices)
     {
@@ -164,7 +174,8 @@ public abstract partial class SharedShipRepairSystem : EntitySystem
         return chunk;
     }
 
-    protected bool TryGetChunk(ShipRepairDataComponent data, Vector2i gridIndices, [NotNullWhen(true)] out ShipRepairChunk? chunk)
+    // Eclipsion - made public alongside the chunk index helpers above.
+    public bool TryGetChunk(ShipRepairDataComponent data, Vector2i gridIndices, [NotNullWhen(true)] out ShipRepairChunk? chunk)
     {
         var chunkSize = data.ChunkSize;
         var chunkIndices = GetRepairChunkIndices(gridIndices, chunkSize);

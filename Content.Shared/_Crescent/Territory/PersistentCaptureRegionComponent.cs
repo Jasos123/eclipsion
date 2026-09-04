@@ -34,8 +34,9 @@ public static class PersistentTerritoryFactions
 }
 
 /// <summary>
-/// Turns a <see cref="Content.Shared.CaptureFlag.CaptureFlagComponent"/> into a freeplay territory whose owner
-/// survives round and server restarts. The flag must sit on the grid that represents the territory on radar.
+/// Turns a <see cref="Content.Shared.CaptureFlag.CaptureFlagComponent"/> into a manually captured freeplay territory
+/// whose owner survives round and server restarts. The flag must sit on the grid that represents the territory on
+/// radar.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class PersistentCaptureRegionComponent : Component
@@ -102,6 +103,17 @@ public sealed partial class PersistentCaptureRegionComponent : Component
     /// <summary>Next passive reward time. Runtime-only and reset when the map loads or ownership changes.</summary>
     [ViewVariables]
     public TimeSpan NextStockReward;
+
+    /// <summary>The player currently working the standard. Runtime-only; prevents simultaneous capture attempts.</summary>
+    [ViewVariables]
+    public EntityUid? Capturer;
+
+    /// <summary>Start and end times used to present the active do-after's progress when the flag is examined.</summary>
+    [ViewVariables]
+    public TimeSpan CaptureStartedAt;
+
+    [ViewVariables]
+    public TimeSpan CaptureEndsAt;
 
     /// <summary>False when map validation rejected this region ID. Runtime-only.</summary>
     [ViewVariables]

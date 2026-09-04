@@ -1,0 +1,17 @@
+- type: gameMap
+  id: RepairSlip
+  mapName: 'Repair Slip'
+  mapPath: /Maps/_Crescent/POI/repairslip.yml
+  isGrid: true
+  minPlayers: 0
+  stations:
+    RepairSlip:
+      stationProto: StandardCrescentPOI
+      gridComponents:
+        # A drydock stays where it is put; the clamps are the point of it.
+        - type: PreventPilot
+        - type: MapIcon
+          iconType: Station
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'Repair Slip'

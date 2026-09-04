@@ -1,0 +1,54 @@
+# What the automated repair slip is allowed to put back on a hull.
+#
+# This is the slip's scope ONLY. The hand-held repair device has its own, driven by the
+# ShipRepairable component on individual prototypes, and nothing in this file widens or narrows it.
+# The slip keeps a separate server-side file of the hull, so editing this costs no bandwidth.
+#
+# Omitting the whitelist means "every anchored structure on the ship" - walls, windows, grilles,
+# airlocks, thrusters, gyroscopes, guns, shield emitters, consoles, lights, cables, pipes, vents,
+# lathes, the lot. The blacklist below is what narrows that back down, and is the line to edit.
+
+- type: shipRepairScope
+  id: DrydockHull
+  blacklist:
+    components:
+    # Anything that spawns with contents would hand those out free every time it was rebuilt, and a
+    # crate is worth far less than what is inside it.
+    - EntityStorage
+    - StorageFill
+    - VendingMachine
+    # Bodies are not hull, and a slip that reprinted one would be a duplicator.
+    - MobState
+    - Body
+  # Wreckage the slip clears off a tile before rebuilding what stood there. Bare frames only: a wall
+  # beaten down to its girder leaves the girder in the way, and welding the new wall through it would
+  # leave the tile holding both.
+  clear:
+    components:
+    - ShipRepairRemnant
+  # Loose wreckage the slip sweeps up while it works, so a rebuilt ship is not handed back knee deep
+  # in the old one's remains: the sheets a wall sheds, the rods and loose tiles a floor sheds, the
+  # shards a window sheds, the coil a cut cable leaves behind, scrap blasted off the hull.
+  #
+  # Only things lying unanchored and directly on the deck are judged by this. Anything in a crate, a
+  # locker or a pocket is never looked at - but a stack a crewman put down on the floor on purpose
+  # goes in the bin with the rest of it, so keep this list to what actually falls off a hull.
+  #
+  # Not the Material component: cash, paper and ingots carry it too, and a slip that binned those
+  # would be robbing the customer rather than sweeping up after him.
+  debris:
+    components:
+    - FloorTile     # metal rods, loose floor tiles, rolled carpet
+    - LightBulb     # the bulbs and tubes a blown-out fixture drops
+    - MachineBoard  # the boards and parts a smashed machine spills
+    - ComputerBoard
+    - MachinePart   # capacitors, matter bins, manipulators, the cell an APC spat out
+    tags:
+    - Sheet       # steel, plasteel, brass, glass and plastic sheets
+    - RawMaterial # scrap blasted off the hull, planks, cloth, cardboard
+    - CableCoil
+    - GlassShard
+    - ReinforcedGlassShard
+    - PlasmaGlassShard
+    - UraniumGlassShard
+    - ClockworkGlassShard

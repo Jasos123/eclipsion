@@ -89,6 +89,37 @@ public sealed class AutoPDTurretTargetingTest
     }
 
     [Test]
+    public async Task WornHostileFactionIdTargetsHardsuitlessWearer()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var turret = entMan.SpawnEntity("WeaponTurretAutoPDDSM", map.GridCoords);
+            var boarder = entMan.SpawnEntity("MobHuman",
+                new EntityCoordinates(map.Grid, new Vector2(1f, 0f)));
+            var id = entMan.SpawnEntity("NCWLIDCardWorker", MapCoordinates.Nullspace);
+
+            Assert.That(server.System<InventorySystem>().TryEquip(boarder, id, "id", silent: true, force: true),
+                Is.True);
+            Assert.That(entMan.GetComponent<FactionIdCardComponent>(id).Faction, Is.EqualTo("NCWL"));
+            Assert.That(server.System<RatDiplomacySystem>().GetRelation("DSM", "NCWL"),
+                Is.EqualTo(FactionRelation.War));
+
+            var htn = entMan.GetComponent<HTNComponent>(turret);
+            var result = server.System<NPCUtilitySystem>().GetEntities(htn.Blackboard, "NearbyPDTTargets");
+
+            Assert.That(result.GetHighest(), Is.EqualTo(boarder),
+                "The anti-boarder turret ignored a hardsuitless wearer of a hostile faction ID.");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task OrdinaryMechTargetsPilot()
     {
         await using var pair = await PoolManager.GetServerClient();

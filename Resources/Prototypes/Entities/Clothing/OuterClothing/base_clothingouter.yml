@@ -170,7 +170,8 @@
         whitelist:
           components:
           - HardsuitInjectable
-        whitelistFailPopup: hardsuit-injector-not-a-pen
+          - Hypospray
+        whitelistFailPopup: hardsuit-injector-invalid-source
         swap: false
         priority: 2
       hardsuit-injector-slot-2:
@@ -178,7 +179,8 @@
         whitelist:
           components:
           - HardsuitInjectable
-        whitelistFailPopup: hardsuit-injector-not-a-pen
+          - Hypospray
+        whitelistFailPopup: hardsuit-injector-invalid-source
         swap: false
         priority: 1
   - type: HardsuitInjector

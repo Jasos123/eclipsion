@@ -489,13 +489,13 @@
     - type: DamageOnLand
       damage:
         types:
-          Blunt: 50
+          Blunt: 30
   - type: ExplodeOnTrigger
   - type: Explosive
     explosionType: Fragmentation
     maxIntensity: 15
     intensitySlope: 5
-    totalIntensity: 150
+    totalIntensity: 120
     canCreateVacuum: false
   - type: EmitSoundOnPickup
     sound: /Audio/_Crescent/Weapons/Grenades/grab1.ogg
@@ -516,16 +516,16 @@
   - type: Sprite
     sprite: _Crescent/Objects/Weapons/Grenades/pta_wp.rsi
   - type: SmokeOnTrigger
-    duration: 9
-    spreadAmount: 7
+    duration: 6
+    spreadAmount: 5
     solution:
       reagents:
       - ReagentId: PolytrinicAcid
-        Quantity: 20
+        Quantity: 10
       - ReagentId: TearGas
-        Quantity: 40
+        Quantity: 25
       - ReagentId: Phlogiston
-        Quantity: 40
+        Quantity: 25
   - type: TimerTriggerVisuals
     primingSound:
       path: "/Audio/_Crescent/Weapons/Grenades/trigger1.ogg"

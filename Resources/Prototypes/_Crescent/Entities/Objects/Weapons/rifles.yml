@@ -281,14 +281,14 @@
           tags:
             - CartridgeCaselessRifle
   - type: Gun
-    damageModifier: 1.35
+    damageModifier: 1.2
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
     - Burst
     burstFireRate: 24
-    burstCooldown: 0.5
-    fireRate: 6
+    burstCooldown: 0.65
+    fireRate: 5
     shotsPerBurst: 2
     soundGunshot:
       path: /Audio/_Crescent/Weapons/Guns/supressed_2/supressed_gunshot_2.ogg
@@ -301,7 +301,7 @@
   - type: Appearance
   - type: ExtendDescription
     descriptionList:
-      - description: This rifle comes with a extended barrel. It deals 35% higher damage per shot.
+      - description: This rifle comes with an extended barrel. It deals 20% higher damage per shot.
         fontSize: 12
         color: "#ff4f00"
         requireDetailRange: false
@@ -334,7 +334,7 @@
         priority: 2
         whitelist:
           tags:
-            - MagazineCaselessRifleShort #Short mags, less fire rate. Still more cracked than all other rifles.
+            - MagazineCaselessRifleShort # Short magazines keep its sustained firepower in check.
       gun_chamber:
         name: Chamber
         startingItem: CartridgeCaselessRifle
@@ -346,7 +346,7 @@
     availableModes:
     - SemiAuto
     - FullAuto
-    fireRate: 7
+    fireRate: 6
     soundGunshot:
       path: /Audio/_Crescent/Weapons/Guns/supressed_2/supressed_gunshot_2.ogg
       params:
@@ -509,7 +509,7 @@
   - type: Clothing
     sprite: _Crescent/Objects/Weapons/Guns/takemura.rsi
   - type: Gun
-    fireRate: 7
+    fireRate: 6
     soundGunshot:
       path: /Audio/_Crescent/Weapons/Guns/rifle_1/rifle_gunshot_2.ogg
   - type: ChamberMagazineAmmoProvider
@@ -742,7 +742,8 @@
   - type: Clothing
     sprite: _Crescent/Objects/Weapons/Guns/halyad.rsi
   - type: Gun
-    fireRate: 2.5 #Same as the barghest. Except Full auto instead of burst. A lot easier to fire.
+    fireRate: 2
+    damageModifier: 0.85
     projectileSpeed: 45
     soundGunshot:
       path: /Audio/_Crescent/Weapons/Guns/dmr_1/dmr_gunshot_2.ogg
@@ -750,6 +751,9 @@
     availableModes:
       - SemiAuto
       - FullAuto
+  - type: HeldSpeedModifier
+    walkModifier: 0.85
+    sprintModifier: 0.85
   - type: ItemSlots
     slots:
       gun_magazine:

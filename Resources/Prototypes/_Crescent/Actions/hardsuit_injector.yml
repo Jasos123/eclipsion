@@ -1,7 +1,7 @@
 - type: entity
   id: ActionHardsuitInjectSlotOne
-  name: Inject medipen (slot 1)
-  description: Injects you with the medipen loaded into hardsuit slot 1.
+  name: Use injector (slot 1)
+  description: Injects you with the contents loaded into hardsuit injector slot 1.
   categories: [ HideSpawnMenu ]
   components:
   - type: InstantAction
@@ -12,8 +12,8 @@
 
 - type: entity
   id: ActionHardsuitInjectSlotTwo
-  name: Inject medipen (slot 2)
-  description: Injects you with the medipen loaded into hardsuit slot 2.
+  name: Use injector (slot 2)
+  description: Injects you with the contents loaded into hardsuit injector slot 2.
   categories: [ HideSpawnMenu ]
   components:
   - type: InstantAction
