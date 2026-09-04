@@ -1,0 +1,13 @@
+- type: entity
+  parent: Jug
+  id: JugLotophagoiOil
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Label
+      currentLabel: reagent-name-lotophagoi-oil
+    - type: SolutionContainerManager
+      solutions:
+        beaker:
+          reagents:
+            - ReagentId: LotophagoiOil
+              Quantity: 200
