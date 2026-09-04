@@ -26,6 +26,7 @@ public sealed partial class ShipRepairStationSystem
     private readonly Dictionary<int, int> _palettePrices = new();
     private readonly Dictionary<int, int> _tilePrices = new();
     private readonly Dictionary<string, int> _protoPrices = new();
+    private readonly Dictionary<string, float> _protoSurcharges = new();
 
     /// <summary>
     /// What one pass over a hull turned up: the work to do, and what it costs the customer.
@@ -66,6 +67,7 @@ public sealed partial class ShipRepairStationSystem
         _palettePrices.Clear();
         _tilePrices.Clear();
         _protoPrices.Clear();
+        _protoSurcharges.Clear();
 
         var standing = BuildOccupancy(ship.Owner);
         var data = ship.Comp;
@@ -161,7 +163,7 @@ public sealed partial class ShipRepairStationSystem
                     continue;
                 }
 
-                var drydockPrice = GetProtoPrice(part.Proto);
+                var drydockPrice = GetStructurePrice(part.Proto);
                 survey.Jobs.Add(new ShipRepairJob
                 {
                     Kind = ShipRepairJobKind.DrydockPart,
@@ -395,7 +397,9 @@ public sealed partial class ShipRepairStationSystem
         if (!TryComp<DamageableComponent>(target, out var damage) || damage.TotalDamage <= FixedPoint2.Zero)
             return;
 
-        var healPrice = (int) MathF.Ceiling(damage.TotalDamage.Float() * station.Comp.DamageRepairRate);
+        var healPrice = (int) MathF.Ceiling(damage.TotalDamage.Float()
+                                           * station.Comp.DamageRepairRate
+                                           * GetSurcharge(MetaData(target).EntityPrototype?.ID));
         survey.Jobs.Add(new ShipRepairJob
         {
             Kind = ShipRepairJobKind.Heal,
@@ -672,11 +676,40 @@ public sealed partial class ShipRepairStationSystem
             return cached;
 
         var price = paletteIndex >= 0 && paletteIndex < data.EntityPalette.Count
-            ? GetProtoPrice(data.EntityPalette[paletteIndex])
+            ? GetStructurePrice(data.EntityPalette[paletteIndex])
             : 0;
 
         _palettePrices[paletteIndex] = price;
         return price;
+    }
+
+    /// <summary>
+    /// What the yard charges to put one structure back - what it is worth in parts and fittings, plus
+    /// the premium on the classes of part that take more than a welder to fit.
+    /// </summary>
+    private int GetStructurePrice(string protoId)
+    {
+        return (int) MathF.Ceiling(GetProtoPrice(protoId) * GetSurcharge(protoId));
+    }
+
+    /// <summary>
+    /// The premium on this class of part, memoed for the survey because a wreck missing forty
+    /// identical mounts asks the same question forty times.
+    /// </summary>
+    private float GetSurcharge(string? protoId)
+    {
+        if (protoId == null)
+            return 1f;
+
+        if (_protoSurcharges.TryGetValue(protoId, out var cached))
+            return cached;
+
+        var multiplier = _proto.TryIndex<EntityPrototype>(protoId, out var proto)
+            ? _drydock.GetSurcharge(proto)
+            : 1f;
+
+        _protoSurcharges[protoId] = multiplier;
+        return multiplier;
     }
 
     private int GetProtoPrice(string protoId)

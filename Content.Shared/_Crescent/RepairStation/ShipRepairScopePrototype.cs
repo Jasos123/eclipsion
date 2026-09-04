@@ -1,3 +1,4 @@
+using Content.Shared._Crescent.Hardpoints;
 using Content.Shared.Whitelist;
 using Robust.Shared.Prototypes;
 
@@ -55,4 +56,48 @@ public sealed partial class ShipRepairScopePrototype : IPrototype
     /// </remarks>
     [DataField]
     public EntityWhitelist? Debris;
+
+    /// <summary>
+    /// What the yard charges over the plain material value of a part, for the kinds of part that take
+    /// a specialist and a crane rather than a welder - shield emitters, engines, and the guns, the
+    /// heavier the worse. It multiplies both the price of putting one back and the price of beating
+    /// the damage out of one that survived.
+    /// </summary>
+    /// <remarks>
+    /// Every rule that matches is considered and the dearest one wins, so an entry for a whole class
+    /// of part can be left in place while a heavier grade of it is priced separately above.
+    /// </remarks>
+    [DataField]
+    public List<ShipRepairSurcharge> Surcharges = new();
+}
+
+/// <summary>
+/// One class of hull part the yard charges a premium on.
+/// </summary>
+[DataDefinition]
+public sealed partial class ShipRepairSurcharge
+{
+    /// <summary>
+    /// Component names that put a part in this class. Any one of them is enough.
+    /// </summary>
+    /// <remarks>
+    /// Judged against the prototype rather than a live entity, because most of what is priced is
+    /// missing by the time the quote is written. Unknown names are logged at startup rather than
+    /// silently pricing nothing.
+    /// </remarks>
+    [DataField(required: true)]
+    public List<string> Components = new();
+
+    /// <summary>
+    /// Narrows the rule to a weapon that mounts on a hardpoint of this size, which is what separates
+    /// a point-defence mount from an artillery piece. Null matches any part.
+    /// </summary>
+    [DataField]
+    public weaponSizes? WeaponSize;
+
+    /// <summary>
+    /// What the part's price is multiplied by. 1.5 = half again over what it is worth in parts.
+    /// </summary>
+    [DataField(required: true)]
+    public float Multiplier = 1f;
 }

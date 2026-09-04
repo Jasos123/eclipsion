@@ -260,4 +260,49 @@ public sealed class RepairSlipMapTest
         await server.WaitRunTicks(1);
         await pair.CleanReturnAsync();
     }
+
+    /// <summary>
+    /// Plating and framing are welding, but a shield emitter, a reactor or a gun comes off a crane and
+    /// gets aligned, and the yard bills for that. This pins the ladder the scope file lays out, in
+    /// particular that a gun's grade comes off the hardpoint it needs rather than off its name.
+    /// </summary>
+    [Test]
+    public async Task SpecialistPartsCarryTheirSurcharge()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        var entManager = server.ResolveDependency<IEntityManager>();
+        var protoManager = server.ResolveDependency<IPrototypeManager>();
+        var drydock = entManager.System<Content.Server._Crescent.RepairStation.ShipDrydockSnapshotSystem>();
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.Multiple(() =>
+            {
+                foreach (var (protoId, expected) in new[]
+                         {
+                             // Hull the yard welds back, charged at what it is worth and no more.
+                             // Thrusters are bolted on rather than commissioned and stay at par.
+                             ("WallReinforced", 1f),
+                             ("Poweredlight", 1f),
+                             ("ThrusterDSMWarship", 1f),
+                             ("ShieldEmitter", 1.5f),
+                             ("AmeController", 1.5f),
+                             ("AmeShielding", 1.5f),
+                             ("BoriaticGeneratorHercules", 1.5f),
+                             ("WeaponTurretVulcan", 1.5f),   // small mount
+                             ("WeaponTurretMortar", 1.75f),  // medium mount
+                             ("FlakCannonTurret", 2f),       // artillery bracket
+                         })
+                {
+                    var proto = protoManager.Index<EntityPrototype>(protoId);
+                    Assert.That(drydock.GetSurcharge(proto), Is.EqualTo(expected).Within(0.001f),
+                        $"{protoId} should be quoted at {expected} times what it is worth in parts.");
+                }
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
 }

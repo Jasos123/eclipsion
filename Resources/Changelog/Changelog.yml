@@ -1190,3 +1190,11 @@ Entries:
   id: 6089
   time: '2026-09-03T00:00:00.0000000+00:00'
   url: null
+
+- author: Taleryn
+  changes:
+    - message: Shield emitters, reactors and ship guns are now quoted above what they are worth in parts, since fitting one is a crane job and an alignment rather than a welding job. Emitters, AME sets and boriatic generators are charged half again, and a gun scales with the mount it needs - half again on a light mount, three quarters more on a medium one, and double in the artillery bracket. The same premium applies to beating the damage out of one that survived, so a battered turret costs what a battered turret costs.
+      type: Tweak
+  id: 6090
+  time: '2026-09-04T00:00:00.0000000+00:00'
+  url: null

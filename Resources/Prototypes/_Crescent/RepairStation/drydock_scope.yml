@@ -52,3 +52,30 @@
     - PlasmaGlassShard
     - UraniumGlassShard
     - ClockworkGlassShard
+  # What the yard charges over the plain material value of a part. Most of a hull is plating and
+  # framing that a welder puts back, and that stays at par. Shield emitters, reactors and guns are
+  # not welding jobs - they come off the crane, get aligned and get tested - so they carry a premium,
+  # and the bigger the gun the worse it is. The multiplier applies both to fitting a missing part and
+  # to beating the damage out of one that survived.
+  #
+  # Every rule that matches is weighed and the dearest wins, so the flat shipgun line below is the
+  # floor for anything that shoots and the sized lines lift the heavier grades above it. A gun's
+  # grade is the hardpoint it needs, not its calibre - Large is the artillery bracket.
+  #
+  # Thrusters and gyroscopes are deliberately not here. They are bolted on rather than commissioned,
+  # and a hull loses them by the dozen, so they are quoted at what they are worth like the rest of it.
+  surcharges:
+  - components: [ ShipShieldEmitter ]
+    multiplier: 1.5
+  # The reactors. AME controllers and their shielding, and the boriatic sets, which are every
+  # generator that burns a chemical fuel.
+  - components: [ AmeController, AmeShield, FuelGenerator ]
+    multiplier: 1.5
+  - components: [ SpaceArtillery ]
+    multiplier: 1.5
+  - components: [ SpaceArtillery ]
+    weaponSize: Medium
+    multiplier: 1.75
+  - components: [ SpaceArtillery ]
+    weaponSize: Large
+    multiplier: 2.0
