@@ -44,7 +44,7 @@ jobs:
       uses: actions/checkout@v7
       with:
         # Use built-in GitHub token (automatically provided)
-        token: ${{ secrets.GH_PAT }}
+        token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
         # Checkout master branch explicitly
         ref: master
         # Full history needed for proper git operations
@@ -134,7 +134,7 @@ jobs:
     - name: Generate Changelog Entry
       env:
         # Pass environment variables explicitly
-        GH_PAT: ${{ secrets.GH_PAT }}
+        GH_PAT: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
         CHANGELOG_DIR: ${{ env.CHANGELOG_DIR }}
         PR_NUMBER: ${{ env.PR_NUMBER }}
         GITHUB_REPOSITORY: ${{ env.GITHUB_REPOSITORY }}
@@ -178,7 +178,7 @@ jobs:
     - name: Commit and Push Changelog
       env:
         # Use GitHub token for push
-        GH_PAT: ${{ secrets.GH_PAT }}
+        GH_PAT: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
       run: |
         echo "=== COMMITTING CHANGELOG ==="
 

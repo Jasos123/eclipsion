@@ -1,6 +1,5 @@
 # Reporting a security vulnerability
 
-All vulnerabilities are to be reported though discord to any maintainer/artificer in the official Hullrot discord.
-If that is not possible , report them to #mlgtastic directly through discord.
+Report vulnerabilities privately to a maintainer in the [Hullrot: Eclipsion Discord](https://discord.gg/tUbZ7CK7DC).
 
-In either case, **do not publicly disclose the vulnerability**
+Until a fix is released, **do not publicly disclose the vulnerability**.

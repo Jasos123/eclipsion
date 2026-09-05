@@ -119,8 +119,10 @@ public sealed partial class ShipShieldsSystem : EntitySystem
             if (emitter.Damage > emitter.DamageLimit)
                 emitter.OverloadAccumulator = emitter.DamageOverloadTimePunishment;
 
-            // if our shield is gone, AND the OverloadAccumulator is done counting down (with some padding), then...
-            if (emitter.Shield is null && emitter.OverloadAccumulator < 1.5 && power.Powered) //put the shield back up!
+            // if our shield is gone, AND the OverloadAccumulator is done counting down (with one tick of
+            // padding - a literal 1.5 here was left over from when EmitterUpdateRate was 1.5, and let the
+            // shield back up a tick and a half before the punishment had actually been served), then...
+            if (emitter.Shield is null && emitter.OverloadAccumulator < EmitterUpdateRate && power.Powered) //put the shield back up!
             {
                 emitter.Recharging = false; //stop boosting hp recharge now that it's up
                 var shield = ShieldEntity(parent.Value, source: uid);

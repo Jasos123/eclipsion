@@ -128,9 +128,13 @@ public partial class ShipShieldsSystem
             return;
         }
 
-        var ratio = component.Damage / component.DamageLimit;
+        // The locale line prints this into a "%" slot, so it has to be scaled here. Handing it the
+        // raw 0-1 ratio read a half-wrecked emitter out as "0.5% damaged".
+        var percent = component.DamageLimit > 0f
+            ? (int) MathF.Round(component.Damage / component.DamageLimit * 100f)
+            : 100;
 
-        args.PushMarkup(Loc.GetString("shield-emitter-examine-damaged", ("percent", ratio)));
+        args.PushMarkup(Loc.GetString("shield-emitter-examine-damaged", ("percent", percent)));
     }
 
     // Rat-start
@@ -153,7 +157,16 @@ public partial class ShipShieldsSystem
         if (ents.Count < 1)
             return false;
 
+        // A hull may carry more than one emitter, and HashSet order is not stable, so taking whatever
+        // came out first handed back a different emitter from one call to the next. Lowest EntityUid
+        // is arbitrary, but it is the same answer every time for a given ship.
         var emitterEnt = ents.First();
+        foreach (var candidate in ents)
+        {
+            if (candidate.Owner.CompareTo(emitterEnt.Owner) < 0)
+                emitterEnt = candidate;
+        }
+
         emitter = emitterEnt;
         emitterComp = emitterEnt.Comp;
         return true;

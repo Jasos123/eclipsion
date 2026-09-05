@@ -8,7 +8,9 @@ using Content.Shared.Damage;
 using Content.Shared.Explosion;
 using Content.Shared.Explosion.Components;
 using Content.Shared.Explosion.EntitySystems;
+using Content.Shared.Humanoid;
 using Content.Shared.Maps;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Physics;
 using Content.Shared.Projectiles;
 using Content.Shared.Tag;
@@ -26,6 +28,7 @@ namespace Content.Server.Explosion.EntitySystems;
 public sealed partial class ExplosionSystem : SharedExplosionSystem
 {
     [Dependency] private readonly FlammableSystem _flammableSystem = default!;
+    [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
 
     /// <summary>
     ///     Used to limit explosion processing time. See <see cref="MaxProcessingTime"/>.
@@ -448,11 +451,13 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
                 // TODO EXPLOSIONS turn explosions into entities, and pass the the entity in as the damage origin.
                 if (!explosion.RandomizeLimbDamage)
                 {
+                    var spreadLimbs = GetSeverableLimbs(entity);
                     _damageableSystem.TryChangeDamage(
                         entity,
                         damage,
                         ignoreResistances: true,
                         partMultiplier: explosion.LimbDamageMultiplier);
+                    TryPlayLimbLossScream(entity, explosion, spreadLimbs);
                     continue;
                 }
 
@@ -493,6 +498,8 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
                         damage * limbDamageMultiplier,
                         ignoreResistances: true);
                 }
+
+                TryPlayLimbLossScream(entity, explosion, limbTargets);
             }
         }
 
@@ -535,23 +542,7 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
         int maximumTargets)
     {
         var selected = new List<(EntityUid Id, BodyPartComponent Component)>();
-        if (!TryComp<BodyComponent>(entity, out var body))
-            return selected;
-
-        var limbs = new List<(EntityUid Id, BodyPartComponent Component)>();
-        foreach (var part in _bodySystem.GetBodyChildren(entity, body))
-        {
-            if (!part.Component.CanSever || part.Component.PartType is not (
-                    BodyPartType.Arm or
-                    BodyPartType.Hand or
-                    BodyPartType.Leg or
-                    BodyPartType.Foot))
-            {
-                continue;
-            }
-
-            limbs.Add(part);
-        }
+        var limbs = GetSeverableLimbs(entity);
 
         _robustRandom.Shuffle(limbs);
         minimumTargets = Math.Max(0, minimumTargets);
@@ -577,6 +568,75 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
         }
 
         return selected;
+    }
+
+    /// <summary>
+    ///     Every attached arm, hand, leg or foot that a blast is allowed to take off. Empty for anything without a
+    ///     body, which is most of what an explosion touches.
+    /// </summary>
+    private List<(EntityUid Id, BodyPartComponent Component)> GetSeverableLimbs(EntityUid entity)
+    {
+        var limbs = new List<(EntityUid Id, BodyPartComponent Component)>();
+        if (!TryComp<BodyComponent>(entity, out var body))
+            return limbs;
+
+        foreach (var part in _bodySystem.GetBodyChildren(entity, body))
+        {
+            if (!part.Component.CanSever || part.Component.PartType is not (
+                    BodyPartType.Arm or
+                    BodyPartType.Hand or
+                    BodyPartType.Leg or
+                    BodyPartType.Foot))
+            {
+                continue;
+            }
+
+            limbs.Add(part);
+        }
+
+        return limbs;
+    }
+
+    /// <summary>
+    ///     Screams if the blast just took an arm or a leg off, and only some of the time - see
+    ///     <see cref="ExplosionPrototype.LimbLossSoundChance"/>. Rolled once per victim, not once per limb.
+    /// </summary>
+    /// <param name="limbs">
+    ///     Limbs that were still attached before the damage went in. Anything now detached or outright gibbed counts
+    ///     as a loss.
+    /// </param>
+    private void TryPlayLimbLossScream(
+        EntityUid entity,
+        ExplosionPrototype explosion,
+        List<(EntityUid Id, BodyPartComponent Component)> limbs)
+    {
+        if (explosion.LimbLossSound is null
+            || explosion.LimbLossSoundChance <= 0f
+            || limbs.Count == 0
+            || TerminatingOrDeleted(entity))
+        {
+            return;
+        }
+
+        // Animals, borgs and whatever is left after a corpse gibs have nothing to scream with.
+        if (!HasComp<HumanoidAppearanceComponent>(entity) || _mobStateSystem.IsDead(entity))
+            return;
+
+        var lostLimb = false;
+        foreach (var limb in limbs)
+        {
+            // DropPart clears Body when a part comes off; a part destroyed outright is deleted instead.
+            if (limb.Component.Body is not null && !TerminatingOrDeleted(limb.Id))
+                continue;
+
+            lostLimb = true;
+            break;
+        }
+
+        if (!lostLimb || !_robustRandom.Prob(explosion.LimbLossSoundChance))
+            return;
+
+        _audio.PlayPvs(explosion.LimbLossSound, entity);
     }
 
     /// <summary>

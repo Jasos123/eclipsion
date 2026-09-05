@@ -2,11 +2,11 @@
     "omnisharp.analyzeOpenDocumentsOnly": true,
     "dotnet.backgroundAnalysis.analyzerDiagnosticsScope": "openFiles",
     "dotnet.backgroundAnalysis.compilerDiagnosticsScope": "openFiles",
-    "dotnet.defaultSolution": "SpaceStation14.sln",
+    "dotnet.defaultSolution": "SpaceStation14.slnx",
     "json.schemas": [
         {
             "fileMatch": [ "**/meta.json" ],
-            "url": "https://raw.githubusercontent.com/Simple-Station/Einstein-Engines/master/.github/rsi-schema.json"
+            "url": "./.github/rsi-schema.json"
         }
     ],
     "workbench.colorCustomizations": {}

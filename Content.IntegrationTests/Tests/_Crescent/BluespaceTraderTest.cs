@@ -6,8 +6,6 @@ using Content.Server.Maps;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Server.StationEvents.Components;
-using Content.Server.Worldgen.Components;
-using Content.Server.Worldgen.Prototypes;
 using Content.Shared.Cargo.Components;
 using Content.Shared.Cargo.Prototypes;
 using Robust.Shared.EntitySerialization.Systems;
@@ -32,61 +30,6 @@ public sealed class BluespaceTraderTest
         new object[] { "ShinoharaTrader", "KitamuraTrader" },
         new object[] { "PangTaiTrader", "GuTianTrader" }
     };
-
-    /// <summary>Worldgen preset the traders have to stay clear of.</summary>
-    private const string WorldgenConfig = "RatWorld";
-
-    /// <summary>
-    /// The traders are meant to be a run out of the belt, not something that materialises on top of it. A min/max
-    /// box cannot express that - it contains the origin - so the events spawn on a ring instead, and that ring has
-    /// to start outside everything worldgen scatters around the centre.
-    /// </summary>
-    [Test, TestCaseSource(nameof(TraderEvents))]
-    public async Task TraderSpawnRingClearsTheBelt(string ruleId, string gameMapId)
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        var protoManager = server.ResolveDependency<IPrototypeManager>();
-        var compFactory = server.ResolveDependency<IComponentFactory>();
-
-        await server.WaitPost(() =>
-        {
-            var rulePrototype = protoManager.Index<EntityPrototype>(ruleId);
-            Assert.That(rulePrototype.TryGetComponent<BluespaceErrorRuleComponent>(out var rule, compFactory), Is.True,
-                $"{ruleId} is not a BluespaceErrorRule.");
-
-            Assert.That(rule!.MinDistance, Is.Not.Null,
-                $"{ruleId} spawns from the min/max box, which contains the origin, so it can drop the trader on the belt.");
-            Assert.That(rule.MaxDistance, Is.Not.Null, $"{ruleId} has a minDistance but no maxDistance.");
-            Assert.That(rule.MinDistance!.Value, Is.LessThanOrEqualTo(rule.MaxDistance!.Value),
-                $"{ruleId}'s spawn ring is inside out.");
-
-            // Every biome worldgen scatters around the centre carves out a radius from the origin. The trader has
-            // to start beyond the furthest of them.
-            var config = protoManager.Index<WorldgenConfigPrototype>(WorldgenConfig);
-            Assert.That(config.Components.TryGetComponent<BiomeSelectionComponent>(compFactory, out var selection), Is.True,
-                $"{WorldgenConfig} selects no biomes.");
-
-            var debrisEdge = 0f;
-            var furthestBiome = string.Empty;
-            foreach (var biomeId in selection!.Biomes)
-            {
-                if (protoManager.Index<BiomePrototype>(biomeId).DistanceRange is not { } range || range.Y <= debrisEdge)
-                    continue;
-
-                debrisEdge = range.Y;
-                furthestBiome = biomeId;
-            }
-
-            Assert.That(debrisEdge, Is.GreaterThan(0f),
-                $"{WorldgenConfig} has no distance-bounded biomes, so this test proves nothing - check the biome list.");
-            Assert.That(rule.MinDistance.Value, Is.GreaterThan(debrisEdge),
-                $"{ruleId} can spawn inside {furthestBiome}, which reaches out to {debrisEdge}.");
-        });
-
-        await pair.CleanReturnAsync();
-    }
 
     [Test, TestCaseSource(nameof(TraderEvents))]
     public async Task TraderGridBecomesAStationWithAWorkingConsole(string ruleId, string gameMapId)

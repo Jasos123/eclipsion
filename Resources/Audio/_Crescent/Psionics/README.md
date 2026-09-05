@@ -1,7 +1,7 @@
 # Psionic power audio
 
-Drop `.ogg` files here, add an entry for each to `attributions.yml`, then point the matching
-prototype at it. Every psionic sound is wired from a single file:
+Drop `.ogg` files here, create `attributions.yml` with an entry for each (see any other
+`attributions.yml` in `Resources/Audio/` for the format), then point the matching prototype at it. Every psionic sound is wired from a single file:
 
 `Resources/Prototypes/Entities/Effects/psionics.yml`
 

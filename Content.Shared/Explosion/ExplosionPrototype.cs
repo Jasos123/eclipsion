@@ -70,6 +70,20 @@ public sealed partial class ExplosionPrototype : IPrototype
     public int MaxLimbDamageTargets = 1;
 
     /// <summary>
+    ///     Sound played on a person who had an arm or a leg torn off by this explosion. Rolled once per victim,
+    ///     no matter how many limbs came off.
+    /// </summary>
+    [DataField]
+    public SoundSpecifier? LimbLossSound = new SoundCollectionSpecifier("DismemberScreams");
+
+    /// <summary>
+    ///     Chance for <see cref="LimbLossSound"/> to play. Deliberately not 1 - a scream that fires on every single
+    ///     dismemberment stops reading as horror and starts reading as a punchline.
+    /// </summary>
+    [DataField]
+    public float LimbLossSoundChance = 0.4f;
+
+    /// <summary>
     ///     Amount of firestacks to apply in addition to igniting.
     /// </summary>
     [DataField]

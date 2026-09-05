@@ -1,0 +1,5 @@
+# Played when an explosion tears a limb off someone. Only rolls some of the time - see the explosion prototype.
+- type: soundCollection
+  id: DismemberScreams
+  files:
+  - /Audio/_Crescent/Player/Dismember/scream_dismember_1.ogg
