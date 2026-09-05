@@ -95506,12 +95506,6 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-  - uid: 5165
-    components:
-    - type: Transform
-      parent: 5164
-    - type: Physics
-      canCollide: False
 - proto: EpinephrineChemistryBottle
   entities:
   - uid: 5166
@@ -116924,28 +116918,13 @@ entities:
     - type: Transform
       parent: 1
       pos: 5.5,-20.5
-- proto: TelecomServer
+- proto: TelecomServerTSP
   entities:
   - uid: 5164
     components:
     - type: Transform
       parent: 1
       pos: 20.5,3.5
-    - type: ContainerContainer
-      containers:
-        key_slots: !type:Container
-          ents:
-          - 5165
-          showEnts: False
-          occludes: True
-        machine_board: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
-        machine_parts: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
 - proto: ToiletDirtyWater
   entities:
   - uid: 8075

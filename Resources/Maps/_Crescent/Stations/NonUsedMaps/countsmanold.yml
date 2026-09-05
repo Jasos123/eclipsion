@@ -26558,7 +26558,7 @@ entities:
           showEnts: False
           occludes: True
           ents: []
-- proto: TelecomServerFilledCommon
+- proto: TelecomServerCivilian
   entities:
   - uid: 1524
     components:

@@ -5515,22 +5515,6 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: EncryptionKeyMinutemen
-  entities:
-  - uid: 577
-    components:
-    - type: Transform
-      parent: 576
-    - type: Physics
-      canCollide: False
-- proto: EncryptionKeyTraffic
-  entities:
-  - uid: 578
-    components:
-    - type: Transform
-      parent: 576
-    - type: Physics
-      canCollide: False
 - proto: FaxMachineShip
   entities:
   - uid: 579
@@ -8022,29 +8006,13 @@ entities:
     - type: Transform
       parent: 1
       pos: 4.5,-11.5
-- proto: TelecomServer
+- proto: TelecomServerTSP
   entities:
   - uid: 576
     components:
     - type: Transform
       parent: 1
       pos: 0.5,-15.5
-    - type: ContainerContainer
-      containers:
-        key_slots: !type:Container
-          ents:
-          - 578
-          - 577
-          showEnts: False
-          occludes: True
-        machine_board: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
-        machine_parts: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
 - proto: Thruster
   entities:
   - uid: 864

@@ -1,6 +1,7 @@
 using Content.Shared.Hands;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Interaction.Components; // Eclipsion
 using Content.Shared.Popups;
 using Robust.Shared.Timing;
 
@@ -26,6 +27,10 @@ public abstract class SharedMultiHandedItemSystem : EntitySystem
 
     private void OnAttemptPickup(EntityUid uid, MultiHandedItemComponent component, GettingPickedUpAttemptEvent args)
     {
+        // Eclipsion - admin ghosts carry anything one-handed.
+        if (HasComp<BypassInteractionChecksComponent>(args.User))
+            return;
+
         if (TryComp<HandsComponent>(args.User, out var hands) && hands.CountFreeHands() >= component.HandsNeeded)
             return;
 

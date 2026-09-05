@@ -11410,22 +11410,6 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: EncryptionKeyMinutemen
-  entities:
-  - uid: 3208
-    components:
-    - type: Transform
-      parent: 1567
-    - type: Physics
-      canCollide: False
-- proto: EncryptionKeyTraffic
-  entities:
-  - uid: 3209
-    components:
-    - type: Transform
-      parent: 1567
-    - type: Physics
-      canCollide: False
 - proto: EphedrineChemistryBottle
   entities:
   - uid: 992
@@ -18018,29 +18002,13 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -12.5,6.5
       parent: 1
-- proto: TelecomServer
+- proto: TelecomServerTSP
   entities:
   - uid: 1567
     components:
     - type: Transform
       pos: -6.5,-8.5
       parent: 1
-    - type: ContainerContainer
-      containers:
-        key_slots: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 3208
-          - 3209
-        machine_board: !type:Container
-          showEnts: False
-          occludes: True
-          ents: []
-        machine_parts: !type:Container
-          showEnts: False
-          occludes: True
-          ents: []
 - proto: Thruster
   entities:
   - uid: 692

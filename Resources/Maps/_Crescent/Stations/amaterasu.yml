@@ -22964,14 +22964,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -12.44482,-14.682181
-- proto: EncryptionKeyShinohara
-  entities:
-  - uid: 1444
-    components:
-    - type: Transform
-      parent: 1443
-    - type: Physics
-      canCollide: False
 - proto: EZNutrientChemistryBottle
   entities:
   - uid: 1445
@@ -28754,28 +28746,13 @@ entities:
       parent: 1
       rot: 1.5707963267948966 rad
       pos: -2.5,24.5
-- proto: TelecomServer
+- proto: TelecomServerSHI
   entities:
   - uid: 1443
     components:
     - type: Transform
       parent: 1
       pos: 4.5,-15.5
-    - type: ContainerContainer
-      containers:
-        key_slots: !type:Container
-          ents:
-          - 1444
-          showEnts: False
-          occludes: True
-        machine_board: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
-        machine_parts: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
 - proto: ThrusterSHIWarship
   entities:
   - uid: 2341

@@ -33694,7 +33694,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: -2.5,-4.5
       parent: 1
-- proto: TelecomServerFilledShuttle
+- proto: TelecomServerCivilian
   entities:
   - uid: 2235
     components:

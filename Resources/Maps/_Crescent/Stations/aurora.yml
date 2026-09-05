@@ -139122,14 +139122,6 @@ entities:
       parent: 1
       rot: -1.5707963267948966 rad
       pos: 4.5,35.5
-- proto: EncryptionKeyEmpire
-  entities:
-  - uid: 9421
-    components:
-    - type: Transform
-      parent: 9420
-    - type: Physics
-      canCollide: False
 - proto: EpinephrineChemistryBottle
   entities:
   - uid: 9422
@@ -172813,7 +172805,7 @@ entities:
       pos: 4.5,34.5
     - type: TechShareReceiver
       consoleName: БМС
-- proto: TelecomServerFilledCommon
+- proto: TelecomServerDSM
   entities:
   - uid: 9420
     components:
@@ -172822,21 +172814,6 @@ entities:
       pos: 13.5,21.5
     - type: Physics
       fixedRotation: False
-    - type: ContainerContainer
-      containers:
-        key_slots: !type:Container
-          ents:
-          - 9421
-          showEnts: False
-          occludes: True
-        machine_board: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
-        machine_parts: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
 - proto: TelescopicBaton
   entities:
   - uid: 1434

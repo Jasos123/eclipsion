@@ -15829,30 +15829,6 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: EncryptionKeyCommon
-  entities:
-  - uid: 4589
-    components:
-    - type: Transform
-      parent: 2407
-    - type: Physics
-      canCollide: False
-- proto: EncryptionKeyFamilies
-  entities:
-  - uid: 4587
-    components:
-    - type: Transform
-      parent: 2407
-    - type: Physics
-      canCollide: False
-- proto: EncryptionKeyTraffic
-  entities:
-  - uid: 4588
-    components:
-    - type: Transform
-      parent: 2407
-    - type: Physics
-      canCollide: False
 - proto: EnergySwordFamilies
   entities:
   - uid: 2058
@@ -24734,7 +24710,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: TelecomServer
+- proto: TelecomServerTAP
   entities:
   - uid: 1343
     components:
@@ -24746,23 +24722,6 @@ entities:
     - type: Transform
       pos: 3.5,-74.5
       parent: 1
-    - type: ContainerContainer
-      containers:
-        key_slots: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 4587
-          - 4588
-          - 4589
-        machine_board: !type:Container
-          showEnts: False
-          occludes: True
-          ents: []
-        machine_parts: !type:Container
-          showEnts: False
-          occludes: True
-          ents: []
 - proto: TelescopicShield
   entities:
   - uid: 2664

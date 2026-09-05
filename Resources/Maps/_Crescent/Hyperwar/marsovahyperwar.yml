@@ -299239,7 +299239,7 @@ entities:
       parent: 1
     - type: TechShareReceiver
       consoleName: ЛРНП
-- proto: TelecomServerFilledNovaBalreska
+- proto: TelecomServerNCWL
   entities:
   - uid: 7888
     components:

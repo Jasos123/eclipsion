@@ -597,6 +597,11 @@ binds:
   type: State
   key: MouseRight
   canFocus: true
+  priority: 5 # Has to beat EditorCancelPlace and MappingOpenContextMenu, which both swallow the press.
+- function: MappingUnselect
+  type: State
+  key: Escape
+  priority: 9 # Under CloseModals so an open popup still closes first.
 - function: SaveMap
   type: State
   key: S
@@ -626,4 +631,10 @@ binds:
   type: State
   key: MouseRight
   canFocus: true
+- function: MappingEraseDecalRect
+  type: State
+  key: MouseLeft
+  canFocus: true
+  mod1: Control
+  priority: 5
 

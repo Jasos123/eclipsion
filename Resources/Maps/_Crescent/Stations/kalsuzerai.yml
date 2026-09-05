@@ -25703,22 +25703,6 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: EncryptionKeyEmpire
-  entities:
-  - uid: 3626
-    components:
-    - type: Transform
-      parent: 3625
-    - type: Physics
-      canCollide: False
-- proto: EncryptionKeyTraffic
-  entities:
-  - uid: 3627
-    components:
-    - type: Transform
-      parent: 3625
-    - type: Physics
-      canCollide: False
 - proto: ExosuitFabricator
   entities:
   - uid: 3628
@@ -41603,29 +41587,13 @@ entities:
       rot: 3.141592653589793 rad
       pos: 17.5,-27.5
       parent: 1
-- proto: TelecomServer
+- proto: TelecomServerDSM
   entities:
   - uid: 3625
     components:
     - type: Transform
       pos: 8.5,9.5
       parent: 1
-    - type: ContainerContainer
-      containers:
-        key_slots: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 3626
-          - 3627
-        machine_board: !type:Container
-          showEnts: False
-          occludes: True
-          ents: []
-        machine_parts: !type:Container
-          showEnts: False
-          occludes: True
-          ents: []
 - proto: ToiletDirtyWater
   entities:
   - uid: 6049

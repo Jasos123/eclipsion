@@ -70,6 +70,7 @@ namespace Content.Server.Decals
 
             SubscribeNetworkEvent<RequestDecalPlacementEvent>(OnDecalPlacementRequest);
             SubscribeNetworkEvent<RequestDecalRemovalEvent>(OnDecalRemovalRequest);
+            SubscribeNetworkEvent<RequestDecalRectRemovalEvent>(OnDecalRectRemovalRequest); // Eclipsion - bulk decal erase
             SubscribeLocalEvent<PostGridSplitEvent>(OnGridSplit);
 
             Subs.CVar(_conf, CVars.NetPVS, OnPvsToggle, true);
@@ -279,6 +280,54 @@ namespace Content.Server.Decals
                 RemoveDecal(gridId.Value, decalId);
             }
         }
+
+        // Eclipsion Start - bulk decal erase in the mapping editor
+        private void OnDecalRectRemovalRequest(RequestDecalRectRemovalEvent ev, EntitySessionEventArgs eventArgs)
+        {
+            if (eventArgs.SenderSession is not { } session)
+                return;
+
+            if (!_adminManager.HasAdminFlag(session, AdminFlags.Spawn))
+                return;
+
+            var start = GetCoordinates(ev.Start);
+            var end = GetCoordinates(ev.End);
+
+            if (!start.IsValid(EntityManager) || !end.IsValid(EntityManager))
+                return;
+
+            var gridId = _transform.GetGrid(start);
+
+            // The rectangle is only meaningful while both corners live in the same local space, so a drag
+            // that wandered off the grid it started on is dropped rather than guessed at.
+            if (gridId == null || gridId != _transform.GetGrid(end))
+                return;
+
+            var bounds = new Box2(Vector2.Min(start.Position, end.Position), Vector2.Max(start.Position, end.Position));
+
+            foreach (var (decalId, decal) in GetDecalsIntersecting(gridId.Value, bounds))
+            {
+                // Box2.Contains is closed on every edge, which would also take the decals sitting exactly on
+                // the far corner of the selection - one tile outside of what the mapper dragged over.
+                var pos = decal.Coordinates;
+                if (pos.X < bounds.Left || pos.X >= bounds.Right || pos.Y < bounds.Bottom || pos.Y >= bounds.Top)
+                    continue;
+
+                if (eventArgs.SenderSession.AttachedEntity != null)
+                {
+                    _adminLogger.Add(LogType.CrayonDraw, LogImpact.High,
+                        $"{ToPrettyString(eventArgs.SenderSession.AttachedEntity.Value):actor} removed a {decal.Color} {decal.Id} at {decal.Coordinates}");
+                }
+                else
+                {
+                    _adminLogger.Add(LogType.CrayonDraw, LogImpact.High,
+                        $"{eventArgs.SenderSession.Name} removed a {decal.Color} {decal.Id} at {decal.Coordinates}");
+                }
+
+                RemoveDecal(gridId.Value, decalId);
+            }
+        }
+        // Eclipsion End
 
         protected override void DirtyChunk(EntityUid uid, Vector2i chunkIndices, DecalChunk chunk)
         {

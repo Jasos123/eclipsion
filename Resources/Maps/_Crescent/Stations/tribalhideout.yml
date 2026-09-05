@@ -21653,14 +21653,6 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: EncryptionKeyFamilies
-  entities:
-  - uid: 848
-    components:
-    - type: Transform
-      parent: 847
-    - type: Physics
-      canCollide: False
 - proto: EnergySwordHoS
   entities:
   - uid: 849
@@ -25528,28 +25520,13 @@ entities:
     - type: Transform
       parent: 1
       pos: -12.5,-20.5
-- proto: TelecomServer
+- proto: TelecomServerTAP
   entities:
   - uid: 847
     components:
     - type: Transform
       parent: 1
       pos: 3.5,-2.5
-    - type: ContainerContainer
-      containers:
-        key_slots: !type:Container
-          ents:
-          - 848
-          showEnts: False
-          occludes: True
-        machine_board: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
-        machine_parts: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
 - proto: TwoWayLever
   entities:
   - uid: 1375

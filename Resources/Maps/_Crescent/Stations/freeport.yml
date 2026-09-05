@@ -40312,36 +40312,6 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-  - uid: 3436
-    components:
-    - type: Transform
-      parent: 3435
-    - type: Physics
-      canCollide: False
-- proto: EncryptionKeySyndiesGorlex
-  entities:
-  - uid: 3437
-    components:
-    - type: Transform
-      parent: 3435
-    - type: Physics
-      canCollide: False
-- proto: EncryptionKeySyndiesInterdyne
-  entities:
-  - uid: 3438
-    components:
-    - type: Transform
-      parent: 3435
-    - type: Physics
-      canCollide: False
-- proto: EncryptionKeySyndiesSaws
-  entities:
-  - uid: 3439
-    components:
-    - type: Transform
-      parent: 3435
-    - type: Physics
-      canCollide: False
 - proto: ExileAutoinjector
   entities:
   - uid: 3440
@@ -54885,31 +54855,13 @@ entities:
       parent: 1
       rot: -1.5707963267948966 rad
       pos: 0.5814114,46.943977
-- proto: TelecomServer
+- proto: TelecomServerTFCF
   entities:
   - uid: 3435
     components:
     - type: Transform
       parent: 1
       pos: 12.5,22.5
-    - type: ContainerContainer
-      containers:
-        key_slots: !type:Container
-          ents:
-          - 3436
-          - 3438
-          - 3437
-          - 3439
-          showEnts: False
-          occludes: True
-        machine_board: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
-        machine_parts: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
 - proto: TFSCMainframeConsole
   entities:
   - uid: 5435

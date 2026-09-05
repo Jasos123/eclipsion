@@ -1,0 +1,22 @@
+- type: entity
+  parent: BaseStructure
+  id: PayphoneEasterEgg
+  name: red phone
+  description: An old red phone. There might still be someone on the other end.
+  suffix: Easter egg
+  components:
+  - type: Sprite
+    sprite: Objects/Fun/Instruments/otherinstruments.rsi
+    state: red_phone
+  - type: InteractionOutline
+  - type: PayphoneEasterEgg
+    requiredAttempts: 5
+    attemptInterval: 1
+    lineInterval: 4
+    stunDuration: 4
+    # Plays once on the first calling message; later calling messages do not restart it.
+    callingSound:
+      path: /Audio/_Crescent/Payphone/calling.ogg
+    # It plays only for the caller, together with the final dialogue message.
+    finalLineSound:
+      path: /Audio/_Crescent/Payphone/you_are_drunk.ogg

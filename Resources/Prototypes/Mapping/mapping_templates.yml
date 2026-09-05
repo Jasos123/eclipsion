@@ -893,21 +893,29 @@
       id: Telecoms
       children:
         - !type:MappingTemplatePrototype
-          id: TelecomServerFilledEngineering
+          id: TelecomServerCivilian
         - !type:MappingTemplatePrototype
-          id: TelecomServerFilledCommand
+          id: TelecomServerDSM
         - !type:MappingTemplatePrototype
-          id: TelecomServerFilledMedical
+          id: TelecomServerNCWL
         - !type:MappingTemplatePrototype
-          id: TelecomServerFilledScience
+          id: TelecomServerTFCF
         - !type:MappingTemplatePrototype
-          id: TelecomServerFilledCommon
+          id: TelecomServerSHI
         - !type:MappingTemplatePrototype
-          id: TelecomServerFilledService
+          id: TelecomServerTAP
         - !type:MappingTemplatePrototype
-          id: TelecomServerFilledSecurity
+          id: TelecomServerSRM
         - !type:MappingTemplatePrototype
-          id: TelecomServerFilledCargo
+          id: TelecomServerATH
+        - !type:MappingTemplatePrototype
+          id: TelecomServerTSP
+        - !type:MappingTemplatePrototype
+          id: TelecomServerClarizian
+        - !type:MappingTemplatePrototype
+          id: TelecomServerNAP
+        - !type:MappingTemplatePrototype
+          id: TelecomServer
         - !type:MappingTemplatePrototype
           id: DefaultStationBeaconTelecoms
         - !type:MappingTemplatePrototype

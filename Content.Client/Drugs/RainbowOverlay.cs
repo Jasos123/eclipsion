@@ -14,16 +14,22 @@ public sealed class RainbowOverlay : Overlay
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly IEntitySystemManager _sysMan = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
     public override bool RequestScreenTexture => true;
     private readonly ShaderInstance _rainbowShader;
 
     public float Intoxication = 0.0f;
-    public float TimeTicker = 0.0f;
 
     private const float VisualThreshold = 10.0f;
     private const float PowerDivisor = 250.0f;
+
+    /// <summary>How long, in seconds, the effect takes to work its way up to its target strength.</summary>
+    private const float RampUpTime = 16.0f;
+
+    /// <summary>How long, in seconds, it takes to fade back out once the effect starts running out.</summary>
+    private const float RampDownTime = 6.0f;
 
     private float EffectScale => Math.Clamp((Intoxication - VisualThreshold) / PowerDivisor, 0.0f, 1.0f);
 
@@ -48,18 +54,15 @@ public sealed class RainbowOverlay : Overlay
         if (!statusSys.TryGetTime(playerEntity.Value, DrugOverlaySystem.RainbowKey, out var time, status))
             return;
 
-        var timeLeft = (float) (time.Value.Item2 - time.Value.Item1).TotalSeconds;
+        var timeLeft = (float) (time.Value.Item2 - _timing.CurTime).TotalSeconds;
 
-        TimeTicker += args.DeltaSeconds;
-
-        if (timeLeft - TimeTicker > timeLeft / 16f)
-        {
-            Intoxication += (timeLeft - Intoxication) * args.DeltaSeconds / 16f;
-        }
-        else
-        {
-            Intoxication -= Intoxication/(timeLeft - TimeTicker) * args.DeltaSeconds;
-        }
+        // Strength simply follows the time left on the status effect, easing in as it builds and
+        // out as it runs down. This used to be driven by a separate ticker that was only ever
+        // reset when the overlay was removed, so any drug that tops its own status effect up -
+        // which is all of them - drove the divisor negative and slammed the shader to full
+        // strength for the rest of the trip.
+        var rate = args.DeltaSeconds / (timeLeft > Intoxication ? RampUpTime : RampDownTime);
+        Intoxication += (timeLeft - Intoxication) * Math.Clamp(rate, 0.0f, 1.0f);
     }
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)

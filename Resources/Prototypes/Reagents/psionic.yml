@@ -74,11 +74,15 @@
     Narcotic:
       metabolismRate: 0.2
       effects:
+      # Accumulates rather than refreshes, so every metabolism tick used to pile another 5
+      # seconds onto a 1 second tick and pinned the rainbow shader at full strength for the
+      # whole drink. 1.5 keeps the trip visible and dose dependent without the screen warping
+      # hard enough to make people ill.
       - !type:GenericStatusEffect
         key: SeeingRainbows
         component: SeeingRainbows
         type: Add
-        time: 5
+        time: 1.5
         refresh: false
       - !type:ChemRerollPsionic
         bonusMultiplier: 4
@@ -125,7 +129,7 @@
           key: SeeingRainbows
           component: SeeingRainbows
           type: Add
-          time: 30
+          time: 20
         - !type:GenericStatusEffect
           key: Stutter
           component: StutteringAccent
@@ -137,7 +141,7 @@
               Toxin: 15 #fast heavy damage, but extreamly hard to get large quantity
               Burn: 5
         - !type:Drunk
-          boozePower: 50
+          boozePower: 30 # Was 50. The drunk blur stacks on top of the rainbow shader here.
         - !type:Paralyze
           paralyzeTime: 10 #too much reagent needed for arrows to be toooo powerful with this, but still useful for tratiors or robust CMOs that want a long stun and are friends with Epi
           conditions:

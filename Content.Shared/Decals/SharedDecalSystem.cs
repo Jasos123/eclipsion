@@ -176,4 +176,26 @@ namespace Content.Shared.Decals
             Coordinates = coordinates;
         }
     }
+
+    // Eclipsion Start - bulk decal erase in the mapping editor
+    /// <summary>
+    ///     Sent by mappers to remove every decal inside the box spanned by two corners.
+    /// </summary>
+    /// <remarks>
+    ///     Both corners have to sit on the same grid; the server resolves the grid from
+    ///     <see cref="Start"/> and ignores the request when they disagree.
+    /// </remarks>
+    [Serializable, NetSerializable]
+    public sealed class RequestDecalRectRemovalEvent : EntityEventArgs
+    {
+        public NetCoordinates Start;
+        public NetCoordinates End;
+
+        public RequestDecalRectRemovalEvent(NetCoordinates start, NetCoordinates end)
+        {
+            Start = start;
+            End = end;
+        }
+    }
+    // Eclipsion End
 }

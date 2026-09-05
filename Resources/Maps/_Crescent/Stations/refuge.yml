@@ -19569,14 +19569,6 @@ entities:
       parent: 1410
     - type: Physics
       canCollide: False
-- proto: EncryptionKeyHunter
-  entities:
-  - uid: 1412
-    components:
-    - type: Transform
-      parent: 1410
-    - type: Physics
-      canCollide: False
 - proto: ExtinguisherCabinetFilled
   entities:
   - uid: 1413
@@ -23757,7 +23749,7 @@ entities:
     - type: Transform
       pos: -6.5,2.5
       parent: 1
-- proto: TelecomServer
+- proto: TelecomServerSRM
   entities:
   - uid: 1410
     components:
@@ -23771,7 +23763,6 @@ entities:
           occludes: True
           ents:
           - 1411
-          - 1412
         machine_board: !type:Container
           showEnts: False
           occludes: True

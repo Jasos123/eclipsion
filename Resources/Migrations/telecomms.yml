@@ -1,0 +1,28 @@
+# Telecomm server cleanup.
+#
+# The upstream department servers and the NF ship servers were deleted in favour of one server per
+# faction (Resources/Prototypes/_Crescent/Entities/Structures/telecomms.yml). Maps in this repo were
+# repointed by hand; these entries keep grids saved before the cleanup - player shuttles, autosaves,
+# downloaded maps - loading. Keys are the old IDs and must never be renamed.
+#
+# Everything that only carried dead upstream department channels lands on the civilian server, which
+# is the Common + Traffic pair those grids actually used.
+
+TelecomServerFilled: TelecomServerCivilian
+TelecomServerFilledCommon: TelecomServerCivilian
+TelecomServerFilledCargo: TelecomServerCivilian
+TelecomServerFilledEngineering: TelecomServerCivilian
+TelecomServerFilledMedical: TelecomServerCivilian
+TelecomServerFilledScience: TelecomServerCivilian
+TelecomServerFilledService: TelecomServerCivilian
+TelecomServerFilledCommand: TelecomServerCivilian
+TelecomServerFilledSecurityEinstein: TelecomServerCivilian
+
+# _NF ship servers.
+TelecomServerFilledShuttle: TelecomServerCivilian
+TelecomServerFilledSecurity: TelecomServerCivilian
+TelecomServerFilledFreelance: TelecomServerCivilian
+TelecomServerFilledSyndicate: TelecomServerTFCF
+
+# Nova Balreska's bespoke server was an NCWL server under another name.
+TelecomServerFilledNovaBalreska: TelecomServerNCWL

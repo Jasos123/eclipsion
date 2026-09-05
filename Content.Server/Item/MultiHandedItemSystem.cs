@@ -1,6 +1,7 @@
 ﻿using Content.Server.Hands.Systems;
 using Content.Server.Inventory;
 using Content.Shared.Hands;
+using Content.Shared.Interaction.Components; // Eclipsion
 using Content.Shared.Item;
 
 namespace Content.Server.Item;
@@ -11,6 +12,10 @@ public sealed class MultiHandedItemSystem : SharedMultiHandedItemSystem
 
     protected override void OnEquipped(EntityUid uid, MultiHandedItemComponent component, GotEquippedHandEvent args)
     {
+        // Eclipsion - admin ghosts hold it in one hand, so don't block the others with virtual items.
+        if (HasComp<BypassInteractionChecksComponent>(args.User))
+            return;
+
         for (var i = 0; i < component.HandsNeeded - 1; i++)
         {
             _virtualItem.TrySpawnVirtualItemInHand(uid, args.User);

@@ -12698,22 +12698,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 1.5,1.5
-- proto: EncryptionKeyEmpire
-  entities:
-  - uid: 1024
-    components:
-    - type: Transform
-      parent: 1023
-    - type: Physics
-      canCollide: False
-- proto: EncryptionKeyEmpireCiv
-  entities:
-  - uid: 1025
-    components:
-    - type: Transform
-      parent: 1023
-    - type: Physics
-      canCollide: False
 - proto: ExtinguisherCabinetFilled
   entities:
   - uid: 1026
@@ -16222,29 +16206,13 @@ entities:
       parent: 1
       rot: -1.5707963267948966 rad
       pos: -5.5,4.5
-- proto: TelecomServer
+- proto: TelecomServerDSM
   entities:
   - uid: 1023
     components:
     - type: Transform
       parent: 1
       pos: -1.5,-25.5
-    - type: ContainerContainer
-      containers:
-        key_slots: !type:Container
-          ents:
-          - 1025
-          - 1024
-          showEnts: False
-          occludes: True
-        machine_board: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
-        machine_parts: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
 - proto: Thruster
   entities:
   - uid: 1562

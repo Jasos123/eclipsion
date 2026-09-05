@@ -31204,54 +31204,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 16.5,5.5
-- proto: EncryptionKeyCommon
-  entities:
-  - uid: 2161
-    components:
-    - type: Transform
-      parent: 2160
-    - type: Physics
-      canCollide: False
-- proto: EncryptionKeySyndie
-  entities:
-  - uid: 2162
-    components:
-    - type: Transform
-      parent: 2160
-    - type: Physics
-      canCollide: False
-- proto: EncryptionKeySyndiesCyberdawn
-  entities:
-  - uid: 2163
-    components:
-    - type: Transform
-      parent: 2160
-    - type: Physics
-      canCollide: False
-- proto: EncryptionKeySyndiesGorlex
-  entities:
-  - uid: 2164
-    components:
-    - type: Transform
-      parent: 2160
-    - type: Physics
-      canCollide: False
-- proto: EncryptionKeySyndiesInterdyne
-  entities:
-  - uid: 2165
-    components:
-    - type: Transform
-      parent: 2160
-    - type: Physics
-      canCollide: False
-- proto: EncryptionKeySyndiesSaws
-  entities:
-  - uid: 2166
-    components:
-    - type: Transform
-      parent: 2160
-    - type: Physics
-      canCollide: False
 - proto: ExosuitFabricator
   entities:
   - uid: 2167
@@ -40226,33 +40178,13 @@ entities:
     - type: Transform
       parent: 1
       pos: -19.5,-23.5
-- proto: TelecomServer
+- proto: TelecomServerTFCF
   entities:
   - uid: 2160
     components:
     - type: Transform
       parent: 1
       pos: 10.5,-16.5
-    - type: ContainerContainer
-      containers:
-        key_slots: !type:Container
-          ents:
-          - 2166
-          - 2165
-          - 2163
-          - 2162
-          - 2161
-          - 2164
-          showEnts: False
-          occludes: True
-        machine_board: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
-        machine_parts: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
 - proto: TFSCMainframeConsole
   entities:
   - uid: 3253

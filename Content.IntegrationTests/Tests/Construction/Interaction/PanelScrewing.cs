@@ -11,7 +11,7 @@ public sealed class PanelScrewing : InteractionTest
     // conflicting interactions due to encryption key removal interactions.
     [Test]
     [TestCase("Airlock")]
-    [TestCase("TelecomServerFilled")]
+    [TestCase("TelecomServerCivilian")]
     public async Task WiresPanelScrewing(string prototype)
     {
         await SpawnTarget(prototype);

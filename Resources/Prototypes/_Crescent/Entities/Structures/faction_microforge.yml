@@ -86,3 +86,98 @@
   components:
   - type: FactionMachine
     faction: TFSC
+
+# Pre-stocked microforges. Mapping convenience: a forge that ships with a full material bay so a map does not have
+# to hand-place hundreds of sheets and chunks, or expect the crew to mine before anything can be printed.
+#
+# The stock is sized off what a fully-researched microforge actually eats per print, not off a flat number:
+#
+#   * Bulk feedstock -- sheets, bars, rolls, planks -- runs 5-20 per print, so it starts at 500. That is roughly
+#     30-100 prints deep, which is a shift's worth rather than an infinite supply.
+#   * Fabricated components -- electronics, mechatronics, hardsuit electronics, laser loci -- run 1-4 per print,
+#     and are the parts a station normally has to print or buy first. Those start at 50, same 20-50 print depth.
+#   * Rare feedstock nothing spams (diamond, bluespace, normality, bananium) also starts at 50.
+#
+# Numbers below are in storage volume, which is NOT the number the UI shows: the forge divides by the material's
+# sheet volume. Sheets and bars are 100 per unit (50000 = 500 sheets), fabricated chunks are 500 per unit
+# (25000 = 50 chunks), biomass is 1. Change the per-unit count, not the raw number, or the UI will read wrong.
+#
+# BaseStockedMicroforge carries only the material bay, so it goes in a forge's parent list next to whatever base
+# that forge already had. MaterialStorage merges across parents field by field, so the forge keeps its own
+# whitelist and its dropOnDeconstruct: false -- deconstructing one does not dump 500 sheets on the floor.
+
+- type: entity
+  id: BaseStockedMicroforge
+  abstract: true
+  components:
+  - type: MaterialStorage
+    storage:
+      # 500 sheets/bars/rolls of bulk feedstock.
+      Steel: 50000
+      Glass: 50000
+      Plastic: 50000
+      Plasteel: 50000
+      ReinforcedGlass: 50000
+      ReinforcedPlasmaGlass: 50000
+      Gold: 50000
+      Silver: 50000
+      Copper: 50000
+      Tungsten: 50000
+      Aluminum: 50000
+      Uranium: 50000
+      Plasma: 50000
+      Cloth: 50000
+      Durathread: 50000
+      WebSilk: 50000
+      Wood: 50000
+      Circuitry: 50000
+      Biomass: 500
+      # 50 chunks/canisters of fabricated and rare stock.
+      BasicElectronics: 25000
+      AdvancedElectronics: 25000
+      NanotrasenElectronics: 25000
+      BasicMechatronics: 25000
+      AdvancedMechatronics: 25000
+      NanotrasenMechatronics: 25000
+      HardsuitElectronics: 25000
+      HardlightGenerator: 25000
+      LaserLocus: 25000
+      WeakLaserLocus: 25000
+      TubeLoader: 25000
+      SilkFilament: 25000
+      PlasmaIsotope: 25000
+      DeactivatedPhoron: 25000
+      Galine: 25000
+      Diamond: 5000
+      Bluespace: 5000
+      Normality: 5000
+      Bananium: 7500
+
+# Unowned forge: no faction stamp, so it binds to whatever research server shares its grid and anyone can use it.
+- type: entity
+  parent: [PristineMicroforge, BaseStockedMicroforge]
+  id: PristineMicroforgeStocked
+  suffix: Stocked
+
+# Faction forges with the same bay. Still access-restricted and still keyed to their own faction's research
+# server -- only the material problem is solved, not the research one.
+
+- type: entity
+  parent: [StationMicroforgeDSM, BaseStockedMicroforge]
+  id: StationMicroforgeDSMStocked
+  suffix: Stocked
+
+- type: entity
+  parent: [StationMicroforgeNCWL, BaseStockedMicroforge]
+  id: StationMicroforgeNCWLStocked
+  suffix: Stocked
+
+- type: entity
+  parent: [StationMicroforgeSHI, BaseStockedMicroforge]
+  id: StationMicroforgeSHIStocked
+  suffix: Stocked
+
+- type: entity
+  parent: [StationMicroforgeTFSC, BaseStockedMicroforge]
+  id: StationMicroforgeTFSCStocked
+  suffix: Stocked

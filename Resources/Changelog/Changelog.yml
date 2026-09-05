@@ -1207,3 +1207,36 @@ Entries:
   time: '2026-09-04T00:00:00.0000000+00:00'
   url: null
 
+- author: Taleryn
+  changes:
+    - message: Added a dormant oracle. She uses the same statue as the one you already know, but she makes no demands, speaks to nobody and cannot be prayed to - her fountain simply starts full of lotophagoi oil and slowly fills itself back up forever, for anyone willing to drink from it.
+      type: Add
+  id: 6092
+  time: '2026-09-05T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: The psychedelic screen effect from lotophagoi oil and ousiana dust no longer ramps straight to full strength and sits there. It now scales with how much you actually took and eases off as it wears out, and ousiana leaves you rather less drunk on top of it.
+      type: Tweak
+  id: 6093
+  time: '2026-09-05T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Right click and escape now back out of the mapping editor's entity, tile and decal erasers instead of leaving them running until you press their button a second time.
+      type: Fix
+    - message: The decal eraser now takes a ctrl click box selection, the same way the entity and tile erasers already did.
+      type: Add
+  id: 6094
+  time: '2026-09-05T00:00:00.0000000+00:00'
+  url: null
+
+- author: Taleryn
+  changes:
+    - message: Telecomm servers are now one per faction, spawning with that faction's encryption keys already inside. The upstream department servers (cargo, engineering, medical, science, security, service, command) and the Nanotrasen ship servers are gone; old grids load onto the civilian server automatically.
+      type: Tweak
+  id: 6095
+  time: '2026-09-05T00:00:00.0000000+00:00'
+  url: null

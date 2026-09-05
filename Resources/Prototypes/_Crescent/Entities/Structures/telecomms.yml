@@ -1,9 +1,148 @@
+# Faction telecomm servers.
+#
+# One server per faction, each one already carrying that faction's encryption keys, so mapping a hull
+# means dropping a single entity instead of spawning a bare server and hand-feeding it keys. Every
+# entry keeps EncryptionKeyCommon alongside the faction key. That one key carries both Common, which
+# every headset falls back to, and Traffic, which docking chatter runs on.
+#
+# The upstream department servers (Cargo, Engineering, Medical, ...) are gone; see
+# Resources/Migrations/telecomms.yml for how old grids are remapped onto these.
+
 - type: entity
   parent: TelecomServer
-  id: TelecomServerFilledNovaBalreska
-  suffix: Nova Balreska
+  id: TelecomServerCivilian
+  suffix: Civilian
+  description: When powered it carries the open and traffic control channels. Neutral ground.
   components:
   - type: ContainerFill
     containers:
       key_slots:
-      - EncryptionKeyBalreska
+      - EncryptionKeyCommon
+
+- type: entity
+  parent: TelecomServer
+  id: TelecomServerDSM
+  suffix: DSM
+  description: When powered it carries Imperial command and civil traffic for a Mandate hull.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - EncryptionKeyEmpire
+      - EncryptionKeyEmpireCiv
+      - EncryptionKeyCommon
+
+- type: entity
+  parent: TelecomServer
+  id: TelecomServerNCWL
+  suffix: NCWL
+  description: When powered it carries League command and line traffic for a Union hull.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - EncryptionKeyNCWLCommand
+      - EncryptionKeyNCWL
+      - EncryptionKeyCommon
+
+# All four member organizations ride the same Federation server: they share hulls often enough that
+# splitting Gorlex/Interdyne/Cyberdawn/SAWs into separate servers just means someone goes silent.
+- type: entity
+  parent: TelecomServer
+  id: TelecomServerTFCF
+  suffix: TFCF
+  description: When powered it carries every Federation member channel for a Free Companies hull.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - EncryptionKeyTFSCCommand
+      - EncryptionKeySyndiesGorlex
+      - EncryptionKeySyndiesInterdyne
+      - EncryptionKeySyndiesCyberdawn
+      - EncryptionKeySyndiesSaws
+      - EncryptionKeyCommon
+
+- type: entity
+  parent: TelecomServer
+  id: TelecomServerSHI
+  suffix: SHI
+  description: When powered it carries the corporate channel for a Shinohara hull.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - EncryptionKeyShinohara
+      - EncryptionKeyCommon
+
+- type: entity
+  parent: TelecomServer
+  id: TelecomServerTAP
+  suffix: TAP
+  description: When powered it carries the caravan channel for a Pact hull.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - EncryptionKeyFamilies
+      - EncryptionKeyCommon
+
+- type: entity
+  parent: TelecomServer
+  id: TelecomServerSRM
+  suffix: SRM
+  description: When powered it carries the Hunt channel for a Militia hull.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - EncryptionKeyHunter
+      - EncryptionKeyCommon
+
+- type: entity
+  parent: TelecomServer
+  id: TelecomServerATH
+  suffix: ATH
+  description: When powered it carries the Crown expeditionary channel.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - EncryptionKeyAuthority
+      - EncryptionKeyCommon
+
+- type: entity
+  parent: TelecomServer
+  id: TelecomServerTSP
+  suffix: TSP
+  description: When powered it carries the Minutemen channel for a Gliess Santo hull.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - EncryptionKeyMinutemen
+      - EncryptionKeyCommon
+
+- type: entity
+  parent: TelecomServer
+  id: TelecomServerClarizian
+  suffix: Aurevienne
+  description: When powered it carries the Aurevienne expatriate channel.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - EncryptionKeyClarizian
+      - EncryptionKeyCommon
+
+- type: entity
+  parent: TelecomServer
+  id: TelecomServerNAP
+  suffix: NAP
+  description: When powered it carries the Protectorate channel.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - EncryptionKeyAmerican
+      - EncryptionKeyCommon

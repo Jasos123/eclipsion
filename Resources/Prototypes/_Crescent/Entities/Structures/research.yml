@@ -736,3 +736,78 @@
   components:
   - type: ResearchServer
     passivePointsPerMinute: 0
+
+# Pre-researched servers. FullyResearched hands the server its own disciplines' entire tree at map init, so a map
+# can ship a station whose R&D is already finished -- every lathe and microforge bound to it prints its faction's
+# full catalogue from round start. Nothing else changes: the server still generates points, they just have nothing
+# left to buy. Hidden technologies stay hidden. Use these only on maps that are meant to skip R&D entirely.
+
+- type: entity
+  id: ResearchAndDevelopmentServerMinutemenFullyResearched
+  parent: ResearchAndDevelopmentServerMinutemen
+  suffix: Fully Researched
+  components:
+  - type: FullyResearched
+
+- type: entity
+  id: ResearchAndDevelopmentServerInterdyneFullyResearched
+  parent: ResearchAndDevelopmentServerInterdyne
+  suffix: Fully Researched
+  components:
+  - type: FullyResearched
+
+- type: entity
+  id: ResearchAndDevelopmentServerCyberdawnFullyResearched
+  parent: ResearchAndDevelopmentServerCyberdawn
+  suffix: Fully Researched
+  components:
+  - type: FullyResearched
+
+- type: entity
+  id: ResearchAndDevelopmentServerImperialFullyResearched
+  parent: ResearchAndDevelopmentServerImperial
+  suffix: Fully Researched
+  components:
+  - type: FullyResearched
+
+- type: entity
+  id: ResearchAndDevelopmentServerCommunardFullyResearched
+  parent: ResearchAndDevelopmentServerCommunard
+  suffix: Fully Researched
+  components:
+  - type: FullyResearched
+
+- type: entity
+  id: ResearchAndDevelopmentServerCorporateFullyResearched
+  parent: ResearchAndDevelopmentServerCorporate
+  suffix: Fully Researched
+  components:
+  - type: FullyResearched
+
+- type: entity
+  id: ResearchAndDevelopmentServerGliessianFullyResearched
+  parent: ResearchAndDevelopmentServerGliessian
+  suffix: Fully Researched
+  components:
+  - type: FullyResearched
+
+- type: entity
+  id: ResearchAndDevelopmentServerPangTaiFullyResearched
+  parent: ResearchAndDevelopmentServerPangTai
+  suffix: Fully Researched
+  components:
+  - type: FullyResearched
+
+- type: entity
+  id: ResearchAndDevelopmentServerFamiliesFullyResearched
+  parent: ResearchAndDevelopmentServerFamilies
+  suffix: Fully Researched
+  components:
+  - type: FullyResearched
+
+- type: entity
+  id: ResearchAndDevelopmentServerCoalitionFullyResearched
+  parent: ResearchAndDevelopmentServerCoalition
+  suffix: Fully Researched
+  components:
+  - type: FullyResearched

@@ -87,6 +87,12 @@ public sealed class MappingState : GameplayStateBase
     private bool _tileErase;
     private int _decalIndex;
 
+    /// <summary>
+    ///     Anchor of the decal eraser's box selection: the grid and the tile the mapper ctrl-clicked.
+    ///     Null whenever no box is being drawn.
+    /// </summary>
+    private (EntityUid Grid, Vector2i Tile)? _decalEraseStart;
+
     private MappingScreen Screen => (MappingScreen) UserInterfaceManager.ActiveScreen!;
     private MainViewport Viewport => UserInterfaceManager.ActiveScreen!.GetWidget<MainViewport>()!;
 
@@ -119,6 +125,7 @@ public sealed class MappingState : GameplayStateBase
         context.AddFunction(ContentKeyFunctions.MappingPick);
         context.AddFunction(ContentKeyFunctions.MappingRemoveDecal);
         context.AddFunction(ContentKeyFunctions.MappingCancelEraseDecal);
+        context.AddFunction(ContentKeyFunctions.MappingEraseDecalRect);
         context.AddFunction(ContentKeyFunctions.MappingOpenContextMenu);
         context.AddFunction(ContentKeyFunctions.MouseMiddle);
 
@@ -157,6 +164,7 @@ public sealed class MappingState : GameplayStateBase
             .Bind(ContentKeyFunctions.MappingPick, new PointerInputCmdHandler(HandlePick, outsidePrediction: true))
             .Bind(ContentKeyFunctions.MappingRemoveDecal, new PointerInputCmdHandler(HandleEditorCancelPlace, outsidePrediction: true))
             .Bind(ContentKeyFunctions.MappingCancelEraseDecal, new PointerInputCmdHandler(HandleCancelEraseDecal, outsidePrediction: true))
+            .Bind(ContentKeyFunctions.MappingEraseDecalRect, new PointerInputCmdHandler(HandleEraseDecalRect, outsidePrediction: true))
             .Bind(ContentKeyFunctions.MappingOpenContextMenu, new PointerInputCmdHandler(HandleOpenContextMenu, outsidePrediction: true))
             .Bind(ContentKeyFunctions.MouseMiddle, new PointerInputCmdHandler(HandleMouseMiddle, outsidePrediction: true))
             .Bind(EngineKeyFunctions.Use, new PointerInputCmdHandler(HandleUse, outsidePrediction: true))
@@ -214,6 +222,7 @@ public sealed class MappingState : GameplayStateBase
         context.RemoveFunction(ContentKeyFunctions.MappingPick);
         context.RemoveFunction(ContentKeyFunctions.MappingRemoveDecal);
         context.RemoveFunction(ContentKeyFunctions.MappingCancelEraseDecal);
+        context.RemoveFunction(ContentKeyFunctions.MappingEraseDecalRect);
         context.RemoveFunction(ContentKeyFunctions.MappingOpenContextMenu);
         context.RemoveFunction(ContentKeyFunctions.MouseMiddle);
 
@@ -625,6 +634,10 @@ public sealed class MappingState : GameplayStateBase
         if (button != Screen.EraseTileButton)
             DisableTileEraser();
 
+        // The decal eraser owns no placement, so its half-drawn box is the only thing left to clean up.
+        if (button != Screen.EraseDecalButton)
+            _decalEraseStart = null;
+
         Screen.UnPressActionsExcept(button);
     }
 
@@ -1031,6 +1044,7 @@ public sealed class MappingState : GameplayStateBase
         else
         {
             Meta.State = CursorState.None;
+            _decalEraseStart = null;
         }
     }
     #endregion
@@ -1190,20 +1204,51 @@ public sealed class MappingState : GameplayStateBase
         return true;
     }
 
+    /// <summary>
+    ///     Backs out of whatever tool is running. Bound to both right click and escape.
+    /// </summary>
+    /// <remarks>
+    ///     This runs above <c>EditorCancelPlace</c> and <c>MappingOpenContextMenu</c> on purpose: both of
+    ///     those swallow the press unconditionally, and while all three sat at the same priority which one
+    ///     saw a right click first came down to bind registration order - that is why the erasers only
+    ///     sometimes let go. It reports the press unhandled when there was nothing of its own to cancel, so
+    ///     an idle right click still opens the context menu and an idle escape still reaches the window
+    ///     stack.
+    /// </remarks>
     private bool HandleMappingUnselect(in PointerInputCmdArgs args)
     {
+        // A half-drawn eraser box is its own step: the first cancel drops the box and keeps the tool.
+        if (_decalEraseStart != null)
+        {
+            _decalEraseStart = null;
+            return true;
+        }
+
         if (Screen.MoveGrid.Pressed && _gridDrag.Enabled)
         {
             _consoleHost.ExecuteCommand("griddrag");
+            SelectTool(new Control());
+            Meta.State = CursorState.None;
+            return true;
         }
+
+        var toolActive = _placement.Eraser
+            || _tileErase
+            || Screen.EraseDecalButton.Pressed
+            || Screen.Pick.Pressed
+            || Screen.PickDecal.Pressed
+            || Screen.Decals.Selected is { Prototype.Prototype: DecalPrototype };
 
         SelectTool(new Control());
         Meta.State = CursorState.None;
 
-        if (Screen.Decals.Selected is not { Prototype.Prototype: DecalPrototype })
+        // A plain placement is left to the engine, which cancels a line or grid drag before the placement
+        // itself. Reporting the press unhandled hands it the click with that step still intact.
+        if (!toolActive)
             return false;
 
         Deselect();
+        _placement.Clear();
         return true;
     }
 
@@ -1337,7 +1382,39 @@ public sealed class MappingState : GameplayStateBase
         if (!Screen.EraseDecalButton.Pressed)
             return false;
 
+        // A ctrl click armed a box; this one closes it and takes everything inside in a single request.
+        if (_decalEraseStart is { } start)
+        {
+            _decalEraseStart = null;
+
+            if (!_entityManager.TryGetComponent<MapGridComponent>(start.Grid, out var grid))
+                return true;
+
+            var (min, max) = TileBounds(start.Tile, HoveredTileOn(start.Grid) ?? start.Tile, grid.TileSize);
+            _entityNetwork.SendSystemNetworkMessage(new RequestDecalRectRemovalEvent(
+                _entityManager.GetNetCoordinates(new EntityCoordinates(start.Grid, min)),
+                _entityManager.GetNetCoordinates(new EntityCoordinates(start.Grid, max))));
+
+            return true;
+        }
+
         _entityNetwork.SendSystemNetworkMessage(new RequestDecalRemovalEvent(_entityManager.GetNetCoordinates(coords)));
+        return true;
+    }
+
+    /// <summary>
+    ///     Ctrl click anchors the decal eraser's box selection, matching how the entity and tile erasers
+    ///     start theirs. The next plain click closes it.
+    /// </summary>
+    private bool HandleEraseDecalRect(in PointerInputCmdArgs args)
+    {
+        // Left unhandled for every other tool so the engine's own ctrl click box selection still runs.
+        if (!Screen.EraseDecalButton.Pressed)
+            return false;
+
+        if (GetHoveredGridTile() is { } hovered)
+            _decalEraseStart = hovered;
+
         return true;
     }
 
@@ -1346,6 +1423,7 @@ public sealed class MappingState : GameplayStateBase
         if (!Screen.EraseDecalButton.Pressed)
             return false;
 
+        _decalEraseStart = null;
         Screen.EraseDecalButton.Pressed = false;
         return true;
     }
@@ -1501,6 +1579,66 @@ public sealed class MappingState : GameplayStateBase
         return new Box2Rotated(box, xform.LocalRotation, box.BottomLeft);
     }
 
+    /// <summary>
+    ///     The tile under the cursor, as indices into the grid it belongs to.
+    /// </summary>
+    private (EntityUid Grid, Vector2i Tile)? GetHoveredGridTile()
+    {
+        if (UserInterfaceManager.CurrentlyHovered is not IViewportControl viewport ||
+            _input.MouseScreenPosition is not { IsValid: true } coords)
+        {
+            return null;
+        }
+
+        if (GetHoveredGrid() is not { } grid)
+            return null;
+
+        var mapCoords = viewport.PixelToMap(coords.Position);
+        var local = _map.WorldToLocal(grid.Owner, grid.Comp, mapCoords.Position) / grid.Comp.TileSize;
+
+        return (grid.Owner, new Vector2i((int) MathF.Floor(local.X), (int) MathF.Floor(local.Y)));
+    }
+
+    /// <summary>
+    ///     The hovered tile, but only while the cursor is still over <paramref name="grid"/>.
+    /// </summary>
+    private Vector2i? HoveredTileOn(EntityUid grid)
+    {
+        return GetHoveredGridTile() is { } hovered && hovered.Grid == grid ? hovered.Tile : null;
+    }
+
+    /// <summary>
+    ///     Local-space corners of the tile range spanned by two tile indices, far corner exclusive.
+    /// </summary>
+    private static (Vector2 Min, Vector2 Max) TileBounds(Vector2i a, Vector2i b, ushort tileSize)
+    {
+        var min = Vector2.Min(a, b);
+        var max = Vector2.Max(a, b) + Vector2.One;
+
+        return (min * tileSize, max * tileSize);
+    }
+
+    /// <summary>
+    ///     The box the decal eraser is currently dragging out, in world space, or null when there is none.
+    /// </summary>
+    public Box2Rotated? GetDecalEraseRect()
+    {
+        if (_decalEraseStart is not { } start)
+            return null;
+
+        if (!_entityManager.TryGetComponent<MapGridComponent>(start.Grid, out var grid) ||
+            !_entityManager.TryGetComponent<TransformComponent>(start.Grid, out var xform))
+        {
+            return null;
+        }
+
+        // The box keeps its anchor tile while the cursor is off the grid, rather than jumping to another one.
+        var (min, max) = TileBounds(start.Tile, HoveredTileOn(start.Grid) ?? start.Tile, grid.TileSize);
+        var box = Box2.FromDimensions(_map.LocalToWorld(start.Grid, grid, min), max - min);
+
+        return new Box2Rotated(box, xform.LocalRotation, box.BottomLeft);
+    }
+
     private Decal? GetHoveredDecal()
     {
         if (UserInterfaceManager.CurrentlyHovered is not IViewportControl viewport ||
@@ -1566,6 +1704,24 @@ public sealed class MappingState : GameplayStateBase
 
         if (_tileErase && (!Screen.EraseTileButton.Pressed || !tileEraserActive))
             DisableTileEraser();
+
+        // A placement can be dropped from outside this state - the engine's own right click, a hotkey - and
+        // that used to leave the list entry lit up with no ghost behind it. Decals are not checked here:
+        // they are placed by the decal system, not the placement manager, so it is inactive all the while.
+        if (!_placement.IsActive)
+        {
+            if (Screen.Entities.Selected is { Prototype.Prototype: EntityPrototype } selectedEntity)
+            {
+                selectedEntity.Button.Pressed = false;
+                Screen.Entities.Selected = null;
+            }
+
+            if (Screen.Tiles.Selected is { Prototype.Prototype: ContentTileDefinition } selectedTile)
+            {
+                selectedTile.Button.Pressed = false;
+                Screen.Tiles.Selected = null;
+            }
+        }
 
         Screen.EntityPlacementMode.Disabled = _placement.Eraser || _tileErase;
     }

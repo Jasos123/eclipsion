@@ -17207,14 +17207,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -0.34687752,-9.490907
-- proto: EncryptionKeyNCWL
-  entities:
-  - uid: 1328
-    components:
-    - type: Transform
-      parent: 1327
-    - type: Physics
-      canCollide: False
 - proto: ExplosivesSignMed
   entities:
   - uid: 1329
@@ -21008,30 +21000,13 @@ entities:
       parent: 1
       rot: 1.5707963267948966 rad
       pos: -3.5,-8.5
-- proto: TelecomServer
+- proto: TelecomServerNCWL
   entities:
   - uid: 1327
     components:
     - type: Transform
       parent: 1
       pos: -4.5,13.5
-    - type: ContainerContainer
-      containers:
-        key_slots: !type:Container
-          ents:
-          - 1328
-          showEnts: False
-          occludes: True
-        machine_board: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
-        machine_parts: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
-- proto: TelecomServerFilledNovaBalreska
-  entities:
   - uid: 1859
     components:
     - type: Transform

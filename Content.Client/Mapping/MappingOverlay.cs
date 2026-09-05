@@ -41,6 +41,11 @@ public sealed class MappingOverlay : Overlay
         var handle = args.WorldHandle;
         handle.UseShader(_shader);
 
+        // Drawn alongside the cursor state rather than as one of its cases: the decal eraser keeps its
+        // hover highlight while a box selection is being dragged out.
+        if (_state.GetDecalEraseRect() is { } eraseRect)
+            handle.DrawRect(eraseRect, _state.Meta.Color);
+
         switch (_state.Meta.State)
         {
             case CursorState.Tile:

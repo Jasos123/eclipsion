@@ -50495,12 +50495,6 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-  - uid: 4470
-    components:
-    - type: Transform
-      parent: 4469
-    - type: Physics
-      canCollide: False
 - proto: EphedrineChemistryBottle
   entities:
   - uid: 4471
@@ -70767,28 +70761,13 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 4.5,64.5
       parent: 1
-- proto: TelecomServer
+- proto: TelecomServerSHI
   entities:
   - uid: 4469
     components:
     - type: Transform
       pos: -3.5,32.5
       parent: 1
-    - type: ContainerContainer
-      containers:
-        key_slots: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 4470
-        machine_board: !type:Container
-          showEnts: False
-          occludes: True
-          ents: []
-        machine_parts: !type:Container
-          showEnts: False
-          occludes: True
-          ents: []
 - proto: ToolboxElectricalFilled
   entities:
   - uid: 7233

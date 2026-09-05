@@ -47,7 +47,7 @@ public sealed class RemoveEncryptionKeys : InteractionTest
     [Test]
     public async Task CommsServerKeys()
     {
-        await SpawnTarget("TelecomServerFilled");
+        await SpawnTarget("TelecomServerCivilian");
         var comp = Comp<EncryptionKeyHolderComponent>();
         var panel = Comp<WiresPanelComponent>();
 
@@ -105,7 +105,7 @@ public sealed class RemoveEncryptionKeys : InteractionTest
         });
 
         // Prying again will start deconstructing the machine.
-        AssertPrototype("TelecomServerFilled");
+        AssertPrototype("TelecomServerCivilian");
         await InteractUsing(Pry);
         AssertPrototype("MachineFrame");
     }
