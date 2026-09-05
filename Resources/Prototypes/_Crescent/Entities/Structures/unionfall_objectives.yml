@@ -11,6 +11,7 @@
     sound:
       path: /Audio/_EE/Supermatter/delamming.ogg
   - type: Sprite
+    snapCardinals: true
     noRot: true
     sprite: _Crescent/Structures/capturepoint.rsi
     layers:
@@ -24,7 +25,6 @@
         enum.PowerDeviceVisualLayers.Powered:
           True: { visible: true }
           False: { visible: false }
-    snapCardinals: true
   - type: Physics
     bodyType: Static
   - type: Transform
@@ -95,6 +95,7 @@
     sound:
       path: /Audio/_EE/Supermatter/delamming.ogg
   - type: Sprite
+    snapCardinals: true
     noRot: true
     sprite: _Crescent/Structures/capturepoint.rsi
     layers:
@@ -108,7 +109,6 @@
         enum.PowerDeviceVisualLayers.Powered:
           True: { visible: true }
           False: { visible: false }
-    snapCardinals: true
   - type: Physics
     bodyType: Static
   - type: Transform
@@ -183,6 +183,7 @@
     sound:
       path: /Audio/_EE/Supermatter/delamming.ogg
   - type: Sprite
+    snapCardinals: true
     noRot: true
     sprite: _Crescent/Structures/capturepoint.rsi
     layers:
@@ -196,7 +197,6 @@
         enum.PowerDeviceVisualLayers.Powered:
           True: { visible: true }
           False: { visible: false }
-    snapCardinals: true
   - type: Physics
     bodyType: Static
   - type: Transform
@@ -271,6 +271,7 @@
     sound:
       path: /Audio/_EE/Supermatter/delamming.ogg
   - type: Sprite
+    snapCardinals: true
     noRot: true
     sprite: _Crescent/Structures/capturepoint.rsi
     layers:
@@ -284,7 +285,6 @@
         enum.PowerDeviceVisualLayers.Powered:
           True: { visible: true }
           False: { visible: false }
-    snapCardinals: true
   - type: Physics
     bodyType: Static
   - type: Transform

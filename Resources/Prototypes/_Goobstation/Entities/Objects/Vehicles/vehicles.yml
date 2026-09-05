@@ -120,8 +120,9 @@
   - type: Sprite
     sprite: Objects/Vehicles/syndicatesegway.rsi
     state: vehicle
-    renderOver: North, NorthEast, NorthWest
     noRot: true
+  - type: Vehicle
+    renderOver: North, NorthEast, NorthWest
   - type: ItemSlots
     slots:
       key_slot:

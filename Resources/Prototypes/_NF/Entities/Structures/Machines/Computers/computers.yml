@@ -119,8 +119,8 @@
       state: contraband
     - map: ["computerLayerKeys"]
       state: telesci_key
-    - type: Appearance
-    - type: GenericVisualizer
+  - type: Appearance
+  - type: GenericVisualizer
     visuals:
       enum.ComputerVisuals.Powered:
         computerLayerScreen:

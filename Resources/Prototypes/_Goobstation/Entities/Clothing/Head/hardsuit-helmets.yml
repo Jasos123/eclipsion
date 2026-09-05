@@ -8,6 +8,7 @@
   - type: Sprite
     sprite: _Goobstation/Clothing/Head/Hardsuits/blueshield.rsi
   - type: Clothing
+    sprite: _Goobstation/Clothing/Head/Hardsuits/blueshield.rsi
     clothingVisuals:
       head:
       - state: off-equipped-HELMET
@@ -20,7 +21,6 @@
       - state: on-equipped-HELMET
       - state: on-equipped-HELMET-glow
         shader: unshaded
-    sprite: _Goobstation/Clothing/Head/Hardsuits/blueshield.rsi
   - type: PointLight
     color: "#57b9ff"
   - type: PressureProtection
@@ -79,6 +79,7 @@
   - type: Sprite
     sprite: _Goobstation/Clothing/Head/Hardsuits/dreadnought.rsi
   - type: Clothing
+    sprite: _Goobstation/Clothing/Head/Hardsuits/dreadnought.rsi
     clothingVisuals:
       head:
       - state: off-equipped-HELMET
@@ -91,7 +92,6 @@
       - state: on-equipped-HELMET
       - state: on-equipped-HELMET-glow
         shader: unshaded
-    sprite: _Goobstation/Clothing/Head/Hardsuits/dreadnought.rsi
   - type: PointLight
     color: red
   - type: PressureProtection

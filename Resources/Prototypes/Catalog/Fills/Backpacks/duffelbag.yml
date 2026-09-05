@@ -139,7 +139,7 @@
     contents:
       - id: MagazinePistolSubMachineGun
         amount: 4
-      - id: MagazineRifle # goobstation - m90がアップリンクに戻る
+      - id: MagazineRifle # goobstation - M90 returns to the uplink
         amount: 3
       - id: MagazineShotgun
         amount: 4

@@ -132,8 +132,10 @@
   name: cult runic belt buckle
   components:
   - type: Sprite
+    layers:
+    - state: icon
+      shader: unshaded
     sprite: _NF/Clothing/Belt/cult_force_field.rsi
-    shader: unshaded
   - type: Clothing
     sprite: _NF/Clothing/Belt/cult_force_field.rsi
   - type: Reflect

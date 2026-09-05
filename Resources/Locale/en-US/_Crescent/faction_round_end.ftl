@@ -4,10 +4,10 @@ faction-roundend-no-missions = No directives are configured on this terminal.
 faction-roundend-turn-in = Submit directive
 faction-roundend-status-completed = ✔ Directive fulfilled
 faction-roundend-denied = Access denied — only faction command may submit directives here. Consult your superiors.
-faction-roundend-item-accepted = The terminal swallows the materiel. It is logged against the directive — and gone for good.
+faction-roundend-item-accepted = Supplies accepted and counted toward the directive. They cannot be returned.
 faction-roundend-incomplete = The directive's materiel quota has not been met yet.
 faction-roundend-completed = Directive fulfilled. The sector has been notified.
-faction-roundend-examine = Click it with requisitioned materiel to feed it in — [color=red]consumed permanently[/color]. Submitting a finished directive requires [color=yellow]faction command credentials[/color].
+faction-roundend-examine = Use the requested items on the terminal to submit them. [color=red]Submitted items are consumed.[/color] You need [color=yellow]faction command credentials[/color] to complete a directive.
 faction-roundend-announcer = Sector Command
 
 # DSM (steals from NCWL)
@@ -17,17 +17,11 @@ faction-mission-dsm-name = Convince Count Olywier
 faction-mission-dsm-desc =
     PRIORITY DIRECTIVE
     {""}
-    Count Olywier demands proof that the Divine Sol Mandate is winning the campaign in Taypan. If the sector is truly within our grasp, he is prepared to commit additional Imperial forces—but he will not do so without evidence.
+    Count Olywier will send reinforcements once we can show him a victory in Taypan.
     {""}
-    Bring back one of two things.
+    Capture the Commandant's ID card or seize the League Plans. Either will give him the proof he wants.
     {""}
-    Capture the Commandant's ID card, or seize the League Plans—the collection of strategic documents and schematics the Communists hold as one of their greatest treasures.
-    {""}
-    Either item will prove that we have struck deep into enemy territory and that victory is within reach. Once the evidence is delivered, Count Olywier will authorize reinforcements.
-    {""}
-    Use diplomacy, infiltration, theft, or force. Your methods are irrelevant. Only the result matters.
-    {""}
-    Return the objective to the terminal intact.
+    Negotiate, steal it, or take it by force. Deliver one of these items to the terminal intact.
 
 faction-mission-dsm-announce = Count Olywier has accepted the evidence. Imperial reinforcements are on their way, and the League now knows nowhere is beyond the Empire's reach.
 
@@ -41,17 +35,11 @@ faction-mission-ncwl-name = Prove the Revolution Advances
 faction-mission-ncwl-desc =
     CENTRAL COMMITTEE DIRECTIVE
     {""}
-    Chengridz Command refuses to deploy the League's largest reinforcements until they are certain the revolution is succeeding in Taypan.
+    Chengridz is holding back reinforcements until we can show that the Imperial position in Taypan is weakening.
     {""}
-    Obtain one of two pieces of evidence.
+    Capture the Lord Admiral's ID card or recover the folder marked Ancient Imperial Secrets. It contains Imperial plans and strategic records.
     {""}
-    Capture the Lord Admiral's ID card, or recover the folder known as Ancient Imperial Secrets, containing confidential Imperial plans, schematics, and strategic records.
-    {""}
-    Either will prove that the Empire is vulnerable and that our forces are making meaningful progress. Once the evidence is secured, Chengridz will dispatch the reinforcements we need.
-    {""}
-    Acquire the objective by any means necessary. Negotiation, infiltration, or direct action are all acceptable.
-    {""}
-    Return the objective to the terminal intact.
+    Deliver either item to the terminal intact. Command has approved negotiation, infiltration, and armed seizure.
 
 faction-mission-ncwl-announce = The evidence has reached Chengridz. The League recognizes our victories in Taypan, and reinforcements are already on their way.
 
@@ -65,36 +53,24 @@ faction-mission-empire-name = Convince the Empire
 faction-mission-empire-desc =
     HIGH COMMAND DIRECTIVE
     {""}
-    If we want to bring our heavy assets into Taypan and establish a stronger presence, we must secure authorization from both the Empire and the Communists. As you can imagine, this will not be easy. The two sides are at war, and neither is willing to cooperate.
+    Our heavy ships need tonnage permits from both the Empire and the Workers' League before they can enter Taypan. This terminal accepts the charter bearing the Mandate seal.
     {""}
-    This directive covers the Empire's authorization.
+    You may offer discounts, equipment, or ships in exchange for the charter. Command has authorized these expenses.
     {""}
-    Fortunately, High Command has granted you extraordinary authority. You are authorized to do whatever is necessary to complete this mission. That includes offering discounts, negotiating favorable deals, or even giving away weapons and ships if it serves the objective. Yes, the situation is that serious.
-    {""}
-    Use diplomacy. Convince them that cooperation is in their best interest. If persuasion fails and you believe you have the capability, infiltrate them and steal the authorization document yourself. Intelligence suggests it is most likely kept within the offices of their senior officers.
-    {""}
-    How you obtain it is irrelevant.
-    {""}
-    What matters is that you return with it. Remember: this is only half of what we need.
-faction-mission-empire-announce = The Divine Sol Mandate has set its seal to a tonnage charter over Taypan. Armed merchant tonnage now flies here with the Throne's sufferance — a thing the Mandate has refused to every petitioner before this one. Somewhere a prefect is explaining himself.
+    If talks fail, look for the document in the Imperial senior officers' offices. Bring it back intact. We will still need the League's permit.
+faction-mission-empire-announce = The Divine Sol Mandate has approved a Taypan tonnage charter. Armed merchant vessels may now enter the sector under the Mandate seal.
 faction-mission-empire-sender = Outer Rim Prefecture
 
 faction-mission-league-name = Convince the Communists
 faction-mission-league-desc =
     HIGH COMMAND DIRECTIVE
     {""}
-    If we want to bring our heavy assets into Taypan and establish a stronger presence, we must secure authorization from both the Empire and the Communists. As you can imagine, this will not be easy. The two sides are at war, and neither is willing to cooperate.
+    Our heavy ships need tonnage permits from both the Empire and the Workers' League before they can enter Taypan. This terminal accepts the charter bearing the League stamp.
     {""}
-    This directive covers the Communists' authorization.
+    You may offer discounts, equipment, or ships in exchange for the charter. Command has authorized these expenses.
     {""}
-    Fortunately, High Command has granted you extraordinary authority. You are authorized to do whatever is necessary to complete this mission. That includes offering discounts, negotiating favorable deals, or even giving away weapons and ships if it serves the objective. Yes, the situation is that serious.
-    {""}
-    Use diplomacy. Convince them that cooperation is in their best interest. If persuasion fails and you believe you have the capability, infiltrate them and steal the authorization document yourself. Intelligence suggests it is most likely kept within the offices of their senior officers.
-    {""}
-    How you obtain it is irrelevant.
-    {""}
-    What matters is that you return with it. Remember: this is only half of what we need.
-faction-mission-league-announce = The Workers' League Oversight Committee has voted through a tonnage permit over Taypan. The comrades have signed off on a company's guns — and the ledger is open for all to read. Let no one say the vote was bought.
+    If talks fail, look for the document in the League senior officers' offices. Bring it back intact. We will still need the Mandate's permit.
+faction-mission-league-announce = The Workers' League Oversight Committee has approved a Taypan tonnage permit for armed merchant vessels. The vote has been entered in the public record.
 faction-mission-league-sender = Commissariat of Shipping
 
 # --- CMM ---
@@ -104,14 +80,12 @@ faction-mission-cmm-name = Recover the Analiesse Key
 faction-mission-cmm-desc =
     MINUTEMEN COMMAND DIRECTIVE
     {""}
-    Long-range picked up a hull matching the Analiesse. She has been listed lost for years. If the reading is good, she is drifting in this sector right now — and the command authentication key she went down with is still aboard her.
+    Long-range scans picked up a hull matching the Analiesse, years after she was reported lost. Her command authentication key may still be aboard.
     {""}
-    We want that key. Command will not put in writing why, and you are not to ask on an open channel.
+    Board the wreck, recover the key, and bring it to the terminal. Other crews may have picked up the same signal.
     {""}
-    Board her, sweep the wreck, and bring the key back. Assume you are not the only party reading that hull signature — anything with a scanner and an opinion will be moving on her too. Do not let it leave the sector in someone else's pocket.
-    {""}
-    Bring it to the terminal and we will handle the rest.
-faction-mission-cmm-announce = The Colonial Minutemen have recovered the Analiesse authentication key from the derelict and filed it under seal. Whatever that key opens, it now opens for the Minutemen — and every other party in this sector just lost a race they may not have known they were running.
+    Keep the key's purpose off open channels. Command will handle it when you return.
+faction-mission-cmm-announce = The Colonial Minutemen have recovered the Analiesse authentication key. Minutemen Command has taken custody of it.
 faction-mission-cmm-sender = Minutemen Command
 
 
@@ -120,13 +94,13 @@ faction-mission-cmm-sender = Minutemen Command
 # style) once a faction has completed EVERY directive on its terminal.
 # ============================================================================
 
-faction-finale-dsm = It seems the Imperials really did it. They convinced Olywier to send reinforcements to Taypan, and now your shuttle console is detecting a massive signal. It's fucking COUNTSMAN! The Imperials are moving their mobile base. This can't be... The sector is doomed.
+faction-finale-dsm = A massive Imperial signal has appeared on shuttle sensors: COUNTSMAN. Count Olywier has approved reinforcements and is moving the mobile base into Taypan.
 
-faction-finale-ncwl = It seems the League really did it. They convinced High Command to send reinforcements to Taypan, and now your shuttle console is detecting a massive signal. It's fucking DEAR CLEMENTINE! The legendary Communard cruiser used during the construction of Balreska. This ship carries a glorious past... The workers of the sector may finally be free.
+faction-finale-ncwl = Shuttle sensors have picked up DEAR CLEMENTINE, the Communard cruiser that served during the construction of Balreska. League High Command has committed her to Taypan.
 
 faction-finale-tfsc = The TFCF secured enough contracts, access, and common support to bring the JACKAL into Taypan. The Federation now has a platform capable of defending its independent market on its own terms. The commercial war has entered a new phase.
 
-faction-finale-shi = It seems the corporate executives succeeded in convincing both major powers of Taypan. They actually got permission, and now your shuttle console is detecting a massive signal. It's fucking AMATERASU! Shinohara is moving its mobile base into the sector. This will only serve their profits. Taypan is... profit.
+faction-finale-shi = Shuttle sensors have picked up AMATERASU. With permission from both major powers, Shinohara is moving its mobile base into Taypan.
 
 faction-finale-cmm = The Colonial Minutemen recovered enough of Analiesse's archive and command authentication to restore the dream it represented. Imperial forces destroyed the old mobile headquarters after the CMM refused to turn local law into Imperial obedience. Your shuttle console now detects ANALIESSE again. Taypan is not saved, but it may once more have a public patrol force beyond Gliess Santo.
 
@@ -157,9 +131,9 @@ faction-victory-dsm = DSM VICTORY — THE CHARTER HOLDS. Count Olywier's seal go
 
 faction-victory-ncwl = NCWL VICTORY — THE FRONT ADVANCES. The winning party's program goes to Chengridz and Kane for ratification while the Workers' Union secures the gains.
 
-faction-victory-shi = SHI VICTORY — INFRASTRUCTURE BECOMES LEVERAGE. Credit, logistics, and Prometheus standards bind the frontier to Shinohara.
+faction-victory-shi = SHI VICTORY. Shinohara controls the sector, its shipyards, and its trade routes.
 
-faction-victory-tfsc = TFCF VICTORY — THE INDEPENDENT MARKET HOLDS. Four distinct member organizations act together where the Administrator's Federation mandate applies.
+faction-victory-tfsc = TFCF VICTORY. The Federation's member organizations have secured their independence and control of trade in Taypan.
 
 faction-victory-tap = TAP VICTORY — THE OLD CLAIMS ENDURE. The tribes keep their sanctuary and the void beyond it answers to no foreign throne.
 

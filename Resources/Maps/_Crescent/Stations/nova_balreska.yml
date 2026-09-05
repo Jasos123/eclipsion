@@ -303220,7 +303220,7 @@ entities:
     - type: Transform
       pos: 13.5,18.5
       parent: 1
-- proto: StatueVenusRed
+- proto: OracleCommunard
   entities:
   - uid: 7847
     components:

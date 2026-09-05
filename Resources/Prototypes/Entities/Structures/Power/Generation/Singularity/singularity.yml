@@ -69,9 +69,9 @@
     location: singularity
   - type: Sprite
     sprite: Structures/Power/Generation/Singularity/singularity_1.rsi
-    shader: unshaded
     layers:
     - map: [ "VisualLevel" ]
+      shader: unshaded
       state: singularity_1
   - type: GenericVisualizer
     visuals:

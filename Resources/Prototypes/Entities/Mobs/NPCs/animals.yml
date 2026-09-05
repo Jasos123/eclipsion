@@ -758,13 +758,13 @@
       Male: SoundsHarpy
       Female: SoundsHarpy
       Unsexed: SoundsHarpy
+    wilhelmProbability: 0.001
   - type: GenericVisualizer
     visuals:
       enum.HarpyVisualLayers.Singing:
         singingLayer:
           False: { visible: false }
           True: { visible: true }
-    wilhelmProbability: 0.001
   - type: MobPrice
     price: 150
   - type: Tag

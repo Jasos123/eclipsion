@@ -1,8 +1,8 @@
 <div align="center">
 
-# 🪐 Hullrot: Eclipsion
+# Hullrot: Eclipsion
 
-**A continuation of HULLROT with its own vision and direction, built on Space Station 14.**
+**A continuation of HULLROT, built on Space Station 14.**
 
 [![Discord](https://img.shields.io/discord/1318776836599320657?style=for-the-badge&logo=discord&logoColor=white&label=Discord&color=%237289da)](https://discord.gg/tUbZ7CK7DC)
 [![License](https://img.shields.io/badge/code-AGPLv3-blue?style=for-the-badge)](./LEGAL.md)
@@ -14,23 +14,23 @@
 
 ---
 
-## 📋 About the Project
+## About the Project
 
 **Hullrot: Eclipsion** is a fork of [Space Station 14](https://github.com/space-wizards/space-station-14), a space station
 simulation game built on the [Robust Toolbox](https://github.com/space-wizards/RobustToolbox) engine.
 
-The project is the continuation of [HULLROT](https://github.com/Sector-Crescent/Hullrot) and carries its direction
-forward: a roleplay-heavy, faction-driven setting in the frontier region of Taypan, with ship-to-ship combat,
-persistent factions and a strong focus on atmosphere over round-based deathmatch.
+Eclipsion continues [HULLROT](https://github.com/Sector-Crescent/Hullrot) in the frontier region of Taypan.
+Players crew ships, work for rival factions, and fight for control of the sector. Roleplay and ship combat
+shape each round.
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Requirements
 
 - **Git** — [download](https://git-scm.com/downloads)
-- **.NET SDK 10.0.302 or higher** — [download](https://dotnet.microsoft.com/download/dotnet/10.0)
+- **.NET SDK 10.0.302** (or a later patch in the 10.0.3xx feature band; see `global.json`) — [download](https://dotnet.microsoft.com/download/dotnet/10.0)
 
-### 🍃 Windows
+### Windows
 
 ```sh
 # 1. Clone the repository
@@ -44,12 +44,12 @@ git submodule update --init --recursive
 Scripts\bat\buildAllRelease.bat
 
 # 4. Run the client and server
-Scripts\bat\runQuickAll.bat
+Scripts\bat\runQuickAll.bat -c Release
 ```
 
-**Done!** Connect to **localhost** in the client and start playing 🎮
+Connect to `localhost` in the client once the server has started.
 
-### 🐧 Linux / macOS
+### Linux / macOS
 
 ```sh
 # 1. Clone the repository
@@ -65,12 +65,12 @@ Scripts/sh/buildAllRelease.sh
 
 # 4. Run the client and server
 chmod +x Scripts/sh/runQuickAll.sh
-Scripts/sh/runQuickAll.sh
+Scripts/sh/runQuickAll.sh -c Release
 ```
 
-**Done!** Connect to **localhost** in the client and start playing 🎮
+Connect to `localhost` in the client once the server has started.
 
-## 🧬 Attribution
+## Attribution
 
 This project is a downstream fork and contains code and assets from many other Space Station 14 projects.
 Content originating from another project is kept under a directory prefix (for example `_Goobstation/`, `_NF/`,
@@ -104,7 +104,7 @@ different upstream license. Their source and modification notices are recorded i
 The attribution notice shipped with the game resources is available at
 [Resources/ShiptestAttribution.txt](./Resources/ShiptestAttribution.txt).
 
-## 📜 License
+## License
 
 The project code is licensed under **GNU AGPLv3** (code contributed before the cutoff commit noted in
 [LEGAL.md](./LEGAL.md) is MIT).

@@ -18,8 +18,8 @@ trait-description-SolBasic = A trade language derived from High Imperial and Tau
 trait-name-Kaishago = Kaishago
 trait-description-Kaishago = [color = green]
     This is the primary language of the SHI faction. All SHI members are able to speak and understand it. [/color]
-    A bizzare compaction of ancient Japanese, made to deliver the most information in the shortest amount of time.
-    Most Shinohara Heavy Industries employees have a brainchip that engrains this form of communication involuntarily.[color = red]
+    A compressed form of ancient Japanese designed to convey information quickly.
+    Most Shinohara Heavy Industries employees learn it through an implanted brainchip.[color = red]
     A translator device for this language is available as a T1 research for all factions, and printable at a Pristine Microforge.[/color]
 
 trait-name-LowImperial = Low Imperial
@@ -41,12 +41,6 @@ trait-description-OldTaypani = Formed out of desperation and constant migration 
 
 trait-name-American = American
 trait-description-American = An amalgamation of various ancient languages originating from Old Terra, spoken by those of the New American Protectorate.
-
-trait-name-IPMBionicPryarm = IPM Bionic Pryarm
-trait-description-IPMBionicPryarm = PLACEHOLDER
-
-trait-name-SHIBionicEye = SHI Bionic Eye
-trait-description-SHIBionicEye = PLACEHOLDER
 
 character-flag-requirement = You must {$inverted ->
     [true] not have

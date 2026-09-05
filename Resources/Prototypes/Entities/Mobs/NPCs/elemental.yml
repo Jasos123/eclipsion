@@ -291,7 +291,6 @@
     solution: bloodstream
     transferAmount: 2
   - type: DamageStateVisuals
-    rotate: true
     states:
       Alive:
         Base: alive

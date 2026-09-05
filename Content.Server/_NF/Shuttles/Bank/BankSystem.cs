@@ -159,7 +159,7 @@ public sealed partial class BankSystem : EntitySystem
     /// <param name="mobUid">The UID that the bank account is connected to, typically the player controlled mob</param>
     /// <param name="amount">The integer amount of which to increase the bank account</param>
     /// <returns>true if the transaction was successful, false if it was not</returns>
-    public bool TryBankDeposit(EntityUid mobUid, int amount)
+    public bool TryBankDeposit(EntityUid mobUid, long amount)
     {
         if (amount <= 0)
         {
@@ -170,6 +170,12 @@ public sealed partial class BankSystem : EntitySystem
         if (!TryComp<BankAccountComponent>(mobUid, out var bank))
         {
             _log.Info($"{mobUid} has no bank account");
+            return false;
+        }
+
+        if (bank.Balance > long.MaxValue - amount)
+        {
+            _log.Warning($"Deposit of {amount} would overflow the bank account for {mobUid}");
             return false;
         }
 

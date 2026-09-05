@@ -12,6 +12,34 @@
     containers:
       board: [ ShipRepairStationComputerCircuitboard ]
   - type: ShipRepairStation
+  # A yard fixture, not equipment. Three separate things have to be sealed, because any one of them left
+  # open is a way to walk off with the board and stand a repair slip up on a private ship:
+  #
+  #   * Anchorable flags None - no wrench. It never leaves the deck it was mapped onto, and an entity that
+  #     cannot be unanchored cannot be rotated or pulled either.
+  #   * The SealedComputer graph - one node, no edges, so the crowbar has nowhere to take it. The stock
+  #     Computer graph lets anyone pry the monitor off, cut the wires and empty the board out of the frame.
+  #   * A Destructible that only destroys. The inherited threshold swaps the console for a ComputerBroken
+  #     shell that is still holding the board and is one pry away from being loot; this one deletes the
+  #     console outright, and deleting a container deletes what is inside it, so a smashed slip leaves
+  #     nothing on the tile worth picking up.
+  - type: Anchorable
+    flags:
+    - None
+  - type: Construction
+    graph: SealedComputer
+    node: start
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: GlassBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
   - type: Sprite
     netsync: false
     noRot: true
@@ -57,3 +85,81 @@
     autoRot: true
     offset: "0, 0.4"
     castShadows: false
+
+# Faction repair slips.
+#
+# Same machine as the commercial slip above, sitting in a fleet yard instead of a trading post. Two things
+# differ, and both are deliberate:
+#
+#   * It is dearer. A commercial yard takes 15% over what the hull it reinstates is worth; a fleet yard bills
+#     the crewman who authorises the job at 65% over. Nobody is competing for the work, the yard answers to a
+#     quartermaster rather than a customer, and the commercial slip is meant to stay worth the trip out to it.
+#
+#   * It is slower. Twice the time on every part, a longer floor under a trivial job and a ceiling of a quarter
+#     hour rather than seven minutes, so a badly mauled hull genuinely sits in the clamps instead of being
+#     welded back together at a pace no yard could keep. A ship in a fleet slip is a ship out of the war.
+#
+# BaseFactionComputerShipRepairStation carries both, plus restrictAccess so only the owning faction may
+# authorise a job on it. Each variant then does nothing but name its faction: the sealing on the commercial
+# slip above is inherited, so none of these can be unbolted, pried apart or looted for their board either.
+- type: entity
+  parent: ComputerShipRepairStation
+  abstract: true
+  id: BaseFactionComputerShipRepairStation
+  name: fleet repair slip console
+  description: Surveys a docked hull against its structural blueprint, quotes the missing plating and framing at fleet rates, then welds it all back on piece by piece. It works to a naval standard, and takes a naval yard's time over it.
+  components:
+  - type: FactionMachine
+    restrictAccess: true
+  - type: ShipRepairStation
+    priceMarkup: 1.65
+    secondsPerPart: 0.8
+    minRepairSeconds: 20
+    maxRepairSeconds: 900
+
+- type: entity
+  parent: BaseFactionComputerShipRepairStation
+  id: ComputerShipRepairStationDSM
+  name: imperial repair slip console
+  suffix: DSM
+  components:
+  - type: FactionMachine
+    faction: DSM
+
+- type: entity
+  parent: BaseFactionComputerShipRepairStation
+  id: ComputerShipRepairStationNCWL
+  name: union repair slip console
+  suffix: NCWL
+  components:
+  - type: FactionMachine
+    faction: NCWL
+
+- type: entity
+  parent: BaseFactionComputerShipRepairStation
+  id: ComputerShipRepairStationSHI
+  name: shinohara repair slip console
+  suffix: SHI
+  components:
+  - type: FactionMachine
+    faction: SHI
+
+# Every TFCF member organization resolves to TFSC in FactionMachineSystem, so this one slip serves the whole
+# umbrella: Families, Interdyne, Saws, Gorlex and Cyberdawn crews can all book a hull into it.
+- type: entity
+  parent: BaseFactionComputerShipRepairStation
+  id: ComputerShipRepairStationTFSC
+  name: TFCF repair slip console
+  suffix: TFCF
+  components:
+  - type: FactionMachine
+    faction: TFSC
+
+- type: entity
+  parent: BaseFactionComputerShipRepairStation
+  id: ComputerShipRepairStationCMM
+  name: minutemen repair slip console
+  suffix: CMM
+  components:
+  - type: FactionMachine
+    faction: CMM

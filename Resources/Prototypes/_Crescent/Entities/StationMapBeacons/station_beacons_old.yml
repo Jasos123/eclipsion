@@ -193,7 +193,7 @@
 - type: entity
   parent: DefaultStationBeaconSecurity
   id: DefaultStationBeaconHOSRoom
-  suffix: HOSâ€™s Room
+  suffix: HOS's Room
   categories: [ HideSpawnMenu ]
   components:
   - type: NavMapBeacon

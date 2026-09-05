@@ -58,7 +58,7 @@
     color: FloralWhite
     textOffset: 0,8
     timerOffset: 0,8
-    textLength: 5
+    rowLength: 5
     rows: 1
   - type: Sprite
     drawdepth: WallMountedItems

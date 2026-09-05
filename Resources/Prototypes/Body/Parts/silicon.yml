@@ -40,17 +40,17 @@
   name: cyborg left arm
   components:
   - type: BodyPart
+    toolName: "a left arm" # Shitmed Change
+    children: # Shitmed Change
+      left hand:
+        id: "left hand"
+        type: Hand
     partType: Arm # Shitmed Change
     symmetry: Left
   - type: Sprite
     state: borg_l_arm
   - type: Icon
     state: borg_l_arm
-    toolName: "a left arm" # Shitmed Change
-    children: # Shitmed Change
-      left hand:
-        id: "left hand"
-        type: Hand
   - type: Tag
     tags:
     - Trash
@@ -63,17 +63,17 @@
   name: cyborg right arm
   components:
   - type: BodyPart
+    toolName: "a right arm" # Shitmed Change
+    children: # Shitmed Change
+      right hand:
+        id: "right hand"
+        type: Hand
     partType: Arm # Shitmed Change
     symmetry: Right
   - type: Sprite
     state: borg_r_arm
   - type: Icon
     state: borg_r_arm
-    toolName: "a right arm" # Shitmed Change
-    children: # Shitmed Change
-      right hand:
-        id: "right hand"
-        type: Hand
   - type: Tag
     tags:
     - Trash
@@ -86,17 +86,17 @@
   name: cyborg left leg
   components:
   - type: BodyPart
+    toolName: "a left leg" # Shitmed Change
+    children: # Shitmed Change
+      left foot:
+        id: "left foot"
+        type: Foot
     partType: Leg
     symmetry: Left
   - type: Sprite
     state: borg_l_leg
   - type: Icon
     state: borg_l_leg
-    toolName: "a left leg" # Shitmed Change
-    children: # Shitmed Change
-      left foot:
-        id: "left foot"
-        type: Foot
   - type: Tag
     tags:
     - Trash
@@ -110,17 +110,17 @@
   name: cyborg right leg
   components:
   - type: BodyPart
+    toolName: "a right leg" # Shitmed Change
+    children: # Shitmed Change
+      right foot:
+        id: "right foot"
+        type: Foot
     partType: Leg
     symmetry: Right
   - type: Sprite
     state: borg_r_leg
   - type: Icon
     state: borg_r_leg
-    toolName: "a right leg" # Shitmed Change
-    children: # Shitmed Change
-      right foot:
-        id: "right foot"
-        type: Foot
   - type: Tag
     tags:
     - Trash
@@ -134,12 +134,12 @@
   name: cyborg head
   components:
   - type: BodyPart
+    toolName: "a head" # Shitmed Change
     partType: Head
   - type: Sprite
     state: borg_head
   - type: Icon
     state: borg_head
-    toolName: "a head" # Shitmed Change
   - type: Tag
     tags:
     - Trash
@@ -151,12 +151,12 @@
   name: cyborg torso
   components:
   - type: BodyPart
+    toolName: "a torso" # Shitmed Change
     partType: Torso
   - type: Sprite
     state: borg_chest
   - type: Icon
     state: borg_chest
-    toolName: "a torso" # Shitmed Change
   - type: Tag
     tags:
     - Trash

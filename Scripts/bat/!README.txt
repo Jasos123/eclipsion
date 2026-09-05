@@ -1,25 +1,20 @@
-buildAllDebug
-    Builds all projects with debug configuration
-buildAllRelease
-    Builds all projects with release configuration
-buildAllTools
-    Builds all projects with tools configuration
+Run these scripts from any working directory. Extra arguments are passed to dotnet.
 
-The debug vs release build is simply what people develop in vs the actual server.
-The release build contains various optimizations, while the debug build contains debugging tools.
-If you're mapping, use the release or tools build as it will run smoother with less crashes.
+buildAllDebug       Update submodules and build in Debug.
+buildAllRelease     Update submodules and build in Release.
+buildAllTools       Update submodules and build with mapping tools.
 
+runQuickAll         Start the server and client without rebuilding.
+runQuickClient      Start the client without rebuilding.
+runQuickServer      Start the server without rebuilding.
 
-runQuickAll
-    Runs the client and server without building
-runQuickClient
-    Runs the client without building
-runQuickServer
-    Runs the server without building
+Pass -c Release or -c Tools to run the configuration you built.
+Without -c, dotnet uses Debug. Close the client to stop the server started by
+runQuickAll.sh; Windows launches each process in its own window.
 
-runTests
-    Runs the unit tests, makes sure various C# systems work as intended
-runTestsIntegration
-    Runs the integration tests, makes sure various C# systems work as intended
-runTestsYAML
-    Runs the YAML linter and finds issues with the YAML files that you probably wouldn't otherwise
+runTests            Run unit tests in DebugOpt.
+runTestsIntegration Run integration tests in DebugOpt.
+runTestsYAML        Validate prototypes in DebugOpt.
+
+Test output is saved under Scripts/logs and printed when the command finishes.
+The scripts return the build or test exit code for use in automation.

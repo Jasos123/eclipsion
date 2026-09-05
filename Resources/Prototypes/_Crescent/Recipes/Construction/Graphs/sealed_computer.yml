@@ -1,0 +1,14 @@
+# A construction graph that goes nowhere.
+#
+# The stock Computer graph is a chain: pry the monitor off, cut the wires, unscrew the board and the frame
+# hands it over. That is the right behaviour for a console someone built and may want back, and the wrong
+# one for a yard fixture that is only ever mapped in. A console pointed at this graph sits on its one node
+# with no edges leading off it, so no tool has anywhere to take it.
+#
+# The node is named "start" on purpose: ConstructionComponent.DeconstructionNode defaults to "start", so
+# the deconstruct verb resolves to the node the console is already standing on and does nothing.
+- type: constructionGraph
+  id: SealedComputer
+  start: start
+  graph:
+  - node: start

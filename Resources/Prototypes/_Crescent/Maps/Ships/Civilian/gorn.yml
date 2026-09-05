@@ -5,10 +5,10 @@
   id: Gorn
   name: ICM Gorn
   description: |
-   A small industrial vessel. The Ä‚ËĂ˘â€šÂ¬Äąâ€şGornÄ‚ËĂ˘â€šÂ¬ÄąÄ„ differs from standard mining shuttles with its powerful drilling system, onboard ore processing system, and increased maneuverability.
-   EQUIPMENT: 2x Exhumer
-    LOADOUT: Armless
-    SHIELD: Absent
+    A compact mining vessel with powerful drills, onboard ore processing, and good maneuverability.
+    EQUIPMENT: 2x Exhumer
+    LOADOUT: Unarmed
+    SHIELD: None
     SPEED: 20 m/s
   price: 31000
   category: Small
@@ -39,4 +39,4 @@
         - type: VesselDesignation
           designation: vessel-designation-mining
         - type: VesselDescription
-          description: Welcome to your personal mining paradise.
+          description: A compact mining vessel with onboard ore processing.

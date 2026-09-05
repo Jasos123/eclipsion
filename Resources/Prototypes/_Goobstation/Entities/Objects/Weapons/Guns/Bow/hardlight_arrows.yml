@@ -4,8 +4,9 @@
   components:
   - type: Sprite
     sprite: _Goobstation/Objects/Weapons/Guns/Bow/arrow.rsi
-    state: icon
-    shader: unshaded
+    layers:
+    - state: icon
+      shader: unshaded
   - type: Physics
     bodyType: Dynamic
     linearDamping: 0

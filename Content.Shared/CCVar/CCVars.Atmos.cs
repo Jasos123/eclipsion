@@ -75,9 +75,12 @@ public sealed partial class CCVars
     /// <summary>
     ///     Whether explosive depressurization will cause the grid to gain an impulse.
     ///     Needs <see cref="MonstermosEqualization"/> and <see cref="MonstermosDepressurization"/> to be enabled to work.
+    ///     Eclipsion: disabled. Every grid here is a piloted vessel, so venting a breached
+    ///     compartment shoving the whole hull sideways (and spinning it) is never wanted -
+    ///     derelict wrecks drifted off station the moment they blew their stored air.
     /// </summary>
     public static readonly CVarDef<bool> AtmosGridImpulse =
-        CVarDef.Create("atmos.grid_impulse", true, CVar.SERVERONLY);
+        CVarDef.Create("atmos.grid_impulse", false, CVar.SERVERONLY);
 
     /// <summary>
     ///     Minimum amount of air allowed on a spaced tile before it is reset to 0 immediately in kPa

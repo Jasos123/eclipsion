@@ -1,7 +1,7 @@
 @echo off
-cd ../../
-
+setlocal
+cd /d "%~dp0..\.." || exit /b 1
 call git submodule update --init --recursive
-call dotnet build -c Tools
-
-pause
+if errorlevel 1 exit /b %errorlevel%
+call dotnet build -c Tools %*
+exit /b %errorlevel%

@@ -277,6 +277,18 @@
     coefficient: 0.01
   - type: FireProtection
     reduction: 0.75
+  - type: IgniteFromGasImmunity # sealed suit, so it has to seal a plasmaman too. Head comes from the helmet.
+    parts:
+    - Torso
+    - Groin
+    - LeftArm
+    - LeftHand
+    - RightArm
+    - RightHand
+    - LeftLeg
+    - LeftFoot
+    - RightLeg
+    - RightFoot
   - type: ExplosionResistance
     damageCoefficient: 1
   - type: DegradeableArmor

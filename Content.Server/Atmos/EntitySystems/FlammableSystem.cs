@@ -483,7 +483,10 @@ namespace Content.Server.Atmos.EntitySystems
                         if (_inventoryQuery.TryComp(uid, out var inv))
                             _inventory.RelayEvent((uid, inv), ref ev);
 
-                        multiplier = ev.Multiplier;
+                        // Reductions stack additively across every worn item, so a suit and helmet that are
+                        // each nearly fireproof push the multiplier past zero and burning would start HEALING
+                        // the wearer. Full protection is the floor.
+                        multiplier = Math.Max(0f, ev.Multiplier);
                     }
 
                     _damageableSystem.TryChangeDamage(uid, flammable.Damage * flammable.FireStacks * multiplier, interruptsDoAfters: false);

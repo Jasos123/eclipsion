@@ -78,7 +78,7 @@
   parent: RMCBaseLandingSign
   id: RMCSorokyneSign
   name: Sorokyne landing sign
-  description: A large sign that reads 'Sorokyne - СОРОКІНО - POP. 110' The Company logo is proudly emblazoned in the corner. Don't eat the resin coated snow.
+  description: A large sign that reads 'Sorokyne - POP. 110' The Company logo is proudly emblazoned in the corner. Don't eat the resin coated snow.
   components:
   - type: Sprite
     state: sorokyne_1
@@ -86,7 +86,7 @@
 - type: entity
   parent: RMCSorokyneSign
   id: RMCSorokyneSignAlt
-  description: A large sign that reads 'Sorokyne - СОРОКІНО - POP. 110' The Company logo is proudly emblazoned in the corner. Someone has crudely written 'FUCK OFF' in teal paint across the majority of the sign.
+  description: A large sign that reads 'Sorokyne - POP. 110' The Company logo is proudly emblazoned in the corner. Someone has crudely written 'FUCK OFF' in teal paint across the majority of the sign.
   components:
   - type: Sprite
     state: sorokyne

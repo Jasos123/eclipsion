@@ -1,10 +1,6 @@
 @echo off
-cd ../../
-
-call git submodule update --init --recursive
-call dotnet build -c Release
-cd Scripts\bat
-start runQuickServer.bat %*
-start runQuickClient.bat %*
-pause
-
+setlocal
+call "%~dp0buildAllRelease.bat"
+if errorlevel 1 exit /b %errorlevel%
+call "%~dp0runQuickAll.bat" -c Release %*
+exit /b %errorlevel%

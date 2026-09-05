@@ -58,3 +58,106 @@
   - type: SpriteFade
   - type: GuideHelp
     guides: [ Psionics ]
+
+
+# The NCWL's counterpart to the Oracle. Same system (OracleSystem), same bargain - it names an
+# item, you hand it over, it fills its basin - but the framing is materialist rather than divine:
+# it is a shift quota handed down by a committee, and the payout is a ration, not grace.
+#
+# It differs from the vanilla Oracle in three ways:
+#   - its liquid payout is ALWAYS lotophagoi oil (abnormalReagentChance 0) rather than a roll
+#     that lands on ichor, wine, blood or an arbitrary chemical four times in five, so the
+#     station's psions get a supply line up the power tree; the disks and bluespace are
+#     unchanged from the Oracle,
+#   - it wears the StatueVenusRed sprite rather than the gnostic oracle statue,
+#   - it is not Prayable and carries no demiurgic/emanative descriptors.
+#
+# barkDelay is longer than the Oracle's 2 minutes because Nova Balreska mounts two of these in
+# one room; at the stock delay they talk over each other constantly.
+
+- type: entity
+  parent: StatueVenusRed
+  id: OracleCommunard
+  name: monument to the first worker
+  suffix: Oracle, NCWL
+  description: A marble labourer with her red toolbox, poured over a noospheric well the League never bothered to cap. It does not hear prayers. It reads the plan, and it expects deliveries.
+  components:
+  - type: Speech
+    speechSounds: Tenor
+  - type: Actions
+  - type: Psionic
+    removable: false
+    roller: false
+    assayFeedback:
+      - oracle-communard-feedback
+    psychognomicDescriptors:
+      - p-descriptor-old
+      - p-descriptor-cyclic
+      - p-descriptor-heavy
+      - p-descriptor-bound
+  - type: InnatePsionicPowers
+    powersToAdd:
+      - XenoglossyPower
+      - TelepathyPower
+      - NoosphericZapPower
+  - type: SolutionContainerManager
+    solutions:
+      fountain:
+        maxVol: 200
+  - type: Drink
+    solution: fountain
+  - type: DrawableSolution
+    solution: fountain
+  - type: DrainableSolution
+    solution: fountain
+  - type: ExaminableSolution
+    solution: fountain
+  - type: Grammar
+    attributes:
+      gender: female
+  - type: SpriteFade
+  - type: Oracle
+    demandTypes: OracleDemandTypes
+    rewardReagents: CommunardOracleRewardReagents
+    # Same disks and bluespace the Oracle hands out - the reward tables are not faction
+    # flavoured, so there is no reason to fork them.
+    rewardEntities:
+    - OracleRewardDisks
+    - OracleRewardCrystals
+    # Always oil. A one in five chance of a random chemical would defeat the point of it.
+    abnormalReagentChance: 0
+    barkDelay: 4m
+    demandMessages:
+    - oracle-communard-demand-1
+    - oracle-communard-demand-2
+    - oracle-communard-demand-3
+    - oracle-communard-demand-4
+    - oracle-communard-demand-5
+    - oracle-communard-demand-6
+    - oracle-communard-demand-7
+    - oracle-communard-demand-8
+    - oracle-communard-demand-9
+    - oracle-communard-demand-10
+    - oracle-communard-demand-11
+    - oracle-communard-demand-12
+    # Spoken verbatim, not locale ids - the same way the Oracle's Greek rejections are.
+    rejectMessages:
+    - "not on the plan"
+    - "rejected by the committee"
+    - "this is not what was requisitioned"
+    - "the quota is unchanged"
+    - "waste"
+  - type: LanguageSpeaker
+    currentLanguage: TauCetiBasic
+  - type: LanguageKnowledge
+    speaks:
+    - TauCetiBasic
+    understands:
+    - TauCetiBasic
+  - type: GuideHelp
+    guides: [ Psionics ]
+
+- type: weightedRandom
+  id: CommunardOracleRewardReagents
+  weights:
+    LotophagoiOil: 1

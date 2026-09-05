@@ -15,6 +15,7 @@
         Base: mite
       Dead:
         Base: mite_dead
+  - type: Thirst
     baseDecayRate: 0.25
   - type: SolutionContainerManager
     solutions:
@@ -45,7 +46,7 @@
   components:
   # appearance
   - type: Sprite
-    drawDepth: Ghosts
+    drawdepth: Ghosts
     sprite: Mobs/Demons/glimmer_wisp.rsi
     layers:
     - state: willowisp

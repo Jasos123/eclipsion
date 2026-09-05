@@ -23,7 +23,7 @@ namespace Content.YAMLLinter
 
             var (errors, fieldErrors) = await RunValidation();
 
-            var count = errors.Count + fieldErrors.Count;
+            var count = errors.Values.Sum(fileErrors => fileErrors.Count) + fieldErrors.Count;
 
             if (count == 0)
             {
@@ -139,18 +139,10 @@ namespace Content.YAMLLinter
                     yamlErrors[key] = newErrors;
             }
 
-            // Next add any always-relevant client errors.
+            // Include client-only fields as well as errors relevant to both sides.
             foreach (var (key, val) in clientErrors.YamlErrors)
             {
                 var newErrors = val.Where(n => n.AlwaysRelevant).ToHashSet();
-                if (newErrors.Count == 0)
-                    continue;
-
-                if (yamlErrors.TryGetValue(key, out var errors))
-                    errors.UnionWith(val.Where(n => n.AlwaysRelevant));
-                else
-                    yamlErrors[key] = newErrors;
-
                 // Include any errors that relate to client-only types
                 foreach (var errorNode in val)
                 {
@@ -159,6 +151,14 @@ namespace Content.YAMLLinter
                         newErrors.Add(errorNode);
                     }
                 }
+
+                if (newErrors.Count == 0)
+                    continue;
+
+                if (yamlErrors.TryGetValue(key, out var errors))
+                    errors.UnionWith(newErrors);
+                else
+                    yamlErrors[key] = newErrors;
             }
 
             // Finally, combine the prototype ID field errors.

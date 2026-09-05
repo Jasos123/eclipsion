@@ -11,7 +11,6 @@
     - WeaponMeleeStake
   - type: Sprite
     sprite: _NF/Objects/Weapons/Melee/wooden_stake.rsi
-    size: Tiny
     state: icon
   - type: MeleeWeapon
     wideAnimationRotation: -135

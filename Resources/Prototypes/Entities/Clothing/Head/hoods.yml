@@ -216,6 +216,9 @@
     lowPressureMultiplier: 1000
   - type: TemperatureProtection
     coefficient: 0.2
+  - type: IgniteFromGasImmunity # sealed helmet, so it has to seal a plasmaman too
+    parts:
+    - Head
   - type: BreathMask
   # this is on the hood so you only fool the fish if you wear the whole set
   # wear carp suit and security helmet, they'll know you are fake

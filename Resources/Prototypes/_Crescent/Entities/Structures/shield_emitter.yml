@@ -26,6 +26,7 @@
     sound:
       path: /Audio/_Crescent/Ambience/turbine.ogg
   - type: Sprite
+    snapCardinals: true
     noRot: true
     sprite: _Crescent/Structures/shieldemitter.rsi
     layers:
@@ -39,7 +40,6 @@
         enum.PowerDeviceVisualLayers.Powered:
           True: { visible: true }
           False: { visible: false }
-    snapCardinals: true
   - type: Physics
     bodyType: Static
   - type: Transform

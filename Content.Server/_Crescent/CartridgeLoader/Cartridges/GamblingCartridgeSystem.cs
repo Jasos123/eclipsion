@@ -383,13 +383,11 @@ public sealed class GamblingCartridgeSystem : EntitySystem
     }
 
     /// <summary>
-    /// Credits winnings and returns the amount actually paid. Bets are unlimited, so a high
-    /// multiplier on a large stake can leave int range; callers compute in long and this clamps,
-    /// since the bank API is int.
+    /// Credits the full payout, including winnings larger than a 32-bit integer can hold.
     /// </summary>
-    private int Pay(EntityUid player, long payoutRaw)
+    private long Pay(EntityUid player, long payoutRaw)
     {
-        var payout = (int) Math.Clamp(payoutRaw, 0, int.MaxValue);
+        var payout = Math.Max(payoutRaw, 0);
         if (payout <= 0)
             return 0;
 
@@ -401,7 +399,7 @@ public sealed class GamblingCartridgeSystem : EntitySystem
         return 0;
     }
 
-    private string BuildResultToast(int bet, int payout, out bool good)
+    private string BuildResultToast(int bet, long payout, out bool good)
     {
         var net = (long) payout - bet;
         good = net > 0;

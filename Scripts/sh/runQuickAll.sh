@@ -1,11 +1,9 @@
 #!/usr/bin/env sh
-
-# make sure to start from script dir
-if [ "$(dirname $0)" != "." ]; then
-    cd "$(dirname $0)"
-fi
-
-sh -e runQuickServer.sh &
-sh -e runQuickClient.sh
-
-exit
+set -eu
+cd "$(dirname "$0")"
+sh ./runQuickServer.sh "$@" &
+server_pid=$!
+trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+sh ./runQuickClient.sh "$@"

@@ -73,6 +73,7 @@
     trackAllDamage: true
     damageOverlay:
       sprite: _Nuclear14/Structures/Windows/slanted/cracks.rsi
+  - type: InteractionVerbs
     allowedVerbs:
     - KnockOn
 

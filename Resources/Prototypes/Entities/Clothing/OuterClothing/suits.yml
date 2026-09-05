@@ -310,6 +310,18 @@
     lowPressureMultiplier: 1000
   - type: TemperatureProtection
     coefficient: 0.01
+  - type: IgniteFromGasImmunity # this one is sealed, so it has to seal a plasmaman too
+    parts:
+    - Torso
+    - Groin
+    - LeftArm
+    - LeftHand
+    - RightArm
+    - RightHand
+    - LeftLeg
+    - LeftFoot
+    - RightLeg
+    - RightFoot
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitCarp
 

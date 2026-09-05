@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   abstract: true
   parent:
     - MobHumanoidInventory
@@ -55,7 +55,7 @@
       layers:
       - map: [ "enum.DamageStateVisualLayers.Base" ]
         state: piratemachete
-      - type: Fixtures
+    - type: Fixtures
       fixtures:
         fix1:
           shape:
@@ -105,7 +105,7 @@
       layers:
       - map: [ "enum.DamageStateVisualLayers.Base" ]
         state: piratesawbones
-      - type: Fixtures
+    - type: Fixtures
       fixtures:
         fix1:
           shape:
@@ -162,7 +162,7 @@
       layers:
       - map: [ "enum.DamageStateVisualLayers.Base" ]
         state: pirateshotgunner
-      - type: Fixtures
+    - type: Fixtures
       fixtures:
         fix1:
           shape:
@@ -239,7 +239,7 @@
       layers:
       - map: [ "enum.DamageStateVisualLayers.Base" ]
         state: piraterifle
-      - type: Fixtures
+    - type: Fixtures
       fixtures:
         fix1:
           shape:
@@ -319,7 +319,7 @@
       layers:
       - map: [ "enum.DamageStateVisualLayers.Base" ]
         state: pirateassaultrifle
-      - type: Fixtures
+    - type: Fixtures
       fixtures:
         fix1:
           shape:

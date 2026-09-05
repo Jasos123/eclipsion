@@ -46,7 +46,6 @@
     bloodReagent: FluorosulfuricAcid
     bloodMaxVolume: 75
   - type: DamageStateVisuals
-    rotate: true
     states:
       Alive:
         Base: running

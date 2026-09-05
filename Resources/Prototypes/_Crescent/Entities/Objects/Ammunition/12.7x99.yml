@@ -12,7 +12,6 @@
       map: ["enum.GunVisualLayers.Base"]
     - state: mag-1
       map: ["enum.GunVisualLayers.Mag"]
-    zeroVisible: false
   - type: MagazineVisuals
     magState: mag
     steps: 3
@@ -171,7 +170,6 @@
       map: ["enum.GunVisualLayers.Base"]
     - state: mag-1
       map: ["enum.GunVisualLayers.Mag"]
-    zeroVisible: false
   - type: MagazineVisuals
     magState: mag
     steps: 3

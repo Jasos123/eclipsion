@@ -246,6 +246,7 @@
   - type: Sprite
     sprite: Clothing/Head/Hardsuits/brigmedic.rsi
   - type: Clothing
+    sprite: Clothing/Head/Hardsuits/brigmedic.rsi
     clothingVisuals:
       head:
       - state: off-equipped-HELMET
@@ -258,7 +259,6 @@
       - state: on-equipped-HELMET
       - state: on-equipped-HELMET-glow
         shader: unshaded
-    sprite: Clothing/Head/Hardsuits/brigmedic.rsi
   - type: PointLight
     color: "#00FFFF"
   - type: Armor
