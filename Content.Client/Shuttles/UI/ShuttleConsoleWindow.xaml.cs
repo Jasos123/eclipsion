@@ -4,7 +4,7 @@ using Content.Client._KS14.UI; // KS14
 using Content.Client.Computer;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.CCVar; // KS14
-using Content.Shared._Crescent.ShipShields; // KS14: status strip
+using Content.Client._Crescent.ShipShields; // KS14: status strip
 using Robust.Client.Graphics; // KS14
 using Robust.Shared.Configuration; // KS14
 using Robust.Shared.Timing; // KS14
@@ -323,16 +323,7 @@ public sealed partial class ShuttleConsoleWindow : KsBaseWindow, // KS14: instru
             return;
         }
 
-        ShipShieldEmitterComponent? shield = null;
-        var query = _entManager.EntityQueryEnumerator<ShipShieldEmitterComponent, TransformComponent>();
-        while (query.MoveNext(out _, out var emitter, out var xform))
-        {
-            if (xform.GridUid != grid)
-                continue;
-
-            shield = emitter;
-            break;
-        }
+        var shield = ShipShieldReadout.Find(_entManager, grid);
 
         if (shield == null)
         {
@@ -342,21 +333,17 @@ public sealed partial class ShuttleConsoleWindow : KsBaseWindow, // KS14: instru
             return;
         }
 
-        var down = shield.OverloadAccumulator > 0 || shield.Damage >= shield.DamageLimit;
-        if (down)
+        if (ShipShieldReadout.IsDown(shield))
         {
-            var seconds = shield.OverloadAccumulator > 0
-                ? shield.OverloadAccumulator
-                : shield.DamageOverloadTimePunishment;
-
-            StatusLabel.Text = Loc.GetString("ks-status-shield-down", ("time", (int) seconds));
+            StatusLabel.Text = Loc.GetString("ks-status-shield-down",
+                ("time", (int) ShipShieldReadout.DownSeconds(shield)));
             StatusLabel.FontColorOverride = KsInstrumentPalette.Shell.Warning;
         }
         else
         {
+            // Percent, so the strip reads the same on every hull no matter its damage limit.
             StatusLabel.Text = Loc.GetString("ks-status-shield-up",
-                ("remaining", (int) (shield.DamageLimit - shield.Damage)),
-                ("limit", (int) shield.DamageLimit));
+                ("percent", ShipShieldReadout.Percent(shield)));
             StatusLabel.FontColorOverride = KsInstrumentPalette.Shell.Text;
         }
 

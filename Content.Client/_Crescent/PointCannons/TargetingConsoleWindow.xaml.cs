@@ -2,6 +2,7 @@ using System.Numerics; // KS14
 using Content.Client.Computer;
 using Content.Client.PointCannons;
 using Content.Client._KS14.UI; // KS14
+using Content.Client._Crescent.ShipShields; // KS14: shield readout on the status strip
 using Content.Shared.CCVar; // KS14
 using Content.Shared.Shuttles.BUIStates;
 using Content.Shared.PointCannons;
@@ -30,6 +31,7 @@ public sealed partial class TargetingConsoleWindow : KsBaseWindow, IComputerWind
 
     [Dependency] private readonly IGameTiming _timing = default!; // KS14
     [Dependency] private readonly IConfigurationManager _cfg = default!; // KS14
+    [Dependency] private readonly IEntityManager _entManager = default!; // KS14: shield readout
 
     /// <summary>KS14: when the shell was created; drives the power-on blink.</summary>
     private TimeSpan _bootStartedAt = TimeSpan.MinValue;
@@ -47,6 +49,9 @@ public sealed partial class TargetingConsoleWindow : KsBaseWindow, IComputerWind
     private int _cannonCount;
     private int _ammoValue;
     private int _ammoMax;
+
+    /// <summary>KS14: the hull this console rides, resolved from the nav state, for the shield readout.</summary>
+    private EntityUid? _statusGrid;
 
     public ShuttleNavControl Radar => NavRadar;
     public Action<string>? OnCannonGroupChange;
@@ -67,6 +72,10 @@ public sealed partial class TargetingConsoleWindow : KsBaseWindow, IComputerWind
     {
         NavRadar.UpdateState(state.NavState);
         NavRadar.UpdateState(state.IFFState);
+
+        // KS14: the console's own coordinates already ride the nav state, so the strip can find
+        // the hull's shield emitter without the server sending anything extra.
+        _statusGrid = _entManager.GetCoordinates(state.NavState.Coordinates)?.EntityId;
 
         if (state.CannonGroups != null)
             UpdateGroupSelector(state.CannonGroups);
@@ -243,6 +252,10 @@ public sealed partial class TargetingConsoleWindow : KsBaseWindow, IComputerWind
     {
         base.FrameUpdate(args);
 
+        // KS14: the shield reading moves on its own, so the strip is refreshed per frame rather
+        // than only when the ammo or group panels push it.
+        KsRefreshStatusStrip();
+
         if (_bootStartedAt == TimeSpan.MinValue)
             return;
 
@@ -258,6 +271,31 @@ public sealed partial class TargetingConsoleWindow : KsBaseWindow, IComputerWind
     }
 
     /// <summary>
+    ///     KS14: the hull's shield strength for the status strip, as a percentage. Percent rather
+    ///         than raw damage because damage limits differ wildly between hulls, so the absolute
+    ///         number told a gunner nothing about how close the shield was to dropping.
+    /// </summary>
+    private string KsShieldReadout()
+    {
+        if (_statusGrid is not { } grid)
+            return Loc.GetString("targeting-console-status-shield-none");
+
+        var shield = ShipShieldReadout.Find(_entManager, grid);
+
+        if (shield == null)
+            return Loc.GetString("targeting-console-status-shield-none");
+
+        if (ShipShieldReadout.IsDown(shield))
+        {
+            return Loc.GetString("targeting-console-status-shield-down",
+                ("time", (int) ShipShieldReadout.DownSeconds(shield)));
+        }
+
+        return Loc.GetString("targeting-console-status-shield-up",
+            ("percent", ShipShieldReadout.Percent(shield)));
+    }
+
+    /// <summary>
     ///     KS14: the always-on status strip. Nothing on it is new information - it is the ammo
     ///         bars and the group buttons already on screen, totalled - so it costs no extra
     ///         server state and cannot disagree with the panels above it.
@@ -270,7 +308,8 @@ public sealed partial class TargetingConsoleWindow : KsBaseWindow, IComputerWind
                 : Loc.GetString("targeting-console-status-no-group")),
             ("cannons", _cannonCount),
             ("ammo", _ammoValue),
-            ("capacity", _ammoMax));
+            ("capacity", _ammoMax),
+            ("shield", KsShieldReadout()));
 
         StatusLabel.FontColorOverride = _cannonCount > 0
             ? KsInstrumentPalette.Shell.Text

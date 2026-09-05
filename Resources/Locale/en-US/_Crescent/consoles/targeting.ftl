@@ -8,6 +8,9 @@ targeting-console-panel-ammo = AMMO
 targeting-console-panel-groups = GROUPS
 
 # Always-on status strip: the panels above it, totalled.
-targeting-console-status = GROUP { $group } // CANNONS { $cannons } // AMMO { $ammo }/{ $capacity }
+targeting-console-status = GROUP { $group } // CANNONS { $cannons } // AMMO { $ammo }/{ $capacity } // SHIELD { $shield }
 targeting-console-status-no-group = ---
+targeting-console-status-shield-none = ---
+targeting-console-status-shield-down = DOWN { $time }s
+targeting-console-status-shield-up = { $percent }%
 targeting-console-alert-dry = ! NO AMMO !
